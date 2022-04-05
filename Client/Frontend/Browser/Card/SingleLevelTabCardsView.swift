@@ -19,91 +19,54 @@ enum TimeFilter: String, CaseIterable {
 }
 
 struct SingleLevelTabCardsView: View {
-    @EnvironmentObject var tabModel: TabCardModel
-    @EnvironmentObject private var browserModel: BrowserModel
-    @Environment(\.columns) private var columns
-
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @Environment(\.verticalSizeClass) private var verticalSizeClass
-
-    var landscapeMode: Bool {
-        verticalSizeClass == .compact || horizontalSizeClass == .regular
-    }
+//    @EnvironmentObject var tabModel: TabCardModel
+//    @EnvironmentObject private var browserModel: BrowserModel
+//    @Environment(\.columns) private var columns
+//
+//    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+//    @Environment(\.verticalSizeClass) private var verticalSizeClass
+//
+//    var landscapeMode: Bool {
+//        verticalSizeClass == .compact || horizontalSizeClass == .regular
+//    }
 
     let containerGeometry: GeometryProxy
     let incognito: Bool
 
     var body: some View {
-        // let _ = debugCount("SingleLevelTabCardsView.body")
-        ForEach(TimeFilter.allCases, id: \.self) { time in
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(time.rawValue)
-                        .withFont(.labelLarge)
-                        .foregroundColor(.label)
-                        .padding(.leading, 20)
-                        .padding(.top, 12)
-                    timeLineCardsView(
-                        containerGeometry: containerGeometry, incognito: incognito,
-                        time: time.rawValue)
-                    //gettimeLineCardsView(time: time.rawValue)
-                }
-                Spacer()
-            }
-            .background(Color.background)
-        }
-        .padding(.top, 8)
-    }
+         let _ = debugCount("SingleLevelTabCardsView.body")
+//        ForEach(TimeFilter.allCases, id: \.self) { time in
+//            HStack {
+//                VStack(alignment: .leading) {
+//                    Text(time.rawValue)
+//                        .withFont(.labelLarge)
+//                        .foregroundColor(.label)
+//                        .padding(.leading, 20)
+//                        .padding(.top, 12)
+//                    timeLineCardsView(
+//                        containerGeometry: containerGeometry, incognito: incognito,
+//                        time: time.rawValue)
+                timeLineCardsView(
+                    containerGeometry: containerGeometry, incognito: incognito,
+                    time: "Today")
 
-    func gettimeLineCardsView(time: String) -> some View {
-        return ForEach(
-            tabModel.getRows(incognito: incognito, byTime: time)
-        ) { row in
-            HStack(spacing: CardGridUX.GridSpacing) {
-                ForEach(row.cells) { details in
-                    switch details {
-                    case .tabGroupInline(let groupDetails):
-                        CollapsedCardGroupView(
-                            groupDetails: groupDetails, containerGeometry: containerGeometry,
-                            rowIndex: row.index,
-                            nextToCells: row.multipleCellTypes
-                        )
-                        .padding(.horizontal, -CardGridUX.GridSpacing)
-                        .padding(.bottom, CardGridUX.GridSpacing)
-                        .zIndex(groupDetails.allDetails.contains(where: \.isSelected) ? 1 : 0)
-                    case .tabGroupGridRow(let groupDetails, let range):
-                        ExpandedCardGroupRowView(
-                            groupDetails: groupDetails, containerGeometry: containerGeometry,
-                            range: range, rowIndex: row.index, nextToCells: false
-                        )
-                        .padding(.horizontal, -CardGridUX.GridSpacing)
-                        .padding(
-                            .bottom,
-                            lastRowTabGroup(range, groupDetails) ? CardGridUX.GridSpacing : 0)
-                    case .tab(let tabDetails):
-                        FittedCard(details: tabDetails)
-                            .modifier(
-                                CardTransitionModifier(
-                                    details: tabDetails, containerGeometry: containerGeometry)
-                            )
-                            .padding(.bottom, CardGridUX.GridSpacing)
-                            .environment(\.selectionCompletion) {
-                                ClientLogger.shared.logCounter(
-                                    .SelectTab,
-                                    attributes: getLogCounterAttributesForTabs(
-                                        selectedTabRow: row.index))
-                                browserModel.hideWithAnimation()
-                            }
-                    }
-                }
-            }
-            .padding(.horizontal, CardGridUX.GridSpacing)
-            .zIndex(row.cells.contains(where: \.isSelected) ? 1 : 0)
-        }
-    }
+            
+                timeLineCardsView(
+                    containerGeometry: containerGeometry, incognito: incognito,
+                    time: "Last Week")
+                
+                
 
-    func lastRowTabGroup(_ rowInfo: Range<Int>, _ groupDetails: TabGroupCardDetails) -> Bool {
-        return rowInfo.last == groupDetails.allDetails.count - 1
+            
+//        .padding(.top, 8)
+        
+                    
+//                }
+//                Spacer()
+//            }
+//            .background(Color.background)
+//        }
+//        .padding(.top, 8)
     }
 }
 
@@ -123,54 +86,78 @@ struct timeLineCardsView: View {
     let incognito: Bool
     let time: String
     var body: some View {
-        // let _ = debugCount("TimeLineCardsView.body")
+        let _ = debugCount("TimeLineCardsView.body")
         ForEach(
             tabModel.getRows(incognito: incognito, byTime: time)
         ) { row in
-            HStack(spacing: CardGridUX.GridSpacing) {
-                ForEach(row.cells) { details in
-                    switch details {
-                    case .tabGroupInline(let groupDetails):
-                        CollapsedCardGroupView(
-                            groupDetails: groupDetails, containerGeometry: containerGeometry,
-                            rowIndex: row.index,
-                            nextToCells: row.multipleCellTypes
-                        )
-                        .padding(.horizontal, -CardGridUX.GridSpacing)
-                        .padding(.bottom, CardGridUX.GridSpacing)
-                        .zIndex(groupDetails.allDetails.contains(where: \.isSelected) ? 1 : 0)
-                    case .tabGroupGridRow(let groupDetails, let range):
-                        ExpandedCardGroupRowView(
-                            groupDetails: groupDetails, containerGeometry: containerGeometry,
-                            range: range, rowIndex: row.index, nextToCells: false
-                        )
-                        .padding(.horizontal, -CardGridUX.GridSpacing)
-                        .padding(
-                            .bottom,
-                            lastRowTabGroup(range, groupDetails) ? CardGridUX.GridSpacing : 0)
-                    case .tab(let tabDetails):
-                        FittedCard(details: tabDetails)
-                            .modifier(
-                                CardTransitionModifier(
-                                    details: tabDetails, containerGeometry: containerGeometry)
-                            )
-                            .padding(.bottom, CardGridUX.GridSpacing)
-                            .environment(\.selectionCompletion) {
-                                ClientLogger.shared.logCounter(
-                                    .SelectTab,
-                                    attributes: getLogCounterAttributesForTabs(
-                                        selectedTabRow: row.index))
-                                browserModel.hideWithAnimation()
+            HStack{
+                VStack(alignment: .leading) {
+                    let _ = print(">>> time is \(time), incognito is \(incognito), rowIndex is \(row.index)")
+                    if let rowIndex = row.index, rowIndex == 1 {
+                        Text(time)
+                            .withFont(.labelLarge)
+                            .foregroundColor(.label)
+                            .padding(.leading, 20)
+                            .padding(.top, 12)
+                    }
+                    HStack(spacing: CardGridUX.GridSpacing) {
+                        ForEach(row.cells) { details in
+                            switch details {
+                            case .tabGroupInline(let groupDetails):
+                                CollapsedCardGroupView(
+                                    groupDetails: groupDetails, containerGeometry: containerGeometry,
+                                    rowIndex: row.index,
+                                    nextToCells: row.multipleCellTypes
+                                )
+                                .padding(.horizontal, -CardGridUX.GridSpacing)
+                                .padding(.bottom, CardGridUX.GridSpacing)
+                                .zIndex(groupDetails.allDetails.contains(where: \.isSelected) ? 1 : 0)
+                            case .tabGroupGridRow(let groupDetails, let range):
+                                ExpandedCardGroupRowView(
+                                    groupDetails: groupDetails, containerGeometry: containerGeometry,
+                                    range: range, rowIndex: row.index, nextToCells: false
+                                )
+                                .padding(.horizontal, -CardGridUX.GridSpacing)
+                                .padding(
+                                    .bottom,
+                                    lastRowTabGroup(range, groupDetails) ? CardGridUX.GridSpacing : 0)
+                            case .tab(let tabDetails):
+                                FittedCard(details: tabDetails)
+                                    .modifier(
+                                        CardTransitionModifier(
+                                            details: tabDetails, containerGeometry: containerGeometry)
+                                    )
+                                    .padding(.bottom, CardGridUX.GridSpacing)
+                                    .environment(\.selectionCompletion) {
+                                        ClientLogger.shared.logCounter(
+                                            .SelectTab,
+                                            attributes: getLogCounterAttributesForTabs(
+                                                selectedTabRow: row.index))
+                                        browserModel.hideWithAnimation()
+                                    }
                             }
+                        }
                     }
                 }
+                .padding(.horizontal, CardGridUX.GridSpacing)
+                .zIndex(row.cells.contains(where: \.isSelected) ? 1 : 0)
+                Spacer()
             }
-            .padding(.horizontal, CardGridUX.GridSpacing)
-            .zIndex(row.cells.contains(where: \.isSelected) ? 1 : 0)
+            .background(Color.background)
+            .padding(.top, isTopRow(row.index) ? 8: 0)
+//            .border(Color.red, width:1)
         }
+
     }
 
     func lastRowTabGroup(_ rowInfo: Range<Int>, _ groupDetails: TabGroupCardDetails) -> Bool {
         return rowInfo.last == groupDetails.allDetails.count - 1
+    }
+    
+    func isTopRow(_ rowIndex: Int?) -> Bool {
+        if let rowIndex = rowIndex {
+            return rowIndex == 1
+        }
+        return false
     }
 }

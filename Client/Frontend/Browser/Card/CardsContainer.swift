@@ -41,8 +41,10 @@ struct TabGridContainer: View {
 
     var selectedRowId: TabCardModel.Row.ID? {
         isIncognito
-            ? tabModel.incognitoRows.first { $0.cells.contains(where: \.isSelected) }?.id
-            : tabModel.normalRows.first { $0.cells.contains(where: \.isSelected) }?.id
+            ? (tabModel.incognitoRows.first { $0.cells.contains(where: \.isSelected) }?.id
+        ?? tabModel.incognitoRowsLastWeek.first { $0.cells.contains(where: \.isSelected) }?.id)
+            : (tabModel.normalRows.first { $0.cells.contains(where: \.isSelected) }?.id
+        ?? tabModel.normalRowsLastWeek.first { $0.cells.contains(where: \.isSelected) }?.id)
     }
 
     var selectedCardID: String? {

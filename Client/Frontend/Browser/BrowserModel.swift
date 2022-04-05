@@ -66,7 +66,6 @@ class BrowserModel: ObservableObject {
     func hideWithAnimation() {
         assert(!gridModel.tabCardModel.allDetails.isEmpty)
         cardTransitionModel.update(to: .visibleForTrayHidden)
-
         gridModel.closeDetailView()
     }
 
@@ -78,7 +77,6 @@ class BrowserModel: ObservableObject {
         }
 
         contentVisibilityModel.update(showContent: true)
-
         gridModel.closeDetailView()
     }
 

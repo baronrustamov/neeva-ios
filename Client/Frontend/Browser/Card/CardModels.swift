@@ -46,9 +46,12 @@ class TabCardModel: CardModel {
     @Default(.tabGroupExpanded) private var tabGroupExpanded: Set<String>
 
     func updateRows() {
+        print(">>> updateRows")
         incognitoRows = buildRows(incognito: true, byTime: "Today")
-        incognitoRowsLastWeek = buildRows(incognito: true, byTime: "Last Week")
         normalRows = buildRows(incognito: false, byTime: "Today")
+//        incognitoRows = buildRows(incognito: true, byTime: "Today")
+        incognitoRowsLastWeek = buildRows(incognito: true, byTime: "Last Week")
+//        normalRows = buildRows(incognito: false, byTime: "Today")
         normalRowsLastWeek = buildRows(incognito: false, byTime: "Last Week")
 
         // Defer signaling until after we have finished updating. This way our state is
@@ -57,16 +60,19 @@ class TabCardModel: CardModel {
     }
 
     func getRows(incognito: Bool, byTime: String) -> [Row] {
+        print(">>> calling getRows with incognito: \(incognito), byTime: \(byTime)")
+        var retVal: [Row] = []
         if incognito && byTime == "Today" {
-            return incognitoRows
+            retVal = incognitoRows
         } else if incognito && byTime == "Last Week" {
-            return incognitoRowsLastWeek
+            retVal = incognitoRowsLastWeek
         } else if !incognito && byTime == "Today" {
-            return normalRows
+            retVal = normalRows
         } else if !incognito && byTime == "Last Week" {
-            return normalRowsLastWeek
+            retVal = normalRowsLastWeek
         }
-        return []
+        print(">>> retVal: \(retVal)")
+        return retVal
     }
 
     var normalDetails: [TabCardDetails] {
@@ -88,6 +94,12 @@ class TabCardModel: CardModel {
             self?.manager.didRestoreAllTabs ?? false
         }).sink { [weak self] in
             self?.onDataUpdated()
+        }.store(in: &subscription)
+
+        manager.selectedTabPublisher.sink{ [weak self] _ in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                self?.updateRows()
+            }
         }.store(in: &subscription)
 
         _tabGroupExpanded.publisher.sink { [weak self] _ in
@@ -312,7 +324,7 @@ class TabCardModel: CardModel {
     }
 
     func onDataUpdated() {
-        // print(">>> cardModel.onDataUpdated()")
+         print(">>> cardModel.onDataUpdated()")
         allDetails = manager.getAll()
             .map { TabCardDetails(tab: $0, manager: manager) }
 
