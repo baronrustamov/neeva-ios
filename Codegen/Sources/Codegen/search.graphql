@@ -1,5 +1,5 @@
 query Search($query: String!) {
-  search(q: $query) {
+  search(q: $query, source: NeevaScope) {
     resultGroup {
       result {
         __typename

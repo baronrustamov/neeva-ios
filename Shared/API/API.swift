@@ -3247,6 +3247,7 @@ public enum FeedbackSource: RawRepresentable, Equatable, Hashable, CaseIterable,
   case appAccountDeletion
   case iosApp
   case iosAppLoggedOut
+  case iosWeb3App
   case preview
   case premiumSurvey
   case protectExtension
@@ -3267,6 +3268,7 @@ public enum FeedbackSource: RawRepresentable, Equatable, Hashable, CaseIterable,
       case "AppAccountDeletion": self = .appAccountDeletion
       case "IOSApp": self = .iosApp
       case "IOSAppLoggedOut": self = .iosAppLoggedOut
+      case "IOSWeb3App": self = .iosWeb3App
       case "Preview": self = .preview
       case "PremiumSurvey": self = .premiumSurvey
       case "ProtectExtension": self = .protectExtension
@@ -3288,6 +3290,7 @@ public enum FeedbackSource: RawRepresentable, Equatable, Hashable, CaseIterable,
       case .appAccountDeletion: return "AppAccountDeletion"
       case .iosApp: return "IOSApp"
       case .iosAppLoggedOut: return "IOSAppLoggedOut"
+      case .iosWeb3App: return "IOSWeb3App"
       case .preview: return "Preview"
       case .premiumSurvey: return "PremiumSurvey"
       case .protectExtension: return "ProtectExtension"
@@ -3309,6 +3312,7 @@ public enum FeedbackSource: RawRepresentable, Equatable, Hashable, CaseIterable,
       case (.appAccountDeletion, .appAccountDeletion): return true
       case (.iosApp, .iosApp): return true
       case (.iosAppLoggedOut, .iosAppLoggedOut): return true
+      case (.iosWeb3App, .iosWeb3App): return true
       case (.preview, .preview): return true
       case (.premiumSurvey, .premiumSurvey): return true
       case (.protectExtension, .protectExtension): return true
@@ -3331,6 +3335,7 @@ public enum FeedbackSource: RawRepresentable, Equatable, Hashable, CaseIterable,
       .appAccountDeletion,
       .iosApp,
       .iosAppLoggedOut,
+      .iosWeb3App,
       .preview,
       .premiumSurvey,
       .protectExtension,
@@ -7117,7 +7122,7 @@ public final class SearchQuery: GraphQLQuery {
   public let operationDefinition: String =
     """
     query Search($query: String!) {
-      search(q: $query) {
+      search(q: $query, source: NeevaScope) {
         __typename
         resultGroup {
           __typename
@@ -7594,7 +7599,7 @@ public final class SearchQuery: GraphQLQuery {
 
   public let operationName: String = "Search"
 
-  public let operationIdentifier: String? = "aa90a169f9542964c5cb734307fd49b4c061dc6a659b948c452cb77ccb6a4624"
+  public let operationIdentifier: String? = "6ebbd1cee60e8e0567665900a9fdd73d920e4c3ad23c8e932813afbbf267df18"
 
   public var query: String
 
@@ -7611,7 +7616,7 @@ public final class SearchQuery: GraphQLQuery {
 
     public static var selections: [GraphQLSelection] {
       return [
-        GraphQLField("search", arguments: ["q": GraphQLVariable("query")], type: .object(Search.selections)),
+        GraphQLField("search", arguments: ["q": GraphQLVariable("query"), "source": "NeevaScope"], type: .object(Search.selections)),
       ]
     }
 
