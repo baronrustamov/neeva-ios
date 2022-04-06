@@ -121,6 +121,7 @@ class TabCardModel: CardModel {
             case tab(TabCardDetails)
             case tabGroupInline(TabGroupCardDetails)
             case tabGroupGridRow(TabGroupCardDetails, Range<Int>)
+            case sectionHeader(String)
 
             var id: String {
                 switch self {
@@ -130,6 +131,8 @@ class TabCardModel: CardModel {
                     return details.id
                 case .tabGroupGridRow(let details, let range):
                     return details.allDetails[range].reduce("") { $0 + $1.id + ":" }
+                case .sectionHeader(let time):
+                    return time == "Last Week" ? "420" : "69"
                 }
             }
 
@@ -141,6 +144,8 @@ class TabCardModel: CardModel {
                     return details.isSelected
                 case .tabGroupGridRow(let details, let range):
                     return details.allDetails[range].contains { $0.isSelected }
+                case .sectionHeader(_):
+                    return false
                 }
             }
 
@@ -152,6 +157,8 @@ class TabCardModel: CardModel {
                     return details.allDetails.count
                 case .tabGroupGridRow(_, let range):
                     return range.count
+                case .sectionHeader(_):
+                    return 0
                 }
             }
         }
@@ -315,10 +322,24 @@ class TabCardModel: CardModel {
         rows = rows.filter {
             !$0.cells.isEmpty
         }
+        
+        print(">>> rows before insert: \(rows)")
+        
+        if !rows.isEmpty {
+            rows.insert(Row(cells: [Row.Cell.sectionHeader(byTime)]), at: 0)
+        }
+        
+        print(">>> rows after insert: \(rows)")
 
         for id in 0..<rows.count {
             rows[id].index = id + 1
         }
+        
+//        if !rows.isEmpty {
+//            rows.insert(Row(cells: [Row.Cell.sectionHeader]), at: 0)
+//        }
+//
+        
 
         return rows
     }

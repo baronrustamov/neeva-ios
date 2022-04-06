@@ -90,16 +90,9 @@ struct timeLineCardsView: View {
         ForEach(
             tabModel.getRows(incognito: incognito, byTime: time)
         ) { row in
-            HStack{
-                VStack(alignment: .leading) {
-                    let _ = print(">>> time is \(time), incognito is \(incognito), rowIndex is \(row.index)")
-                    if let rowIndex = row.index, rowIndex == 1 {
-                        Text(time)
-                            .withFont(.labelLarge)
-                            .foregroundColor(.label)
-                            .padding(.leading, 20)
-                            .padding(.top, 12)
-                    }
+            let _ = print(">>> row info: \(row)")
+//            HStack{
+//                VStack(alignment: .leading) {
                     HStack(spacing: CardGridUX.GridSpacing) {
                         ForEach(row.cells) { details in
                             switch details {
@@ -135,17 +128,30 @@ struct timeLineCardsView: View {
                                                 selectedTabRow: row.index))
                                         browserModel.hideWithAnimation()
                                     }
+                            case .sectionHeader:
+                                Text(time)
+                                    .withFont(.labelLarge)
+                                    .foregroundColor(.label)
+                                    .padding(.leading, 20)
+                                    .padding(.top, 12)
+                                    .padding(.bottom, 8)
+                                    .border(Color.red, width:1)
+                                Spacer()
                             }
                         }
                     }
-                }
-                .padding(.horizontal, CardGridUX.GridSpacing)
-                .zIndex(row.cells.contains(where: \.isSelected) ? 1 : 0)
-                Spacer()
-            }
-            .background(Color.background)
-            .padding(.top, isTopRow(row.index) ? 8: 0)
-//            .border(Color.red, width:1)
+                    .padding(.horizontal, CardGridUX.GridSpacing)
+                    .border(Color.black, width:1)
+                    .zIndex(row.cells.contains(where: \.isSelected) ? 1 : 0)
+                    .background(Color.background)
+                    .padding(.top, isTopRow(row.index) ? 8: 0)
+//                }
+//                .padding(.horizontal, CardGridUX.GridSpacing)
+//                Spacer()
+//            }
+//            .background(Color.background)
+//            .padding(.top, isTopRow(row.index) ? 8: 0)
+//            .zIndex(row.cells.contains(where: \.isSelected) ? 1 : 0)
         }
 
     }
