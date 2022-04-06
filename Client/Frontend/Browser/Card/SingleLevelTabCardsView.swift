@@ -129,22 +129,26 @@ struct timeLineCardsView: View {
                                         browserModel.hideWithAnimation()
                                     }
                             case .sectionHeader:
-                                Text(time)
-                                    .withFont(.labelLarge)
-                                    .foregroundColor(.label)
-                                    .padding(.leading, 20)
-                                    .padding(.top, 12)
-                                    .padding(.bottom, 8)
-                                    .border(Color.red, width:1)
-                                Spacer()
+                                VStack {
+                                    Color.secondarySystemFill
+                                        .frame(height: 8)
+                                        .padding(.horizontal, -CardGridUX.GridSpacing)
+                                    HStack {
+                                        Text(time)
+                                            .withFont(.labelLarge)
+                                            .foregroundColor(.label)
+                                            .padding(.leading, 20)
+                                            .padding(.top, 12)
+                                            .padding(.bottom, 8)
+                                        Spacer()
+                                    }
+                                }
                             }
                         }
                     }
                     .padding(.horizontal, CardGridUX.GridSpacing)
-                    .border(Color.black, width:1)
                     .zIndex(row.cells.contains(where: \.isSelected) ? 1 : 0)
                     .background(Color.background)
-                    .padding(.top, isTopRow(row.index) ? 8: 0)
 //                }
 //                .padding(.horizontal, CardGridUX.GridSpacing)
 //                Spacer()
