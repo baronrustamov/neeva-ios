@@ -15,6 +15,7 @@ import web3swift
 
 class Web3Model: ObservableObject, ResponseRelay {
     let openURLForSpace: (URL, String) -> Void
+    let openURL: (URL) -> Void
 
     var publicAddress: String {
         wallet?.publicAddress ?? ""
@@ -135,6 +136,9 @@ class Web3Model: ObservableObject, ResponseRelay {
         }
         self.openURLForSpace = {
             tabManager.createOrSwitchToTabForSpace(for: $0, spaceID: $1)
+        }
+        self.openURL = {
+            tabManager.createOrSwitchToTab(for: $0)
         }
 
         self.walletDetailsModel = WalletDetailsModel()
