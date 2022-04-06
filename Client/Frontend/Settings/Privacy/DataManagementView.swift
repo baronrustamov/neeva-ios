@@ -13,6 +13,7 @@ enum ClearableDataType: String, Identifiable, Codable, CaseIterable {
     case cookies = "Cookies"
     case trackingProtection = "Tracking Protection"
     case dapps = "Connected dApps"
+    case cookieCutterExclusions = "Cookie Cutter Exclusions"
 
     var id: String { rawValue }
 
@@ -24,6 +25,7 @@ enum ClearableDataType: String, Identifiable, Codable, CaseIterable {
         case .cookies: return "Cookies"
         case .trackingProtection: return "Tracking Protection"
         case .dapps: return "Connected dApps"
+        case .cookieCutterExclusions: return "Cookie Cutter Exclusions"
         }
     }
 
@@ -31,6 +33,8 @@ enum ClearableDataType: String, Identifiable, Codable, CaseIterable {
         switch self {
         case .cookies:
             return "Clearing it will sign you out of most sites."
+        case .cookieCutterExclusions:
+            return "List of sites you configured to not use Cookie Cutter"
         default:
             return nil
         }
@@ -48,6 +52,8 @@ enum ClearableDataType: String, Identifiable, Codable, CaseIterable {
             return TrackingProtectionClearable()
         case .dapps:
             return ConnectedDAppsClearable()
+        case .cookieCutterExclusions:
+            return CookieCutterExclusionsClearable()
         }
     }
 }
@@ -83,7 +89,16 @@ struct DataManagementView: View {
             Section(header: Text("Data on This Device")) {
                 ForEach(
                     ClearableDataType.allCases.filter {
-                        $0 == .dapps ? NeevaConstants.currentTarget == .xyz : true
+                        switch $0 {
+                        case .trackingProtection:
+                            return !FeatureFlag[.cookieCutter]
+                        case .dapps:
+                            return NeevaConstants.currentTarget == .xyz
+                        case .cookieCutterExclusions:
+                            return FeatureFlag[.cookieCutter]
+                        default:
+                            return true
+                        }
                     }
                 ) { dataType in
                     Toggle(

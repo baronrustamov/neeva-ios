@@ -61,6 +61,11 @@ struct BrowserTopBarView: View {
                         bvc.hideZeroQuery()
                     }
                 }
+            ).environment(
+                \.openSettings,
+                {
+                    bvc.openSettings(openPage: .cookieCutter)
+                }
             )
         }
     }

@@ -21,6 +21,8 @@ struct TabLocationBarButton<Label: View>: View {
 
 struct LocationViewTrackingButton: View {
     @State private var showingPopover = false
+
+    @Environment(\.openSettings) private var openSettings
     @EnvironmentObject private var incognitoModel: IncognitoModel
     @EnvironmentObject private var trackingStatsModel: TrackingStatsViewModel
 
@@ -42,6 +44,7 @@ struct LocationViewTrackingButton: View {
             arrowDirections: [.up, .down]
         ) {
             TrackingMenuView().environmentObject(trackingStatsModel)
+                .environment(\.openSettings, openSettings)
         }
     }
 }

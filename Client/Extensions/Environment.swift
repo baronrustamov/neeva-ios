@@ -92,4 +92,12 @@ extension EnvironmentValues {
         get { self[SafeAreaKey.self] }
         set { self[SafeAreaKey.self] = newValue }
     }
+
+    private struct OpenSettingsKey: EnvironmentKey {
+        static var defaultValue: (() -> Void) = {}
+    }
+    public var openSettings: (() -> Void) {
+        get { self[OpenSettingsKey.self] }
+        set { self[OpenSettingsKey.self] = newValue }
+    }
 }

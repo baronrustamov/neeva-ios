@@ -29,6 +29,7 @@ class BrowserModel: ObservableObject {
     var contentVisibilityModel: ContentVisibilityModel
     var scrollingControlModel: ScrollingControlModel
     let switcherToolbarModel: SwitcherToolbarModel
+    let cookieCutterModel = CookieCutterModel()
 
     func show() {
         if gridModel.switcherState != .tabs {

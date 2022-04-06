@@ -7,10 +7,10 @@ import Shared
 import SwiftUI
 
 struct CookieCutterSettings: View {
-    @Default(.contentBlockingEnabled) private var contentBlockingEnabled
-
+    @Environment(\.onOpenURL) var openURL
     @EnvironmentObject var cookieCutterModel: CookieCutterModel
 
+    @Default(.contentBlockingEnabled) private var contentBlockingEnabled
     @State var showNonEssentialCookieSettings = false
 
     var body: some View {
@@ -24,7 +24,7 @@ struct CookieCutterSettings: View {
                         )
 
                         Button {
-                            // TODO: Link to learn more page
+                            openURL(NeevaConstants.cookieCutterHelpURL)
                         } label: {
                             Text("Learn More")
                         }

@@ -2007,3 +2007,21 @@ extension BrowserViewController {
                     })))
     }
 }
+
+extension BrowserViewController {
+    func openSettings(openPage: SettingsPage? = nil) {
+        let action = {
+            let controller = SettingsViewController(bvc: self, openPage: openPage)
+            self.present(controller, animated: true)
+        }
+
+        TourManager.shared.userReachedStep(tapTarget: .settingMenu)
+
+        // For the connected apps tour prompt
+        if let presentedViewController = presentedViewController {
+            presentedViewController.dismiss(animated: true, completion: action)
+        } else {
+            action()
+        }
+    }
+}

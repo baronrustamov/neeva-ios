@@ -7,9 +7,12 @@ import Shared
 import SwiftUI
 
 struct PrivacySettingsSection: View {
+    @State var openCookieCutterPage = false
+
     @Default(.closeIncognitoTabs) var closeIncognitoTabs
     @Default(.contentBlockingEnabled) private var contentBlockingEnabled
     @Environment(\.onOpenURL) var openURL
+    @EnvironmentObject var browserModel: BrowserModel
 
     var body: some View {
         NavigationLink(
@@ -58,9 +61,12 @@ struct PrivacySettingsSection: View {
         }
 
         if FeatureFlag[.cookieCutter] {
-            NavigationLink(
-                "Cookie Cutter",
-                destination: CookieCutterSettings().environmentObject(CookieCutterModel()))
+            NavigationLink(isActive: $openCookieCutterPage) {
+                CookieCutterSettings()
+                    .environmentObject(browserModel.cookieCutterModel)
+            } label: {
+                Text("Cookie Cutter")
+            }
         }
 
         NavigationLinkButton("Privacy Policy") {

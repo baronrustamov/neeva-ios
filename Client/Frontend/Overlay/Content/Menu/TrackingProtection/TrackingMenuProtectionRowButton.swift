@@ -8,6 +8,7 @@ import SwiftUI
 
 public struct TrackingMenuProtectionRowButton: View {
     @Binding var preventTrackers: Bool
+    @Environment(\.openSettings) var openSettings
 
     public var body: some View {
         GroupedCell.Decoration {
@@ -36,7 +37,7 @@ public struct TrackingMenuProtectionRowButton: View {
 
                 if FeatureFlag[.cookieCutter] {
                     Button {
-                        // TODO: Open Settings
+                        openSettings()
                     } label: {
                         HStack {
                             Text("Cookie Cutter Settings")

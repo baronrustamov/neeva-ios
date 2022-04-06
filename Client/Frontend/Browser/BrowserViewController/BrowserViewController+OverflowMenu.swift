@@ -124,17 +124,8 @@ extension BrowserViewController {
                 .OpenSetting,
                 attributes: EnvironmentHelper.shared.getAttributes() + [overflowMenuAttribute]
             )
-            let action = {
-                let controller = SettingsViewController(bvc: self)
-                self.present(controller, animated: true)
-            }
-            TourManager.shared.userReachedStep(tapTarget: .settingMenu)
-            // For the connected apps tour prompt
-            if let presentedViewController = presentedViewController {
-                presentedViewController.dismiss(animated: true, completion: action)
-            } else {
-                action()
-            }
+
+            openSettings()
         case .goToHistory:
             ClientLogger.shared.logCounter(
                 .OpenHistory,

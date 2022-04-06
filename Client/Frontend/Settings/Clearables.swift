@@ -96,3 +96,11 @@ class ConnectedDAppsClearable: Clearable {
         return succeed()
     }
 }
+
+class CookieCutterExclusionsClearable: Clearable {
+    func clear() -> Success {
+        // TODO: Actually clear this data
+        let result = Success()
+        return result
+    }
+}
