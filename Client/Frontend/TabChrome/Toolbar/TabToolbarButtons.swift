@@ -7,7 +7,10 @@ import SDWebImageSwiftUI
 import SFSafeSymbols
 import Shared
 import SwiftUI
-import WalletCore
+
+#if XYZ
+    import WalletCore
+#endif
 
 struct TabToolbarButton<Content: View>: View {
     let label: Content
@@ -56,15 +59,15 @@ enum TabToolbarButtons {
         }
 
         @ViewBuilder private var label: some View {
-            if NeevaConstants.currentTarget == .xyz {
+            #if XYZ
                 Web3Theme(with: currentTheme).backButton
-            } else {
+            #else
                 Symbol(
                     .arrowBackward,
                     size: 20,
                     weight: weight,
                     label: .TabToolbarBackAccessibilityLabel)
-            }
+            #endif
         }
     }
 
@@ -145,15 +148,15 @@ enum TabToolbarButtons {
         }
 
         @ViewBuilder private var label: some View {
-            if NeevaConstants.currentTarget == .xyz {
+            #if XYZ
                 Web3Theme(with: currentTheme).overflowButton
-            } else {
+            #else
                 Symbol(
                     .ellipsisCircle,
                     size: 20,
                     weight: weight,
                     label: .TabToolbarMoreAccessibilityLabel)
-            }
+            #endif
         }
     }
 
@@ -176,30 +179,34 @@ enum TabToolbarButtons {
         }
     }
 
-    struct NeevaWallet: View {
-        @ObservedObject var assetStore: AssetStore
-        @EnvironmentObject var model: Web3Model
-        @Default(.currentTheme) var currentTheme
+    #if XYZ
+        struct NeevaWallet: View {
+            @ObservedObject var assetStore: AssetStore
+            @EnvironmentObject var model: Web3Model
+            @Default(.currentTheme) var currentTheme
 
-        var body: some View {
-            TabToolbarButton(
-                label: Web3Theme(with: currentTheme).walletButton,
-                action: model.showWalletPanel
-            )
+            var body: some View {
+                TabToolbarButton(
+                    label: Web3Theme(with: currentTheme).walletButton,
+                    action: model.showWalletPanel
+                )
+            }
         }
-    }
+    #endif
 
-    struct LazyTabButton: View {
-        let action: () -> Void
-        @Default(.currentTheme) var currentTheme
+    #if XYZ
+        struct LazyTabButton: View {
+            let action: () -> Void
+            @Default(.currentTheme) var currentTheme
 
-        var body: some View {
-            TabToolbarButton(
-                label: Web3Theme(with: currentTheme).lazyTabButton,
-                action: action
-            )
+            var body: some View {
+                TabToolbarButton(
+                    label: Web3Theme(with: currentTheme).lazyTabButton,
+                    action: action
+                )
+            }
         }
-    }
+    #endif
 
     struct AddToSpace: View {
         let weight: NiconFont
@@ -228,7 +235,7 @@ enum TabToolbarButtons {
 
         @ViewBuilder
         var body: some View {
-            if NeevaConstants.currentTarget == .xyz {
+            #if XYZ
                 SecondaryMenuButton(action: action) { button in
                     button.setImage(
                         Web3Theme(with: currentTheme).tabsImage, for: .normal)
@@ -238,7 +245,7 @@ enum TabToolbarButtons {
                     }
                     button.accessibilityLabel = "Show Tabs"
                 }
-            } else {
+            #else
                 SecondaryMenuButton(action: action) { button in
                     button.setImage(
                         Symbol.uiImage(.squareOnSquare, size: 20, weight: weight), for: .normal)
@@ -247,7 +254,7 @@ enum TabToolbarButtons {
                     }
                     button.accessibilityLabel = "Show Tabs"
                 }
-            }
+            #endif
         }
     }
 

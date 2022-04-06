@@ -485,7 +485,7 @@ struct WalletDashboard: View {
                     action: {
                         let session = sessionToDisconnect!
                         DispatchQueue.global(qos: .userInitiated).async {
-                            try? model.server?.disconnect(from: session)
+                            try? model.serverManager?.server.disconnect(from: session)
                         }
                         Defaults[.sessionsPeerIDs].remove(session.dAppInfo.peerId)
                         sessionToDisconnect = nil

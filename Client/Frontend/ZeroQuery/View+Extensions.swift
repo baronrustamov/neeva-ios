@@ -4,28 +4,43 @@
 
 import Shared
 import SwiftUI
-import WalletCore
+
+#if XYZ
+    import WalletCore
+#endif
 
 extension View {
     @ViewBuilder
     func foregroundColorOrGradient(_ color: Color) -> some View {
-        if NeevaConstants.currentTarget == .xyz {
+        #if XYZ
             self.gradientForeground()
-        } else {
+        #else
             self.foregroundColor(color)
-        }
+        #endif
     }
 
     @ViewBuilder
     func backgroundColorOrGradient(_ color: Color? = nil) -> some View {
-        if NeevaConstants.currentTarget == .xyz {
+        #if XYZ
             self.background(WalletTheme.gradient.opacity(0.1))
-        } else if let color = color {
-            self.background(color)
-        } else {
-            self
-        }
+        #else
+            if let color = color {
+                self.background(color)
+            } else {
+                self
+            }
+        #endif
     }
+
+    @ViewBuilder
+    func defaultBackgroundOrTheme(_ currentTheme: String?) -> some View {
+        #if XYZ
+            self.background(Web3Theme(with: currentTheme).backgroundColor.ignoresSafeArea())
+        #else
+            self.background(Color.DefaultBackground.ignoresSafeArea())
+        #endif
+    }
+
 }
 
 extension View {

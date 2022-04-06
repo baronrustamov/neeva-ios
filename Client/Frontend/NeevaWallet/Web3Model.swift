@@ -57,7 +57,18 @@ class Web3Model: ObservableObject, ResponseRelay {
     @Published var matchingCollection: Collection?
     @Published var showingMaliciousSiteWarning = false
 
-    let server: Server?
+    #if XYZ
+        var serverManager: WalletServerManager?
+        weak var toastDelegate: ToastDelegate?
+    #endif
+
+    var server: Server? {
+        #if XYZ
+            return serverManager?.server
+        #endif
+        return nil
+    }
+
     let presenter: WalletConnectPresenter
     var selectedTab: Tab?
     var wallet: WalletAccessor?
@@ -117,8 +128,7 @@ class Web3Model: ObservableObject, ResponseRelay {
     private var walletConnectSubscription: AnyCancellable? = nil
     private let closeTab: (Tab) -> Void
 
-    init(server: Server?, presenter: WalletConnectPresenter, tabManager: TabManager) {
-        self.server = server
+    init(presenter: WalletConnectPresenter, tabManager: TabManager) {
         self.presenter = presenter
         self.closeTab = { tab in
             tabManager.close(tab)
@@ -126,6 +136,7 @@ class Web3Model: ObservableObject, ResponseRelay {
         self.openURLForSpace = {
             tabManager.createOrSwitchToTabForSpace(for: $0, spaceID: $1)
         }
+
         self.walletDetailsModel = WalletDetailsModel()
         self.currentSession =
             allSavedSessions.first(where: {
@@ -153,6 +164,10 @@ class Web3Model: ObservableObject, ResponseRelay {
                 }
             }
         }
+
+        #if XYZ
+            self.serverManager = WalletServerManager(delegate: self)
+        #endif
     }
 
     var allSavedSessions: [Session] {
@@ -322,54 +337,61 @@ class Web3Model: ObservableObject, ResponseRelay {
     }
 
     func startSequence() {
-        presenter.showModal(
-            style: .spaces,
-            headerButton: nil,
-            content: {
-                WalletSequenceContent(model: self)
-                    .overlayIsFixedHeight(isFixedHeight: true)
-            }, onDismiss: { self.reset() })
+        #if XYZ
+            presenter.showModal(
+                style: .spaces,
+                headerButton: nil,
+                content: {
+                    WalletSequenceContent(model: self)
+                        .overlayIsFixedHeight(isFixedHeight: true)
+                }, onDismiss: { self.reset() })
+        #endif
     }
 
     func showWalletPanel() {
-        updateBalances()
-        presenter.presentFullScreenModal(
-            content: AnyView(
-                CryptoWalletView(dismiss: {
-                    self.presenter.dismissCurrentOverlay()
-                    if !Defaults[.cryptoPublicKey].isEmpty, self.wallet?.ethereumAddress == nil {
-                        DispatchQueue.global(qos: .userInitiated).async {
-                            self.wallet = WalletAccessor()
-                            self.updateBalances()
-                        }
-                        AssetStore.shared.refresh()
-                        if !Defaults[.walletOnboardingDone] {
-                            DispatchQueue.main.async {
-                                self.showWalletPanelHalfScreen()
+        #if XYZ
+            updateBalances()
+            presenter.presentFullScreenModal(
+                content: AnyView(
+                    CryptoWalletView(dismiss: {
+                        self.presenter.dismissCurrentOverlay()
+                        if !Defaults[.cryptoPublicKey].isEmpty, self.wallet?.ethereumAddress == nil
+                        {
+                            DispatchQueue.global(qos: .userInitiated).async {
+                                self.wallet = WalletAccessor()
+                                self.updateBalances()
                             }
-                            Defaults[.walletOnboardingDone] = true
-                        }
+                            AssetStore.shared.refresh()
+                            if !Defaults[.walletOnboardingDone] {
+                                DispatchQueue.main.async {
+                                    self.showWalletPanelHalfScreen()
+                                }
+                                Defaults[.walletOnboardingDone] = true
+                            }
 
+                        }
+                    })
+                    .environmentObject(self)
+                    .overlayIsFixedHeight(isFixedHeight: true)
+                    .onDisappear {
+                        self.reset()
                     }
-                })
-                .environmentObject(self)
-                .overlayIsFixedHeight(isFixedHeight: true)
-                .onDisappear {
-                    self.reset()
-                }
-            ), completion: {})
+                ), completion: {})
+        #endif
     }
 
     func showWalletPanelHalfScreen() {
-        presenter.showModal(
-            style: .grouped,
-            headerButton: nil,
-            content: {
-                CryptoWalletView(dismiss: { self.presenter.dismissCurrentOverlay() })
-                    .frame(minHeight: 500)
-                    .environmentObject(self)
-                    .overlayIsFixedHeight(isFixedHeight: true)
-            }, onDismiss: {})
+        #if XYZ
+            presenter.showModal(
+                style: .grouped,
+                headerButton: nil,
+                content: {
+                    CryptoWalletView(dismiss: { self.presenter.dismissCurrentOverlay() })
+                        .frame(minHeight: 500)
+                        .environmentObject(self)
+                        .overlayIsFixedHeight(isFixedHeight: true)
+                }, onDismiss: {})
+        #endif
     }
 
     func toggle(session: Session, to chain: EthNode) {
@@ -540,3 +562,15 @@ class Web3Model: ObservableObject, ResponseRelay {
 class WalletDetailsModel: ObservableObject {
     @Published var showingWalletDetails = false
 }
+
+#if XYZ
+    extension Web3Model: WalletServerManagerDelegate {
+        func shouldShowToast(for message: LocalizedStringKey) {
+            self.toastDelegate?.shouldShowToast(for: message)
+        }
+
+        func updateCurrentSequence(_ sequence: SequenceInfo) {
+            self.currentSequence = sequence
+        }
+    }
+#endif

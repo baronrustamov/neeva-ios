@@ -6,7 +6,10 @@ import Defaults
 import SFSafeSymbols
 import Shared
 import SwiftUI
-import WalletCore
+
+#if XYZ
+    import WalletCore
+#endif
 
 struct TabToolbarView: View {
     @EnvironmentObject var chromeModel: TabChromeModel
@@ -25,26 +28,24 @@ struct TabToolbarView: View {
 
             if chromeModel.toolBarContentView == .recipeContent {
                 cheatsheetToolbar
-            } else if NeevaConstants.currentTarget == .xyz {
-                Web3Toolbar(
-                    opacity: scrollingControlModel.controlOpacity,
-                    buildTabsMenu: buildTabsMenu,
-                    onBack: { performAction(.back) },
-                    onLongPress: { performAction(.longPressBackForward) },
-                    overFlowMenuAction: { performAction(.overflow) },
-                    showTabsAction: { performAction(.showTabs) },
-                    openLazyTabAction: { performAction(.openLazyTab) }
-                )
             } else {
-                normalTabToolbar
+                #if XYZ
+                    Web3Toolbar(
+                        opacity: scrollingControlModel.controlOpacity,
+                        buildTabsMenu: buildTabsMenu,
+                        onBack: { performAction(.back) },
+                        onLongPress: { performAction(.longPressBackForward) },
+                        overFlowMenuAction: { performAction(.overflow) },
+                        showTabsAction: { performAction(.showTabs) },
+                        openLazyTabAction: { performAction(.openLazyTab) }
+                    )
+                #else
+                    normalTabToolbar
+                #endif
             }
             Spacer()
         }
-        .background(
-            NeevaConstants.currentTarget == .xyz
-                ? Web3Theme(with: currentTheme).backgroundColor.ignoresSafeArea()
-                : Color.DefaultBackground.ignoresSafeArea()
-        )
+        .defaultBackgroundOrTheme(currentTheme)
         .accentColor(.label)
         .offset(y: scrollingControlModel.footerBottomOffset)
     }

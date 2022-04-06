@@ -10,38 +10,36 @@ import WalletConnectSwift
 import WalletCore
 import web3swift
 
-extension Defaults.Keys {
-    static func dAppsSession(_ sessionID: String) -> Defaults.Key<Data?> {
-        Defaults.Key("DataForSession" + sessionID)
-    }
+protocol ToastDelegate: AnyObject {
+    func shouldShowToast(for message: LocalizedStringKey)
 }
 
-protocol WalletConnectPresenter: ModalPresenter {
-    @discardableResult func connectWallet(to wcURL: WCURL) -> Bool
+protocol WalletServerManagerDelegate: ResponseRelay, ToastDelegate {
+    func updateCurrentSession()
+    func updateCurrentSequence(_ sequence: SequenceInfo)
+    var wallet: WalletAccessor? { get set }
 }
 
-extension BrowserViewController: ServerDelegate, WalletConnectPresenter {
-    @discardableResult func connectWallet(to wcURL: WCURL) -> Bool {
-        guard NeevaConstants.currentTarget == .xyz, let _ = web3Model.wallet?.ethereumAddress
-        else {
-            return false
-        }
+class WalletServerManager {
+    weak var delegate: WalletServerManagerDelegate?
+    var server: Server!
 
-        web3Model.startSequence()
-        DispatchQueue.global(qos: .userInitiated).async {
-            try? self.server?.connect(to: wcURL)
-        }
-        return true
-    }
-
-    func configureWalletServer() {
+    init(delegate: WalletServerManagerDelegate?) {
+        self.delegate = delegate
         self.server = Server(delegate: self)
-        server!.register(handler: PersonalSignHandler(relay: self.web3Model))
-        server!.register(handler: SendTransactionHandler(relay: self.web3Model))
-        server!.register(handler: SignTypedDataHandler(relay: self.web3Model))
-        web3Model.updateCurrentSession()
+        registerToHandlers()
     }
 
+    func registerToHandlers() {
+        guard let delegate = delegate else { return }
+        server.register(handler: PersonalSignHandler(relay: delegate))
+        server.register(handler: SendTransactionHandler(relay: delegate))
+        server.register(handler: SignTypedDataHandler(relay: delegate))
+    }
+
+}
+
+extension WalletServerManager: ServerDelegate {
     func server(_ server: Server, didFailToConnect url: WCURL) {
         LogService.shared.log("WC: Did fail to connect")
     }
@@ -50,22 +48,24 @@ extension BrowserViewController: ServerDelegate, WalletConnectPresenter {
         _ server: Server, shouldStart session: Session,
         completion: @escaping (Session.WalletInfo) -> Void
     ) {
-        guard let wallet = self.web3Model.wallet else {
+        guard let wallet = delegate?.wallet else {
             let walletInfo = Session.WalletInfo(
                 approved: false,
                 accounts: [],
                 chainId: session.dAppInfo.chainId ?? 1,
                 peerId: UUID().uuidString,
-                peerMeta: Session.ClientMeta(name: "", description: "", icons: [], url: .aboutBlank)
+                peerMeta: Session.ClientMeta(
+                    name: "", description: "", icons: [], url: .aboutBlank)
             )
             completion(walletInfo)
             return
         }
 
         LogService.shared.log(
-            "WC: Should Start from \(String(describing: session.dAppInfo.peerMeta.url.baseDomain))")
+            "WC: Should Start from \(String(describing: session.dAppInfo.peerMeta.url.baseDomain))"
+        )
         DispatchQueue.main.async {
-            self.web3Model.currentSequence = SequenceInfo(
+            let sequence = SequenceInfo(
                 type: .sessionRequest,
                 thumbnailURL: session.dAppInfo.peerMeta.icons.first ?? .aboutBlank,
                 dAppMeta: session.dAppInfo.peerMeta,
@@ -103,6 +103,7 @@ extension BrowserViewController: ServerDelegate, WalletConnectPresenter {
                         completion(walletInfo)
                     }
                 })
+            self.delegate?.updateCurrentSequence(sequence)
         }
     }
 
@@ -115,24 +116,19 @@ extension BrowserViewController: ServerDelegate, WalletConnectPresenter {
         guard !Defaults[.sessionsPeerIDs].contains(session.dAppInfo.peerId) else { return }
         Defaults[.dAppsSession(session.dAppInfo.peerId)] = try! JSONEncoder().encode(session)
         Defaults[.sessionsPeerIDs].insert(session.dAppInfo.peerId)
-        self.web3Model.updateCurrentSession()
+        self.delegate?.updateCurrentSession()
     }
 
     func server(_ server: Server, didDisconnect session: Session) {
         LogService.shared.log(
             "WC: Did disconnect session to \(String(describing: session.dAppInfo.peerMeta.url.baseDomain))"
         )
-        self.web3Model.updateCurrentSession()
+        self.delegate?.updateCurrentSession()
         Defaults[.dAppsSession(session.dAppInfo.peerId)] = nil
         Defaults[.sessionsPeerIDs].remove(session.dAppInfo.peerId)
         DispatchQueue.main.async {
-            if let toastManager = self.getSceneDelegate()?.toastViewManager {
-                toastManager.makeToast(
-                    text:
-                        "Disconnected from \(session.dAppInfo.peerMeta.name)"
-                )
-                .enqueue(manager: toastManager)
-            }
+            self.delegate?.shouldShowToast(
+                for: "Disconnected from \(session.dAppInfo.peerMeta.name)")
         }
     }
 

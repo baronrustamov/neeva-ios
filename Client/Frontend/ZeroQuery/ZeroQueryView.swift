@@ -6,7 +6,6 @@ import Defaults
 import Shared
 import Storage
 import SwiftUI
-import WalletCore
 
 private enum TriState: Int, Codable {
     case hidden
