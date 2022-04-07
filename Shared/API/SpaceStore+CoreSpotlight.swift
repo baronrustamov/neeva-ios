@@ -41,6 +41,22 @@ extension SpaceStore {
         scaleMode: .aspectFit
     )
 
+    static var bookmarkImage: UIImage = {
+        // start with symbol with white foreground
+        let bookmarkImage = UIImage(systemSymbol: .bookmark)
+            .withTintColor(.white, renderingMode: .alwaysOriginal)
+
+        let size = CGSize(width: 180, height: 180)
+
+        let renderer = UIGraphicsImageRenderer(size: size)
+
+        return renderer.image { context in
+            context.cgContext.setFillColor(UIColor.SpaceIconBackground.cgColor)
+            context.fill(CGRect(size: size))
+            bookmarkImage.draw(in: CGRect(size: size))
+        }
+    }()
+
     // MARK: - Space Methods
     /// Add or update spaces in index
     func addSpacesToCoreSpotlight(
@@ -107,22 +123,21 @@ extension SpaceStore {
             for (idx, entity) in data.enumerated() {
                 guard let url = entity.url else { continue }
                 group.enter()
-                // TODO: - Investigate why repeated calls grow memory unbounded
-                //                Self.getThumbnailData(for: entity) { image in
-                //                    attributes.thumbnailData = image?.pngData()
-                //                }
-                let attributes = CSSearchableItemAttributeSet(
-                    contentType: CSConst.spacePageContentType
-                )
-                attributes.title = entity.displayTitle
-                attributes.contentDescription = entity.displayDescription
-                attributes.url = url
-                let item = CSSearchableItem(
-                    uniqueIdentifier: url.absoluteString,
-                    domainIdentifier: CSConst.spacePageDomainIdentifier,
-                    attributeSet: attributes)
-                items[idx] = item
-                group.leave()
+                Self.getThumbnailData(for: entity) { image in
+                    let attributes = CSSearchableItemAttributeSet(
+                        contentType: CSConst.spacePageContentType
+                    )
+                    attributes.title = entity.displayTitle
+                    attributes.contentDescription = entity.displayDescription
+                    attributes.url = url
+                    attributes.thumbnailData = (image ?? Self.bookmarkImage).pngData()
+                    let item = CSSearchableItem(
+                        uniqueIdentifier: url.absoluteString,
+                        domainIdentifier: CSConst.spacePageDomainIdentifier,
+                        attributeSet: attributes)
+                    items[idx] = item
+                    group.leave()
+                }
             }
 
             // block the queue
@@ -215,30 +230,11 @@ extension SpaceStore {
             completionHandler(UIImage.imageFromDataThreadSafe(thumbnailData))
         } else if let thumbnailURL = entity.getThumbnailURL() {
             downloadHelperSDWebImage(imageURL: thumbnailURL) { image in
-                if let image = image {
-                    completionHandler(image)
-                } else {
-                    downloadDomainLevelFavicon(
-                        url: entity.url, completionHandler: completionHandler)
-                }
+                completionHandler(image)
             }
         } else {
-            downloadDomainLevelFavicon(url: entity.url, completionHandler: completionHandler)
-        }
-    }
-
-    private class func downloadDomainLevelFavicon(
-        url: URL?,
-        completionHandler: @escaping (UIImage?) -> Void
-    ) {
-        guard let url = url else {
             completionHandler(nil)
-            return
         }
-
-        let siteIconURL = url.domainURL.appendingPathComponent("favicon.ico")
-
-        downloadHelperSDWebImage(imageURL: siteIconURL, completionHandler: completionHandler)
     }
 
     private class func downloadHelperSDWebImage(
@@ -246,7 +242,7 @@ extension SpaceStore {
         completionHandler: @escaping (UIImage?) -> Void
     ) {
         let manager = SDWebImageManager.shared
-        let options: SDWebImageOptions = .lowPriority
+        let options: SDWebImageOptions = [.lowPriority, .fromCacheOnly]
 
         let onCompletedPageFavicon: SDInternalCompletionBlock = {
             (img, _, _, _, _, _) -> Void in

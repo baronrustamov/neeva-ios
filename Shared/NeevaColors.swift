@@ -160,6 +160,7 @@ extension UIColor {
         named: "TextSelectionHighlight", in: NeevaConstants.sharedBundle, compatibleWith: nil)!
     public static let PreviewHomeBackground = UIColor(
         named: "PreviewHomeBackground", in: NeevaConstants.sharedBundle, compatibleWith: nil)!
+    public static let SpaceIconBackground = UIColor.brand.variant.polar
 }
 
 extension Color {
@@ -249,7 +250,7 @@ extension Color {
     public static let textSelectionHighlight = Color(UIColor.TextSelectionHighlight)
     public static let selectedCell = Color(UIColor.SelectedCell)
 
-    public static let spaceIconBackground = Color.brand.variant.polar
+    public static let spaceIconBackground = Color(UIColor.SpaceIconBackground)
 
     public static let PreviewHomeBackground = Color(UIColor.PreviewHomeBackground)
 }
