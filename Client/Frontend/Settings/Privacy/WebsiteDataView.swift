@@ -87,7 +87,7 @@ struct WebsiteDataView: View {
                         LoadingView("Loading data…", mini: true)
                     }
                 }
-                DecorativeSection {
+                Group {
                     HStack {
                         Spacer(minLength: 0)
                         Button("Clear All Website Data") { isDeleting = true }
