@@ -71,6 +71,9 @@ struct ShareAddedSpaceView: View {
                         })
                     Button(
                         action: {
+                            if let tab = bvc.tabManager.selectedTab {
+                                bvc.screenshotHelper.takeScreenshot(tab)
+                            }
                             browserModel.openSpace(
                                 spaceID: request.targetSpaceID!)
                             hideOverlay()
