@@ -15,6 +15,12 @@ commands:
       - restore_cache:
           name: Restore build cache
           key: v1-build-{{ .Environment.CIRCLE_SHA1 }}
+  restore-xyzbuild-cache:
+    steps:
+      - bootstrap
+      - restore_cache:
+          name: Restore build cache
+          key: v1-xyzbuild-{{ .Environment.CIRCLE_SHA1 }}
   carthage-bootstrap:
     steps:
       - run:
@@ -47,6 +53,12 @@ commands:
       - run:
           name: Build Client
           command: xcodebuild build-for-testing -scheme Client -workspace Neeva.xcworkspace -destination 'platform=iOS Simulator,name=iPhone 12'
+  build-xyzclient:
+    steps:
+      - generate-user-scripts
+      - run:
+          name: Build XYZ Client
+          command: xcodebuild build-for-testing -scheme XYZClient -workspace Neeva.xcworkspace -destination 'platform=iOS Simulator,name=iPhone 12'
   build-codegen:
     steps:
        - run:
@@ -108,7 +120,6 @@ commands:
           name: XCUITests - iPad
           command: xcodebuild test-without-building -scheme Client -workspace Neeva.xcworkspace -destination 'platform=iOS Simulator,name=iPad Pro (11-inch) (3rd generation)' -only-testing XCUITests -resultBundlePath xcuitests-$CIRCLE_BUILD_NUM.xcresult
       - store-xcuitest-artifact
-
   store-xcuitest-artifact:
     steps:
       - run:
@@ -154,6 +165,19 @@ jobs:
           key: v1-build-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - ~/Library/Developer/Xcode/DerivedData
+  build-xyz:
+    macos:
+      xcode: "13.3.0"
+    resource_class: macos.x86.medium.gen2
+    steps:
+      - bootstrap
+      - build-codegen
+      - build-xyzclient
+      - save_cache:
+          name: Save XYZ build cache
+          key: v1-xyzbuild-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/Library/Developer/Xcode/DerivedData
   swift-format:
     macos:
       xcode: "13.3.0"
@@ -192,12 +216,12 @@ jobs:
     steps:
       - restore-build-cache
       - xcui-tests-ipad
-
 workflows:
   version: 2
   build:
     jobs:
       - build
+      - build-xyz
       - swift-format:
           requires: [build]
       - test-client:
