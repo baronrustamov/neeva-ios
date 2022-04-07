@@ -46,12 +46,9 @@ class TabCardModel: CardModel {
     @Default(.tabGroupExpanded) private var tabGroupExpanded: Set<String>
 
     func updateRows() {
-        print(">>> updateRows")
         incognitoRows = buildRows(incognito: true, byTime: "Today")
         normalRows = buildRows(incognito: false, byTime: "Today")
-//        incognitoRows = buildRows(incognito: true, byTime: "Today")
         incognitoRowsLastWeek = buildRows(incognito: true, byTime: "Last Week")
-//        normalRows = buildRows(incognito: false, byTime: "Today")
         normalRowsLastWeek = buildRows(incognito: false, byTime: "Last Week")
 
         // Defer signaling until after we have finished updating. This way our state is
@@ -59,9 +56,16 @@ class TabCardModel: CardModel {
         self.objectWillChange.send()
     }
 
-    func getRows(incognito: Bool, byTime: String) -> [Row] {
-        print(">>> calling getRows with incognito: \(incognito), byTime: \(byTime)")
+    func getRows(incognito: Bool) -> [Row] { //, byTime: String
         var retVal: [Row] = []
+
+        if incognito {
+            retVal = incognitoRows + incognitoRowsLastWeek
+        } else {
+            retVal = normalRows + normalRowsLastWeek
+        }
+
+        /*
         if incognito && byTime == "Today" {
             retVal = incognitoRows
         } else if incognito && byTime == "Last Week" {
@@ -71,7 +75,9 @@ class TabCardModel: CardModel {
         } else if !incognito && byTime == "Last Week" {
             retVal = normalRowsLastWeek
         }
+        
         print(">>> retVal: \(retVal)")
+        */
         return retVal
     }
 
@@ -132,7 +138,7 @@ class TabCardModel: CardModel {
                 case .tabGroupGridRow(let details, let range):
                     return details.allDetails[range].reduce("") { $0 + $1.id + ":" }
                 case .sectionHeader(let time):
-                    return time == "Last Week" ? "420" : "69"
+                    return time == "Last Week" ? "68753A44-4D6F-1226-9C60-0050E4C00067" : "68753A44-4D6F-1226-9C60-0050E4C00068"
                 }
             }
 
@@ -322,24 +328,14 @@ class TabCardModel: CardModel {
         rows = rows.filter {
             !$0.cells.isEmpty
         }
-        
-        print(">>> rows before insert: \(rows)")
-        
+
         if !rows.isEmpty {
             rows.insert(Row(cells: [Row.Cell.sectionHeader(byTime)]), at: 0)
         }
-        
-        print(">>> rows after insert: \(rows)")
 
         for id in 0..<rows.count {
             rows[id].index = id + 1
         }
-        
-//        if !rows.isEmpty {
-//            rows.insert(Row(cells: [Row.Cell.sectionHeader]), at: 0)
-//        }
-//
-        
 
         return rows
     }

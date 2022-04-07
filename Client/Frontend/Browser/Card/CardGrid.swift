@@ -93,8 +93,6 @@ struct CardGrid: View {
 
     var cardContainerBackground: some View {
         Color.background.ignoresSafeArea()
-        //        Color.secondarySystemFill.ignoresSafeArea()
-        //Color(light: Color.secondarySystemFill, dark: Color.background)
     }
 
     @ViewBuilder

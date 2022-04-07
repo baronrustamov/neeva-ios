@@ -88,7 +88,6 @@ class GridModel: ObservableObject {
 
         tabCardModel.manager.switchIncognitoMode(
             incognito: incognito, fromTabTray: true, openLazyTab: false)
-        tabCardModel.updateRows()
     }
 
     func switchToSpaces() {

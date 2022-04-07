@@ -92,19 +92,20 @@ struct CardScrollContainer<Content: View>: View {
     }
 
     var body: some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            ScrollViewReader(content: content)
-        }
-        .accessibilityIdentifier("CardGrid")
-        .environment(\.columns, columns)
-        .introspectScrollView { scrollView in
-            // This is to make sure the overlay card bleeds outside the horizontal and bottom
-            // area in landscape mode. Clipping should be kept in portrait mode because
-            // bottom tool bar needs to be shown.
-            if landscapeMode {
-                scrollView.clipsToBounds = false
+            ScrollView(.vertical, showsIndicators: false) {
+                ScrollViewReader(content: content)
             }
-        }
+//            .animation(nil) //TODO: see if this resolves stuttering bug
+            .accessibilityIdentifier("CardGrid")
+            .environment(\.columns, columns)
+            .introspectScrollView { scrollView in
+                // This is to make sure the overlay card bleeds outside the horizontal and bottom
+                // area in landscape mode. Clipping should be kept in portrait mode because
+                // bottom tool bar needs to be shown.
+                if landscapeMode {
+                    scrollView.clipsToBounds = false
+                }
+            }
     }
 }
 
