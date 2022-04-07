@@ -56,7 +56,7 @@ class TabCardModel: CardModel {
         self.objectWillChange.send()
     }
 
-    func getRows(incognito: Bool) -> [Row] { //, byTime: String
+    func getRows(incognito: Bool) -> [Row] {  //, byTime: String
         var retVal: [Row] = []
 
         if incognito {
@@ -75,7 +75,7 @@ class TabCardModel: CardModel {
         } else if !incognito && byTime == "Last Week" {
             retVal = normalRowsLastWeek
         }
-        
+
         print(">>> retVal: \(retVal)")
         */
         return retVal
@@ -102,7 +102,7 @@ class TabCardModel: CardModel {
             self?.onDataUpdated()
         }.store(in: &subscription)
 
-        manager.selectedTabPublisher.sink{ [weak self] _ in
+        manager.selectedTabPublisher.sink { [weak self] _ in
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 self?.updateRows()
             }
@@ -138,7 +138,9 @@ class TabCardModel: CardModel {
                 case .tabGroupGridRow(let details, let range):
                     return details.allDetails[range].reduce("") { $0 + $1.id + ":" }
                 case .sectionHeader(let time):
-                    return time == "Last Week" ? "68753A44-4D6F-1226-9C60-0050E4C00067" : "68753A44-4D6F-1226-9C60-0050E4C00068"
+                    return time == "Last Week"
+                        ? "68753A44-4D6F-1226-9C60-0050E4C00067"
+                        : "68753A44-4D6F-1226-9C60-0050E4C00068"
                 }
             }
 
@@ -341,7 +343,7 @@ class TabCardModel: CardModel {
     }
 
     func onDataUpdated() {
-         print(">>> cardModel.onDataUpdated()")
+        print(">>> cardModel.onDataUpdated()")
         allDetails = manager.getAll()
             .map { TabCardDetails(tab: $0, manager: manager) }
 

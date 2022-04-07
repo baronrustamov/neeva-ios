@@ -42,9 +42,10 @@ struct TabGridContainer: View {
     var selectedRowId: TabCardModel.Row.ID? {
         isIncognito
             ? (tabModel.incognitoRows.first { $0.cells.contains(where: \.isSelected) }?.id
-        ?? tabModel.incognitoRowsLastWeek.first { $0.cells.contains(where: \.isSelected) }?.id)
+                ?? tabModel.incognitoRowsLastWeek.first { $0.cells.contains(where: \.isSelected) }?
+                .id)
             : (tabModel.normalRows.first { $0.cells.contains(where: \.isSelected) }?.id
-        ?? tabModel.normalRowsLastWeek.first { $0.cells.contains(where: \.isSelected) }?.id)
+                ?? tabModel.normalRowsLastWeek.first { $0.cells.contains(where: \.isSelected) }?.id)
     }
 
     var selectedCardID: String? {
@@ -92,20 +93,20 @@ struct CardScrollContainer<Content: View>: View {
     }
 
     var body: some View {
-            ScrollView(.vertical, showsIndicators: false) {
-                ScrollViewReader(content: content)
+        ScrollView(.vertical, showsIndicators: false) {
+            ScrollViewReader(content: content)
+        }
+        //            .animation(nil) //TODO: see if this resolves stuttering bug
+        .accessibilityIdentifier("CardGrid")
+        .environment(\.columns, columns)
+        .introspectScrollView { scrollView in
+            // This is to make sure the overlay card bleeds outside the horizontal and bottom
+            // area in landscape mode. Clipping should be kept in portrait mode because
+            // bottom tool bar needs to be shown.
+            if landscapeMode {
+                scrollView.clipsToBounds = false
             }
-//            .animation(nil) //TODO: see if this resolves stuttering bug
-            .accessibilityIdentifier("CardGrid")
-            .environment(\.columns, columns)
-            .introspectScrollView { scrollView in
-                // This is to make sure the overlay card bleeds outside the horizontal and bottom
-                // area in landscape mode. Clipping should be kept in portrait mode because
-                // bottom tool bar needs to be shown.
-                if landscapeMode {
-                    scrollView.clipsToBounds = false
-                }
-            }
+        }
     }
 }
 
