@@ -60,8 +60,11 @@ struct ShareSpaceView: View {
     @Binding var isPresented: Bool
 
     @Default(.seenSpacesShareIntro) var seenSpacesShareIntro: Bool
+
     @EnvironmentObject var tabModel: TabCardModel
     @EnvironmentObject var spaceModel: SpaceCardModel
+    @EnvironmentObject var toastViewManager: ToastViewManager
+
     @State var suggestedContacts: [ContactsProvider.Profile] = []
     @State var selectedProfiles: [ContactsProvider.Profile] = []
     @State var isPublic: Bool
@@ -223,16 +226,12 @@ struct ShareSpaceView: View {
                             acl: selectedACL, note: noteText)
                     }
 
-                    if sharedUsers > 0,
-                        let toastManager = SceneDelegate.getCurrentSceneDelegate(
-                            with: tabModel.manager.scene)?.toastViewManager
-                    {
-                        toastManager.makeToast(
+                    if sharedUsers > 0 {
+                        toastViewManager.makeToast(
                             text: sharedUsers == 1
                                 ? "Success! Space shared with 1 person"
                                 : "Success! Space shared with \(sharedUsers) people"
-                        )
-                        .enqueue(manager: toastManager)
+                        ).enqueue(manager: toastViewManager)
                     }
 
                     isPresented = false

@@ -30,7 +30,10 @@ private enum Social: String {
 struct ShareToSocialView: View {
     @Environment(\.shareURL) var shareURL
     @Environment(\.onOpenURL) var openURL
+
     @EnvironmentObject var tabModel: TabCardModel
+    @EnvironmentObject var toastViewManager: ToastViewManager
+
     let url: URL
     let noteText: String
     let shareTargetView: UIView
@@ -132,12 +135,9 @@ struct ShareToSocialView: View {
                 onClick: {
                     ensurePublicACL({
                         UIPasteboard.general.url = url
-                        if let toastManager = SceneDelegate.getCurrentSceneDelegate(
-                            with: tabModel.manager.scene)?.toastViewManager
-                        {
-                            toastManager.makeToast(text: "URL copied to clipboard")
-                                .enqueue(manager: toastManager)
-                        }
+
+                        toastViewManager.makeToast(text: "URL copied to clipboard")
+                            .enqueue(manager: toastViewManager)
                     })
                 })
             Spacer()

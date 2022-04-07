@@ -126,18 +126,15 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
                 isIncognito
                 ? "New Incognito Tab opened"
                 : "Incognito Tab opened"
+            let toastManager = SceneDelegate.getBVC(for: self.view).toastViewManager
 
-            if let toastManager = SceneDelegate.getCurrentSceneDelegate(for: self.view)
-                .toastViewManager
-            {
-                toastManager.makeToast(
-                    text: toastLabelText,
-                    buttonText: "Switch",
-                    buttonAction: {
-                        self.tabManager?.selectTab(tab, notify: true)
-                    }
-                ).enqueue(manager: toastManager)
-            }
+            toastManager.makeToast(
+                text: toastLabelText,
+                buttonText: "Switch",
+                buttonAction: {
+                    self.tabManager?.selectTab(tab, notify: true)
+                }
+            ).enqueue(manager: toastManager)
         }
     }
 

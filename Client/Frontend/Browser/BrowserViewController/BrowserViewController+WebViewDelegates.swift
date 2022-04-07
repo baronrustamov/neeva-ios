@@ -492,14 +492,10 @@ extension BrowserViewController: WKNavigationDelegate {
 
         showModal(style: .grouped) {
             OpenInAppOverlayContent(url: url) {
-                guard let toastViewManager = self.getSceneDelegate()?.toastViewManager else {
-                    return
-                }
-
                 ToastDefaults().showToast(
                     with:
                         "Unable to open link in external app. Check if the app is installed on this device.",
-                    toastViewManager: toastViewManager)
+                    toastViewManager: self.toastViewManager)
             }.environment(\.hideOverlay, { self.overlayManager.hideCurrentOverlay() })
         }
     }

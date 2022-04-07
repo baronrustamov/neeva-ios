@@ -95,7 +95,8 @@ class BrowserViewController: UIViewController, ModalPresenter {
     lazy var browserModel: BrowserModel = {
         BrowserModel(
             gridModel: gridModel, tabManager: tabManager, chromeModel: chromeModel,
-            incognitoModel: incognitoModel, switcherToolbarModel: switcherToolbarModel)
+            incognitoModel: incognitoModel, switcherToolbarModel: switcherToolbarModel,
+            toastViewManager: toastViewManager, notificationViewManager: notificationViewManager)
     }()
 
     private lazy var switcherToolbarModel: SwitcherToolbarModel = {
@@ -136,6 +137,9 @@ class BrowserViewController: UIViewController, ModalPresenter {
     private(set) lazy var trackingStatsViewModel: TrackingStatsViewModel = {
         return TrackingStatsViewModel(tabManager: tabManager)
     }()
+
+    var toastViewManager: ToastViewManager
+    var notificationViewManager: NotificationViewManager
 
     var findInPageModel: FindInPageModel?
     var overlayWindowManager: WindowManager?
@@ -192,10 +196,14 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
     private var subscriptions: Set<AnyCancellable> = []
 
-    init(profile: Profile, scene: UIScene) {
+    init(profile: Profile, window: UIWindow, scene: UIScene) {
         self.profile = profile
         self.tabManager = TabManager(profile: profile, scene: scene, incognitoModel: incognitoModel)
         self.readerModeCache = DiskReaderModeCache.sharedInstance
+
+        self.toastViewManager = ToastViewManager(window: window)
+        self.notificationViewManager = NotificationViewManager(window: window)
+
         super.init(nibName: nil, bundle: nil)
 
         chromeModel.topBarDelegate = self
@@ -897,15 +905,13 @@ class BrowserViewController: UIViewController, ModalPresenter {
             toastLabelText = "New Tab opened"
         }
 
-        if let toastManager = self.getSceneDelegate()?.toastViewManager {
-            toastManager.makeToast(
-                text: toastLabelText,
-                buttonText: "Switch",
-                buttonAction: {
-                    self.tabManager.selectTab(tab, notify: true)
-                }
-            ).enqueue(manager: toastManager)
-        }
+        toastViewManager.makeToast(
+            text: toastLabelText,
+            buttonText: "Switch",
+            buttonAction: {
+                self.tabManager.selectTab(tab, notify: true)
+            }
+        ).enqueue(manager: toastViewManager)
     }
 
     func openBlankNewTab(isIncognito: Bool = false) {
@@ -994,12 +1000,10 @@ class BrowserViewController: UIViewController, ModalPresenter {
                             return succeed()
                         }
                         return self.profile.history.addPinnedTopSite(site)
-                    }.uponQueue(.main) { result in
+                    }.uponQueue(.main) { [self] result in
                         if result.isSuccess {
-                            if let toastManager = self.getSceneDelegate()?.toastViewManager {
-                                toastManager.makeToast(text: "Pinned To Top Sites").enqueue(
-                                    manager: toastManager)
-                            }
+                            toastViewManager.makeToast(text: "Pinned To Top Sites").enqueue(
+                                manager: toastViewManager)
                         }
                     }
                 }
@@ -1015,12 +1019,10 @@ class BrowserViewController: UIViewController, ModalPresenter {
                         }
 
                         return self.profile.history.removeFromPinnedTopSites(site)
-                    }.uponQueue(.main) { result in
+                    }.uponQueue(.main) { [self] result in
                         if result.isSuccess {
-                            if let toastManager = self.getSceneDelegate()?.toastViewManager {
-                                toastManager.makeToast(text: "Removed From Top Sites").enqueue(
-                                    manager: toastManager)
-                            }
+                            toastViewManager.makeToast(text: "Removed From Top Sites").enqueue(
+                                manager: toastViewManager)
                         }
                     }
                 }

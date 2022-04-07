@@ -237,10 +237,8 @@ class HistoryPanel: SiteTableViewController {
 
     func pinToTopSites(_ site: Site) {
         profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
-            if result.isSuccess,
-                let toastManager = SceneDelegate.getCurrentSceneDelegate(for: self.view)
-                    .toastViewManager
-            {
+            if result.isSuccess {
+                let toastManager = SceneDelegate.getBVC(for: self.view).toastViewManager
                 toastManager.makeToast(text: "Pinned To Top Sites").enqueue(manager: toastManager)
             }
         }
@@ -500,22 +498,19 @@ class HistoryPanel: SiteTableViewController {
                 self.removeHistoryForURLAtIndexPath(indexPath: indexPath)
             }
         ) { tab, isIncognito in
-            if let toastManager = SceneDelegate.getCurrentSceneDelegate(for: self.view)
-                .toastViewManager
-            {
-                let toastLabelText: LocalizedStringKey =
-                    isIncognito
-                    ? "New Incognito Tab opened"
-                    : "New Tab opened"
+            let toastManager = SceneDelegate.getBVC(for: self.view).toastViewManager
+            let toastLabelText: LocalizedStringKey =
+                isIncognito
+                ? "New Incognito Tab opened"
+                : "New Tab opened"
 
-                toastManager.makeToast(
-                    text: toastLabelText,
-                    buttonText: "Switch",
-                    buttonAction: {
-                        self.tabManager.selectTab(tab, notify: true)
-                    }
-                ).enqueue(manager: toastManager)
-            }
+            toastManager.makeToast(
+                text: toastLabelText,
+                buttonText: "Switch",
+                buttonAction: {
+                    self.tabManager.selectTab(tab, notify: true)
+                }
+            ).enqueue(manager: toastManager)
         }
     }
 

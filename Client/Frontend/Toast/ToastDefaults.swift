@@ -40,13 +40,7 @@ class ToastDefaults: NSObject {
                         _ = bvc.tabManager.restoreSavedTabs(savedTabs)
                     }))
 
-            guard
-                let toastViewManager = SceneDelegate.getCurrentSceneDelegate(
-                    with: tabManager.scene)?.toastViewManager
-            else {
-                return
-            }
-
+            let toastViewManager = SceneDelegate.getBVC(with: tabManager.scene).toastViewManager
             let toastView = toastViewManager.makeToast(content: toastContent)
             toast = toastView
             toastViewManager.enqueue(view: toastView)
@@ -56,13 +50,7 @@ class ToastDefaults: NSObject {
     func showToastForPinningTab(pinning: Bool, tabManager: TabManager) {
         let toastText = pinning ? "Tab Pinned" : "Tab Unpinned"
 
-        guard
-            let toastViewManager = SceneDelegate.getCurrentSceneDelegate(
-                with: tabManager.scene)?.toastViewManager
-        else {
-            return
-        }
-
+        let toastViewManager = SceneDelegate.getBVC(with: tabManager.scene).toastViewManager
         showToast(with: toastText, toastViewManager: toastViewManager, checkmark: true)
     }
 
@@ -159,13 +147,7 @@ class ToastDefaults: NSObject {
             normalContent: normalContent, completedContent: completedContent,
             failedContent: failedContent)
 
-        guard
-            let toastViewManager = SceneDelegate.getCurrentSceneDelegate(for: bvc.view)
-                .toastViewManager
-        else {
-            return
-        }
-
+        let toastViewManager = bvc.toastViewManager
         let toastView = toastViewManager.makeToast(
             content: toastContent, toastProgressViewModel: toastProgressViewModel,
             autoDismiss: false)
@@ -200,13 +182,7 @@ class ToastDefaults: NSObject {
             normalContent: normalContent, completedContent: completedContent,
             failedContent: failedContent)
 
-        guard
-            let toastViewManager = SceneDelegate.getCurrentSceneDelegate(for: bvc.view)
-                .toastViewManager
-        else {
-            return
-        }
-
+        let toastViewManager = bvc.toastViewManager
         let toastView = toastViewManager.makeToast(
             content: toastContent, toastProgressViewModel: toastProgressViewModel,
             autoDismiss: false)

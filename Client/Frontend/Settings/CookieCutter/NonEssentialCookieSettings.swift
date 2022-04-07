@@ -7,6 +7,8 @@ import SwiftUI
 
 struct NonEssentialCookieSettings: View {
     @EnvironmentObject var cookieCutterModel: CookieCutterModel
+    @EnvironmentObject var browserModel: BrowserModel
+    @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
         List {
@@ -45,6 +47,23 @@ struct NonEssentialCookieSettings: View {
         .pickerStyle(.inline)
         .applyToggleStyle()
         .navigationTitle(Text("Non-essential Cookies"))
+        .onChange(of: cookieCutterModel.cookieNoticeStateShouldReset) { value in
+            if value {
+                cookieCutterModel.cookieNoticeStateShouldReset = false
+                cookieCutterModel.cookieNotices = .declineNonEssential
+
+                let toastViewManager = browserModel.toastViewManager
+                toastViewManager.makeToast(
+                    content: ToastViewContent(
+                        normalContent: ToastStateContent(
+                            text: "Non-essential cookies will be set to decline.",
+                            buttonText: "Reload",
+                            buttonAction: {
+                                self.presentationMode.wrappedValue.dismiss()
+                            }))
+                ).enqueue(manager: toastViewManager)
+            }
+        }
     }
 }
 

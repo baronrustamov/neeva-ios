@@ -31,6 +31,9 @@ class BrowserModel: ObservableObject {
     let switcherToolbarModel: SwitcherToolbarModel
     let cookieCutterModel = CookieCutterModel()
 
+    var toastViewManager: ToastViewManager
+    var notificationViewManager: NotificationViewManager
+
     func show() {
         if gridModel.switcherState != .tabs {
             gridModel.switcherState = .tabs
@@ -136,8 +139,7 @@ class BrowserModel: ObservableObject {
 
                     ToastDefaults().showToast(
                         with: "Unable to find Space",
-                        toastViewManager: SceneDelegate.getCurrentSceneDelegate(for: bvc.view)
-                            .toastViewManager
+                        toastViewManager: toastViewManager
                     )
 
                     return
@@ -188,7 +190,8 @@ class BrowserModel: ObservableObject {
 
     init(
         gridModel: GridModel, tabManager: TabManager, chromeModel: TabChromeModel,
-        incognitoModel: IncognitoModel, switcherToolbarModel: SwitcherToolbarModel
+        incognitoModel: IncognitoModel, switcherToolbarModel: SwitcherToolbarModel,
+        toastViewManager: ToastViewManager, notificationViewManager: NotificationViewManager
     ) {
         self.gridModel = gridModel
         self.tabManager = tabManager
@@ -198,5 +201,8 @@ class BrowserModel: ObservableObject {
         self.scrollingControlModel = ScrollingControlModel(
             tabManager: tabManager, chromeModel: chromeModel)
         self.switcherToolbarModel = switcherToolbarModel
+
+        self.toastViewManager = toastViewManager
+        self.notificationViewManager = notificationViewManager
     }
 }

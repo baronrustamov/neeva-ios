@@ -182,6 +182,7 @@ struct WalletDashboard: View {
                     UIPasteboard.general.setValue(
                         Defaults[.cryptoPublicKey],
                         forPasteboardType: kUTTypePlainText as String)
+
                     copyAddressText = "Copied!"
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                         copyAddressText = "Copy Address"

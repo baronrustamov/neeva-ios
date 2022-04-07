@@ -21,7 +21,7 @@ public class SendFeedbackPanel: UIHostingController<AnyView> {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     ToastDefaults().showToastForFeedback(
                         request: feedbackRequest,
-                        toastViewManager: SceneDelegate.getCurrentSceneDelegate(for: self.view)
+                        toastViewManager: SceneDelegate.getBVC(for: self.view)
                             .toastViewManager)
                 }
             }

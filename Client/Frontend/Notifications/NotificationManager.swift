@@ -380,13 +380,11 @@ class NotificationManager: ObservableObject {
     }
 
     private func showInAppNotification(notification: BaseNotification) {
-        guard let sceneDelegate = SceneDelegate.getCurrentSceneDelegateOrNil(),
-            let bvc = SceneDelegate.getBVCOrNil()
-        else {
+        guard let bvc = SceneDelegate.getBVCOrNil() else {
             return
         }
 
-        sceneDelegate.notificationViewManager.enqueue(
+        bvc.notificationViewManager.enqueue(
             view: NotificationRow(
                 notification: notification, showUnreadBadge: false,
                 action: {

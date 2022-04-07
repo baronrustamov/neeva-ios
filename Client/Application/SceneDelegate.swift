@@ -16,9 +16,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     private var scene: UIScene?
 
-    public var toastViewManager: ToastViewManager!
-    public var notificationViewManager: NotificationViewManager!
-
     private var bvc: BrowserViewController!
     private var geigerCounter: KMCGeigerCounter?
 
@@ -34,8 +31,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         window = .init(windowScene: scene)
         window!.makeKeyAndVisible()
-        toastViewManager = ToastViewManager(window: window!)
-        notificationViewManager = NotificationViewManager(window: window!)
 
         setupRootViewController(scene)
 
@@ -61,14 +56,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private func setupRootViewController(_ scene: UIScene) {
         let profile = getAppDelegate().profile
 
-        self.bvc = BrowserViewController(profile: profile, scene: scene)
+        self.bvc = BrowserViewController(profile: profile, window: window!, scene: scene)
 
         bvc.edgesForExtendedLayout = []
         bvc.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
         bvc.restorationClass = AppDelegate.self
 
         window!.rootViewController = bvc
-
         bvc.tabManager.selectedTab?.reload()
     }
 

@@ -4,6 +4,7 @@
 
 import Defaults
 import Foundation
+import SwiftUI
 
 enum CookieNotices: CaseIterable, Encodable, Decodable {
     case declineNonEssential
@@ -22,6 +23,7 @@ extension Defaults.Keys {
 }
 
 class CookieCutterModel: ObservableObject {
+    @Published var cookieNoticeStateShouldReset = false
     @Published var cookieNotices: CookieNotices {
         didSet {
             guard cookieNotices != oldValue else {
@@ -38,9 +40,31 @@ class CookieCutterModel: ObservableObject {
     }
 
     // User selected settings.
-    @Default(.marketingCookies) var marketingCookiesAllowed
-    @Default(.analyticCookies) var analyticCookiesAllowed
-    @Default(.socialCookies) var socialCookiesAllowed
+    @Default(.marketingCookies) var marketingCookiesAllowed {
+        didSet {
+            checkIfCookieNoticeStateShouldReset()
+        }
+    }
+    @Default(.analyticCookies) var analyticCookiesAllowed {
+        didSet {
+            checkIfCookieNoticeStateShouldReset()
+        }
+    }
+    @Default(.socialCookies) var socialCookiesAllowed {
+        didSet {
+            checkIfCookieNoticeStateShouldReset()
+        }
+    }
+
+    private func checkIfCookieNoticeStateShouldReset() {
+        if cookieNotices == .userSelected
+            && !marketingCookiesAllowed
+            && !analyticCookiesAllowed
+            && !socialCookiesAllowed
+        {
+            cookieNoticeStateShouldReset = true
+        }
+    }
 
     init() {
         self.cookieNotices = Defaults[.cookieNotices]

@@ -11,6 +11,7 @@ struct PrivacySettingsSection: View {
 
     @Default(.closeIncognitoTabs) var closeIncognitoTabs
     @Default(.contentBlockingEnabled) private var contentBlockingEnabled
+
     @Environment(\.onOpenURL) var openURL
     @EnvironmentObject var browserModel: BrowserModel
 

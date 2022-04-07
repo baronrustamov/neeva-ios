@@ -132,6 +132,7 @@ struct BrowserView: View {
         .environmentObject(browserModel.contentVisibilityModel)
         .environmentObject(browserModel.scrollingControlModel)
         .environmentObject(browserModel.switcherToolbarModel)
+        .environmentObject(browserModel.toastViewManager)
         .environmentObject(chromeModel)
         .environmentObject(bvc.gridModel)
         .environmentObject(bvc.gridModel.spaceCardModel)

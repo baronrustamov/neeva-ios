@@ -126,6 +126,7 @@ extension WalletServerManager: ServerDelegate {
         self.delegate?.updateCurrentSession()
         Defaults[.dAppsSession(session.dAppInfo.peerId)] = nil
         Defaults[.sessionsPeerIDs].remove(session.dAppInfo.peerId)
+
         DispatchQueue.main.async {
             self.delegate?.shouldShowToast(
                 for: "Disconnected from \(session.dAppInfo.peerMeta.name)")

@@ -7,10 +7,6 @@ import Shared
 
 extension BrowserViewController: DownloadQueueDelegate {
     func downloadQueue(_ downloadQueue: DownloadQueue, didStartDownload download: Download) {
-        guard let toastViewManager = getSceneDelegate()?.toastViewManager else {
-            return
-        }
-
         ToastDefaults().showToastForDownload(download: download, toastViewManager: toastViewManager)
     }
 

@@ -34,41 +34,49 @@ struct SettingsView: View {
     let scrollViewAppearance = UINavigationBar.appearance().scrollEdgeAppearance
 
     var body: some View {
-        NavigationView {
-            List {
-                if NeevaConstants.currentTarget != .xyz {
-                    Section(header: Text("Neeva")) {
-                        NeevaSettingsSection(dismissVC: dismiss, userInfo: .shared)
+        ZStack {
+            NavigationView {
+                List {
+                    if NeevaConstants.currentTarget != .xyz {
+                        Section(header: Text("Neeva")) {
+                            NeevaSettingsSection(dismissVC: dismiss, userInfo: .shared)
+                        }
+                    }
+
+                    Section(header: Text("General")) {
+                        GeneralSettingsSection()
+                    }
+
+                    Section(header: Text("Privacy")) {
+                        PrivacySettingsSection()
+                    }
+
+                    Section(header: Text("Support")) {
+                        SupportSettingsSection()
+                    }
+
+                    Section(header: Text("About")) {
+                        AboutSettingsSection(showDebugSettings: $showDebugSettings)
+                    }
+
+                    if showDebugSettings {
+                        DebugSettingsSection()
                     }
                 }
-                Section(header: Text("General")) {
-                    GeneralSettingsSection()
+                .onDisappear(perform: TourManager.shared.notifyCurrentViewClose)
+                .listStyle(.insetGrouped)
+                .applyToggleStyle()
+                .navigationTitle("Settings")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Done", action: dismiss)
+                    }
                 }
-                Section(header: Text("Privacy")) {
-                    PrivacySettingsSection(openCookieCutterPage: openPage == .cookieCutter)
-                }
-                Section(header: Text("Support")) {
-                    SupportSettingsSection()
-                }
-                Section(header: Text("About")) {
-                    AboutSettingsSection(showDebugSettings: $showDebugSettings)
-                }
-                if showDebugSettings {
-                    DebugSettingsSection()
-                }
-            }
-            .listStyle(.insetGrouped)
-            .applyToggleStyle()
-            .navigationTitle("Settings")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done", action: dismiss)
-                }
-            }
+            }.navigationViewStyle(.stack)
+
+            OverlayView(limitToOverlayType: [.toast(nil)])
         }
-        .navigationViewStyle(.stack)
-        .onDisappear(perform: TourManager.shared.notifyCurrentViewClose)
     }
 }
 
@@ -87,7 +95,6 @@ struct SettingPreviewWrapper<Content: View>: View {
             .navigationBarHidden(true)
             .navigationBarTitleDisplayMode(.inline)
         }.navigationViewStyle(.stack)
-
     }
 }
 
@@ -130,6 +137,9 @@ class SettingsViewController: UIHostingController<AnyView> {
                 }
             }
             .environmentObject(bvc.browserModel)
+            .environmentObject(bvc.browserModel.scrollingControlModel)
+            .environmentObject(bvc.chromeModel)
+            .environmentObject(bvc.overlayManager)
         )
     }
 

@@ -741,12 +741,8 @@ private struct XYZQueryView: View {
 func copySuggestion(value: String?, scene: UIScene) {
     UIPasteboard.general.string = value
 
-    if let toastManager = SceneDelegate.getCurrentSceneDelegate(
-        with: scene)?.toastViewManager
-    {
-        toastManager.makeToast(text: "Copied to clipboard").enqueue(
-            manager: toastManager)
-    }
+    let toastManager = SceneDelegate.getBVC(with: scene).toastViewManager
+    toastManager.makeToast(text: "Copied to clipboard").enqueue(manager: toastManager)
 }
 
 struct SuggestionView_Previews: PreviewProvider {
