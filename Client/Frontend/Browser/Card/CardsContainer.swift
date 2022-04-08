@@ -40,24 +40,19 @@ struct TabGridContainer: View {
     @Environment(\.columns) private var columns
 
     var selectedRowId: TabCardModel.Row.ID? {
-        /*
-        isIncognito
-            ? (tabModel.incognitoRows.first { $0.cells.contains(where: \.isSelected) }?.id
-                ?? tabModel.incognitoRowsLastWeek.first { $0.cells.contains(where: \.isSelected) }?
-                .id)
-            : (tabModel.normalRows.first { $0.cells.contains(where: \.isSelected) }?.id
-                ?? tabModel.normalRowsLastWeek.first { $0.cells.contains(where: \.isSelected) }?.id)
-        */
-        
+        // note: this is still WIP, it's working but can remove some of the code
         if isIncognito {
-            if let row = tabModel.incognitoRows.first { $0.cells.contains(where: \.isSelected) } {
+            if let row = tabModel.incognitoRows.first { row in
+                row.cells.contains(where: \.isSelected) } {
                 if row.index == 2 {
                     //scroll to today header
                     return ["68753A44-4D6F-1226-9C60-0050E4C00068"]
                 } else {
                     return row.id
                 }
-            } else if let row = tabModel.incognitoRowsLastWeek.first { $0.cells.contains(where: \.isSelected) } {
+            } else if let row = tabModel.incognitoRowsLastWeek.first { row in
+                row.cells.contains(where: \.isSelected)
+            } {
                 if row.index == 2 {
                     //scroll to last week's header
                     return ["68753A44-4D6F-1226-9C60-0050E4C00067"]
@@ -65,15 +60,19 @@ struct TabGridContainer: View {
                     return row.id
                 }
             }
-        } else {
-            if let row = tabModel.normalRows.first { $0.cells.contains(where: \.isSelected) } {
+        }
+        else {
+            if let row = tabModel.normalRows.first { row in
+                row.cells.contains(where: \.isSelected) } {
                 if row.index == 2 {
                     //scroll to today header
                     return ["68753A44-4D6F-1226-9C60-0050E4C00068"]
                 } else {
                     return row.id
                 }
-            } else if let row = tabModel.normalRowsLastWeek.first { $0.cells.contains(where: \.isSelected) } {
+            } else if let row = tabModel.normalRowsLastWeek.first { row in
+                row.cells.contains(where: \.isSelected)
+            } {
                 if row.index == 2 {
                     //scroll to last week's header
                     return ["68753A44-4D6F-1226-9C60-0050E4C00067"]

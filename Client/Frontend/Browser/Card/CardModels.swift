@@ -342,7 +342,6 @@ class TabCardModel: CardModel {
     }
 
     func onDataUpdated() {
-        print(">>> cardModel.onDataUpdated()")
         allDetails = manager.getAll()
             .map { TabCardDetails(tab: $0, manager: manager) }
 

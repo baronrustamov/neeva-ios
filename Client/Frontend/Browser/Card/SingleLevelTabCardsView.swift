@@ -100,12 +100,12 @@ struct SingleLevelTabCardsView: View {
         return rowInfo.last == groupDetails.allDetails.count - 1
     }
 
-//    func isTopRow(_ rowIndex: Int?) -> Bool {
-//        if let rowIndex = rowIndex {
-//            return rowIndex == 1
-//        }
-//        return false
-//    }
+    //    func isTopRow(_ rowIndex: Int?) -> Bool {
+    //        if let rowIndex = rowIndex {
+    //            return rowIndex == 1
+    //        }
+    //        return false
+    //    }
 }
 
 struct timeLineCardsView: View {
