@@ -8,21 +8,24 @@ import SwiftUI
 struct RecommendedSpacesView: View {
     @ObservedObject var store: SpaceStore
     @ObservedObject var viewModel: ZeroQueryModel
-    @Binding var expandSuggestedSpace: Bool
+    @Binding var expandSuggestedSpace: TriState
 
     var body: some View {
-        if let space = store.allSpaces.first {
+        if let suggestedSpaceId = SpaceStore.suggested.suggestedSpaceID,
+            let space = store.allSpaces.first(where: { $0.id.id == suggestedSpaceId })
+        {
             ZeroQueryHeader(
                 title: "\(space.name)",
-                action: { expandSuggestedSpace.toggle() },
-                label: "\(expandSuggestedSpace ? "hides" : "shows") this section",
-                icon: expandSuggestedSpace ? .chevronUp : .chevronDown
+                action: { expandSuggestedSpace.advance() },
+                label: "\(expandSuggestedSpace.verb) this section",
+                icon: expandSuggestedSpace.icon
             )
-            if expandSuggestedSpace {
+            if expandSuggestedSpace != .hidden {
                 CompactSpaceDetailList(
                     primitive: SpaceCardDetails(
                         space: space,
-                        manager: SpaceStore.suggested)
+                        manager: SpaceStore.suggested),
+                    state: expandSuggestedSpace
                 )
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)

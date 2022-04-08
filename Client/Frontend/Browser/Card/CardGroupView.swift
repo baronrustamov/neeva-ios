@@ -134,6 +134,7 @@ struct ThumbnailGroupView<Model: ThumbnailModel>: View {
 // MARK: ColorThumbnail for Preview
 
 private class PreviewThumbnailModel: ThumbnailModel {
+
     fileprivate struct ColorThumbnail: SelectableThumbnail {
         let color: Color
         var thumbnail: some View { color }
@@ -147,6 +148,10 @@ private class PreviewThumbnailModel: ThumbnailModel {
     init(color: Color, num: Int) {
         self.color = color
         self.num = num
+    }
+
+    var allDetailsWithExclusionList: [ColorThumbnail] {
+        allDetails
     }
 
     var allDetails: [ColorThumbnail] {

@@ -218,11 +218,20 @@ struct SpaceDetailList: View {
 
 struct CompactSpaceDetailList: View {
     let primitive: SpaceCardDetails
+    let state: TriState
     @Environment(\.onOpenURLForSpace) var onOpenURLForSpace
+
+    private var dataSource: [SpaceEntityThumbnail] {
+        if state == .compact {
+            return Array(primitive.allDetailsWithExclusionList.prefix(upTo: 5))
+        }
+        return primitive.allDetailsWithExclusionList
+    }
 
     var body: some View {
         VStack {
-            ForEach(primitive.allDetails, id: \.id) { details in
+
+            ForEach(dataSource, id: \.id) { details in
                 if let url = details.data.url {
                     Button(
                         action: {

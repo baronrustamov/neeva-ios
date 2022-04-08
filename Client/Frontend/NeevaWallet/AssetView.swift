@@ -101,6 +101,9 @@ public class AssetGroup: ThumbnailModel, Identifiable {
     var allDetails: [Asset] = []
     var assetStoreSubscription: AnyCancellable? = nil
     var collections: [String] = []
+    var allDetailsWithExclusionList: [Asset] {
+        return allDetails
+    }
 
     init(collectionSlug: String) {
         allDetails = AssetStore.shared.assets.filter {

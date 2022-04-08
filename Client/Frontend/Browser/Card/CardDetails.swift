@@ -487,6 +487,7 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
     var item: Space? { manager.get(for: id) }
     var closeButtonImage: UIImage? = nil
     @Published var allDetails: [SpaceEntityThumbnail] = []
+    @Published var allDetailsWithExclusionList: [SpaceEntityThumbnail] = []
 
     var accessibilityLabel: String {
         "\(title), Space"
@@ -530,6 +531,10 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
         allDetails =
             manager.get(for: id)?.contentData?
             .map { SpaceEntityThumbnail(data: $0, spaceID: id) } ?? []
+        allDetailsWithExclusionList = allDetails.filter({
+            $0.data.url?.absoluteString.hasPrefix(NeevaConstants.appSpacesURL.absoluteString)
+                ?? false
+        })
     }
 
     func onSelect() {

@@ -143,7 +143,7 @@ public class Space: Hashable, Identifiable {
 public class SpaceStore: ObservableObject {
     public static var shared = SpaceStore()
     public static var suggested = SpaceStore(
-        suggestedID: "c3Z5QSdvOcybtFTY5uboDyvhm4W8mywvEyvCcdtU")
+        suggestedID: "xlvaUJmdPRSrcqRHPEzVPuWf4RP74EyHvz5QvxLN")
 
     public static var promotionalSpaceId =
         "-ysvXOiH2HWXsXeN_QaVFzwWEF_ASvtOW_yylJEM"
@@ -152,7 +152,7 @@ public class SpaceStore: ObservableObject {
 
     private static var subscription: AnyCancellable? = nil
     private var refreshCompletionHandlers: [() -> Void] = []
-    private var suggestedSpaceID: String? = nil
+    public var suggestedSpaceID: String? = nil
 
     public init(suggestedID: String? = nil) {
         self.suggestedSpaceID = suggestedID
@@ -220,8 +220,8 @@ public class SpaceStore: ObservableObject {
             return
         }
 
-        if let _ = suggestedSpaceID {
-            fetchSuggestedSpaces()
+        if let id = suggestedSpaceID {
+            fetchSuggestedSpaces(id: id)
             return
         }
 
@@ -268,11 +268,7 @@ public class SpaceStore: ObservableObject {
         allSpaces.move(fromOffsets: indexSet, toOffset: 0)
     }
 
-    private func fetchSuggestedSpaces() {
-        guard let id = suggestedSpaceID else {
-            return
-        }
-
+    private func fetchSuggestedSpaces(id: String) {
         GraphQLAPI.shared.isAnonymous = true
         allSpaces.append(
             Space(

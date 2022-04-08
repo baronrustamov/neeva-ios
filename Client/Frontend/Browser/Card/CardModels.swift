@@ -11,6 +11,7 @@ import SwiftUI
 protocol ThumbnailModel: ObservableObject {
     associatedtype Thumbnail: SelectableThumbnail
     var allDetails: [Thumbnail] { get }
+    var allDetailsWithExclusionList: [Thumbnail] { get }
 }
 
 protocol CardModel: ThumbnailModel {

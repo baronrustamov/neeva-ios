@@ -7,7 +7,7 @@ import Shared
 import Storage
 import SwiftUI
 
-private enum TriState: Int, Codable {
+enum TriState: Int, Codable {
     case hidden
     case compact
     case expanded
@@ -61,8 +61,8 @@ extension Defaults.Keys {
         "profile.home.searches.expanded", default: true)
     fileprivate static let expandSpaces = Defaults.Key<Bool>(
         "profile.home.spaces.expanded", default: true)
-    fileprivate static let expandSuggestedSpace = Defaults.Key<Bool>(
-        "profile.home.suggestedSpace.expanded", default: true)
+    fileprivate static let expandSuggestedSpace = Defaults.Key<TriState>(
+        "profile.home.suggestedSpace.expanded", default: .compact)
 }
 
 struct ZeroQueryView: View {
@@ -209,7 +209,7 @@ struct ZeroQueryView: View {
         }
 
         if !SpaceStore.suggested.allSpaces.isEmpty,
-            expandSuggestedSpace
+            expandSuggestedSpace != .hidden
         {
             suggestedSpace
         }
@@ -275,7 +275,7 @@ struct ZeroQueryView: View {
         }
 
         if !SpaceStore.suggested.allSpaces.isEmpty,
-            !expandSuggestedSpace
+            expandSuggestedSpace == .hidden
         {
             suggestedSpace
         }
