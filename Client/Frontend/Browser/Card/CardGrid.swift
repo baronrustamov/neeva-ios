@@ -45,15 +45,14 @@ struct CardGridBackground: View {
                         gridModel.scrollToSelectedTab()
                     }
                     // Allow some time for the `Card` to get created if it was previously
-                    // not visible.
+                    // not visible. Compute `showGrid` before the the delay since the
+                    // card transition animation could complete before the callback runs.
+                    let showGrid =
+                        (cardTransitionModel.state == .visibleForTrayShow)
                     DispatchQueue.main.async {
-                        if cardTransitionModel.state != .hidden {
+                        if browserModel.showGrid != showGrid {
                             withAnimation(CardTransitionUX.animation) {
-                                let showGrid =
-                                    (cardTransitionModel.state == .visibleForTrayShow)
-                                if browserModel.showGrid != showGrid {
-                                    browserModel.showGrid = showGrid
-                                }
+                                browserModel.showGrid = showGrid
                             }
                         }
                     }
