@@ -69,7 +69,6 @@ struct TabGridContainer: View {
             if let row = tabModel.normalRows.first { $0.cells.contains(where: \.isSelected) } {
                 if row.index == 2 {
                     //scroll to today header
-                    print(">>> scrolling to today's header")
                     return ["68753A44-4D6F-1226-9C60-0050E4C00068"]
                 } else {
                     return row.id
@@ -106,6 +105,7 @@ struct TabGridContainer: View {
         //        .padding(.vertical, landscapeMode ? 8 : 16)
         .useEffect(deps: gridModel.needsScrollToSelectedTab) { _ in
             if let selectedRowId = selectedRowId {
+                print(">>> scroll to selected tab")
                 withAnimation(nil) {
                     scrollProxy.scrollTo(selectedRowId)
                 }
