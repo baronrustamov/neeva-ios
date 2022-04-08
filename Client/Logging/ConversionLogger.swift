@@ -57,7 +57,9 @@ class ConversionLogger {
                             "Failed to resolve attributionToken: \(error!.localizedDescription)")
                         logAttributionDataError(
                             errorType: AttributionTokenErrorType.requestError,
-                            error: error
+                            token: token,
+                            error: error,
+                            response: response
                         )
                         return
                     }
@@ -75,7 +77,9 @@ class ConversionLogger {
                     } else {
                         logAttributionDataError(
                             errorType: AttributionTokenErrorType.jsonParsingError,
-                            error: nil
+                            token: token,
+                            data: data,
+                            response: response
                         )
                     }
                 }.resume()
@@ -94,7 +98,11 @@ class ConversionLogger {
     }
 
     private static func logAttributionDataError(
-        errorType: AttributionTokenErrorType, error: Error?
+        errorType: AttributionTokenErrorType,
+        token: String? = nil,
+        error: Error? = nil,
+        data: Data? = nil,
+        response: URLResponse? = nil
     ) {
         var attributes = EnvironmentHelper.shared.getFirstRunAttributes()
         attributes.append(
@@ -111,6 +119,31 @@ class ConversionLogger {
                 )
             )
         }
+        if let data = data, let dataStr = String(data: data, encoding: .utf8) {
+            attributes.append(
+                ClientLogCounterAttribute(
+                    key: LogConfig.Attribute.AttributionTokenErrorDataStr,
+                    value: String(dataStr.prefix(300))
+                )
+            )
+        }
+        if let response = response, let httpResponse = response as? HTTPURLResponse {
+            attributes.append(
+                ClientLogCounterAttribute(
+                    key: LogConfig.Attribute.AttributionTokenErrorResponseCode,
+                    value: String(httpResponse.statusCode)
+                )
+            )
+        }
+        if let token = token {
+            attributes.append(
+                ClientLogCounterAttribute(
+                    key: LogConfig.Attribute.AttributionTokenErrorToken,
+                    value: token
+                )
+            )
+        }
+
         ClientLogger.shared.logCounter(
             .ResolvedAttributionTokenError,
             attributes: attributes
