@@ -166,13 +166,14 @@ extension TabManager {
         newTab: Tab, possibleChildTab: Tab
     ) -> Bool {
         guard
-            let childTabInitialURL = possibleChildTab.initialURL?.normalizedHostAndPathForDisplay,
-            let newTabURL = newTab.url?.normalizedHostAndPathForDisplay
+            let childTabInitialURL = possibleChildTab.initialURL,
+            let newTabURL = newTab.url
         else {
             return false
         }
 
-        let shouldCreateTabGroup = childTabInitialURL == newTabURL
+        let options: [URL.EqualsOption] = [.normalizeHost, .ignoreFragment, .ignoreLastSlash]
+        let shouldCreateTabGroup = childTabInitialURL.equals(newTabURL, with: options)
 
         /// TODO: To make this more effecient, we should refactor `TabGroupManager`
         /// to be apart of `TabManager`. That we can quickly check if the ChildTab is in a Tab Group.
