@@ -45,11 +45,8 @@ extension BrowserViewController: WalletConnectPresenter {
 #if XYZ
     extension BrowserViewController: ToastDelegate {
         func shouldShowToast(for message: LocalizedStringKey) {
-            if let toastManager = self.getSceneDelegate()?.toastViewManager {
-                toastManager.makeToast(text: message)
-                    .enqueue(manager: toastManager)
-            }
+            toastViewManager.makeToast(text: message)
+                .enqueue(manager: toastViewManager)
         }
-
     }
 #endif
