@@ -39,6 +39,7 @@ class BrowserModel: ObservableObject {
         } else {
             cardTransitionModel.update(to: .visibleForTrayShow)
             contentVisibilityModel.update(showContent: false)
+            gridModel.tabCardModel.contentVisibilityPublisher.send()
             updateSpaces()
         }
     }
@@ -46,6 +47,7 @@ class BrowserModel: ObservableObject {
     func showWithNoAnimation() {
         cardTransitionModel.update(to: .hidden)
         contentVisibilityModel.update(showContent: false)
+        gridModel.tabCardModel.contentVisibilityPublisher.send()
         if !showGrid {
             showGrid = true
         }
@@ -55,6 +57,7 @@ class BrowserModel: ObservableObject {
     func showSpaces(forceUpdate: Bool = true) {
         cardTransitionModel.update(to: .hidden)
         contentVisibilityModel.update(showContent: false)
+        gridModel.tabCardModel.contentVisibilityPublisher.send()
         showGrid = true
         gridModel.switcherState = .spaces
 
@@ -77,6 +80,7 @@ class BrowserModel: ObservableObject {
         }
 
         contentVisibilityModel.update(showContent: true)
+        gridModel.tabCardModel.contentVisibilityPublisher.send()
         gridModel.closeDetailView()
     }
 

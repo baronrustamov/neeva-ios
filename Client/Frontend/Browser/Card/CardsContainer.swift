@@ -40,12 +40,49 @@ struct TabGridContainer: View {
     @Environment(\.columns) private var columns
 
     var selectedRowId: TabCardModel.Row.ID? {
-        isIncognito
-            ? (tabModel.incognitoRows.first { $0.cells.contains(where: \.isSelected) }?.id
-                ?? tabModel.incognitoRowsLastWeek.first { $0.cells.contains(where: \.isSelected) }?
-                .id)
-            : (tabModel.normalRows.first { $0.cells.contains(where: \.isSelected) }?.id
-                ?? tabModel.normalRowsLastWeek.first { $0.cells.contains(where: \.isSelected) }?.id)
+        // note: this is still WIP, it's working but can remove some of the code
+        if isIncognito {
+            if let row = tabModel.incognitoRows.first { row in
+                row.cells.contains(where: \.isSelected)
+            } {
+                if row.index == 2 {
+                    //scroll to today header
+                    return ["68753A44-4D6F-1226-9C60-0050E4C00068"]
+                } else {
+                    return row.id
+                }
+            } else if let row = tabModel.incognitoRowsLastWeek.first { row in
+                row.cells.contains(where: \.isSelected)
+            } {
+                if row.index == 2 {
+                    //scroll to last week's header
+                    return ["68753A44-4D6F-1226-9C60-0050E4C00067"]
+                } else {
+                    return row.id
+                }
+            }
+        } else {
+            if let row = tabModel.normalRows.first { row in
+                row.cells.contains(where: \.isSelected)
+            } {
+                if row.index == 2 {
+                    //scroll to today header
+                    return ["68753A44-4D6F-1226-9C60-0050E4C00068"]
+                } else {
+                    return row.id
+                }
+            } else if let row = tabModel.normalRowsLastWeek.first { row in
+                row.cells.contains(where: \.isSelected)
+            } {
+                if row.index == 2 {
+                    //scroll to last week's header
+                    return ["68753A44-4D6F-1226-9C60-0050E4C00067"]
+                } else {
+                    return row.id
+                }
+            }
+        }
+        return nil
     }
 
     var selectedCardID: String? {
@@ -68,6 +105,7 @@ struct TabGridContainer: View {
         //        .padding(.vertical, landscapeMode ? 8 : 16)
         .useEffect(deps: gridModel.needsScrollToSelectedTab) { _ in
             if let selectedRowId = selectedRowId {
+                print(">>> scroll to selected tab")
                 withAnimation(nil) {
                     scrollProxy.scrollTo(selectedRowId)
                 }
@@ -96,6 +134,7 @@ struct CardScrollContainer<Content: View>: View {
         ScrollView(.vertical, showsIndicators: false) {
             ScrollViewReader(content: content)
         }
+        // Fixes a bug when the ScrollView would bounce
         .animation(gridModel.gridCanAnimate ? .interactiveSpring() : nil)
         .accessibilityIdentifier("CardGrid")
         .environment(\.columns, columns)
@@ -105,6 +144,11 @@ struct CardScrollContainer<Content: View>: View {
             // bottom tool bar needs to be shown.
             if landscapeMode {
                 scrollView.clipsToBounds = false
+            }
+            // Disable bounce on iOS 14 due to stuttering bug with ScrollView
+            guard #available(iOS 15, *) else {
+                scrollView.bounces = false
+                return
             }
         }
     }
