@@ -243,7 +243,7 @@ public class SpaceStore: ObservableObject {
         }
     }
 
-    public func refreshSpace(spaceID: String) {
+    public func refreshSpace(spaceID: String, url: URL? = nil) {
         guard let space = allSpaces.first(where: { $0.id.id == spaceID }),
             let index = allSpaces.firstIndex(where: { $0.id.id == spaceID })
         else {
@@ -256,7 +256,13 @@ public class SpaceStore: ObservableObject {
         if disableRefresh { return }
         state = .refreshing
 
-        fetch(spaces: [space])
+        fetch(spaces: [space]) { [self, space, url] in
+            // We do this to make sure the UI is properly updated when
+            // an item is deleted from a Space but it might be in other Spaces
+            if let url = url, let spaceURLs = space.contentURLs, !spaceURLs.contains(url) {
+                urlToSpacesMap[url] = urlToSpacesMap[url]?.filter { $0 != space }
+            }
+        }
 
         let indexSet: IndexSet = [index]
         allSpaces.move(fromOffsets: indexSet, toOffset: 0)
@@ -430,7 +436,7 @@ public class SpaceStore: ObservableObject {
         }
     }
 
-    private func fetch(spaces spacesToFetch: [Space]) {
+    private func fetch(spaces spacesToFetch: [Space], beforeReady: (() -> Void)? = nil) {
         SpacesDataQueryController.getSpacesData(spaceIds: spacesToFetch.map(\.id.value)) {
             result in
             switch result {
@@ -459,6 +465,7 @@ public class SpaceStore: ObservableObject {
                 }
 
                 self.updatedSpacesFromLastRefresh = spacesToFetch
+                beforeReady?()
                 self.state = .ready
                 self.addDailyDigestToSpaces()
 

@@ -12,6 +12,9 @@ class ToastDefaults: NSObject {
     var toastProgressViewModel: ToastProgressViewModel?
 
     private var requestListener: AnyCancellable?
+    // This is used to subscribe to SpaceStore's state
+    // in order to properly update the UI
+    private var refreshListener: AnyCancellable?
 
     func showToast(with text: String, toastViewManager: ToastViewManager, checkmark: Bool = false) {
         let toastView = toastViewManager.makeToast(
@@ -103,11 +106,13 @@ class ToastDefaults: NSObject {
             } else {
                 self.toastProgressViewModel?.status = .success
                 if let spaceID = request.targetSpaceID {
-                    SpaceStore.shared.refreshSpace(spaceID: spaceID)
+                    SpaceStore.shared.refreshSpace(spaceID: spaceID, url: request.url)
                 }
-                self.requestListener = SpaceStore.shared.$state.sink { state in
-                    bvc.chromeModel.urlInSpace = false
-                    self.requestListener?.cancel()
+                self.refreshListener = SpaceStore.shared.$state.sink { [request] state in
+                    if case .ready = state {
+                        bvc.chromeModel.urlInSpace = SpaceStore.shared.urlInASpace(request.url)
+                        self.refreshListener?.cancel()
+                    }
                 }
             }
         }
