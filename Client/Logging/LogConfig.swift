@@ -711,6 +711,9 @@ public struct LogConfig {
         public static let AttributionTokenErrorType = "AttributionTokenErrorType"
         /// Attribution Token Error Message
         public static let AttributionTokenErrorMessage = "AttributionTokenErrorMessage"
+        public static let AttributionTokenErrorToken = "AttributionTokenErrorToken"
+        public static let AttributionTokenErrorDataStr = "AttributionTokenErrorDataStr"
+        public static let AttributionTokenErrorResponseCode = "AttributionTokenErrorResponseCode"
     }
 
     public struct UIInteractionAttribute {
