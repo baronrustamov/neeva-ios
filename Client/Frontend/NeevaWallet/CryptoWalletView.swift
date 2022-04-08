@@ -36,8 +36,8 @@ struct CryptoWalletView: View {
             Image("wallet-wordmark")
                 .resizable()
                 .scaledToFit()
-                .frame(height: viewState == .starter || viewState == .xyzIntro ? 32 : 20)
-                .padding(.top, viewState == .starter || viewState == .xyzIntro ? 40 : 16)
+                .frame(height: viewState == .starter ? 32 : 20)
+                .padding(.top, viewState == .starter ? 40 : 16)
                 .animation(
                     viewState == .showPhrases || viewState == .importWallet ? .easeInOut : nil
                 )
@@ -46,7 +46,7 @@ struct CryptoWalletView: View {
                 .padding(.horizontal, 16)
                 .padding(.top, 44)
 
-            if viewState != .starter && viewState != .xyzIntro {
+            if viewState != .starter {
                 Color.ui.adaptive.separator.frame(height: 1)
             }
 
