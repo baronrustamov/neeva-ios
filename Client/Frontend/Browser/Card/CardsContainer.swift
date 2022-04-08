@@ -96,7 +96,7 @@ struct CardScrollContainer<Content: View>: View {
         ScrollView(.vertical, showsIndicators: false) {
             ScrollViewReader(content: content)
         }
-        //            .animation(nil) //TODO: see if this resolves stuttering bug
+        .animation(gridModel.gridCanAnimate ? .interactiveSpring() : nil)
         .accessibilityIdentifier("CardGrid")
         .environment(\.columns, columns)
         .introspectScrollView { scrollView in
@@ -122,7 +122,6 @@ struct CardsContainer: View {
     // Used to rebuild the scene when switching between portrait and landscape.
     @State var orientation: UIDeviceOrientation = .unknown
     @State var generationId: Int = 0
-    @State var switchingState = false
 
     let columns: [GridItem]
 
