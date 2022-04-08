@@ -107,14 +107,23 @@ struct BrowserView: View {
                     topBarHeight = chromeModel.topBarHeight
                     browserModel.scrollingControlModel.setHeaderFooterHeight(
                         header: chromeModel.topBarHeight,
-                        footer: UIConstants.TopToolbarHeightWithToolbarButtonsShowing
-                            + geom.safeAreaInsets.bottom)
+                        footer: UIConstants.ToolbarHeight
+                            + safeArea.bottom)
                 }.keyboardListener(adapt: false) { height in
                     DispatchQueue.main.async {
                         chromeModel.keyboardShowing = height > 0
                     }
                 }.navigationBarHidden(true)
-            }.navigationViewStyle(.stack)
+            }
+            .navigationViewStyle(.stack)
+            .useEffect(deps: geom.safeAreaInsets) { safeArea in
+                self.safeArea = safeArea
+
+                browserModel.scrollingControlModel.setHeaderFooterHeight(
+                    header: chromeModel.topBarHeight,
+                    footer: UIConstants.ToolbarHeight
+                        + safeArea.bottom)
+            }
         }
     }
 
@@ -122,8 +131,6 @@ struct BrowserView: View {
         ZStack {
             mainContent
             OverlayView()
-        }.safeAreaChanged { safeArea in
-            self.safeArea = safeArea
         }
         .environment(\.safeArea, safeArea)
         .environmentObject(browserModel)
