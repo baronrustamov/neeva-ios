@@ -103,4 +103,27 @@ class TabGroupTests: BaseTestCase {
         goToTabTray()
         confirmOneTabGroupExists()
     }
+
+    func testUniqueSearchQueriesAfterTabRestore() {
+        closeAllTabs(createNewTab: false)
+
+        openURL(path(forTestPage: "test-example.html?q=1"))  // Simulate a search query
+        openURL(path(forTestPage: "test-mozilla-book.html"))
+
+        goToTabTray()
+
+        app.buttons["Close"].firstMatch.tap()
+
+        // Restore the closed tab.
+        app.buttons["Add Tab"].press(forDuration: 2.0)
+        waitForExistence(app.collectionViews.firstMatch)
+
+        app.collectionViews.firstMatch.buttons.firstMatch.tap()
+
+        // This should not result in a tab group.
+        openURL(path(forTestPage: "test-example.html?q=2"))  // Simulate a search query
+
+        goToTabTray()
+        XCTAssertFalse(app.buttons["Tab Group, Example Domain"].exists)
+    }
 }
