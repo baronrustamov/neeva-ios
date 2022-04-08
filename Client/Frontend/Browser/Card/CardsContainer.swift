@@ -43,7 +43,8 @@ struct TabGridContainer: View {
         // note: this is still WIP, it's working but can remove some of the code
         if isIncognito {
             if let row = tabModel.incognitoRows.first { row in
-                row.cells.contains(where: \.isSelected) } {
+                row.cells.contains(where: \.isSelected)
+            } {
                 if row.index == 2 {
                     //scroll to today header
                     return ["68753A44-4D6F-1226-9C60-0050E4C00068"]
@@ -60,10 +61,10 @@ struct TabGridContainer: View {
                     return row.id
                 }
             }
-        }
-        else {
+        } else {
             if let row = tabModel.normalRows.first { row in
-                row.cells.contains(where: \.isSelected) } {
+                row.cells.contains(where: \.isSelected)
+            } {
                 if row.index == 2 {
                     //scroll to today header
                     return ["68753A44-4D6F-1226-9C60-0050E4C00068"]
