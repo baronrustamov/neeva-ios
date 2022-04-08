@@ -26,23 +26,19 @@ struct TabToolbarView: View {
                 .frame(height: 0.5)
                 .ignoresSafeArea()
 
-            if chromeModel.toolBarContentView == .recipeContent {
-                cheatsheetToolbar
-            } else {
-                #if XYZ
-                    Web3Toolbar(
-                        opacity: scrollingControlModel.controlOpacity,
-                        buildTabsMenu: buildTabsMenu,
-                        onBack: { performAction(.back) },
-                        onLongPress: { performAction(.longPressBackForward) },
-                        overFlowMenuAction: { performAction(.overflow) },
-                        showTabsAction: { performAction(.showTabs) },
-                        openLazyTabAction: { performAction(.openLazyTab) }
-                    )
-                #else
-                    normalTabToolbar
-                #endif
-            }
+            #if XYZ
+                Web3Toolbar(
+                    opacity: scrollingControlModel.controlOpacity,
+                    buildTabsMenu: buildTabsMenu,
+                    onBack: { performAction(.back) },
+                    onLongPress: { performAction(.longPressBackForward) },
+                    overFlowMenuAction: { performAction(.overflow) },
+                    showTabsAction: { performAction(.showTabs) },
+                    openLazyTabAction: { performAction(.openLazyTab) }
+                )
+            #else
+                normalTabToolbar
+            #endif
             Spacer()
         }
         .defaultBackgroundOrTheme(currentTheme)
@@ -79,20 +75,6 @@ struct TabToolbarView: View {
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("TabToolbar")
         .accessibilityLabel("Toolbar")
-    }
-
-    @ViewBuilder
-    var cheatsheetToolbar: some View {
-        HStack(spacing: 0) {
-            TabToolbarButtons.ShareButton(
-                weight: .medium, action: { performAction(.share) })
-            TabToolbarButtons.AddToSpace(
-                weight: .medium, action: { performAction(.addToSpace) })
-        }
-        .padding(.top, 2)
-        .opacity(scrollingControlModel.controlOpacity)
-        .accessibilityElement(children: .contain)
-        .accessibilityIdentifier("CheatsheetToolBar")
     }
 
     @ViewBuilder

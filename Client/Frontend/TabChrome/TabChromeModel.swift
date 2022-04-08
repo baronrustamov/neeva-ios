@@ -7,11 +7,6 @@ import Defaults
 import Shared
 import SwiftUI
 
-enum ToolbarContentView {
-    case regularContent
-    case recipeContent
-}
-
 class TabChromeModel: ObservableObject {
     @Published var canGoBack: Bool
 
@@ -97,12 +92,6 @@ class TabChromeModel: ObservableObject {
 
     @Published var showNeevaMenuTourPrompt = false
 
-    @Published var toolBarContentView: ToolbarContentView = .regularContent
-
-    @Published var currentCheatsheetURL: URL? = nil
-
-    @Published var currentCheatsheetFaviconURL: URL? = nil
-
     private var inlineToolbarHeight: CGFloat {
         return UIConstants.TopToolbarHeightWithToolbarButtonsShowing
             + (showTopCardStrip ? CardControllerUX.Height : 0)
@@ -137,10 +126,6 @@ class TabChromeModel: ObservableObject {
     }
 
     func setEditingLocation(to value: Bool) {
-        if value {
-            toolBarContentView = .regularContent
-        }
-
         withAnimation(TabLocationViewUX.animation) {
             isEditingLocation = value
         }
