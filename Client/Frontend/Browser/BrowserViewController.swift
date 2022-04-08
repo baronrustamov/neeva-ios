@@ -13,11 +13,11 @@ import Storage
 import SwiftUI
 import SwiftyJSON
 import UIKit
-import WalletConnectSwift
 import WebKit
 import XCGLogger
 
 #if XYZ
+    import WalletConnectSwift
     import WalletCore
 #endif
 
@@ -53,7 +53,11 @@ class BrowserViewController: UIViewController, ModalPresenter {
     }()
 
     private(set) lazy var web3Model: Web3Model = {
-        return Web3Model(presenter: self, tabManager: self.tabManager)
+        #if XYZ
+            return Web3Model(presenter: self, tabManager: self.tabManager)
+        #else
+            return Web3Model()
+        #endif
     }()
 
     let walletDetailsModel = WalletDetailsModel()
@@ -508,16 +512,18 @@ class BrowserViewController: UIViewController, ModalPresenter {
             if Self.createNewTabOnStartForTesting {
                 self.tabManager.select(self.tabManager.addTab())
             } else if self.tabManager.normalTabs.isEmpty {
-                if NeevaConstants.currentTarget == .xyz {
+                #if XYZ
                     self.showZeroQuery()
                     if !Defaults[.walletIntroSeen] {
                         self.web3Model.showWalletPanel()
                     }
-                } else if !Defaults[.didFirstNavigation] {
-                    self.showPreviewHome()
-                } else {
-                    self.showTabTray()
-                }
+                #else
+                    if !Defaults[.didFirstNavigation] {
+                        self.showPreviewHome()
+                    } else {
+                        self.showTabTray()
+                    }
+                #endif
             }
         }
     }

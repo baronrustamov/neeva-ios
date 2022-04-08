@@ -7,7 +7,10 @@ import Defaults
 import Foundation
 import Shared
 import SwiftUI
-import WalletConnectSwift
+
+#if XYZ
+    import WalletConnectSwift
+#endif
 
 extension URLComponents {
     // Return the first query parameter that matches
@@ -25,7 +28,9 @@ enum NavigationPath {
     case spaceDigest
     case fastTap(String, Bool)
     case configNewsProvider(isIncognito: Bool)
-    case walletConnect(wcURL: WCURL)
+    #if XYZ
+        case walletConnect(wcURL: WCURL)
+    #endif
 
     init?(bvc: BrowserViewController, url: URL) {
         let urlString = url.absoluteString
@@ -76,11 +81,17 @@ enum NavigationPath {
             self = .fastTap(query, components.valueForQuery("no-delay") != nil)
         } else if urlString.starts(with: "\(scheme)://configure-news-provider") {
             self = .configNewsProvider(isIncognito: Defaults[.lastSessionPrivate])
-        } else if urlString.starts(with: "\(scheme)://wc?uri="),
-            let wcURL = WCURL(
-                urlString.dropFirst("\(scheme)://wc?uri=".count).removingPercentEncoding ?? "")
-        {
-            self = .walletConnect(wcURL: wcURL)
+        } else if urlString.starts(with: "\(scheme)://wc?uri=") {
+            #if XYZ
+                if let wcURL = WCURL(
+                    urlString.dropFirst("\(scheme)://wc?uri=".count).removingPercentEncoding ?? "")
+                {
+                    self = .walletConnect(wcURL: wcURL)
+                    return
+                }
+            #endif
+            return nil
+
         } else {
             return nil
         }
@@ -105,8 +116,10 @@ enum NavigationPath {
         case .configNewsProvider(let isIncognito):
             NavigationPath.handleURL(
                 url: NeevaConstants.configureNewsProviderURL, isIncognito: isIncognito, with: bvc)
-        case .walletConnect(let wcURL):
-            bvc.connectWallet(to: wcURL)
+        #if XYZ
+            case .walletConnect(let wcURL):
+                bvc.connectWallet(to: wcURL)
+        #endif
         }
     }
 

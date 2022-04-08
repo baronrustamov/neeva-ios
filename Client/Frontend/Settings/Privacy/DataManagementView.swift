@@ -12,8 +12,10 @@ enum ClearableDataType: String, Identifiable, Codable, CaseIterable {
     case cache = "Cache"
     case cookies = "Cookies"
     case trackingProtection = "Tracking Protection"
-    case dapps = "Connected dApps"
     case cookieCutterExclusions = "Cookie Cutter Exclusions"
+    #if XYZ
+        case dapps = "Connected dApps"
+    #endif
 
     var id: String { rawValue }
 
@@ -24,8 +26,10 @@ enum ClearableDataType: String, Identifiable, Codable, CaseIterable {
         case .cache: return "Cache"
         case .cookies: return "Cookies"
         case .trackingProtection: return "Tracking Protection"
-        case .dapps: return "Connected dApps"
         case .cookieCutterExclusions: return "Cookie Cutter Exclusions"
+        #if XYZ
+            case .dapps: return "Connected dApps"
+        #endif
         }
     }
 
@@ -50,10 +54,12 @@ enum ClearableDataType: String, Identifiable, Codable, CaseIterable {
             return CookiesClearable()
         case .trackingProtection:
             return TrackingProtectionClearable()
-        case .dapps:
-            return ConnectedDAppsClearable()
         case .cookieCutterExclusions:
             return CookieCutterExclusionsClearable()
+        #if XYZ
+            case .dapps:
+                return ConnectedDAppsClearable()
+        #endif
         }
     }
 }
@@ -92,8 +98,10 @@ struct DataManagementView: View {
                         switch $0 {
                         case .trackingProtection:
                             return !FeatureFlag[.cookieCutter]
-                        case .dapps:
-                            return NeevaConstants.currentTarget == .xyz
+                        #if XYZ
+                            case .dapps:
+                                return NeevaConstants.currentTarget == .xyz
+                        #endif
                         case .cookieCutterExclusions:
                             return FeatureFlag[.cookieCutter]
                         default:

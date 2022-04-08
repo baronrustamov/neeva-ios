@@ -5,7 +5,6 @@
 import Combine
 import Shared
 import SwiftUI
-import web3swift
 
 // For sharing to work, this must currently be the BrowserViewController
 protocol TopBarDelegate: ToolbarDelegate {
@@ -33,7 +32,7 @@ struct TopBarContent: View {
     let trackingStatsViewModel: TrackingStatsViewModel
     let chromeModel: TabChromeModel
     let readerModeModel: ReaderModeModel
-    let web3Model: Web3Model
+    var web3Model: Web3Model
 
     let newTab: () -> Void
     let onCancel: () -> Void

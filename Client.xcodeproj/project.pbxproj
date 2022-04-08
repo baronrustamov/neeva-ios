@@ -677,8 +677,6 @@
 		4A8CE5C527CCA07800735C75 /* WalletCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A8CE5BB27CCA07700735C75 /* WalletCore.framework */; };
 		4A8CE5CC27CCA07800735C75 /* WalletCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8CE5CB27CCA07800735C75 /* WalletCoreTests.swift */; };
 		4A8CE5CD27CCA07800735C75 /* WalletCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A8CE5BD27CCA07700735C75 /* WalletCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4A8CE5D027CCA07800735C75 /* WalletCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A8CE5BB27CCA07700735C75 /* WalletCore.framework */; };
-		4A8CE5D127CCA07800735C75 /* WalletCore.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4A8CE5BB27CCA07700735C75 /* WalletCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4A8CE5D827CCA0A600735C75 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		4A8CE5DE27CCA0BE00735C75 /* web3swift in Frameworks */ = {isa = PBXBuildFile; productRef = 4A8CE5DD27CCA0BE00735C75 /* web3swift */; };
 		4A8CE5E027CCA0CC00735C75 /* WalletConnectSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 4A8CE5DF27CCA0CC00735C75 /* WalletConnectSwift */; };
@@ -710,7 +708,6 @@
 		4A8CE60A27CD868800735C75 /* Wallet.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A9EFAEA27AF9FC200F3ED7F /* Wallet.xcassets */; };
 		4A8CE60F27CD8ACC00735C75 /* WelcomeStarterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCAAA0E5276D9D3D0013223E /* WelcomeStarterView.swift */; };
 		4A8CE61127CD8B0F00735C75 /* Confetti.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9EFAEC27AFBCF900F3ED7F /* Confetti.swift */; };
-		4A93B54D277D287300CD5415 /* BrowserViewController+WalletConnectPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A93B54C277D287300CD5415 /* BrowserViewController+WalletConnectPresenter.swift */; };
 		4A9E28FD27E270DF00A70CA9 /* NFTSuggestionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9E28FC27E270DF00A70CA9 /* NFTSuggestionResult.swift */; };
 		4A9EFAF027B0BFD100F3ED7F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4A9EFAEF27B0BFD100F3ED7F /* README.md */; };
 		4A9F653F2702D2CE00B7C06E /* SpaceContentSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9F653E2702D2CE00B7C06E /* SpaceContentSheet.swift */; };
@@ -1340,7 +1337,6 @@
 		E63B18DD27F7937A001BA0B0 /* NonEssentialCookieSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2026EC2027F4070900817053 /* NonEssentialCookieSettings.swift */; };
 		E63B18DF27FB4630001BA0B0 /* Web3Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A93B5592782981600CD5415 /* Web3Model.swift */; };
 		E63B18E227FB472E001BA0B0 /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8CE5ED27CCA66600735C75 /* ViewExtension.swift */; };
-		E63B18E327FB5AD9001BA0B0 /* SessionInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A93B54E277EA7E100CD5415 /* SessionInfoView.swift */; };
 		E63B18E627FB69DF001BA0B0 /* WalletServerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B18E427FB69B5001BA0B0 /* WalletServerManager.swift */; };
 		E63B18E727FDEBCF001BA0B0 /* BrowserViewController+IntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20ED47CD27F28235002E3ADF /* BrowserViewController+IntroView.swift */; };
 		E63DBA5727F339FC001B7A68 /* SuggestedXYZSearchesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63DBA5627F339FC001B7A68 /* SuggestedXYZSearchesView.swift */; };
@@ -1392,6 +1388,12 @@
 		E653422D1C5944F90039DD9E /* BrowserPrompts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E653422C1C5944F90039DD9E /* BrowserPrompts.swift */; };
 		E663D5781BB341C4001EF30E /* IncognitoButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E663D5771BB341C4001EF30E /* IncognitoButton.swift */; };
 		E67422C51CFF2D39009E8373 /* youtube.ico in Resources */ = {isa = PBXBuildFile; fileRef = E67422C41CFF2D39009E8373 /* youtube.ico */; };
+		E677D1D12800E88E0060869F /* HistoryPanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F2889327FD20B4005A8A79 /* HistoryPanelViewController.swift */; };
+		E677D1D22800E89E0060869F /* HistoryPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A5D15227F6A43E00DB88FE /* HistoryPanelView.swift */; };
+		E677D1D32800E8A50060869F /* HistoryPanelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F2889127FD1BA9005A8A79 /* HistoryPanelModel.swift */; };
+		E677D1D42800E8B00060869F /* RecentlyClosedTabsPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206954A727FF449E000360D6 /* RecentlyClosedTabsPanelView.swift */; };
+		E677D1D52800E8C10060869F /* SiteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206954A327FF4257000360D6 /* SiteListView.swift */; };
+		E677D1D62800E8CD0060869F /* SiteRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206954A527FF425B000360D6 /* SiteRowView.swift */; };
 		E677F0451D9423FB00ECF1FB /* SQLiteMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E677F0441D9423FB00ECF1FB /* SQLiteMetadata.swift */; };
 		E677F0541D94247300ECF1FB /* Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E677F0531D94247300ECF1FB /* Metadata.swift */; };
 		E67CD27027F33BB5007BFE58 /* RecommendedSpacesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64024E727F2432300D65B63 /* RecommendedSpacesView.swift */; };
@@ -1551,13 +1553,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
-		};
-		4A8CE5CE27CCA07800735C75 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4A8CE5BA27CCA07700735C75;
-			remoteInfo = WalletCore;
 		};
 		4A8CE5DA27CCA0A600735C75 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1770,7 +1765,6 @@
 				85EFC04227C51E8B009460DE /* SwiftyJSON.xcframework in Copy Frameworks */,
 				66A7639327C7505D0047F999 /* SDWebImage.xcframework in Copy Frameworks */,
 				85EFC04327C51E8B009460DE /* XCGLogger.xcframework in Copy Frameworks */,
-				4A8CE5D127CCA07800735C75 /* WalletCore.framework in Copy Frameworks */,
 				C87703D225223EA5006E38EB /* Shared.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
@@ -2819,7 +2813,6 @@
 				66A7639227C7505D0047F999 /* SDWebImage.xcframework in Frameworks */,
 				85EFC02527C515EE009460DE /* OnePasswordExtension.xcframework in Frameworks */,
 				85EFC03027C51754009460DE /* ObjcExceptionBridging.xcframework in Frameworks */,
-				4A8CE5D027CCA07800735C75 /* WalletCore.framework in Frameworks */,
 				6786EA772759545A00B53127 /* CrashReporter in Frameworks */,
 				85EFC02E27C5174B009460DE /* SwiftyJSON.xcframework in Frameworks */,
 				85EFC03527C5179F009460DE /* XCGLogger.xcframework in Frameworks */,
@@ -5562,7 +5555,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				4A8CE5CF27CCA07800735C75 /* PBXTargetDependency */,
 				677F4D6B272B621B00332759 /* PBXTargetDependency */,
 				F016AC0F25ED5F590007270F /* PBXTargetDependency */,
 				288A2D9C1AB8B3260023ABC3 /* PBXTargetDependency */,
@@ -6555,6 +6547,7 @@
 				4A42C42E27E58487003B9826 /* BrowserViewController+Quests.swift in Sources */,
 				4A42C42F27E58487003B9826 /* PrivacySettingsSection.swift in Sources */,
 				4A42C43027E58487003B9826 /* BrowserViewController+ReaderMode.swift in Sources */,
+				E677D1D12800E88E0060869F /* HistoryPanelViewController.swift in Sources */,
 				4A42C43127E58487003B9826 /* TabContainerHost.swift in Sources */,
 				4A42C43227E58487003B9826 /* SingleLevelTabCardsView.swift in Sources */,
 				4A42C43327E58487003B9826 /* OverlayStepperModifier.swift in Sources */,
@@ -6569,6 +6562,7 @@
 				4A42C43B27E58487003B9826 /* KeyboardListener.swift in Sources */,
 				4A42C43C27E58487003B9826 /* RelatedRecipeView.swift in Sources */,
 				4A42C43D27E58487003B9826 /* FaviconResolver.swift in Sources */,
+				E677D1D52800E8C10060869F /* SiteListView.swift in Sources */,
 				4A42C43E27E58487003B9826 /* ReaderModeHandlers.swift in Sources */,
 				E6EA734C27F610B100845FFB /* SearchEngineExtensions.swift in Sources */,
 				4A42C43F27E58487003B9826 /* RecentlyClosedTabsPanel.swift in Sources */,
@@ -6633,6 +6627,7 @@
 				4A42C47827E58487003B9826 /* MutationController.swift in Sources */,
 				4A42C47927E58487003B9826 /* TabLocationAligner.swift in Sources */,
 				4A42C47A27E58487003B9826 /* SessionRestoreHandler.swift in Sources */,
+				E677D1D42800E8B00060869F /* RecentlyClosedTabsPanelView.swift in Sources */,
 				4A42C47B27E58487003B9826 /* UIMenuHelpers.swift in Sources */,
 				4A42C47C27E58487003B9826 /* NotificationManager.swift in Sources */,
 				4A42C47D27E58487003B9826 /* QuickActions.swift in Sources */,
@@ -6693,8 +6688,10 @@
 				4A42C4AE27E58487003B9826 /* RecipeView.swift in Sources */,
 				4A42C4AF27E58487003B9826 /* LogConfig.swift in Sources */,
 				4A42C4B027E58487003B9826 /* OpenInAppOverlayContent.swift in Sources */,
+				E677D1D32800E8A50060869F /* HistoryPanelModel.swift in Sources */,
 				4A42C4B127E58487003B9826 /* ZeroQueryModel.swift in Sources */,
 				4A42C4B227E58487003B9826 /* NeevaTabContentBlocker.swift in Sources */,
+				E677D1D62800E8CD0060869F /* SiteRowView.swift in Sources */,
 				4A42C4B327E58487003B9826 /* BuyingGuideView.swift in Sources */,
 				4A42C4B427E58487003B9826 /* OktaAuth.swift in Sources */,
 				4A42C4B527E58487003B9826 /* TourPromptViewController.swift in Sources */,
@@ -6860,6 +6857,7 @@
 				4A42C54727E58487003B9826 /* CloseButton.swift in Sources */,
 				4A42C54827E58487003B9826 /* DefaultBrowserIntestitialOnboardingView.swift in Sources */,
 				4A42C54927E58487003B9826 /* HTTPAuthPromptOverlayContent.swift in Sources */,
+				E677D1D22800E89E0060869F /* HistoryPanelView.swift in Sources */,
 				4A42C54A27E58487003B9826 /* URIFixup.swift in Sources */,
 				E67CD27627F33BD1007BFE58 /* SuggestedXYZSearchesView.swift in Sources */,
 				4A42C54B27E58487003B9826 /* CheatsheetTooltipPopoverView.swift in Sources */,
@@ -7334,7 +7332,6 @@
 				BC264BC226746098001527B6 /* ViewExtensions.swift in Sources */,
 				2026EC2127F4070900817053 /* NonEssentialCookieSettings.swift in Sources */,
 				BC5740A226BB699A0047D29B /* PerformanceLogger.swift in Sources */,
-				E63B18E327FB5AD9001BA0B0 /* SessionInfoView.swift in Sources */,
 				4A255AB3265C48EC00422839 /* TrackingPreventionRules.swift in Sources */,
 				EBC4869E2195F58300CDA48D /* AboutHomeHandler.swift in Sources */,
 				32D7F0EB2797025C000203C7 /* CheatsheetMenuViewModel.swift in Sources */,
@@ -7491,7 +7488,6 @@
 				4A88F97726630F39007C203D /* Card.swift in Sources */,
 				E40FAB0C1A7ABB77009CB80D /* WebServer.swift in Sources */,
 				59A68D66379CFA85C4EAF00B /* TwoLineCell.swift in Sources */,
-				4A93B54D277D287300CD5415 /* BrowserViewController+WalletConnectPresenter.swift in Sources */,
 				E6EA734727F60E0F00845FFB /* NeevaConstantsExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7613,11 +7609,6 @@
 			isa = PBXTargetDependency;
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = 4A8CE5C827CCA07800735C75 /* PBXContainerItemProxy */;
-		};
-		4A8CE5CF27CCA07800735C75 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4A8CE5BA27CCA07700735C75 /* WalletCore */;
-			targetProxy = 4A8CE5CE27CCA07800735C75 /* PBXContainerItemProxy */;
 		};
 		4A8CE5DB27CCA0A600735C75 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
