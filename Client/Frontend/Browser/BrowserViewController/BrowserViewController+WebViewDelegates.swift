@@ -633,7 +633,6 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // This is the normal case, opening a http or https url, which we handle by loading them in this WKWebView. We
         // always allow this. Additionally, data URIs are also handled just like normal web pages.
-
         if ["http", "https", "blob", "file"].contains(url.scheme) {
             if navigationAction.targetFrame?.isMainFrame ?? false {
                 tab.changedUserAgent = Tab.ChangeUserAgent.contains(
@@ -680,31 +679,6 @@ extension BrowserViewController: WKNavigationDelegate {
                     decisionHandler(.allow)
                 }
                 return
-            }
-
-            // for Neeva signup or signin page, open native auth panel
-            if NeevaConstants.isAppHost(url.host), request.httpMethod == "GET" {
-                let query = url.getQuery()
-
-                if url.path == "/p/signup" {
-                    // check if query param contains email
-                    // if user already enter email,
-                    // let user stay on the web sign up flow
-                    if query["e"] == nil {
-                        self.presentIntroViewController(true)
-                        decisionHandler(.cancel)
-                        return
-                    }
-                } else if url.path == "/signin"
-                    || (url.path == "/search"
-                        && query["q"] != nil
-                        && !NeevaUserInfo.shared.hasLoginCookie())
-                        && Defaults[.signedInOnce]
-                {
-                    self.presentIntroViewController(true, signInMode: true)
-                    decisionHandler(.allow)
-                    return
-                }
             }
 
             if NeevaConstants.currentTarget == .xyz, url.lastPathComponent == "wc" {
@@ -766,7 +740,6 @@ extension BrowserViewController: WKNavigationDelegate {
             request: request, response: response, canShowInWebView: canShowInWebView,
             forceDownload: forceDownload, browserViewController: self)
         {
-
             // Certain files are too large to download before the preview presents, block and use a temporary document instead
             if let tab = tabManager[webView] {
                 if navigationResponse.isForMainFrame, response.mimeType != MIMEType.HTML,
@@ -814,6 +787,30 @@ extension BrowserViewController: WKNavigationDelegate {
                     preflightResponse: response, request: request)
             } else {
                 tab.provisionalTemporaryDocument = nil
+            }
+        }
+
+        // for Neeva signup or signin page, open native auth panel
+        if let url = responseURL, NeevaConstants.isAppHost(url.host), request?.httpMethod == "GET" {
+            let query = url.getQuery()
+
+            if url.path == "/p/signup" {
+                // check if query param contains email
+                // if user already enter email,
+                // let user stay on the web sign up flow
+                if query["e"] == nil {
+                    self.presentIntroViewController(true)
+
+                    decisionHandler(.cancel)
+                    return
+                }
+            } else if url.path == "/signin"
+                || (url.path == "/search"
+                    && query["q"] != nil
+                    && !NeevaUserInfo.shared.hasLoginCookie())
+                    && Defaults[.signedInOnce]
+            {
+                self.presentIntroViewController(true, signInMode: true)
             }
         }
 
