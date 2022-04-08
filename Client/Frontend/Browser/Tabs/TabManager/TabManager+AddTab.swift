@@ -7,27 +7,35 @@ import Storage
 import WebKit
 
 extension TabManager {
-    func addTabsForURLs(_ urls: [URL], zombie: Bool) {
+    func addTabsForURLs(
+        _ urls: [URL], zombie: Bool, shouldSelectTab: Bool = true, incognito: Bool = false
+    ) -> [Tab] {
         assert(Thread.isMainThread)
 
         if urls.isEmpty {
-            return
+            return []
         }
 
-        var tab: Tab!
+        var newTabs: [Tab] = []
         for url in urls {
-            tab = self.addTab(
-                URLRequest(url: url), flushToDisk: false, zombie: zombie, notify: false)
+            newTabs.append(
+                self.addTab(
+                    URLRequest(url: url), flushToDisk: false, zombie: zombie,
+                    isIncognito: incognito, notify: false))
         }
 
         // Select the most recent.
-        selectTab(tab, notify: true)
+        if shouldSelectTab {
+            selectTab(newTabs.last, notify: true)
+        }
 
         // Okay now notify that we bulk-loaded so we can adjust counts and animate changes.
         tabsUpdatedPublisher.send()
 
         // Flush.
         storeChanges()
+
+        return newTabs
     }
 
     @discardableResult func addTab(

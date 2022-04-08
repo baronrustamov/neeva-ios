@@ -3,8 +3,10 @@
 // found in the LICENSE file.
 
 import Defaults
+import SFSafeSymbols
 import Shared
 import Storage
+import SwiftUI
 import UIKit
 
 // TODO(iOS 15): Port this to SwiftUI
@@ -122,6 +124,73 @@ struct TabMenu {
             }
 
             return UIMenu(children: [newTabAction, newIncognitoTabAction])
+        }
+    }
+
+    // SwiftUI
+    private func createButtonLabel(incognito: Bool) -> some View {
+        Label {
+            if incognito {
+                Text("Open in new incognito tab")
+            } else {
+                Text("Open in new tab")
+            }
+        } icon: {
+            if incognito {
+                Image("incognito")
+                    .renderingMode(.template)
+            } else {
+                Symbol(decorative: .plusSquare)
+            }
+        }
+    }
+
+    func swiftUIOpenInNewTabMenu(_ tab: SavedTab) -> some View {
+        func createButton(incognito: Bool) -> some View {
+            Button {
+                let tab = self.tabManager.restoreSavedTabs(
+                    [tab], isIncognito: incognito, shouldSelectTab: false)
+                ToastDefaults().showToastForSwitchToTab(
+                    tab, incognito: incognito, tabManager: tabManager)
+            } label: {
+                createButtonLabel(incognito: incognito)
+            }
+        }
+
+        return Group {
+            createButton(incognito: false)
+            createButton(incognito: true)
+        }
+    }
+
+    func swiftUIOpenInNewTabMenu(_ url: URL) -> some View {
+        func createButton(incognito: Bool) -> some View {
+            Button {
+                let tab = self.tabManager.addTabsForURLs(
+                    [url], zombie: true, shouldSelectTab: false, incognito: incognito)[0]
+                ToastDefaults().showToastForSwitchToTab(
+                    tab, incognito: incognito, tabManager: tabManager)
+            } label: {
+                createButtonLabel(incognito: incognito)
+            }
+        }
+
+        return Group {
+            createButton(incognito: false)
+            createButton(incognito: true)
+
+            Button {
+                let tab = self.tabManager.addTabsForURLs(
+                    [url], zombie: true, shouldSelectTab: false, incognito: true)[0]
+                ToastDefaults().showToastForSwitchToTab(
+                    tab, incognito: true, tabManager: tabManager)
+            } label: {
+                Label {
+
+                } icon: {
+
+                }
+            }
         }
     }
 }

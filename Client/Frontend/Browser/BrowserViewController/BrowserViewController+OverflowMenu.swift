@@ -131,14 +131,19 @@ extension BrowserViewController {
                 .OpenHistory,
                 attributes: EnvironmentHelper.shared.getAttributes() + [overflowMenuAttribute]
             )
-            let historyPanel = HistoryPanel(profile: profile)
-            historyPanel.delegate = self
-            historyPanel.accessibilityLabel = "History Panel"
 
-            let navigationController = UINavigationController(rootViewController: historyPanel)
-            navigationController.modalPresentationStyle = .formSheet
+            if FeatureFlag[.swiftUIHistory] {
+                present(HistoryPanelViewController(bvc: self), animated: true)
+            } else {
+                let historyPanel = HistoryPanel(profile: profile)
+                historyPanel.delegate = self
+                historyPanel.accessibilityLabel = "History Panel"
 
-            present(navigationController, animated: true, completion: nil)
+                let navigationController = UINavigationController(rootViewController: historyPanel)
+                navigationController.modalPresentationStyle = .formSheet
+
+                present(navigationController, animated: true, completion: nil)
+            }
         case .goToDownloads:
             ClientLogger.shared.logCounter(
                 .OpenDownloads,

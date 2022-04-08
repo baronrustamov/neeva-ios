@@ -32,7 +32,7 @@ struct BrowserContentView: View {
             cardGrid
                 .environment(
                     \.onOpenURL,
-                    { bvc.gridModel.tabCardModel.manager.createOrSwitchToTab(for: $0) }
+                    { bvc.tabManager.createOrSwitchToTab(for: $0) }
                 )
                 .environment(
                     \.onOpenURLForSpace,
