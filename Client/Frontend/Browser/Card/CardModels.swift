@@ -45,6 +45,7 @@ class TabCardModel: CardModel {
 
     @Default(.tabGroupExpanded) private var tabGroupExpanded: Set<String>
     var contentVisibilityPublisher = PassthroughSubject<Void, Never>()
+    var needsUpdateRows: Bool = false
 
     func updateRows() {
         incognitoRows = buildRows(incognito: true, byTime: "Today")
@@ -103,8 +104,21 @@ class TabCardModel: CardModel {
             self?.onDataUpdated()
         }.store(in: &subscription)
 
+        manager.selectedTabPublisher.sink { [weak self] _ in
+            guard let self = self else {
+                return
+            }
+            self.needsUpdateRows = true
+        }.store(in: &subscription)
+
         contentVisibilityPublisher.sink { [weak self] _ in
-            self?.updateRows()
+            guard let self = self else {
+                return
+            }
+            if self.needsUpdateRows {
+                self.updateRows()
+                self.needsUpdateRows = false
+            }
         }.store(in: &subscription)
 
         _tabGroupExpanded.publisher.sink { [weak self] _ in

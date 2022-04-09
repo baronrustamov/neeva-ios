@@ -105,7 +105,6 @@ struct TabGridContainer: View {
         //        .padding(.vertical, landscapeMode ? 8 : 16)
         .useEffect(deps: gridModel.needsScrollToSelectedTab) { _ in
             if let selectedRowId = selectedRowId {
-                print(">>> scroll to selected tab")
                 withAnimation(nil) {
                     scrollProxy.scrollTo(selectedRowId)
                 }
