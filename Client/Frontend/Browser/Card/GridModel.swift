@@ -32,6 +32,7 @@ class GridModel: ObservableObject {
         }
     }
     @Published var needsScrollToSelectedTab: Int = 0
+    var scrollToCompletion: (() -> Void)?
 
     // Spaces
     @Published var isLoading = false
@@ -55,7 +56,8 @@ class GridModel: ObservableObject {
         return tabManager.normalTabs.isEmpty
     }
 
-    func scrollToSelectedTab() {
+    func scrollToSelectedTab(completion: (() -> Void)? = nil) {
+        scrollToCompletion = completion
         needsScrollToSelectedTab += 1
     }
 

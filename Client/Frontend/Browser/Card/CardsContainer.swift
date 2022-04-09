@@ -45,16 +45,6 @@ struct TabGridContainer: View {
             : tabModel.normalRows.first { $0.cells.contains(where: \.isSelected) }?.id
     }
 
-    var selectedCardID: String? {
-        if let details = tabModel.allDetailsWithExclusionList.first(where: \.isSelected) {
-            return details.id
-        }
-        if let details = tabModel.allTabGroupDetails.first(where: \.isSelected) {
-            return details.id
-        }
-        return nil
-    }
-
     var body: some View {
         Group {
             LazyVStack(alignment: .leading, spacing: 0) {
@@ -68,6 +58,10 @@ struct TabGridContainer: View {
                 withAnimation(nil) {
                     scrollProxy.scrollTo(selectedRowId)
                 }
+            }
+            if let completion = gridModel.scrollToCompletion {
+                gridModel.scrollToCompletion = nil
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: completion)
             }
         }
         .animation(nil)

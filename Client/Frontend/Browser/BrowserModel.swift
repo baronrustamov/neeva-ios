@@ -41,13 +41,16 @@ class BrowserModel: ObservableObject {
         if gridModel.tabCardModel.allDetails.isEmpty {
             showWithNoAnimation()
         } else {
-            cardTransitionModel.update(to: .visibleForTrayShow)
-            contentVisibilityModel.update(showContent: false)
-            updateSpaces()
+            gridModel.scrollToSelectedTab { [self] in
+                cardTransitionModel.update(to: .visibleForTrayShow)
+                contentVisibilityModel.update(showContent: false)
+                updateSpaces()
+            }
         }
     }
 
     func showWithNoAnimation() {
+        gridModel.scrollToSelectedTab()
         cardTransitionModel.update(to: .hidden)
         contentVisibilityModel.update(showContent: false)
         if !showGrid {
@@ -69,12 +72,14 @@ class BrowserModel: ObservableObject {
 
     func hideWithAnimation() {
         assert(!gridModel.tabCardModel.allDetails.isEmpty)
-        cardTransitionModel.update(to: .visibleForTrayHidden)
-
-        gridModel.closeDetailView()
+        gridModel.scrollToSelectedTab { [self] in
+            cardTransitionModel.update(to: .visibleForTrayHidden)
+            gridModel.closeDetailView()
+        }
     }
 
     func hideWithNoAnimation() {
+        gridModel.scrollToSelectedTab()
         cardTransitionModel.update(to: .hidden)
 
         if showGrid {
