@@ -107,9 +107,10 @@ struct CardGrid: View {
     var cardContainer: some View {
         VStack(spacing: 0) {
             CardsContainer(
-                columns: columns
+                geom: geom, columns: columns
             )
             .environment(\.cardSize, cardSize)
+
             Spacer(minLength: 0)
         }
         .background(cardContainerBackground)
@@ -132,17 +133,23 @@ struct CardGrid: View {
 
     func updateCardSize(width: CGFloat, topToolbar: Bool) {
         var columnCount = tabCardModel.columnCount
+
         if width > 1000 {
             columnCount = 4
         } else {
             columnCount = topToolbar ? 3 : 2
         }
+
         if tabCardModel.columnCount != columnCount {
             tabCardModel.columnCount = columnCount
         }
+
         self.cardSize =
             (width - (tabCardModel.columnCount + 1) * CardGridUX.GridSpacing)
             / tabCardModel.columnCount
+
+        print("cardSize: ", cardSize)
+        print("columns: ", tabCardModel.columnCount)
     }
 
     var body: some View {

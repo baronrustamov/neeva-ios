@@ -120,72 +120,71 @@ struct CardsContainer: View {
     @State var generationId: Int = 0
     @State var switchingState = false
 
-    let columns: [GridItem]
+    var geom: GeometryProxy
+    var columns: [GridItem]
 
     var body: some View {
-        GeometryReader { geom in
-            ZStack {
-                // Spaces
-                CardScrollContainer(columns: columns) { scrollProxy in
-                    VStack(alignment: .leading) {
-                        LazyVGrid(columns: columns, spacing: CardGridUX.GridSpacing) {
-                            SpaceCardsView()
-                                .environment(\.columns, columns)
-                        }.animation(nil)
-                    }
-                    .padding(.vertical, CardGridUX.GridSpacing)
-                    .useEffect(deps: browserModel.showGrid) { _ in
-                        scrollProxy.scrollTo(
-                            spacesModel.allDetails.first?.id ?? ""
-                        )
-                    }
+        ZStack {
+            // Spaces
+            CardScrollContainer(columns: columns) { scrollProxy in
+                VStack(alignment: .leading) {
+                    LazyVGrid(columns: columns, spacing: CardGridUX.GridSpacing) {
+                        SpaceCardsView()
+                            .environment(\.columns, columns)
+                    }.animation(nil)
                 }
-                .offset(x: (gridModel.switcherState == .spaces ? 0 : geom.size.width))
-                .accessibilityElement(children: .contain)
-                .accessibilityLabel("Spaces")
-                .accessibilityHidden(gridModel.switcherState != .spaces)
-
-                // Normal Tabs
-                ZStack {
-                    EmptyCardGrid(isIncognito: false)
-                        .opacity(tabModel.normalDetails.isEmpty ? 1 : 0)
-
-                    CardScrollContainer(columns: columns) { scrollProxy in
-                        TabGridContainer(isIncognito: false, geom: geom, scrollProxy: scrollProxy)
-                    }.onAppear {
-                        gridModel.scrollToSelectedTab()
-                    }
+                .padding(.vertical, CardGridUX.GridSpacing)
+                .useEffect(deps: browserModel.showGrid) { _ in
+                    scrollProxy.scrollTo(
+                        spacesModel.allDetails.first?.id ?? ""
+                    )
                 }
-                .offset(
-                    x: (gridModel.switcherState == .tabs
-                        ? (incognitoModel.isIncognito ? geom.size.width : 0) : -geom.size.width)
-                )
-                .accessibilityElement(children: .contain)
-                .accessibilityLabel("Tabs")
-                .accessibilityValue(Text("\(tabModel.manager.normalTabs.count) tabs"))
-                .accessibilityHidden(gridModel.switcherState != .tabs || incognitoModel.isIncognito)
-
-                // Incognito Tabs
-                ZStack {
-                    EmptyCardGrid(isIncognito: true)
-                        .opacity(tabModel.incognitoDetails.isEmpty ? 1 : 0)
-
-                    CardScrollContainer(columns: columns) { scrollProxy in
-                        TabGridContainer(isIncognito: true, geom: geom, scrollProxy: scrollProxy)
-                    }.onAppear {
-                        gridModel.scrollToSelectedTab()
-                    }
-                }
-                .offset(
-                    x: (gridModel.switcherState == .tabs
-                        ? (incognitoModel.isIncognito ? 0 : -geom.size.width) : -geom.size.width)
-                )
-                .accessibilityElement(children: .contain)
-                .accessibilityLabel("Incognito Tabs")
-                .accessibilityValue(Text("\(tabModel.manager.incognitoTabs.count) tabs"))
-                .accessibilityHidden(
-                    gridModel.switcherState != .tabs || !incognitoModel.isIncognito)
             }
+            .offset(x: (gridModel.switcherState == .spaces ? 0 : geom.size.width))
+            .accessibilityElement(children: .contain)
+            .accessibilityLabel("Spaces")
+            .accessibilityHidden(gridModel.switcherState != .spaces)
+
+            // Normal Tabs
+            ZStack {
+                EmptyCardGrid(isIncognito: false)
+                    .opacity(tabModel.normalDetails.isEmpty ? 1 : 0)
+
+                CardScrollContainer(columns: columns) { scrollProxy in
+                    TabGridContainer(isIncognito: false, geom: geom, scrollProxy: scrollProxy)
+                }.onAppear {
+                    gridModel.scrollToSelectedTab()
+                }
+            }
+            .offset(
+                x: (gridModel.switcherState == .tabs
+                    ? (incognitoModel.isIncognito ? geom.size.width : 0) : -geom.size.width)
+            )
+            .accessibilityElement(children: .contain)
+            .accessibilityLabel("Tabs")
+            .accessibilityValue(Text("\(tabModel.manager.normalTabs.count) tabs"))
+            .accessibilityHidden(gridModel.switcherState != .tabs || incognitoModel.isIncognito)
+
+            // Incognito Tabs
+            ZStack {
+                EmptyCardGrid(isIncognito: true)
+                    .opacity(tabModel.incognitoDetails.isEmpty ? 1 : 0)
+
+                CardScrollContainer(columns: columns) { scrollProxy in
+                    TabGridContainer(isIncognito: true, geom: geom, scrollProxy: scrollProxy)
+                }.onAppear {
+                    gridModel.scrollToSelectedTab()
+                }
+            }
+            .offset(
+                x: (gridModel.switcherState == .tabs
+                    ? (incognitoModel.isIncognito ? 0 : -geom.size.width) : -geom.size.width)
+            )
+            .accessibilityElement(children: .contain)
+            .accessibilityLabel("Incognito Tabs")
+            .accessibilityValue(Text("\(tabModel.manager.incognitoTabs.count) tabs"))
+            .accessibilityHidden(
+                gridModel.switcherState != .tabs || !incognitoModel.isIncognito)
         }
         .id(generationId)
         .animation(
