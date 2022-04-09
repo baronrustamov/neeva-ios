@@ -37,23 +37,17 @@ struct CardGridBackground: View {
                 for: browserModel.showGrid,
                 completion: browserModel.onCompletedCardTransition
             )
-            .useEffect(deps: cardTransitionModel.state) { _ in
+            .useEffect(deps: cardTransitionModel.state) { state in
                 // Ensure that the `Card` for the selected tab is visible. This way its
                 // `CardTransitionModifier` will be visible and run the animation.
-                if cardTransitionModel.state != .hidden {
-                    if !tabModel.allDetails.isEmpty {
-                        gridModel.scrollToSelectedTab()
-                    }
+                if state != .hidden {
                     // Allow some time for the `Card` to get created if it was previously
                     // not visible. Compute `showGrid` before the the delay since the
                     // card transition animation could complete before the callback runs.
-                    let showGrid =
-                        (cardTransitionModel.state == .visibleForTrayShow)
-                    DispatchQueue.main.async {
-                        if browserModel.showGrid != showGrid {
-                            withAnimation(CardTransitionUX.animation) {
-                                browserModel.showGrid = showGrid
-                            }
+                    let showGrid = (state == .visibleForTrayShow)
+                    if browserModel.showGrid != showGrid {
+                        withAnimation(CardTransitionUX.animation) {
+                            browserModel.showGrid = showGrid
                         }
                     }
                 }

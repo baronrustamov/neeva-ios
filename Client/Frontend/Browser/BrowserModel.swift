@@ -37,14 +37,18 @@ class BrowserModel: ObservableObject {
         if gridModel.tabCardModel.allDetails.isEmpty {
             showWithNoAnimation()
         } else {
-            cardTransitionModel.update(to: .visibleForTrayShow)
-            contentVisibilityModel.update(showContent: false)
             gridModel.tabCardModel.contentVisibilityPublisher.send()
-            updateSpaces()
+            gridModel.scrollToSelectedTab { [self] in
+                cardTransitionModel.update(to: .visibleForTrayShow)
+                contentVisibilityModel.update(showContent: false)
+                updateSpaces()
+            }
         }
     }
 
     func showWithNoAnimation() {
+        gridModel.tabCardModel.contentVisibilityPublisher.send()
+        gridModel.scrollToSelectedTab()
         cardTransitionModel.update(to: .hidden)
         contentVisibilityModel.update(showContent: false)
         gridModel.tabCardModel.contentVisibilityPublisher.send()
@@ -68,11 +72,16 @@ class BrowserModel: ObservableObject {
 
     func hideWithAnimation() {
         assert(!gridModel.tabCardModel.allDetails.isEmpty)
-        cardTransitionModel.update(to: .visibleForTrayHidden)
-        gridModel.closeDetailView()
+        gridModel.scrollToSelectedTab { [self] in
+            //gridModel.tabCardModel.contentVisibilityPublisher.send()
+            cardTransitionModel.update(to: .visibleForTrayHidden)
+            gridModel.closeDetailView()
+        }
     }
 
     func hideWithNoAnimation() {
+        gridModel.scrollToSelectedTab()
+        //gridModel.tabCardModel.contentVisibilityPublisher.send()
         cardTransitionModel.update(to: .hidden)
 
         if showGrid {
@@ -80,7 +89,6 @@ class BrowserModel: ObservableObject {
         }
 
         contentVisibilityModel.update(showContent: true)
-        gridModel.tabCardModel.contentVisibilityPublisher.send()
         gridModel.closeDetailView()
     }
 

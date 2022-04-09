@@ -42,55 +42,27 @@ struct TabGridContainer: View {
     var selectedRowId: TabCardModel.Row.ID? {
         // note: this is still WIP, it's working but can remove some of the code
         if isIncognito {
-            if let row = tabModel.incognitoRows.first { row in
+            if let row = tabModel.incognitoRows.first(where: { row in
                 row.cells.contains(where: \.isSelected)
-            } {
+            }) {
                 if row.index == 2 {
                     //scroll to today header
                     return ["68753A44-4D6F-1226-9C60-0050E4C00068"]
-                } else {
-                    return row.id
-                }
-            } else if let row = tabModel.incognitoRowsLastWeek.first { row in
-                row.cells.contains(where: \.isSelected)
-            } {
-                if row.index == 2 {
-                    //scroll to last week's header
-                    return ["68753A44-4D6F-1226-9C60-0050E4C00067"]
                 } else {
                     return row.id
                 }
             }
         } else {
-            if let row = tabModel.normalRows.first { row in
+            if let row = tabModel.normalRows.first(where: { row in
                 row.cells.contains(where: \.isSelected)
-            } {
+            }) {
                 if row.index == 2 {
                     //scroll to today header
                     return ["68753A44-4D6F-1226-9C60-0050E4C00068"]
                 } else {
                     return row.id
                 }
-            } else if let row = tabModel.normalRowsLastWeek.first { row in
-                row.cells.contains(where: \.isSelected)
-            } {
-                if row.index == 2 {
-                    //scroll to last week's header
-                    return ["68753A44-4D6F-1226-9C60-0050E4C00067"]
-                } else {
-                    return row.id
-                }
             }
-        }
-        return nil
-    }
-
-    var selectedCardID: String? {
-        if let details = tabModel.allDetailsWithExclusionList.first(where: \.isSelected) {
-            return details.id
-        }
-        if let details = tabModel.allTabGroupDetails.first(where: \.isSelected) {
-            return details.id
         }
         return nil
     }
@@ -102,12 +74,15 @@ struct TabGridContainer: View {
             }
         }
         .environment(\.aspectRatio, CardUX.DefaultTabCardRatio)
-        //        .padding(.vertical, landscapeMode ? 8 : 16)
         .useEffect(deps: gridModel.needsScrollToSelectedTab) { _ in
             if let selectedRowId = selectedRowId {
                 withAnimation(nil) {
                     scrollProxy.scrollTo(selectedRowId)
                 }
+            }
+            if let completion = gridModel.scrollToCompletion {
+                gridModel.scrollToCompletion = nil
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: completion)
             }
         }
         .animation(nil)

@@ -13,11 +13,6 @@ enum SingleLevelTabCardsViewUX {
     static let TabGroupCarouselTabSpacing: CGFloat = 12
 }
 
-enum TimeFilter: String, CaseIterable {
-    case today = "Today"
-    case lastWeek = "Last Week"
-}
-
 struct SingleLevelTabCardsView: View {
     @EnvironmentObject var tabModel: TabCardModel
     @EnvironmentObject private var browserModel: BrowserModel
@@ -78,7 +73,7 @@ struct SingleLevelTabCardsView: View {
                                 .frame(height: 8)
                                 .padding(.horizontal, -CardGridUX.GridSpacing)
                             HStack {
-                                Text(byTime)
+                                Text(byTime.rawValue)
                                     .withFont(.labelLarge)
                                     .foregroundColor(.label)
                                     .padding(.leading, 20)
@@ -169,7 +164,7 @@ struct timeLineCardsView: View {
                                 .frame(height: 8)
                                 .padding(.horizontal, -CardGridUX.GridSpacing)
                             HStack {
-                                Text(byTime)
+                                Text(byTime.rawValue)
                                     .withFont(.labelLarge)
                                     .foregroundColor(.label)
                                     .padding(.leading, 20)
