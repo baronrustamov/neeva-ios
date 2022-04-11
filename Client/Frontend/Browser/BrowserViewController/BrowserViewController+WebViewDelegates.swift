@@ -683,7 +683,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 }
                 return
             }
-                  
+
             #if XYZ
                 if url.lastPathComponent == "wc" {
                     if url.query == nil {
@@ -700,7 +700,7 @@ extension BrowserViewController: WKNavigationDelegate {
                     }
                 }
             #endif
-                  
+
             decisionHandler(.allow)
             return
         }
