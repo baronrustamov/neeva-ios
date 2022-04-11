@@ -26,6 +26,8 @@ class ConversionLogger {
         case handledNavigationAsDefaultBrowser = 20
     }
 
+    static var shouldRetryRequestAfterFailure = true
+
     static func log(event: Event) {
         guard event.rawValue > Defaults[.lastReportedConversionEvent] else {
             return
@@ -33,7 +35,9 @@ class ConversionLogger {
         Defaults[.lastReportedConversionEvent] = event.rawValue
         if event.rawValue == 0 {
             SKAdNetwork.registerAppForAdNetworkAttribution()
-            logAttributionData()
+            #if !targetEnvironment(simulator)
+                logAttributionData()
+            #endif
         } else {
             SKAdNetwork.updateConversionValue(event.rawValue)
         }
@@ -61,6 +65,7 @@ class ConversionLogger {
                             error: error,
                             response: response
                         )
+                        retryAttributionRequest()
                         return
                     }
                     if let data = data, let json = try? JSON(data: data) {
@@ -81,6 +86,7 @@ class ConversionLogger {
                             data: data,
                             response: response
                         )
+                        retryAttributionRequest()
                     }
                 }.resume()
             } else {
@@ -97,6 +103,16 @@ class ConversionLogger {
         }
     }
 
+    private static func retryAttributionRequest() {
+        if shouldRetryRequestAfterFailure {
+            // retry after 20 seconds
+            DispatchQueue.main.asyncAfter(deadline: .now() + 20.0) {
+                shouldRetryRequestAfterFailure = false
+                logAttributionData()
+            }
+        }
+    }
+
     private static func logAttributionDataError(
         errorType: AttributionTokenErrorType,
         token: String? = nil,
@@ -104,49 +120,52 @@ class ConversionLogger {
         data: Data? = nil,
         response: URLResponse? = nil
     ) {
-        var attributes = EnvironmentHelper.shared.getFirstRunAttributes()
-        attributes.append(
-            ClientLogCounterAttribute(
-                key: LogConfig.Attribute.AttributionTokenErrorType,
-                value: errorType.rawValue
-            )
-        )
-        if let message = error?.localizedDescription {
+        DispatchQueue.main.async {
+            var attributes = EnvironmentHelper.shared.getFirstRunAttributes()
             attributes.append(
                 ClientLogCounterAttribute(
-                    key: LogConfig.Attribute.AttributionTokenErrorMessage,
-                    value: message
+                    key: LogConfig.Attribute.AttributionTokenErrorType,
+                    value: errorType.rawValue
                 )
             )
-        }
-        if let data = data, let dataStr = String(data: data, encoding: .utf8) {
-            attributes.append(
-                ClientLogCounterAttribute(
-                    key: LogConfig.Attribute.AttributionTokenErrorDataStr,
-                    value: String(dataStr.prefix(300))
+            if let message = error?.localizedDescription {
+                attributes.append(
+                    ClientLogCounterAttribute(
+                        key: LogConfig.Attribute.AttributionTokenErrorMessage,
+                        value: message
+                    )
                 )
-            )
-        }
-        if let response = response, let httpResponse = response as? HTTPURLResponse {
-            attributes.append(
-                ClientLogCounterAttribute(
-                    key: LogConfig.Attribute.AttributionTokenErrorResponseCode,
-                    value: String(httpResponse.statusCode)
+            }
+            if let data = data, let dataStr = String(data: data, encoding: .utf8) {
+                attributes.append(
+                    ClientLogCounterAttribute(
+                        key: LogConfig.Attribute.AttributionTokenErrorDataStr,
+                        value: String(dataStr.prefix(300))
+                    )
                 )
-            )
-        }
-        if let token = token {
-            attributes.append(
-                ClientLogCounterAttribute(
-                    key: LogConfig.Attribute.AttributionTokenErrorToken,
-                    value: token
+            }
+            if let response = response, let httpResponse = response as? HTTPURLResponse {
+                attributes.append(
+                    ClientLogCounterAttribute(
+                        key: LogConfig.Attribute.AttributionTokenErrorResponseCode,
+                        value: String(httpResponse.statusCode)
+                    )
                 )
-            )
-        }
+            }
+            if let token = token {
+                attributes.append(
+                    ClientLogCounterAttribute(
+                        key: LogConfig.Attribute.AttributionTokenErrorToken,
+                        value: token
+                    )
+                )
+            }
 
-        ClientLogger.shared.logCounter(
-            .ResolvedAttributionTokenError,
-            attributes: attributes
-        )
+            ClientLogger.shared.logCounter(
+                shouldRetryRequestAfterFailure
+                    ? .ResolvedAttributionTokenError : .ResolvedAttributionTokenRetryError,
+                attributes: attributes
+            )
+        }
     }
 }
