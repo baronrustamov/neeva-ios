@@ -118,6 +118,9 @@ public struct CheatsheetMenuView: View {
                 CheatsheetInfoViewOnPage {
                     seenCheatsheetIntro = true
                 }
+                .onDisappear {
+                    seenCheatsheetIntro = true
+                }
             } else if model.cheatsheetDataLoading {
                 CheatsheetLoadingView()
             } else if let error = model.cheatsheetDataError {
