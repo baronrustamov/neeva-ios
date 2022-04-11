@@ -55,7 +55,8 @@ class TabCardModel: CardModel {
     func updateRows() {
         incognitoRows = buildRows(incognito: true, byTime: TimeFilter(rawValue: "Today"))
         normalRows = buildRows(incognito: false, byTime: TimeFilter(rawValue: "Today"))
-        incognitoRowsLastWeek = buildRows(incognito: true, byTime: TimeFilter(rawValue: "Last Week"))
+        incognitoRowsLastWeek = buildRows(
+            incognito: true, byTime: TimeFilter(rawValue: "Last Week"))
         normalRowsLastWeek = buildRows(incognito: false, byTime: TimeFilter(rawValue: "Last Week"))
 
         // Defer signaling until after we have finished updating. This way our state is
@@ -193,16 +194,16 @@ class TabCardModel: CardModel {
         }
 
         switch byTime {
-            case .today:
-                return lastExecutedTime > Int64(startOftenSecondsAgo.timeIntervalSince1970 * 1000)
-            case .lastWeek:
-                let minusOneDayToCurrentDate = Calendar.current.date(
-                    byAdding: .day, value: -1, to: Date())
-                guard let startOfLastDay = minusOneDayToCurrentDate else {
-                    return true
-                }
-                return lastExecutedTime < Int64(startOftenSecondsAgo.timeIntervalSince1970 * 1000)
-                    && lastExecutedTime > Int64(startOfLastDay.timeIntervalSince1970 * 1000)
+        case .today:
+            return lastExecutedTime > Int64(startOftenSecondsAgo.timeIntervalSince1970 * 1000)
+        case .lastWeek:
+            let minusOneDayToCurrentDate = Calendar.current.date(
+                byAdding: .day, value: -1, to: Date())
+            guard let startOfLastDay = minusOneDayToCurrentDate else {
+                return true
+            }
+            return lastExecutedTime < Int64(startOftenSecondsAgo.timeIntervalSince1970 * 1000)
+                && lastExecutedTime > Int64(startOfLastDay.timeIntervalSince1970 * 1000)
         }
     }
 
