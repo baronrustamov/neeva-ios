@@ -121,7 +121,7 @@ class ZeroQueryModel: ObservableObject {
             !Defaults[.didShowDefaultBrowserInterstitial]
             && !Defaults[.didShowDefaultBrowserInterstitialFromSkipToBrowser]
 
-        if !Defaults[.didDismissDefaultBrowserCard]
+        if NeevaConstants.currentTarget == .client && !Defaults[.didDismissDefaultBrowserCard]
             && !Defaults[.didSetDefaultBrowser]
             && Defaults[.didFirstNavigation]
             && (notSeenInterstitial
@@ -145,20 +145,26 @@ class ZeroQueryModel: ObservableObject {
                 Defaults[.didDismissDefaultBrowserCard] = true
             }
         } else if !Defaults[.signedInOnce] {
-            if NeevaConstants.currentTarget == .xyz && Defaults[.cryptoPublicKey].isEmpty {
-                promoCard = .walletPromo {
-                    self.bvc.web3Model.showWalletPanel()
+            #if XYZ
+                if Defaults[.cryptoPublicKey].isEmpty {
+                    promoCard = .walletPromo {
+                        self.bvc.web3Model.showWalletPanel()
+                    }
+                } else {
+                    promoCard = nil
                 }
-            } else if Defaults[.didFirstNavigation] && NeevaConstants.currentTarget != .xyz {
-                promoCard = .previewModeSignUp {
-                    ClientLogger.shared.logCounter(
-                        .PreviewModePromoSignup,
-                        attributes: EnvironmentHelper.shared.getFirstRunAttributes())
-                    self.signIn()
+            #else
+                if Defaults[.didFirstNavigation] && NeevaConstants.currentTarget != .xyz {
+                    promoCard = .previewModeSignUp {
+                        ClientLogger.shared.logCounter(
+                            .PreviewModePromoSignup,
+                            attributes: EnvironmentHelper.shared.getFirstRunAttributes())
+                        self.signIn()
+                    }
+                } else {
+                    promoCard = nil
                 }
-            } else {
-                promoCard = nil
-            }
+            #endif
         } else if NeevaFeatureFlags[.referralPromo] && !Defaults[.didDismissReferralPromoCard] {
             promoCard = .referralPromo {
                 self.handleReferralPromo()

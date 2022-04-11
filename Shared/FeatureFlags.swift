@@ -24,10 +24,10 @@ public enum FeatureFlag: String, CaseIterable, RawRepresentable {
     case spacify = "Enable button to turn a page into a Space"
     case swipePlusPlus = "Additional forward and back swipe gestures"
     case enableSuggestedSpaces = "Show Spaces from Neeva Community"
-    case showNFTsInWallet = "Show NFTs in Wallet"
     case customSearchEngine = "Custom Search Engine"
     case swipeToCloseTabs = "Swipe to close tabs"
     case cookieCutter = "Cookie Cutter"
+    case swiftUIHistory = "SwiftUI History"
 
     public init?(caseName: String) {
         for value in FeatureFlag.allCases where "\(value)" == caseName {

@@ -7,11 +7,8 @@ import Foundation
 import Shared
 import SwiftUI
 import WalletConnectSwift
+import WalletCore
 import web3swift
-
-#if XYZ
-    import WalletCore
-#endif
 
 extension Defaults.Keys {
     static func dAppsSession(_ sessionID: String) -> Defaults.Key<Data?> {
@@ -42,11 +39,11 @@ extension BrowserViewController: WalletConnectPresenter {
     }
 }
 
-#if XYZ
-    extension BrowserViewController: ToastDelegate {
-        func shouldShowToast(for message: LocalizedStringKey) {
-            toastViewManager.makeToast(text: message)
-                .enqueue(manager: toastViewManager)
-        }
+extension BrowserViewController: ToastDelegate {
+    func shouldShowToast(for message: LocalizedStringKey) {
+        print(message)
+        toastViewManager.makeToast(text: message)
+            .enqueue(manager: toastViewManager)
     }
-#endif
+
+}

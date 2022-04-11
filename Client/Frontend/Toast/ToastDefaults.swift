@@ -249,6 +249,30 @@ class ToastDefaults: NSObject {
         toastViewManager.enqueue(view: toastView)
     }
 
+    func showToastForSwitchToTab(_ tab: Tab?, incognito: Bool, tabManager: TabManager) {
+        if let tab = tab {
+            let bvc = SceneDelegate.getBVC(with: tabManager.scene)
+            let toastViewManager = bvc.toastViewManager
+
+            let toastLabelText: LocalizedStringKey =
+                incognito
+                ? "New Incognito Tab opened"
+                : "New Tab opened"
+
+            toastViewManager.makeToast(
+                text: toastLabelText,
+                buttonText: "Switch",
+                buttonAction: {
+                    tabManager.selectTab(tab, notify: true)
+
+                    if let presentedViewController = bvc.presentedViewController {
+                        presentedViewController.dismiss(animated: true, completion: nil)
+                    }
+                }
+            ).enqueue(manager: toastViewManager)
+        }
+    }
+
     private func resetProgress() {
         toastProgressViewModel = ToastProgressViewModel()
         toastProgressViewModel?.status = .inProgress

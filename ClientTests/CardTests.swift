@@ -46,27 +46,6 @@ class CardTests: XCTestCase {
     fileprivate let spyRestoredTabs = "tabManagerDidRestoreTabs(_:)"
     fileprivate let spyAddTab = "tabManager(_:didAddTab:isRestoring:)"
 
-    private struct MockPresenter: WalletConnectPresenter {
-        func connectWallet(to wcURL: WCURL) -> Bool {
-            return false
-        }
-
-        func showModal<Content>(
-            style: OverlayStyle, headerButton: OverlayHeaderButton?,
-            content: @escaping () -> Content, onDismiss: (() -> Void)?
-        ) where Content: View {
-            // Do nothing.
-        }
-
-        func presentFullScreenModal(content: AnyView, completion: (() -> Void)?) {
-            // Do nothing.
-        }
-
-        func dismissCurrentOverlay() {
-            // Do nothing.
-        }
-    }
-
     override func setUp() {
         super.setUp()
 

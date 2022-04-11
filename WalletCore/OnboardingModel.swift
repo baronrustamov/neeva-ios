@@ -37,7 +37,9 @@ public struct OnboardingModel {
                 try? NeevaConstants.cryptoKeychain.set(
                     privateKey, key: NeevaConstants.cryptoPrivateKey)
                 Defaults[.cryptoPublicKey] = wallet.address
-                completion()
+                DispatchQueue.main.async {
+                    completion()
+                }
             } catch {
                 print("🔥 Unexpected error: \(error).")
             }
@@ -60,7 +62,9 @@ public struct OnboardingModel {
                         password: password, account: account
                     ).toHexString()
                 else {
-                    completion(false)
+                    DispatchQueue.main.async {
+                        completion(false)
+                    }
                     return
                 }
                 Defaults[.cryptoPublicKey] = address
@@ -68,9 +72,13 @@ public struct OnboardingModel {
                     mnemonics, key: NeevaConstants.cryptoSecretPhrase)
                 try? NeevaConstants.cryptoKeychain.set(
                     privateKey, key: NeevaConstants.cryptoPrivateKey)
-                completion(true)
+                DispatchQueue.main.async {
+                    completion(true)
+                }
             } catch {
-                completion(false)
+                DispatchQueue.main.async {
+                    completion(false)
+                }
                 print("🔥 Unexpected error: \(error).")
             }
         }

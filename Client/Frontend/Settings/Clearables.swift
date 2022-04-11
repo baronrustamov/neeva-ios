@@ -87,15 +87,17 @@ class TrackingProtectionClearable: Clearable {
     }
 }
 
-class ConnectedDAppsClearable: Clearable {
-    func clear() -> Success {
-        for session in Defaults[.sessionsPeerIDs] {
-            Defaults[.dAppsSession(session)] = nil
+#if XYZ
+    class ConnectedDAppsClearable: Clearable {
+        func clear() -> Success {
+            for session in Defaults[.sessionsPeerIDs] {
+                Defaults[.dAppsSession(session)] = nil
+            }
+            Defaults[.sessionsPeerIDs].removeAll()
+            return succeed()
         }
-        Defaults[.sessionsPeerIDs].removeAll()
-        return succeed()
     }
-}
+#endif
 
 class CookieCutterExclusionsClearable: Clearable {
     func clear() -> Success {

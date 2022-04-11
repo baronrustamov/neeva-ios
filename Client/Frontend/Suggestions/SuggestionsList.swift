@@ -43,6 +43,7 @@ struct SuggestionsList: View {
                 }
             } else {
                 TabSuggestionsList()
+
                 if NeevaConstants.currentTarget != .xyz {
                     AutocompleteSuggestionView()
                 }

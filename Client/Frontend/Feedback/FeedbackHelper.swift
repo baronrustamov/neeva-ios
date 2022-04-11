@@ -24,13 +24,15 @@ func showFeedbackPanel(
 func getSearchRequestID(
     bvc: BrowserViewController, completion: @escaping (_ requestIdString: String?) -> Void
 ) {
-    if let webView = bvc.tabManager.selectedTab?.webView {
-        webView.evaluateJavaScript("window.__neevaNativeBridge.messaging.getRequestID()") {
-            (data, error) in
-            completion(data as? String)
-            if let error = error {
-                print("evaluateJavaScript Error : \(String(describing: error))")
-            }
+    guard let webView = bvc.tabManager.selectedTab?.webView else {
+        completion(nil)
+        return
+    }
+    webView.evaluateJavaScript("window.__neevaNativeBridge.messaging.getRequestID()") {
+        (data, error) in
+        completion(data as? String)
+        if let error = error {
+            print("evaluateJavaScript Error : \(String(describing: error))")
         }
     }
 }

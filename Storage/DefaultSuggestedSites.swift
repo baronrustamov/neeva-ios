@@ -128,12 +128,12 @@ open class DefaultSuggestedSites {
                 title: "Aave"
             ),
             SuggestedSiteData(
-                url: "https://syndicate.io",
+                url: "https://matcha.xyz",
                 bgColor: "0x55acee",
-                imageUrl: "https://syndicate.io/icons/apple-touch-icon.png",
-                faviconUrl: "https://syndicate.io/icons/apple-touch-icon.png",
+                imageUrl: "https://matcha.xyz/apple-touch-icon.png",
+                faviconUrl: "https://matcha.xyz/apple-touch-icon.png",
                 trackingId: 807,
-                title: "Syndicate DAO"
+                title: "Matcha"
             ),
         ],
         "zh_CN": [

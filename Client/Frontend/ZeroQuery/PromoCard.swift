@@ -158,13 +158,13 @@ struct PromoCard: View {
 
     @ViewBuilder
     var button: some View {
-        if NeevaConstants.currentTarget == .xyz {
+        #if XYZ
             Button(action: type.action) {
                 type
                     .buttonLabel
                     .frame(maxWidth: .infinity)
             }.buttonStyle(.wallet(.primary))
-        } else {
+        #else
             Button(action: type.action) {
                 if type.isCompact {
                     HStack {
@@ -185,7 +185,7 @@ struct PromoCard: View {
                     .background(Capsule().fill(Color.brand.blue))
                 }
             }
-        }
+        #endif
     }
 
     @ViewBuilder
