@@ -35,7 +35,7 @@ extension View {
     @ViewBuilder
     func defaultBackgroundOrTheme(_ currentTheme: String?) -> some View {
         #if XYZ
-            self.background(Web3Theme(with: currentTheme).backgroundColor.ignoresSafeArea())
+            self.background(Web3Theme(with: currentTheme).tabBar.ignoresSafeArea())
         #else
             self.background(Color.DefaultBackground.ignoresSafeArea())
         #endif

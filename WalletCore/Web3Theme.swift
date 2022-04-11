@@ -38,18 +38,13 @@ extension Web3Theme {
     @ViewBuilder
     public var backButton: some View {
         switch self {
-        case .default:
+        case .azuki, .coolCats, .default:
             Symbol(
                 .arrowBackward,
                 size: 20,
                 weight: .medium,
                 label: .TabToolbarBackAccessibilityLabel
             )
-        case .azuki:
-            Image("azuki_back")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 24)
         case .cryptoCoven:
             Image(
                 uiImage: UIImage(named: "cryptocoven_back")!
@@ -59,27 +54,17 @@ extension Web3Theme {
             .aspectRatio(contentMode: .fit)
             .frame(width: 22)
             .foregroundColor(.label)
-        case .coolCats:
-            Image("coolcats_back")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 36)
         }
     }
 
     @ViewBuilder
     public var overflowButton: some View {
         switch self {
-        case .default:
+        case .azuki, .coolCats, .default:
             Symbol(
                 .ellipsisCircle,
                 size: 20, weight: .medium,
                 label: .TabToolbarMoreAccessibilityLabel)
-        case .azuki:
-            Image("azuki_overflow")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 24)
         case .cryptoCoven:
             Image(
                 uiImage:
@@ -90,11 +75,6 @@ extension Web3Theme {
             .aspectRatio(contentMode: .fit)
             .frame(width: 22)
             .foregroundColor(.label)
-        case .coolCats:
-            Image("coolcats_overflow")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 36)
         }
     }
 
@@ -113,6 +93,10 @@ extension Web3Theme {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 32)
                 .cornerRadius(16)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(self == .cryptoCoven ? Color.label : Color.white, lineWidth: 2)
+                )
                 .accessibilityLabel("Neeva Wallet")
         }
     }
@@ -120,18 +104,13 @@ extension Web3Theme {
     @ViewBuilder
     public var lazyTabButton: some View {
         switch self {
-        case .default:
+        case .azuki, .coolCats, .default:
             Symbol(
                 .plus,
                 size: 20,
                 weight: .medium,
                 label: .TabToolbarBackAccessibilityLabel
             )
-        case .azuki:
-            Image("azuki_magnifier")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 24)
         case .cryptoCoven:
             Image(
                 uiImage: UIImage(named: "cryptocoven_magnifier")!
@@ -141,40 +120,56 @@ extension Web3Theme {
             .aspectRatio(contentMode: .fit)
             .frame(width: 22)
             .foregroundColor(.label)
-        case .coolCats:
-            Image("coolcats_magnifier")
+        }
+    }
+
+    @ViewBuilder
+    public var tabBar: some View {
+        if let backgroundImageDestination = backgroundImageDestination {
+            HStack {
+                Spacer()
+                createBackgroundImageView(with: backgroundImageDestination)
+                    .opacity(0.2)
+            }.background(backgroundColor)
+        } else {
+            backgroundColor
+        }
+    }
+
+    @ViewBuilder
+    private func createBackgroundImageView(with destination: String) -> some View {
+        if self == .azuki {
+            WebImage(
+                url: URL(string: destination),
+                context: [
+                    .imageThumbnailPixelSize: CGSize(
+                        width: 256,
+                        height: 256)
+                ]
+            )
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+        } else {
+            Image(destination)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(width: 24)
         }
     }
 
     public var tabsImage: UIImage? {
         switch self {
-        case .default:
+        case .azuki, .coolCats, .default:
             return Symbol.uiImage(
                 .squareOnSquare,
                 size: 20,
                 weight: .medium
             )
-        case .azuki:
-            return UIImage(named: "azuki_tabs")?
-                .scalePreservingAspectRatio(
-                    targetSize: CGSize(width: 24, height: 24)
-                )
-                .withRenderingMode(.alwaysOriginal)
         case .cryptoCoven:
             return UIImage(named: "cryptocoven_tabs")?
                 .scalePreservingAspectRatio(
                     targetSize: CGSize(width: 36, height: 36)
                 )
                 .withRenderingMode(.alwaysTemplate)
-        case .coolCats:
-            return UIImage(named: "coolcats_tabs")?
-                .scalePreservingAspectRatio(
-                    targetSize: CGSize(width: 36, height: 36)
-                )
-                .withRenderingMode(.alwaysOriginal)
         }
     }
 
@@ -188,6 +183,17 @@ extension Web3Theme {
             return Color(UIColor(named: "cryptocoven_background")!)
         case .coolCats:
             return Color(UIColor(named: "coolcats_background")!)
+        }
+    }
+
+    public var backgroundImageDestination: String? {
+        switch self {
+        case .coolCats:
+            return "coolcats_background_image"
+        case .azuki:
+            return "https://www.azuki.com/map/meta3.png"
+        default:
+            return nil
         }
     }
 
