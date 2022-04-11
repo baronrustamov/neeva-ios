@@ -69,7 +69,9 @@ public class ClientLogger {
 
         #if DEBUG
             if !Defaults[.forceProdGraphQLLogger] {
-                let attributes = loggingAttributes.map { "\($0.key! ?? "" ): \($0.value! ?? "")" }
+                let attributes = loggingAttributes.compactMap {
+                    "\(String(describing: $0.key)): \(String(describing: $0.value))"
+                }
                 let path = path.rawValue
                 debugLoggerHistory.insert(
                     DebugLog(
