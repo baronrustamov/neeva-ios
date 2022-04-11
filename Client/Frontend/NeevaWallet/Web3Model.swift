@@ -24,7 +24,6 @@ class Web3Model: ObservableObject {
     let walletDetailsModel: WalletDetailsModel = WalletDetailsModel()
 
     #if XYZ
-        let openURLForSpace: (URL, String) -> Void
         let openURL: (URL) -> Void
 
         var publicAddress: String {
@@ -37,6 +36,10 @@ class Web3Model: ObservableObject {
 
                 tryMatchCurrentPageToCollection()
                 updateBalances()
+
+                if desktopSession {
+                    updateCurrentSession(with: currentSequence?.dAppMeta.url)
+                }
             }
         }
 
@@ -52,6 +55,7 @@ class Web3Model: ObservableObject {
         @Published var alternateTrustedDomain: String? = nil
         @Published var matchingCollection: Collection?
         @Published var showingMaliciousSiteWarning = false
+        @Published var desktopSession = false
 
         var serverManager: WalletServerManager?
         weak var toastDelegate: ToastDelegate?
@@ -150,9 +154,6 @@ class Web3Model: ObservableObject {
             self.presenter = presenter
             self.closeTab = { tab in
                 tabManager.close(tab)
-            }
-            self.openURLForSpace = {
-                tabManager.createOrSwitchToTabForSpace(for: $0, spaceID: $1)
             }
             self.openURL = {
                 tabManager.createOrSwitchToTab(for: $0)
@@ -287,6 +288,11 @@ class Web3Model: ObservableObject {
         func reset() {
             currentSequence = nil
             showingMaliciousSiteWarning = false
+            if desktopSession {
+                // If this was a desktop session, recompute the trust signal based on current tab again.
+                updateCurrentSession()
+            }
+            desktopSession = false
         }
 
         func tryWalletConnect() {
@@ -379,9 +385,6 @@ class Web3Model: ObservableObject {
                     })
                     .environmentObject(self)
                     .overlayIsFixedHeight(isFixedHeight: true)
-                    .onDisappear {
-                        self.reset()
-                    }
                 ), completion: {})
         }
 

@@ -8,7 +8,7 @@ import SwiftUI
 import web3swift
 
 private struct XYZIntroModel: Identifiable, Codable {
-    var id = UUID()
+    var id = UUID().hashValue
     var image: String
     var text: String
 }
@@ -32,22 +32,25 @@ public struct XYZIntroView: View {
     @Default(.cryptoPublicKey) var publicKey
     @State var isCreatingWallet: Bool = false
     @Binding var viewState: ViewState
+    @State var selectionState: Int
 
     public init(viewState: Binding<ViewState>) {
         self._viewState = viewState
+        self.selectionState = viewModel.dataSource[0].id
     }
 
     public var body: some View {
         GeometryReader { geometry in
             VStack(alignment: .leading) {
-                TabView {
+                TabView(selection: $selectionState) {
                     ForEach(
                         viewModel.dataSource, id: \.id,
                         content: {
                             createIntroView(with: $0, proxy: geometry)
                         })
                 }
-                .tabViewStyle(PageTabViewStyle())
+                .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+                .tabViewStyle(.page)
                 Button(action: { viewState = .starter }) {
                     Text("Let's go!")
                         .frame(maxWidth: .infinity)
@@ -55,6 +58,8 @@ public struct XYZIntroView: View {
                 .buttonStyle(.wallet(.primary))
                 .padding(.horizontal, 24)
                 .padding(.bottom, 50)
+                .opacity(self.selectionState == viewModel.dataSource[2].id ? 1 : 0)
+                .animation(.easeInOut)
             }
         }
     }
@@ -76,9 +81,9 @@ public struct XYZIntroView: View {
                 .frame(width: proxy.size.width, height: 75)
             }
             Text(model.text)
-                .foregroundColor(Color.label)
+                .withFont(.displayLarge)
+                .gradientForeground()
                 .lineLimit(nil)
-                .font(.system(size: 32, weight: .semibold))
                 .multilineTextAlignment(.center)
                 .padding(.bottom, 40)
                 .padding(.horizontal, 28)

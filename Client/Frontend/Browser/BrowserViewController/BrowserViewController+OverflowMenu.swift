@@ -20,9 +20,6 @@ public enum OverflowMenuAction {
     case goToDownloads
     case closeAllTabs
     case support(screenshot: UIImage? = nil)
-    #if XYZ
-        case cryptoWallet
-    #endif
 }
 
 extension BrowserViewController {
@@ -165,10 +162,6 @@ extension BrowserViewController {
                 attributes: EnvironmentHelper.shared.getAttributes() + [overflowMenuAttribute]
             )
             showFeedbackPanel(bvc: self, screenshot: image ?? self.feedbackImage)
-        #if XYZ
-            case .cryptoWallet:
-                web3Model.showWalletPanel()
-        #endif
         }
     }
 }

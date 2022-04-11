@@ -11,14 +11,14 @@ import SwiftUI
 public struct Asset: Codable, Identifiable {
     public let id: Int
     public let tokenID: String
-    public let imageURL: URL
-    public let name: String
+    public let imageURL: URL?
+    public let name: String?
     public let description: String?
-    public let contract: AssetContract
+    public let contract: AssetContract?
     public let collection: Collection?
     public let traits: [Trait]?
     public let creator: Web3Profile?
-    public let owner: Web3Profile
+    public let owner: Web3Profile?
 
     enum CodingKeys: String, CodingKey {
         case id = "id"
@@ -39,8 +39,8 @@ public struct Web3Profile: Codable {
 }
 
 public struct AssetContract: Codable {
-    public let address: String
-    public let schemaName: String
+    public let address: String?
+    public let schemaName: String?
     public let externalURL: URL?
     public let payoutAddress: String?
 
@@ -53,8 +53,8 @@ public struct AssetContract: Codable {
 }
 
 public struct Trait: Codable {
-    public let type: String
-    public let traitCount: Int
+    public let type: String?
+    public let traitCount: Int?
 
     enum CodingKeys: String, CodingKey {
         case type = "trait_type"

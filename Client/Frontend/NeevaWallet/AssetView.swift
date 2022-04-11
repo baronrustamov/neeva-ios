@@ -46,11 +46,12 @@ struct AssetView: View {
         }
         .padding(4)
         .backgroundColorOrGradient()
+        .frame(maxWidth: 200)
         .cornerRadius(CardUX.CornerRadius)
     }
 
     private var titleView: some View {
-        Text(asset.name)
+        Text(asset.name ?? "")
             .withFont(.headingSmall)
             .padding(.horizontal, 8)
     }
@@ -65,13 +66,13 @@ struct AssetView: View {
     private var neevaButton: some View {
         createCircularButton(
             with:
-                "https://neeva.xyz/search?q=\(asset.contract.address)&contractAddress=\(asset.contract.address)&tokenID=\(asset.tokenID)",
+                "https://neeva.xyz/search?q=\(asset.contract?.address)&contractAddress=\(asset.contract?.address)&tokenID=\(asset.tokenID)",
             assetUrl: SearchEngine.nft.icon)
     }
 
     private var openSeaButton: some View {
         createCircularButton(
-            with: "https://opensea.io/assets/\(asset.contract.address)/\(asset.tokenID)",
+            with: "https://opensea.io/assets/\(asset.contract?.address)/\(asset.tokenID)",
             assetUrl: URL("https://opensea.io/static/images/favicon/180x180.png"))
     }
 
@@ -81,7 +82,7 @@ struct AssetView: View {
                 return
             }
             DispatchQueue.main.async {
-                web3Model.openURLForSpace(url, web3Model.wallet?.publicAddress ?? "")
+                web3Model.openURL(url)
             }
         } label: {
             WebImage(url: assetUrl)

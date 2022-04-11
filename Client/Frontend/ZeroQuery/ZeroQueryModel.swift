@@ -121,7 +121,7 @@ class ZeroQueryModel: ObservableObject {
             !Defaults[.didShowDefaultBrowserInterstitial]
             && !Defaults[.didShowDefaultBrowserInterstitialFromSkipToBrowser]
 
-        if !Defaults[.didDismissDefaultBrowserCard]
+        if NeevaConstants.currentTarget == .client && !Defaults[.didDismissDefaultBrowserCard]
             && !Defaults[.didSetDefaultBrowser]
             && Defaults[.didFirstNavigation]
             && (notSeenInterstitial
@@ -150,6 +150,8 @@ class ZeroQueryModel: ObservableObject {
                     promoCard = .walletPromo {
                         self.bvc.web3Model.showWalletPanel()
                     }
+                } else {
+                    promoCard = nil
                 }
             #else
                 if Defaults[.didFirstNavigation] && NeevaConstants.currentTarget != .xyz {

@@ -221,28 +221,6 @@ struct WalletDashboard: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 12)
-            if !FeatureFlag[.showNFTsInWallet] {
-                Button(
-                    action: {
-                        model.openURL(
-                            NeevaConstants.appHomeURL)
-                    },
-                    label: {
-                        HStack(spacing: 4) {
-                            WebImage(url: SearchEngine.nft.icon)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 16, height: 16)
-                                .padding(4)
-                                .background(Color.quaternarySystemFill)
-                                .cornerRadius(4)
-                            Text("Your NFTs")
-                        }
-                    }
-                )
-                .padding(.horizontal, 16)
-                .buttonStyle(DashboardButtonStyle())
-            }
         }
         .padding(.top, 24)
         .modifier(WalletListSeparatorModifier())
@@ -501,9 +479,7 @@ struct WalletDashboard: View {
                 accountInfo
                 balancesSection
                 openSessionsSection
-                if FeatureFlag[.showNFTsInWallet] {
-                    nftSection
-                }
+                nftSection
                 unlockedThemesSection
                     .actionSheet(isPresented: $showConfirmDisconnectAlert) {
                         confirmDisconnectSheet
@@ -522,6 +498,7 @@ struct WalletDashboard: View {
         if let wcURL = WCURL(wcStr.removingPercentEncoding ?? "") {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 model.presenter.connectWallet(to: wcURL)
+                model.desktopSession = true
             }
         }
     }
