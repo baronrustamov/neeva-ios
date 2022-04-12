@@ -41,26 +41,32 @@ struct TabGridContainer: View {
 
     var selectedRowId: TabCardModel.Row.ID? {
         // note: this is still WIP, it's working but can remove some of the code
-        if isIncognito {
-            if let row = tabModel.incognitoRows.first(where: { row in
-                row.cells.contains(where: \.isSelected)
-            }) {
-                if row.index == 2 {
-                    //scroll to today header
-                    return ["68753A44-4D6F-1226-9C60-0050E4C00068"]
-                } else {
-                    return row.id
-                }
-            }
+        if !FeatureFlag[.enableTimeBasedSwitcher] {
+            isIncognito
+                ? tabModel.incognitoRows.first { $0.cells.contains(where: \.isSelected) }?.id
+                : tabModel.normalRows.first { $0.cells.contains(where: \.isSelected) }?.id
         } else {
-            if let row = tabModel.normalRows.first(where: { row in
-                row.cells.contains(where: \.isSelected)
-            }) {
-                if row.index == 2 {
-                    //scroll to today header
-                    return ["68753A44-4D6F-1226-9C60-0050E4C00068"]
-                } else {
-                    return row.id
+            if isIncognito {
+                if let row = tabModel.incognitoRows.first(where: { row in
+                    row.cells.contains(where: \.isSelected)
+                }) {
+                    if row.index == 2 {
+                        //scroll to today header
+                        return ["68753A44-4D6F-1226-9C60-0050E4C00068"]
+                    } else {
+                        return row.id
+                    }
+                }
+            } else {
+                if let row = tabModel.normalRows.first(where: { row in
+                    row.cells.contains(where: \.isSelected)
+                }) {
+                    if row.index == 2 {
+                        //scroll to today header
+                        return ["68753A44-4D6F-1226-9C60-0050E4C00068"]
+                    } else {
+                        return row.id
+                    }
                 }
             }
         }
@@ -74,6 +80,7 @@ struct TabGridContainer: View {
             }
         }
         .environment(\.aspectRatio, CardUX.DefaultTabCardRatio)
+        .padding(.vertical, !FeatureFlag[.enableTimeBasedSwitcher] ? (landscapeMode ? 8 : 16) : 0)
         .useEffect(deps: gridModel.needsScrollToSelectedTab) { _ in
             if let selectedRowId = selectedRowId {
                 withAnimation(nil) {

@@ -53,11 +53,16 @@ class TabCardModel: CardModel {
     var needsUpdateRows: Bool = false
 
     func updateRows() {
-        incognitoRows = buildRows(incognito: true, byTime: TimeFilter(rawValue: "Today"))
-        normalRows = buildRows(incognito: false, byTime: TimeFilter(rawValue: "Today"))
-        incognitoRowsLastWeek = buildRows(
-            incognito: true, byTime: TimeFilter(rawValue: "Last Week"))
-        normalRowsLastWeek = buildRows(incognito: false, byTime: TimeFilter(rawValue: "Last Week"))
+        if FeatureFlag[.enableTimeBasedSwitcher] {
+            incognitoRows = buildRows(incognito: true, byTime: TimeFilter(rawValue: "Today"))
+            normalRows = buildRows(incognito: false, byTime: TimeFilter(rawValue: "Today"))
+            incognitoRowsLastWeek = buildRows(
+                incognito: true, byTime: TimeFilter(rawValue: "Last Week"))
+            normalRowsLastWeek = buildRows(incognito: false, byTime: TimeFilter(rawValue: "Last Week"))
+        } else {
+            incognitoRows = buildRows(incognito: true)
+            normalRows = buildRows(incognito: false)
+        }
 
         // Defer signaling until after we have finished updating. This way our state is
         // completely consistent with TabManager prior to accessing allDetails, etc.
@@ -97,22 +102,24 @@ class TabCardModel: CardModel {
             self?.onDataUpdated()
         }.store(in: &subscription)
 
-        manager.selectedTabPublisher.sink { [weak self] tab in
-            guard let self = self else {
-                return
-            }
-            self.needsUpdateRows = true
-        }.store(in: &subscription)
+        if FeatureFlag[.enableTimeBasedSwitcher] {
+            manager.selectedTabPublisher.sink { [weak self] tab in
+                guard let self = self else {
+                    return
+                }
+                self.needsUpdateRows = true
+            }.store(in: &subscription)
 
-        contentVisibilityPublisher.sink { [weak self] _ in
-            guard let self = self else {
-                return
-            }
-            if self.needsUpdateRows {
-                self.updateRows()
-                self.needsUpdateRows = false
-            }
-        }.store(in: &subscription)
+            contentVisibilityPublisher.sink { [weak self] _ in
+                guard let self = self else {
+                    return
+                }
+                if self.needsUpdateRows {
+                    self.updateRows()
+                    self.needsUpdateRows = false
+                }
+            }.store(in: &subscription)
+        }
 
         _tabGroupExpanded.publisher.sink { [weak self] _ in
             self?.updateRows()
@@ -183,7 +190,7 @@ class TabCardModel: CardModel {
 
     func filterTabByTime(tab: Tab, byTime: TimeFilter?) -> Bool {
         guard let byTime = byTime else {
-            return false
+            return true
         }
         // TODO(Charles): ideally, lastExecutedTime should be stored, and the fallback
         // should not be Date.nowMilliseconds() either
@@ -208,11 +215,11 @@ class TabCardModel: CardModel {
         }
     }
 
-    func buildRows(incognito: Bool, byTime: TimeFilter?) -> [Row] {
+    func buildRows(incognito: Bool, byTime: TimeFilter? = nil) -> [Row] {
 
         var rows: [Row] = []
 
-        guard let byTime = byTime else {
+        if FeatureFlag[.enableTimeBasedSwitcher] && byTime == nil {
             return rows
         }
 
@@ -222,7 +229,7 @@ class TabCardModel: CardModel {
                 (representativeTabs.contains(tab)
                 || allDetailsWithExclusionList.contains { $0.id == tabCard.id })
                 && tab.isIncognito == incognito
-                && filterTabByTime(tab: tab, byTime: byTime)
+            && (FeatureFlag[.enableTimeBasedSwitcher] ? filterTabByTime(tab: tab, byTime: byTime) : true)
         }
 
         modifyAllDetailsFilteredPromotingPinnedTabs(&allDetailsFiltered)
@@ -346,7 +353,7 @@ class TabCardModel: CardModel {
             !$0.cells.isEmpty
         }
 
-        if !rows.isEmpty {
+        if FeatureFlag[.enableTimeBasedSwitcher] && !rows.isEmpty, let byTime = byTime {
             rows.insert(Row(cells: [Row.Cell.sectionHeader(byTime)]), at: 0)
         }
 

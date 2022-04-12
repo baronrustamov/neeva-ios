@@ -37,7 +37,9 @@ class BrowserModel: ObservableObject {
         if gridModel.tabCardModel.allDetails.isEmpty {
             showWithNoAnimation()
         } else {
-            gridModel.tabCardModel.contentVisibilityPublisher.send()
+            if FeatureFlag[.enableTimeBasedSwitcher] {
+                gridModel.tabCardModel.contentVisibilityPublisher.send()
+            }
             gridModel.scrollToSelectedTab { [self] in
                 cardTransitionModel.update(to: .visibleForTrayShow)
                 contentVisibilityModel.update(showContent: false)
@@ -47,7 +49,9 @@ class BrowserModel: ObservableObject {
     }
 
     func showWithNoAnimation() {
-        gridModel.tabCardModel.contentVisibilityPublisher.send()
+        if FeatureFlag[.enableTimeBasedSwitcher] {
+            gridModel.tabCardModel.contentVisibilityPublisher.send()
+        }
         gridModel.scrollToSelectedTab()
         cardTransitionModel.update(to: .hidden)
         contentVisibilityModel.update(showContent: false)
@@ -61,7 +65,6 @@ class BrowserModel: ObservableObject {
     func showSpaces(forceUpdate: Bool = true) {
         cardTransitionModel.update(to: .hidden)
         contentVisibilityModel.update(showContent: false)
-        gridModel.tabCardModel.contentVisibilityPublisher.send()
         showGrid = true
         gridModel.switcherState = .spaces
 
@@ -73,7 +76,6 @@ class BrowserModel: ObservableObject {
     func hideWithAnimation() {
         assert(!gridModel.tabCardModel.allDetails.isEmpty)
         gridModel.scrollToSelectedTab { [self] in
-            //gridModel.tabCardModel.contentVisibilityPublisher.send()
             cardTransitionModel.update(to: .visibleForTrayHidden)
             gridModel.closeDetailView()
         }
@@ -81,7 +83,6 @@ class BrowserModel: ObservableObject {
 
     func hideWithNoAnimation() {
         gridModel.scrollToSelectedTab()
-        //gridModel.tabCardModel.contentVisibilityPublisher.send()
         cardTransitionModel.update(to: .hidden)
 
         if showGrid {
