@@ -31,7 +31,7 @@ extension SpaceStore {
         label: "co.neeva.app.ios.browser.spaces.csqueue",
         qos: .utility,
         attributes: [],
-        autoreleaseFrequency: .inherit,
+        autoreleaseFrequency: .workItem,
         target: nil
     )
 
