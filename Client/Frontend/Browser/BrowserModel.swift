@@ -83,6 +83,7 @@ class BrowserModel: ObservableObject {
 
         contentVisibilityModel.update(showContent: true)
 
+        gridModel.switcherState = .tabs
         gridModel.closeDetailView()
     }
 
