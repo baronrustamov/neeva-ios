@@ -58,7 +58,8 @@ class TabCardModel: CardModel {
             normalRows = buildRows(incognito: false, byTime: TimeFilter(rawValue: "Today"))
             incognitoRowsLastWeek = buildRows(
                 incognito: true, byTime: TimeFilter(rawValue: "Last Week"))
-            normalRowsLastWeek = buildRows(incognito: false, byTime: TimeFilter(rawValue: "Last Week"))
+            normalRowsLastWeek = buildRows(
+                incognito: false, byTime: TimeFilter(rawValue: "Last Week"))
         } else {
             incognitoRows = buildRows(incognito: true)
             normalRows = buildRows(incognito: false)
@@ -229,7 +230,8 @@ class TabCardModel: CardModel {
                 (representativeTabs.contains(tab)
                 || allDetailsWithExclusionList.contains { $0.id == tabCard.id })
                 && tab.isIncognito == incognito
-            && (FeatureFlag[.enableTimeBasedSwitcher] ? filterTabByTime(tab: tab, byTime: byTime) : true)
+                && (FeatureFlag[.enableTimeBasedSwitcher]
+                    ? filterTabByTime(tab: tab, byTime: byTime) : true)
         }
 
         modifyAllDetailsFilteredPromotingPinnedTabs(&allDetailsFiltered)
