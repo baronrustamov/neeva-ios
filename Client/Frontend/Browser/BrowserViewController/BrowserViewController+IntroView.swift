@@ -132,9 +132,6 @@ extension BrowserViewController {
                     self.overlayManager.hideCurrentOverlay()
                 } buttonAction: {
                     self.overlayManager.hideCurrentOverlay()
-                    UIApplication.shared.openSettings(
-                        triggerFrom: .defaultBrowserPromptMergeEduction
-                    )
                 }
                 .onAppear {
                     AppDelegate.setRotationLock(to: .portrait)
@@ -156,7 +153,7 @@ extension BrowserViewController {
     func presentDBOnboardingViewController(
         _ force: Bool = false,
         modalTransitionStyle: UIModalTransitionStyle? = nil,
-        triggerFrom: OpenSysSettingTrigger
+        triggerFrom: OpenDefaultBrowserOnboardingTrigger
     ) {
         let onboardingVC = DefaultBrowserInterstitialOnboardingViewController(
             didOpenSettings: { [weak self] in

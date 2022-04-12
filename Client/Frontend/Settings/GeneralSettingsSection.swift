@@ -29,18 +29,16 @@ struct GeneralSettingsSection: View {
         NavigationLink(
             "Default Browser",
             destination:
-                DefaultBrowserInterstitialOnboardingView(trigger: .settings, showSkipButton: false)
-            {
-            } buttonAction: {
-                UIApplication.shared.openSettings(
-                    triggerFrom: .defaultBrowserSettings
-                )
-            }
-            .onAppear {
-                ClientLogger.shared.logCounter(
-                    .SettingDefaultBrowser, attributes: EnvironmentHelper.shared.getAttributes()
-                )
-            }
+                DefaultBrowserInterstitialOnboardingView(
+                    trigger: .defaultBrowserSettings, showSkipButton: false
+                ) {
+                } buttonAction: {
+                }
+                .onAppear {
+                    ClientLogger.shared.logCounter(
+                        .SettingDefaultBrowser, attributes: EnvironmentHelper.shared.getAttributes()
+                    )
+                }
         )
         if FeatureFlag[.customSearchEngine] {
             makeNavigationLink(title: "Search Engine") {

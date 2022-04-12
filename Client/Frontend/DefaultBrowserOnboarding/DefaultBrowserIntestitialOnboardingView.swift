@@ -19,7 +19,7 @@ class DefaultBrowserInterstitialOnboardingViewController: UIHostingController<
     struct Content: View {
         let openSettings: () -> Void
         let onCancel: () -> Void
-        let triggerFrom: OpenSysSettingTrigger
+        let triggerFrom: OpenDefaultBrowserOnboardingTrigger
 
         var body: some View {
             VStack {
@@ -31,7 +31,7 @@ class DefaultBrowserInterstitialOnboardingViewController: UIHostingController<
                         .background(Color.clear)
                 }
                 DefaultBrowserInterstitialOnboardingView(
-                    trigger: .promoCard,
+                    trigger: .defaultBrowserPromoCard,
                     showSkipButton: false,
                     skipAction: {},
                     buttonAction: {
@@ -42,14 +42,11 @@ class DefaultBrowserInterstitialOnboardingViewController: UIHostingController<
         }
     }
 
-    init(didOpenSettings: @escaping () -> Void, triggerFrom: OpenSysSettingTrigger) {
+    init(didOpenSettings: @escaping () -> Void, triggerFrom: OpenDefaultBrowserOnboardingTrigger) {
         super.init(rootView: Content(openSettings: {}, onCancel: {}, triggerFrom: triggerFrom))
         self.rootView = Content(
             openSettings: { [weak self] in
                 self?.dismiss(animated: true) {
-                    UIApplication.shared.openSettings(
-                        triggerFrom: triggerFrom
-                    )
                     didOpenSettings()
                 }
                 // Don't show default browser card if this button is tapped
@@ -143,17 +140,19 @@ struct DefaultBrowserInterstitialWelcomeScreen: View {
 
 // TODO merge this with the settings trigger as we are standardize the default browser screen now
 public enum OpenDefaultBrowserOnboardingTrigger: String {
-    case skipToBrowser
     case defaultBrowserFirstScreen
-    case afterSignup
-    case promoCard
-    case settings
+    case defaultBrowserPromoCard
+    case defaultBrowserSettings
+
+    var defaultBrowserIntent: Bool {
+        true  // Update if we ever have other reasons to guide users to system settings.
+    }
 }
 
 struct DefaultBrowserInterstitialOnboardingView: View {
     @State private var didTakeAction = false
 
-    var trigger: OpenDefaultBrowserOnboardingTrigger = .afterSignup
+    var trigger: OpenDefaultBrowserOnboardingTrigger = .defaultBrowserFirstScreen
     var showSkipButton: Bool = true
 
     var skipAction: () -> Void
@@ -251,6 +250,9 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                                 value: trigger.rawValue
                             )
                         ]
+                    )
+                    UIApplication.shared.openSettings(
+                        triggerFrom: trigger
                     )
                 },
                 label: {

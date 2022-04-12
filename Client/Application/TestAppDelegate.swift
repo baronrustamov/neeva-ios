@@ -165,6 +165,10 @@ class TestAppDelegate: AppDelegate {
             Defaults[.introSeen] = true
         }
 
+        if launchArguments.contains(LaunchArguments.ReactivateIntro) {
+            Defaults[.introSeen] = false
+        }
+
         // Set signInOnce
         if launchArguments.contains(LaunchArguments.SetSignInOnce) {
             Defaults[.signedInOnce] = true
