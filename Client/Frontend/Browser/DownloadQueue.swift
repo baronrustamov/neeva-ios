@@ -4,13 +4,16 @@
 
 import Foundation
 
-protocol DownloadDelegate {
+protocol DownloadDelegate: AnyObject {
     func download(_ download: Download, didCompleteWithError error: Error?)
     func download(_ download: Download, didDownloadBytes bytesDownloaded: Int64)
     func download(_ download: Download, didFinishDownloadingTo location: URL)
 }
 
 class Download: NSObject, ObservableObject {
+    /// Parent queue that manages the download object
+    fileprivate(set) weak var parentQueue: DownloadDelegate?
+    /// Delegate to receive events for this Download object
     var delegate: DownloadDelegate?
 
     fileprivate(set) var filename: String
@@ -137,6 +140,7 @@ extension HTTPDownload: URLSessionTaskDelegate, URLSessionDownloadDelegate {
         }
 
         delegate?.download(self, didCompleteWithError: error)
+        parentQueue?.download(self, didCompleteWithError: error)
     }
 
     func urlSession(
@@ -147,6 +151,7 @@ extension HTTPDownload: URLSessionTaskDelegate, URLSessionDownloadDelegate {
         totalBytesExpected = totalBytesExpectedToWrite
 
         delegate?.download(self, didDownloadBytes: bytesWritten)
+        parentQueue?.download(self, didDownloadBytes: bytesWritten)
     }
 
     func urlSession(
@@ -158,8 +163,10 @@ extension HTTPDownload: URLSessionTaskDelegate, URLSessionDownloadDelegate {
             try FileManager.default.moveItem(at: location, to: destination)
             isComplete = true
             delegate?.download(self, didFinishDownloadingTo: destination)
+            parentQueue?.download(self, didFinishDownloadingTo: destination)
         } catch let error {
             delegate?.download(self, didCompleteWithError: error)
+            parentQueue?.download(self, didCompleteWithError: error)
         }
     }
 }
@@ -188,8 +195,10 @@ class BlobDownload: Download {
                 try self.data.write(to: destination)
                 self.isComplete = true
                 self.delegate?.download(self, didFinishDownloadingTo: destination)
+                self.parentQueue?.download(self, didFinishDownloadingTo: destination)
             } catch let error {
                 self.delegate?.download(self, didCompleteWithError: error)
+                self.parentQueue?.download(self, didCompleteWithError: error)
             }
         }
     }
@@ -231,7 +240,7 @@ class DownloadQueue {
         }
 
         downloads.append(download)
-        download.delegate = self
+        download.parentQueue = self
 
         if let totalBytesExpected = download.totalBytesExpected, combinedTotalBytesExpected != nil {
             combinedTotalBytesExpected! += totalBytesExpected
