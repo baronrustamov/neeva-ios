@@ -185,8 +185,9 @@ class TabCardModel: CardModel {
         guard let byTime = byTime else {
             return false
         }
-
-        let lastExecutedTime = tab.lastExecutedTime ?? 0
+        // TODO(Charles): ideally, lastExecutedTime should be stored, and the fallback
+        // should not be Date.nowMilliseconds() either
+        let lastExecutedTime = tab.lastExecutedTime ?? Date.nowMilliseconds()
         let minusTenSecondsToCurrentDate = Calendar.current.date(
             byAdding: .second, value: -10, to: Date())
         guard let startOftenSecondsAgo = minusTenSecondsToCurrentDate else {
