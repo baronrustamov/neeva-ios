@@ -42,7 +42,7 @@ struct TabGridContainer: View {
     var selectedRowId: TabCardModel.Row.ID? {
         // note: this is still WIP, it's working but can remove some of the code
         if !FeatureFlag[.enableTimeBasedSwitcher] {
-            isIncognito
+            return isIncognito
                 ? tabModel.incognitoRows.first { $0.cells.contains(where: \.isSelected) }?.id
                 : tabModel.normalRows.first { $0.cells.contains(where: \.isSelected) }?.id
         } else {
