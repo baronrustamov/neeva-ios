@@ -146,6 +146,7 @@ extension BrowserViewController {
         ) {
             Defaults[.didShowDefaultBrowserInterstitialFromSkipToBrowser] = true
             Defaults[.introSeen] = true
+            Defaults[.firstRunSeenAndNotSignedIn] = true
             ClientLogger.shared.logCounter(
                 .DefaultBrowserInterstitialImp
             )
