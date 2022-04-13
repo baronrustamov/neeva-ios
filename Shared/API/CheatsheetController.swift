@@ -109,6 +109,7 @@ public class CheatsheetQueryController:
         public var priceHistory: PriceHistory?
         public var memorizedQuery: [String]?
         public var recipe: Recipe?
+        public var backlinkURL: [String]?
     }
 
     private var url: URL
@@ -204,12 +205,18 @@ public class CheatsheetQueryController:
                 reviews: reviews, preference: preference)
         }
 
+        if let backlinks = data.getCheatsheetInfo?.backlinkUrl {
+            print("🔥 🔥 back links")
+            print(backlinks)
+            print("🔥 🔥 back links ====")
+        }
+
         return [result]
     }
 
     @discardableResult public static func getCheatsheetInfo(
-        url: String, completion: @escaping (Result<[CheatsheetInfo], Error>) -> Void
+        url: String, title: String, completion: @escaping (Result<[CheatsheetInfo], Error>) -> Void
     ) -> Combine.Cancellable {
-        Self.perform(query: CheatsheetInfoQuery(input: url), completion: completion)
+        Self.perform(query: CheatsheetInfoQuery(input: url, title: title), completion: completion)
     }
 }

@@ -59,7 +59,7 @@ class RecipeViewModel: ObservableObject {
 
     private func setupRecipeData(url: String) {
         GraphQLAPI.shared.isAnonymous = true
-        CheatsheetQueryController.getCheatsheetInfo(url: url) { result in
+        CheatsheetQueryController.getCheatsheetInfo(url: url, title: "") { result in
             switch result {
             case .success(let cheatsheetInfo):
                 let data = cheatsheetInfo[0]

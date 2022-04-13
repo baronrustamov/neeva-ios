@@ -12,6 +12,7 @@ public class CheatsheetMenuViewModel: ObservableObject {
 
     private weak var tab: Tab?
 
+    private(set) var currentPageTitle: String?
     private(set) var currentPageURL: URL?
     private(set) var currentCheatsheetQuery: String?
 
@@ -106,6 +107,13 @@ public class CheatsheetMenuViewModel: ObservableObject {
         clearCheatsheetData()
 
         currentPageURL = tab?.url
+
+        if let title = tab?.title {
+            currentPageTitle = title
+        } else {
+            currentPageTitle = ""
+        }
+
         self.cheatsheetDataLoading = true
 
         // Unwrap reader mode URLs
@@ -127,7 +135,7 @@ public class CheatsheetMenuViewModel: ObservableObject {
             return
         }
 
-        CheatsheetQueryController.getCheatsheetInfo(url: url.absoluteString) { [self] result in
+        CheatsheetQueryController.getCheatsheetInfo(url: url.absoluteString, title: currentPageTitle!) { [self] result in
             switch result {
             case .success(let cheatsheetInfo):
                 self.cheatsheetInfo = cheatsheetInfo.first
