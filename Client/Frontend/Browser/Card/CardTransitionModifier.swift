@@ -58,9 +58,10 @@ struct CardTransitionModifier<Details: CardDetails>: ViewModifier {
         let x = -cardFrame.minX
         let y = containerFrame.minY - cardFrame.minY
 
-        // It seems that the WebView screenshots are capturing the bleeds, so here we
-        // animate the card to the full width of the screen.
-        let width = UIScreen.main.bounds.width
+        // On iPhone we should find the full width of the display
+        // since the `containerFrame` does not account for the notch and safe area (in landscape mode).
+        let width =
+            UIDevice.current.useTabletInterface ? containerFrame.width : UIScreen.main.bounds.width
         let height = containerFrame.size.height - extraBottomPadding + CardUX.HeaderSize
 
         return CGRect(x: x, y: y, width: width, height: height)
