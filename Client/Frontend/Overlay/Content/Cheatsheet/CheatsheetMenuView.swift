@@ -45,6 +45,34 @@ struct ReviewURLButton: View {
     }
 }
 
+struct RedditBacklinkButton: View {
+    let url: URL
+    @Environment(\.onOpenURLForCheatsheet) var onOpenURLForCheatsheet
+
+    var body: some View {
+        Button(action: {
+            onOpenURLForCheatsheet(url, String(describing: Self.self))
+        }) {
+            getHostName()
+        }
+    }
+
+    @ViewBuilder
+    func getHostName() -> some View {
+        let lastPath = url.lastPathComponent
+            .replacingOccurrences(of: "/", with: "")
+            .replacingOccurrences(of: "_", with: " ")
+
+        HStack {
+            Text(lastPath).bold()
+        }
+        .withFont(unkerned: .bodyMedium)
+        .lineLimit(1)
+        .padding(4)
+    }
+
+}
+
 struct CheatsheetNoResultView: View {
     var body: some View {
         VStack(alignment: .center) {
@@ -228,6 +256,9 @@ public struct CheatsheetMenuView: View {
                 .padding()
 
             }
+            if NeevaFeatureFlags[.enableBacklink] {
+                redditBacklinkSession
+            }
             priceHistorySection
             reviewURLSection
             memorizedQuerySection
@@ -329,6 +360,22 @@ public struct CheatsheetMenuView: View {
             NewsResultsView(
                 newsResults: newsResults
             )
+        }
+    }
+
+    @ViewBuilder
+    var redditBacklinkSession: some View {
+        if model.cheatsheetInfo?.backlinkURL?.count ?? 0 > 0 {
+            VStack(alignment: .leading, spacing: 20) {
+                Text("From Reddit").withFont(.headingMedium)
+                ForEach(model.cheatsheetInfo?.backlinkURL ?? [], id: \.self) { backlink in
+                    if let url = URL(string: backlink) {
+                        // construct reddit link
+                        RedditBacklinkButton(url: url)
+                    }
+                }
+            }
+            .padding()
         }
     }
 

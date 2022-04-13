@@ -5180,8 +5180,8 @@ public final class CheatsheetInfoQuery: GraphQLQuery {
   /// The raw GraphQL definition of this operation.
   public let operationDefinition: String =
     """
-    query CheatsheetInfo($input: String!) {
-      getCheatsheetInfo(input: $input) {
+    query CheatsheetInfo($input: String!, $title: String) {
+      getCheatsheetInfo(input: $input, title: $title) {
         __typename
         ReviewURL
         PriceHistory {
@@ -5242,22 +5242,25 @@ public final class CheatsheetInfoQuery: GraphQLQuery {
             }
           }
         }
+        BacklinkURL
       }
     }
     """
 
   public let operationName: String = "CheatsheetInfo"
 
-  public let operationIdentifier: String? = "de04f6a5f3780f8256c08ab333608050744f2aa80f4cec1af52659f4bb19fc35"
+  public let operationIdentifier: String? = "2592047ecfaf990326a3b9bb352a4f365639f9901f8c3247aded1363a64579cf"
 
   public var input: String
+  public var title: String?
 
-  public init(input: String) {
+  public init(input: String, title: String? = nil) {
     self.input = input
+    self.title = title
   }
 
   public var variables: GraphQLMap? {
-    return ["input": input]
+    return ["input": input, "title": title]
   }
 
   public struct Data: GraphQLSelectionSet {
@@ -5265,7 +5268,7 @@ public final class CheatsheetInfoQuery: GraphQLQuery {
 
     public static var selections: [GraphQLSelection] {
       return [
-        GraphQLField("getCheatsheetInfo", arguments: ["input": GraphQLVariable("input")], type: .object(GetCheatsheetInfo.selections)),
+        GraphQLField("getCheatsheetInfo", arguments: ["input": GraphQLVariable("input"), "title": GraphQLVariable("title")], type: .object(GetCheatsheetInfo.selections)),
       ]
     }
 
@@ -5299,6 +5302,7 @@ public final class CheatsheetInfoQuery: GraphQLQuery {
           GraphQLField("PriceHistory", type: .object(PriceHistory.selections)),
           GraphQLField("MemorizedQuery", type: .list(.nonNull(.scalar(String.self)))),
           GraphQLField("Recipe", type: .object(Recipe.selections)),
+          GraphQLField("BacklinkURL", type: .list(.nonNull(.scalar(String.self)))),
         ]
       }
 
@@ -5308,8 +5312,8 @@ public final class CheatsheetInfoQuery: GraphQLQuery {
         self.resultMap = unsafeResultMap
       }
 
-      public init(reviewUrl: [String]? = nil, priceHistory: PriceHistory? = nil, memorizedQuery: [String]? = nil, recipe: Recipe? = nil) {
-        self.init(unsafeResultMap: ["__typename": "CheatsheetAnnotationData", "ReviewURL": reviewUrl, "PriceHistory": priceHistory.flatMap { (value: PriceHistory) -> ResultMap in value.resultMap }, "MemorizedQuery": memorizedQuery, "Recipe": recipe.flatMap { (value: Recipe) -> ResultMap in value.resultMap }])
+      public init(reviewUrl: [String]? = nil, priceHistory: PriceHistory? = nil, memorizedQuery: [String]? = nil, recipe: Recipe? = nil, backlinkUrl: [String]? = nil) {
+        self.init(unsafeResultMap: ["__typename": "CheatsheetAnnotationData", "ReviewURL": reviewUrl, "PriceHistory": priceHistory.flatMap { (value: PriceHistory) -> ResultMap in value.resultMap }, "MemorizedQuery": memorizedQuery, "Recipe": recipe.flatMap { (value: Recipe) -> ResultMap in value.resultMap }, "BacklinkURL": backlinkUrl])
       }
 
       public var __typename: String {
@@ -5354,6 +5358,15 @@ public final class CheatsheetInfoQuery: GraphQLQuery {
         }
         set {
           resultMap.updateValue(newValue?.resultMap, forKey: "Recipe")
+        }
+      }
+
+      public var backlinkUrl: [String]? {
+        get {
+          return resultMap["BacklinkURL"] as? [String]
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "BacklinkURL")
         }
       }
 

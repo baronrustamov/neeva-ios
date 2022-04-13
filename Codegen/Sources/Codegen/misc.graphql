@@ -20,8 +20,8 @@ query UserInfo {
   }
 }
 
-query CheatsheetInfo($input: String!) {
-  getCheatsheetInfo(input: $input) {
+query CheatsheetInfo($input: String!, $title: String) {
+  getCheatsheetInfo(input: $input, title: $title) {
     ReviewURL
     PriceHistory {
       InStock
@@ -70,6 +70,7 @@ query CheatsheetInfo($input: String!) {
         }
       }
     }
+    BacklinkURL
   }
 }
 
