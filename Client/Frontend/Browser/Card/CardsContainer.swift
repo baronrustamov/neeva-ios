@@ -40,17 +40,35 @@ struct TabGridContainer: View {
     @Environment(\.columns) private var columns
 
     var selectedRowId: TabCardModel.Row.ID? {
-        isIncognito
-            ? tabModel.incognitoRows.first { $0.cells.contains(where: \.isSelected) }?.id
-            : tabModel.normalRows.first { $0.cells.contains(where: \.isSelected) }?.id
-    }
-
-    var selectedCardID: String? {
-        if let details = tabModel.allDetailsWithExclusionList.first(where: \.isSelected) {
-            return details.id
-        }
-        if let details = tabModel.allTabGroupDetails.first(where: \.isSelected) {
-            return details.id
+        // note: this is still WIP, it's working but can remove some of the code
+        if !FeatureFlag[.enableTimeBasedSwitcher] {
+            return isIncognito
+                ? tabModel.incognitoRows.first { $0.cells.contains(where: \.isSelected) }?.id
+                : tabModel.normalRows.first { $0.cells.contains(where: \.isSelected) }?.id
+        } else {
+            if isIncognito {
+                if let row = tabModel.getRows(incognito: true).first(where: { row in
+                    row.cells.contains(where: \.isSelected)
+                }) {
+                    if row.index == 2 {
+                        // scroll to today header
+                        return [TabCardModel.todayRowHeaderID]
+                    } else {
+                        return row.id
+                    }
+                }
+            } else {
+                if let row = tabModel.getRows(incognito: false).first(where: { row in
+                    row.cells.contains(where: \.isSelected)
+                }) {
+                    if row.index == 2 {
+                        // scroll to today header
+                        return [TabCardModel.todayRowHeaderID]
+                    } else {
+                        return row.id
+                    }
+                }
+            }
         }
         return nil
     }
@@ -62,12 +80,16 @@ struct TabGridContainer: View {
             }
         }
         .environment(\.aspectRatio, CardUX.DefaultTabCardRatio)
-        .padding(.vertical, landscapeMode ? 8 : 16)
+        .padding(.vertical, !FeatureFlag[.enableTimeBasedSwitcher] ? (landscapeMode ? 8 : 16) : 0)
         .useEffect(deps: gridModel.needsScrollToSelectedTab) { _ in
             if let selectedRowId = selectedRowId {
                 withAnimation(nil) {
                     scrollProxy.scrollTo(selectedRowId)
                 }
+            }
+            if let completion = gridModel.scrollToCompletion {
+                gridModel.scrollToCompletion = nil
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: completion)
             }
         }
         .animation(nil)
@@ -93,6 +115,8 @@ struct CardScrollContainer<Content: View>: View {
         ScrollView(.vertical, showsIndicators: false) {
             ScrollViewReader(content: content)
         }
+        // Fixes a bug where scrollView would stutter at the edge
+        .animation(gridModel.gridCanAnimate ? .interactiveSpring() : nil)
         .accessibilityIdentifier("CardGrid")
         .environment(\.columns, columns)
         .introspectScrollView { scrollView in
@@ -101,6 +125,11 @@ struct CardScrollContainer<Content: View>: View {
             // bottom tool bar needs to be shown.
             if landscapeMode {
                 scrollView.clipsToBounds = false
+            }
+            // Disable bounce on iOS 14 due to stuttering bug with ScrollView
+            guard #available(iOS 15, *) else {
+                scrollView.bounces = false
+                return
             }
         }
     }
@@ -118,7 +147,6 @@ struct CardsContainer: View {
     // Used to rebuild the scene when switching between portrait and landscape.
     @State var orientation: UIDeviceOrientation = .unknown
     @State var generationId: Int = 0
-    @State var switchingState = false
 
     let columns: [GridItem]
 

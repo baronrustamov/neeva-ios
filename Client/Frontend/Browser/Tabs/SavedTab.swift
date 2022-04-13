@@ -13,6 +13,7 @@ class SavedTab: NSObject, NSCoding {
     var isIncognito: Bool
     var isPinned: Bool
     var pinnedTime: TimeInterval?
+    var lastExecutedTime: Timestamp?
     var sessionData: SessionData?
     var screenshotUUID: UUID?
     var faviconURL: URL?
@@ -50,7 +51,7 @@ class SavedTab: NSObject, NSCoding {
 
     init(
         screenshotUUID: UUID?, isSelected: Bool, title: String?, isIncognito: Bool, isPinned: Bool,
-        pinnedTime: TimeInterval?,
+        pinnedTime: TimeInterval?, lastExecutedTIme: Timestamp?,
         faviconURL: URL?, url: URL?, sessionData: SessionData?, uuid: String, rootUUID: String,
         parentUUID: String, tabIndex: Int?, parentSpaceID: String
     ) {
@@ -60,6 +61,7 @@ class SavedTab: NSObject, NSCoding {
         self.isIncognito = isIncognito
         self.isPinned = isPinned
         self.pinnedTime = pinnedTime
+        self.lastExecutedTime = lastExecutedTIme
         self.faviconURL = faviconURL
         self.url = url
         self.sessionData = sessionData
@@ -78,6 +80,7 @@ class SavedTab: NSObject, NSCoding {
         self.isSelected = coder.decodeBool(forKey: "isSelected")
         self.isPinned = coder.decodeBool(forKey: "isPinned")
         self.pinnedTime = coder.decodeObject(forKey: "pinnedTime") as? TimeInterval
+        self.lastExecutedTime = coder.decodeObject(forKey: "lastExecutedTime") as? Timestamp
         self.title = coder.decodeObject(forKey: "title") as? String
         self.isIncognito = coder.decodeBool(forKey: "isPrivate")
         self.faviconURL = (coder.decodeObject(forKey: "faviconURL") as? URL)
@@ -95,6 +98,7 @@ class SavedTab: NSObject, NSCoding {
         coder.encode(isSelected, forKey: "isSelected")
         coder.encode(isPinned, forKey: "isPinned")
         coder.encode(pinnedTime, forKey: "pinnedTime")
+        coder.encode(lastExecutedTime, forKey: "lastExecutedTime")
         coder.encode(title, forKey: "title")
         coder.encode(isIncognito, forKey: "isPrivate")
         coder.encode(faviconURL, forKey: "faviconURL")

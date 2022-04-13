@@ -24,12 +24,19 @@ protocol CardModel: ThumbnailModel {
     func onDataUpdated()
 }
 
+enum TimeFilter: String {
+    case today = "Today"
+    case lastWeek = "Last Week"
+}
+
 class TabCardModel: CardModel {
     private var subscription: Set<AnyCancellable> = Set()
 
     private(set) var manager: TabManager
     private(set) var normalRows: [Row] = []
+    private(set) var timeBasedNormalRows: [TimeFilter: [Row]] = [:]
     private(set) var incognitoRows: [Row] = []
+    private(set) var timeBasedIncognitoRows: [TimeFilter: [Row]] = [:]
     private(set) var allDetails: [TabCardDetails] = []
     private(set) var allDetailsWithExclusionList: [TabCardDetails] = []
     var columnCount: Int = 2 {
@@ -43,14 +50,46 @@ class TabCardModel: CardModel {
     private(set) var allTabGroupDetails: [TabGroupCardDetails] = []
 
     @Default(.tabGroupExpanded) private var tabGroupExpanded: Set<String>
+    var contentVisibilityPublisher = PassthroughSubject<Void, Never>()
+    var needsUpdateRows: Bool = false
+    static let todayRowHeaderID: String = "today-header"
+    static let lastweekRowHeaderID: String = "lastWeek-header"
 
     func updateRows() {
-        incognitoRows = buildRows(incognito: true)
-        normalRows = buildRows(incognito: false)
+        if FeatureFlag[.enableTimeBasedSwitcher] {
+            timeBasedIncognitoRows[.today] = buildRows(incognito: true, byTime: .today)
+            timeBasedNormalRows[.today] = buildRows(incognito: false, byTime: .today)
+            timeBasedIncognitoRows[.lastWeek] = buildRows(
+                incognito: true, byTime: .lastWeek)
+            timeBasedNormalRows[.lastWeek] = buildRows(
+                incognito: false, byTime: .lastWeek)
+        } else {
+            incognitoRows = buildRows(incognito: true)
+            normalRows = buildRows(incognito: false)
+        }
 
         // Defer signaling until after we have finished updating. This way our state is
         // completely consistent with TabManager prior to accessing allDetails, etc.
         self.objectWillChange.send()
+    }
+
+    func getRows(incognito: Bool) -> [Row] {
+        var returnValue: [Row] = []
+
+        if FeatureFlag[.enableTimeBasedSwitcher] {
+            if incognito {
+                returnValue =
+                    (timeBasedIncognitoRows[.today] ?? [])
+                    + (timeBasedIncognitoRows[.lastWeek] ?? [])
+            } else {
+                returnValue =
+                    (timeBasedNormalRows[.today] ?? []) + (timeBasedNormalRows[.lastWeek] ?? [])
+            }
+        } else {
+            returnValue = incognito ? incognitoRows : normalRows
+        }
+
+        return returnValue
     }
 
     var normalDetails: [TabCardDetails] {
@@ -74,6 +113,25 @@ class TabCardModel: CardModel {
             self?.onDataUpdated()
         }.store(in: &subscription)
 
+        if FeatureFlag[.enableTimeBasedSwitcher] {
+            manager.selectedTabPublisher.sink { [weak self] tab in
+                guard let self = self else {
+                    return
+                }
+                self.needsUpdateRows = true
+            }.store(in: &subscription)
+
+            contentVisibilityPublisher.sink { [weak self] _ in
+                guard let self = self else {
+                    return
+                }
+                if self.needsUpdateRows {
+                    self.updateRows()
+                    self.needsUpdateRows = false
+                }
+            }.store(in: &subscription)
+        }
+
         _tabGroupExpanded.publisher.sink { [weak self] _ in
             self?.updateRows()
         }.store(in: &subscription)
@@ -93,6 +151,7 @@ class TabCardModel: CardModel {
             case tab(TabCardDetails)
             case tabGroupInline(TabGroupCardDetails)
             case tabGroupGridRow(TabGroupCardDetails, Range<Int>)
+            case sectionHeader(TimeFilter)
 
             var id: String {
                 switch self {
@@ -102,6 +161,10 @@ class TabCardModel: CardModel {
                     return details.id
                 case .tabGroupGridRow(let details, let range):
                     return details.allDetails[range].reduce("") { $0 + $1.id + ":" }
+                case .sectionHeader(let timeFilter):
+                    return timeFilter.rawValue == "Last Week"
+                        ? TabCardModel.lastweekRowHeaderID
+                        : TabCardModel.todayRowHeaderID
                 }
             }
 
@@ -113,6 +176,8 @@ class TabCardModel: CardModel {
                     return details.isSelected
                 case .tabGroupGridRow(let details, let range):
                     return details.allDetails[range].contains { $0.isSelected }
+                case .sectionHeader(_):
+                    return false
                 }
             }
 
@@ -124,6 +189,8 @@ class TabCardModel: CardModel {
                     return details.allDetails.count
                 case .tabGroupGridRow(_, let range):
                     return range.count
+                case .sectionHeader(_):
+                    return 0
                 }
             }
         }
@@ -132,8 +199,33 @@ class TabCardModel: CardModel {
         var multipleCellTypes: Bool = false
     }
 
-    func buildRows(incognito: Bool) -> [Row] {
+    func filterTabByTime(tab: Tab, byTime: TimeFilter) -> Bool {
+        // The fallback value won't be used. tab.lastExecutedTime is
+        // guaranteed to be non-nil in configureTab()
+        let lastExecutedTime = tab.lastExecutedTime ?? Date.nowMilliseconds()
+        let minusOneDayToCurrentDate = Calendar.current.date(
+            byAdding: .day, value: -1, to: Date())
+        guard let startOfOneDayAgo = minusOneDayToCurrentDate else {
+            return true
+        }
+        // timeIntervalSince1970 returns the number of seconds. It is converted
+        // to milliseconds by multiplying by 1000 to compare with lastExecutedTime
+        // which is stored in milliseconds.
+        switch byTime {
+        case .today:
+            return lastExecutedTime > Int64(startOfOneDayAgo.timeIntervalSince1970 * 1000)
+        case .lastWeek:
+            let minusOneWeekToCurrentDate = Calendar.current.date(
+                byAdding: .day, value: -7, to: Date())
+            guard let startOfLastWeek = minusOneWeekToCurrentDate else {
+                return true
+            }
+            return lastExecutedTime < Int64(startOfOneDayAgo.timeIntervalSince1970 * 1000)
+                && lastExecutedTime > Int64(startOfLastWeek.timeIntervalSince1970 * 1000)
+        }
+    }
 
+    func buildRows(incognito: Bool, byTime: TimeFilter? = nil) -> [Row] {
         var rows: [Row] = []
 
         var allDetailsFiltered = allDetails.filter { tabCard in
@@ -142,6 +234,8 @@ class TabCardModel: CardModel {
                 (representativeTabs.contains(tab)
                 || allDetailsWithExclusionList.contains { $0.id == tabCard.id })
                 && tab.isIncognito == incognito
+                && (FeatureFlag[.enableTimeBasedSwitcher]
+                    ? filterTabByTime(tab: tab, byTime: byTime!) : true)
         }
 
         modifyAllDetailsFilteredPromotingPinnedTabs(&allDetailsFiltered)
@@ -263,6 +357,10 @@ class TabCardModel: CardModel {
 
         rows = rows.filter {
             !$0.cells.isEmpty
+        }
+
+        if FeatureFlag[.enableTimeBasedSwitcher] && !rows.isEmpty, let byTime = byTime {
+            rows.insert(Row(cells: [Row.Cell.sectionHeader(byTime)]), at: 0)
         }
 
         for id in 0..<rows.count {

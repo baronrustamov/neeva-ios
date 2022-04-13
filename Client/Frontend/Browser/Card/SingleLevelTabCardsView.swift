@@ -18,12 +18,19 @@ struct SingleLevelTabCardsView: View {
     @EnvironmentObject private var browserModel: BrowserModel
     @Environment(\.columns) private var columns
 
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+
+    var landscapeMode: Bool {
+        verticalSizeClass == .compact || horizontalSizeClass == .regular
+    }
+
     let containerGeometry: GeometryProxy
     let incognito: Bool
 
     var body: some View {
         ForEach(
-            incognito ? tabModel.incognitoRows : tabModel.normalRows
+            tabModel.getRows(incognito: incognito)
         ) { row in
             HStack(spacing: CardGridUX.GridSpacing) {
                 ForEach(row.cells) { details in
@@ -60,10 +67,26 @@ struct SingleLevelTabCardsView: View {
                                         selectedTabRow: row.index))
                                 browserModel.hideWithAnimation()
                             }
+                    case .sectionHeader(let byTime):
+                        VStack {
+                            Color.secondarySystemFill
+                                .frame(height: 8)
+                                .padding(.horizontal, -CardGridUX.GridSpacing)
+                            HStack {
+                                Text(byTime.rawValue)
+                                    .withFont(.labelLarge)
+                                    .foregroundColor(.label)
+                                    .padding(.leading, 20)
+                                    .padding(.top, 12)
+                                    .padding(.bottom, 8)
+                                Spacer()
+                            }
+                        }
                     }
                 }
             }
             .padding(.horizontal, CardGridUX.GridSpacing)
+            .background(Color.background)
             .zIndex(row.cells.contains(where: \.isSelected) ? 1 : 0)
         }
     }

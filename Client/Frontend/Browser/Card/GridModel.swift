@@ -14,7 +14,15 @@ class GridModel: ObservableObject {
     @Published private(set) var pickerHeight: CGFloat = UIConstants
         .TopToolbarHeightWithToolbarButtonsShowing
     @Published var switcherState: SwitcherViews = .tabs {
+        willSet {
+            gridCanAnimate = true
+        }
+
         didSet {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self.gridCanAnimate = false
+            }
+
             if case .spaces = switcherState {
                 ClientLogger.shared.logCounter(
                     .SpacesUIVisited,
@@ -22,7 +30,7 @@ class GridModel: ObservableObject {
             }
         }
     }
-
+    @Published var gridCanAnimate = false
     @Published var showingDetailView = false {
         didSet {
             // Reset when going from true to false
@@ -32,6 +40,7 @@ class GridModel: ObservableObject {
         }
     }
     @Published var needsScrollToSelectedTab: Int = 0
+    var scrollToCompletion: (() -> Void)?
 
     // Spaces
     @Published var isLoading = false
@@ -55,7 +64,8 @@ class GridModel: ObservableObject {
         return tabManager.normalTabs.isEmpty
     }
 
-    func scrollToSelectedTab() {
+    func scrollToSelectedTab(completion: (() -> Void)? = nil) {
+        scrollToCompletion = completion
         needsScrollToSelectedTab += 1
     }
 
@@ -88,7 +98,6 @@ class GridModel: ObservableObject {
 
         tabCardModel.manager.switchIncognitoMode(
             incognito: incognito, fromTabTray: true, openLazyTab: false)
-        tabCardModel.updateRows()
     }
 
     func switchToSpaces() {

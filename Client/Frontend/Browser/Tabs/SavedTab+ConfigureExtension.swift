@@ -39,7 +39,7 @@ extension SavedTab {
         self.init(
             screenshotUUID: tab.screenshotUUID, isSelected: isSelected,
             title: tab.title ?? tab.lastTitle, isIncognito: tab.isIncognito, isPinned: tab.isPinned,
-            pinnedTime: tab.pinnedTime,
+            pinnedTime: tab.pinnedTime, lastExecutedTIme: tab.lastExecutedTime,
             faviconURL: tab.displayFavicon?.url, url: tab.url, sessionData: sessionData,
             uuid: tab.tabUUID, rootUUID: tab.rootUUID, parentUUID: tab.parentUUID ?? "",
             tabIndex: tabIndex, parentSpaceID: tab.parentSpaceID ?? "")
@@ -72,6 +72,7 @@ extension SavedTab {
             (title?.trim() ?? "").count > 0 ? title : sessionData?.currentUrl?.absoluteString
         tab.isPinned = isPinned
         tab.pinnedTime = pinnedTime
+        tab.lastExecutedTime = lastExecutedTime ?? Date.nowMilliseconds()
         tab.parentUUID = parentUUID ?? ""
         tab.tabUUID = UUID ?? ""
         tab.rootUUID = rootUUID ?? ""
