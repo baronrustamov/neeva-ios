@@ -6,10 +6,12 @@ import Defaults
 import Foundation
 import KeychainAccess
 import UIKit
+
 // neeva.com
 extension Defaults.Keys {
     public static let neevaHost = Defaults.Key<String>(
-        "neevaHost", default: "macy.local.neeva.dev", suite: UserDefaults(suiteName: NeevaConstants.appGroup)!)
+        "neevaHost", default: "macy.local.neeva.dev",
+        suite: UserDefaults(suiteName: NeevaConstants.appGroup)!)
 }
 
 public struct NeevaConstants {

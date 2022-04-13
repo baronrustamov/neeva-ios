@@ -135,7 +135,9 @@ public class CheatsheetMenuViewModel: ObservableObject {
             return
         }
 
-        CheatsheetQueryController.getCheatsheetInfo(url: url.absoluteString, title: currentPageTitle!) { [self] result in
+        CheatsheetQueryController.getCheatsheetInfo(
+            url: url.absoluteString, title: currentPageTitle!
+        ) { [self] result in
             switch result {
             case .success(let cheatsheetInfo):
                 self.cheatsheetInfo = cheatsheetInfo.first
