@@ -14,6 +14,7 @@ struct Web3Toolbar: View {
     private let overFlowMenuAction: () -> Void
     private let showTabsAction: () -> Void
     private let openLazyTabAction: () -> Void
+    @EnvironmentObject var model: Web3Model
 
     init(
         opacity: CGFloat,
@@ -45,7 +46,9 @@ struct Web3Toolbar: View {
                 action: overFlowMenuAction,
                 identifier: "TabOverflowButton"
             )
-            TabToolbarButtons.NeevaWallet(assetStore: AssetStore.shared)
+            TabToolbarButtons.NeevaWallet(
+                assetStore: AssetStore.shared, gasFeeModel: model.gasFeeModel
+            )
             TabToolbarButtons.LazyTabButton(
                 action: openLazyTabAction
             )

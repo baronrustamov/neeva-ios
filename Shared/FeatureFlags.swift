@@ -28,6 +28,8 @@ public enum FeatureFlag: String, CaseIterable, RawRepresentable {
     case customSearchEngine = "Custom Search Engine"
     case swipeToCloseTabs = "Swipe to close tabs"
     case cookieCutter = "Cookie Cutter"
+    case swiftUIHistory = "SwiftUI History"
+    case gasFee = "Show Gas Fee UI"
 
     public init?(caseName: String) {
         for value in FeatureFlag.allCases where "\(value)" == caseName {

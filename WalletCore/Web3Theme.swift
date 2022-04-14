@@ -11,6 +11,8 @@ import UIKit
 
 public enum Web3Theme: String {
 
+    @Default(.showGasFeeInToolbar) static var showGasFeeInToolbar
+
     public init(with slug: String?) {
         guard let slug = slug else {
             self = .default
@@ -79,7 +81,34 @@ extension Web3Theme {
     }
 
     @ViewBuilder
-    public var walletButton: some View {
+    public func walletButton(with tintColor: Color) -> some View {
+        if Web3Theme.showGasFeeInToolbar, FeatureFlag[.gasFee] {
+            VStack(alignment: .center, spacing: 0) {
+                walletButtonContent
+                gasIcon(with: tintColor)
+            }.offset(x: 0, y: 4)
+        } else {
+            walletButtonContent
+        }
+    }
+
+    func gasIcon(with tintColor: Color) -> some View {
+        Image(uiImage: (UIImage(named: "gasIcon")?.withRenderingMode(.alwaysTemplate))!)
+            .resizable()
+            .padding(2)
+            .frame(width: 16, height: 16)
+            .foregroundColor(tintColor)
+            .background(Color.label)
+            .clipShape(Circle())
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(backgroundColor, lineWidth: 1)
+            )
+            .offset(x: 0, y: -4)
+    }
+
+    @ViewBuilder
+    private var walletButtonContent: some View {
         switch self {
         case .default:
             Image("wallet-illustration")
@@ -91,7 +120,7 @@ extension Web3Theme {
             WebImage(url: asset?.imageURL)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(width: 32)
+                .frame(width: 32, height: 32)
                 .cornerRadius(16)
                 .overlay(
                     RoundedRectangle(cornerRadius: 16)

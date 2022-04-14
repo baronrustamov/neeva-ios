@@ -12,30 +12,6 @@ import WalletConnectSwift
 import WalletCore
 import web3swift
 
-struct WalletHeader: View {
-    let title: String
-    @Binding var isExpanded: Bool
-
-    var body: some View {
-        HStack {
-            Text(title)
-                .withFont(.headingMedium)
-                .foregroundColor(.label)
-            Spacer()
-            Button(action: {
-                isExpanded.toggle()
-            }) {
-                Symbol(
-                    decorative: isExpanded ? .chevronUp : .chevronDown,
-                    style: .headingMedium
-                )
-                .foregroundColor(.label)
-            }
-        }
-        .padding(.bottom, 4)
-    }
-}
-
 struct WalletDashboard: View {
     @Default(.sessionsPeerIDs) var savedSessions
     @Default(.currentTheme) var currentTheme
@@ -477,6 +453,9 @@ struct WalletDashboard: View {
         NavigationView {
             List {
                 accountInfo
+                if FeatureFlag[.gasFee] {
+                    GasFeeView(gasFeeModel: model.gasFeeModel)
+                }
                 balancesSection
                 openSessionsSection
                 nftSection

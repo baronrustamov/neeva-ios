@@ -171,6 +171,7 @@ extension Defaults.Keys {
     public static let walletIntroSeen = Defaults.BoolKey("seenWalletIntro")
     public static let walletOnboardingDone = Defaults.BoolKey("walletOnboardingDone")
     public static let currentTheme = Defaults.Key<String>("currentTheme", default: "")
+    public static let showGasFeeInToolbar = Defaults.Key<Bool>("gasFeeToolbar", default: false)
 
     // MARK: - default browser
     public static let didDismissDefaultBrowserCard = Defaults.BoolKey(

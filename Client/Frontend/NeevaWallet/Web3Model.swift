@@ -56,6 +56,7 @@ class Web3Model: ObservableObject {
         @Published var matchingCollection: Collection?
         @Published var showingMaliciousSiteWarning = false
         @Published var desktopSession = false
+        var gasFeeModel: GasFeeModel = GasFeeModel()
 
         var serverManager: WalletServerManager?
         weak var toastDelegate: ToastDelegate?
@@ -165,7 +166,6 @@ class Web3Model: ObservableObject {
                 })
             self.selectedTab = tabManager.selectedTab
             self.wallet = NeevaConstants.currentTarget == .xyz ? WalletAccessor() : nil
-
             self.selectedTabSubscription = tabManager.selectedTabPublisher.sink { tab in
                 guard let tab = tab else { return }
 
@@ -187,6 +187,7 @@ class Web3Model: ObservableObject {
             }
 
             self.serverManager = WalletServerManager(delegate: self)
+            self.gasFeeModel.configureTimer(with: wallet)
         }
 
         func updateBalances() {

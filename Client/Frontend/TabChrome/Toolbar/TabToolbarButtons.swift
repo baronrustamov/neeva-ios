@@ -184,10 +184,12 @@ enum TabToolbarButtons {
             @ObservedObject var assetStore: AssetStore
             @EnvironmentObject var model: Web3Model
             @Default(.currentTheme) var currentTheme
+            @ObservedObject var gasFeeModel: GasFeeModel
 
             var body: some View {
                 TabToolbarButton(
-                    label: Web3Theme(with: currentTheme).walletButton,
+                    label: Web3Theme(with: currentTheme).walletButton(
+                        with: gasFeeModel.gasFeeState.tintColor),
                     action: model.showWalletPanel
                 )
             }
