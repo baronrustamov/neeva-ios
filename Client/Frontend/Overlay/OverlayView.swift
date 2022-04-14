@@ -30,7 +30,7 @@ struct OverlayView: View {
 
     var isSheet: Bool {
         if let currentOverlay = overlayManager.currentOverlay,
-            case OverlayType.sheet(_) = currentOverlay
+            case OverlayType.sheet = currentOverlay
         {
             return true
         }
@@ -40,51 +40,53 @@ struct OverlayView: View {
 
     @ViewBuilder
     var content: some View {
-        switch overlayManager.currentOverlay {
-        case .backForwardList(let backForwardList):
-            backForwardList
-        case .findInPage(let findInPage):
-            VStack {
-                Spacer()
-                findInPage
-                    .padding(.bottom, keyboardHidden ? 0 : -14)
-            }.ignoresSafeArea(.container)
-        case .fullScreenModal(let fullScreenModal):
-            if verticalSizeClass == .regular && horizontalSizeClass == .regular {
-                Color.clear
-                    .sheet(isPresented: $overlayManager.showFullScreenPopoverSheet) {
-                        // OnDismiss
-                        // Nothing to do here
-                    } content: {
-                        fullScreenModal
-                    }
-            } else {
-                Color.clear
-                    .fullScreenCover(isPresented: $overlayManager.showFullScreenPopoverSheet) {
-                        // OnDismiss
-                        // Nothing to do here
-                    } content: {
-                        fullScreenModal
-                    }
+        if isVisible, canDisplay {
+            switch overlayManager.currentOverlay {
+            case .backForwardList(let backForwardList):
+                backForwardList
+            case .findInPage(let findInPage):
+                VStack {
+                    Spacer()
+                    findInPage
+                        .padding(.bottom, keyboardHidden ? 0 : -14)
+                }.ignoresSafeArea(.container)
+            case .fullScreenModal(let fullScreenModal):
+                if verticalSizeClass == .regular && horizontalSizeClass == .regular {
+                    Color.clear
+                        .sheet(isPresented: $overlayManager.showFullScreenPopoverSheet) {
+                            // OnDismiss
+                            // Nothing to do here
+                        } content: {
+                            fullScreenModal
+                        }
+                } else {
+                    Color.clear
+                        .fullScreenCover(isPresented: $overlayManager.showFullScreenPopoverSheet) {
+                            // OnDismiss
+                            // Nothing to do here
+                        } content: {
+                            fullScreenModal
+                        }
+                }
+            case .notification(let notification):
+                VStack {
+                    notification
+                        .padding(.top, 12)
+                    Spacer()
+                }
+            case .popover(let popover):
+                popover
+            case .sheet(let sheet):
+                sheet
+            case .toast(let toast):
+                VStack {
+                    Spacer()
+                    toast
+                        .padding(.bottom, 18)
+                }
+            default:
+                EmptyView()
             }
-        case .notification(let notification):
-            VStack {
-                notification
-                    .padding(.top, 12)
-                Spacer()
-            }
-        case .popover(let popover):
-            popover
-        case .sheet(let sheet):
-            sheet
-        case .toast(let toast):
-            VStack {
-                Spacer()
-                toast
-                    .padding(.bottom, 18)
-            }
-        default:
-            EmptyView()
         }
     }
 
@@ -102,11 +104,6 @@ struct OverlayView: View {
                     safeArea = geom.safeAreaInsets.bottom
                     keyboardHidden = safeArea < 100
                 }
-                .onChange(of: canDisplay) { value in
-                    if !value, isVisible {
-                        overlayManager.hideCurrentOverlay(animate: false)
-                    }
-                }
                 .padding(
                     .bottom,
                     overlayManager.offsetForBottomBar && !chromeModel.inlineToolbar
@@ -114,12 +111,14 @@ struct OverlayView: View {
                         ? chromeModel.bottomBarHeight - scrollingControlModel.footerBottomOffset
                         : 0
                 )
-                .onAppear {
-                    isVisible = true
-                }
-                .onDisappear {
-                    isVisible = false
-                }
+        }.onAppear {
+            isVisible = true
+        }.onDisappear {
+            isVisible = false
+        }.onChange(of: canDisplay) { _ in
+            if !canDisplay, isVisible {
+                overlayManager.hideCurrentOverlay(animate: false)
+            }
         }
     }
 }
