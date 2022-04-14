@@ -63,8 +63,8 @@ struct BrowserTopBarView: View {
                 }
             ).environment(
                 \.openSettings,
-                {
-                    bvc.openSettings(openPage: .cookieCutter)
+                { page in
+                    bvc.openSettings(openPage: page)
                 }
             )
         }

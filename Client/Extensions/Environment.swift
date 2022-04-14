@@ -94,9 +94,9 @@ extension EnvironmentValues {
     }
 
     private struct OpenSettingsKey: EnvironmentKey {
-        static var defaultValue: (() -> Void) = {}
+        static var defaultValue: ((SettingsPage?) -> Void) = { _ in }
     }
-    public var openSettings: (() -> Void) {
+    public var openSettings: ((SettingsPage?) -> Void) {
         get { self[OpenSettingsKey.self] }
         set { self[OpenSettingsKey.self] = newValue }
     }

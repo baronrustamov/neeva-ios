@@ -37,7 +37,7 @@ public struct TrackingMenuProtectionRowButton: View {
 
                 if FeatureFlag[.cookieCutter] {
                     Button {
-                        openSettings()
+                        openSettings(.cookieCutter)
                     } label: {
                         HStack {
                             Text("Cookie Cutter Settings")

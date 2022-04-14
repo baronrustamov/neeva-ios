@@ -17,7 +17,7 @@ extension EnvironmentValues {
     }
 }
 
-enum SettingsPage {
+public enum SettingsPage {
     case cookieCutter
 }
 
