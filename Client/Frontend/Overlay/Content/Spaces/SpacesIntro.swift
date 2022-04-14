@@ -56,7 +56,33 @@ struct SpacesShareIntroOverlayContent: View {
     }
 }
 
+struct OrientationDependentStack<Content: View>: View {
+    let orientation: UIDeviceOrientation
+
+    @ViewBuilder var content: Content
+
+    @ViewBuilder
+    var body: some View {
+        if orientation.isLandscape {
+            HStack(spacing: 0) {
+                content
+            }
+        } else {
+            VStack(spacing: 0) {
+                content
+            }
+        }
+    }
+}
+
 struct SpacesIntroView: View {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+
+    var landscapeMode: Bool {
+        verticalSizeClass == .compact || horizontalSizeClass == .regular
+    }
+
     let dismiss: () -> Void
     let imageName: String
     let imageAccessibilityLabel: LocalizedStringKey
@@ -80,42 +106,54 @@ struct SpacesIntroView: View {
                         .padding(.trailing, 4.5)
                 }
             }
-            Image(imageName, bundle: .main)
-                .resizable()
-                .frame(width: 214, height: 200)
-                .padding(32)
-                .accessibilityLabel(imageAccessibilityLabel)
-            Text(headlineText).withFont(.headingXLarge).padding(8)
-            Text(detailText)
-                .withFont(.bodyLarge)
-                .lineLimit(3)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 40)
-                .fixedSize(horizontal: false, vertical: true)
-            Button(
-                action: firstButtonPressed,
-                label: {
-                    Text(firstButtonText)
-                        .withFont(.labelLarge)
-                        .foregroundColor(.brand.white)
-                        .padding(13)
-                        .frame(maxWidth: .infinity)
+            OrientationDependentStack(
+                orientation: landscapeMode
+                    ? UIDeviceOrientation.landscapeLeft : UIDeviceOrientation.portrait
+            ) {
+                Image(imageName, bundle: .main)
+                    .resizable()
+                    .frame(
+                        width: 214 * (landscapeMode ? 0.9 : 1),
+                        height: 200 * (landscapeMode ? 0.9 : 1)
+                    )
+                    .padding(.horizontal, landscapeMode ? 16 : 32)
+                    .padding(.vertical, landscapeMode ? 0 : 32)
+                    .accessibilityLabel(imageAccessibilityLabel)
+                VStack {
+                    Text(headlineText).withFont(.headingXLarge)
+                        .padding(landscapeMode ? 4 : 8)
+                    Text(detailText)
+                        .withFont(.bodyLarge)
+                        .lineLimit(3)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 40)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Button(
+                        action: firstButtonPressed,
+                        label: {
+                            Text(firstButtonText)
+                                .withFont(.labelLarge)
+                                .foregroundColor(.brand.white)
+                                .padding(12)
+                                .frame(maxWidth: .infinity)
+                        }
+                    )
+                    .buttonStyle(.neeva(.primary))
+                    .padding(.top, landscapeMode ? 4 : 36)
+                    .padding(.horizontal, 16)
+                    Button(
+                        action: secondButtonPressed,
+                        label: {
+                            Text(secondButtonText)
+                                .withFont(.labelLarge)
+                                .foregroundColor(.ui.adaptive.blue)
+                                .padding(landscapeMode ? 10 : 12)
+                                .frame(maxWidth: .infinity)
+                                .padding(.horizontal, 16)
+                        }
+                    ).padding(.top, landscapeMode ? 0 : 10)
                 }
-            )
-            .buttonStyle(.neeva(.primary))
-            .padding(.top, 36)
-            .padding(.horizontal, 16)
-            Button(
-                action: secondButtonPressed,
-                label: {
-                    Text(secondButtonText)
-                        .withFont(.labelLarge)
-                        .foregroundColor(.ui.adaptive.blue)
-                        .padding(13)
-                        .frame(maxWidth: .infinity)
-                        .padding(.horizontal, 16)
-                }
-            ).padding(.top, 10)
+            }
         }.padding(.bottom, 20)
     }
 }
