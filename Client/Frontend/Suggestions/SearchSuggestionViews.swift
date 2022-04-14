@@ -551,11 +551,8 @@ private struct TabSuggestionView: View {
 }
 
 private struct EditCurrentURLSuggestionView: View {
+    @EnvironmentObject public var model: SuggestionModel
     let suggestion: TabCardDetails
-
-    func copy() {
-        copySuggestion(value: suggestion.url?.absoluteString, scene: suggestion.manager.scene)
-    }
 
     var url: URL? {
         let url = suggestion.url
@@ -567,8 +564,6 @@ private struct EditCurrentURLSuggestionView: View {
         return InternalURL.isValid(url: url)
             ? InternalURL(url)?.originalURLFromErrorPage : suggestion.url
     }
-
-    @EnvironmentObject public var model: SuggestionModel
 
     var icon: some View {
         suggestion.favicon
@@ -642,6 +637,10 @@ private struct EditCurrentURLSuggestionView: View {
         .environmentObject(model)
         .contextMenu { menuItems }
         .accessibility(label: Text("Edit current address"))
+    }
+
+    func copy() {
+        copySuggestion(value: url?.absoluteString, scene: suggestion.manager.scene)
     }
 }
 

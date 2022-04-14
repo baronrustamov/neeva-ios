@@ -24,16 +24,7 @@ class ReaderModeTests: BaseTestCase {
         waitForNoExistence(app.buttons["Reader Mode"])
     }
 
-    func testEnableReaderMode() {
-        enableReaderMode()
-        copyUrl()
-
-        if let myString = UIPasteboard.general.string, let url = URL(string: myString) {
-            XCTAssertEqual("/reader-mode/page", url.path)
-        }
-    }
-
-    func testDisableReaderMode() {
+    func testEnableDisableReaderMode() {
         enableReaderMode()
         waitForExistence(app.buttons["Reading Mode Settings"])
         app.buttons["Reading Mode Settings"].tap()
