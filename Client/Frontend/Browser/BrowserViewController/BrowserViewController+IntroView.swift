@@ -98,11 +98,9 @@ extension BrowserViewController {
                 .registerDeviceTokenWithServer(deviceToken: notificationToken)
         }
 
-        let httpCookieStore = self.tabManager.configuration.websiteDataStore.httpCookieStore
-        httpCookieStore.setCookie(NeevaConstants.loginCookie(for: token)) {
-            DispatchQueue.main.async {
-                self.openURLFromAuth(url)
-            }
+        NeevaUserInfo.shared.setLoginCookie(token)
+        DispatchQueue.main.async {
+            self.openURLFromAuth(url)
         }
     }
 
