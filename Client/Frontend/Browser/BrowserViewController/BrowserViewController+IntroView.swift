@@ -80,13 +80,18 @@ extension BrowserViewController {
     }
 
     private func openURLFromAuth(_ url: URL) {
-        if tabManager.selectedTab == nil {
-            // Open URL in new tab to avoid overriding the user's current tab content.
+        if let selectedTab = self.tabManager.selectedTab,
+            let _ = self.tabManager.selectedTab?.url
+        {
+            DispatchQueue.main.async {
+                selectedTab.loadRequest(URLRequest(url: url))
+                self.hideCardGrid(withAnimation: false)
+            }
+        } else {
             openURLInNewTab(url)
-        }
-
-        DispatchQueue.main.async {
-            self.hideCardGrid(withAnimation: false)
+            DispatchQueue.main.async {
+                self.hideCardGrid(withAnimation: false)
+            }
         }
     }
 
