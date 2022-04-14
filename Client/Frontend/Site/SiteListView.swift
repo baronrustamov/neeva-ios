@@ -23,17 +23,13 @@ struct SiteListView: View {
                     ForEach(
                         Array(sites.enumerated()), id: \.element
                     ) { index, site in
-                        SiteRowView(tabManager: tabManager, site: site) {
+                        SiteRowView(tabManager: tabManager, site: site, deleteSite: deleteSite) {
                             tappedItemAtIndex(index)
                         }.onAppear {
                             itemAtIndexAppeared(index)
                         }
 
                         Color.groupedBackground.frame(height: 1)
-                    }.onDelete { indexSet in
-                        indexSet.forEach { index in
-                            deleteSite(sites[index])
-                        }
                     }
                 } else if let savedTabs = savedTabs {
                     ForEach(

@@ -37,8 +37,8 @@ class HistoryTests: UITestBase {
 
         // Check that both appear in the history home panel
         goToHistory()
-        tester().waitForView(withAccessibilityLabel: "\(webRoot!)/numberedPage.html?page=2")
-        tester().waitForView(withAccessibilityLabel: "\(webRoot!)/numberedPage.html?page=1")
+        tester().waitForView(withAccessibilityIdentifier: "\(webRoot!)/numberedPage.html?page=2")
+        tester().waitForView(withAccessibilityIdentifier: "\(webRoot!)/numberedPage.html?page=1")
 
         // Close History panel
         closeHistory()
@@ -86,36 +86,22 @@ class HistoryTests: UITestBase {
         }
 
         tester().wait(forTimeInterval: 2)
-
-        let oldestUrl = "\(webRoot!)/numberedPage.html?page=\(101)"
         tester().waitForAnimationsToFinish()
 
         goToHistory()
-        tester().waitForView(withAccessibilityLabel: "Page 102")
 
-        let firstIndexPath = IndexPath(row: 0, section: 1)
-        let row = tester().waitForCell(
-            at: firstIndexPath, inTableViewWithAccessibilityIdentifier: "History List")
-        tester().waitForAnimationsToFinish()
+        // Delete first item
+        tester().waitForView(withAccessibilityIdentifier: "\(webRoot!)/numberedPage.html?page=102")
         tester().longPressView(
-            withAccessibilityLabel: row?.accessibilityLabel, value: row?.accessibilityValue,
-            duration: 1)
+            withAccessibilityIdentifier: "\(webRoot!)/numberedPage.html?page=102", duration: 1)
+        tester().waitForView(withAccessibilityLabel: "Delete").tap()
 
-        // The history list still exists
-        tester().waitForView(withAccessibilityIdentifier: "History List")
-        tester().waitForView(withAccessibilityLabel: oldestUrl)
+        // Check that the deleted page does not exist
+        tester().waitForAbsenceOfView(withAccessibilityLabel: "Page 102")
 
-        // check that the deleted page does not exist
-        tester().waitForAbsenceOfView(withAccessibilityLabel: row?.accessibilityLabel)
-
-        // On iPad, there is no explicit "Cancel" button. Instead, we just have to
-        // tap outside the bounds of the prompt. The "Done" button from the History
-        // Panel provides a way to do that.
-        if isiPad() {
-            tester().tapView(withAccessibilityLabel: "Done")
-        } else {
-            tester().tapView(withAccessibilityLabel: "Cancel")
-        }
+        // Make sure other list items exists
+        tester().waitForView(withAccessibilityIdentifier: "\(webRoot!)/numberedPage.html?page=101")
+        tester().waitForView(withAccessibilityIdentifier: "\(webRoot!)/numberedPage.html?page=100")
 
         // Close History (and so Library) panel
         closeHistory()

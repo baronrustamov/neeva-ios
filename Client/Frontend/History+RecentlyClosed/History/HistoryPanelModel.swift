@@ -26,6 +26,16 @@ enum HistoryClearableTimeFrame: String, CaseIterable {
     }
 }
 
+enum HistoryPanelUX {
+    static let IconSize: CGFloat = 23
+}
+
+class FetchInProgressError: MaybeErrorType {
+    internal var description: String {
+        return "Fetch is already in-progress"
+    }
+}
+
 class HistoryPanelModel: ObservableObject {
     private let profile: Profile
     let tabManager: TabManager

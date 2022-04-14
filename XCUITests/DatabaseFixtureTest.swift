@@ -22,16 +22,6 @@ class DatabaseFixtureTest: BaseTestCase {
         super.setUp()
     }
 
-    func testHistoryDatabaseFixture() {
-        goToHistory()
-
-        // History list has two cells that are for recently closed and synced devices that should not count as history items,
-        // the actual max number is 100
-        let loaded = NSPredicate(format: "count == 102")
-        expectation(for: loaded, evaluatedWith: app.tables["History List"].cells, handler: nil)
-        waitForExpectations(timeout: 30, handler: nil)
-    }
-
     func testPerfHistory4000startUp() {
         measure(metrics: [
             XCTMemoryMetric(),

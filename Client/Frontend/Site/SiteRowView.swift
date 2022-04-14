@@ -10,12 +10,13 @@ struct SiteRowView: View {
     @Environment(\.onOpenURL) var openURL
 
     let tabManager: TabManager
+    private let padding: CGFloat = 4
 
     var site: Site? = nil
     var savedTab: SavedTab? = nil
-    let action: () -> Void
 
-    private let padding: CGFloat = 4
+    var deleteSite: (Site) -> Void = { _ in }
+    var action: () -> Void
 
     @ViewBuilder
     var siteContent: some View {
@@ -53,9 +54,21 @@ struct SiteRowView: View {
                 .padding(.vertical, 10)
                 .frame(minHeight: GroupedCellUX.minCellHeight)
             }
+            .accessibilityLabel(Text(title))
+            .accessibilityIdentifier(site.url.absoluteString)
             .buttonStyle(.tableCell)
             .contextMenu {
                 TabMenu(tabManager: tabManager).swiftUIOpenInNewTabMenu(site.url)
+
+                Button {
+                    deleteSite(site)
+                } label: {
+                    Label {
+                        Text("Delete")
+                    } icon: {
+                        Symbol(decorative: .trash)
+                    }
+                }
             }
         }
     }
@@ -87,6 +100,8 @@ struct SiteRowView: View {
                 .padding(.vertical, 10)
                 .frame(minHeight: GroupedCellUX.minCellHeight)
             }
+            .accessibilityLabel(Text(savedTab.title ?? ""))
+            .accessibilityIdentifier(savedTab.url?.absoluteString ?? "")
             .buttonStyle(.tableCell)
             .contextMenu {
                 TabMenu(tabManager: tabManager).swiftUIOpenInNewTabMenu(savedTab)

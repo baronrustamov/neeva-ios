@@ -23,7 +23,7 @@ class HistoryTests: BaseTestCase {
     // This DDBB contains those 4 websites listed in the name
     let historyDB = "browserYoutubeTwitterMozillaExample.db"
 
-    let clearRecentHistoryOptions = ["The Last Hour", "Today", "Today and Yesterday", "Everything"]
+    let clearRecentHistoryOptions = ["Last Hour", "Today", "Today & Yesterday", "Everything"]
 
     func clearWebsiteData() {
         goToSettings()
@@ -56,8 +56,7 @@ class HistoryTests: BaseTestCase {
         // Go to History List from Top Sites and check it is empty
         goToHistory()
 
-        waitForExistence(app.tables.cells["HistoryPanel.recentlyClosedCell"])
-        XCTAssertTrue(app.tables.cells["HistoryPanel.recentlyClosedCell"].exists)
+        waitForExistence(app.staticTexts["History List Empty"])
     }
 
     func testClearHistoryFromSettings() {
@@ -94,16 +93,16 @@ class HistoryTests: BaseTestCase {
         goToRecentlyClosedPage()
 
         // The Closed Tabs list should contain the info of the website just closed
-        waitForExistence(app.tables["Recently Closed Tabs List"], timeout: 3)
-        XCTAssertTrue(app.tables.cells.staticTexts["The Book of Mozilla"].exists)
-        app.buttons["History Panel"].tap()
+        waitForExistence(app.scrollViews["recentlyClosedPanel"])
+        waitForExistence(app.buttons["The Book of Mozilla"])
+        app.buttons["History"].tap()
         app.buttons["Done"].tap()
 
         // This option should be enabled on private mode too
         setIncognitoMode(enabled: true)
 
         goToRecentlyClosedPage()
-        waitForExistence(app.tables["Recently Closed Tabs List"])
+        waitForExistence(app.scrollViews["recentlyClosedPanel"])
     }
 
     func testClearRecentlyClosedHistory() {
@@ -115,17 +114,16 @@ class HistoryTests: BaseTestCase {
         goToRecentlyClosedPage()
 
         // Once the website is visited and closed it will appear in Recently Closed Tabs list
-        waitForExistence(app.tables["Recently Closed Tabs List"])
-        XCTAssertTrue(app.tables.cells.staticTexts[closedWebPageLabel].exists)
-        print(app.menus.buttons.debugDescription, app.navigationBars.buttons.debugDescription)
-        app.buttons["History Panel"].tap()
+        waitForExistence(app.scrollViews["recentlyClosedPanel"])
+        waitForExistence(app.buttons["The Book of Mozilla"])
+        app.buttons["History"].tap()
         app.buttons["Done"].tap()
 
         clearPrivateData()
+        goToHistory()
 
-        // Back on History panel view check that there is not any item
-        goToRecentlyClosedPage()
-        waitForNoExistence(app.tables["Recently Closed Tabs List"])
+        // Check history/recently closed items are cleared
+        waitForExistence(app.staticTexts["History List Empty"])
     }
 
     func testRecentlyClosedMenuAvailable() {
@@ -150,30 +148,38 @@ class HistoryTests: BaseTestCase {
     }
 
     func testOpenInNewTabRecentlyClosedItem() {
-        // test the recently closed tab page
+        // Test the recently closed tab page
         openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
-        closeAllTabs(createNewTab: false)
+        closeAllTabs()
 
         goToRecentlyClosedPage()
 
-        waitForExistence(app.tables["Recently Closed Tabs List"])
-        app.tables.cells.staticTexts[closedWebPageLabel].tap()
+        waitForExistence(app.scrollViews["recentlyClosedPanel"])
+        app.buttons["The Book of Mozilla"].press(forDuration: 1)
+        app.buttons["Open in new tab"].tap()
+        app.buttons["History"].tap()
+        app.buttons["Done"].tap()
 
-        XCTAssertEqual(getNumberOfTabs(openTabTray: false), 1)
+        XCTAssertEqual(getNumberOfTabs(), 2)
     }
 
     func testOpenInNewIncognitoTabRecentlyClosedItem() {
         // Open the default website
         openURLInNewTab(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
-        closeAllTabs(createNewTab: false)
+        closeAllTabs()
 
         goToRecentlyClosedPage()
 
-        waitForExistence(app.tables["Recently Closed Tabs List"])
-        app.tables.cells.staticTexts[closedWebPageLabel].press(forDuration: 1)
-        app.buttons["Open in New Incognito Tab"].tap()
+        waitForExistence(app.scrollViews["recentlyClosedPanel"])
+        app.buttons["The Book of Mozilla"].press(forDuration: 1)
+        app.buttons["Open in new incognito tab"].tap()
+        app.buttons["History"].tap()
+        app.buttons["Done"].tap()
+
+        goToTabTray()
+        setIncognitoMode(enabled: true, shouldOpenURL: false, closeTabTray: false)
 
         XCTAssertEqual(getNumberOfTabs(openTabTray: false), 1)
     }
@@ -198,8 +204,9 @@ class HistoryTests: BaseTestCase {
         waitUntilPageLoad()
         closeAllTabs()
 
-        goToRecentlyClosedPage()
-        XCTAssertFalse(app.tables.cells.staticTexts[closedWebPageLabel].exists)
+        goToHistory()
+
+        waitForExistence(app.staticTexts["History List Empty"])
     }
 
     // Private function created to select desired option from the "Clear Recent History" list
@@ -289,26 +296,12 @@ class HistoryTests: BaseTestCase {
         navigateToExample()
 
         goToHistory()
-        waitForExistence(
-            app.tables["History List"].cells.element(
-                matching: .cell, identifier: "HistoryPanel.clearHistory"))
-        app.tables["History List"].cells.element(
-            matching: .cell, identifier: "HistoryPanel.clearHistory"
-        ).tap()
+
+        waitForExistence(app.buttons["Clear Recent History"])
+        app.buttons["Clear Recent History"].tap()
 
         for option in clearRecentHistoryOptions {
             XCTAssertTrue(app.sheets.buttons[option].exists)
         }
-    }
-
-    // Smoketest
-    func testDeleteHistoryEntryBySwiping() {
-        navigateToExample()
-        goToHistory()
-        waitForExistence(app.cells.staticTexts["https://example.com/"], timeout: 10)
-        app.cells.staticTexts["https://example.com/"].firstMatch.swipeLeft()
-        waitForExistence(app.buttons["Delete"], timeout: 10)
-        app.buttons["Delete"].tap()
-        waitForNoExistence(app.staticTexts["https://example.com"])
     }
 }

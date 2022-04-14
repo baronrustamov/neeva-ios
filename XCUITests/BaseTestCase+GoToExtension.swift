@@ -86,8 +86,8 @@ extension BaseTestCase {
     func goToRecentlyClosedPage() {
         goToHistory()
 
-        waitForExistence(app.tables.cells["Recently Closed"])
-        app.tables.cells["Recently Closed"].tap()
+        waitForExistence(app.buttons["Recently Closed Tabs"])
+        app.buttons["Recently Closed Tabs"].tap()
     }
 
     /// Launches from tab page, then opens the overflow menu

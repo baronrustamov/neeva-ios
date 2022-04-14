@@ -1397,18 +1397,6 @@ extension BrowserViewController: TabDelegate {
     }
 }
 
-extension BrowserViewController: HistoryPanelDelegate {
-    func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
-        presentedViewController?.dismiss(
-            animated: true,
-            completion: {
-                self.hideCardGrid(
-                    withAnimation: self.tabManager.createOrSwitchToTab(for: url)
-                        == .switchedToExistingTab)
-            })
-    }
-}
-
 extension BrowserViewController: ZeroQueryPanelDelegate {
     func zeroQueryPanelDidRequestToSaveToSpace(_ url: URL, title: String?, description: String?) {
         chromeModel.setEditingLocation(to: false)

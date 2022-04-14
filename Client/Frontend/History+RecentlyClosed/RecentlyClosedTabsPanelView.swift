@@ -31,7 +31,9 @@ struct RecentlyClosedTabsPanelView: View {
                         onDismiss()
                     })
             }.padding(.horizontal)
-        }.background(Color.groupedBackground.ignoresSafeArea(.container))
+        }
+        .background(Color.groupedBackground.ignoresSafeArea(.container))
+        .accessibilityIdentifier("recentlyClosedPanel")
     }
 
     var body: some View {
@@ -39,6 +41,7 @@ struct RecentlyClosedTabsPanelView: View {
             if model.recentlyClosedTabs.isEmpty {
                 Text("Websites you've closed\nrecently will show up here.")
                     .multilineTextAlignment(.center)
+                    .accessibilityLabel(Text("Recently Closed List Empty"))
             } else {
                 if #available(iOS 15.0, *) {
                     listContent

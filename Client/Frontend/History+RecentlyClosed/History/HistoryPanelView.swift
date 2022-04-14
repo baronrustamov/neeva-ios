@@ -96,7 +96,8 @@ struct HistoryPanelView: View {
                                 },
                                 deleteSite: { site in
                                     model.removeHistoryForURLAtIndexPath(site: site)
-                                })
+                                }
+                            ).accessibilityLabel(Text("History List"))
                         }
                     }
                 }
@@ -109,6 +110,7 @@ struct HistoryPanelView: View {
         if model.groupedSites.isEmpty {
             Text("Websites you've visted\nrecently will show up here.")
                 .multilineTextAlignment(.center)
+                .accessibilityLabel(Text("History List Empty"))
         } else {
             if #available(iOS 15.0, *) {
                 historyList
@@ -159,6 +161,7 @@ struct HistoryPanelView: View {
         ZStack {
             NavigationView {
                 content
+                    .accessibilityIdentifier("historyListPanel")
                     .navigationTitle("History")
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {

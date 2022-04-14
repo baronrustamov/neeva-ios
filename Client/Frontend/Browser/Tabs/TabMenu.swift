@@ -178,19 +178,6 @@ struct TabMenu {
         return Group {
             createButton(incognito: false)
             createButton(incognito: true)
-
-            Button {
-                let tab = self.tabManager.addTabsForURLs(
-                    [url], zombie: true, shouldSelectTab: false, incognito: true)[0]
-                ToastDefaults().showToastForSwitchToTab(
-                    tab, incognito: true, tabManager: tabManager)
-            } label: {
-                Label {
-
-                } icon: {
-
-                }
-            }
         }
     }
 }
