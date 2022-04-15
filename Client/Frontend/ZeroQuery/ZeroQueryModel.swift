@@ -272,7 +272,9 @@ class ZeroQueryModel: ObservableObject {
         self.suggestedSitesViewModel.sites.removeAll(where: { $0 == site })
     }
 
-    public func reset(bvc: BrowserViewController?, createdLazyTab: Bool = false) {
+    public func reset(
+        bvc: BrowserViewController?, createdLazyTab: Bool = false, suggestionTapped: Bool
+    ) {
         if let bvc = bvc, bvc.incognitoModel.isIncognito, !(bvc.tabManager.incognitoTabs.count > 0),
             isLazyTab && !createdLazyTab
                 && (openedFrom != .tabTray)
@@ -282,7 +284,7 @@ class ZeroQueryModel: ObservableObject {
 
         // This can occur if a taps back and the Suggestion UI is shown.
         // If the user cancels out of that UI, we should navigate the tab back, like a complete undo.
-        if let bvc = bvc, openedFrom == .backButton {
+        if let bvc = bvc, openedFrom == .backButton, !suggestionTapped {
             bvc.tabManager.selectedTab?.webView?.goBack()
         }
 

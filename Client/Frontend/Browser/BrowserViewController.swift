@@ -609,12 +609,12 @@ class BrowserViewController: UIViewController, ModalPresenter {
         }
     }
 
-    public func hideZeroQuery() {
+    public func hideZeroQuery(suggestionTapped: Bool = false) {
         chromeModel.setEditingLocation(to: false)
 
         DispatchQueue.main.async { [self] in
             tabContainerModel.updateContent(.hideZeroQuery)
-            zeroQueryModel.reset(bvc: self)
+            zeroQueryModel.reset(bvc: self, suggestionTapped: suggestionTapped)
 
             if tabContainerModel.currentContentUI == .previewHome {
                 browserModel.scrollingControlModel.showToolbars(animated: true)
