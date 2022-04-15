@@ -241,10 +241,9 @@ public struct CheatsheetMenuView: View {
 
     @ViewBuilder
     var cheatsheetContent: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading) {
             if isRecipeAllowed() {
                 recipeView
-                    .padding()
             }
 
             if let richResults = model.searchRichResults {
@@ -253,8 +252,6 @@ public struct CheatsheetMenuView: View {
                         renderRichResult(for: richResult)
                     }
                 }
-                .padding()
-
             }
             if NeevaFeatureFlags[.enableBacklink] {
                 redditBacklinkSession
@@ -265,9 +262,9 @@ public struct CheatsheetMenuView: View {
 
             Divider()
                 .padding(.horizontal)
-
             supportSection
         }
+        .padding(.horizontal)
     }
 
     @ViewBuilder
@@ -292,7 +289,6 @@ public struct CheatsheetMenuView: View {
                     }
                 })
         }
-        .padding()
     }
 
     @ViewBuilder
@@ -360,6 +356,18 @@ public struct CheatsheetMenuView: View {
             NewsResultsView(
                 newsResults: newsResults
             )
+        case .Place(result: let placeResult):
+            if let viewModel = model.placeViewModel {
+                PlaceView(viewModel: viewModel)
+            } else {
+                PlaceView(viewModel: PlaceViewModel(placeResult))
+            }
+        case .PlaceList(result: let placeListResult):
+            if let viewModel = model.placeListViewModel {
+                PlaceListView(viewModel: viewModel)
+            } else {
+                PlaceListView(viewModel: PlaceListViewModel(placeListResult))
+            }
         }
     }
 
@@ -390,7 +398,6 @@ public struct CheatsheetMenuView: View {
                     }
                 }
             }
-            .padding()
         }
     }
 
@@ -404,7 +411,6 @@ public struct CheatsheetMenuView: View {
                     QueryButtonView(query: query)
                 }
             }
-            .padding()
         }
     }
 
@@ -463,7 +469,6 @@ public struct CheatsheetMenuView: View {
                     .withFont(unkerned: .bodyMedium)
                 }
             }
-            .padding()
         }
     }
 

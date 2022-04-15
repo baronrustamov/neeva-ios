@@ -54,16 +54,12 @@ query Search($query: String!) {
               telephonePretty
               websiteURL
               yelpURL
-              mapsURL
               googleMapsURL
               price
               rating
               reviewCount
-              reviews {
-                id
-              }
               articulatedOperatingStatus
-                        articulatedHour
+              articulatedHour
               specialHours {
                   isOvernight
                   start
@@ -89,6 +85,21 @@ query Search($query: String!) {
                 height
                 width
               }
+              mapImageLarge {
+                url
+                darkUrl
+                height
+                width
+              }
+              neevaMapsQuery {
+                query
+                latitude
+                longitude
+                radius
+                isLocationShift
+                placeID
+                zoom
+              }
             }
           }
           ... on PlaceList {
@@ -97,6 +108,7 @@ query Search($query: String!) {
                 place {
                   id
                   type
+                  placeSubType
                   name
                   address {
                     streetAddress
@@ -106,22 +118,13 @@ query Search($query: String!) {
                   telephonePretty
                   websiteURL
                   yelpURL
-                  bingWebSearchURL
                   position {
                     lat
                     lon
                   }
-                  placeSubType
                   isAddress
                   rating
                   price
-                  reviews {
-                    id
-                    text
-                    rating
-                    timeCreated
-                    url
-                  }
                   specialHours {
                     isOvernight
                     start
@@ -156,11 +159,9 @@ query Search($query: String!) {
                     height
                   }
                   googleMapsURL
-                  subTitle
                   useHighVisuals
                   articulatedOperatingStatus
                   articulatedHour
-                  mapsURL
                   neevaMapsQuery {
                     query
                     latitude

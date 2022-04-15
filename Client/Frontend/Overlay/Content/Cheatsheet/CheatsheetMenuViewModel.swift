@@ -22,6 +22,9 @@ public class CheatsheetMenuViewModel: ObservableObject {
     private(set) var cheatsheetDataError: Error?
     private(set) var searchRichResultsError: Error?
 
+    private(set) var placeViewModel: PlaceViewModel?
+    private(set) var placeListViewModel: PlaceListViewModel?
+
     private var cheatsheetLoggerSubscription: AnyCancellable?
     // Workaround to indicate to SwiftUI view if it should log empty cheatsheet
     var hasFetchedOnce = false
@@ -206,6 +209,22 @@ public class CheatsheetMenuViewModel: ObservableObject {
                     )
                 }
                 self.searchRichResults = self.removeCurrentPageURLs(from: richResults)
+
+                // Create Children ViewModels if corresponding results exist
+                self.searchRichResults?.forEach { result in
+                    switch result.resultType {
+                    case .Place(let result):
+                        if self.placeViewModel == nil {
+                            self.placeViewModel = PlaceViewModel(result)
+                        }
+                    case .PlaceList(let result):
+                        if self.placeListViewModel == nil {
+                            self.placeListViewModel = PlaceListViewModel(result)
+                        }
+                    default:
+                        return
+                    }
+                }
             case .failure(let error):
                 Logger.browser.error("Error: \(error)")
                 self.searchRichResultsError = error
@@ -220,7 +239,7 @@ public class CheatsheetMenuViewModel: ObservableObject {
         ]
         return richResults.compactMap { richResult -> RichResult? in
             switch richResult.resultType {
-            case .ProductCluster:
+            case .ProductCluster, .Place, .PlaceList:
                 return richResult
             case .RecipeBlock(let result):
                 let filteredRecipes = result.filter {
@@ -269,6 +288,9 @@ public class CheatsheetMenuViewModel: ObservableObject {
         searchRichResults = nil
         cheatsheetDataError = nil
         searchRichResultsError = nil
+
+        placeViewModel = nil
+        placeListViewModel = nil
     }
 
     private func setupCheatsheetLoaderLogger() {

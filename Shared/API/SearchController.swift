@@ -99,6 +99,67 @@ public struct NewsResult {
     public let provider: Provider
 }
 
+public struct Place {
+    public struct Address {
+        public let street: String
+        public let full: String
+    }
+    public struct Coordinate {
+        public let lat: Double
+        public let lon: Double
+    }
+    public struct Hour {
+        public let isOvernight: Bool
+        public let start: String
+        public let end: String
+        public let day: Int
+    }
+    public struct SpecialHour {
+        public let isOvernight: Bool
+        public let isClosed: Bool
+        public let start: String
+        public let end: String
+        public let date: String
+    }
+    public struct MapImage {
+        public let url: URL?
+        public let darkURL: URL?
+    }
+    public struct MapQuery {
+        public let query: String
+        public let placeID: String
+    }
+    // basic info
+    public let name: String
+    public let address: Address
+    public let position: Coordinate
+    public let telephone: String?
+    public let telephonePretty: String?
+    public let price: String?
+    public let categories: [String]
+
+    // review
+    public let rating: Double?
+    public let reviewCount: Int?
+
+    // hours
+    public let articulatedOperatingStatus: String?
+    public let articulatedHour: String?
+    public let specialHours: [SpecialHour]?
+    public let hours: [Hour]?
+    public let isOpenNow: Bool
+
+    // urls
+    public let websiteURL: URL?
+    public let yelpURL: URL?
+    public let imageURL: URL?
+
+    public let mapImage: MapImage?
+    public let mapImageLarge: MapImage?
+
+    public let mapQuery: MapQuery?
+}
+
 public typealias ProductClusterResult = ([Product])
 public typealias RecipeBlockResult = ([RelatedRecipe])
 public typealias RelatedSearchesResult = ([String])
@@ -109,8 +170,12 @@ public struct NewsResults {
     public let snippet: String?
     public let actionURL: URL
 }
+public typealias PlaceResult = (Place)
+public typealias PlaceListResult = ([Place])
 
 private struct PartialResult<T> {
+    // TODO: - Expand this to use enum and support aggregating over many results
+    /// Used to indicate if a result was omitted because a string cannot be parsed into a URL object
     let skippedItem: Bool
     let result: T?
 
@@ -126,10 +191,12 @@ public enum RichResultType {
     case RelatedSearches(result: RelatedSearchesResult)
     case WebGroup(result: WebResults)
     case NewsGroup(result: NewsResults)
+    case Place(result: PlaceResult)
+    case PlaceList(result: PlaceListResult)
 
     var order: Int {
         switch self {
-        case .ProductCluster, .RecipeBlock, .NewsGroup:
+        case .ProductCluster, .RecipeBlock, .NewsGroup, .Place, .PlaceList:
             return 0
         case .WebGroup:
             return 1
@@ -450,6 +517,193 @@ public class SearchController:
         )
     }
 
+    private class func constructPlace(
+        from data: SearchQuery.Data.Search.ResultGroup.Result.TypeSpecific.AsPlace.Place
+    ) -> Place? {
+        guard let streetAddress = data.address.streetAddress,
+            let fullAddress = data.address.fullAddress
+        else {
+            return nil
+        }
+        let address = Place.Address(street: streetAddress, full: fullAddress)
+        let coordinate = Place.Coordinate(lat: data.position.lat, lon: data.position.lon)
+        let specialHours = data.specialHours?.map {
+            return Place.SpecialHour(
+                isOvernight: $0.isOvernight,
+                isClosed: $0.isClosed,
+                start: $0.start,
+                end: $0.end,
+                date: $0.date
+            )
+        }
+        let hours = data.hours?.open.map {
+            return Place.Hour(
+                isOvernight: $0.isOvernight,
+                start: $0.start,
+                end: $0.end,
+                day: $0.day
+            )
+        }
+
+        var mapImage: Place.MapImage?
+        if let mapImageURLString = data.mapImage?.url,
+            let mapImageDarkURLString = data.mapImage?.darkUrl
+        {
+            mapImage = .init(
+                url: URL(string: mapImageURLString),
+                darkURL: URL(string: mapImageDarkURLString)
+            )
+        }
+
+        var mapImageLarge: Place.MapImage?
+        if let mapImageURLString = data.mapImageLarge?.url,
+            let mapImageDarkURLString = data.mapImageLarge?.darkUrl
+        {
+            mapImageLarge = .init(
+                url: URL(string: mapImageURLString),
+                darkURL: URL(string: mapImageDarkURLString)
+            )
+        }
+
+        return Place(
+            name: data.name,
+            address: address,
+            position: coordinate,
+            telephone: data.telephone.isEmpty ? nil : data.telephone,
+            telephonePretty: data.telephonePretty.isEmpty ? nil : data.telephonePretty,
+            price: data.price.isEmpty ? nil : data.price,
+            categories: data.categories.filter { !$0.isEmpty },
+            rating: data.rating > 0 ? data.rating : nil,
+            reviewCount: data.reviewCount > 0 ? data.reviewCount : nil,
+            articulatedOperatingStatus: data.articulatedOperatingStatus,
+            articulatedHour: data.articulatedHour,
+            specialHours: specialHours,
+            hours: hours,
+            isOpenNow: data.isOpenNow ?? !data.isClosed,
+            websiteURL: URL(string: data.websiteUrl),
+            yelpURL: URL(string: data.yelpUrl),
+            imageURL: URL(string: data.imageUrl),
+            mapImage: mapImage,
+            mapImageLarge: mapImageLarge,
+            mapQuery: nil
+        )
+    }
+
+    private class func constructPlace(
+        from data: SearchQuery.Data.Search.ResultGroup.Result.TypeSpecific.AsPlaceList.PlaceList
+            .Place.Place
+    ) -> Place? {
+        guard let streetAddress = data.address.streetAddress,
+            let fullAddress = data.address.fullAddress,
+            let mapQueryString = data.neevaMapsQuery?.query,
+            let mapQueryPlaceID = data.neevaMapsQuery?.placeId
+        else {
+            return nil
+        }
+        let address = Place.Address(street: streetAddress, full: fullAddress)
+        let coordinate = Place.Coordinate(lat: data.position.lat, lon: data.position.lon)
+
+        let specialHours = data.specialHours?.map {
+            return Place.SpecialHour(
+                isOvernight: $0.isOvernight,
+                isClosed: $0.isClosed,
+                start: $0.start,
+                end: $0.end,
+                date: $0.date
+            )
+        }
+        let hours = data.hours?.open.map {
+            return Place.Hour(
+                isOvernight: $0.isOvernight,
+                start: $0.start,
+                end: $0.end,
+                day: $0.day
+            )
+        }
+
+        var mapImage: Place.MapImage?
+        if let mapImageURLString = data.mapImage?.url,
+            let mapImageDarkURLString = data.mapImage?.darkUrl
+        {
+            mapImage = .init(
+                url: URL(string: mapImageURLString),
+                darkURL: URL(string: mapImageDarkURLString)
+            )
+        }
+
+        var mapImageLarge: Place.MapImage?
+        if let mapImageURLString = data.mapImageLarge?.url,
+            let mapImageDarkURLString = data.mapImageLarge?.darkUrl
+        {
+            mapImageLarge = .init(
+                url: URL(string: mapImageURLString),
+                darkURL: URL(string: mapImageDarkURLString)
+            )
+        }
+
+        return Place(
+            name: data.name,
+            address: address,
+            position: coordinate,
+            telephone: data.telephone.isEmpty ? nil : data.telephone,
+            telephonePretty: data.telephonePretty.isEmpty ? nil : data.telephonePretty,
+            price: data.price.isEmpty ? nil : data.price,
+            categories: data.categories.filter { !$0.isEmpty },
+            rating: data.rating > 0 ? data.rating : nil,
+            reviewCount: data.reviewCount > 0 ? data.reviewCount : nil,
+            articulatedOperatingStatus: data.articulatedOperatingStatus,
+            articulatedHour: data.articulatedHour,
+            specialHours: specialHours,
+            hours: hours,
+            isOpenNow: data.isOpenNow ?? data.isClosed,
+            websiteURL: URL(string: data.websiteUrl),
+            yelpURL: URL(string: data.yelpUrl),
+            imageURL: URL(string: data.imageUrLs?.first ?? data.imageUrl),
+            mapImage: mapImage,
+            mapImageLarge: mapImageLarge,
+            mapQuery: Place.MapQuery(query: mapQueryString, placeID: mapQueryPlaceID)
+        )
+    }
+
+    private class func constructPlaceResult(
+        from result: SearchQuery.Data.Search.ResultGroup.Result
+    ) -> PartialResult<PlaceResult> {
+        guard let place = result.typeSpecific?.asPlace?.place,
+            let parsedPlace = constructPlace(from: place)
+        else {
+            return PartialResult()
+        }
+
+        // purely to conform to the Result type alias
+        let placeResult = parsedPlace as PlaceResult
+
+        return PartialResult(skippedItem: false, result: placeResult)
+    }
+
+    private class func constructPlaceListResult(
+        from result: SearchQuery.Data.Search.ResultGroup.Result
+    ) -> PartialResult<PlaceListResult> {
+        guard
+            let placeList = result
+                .typeSpecific?
+                .asPlaceList?
+                .placeList
+        else {
+            return PartialResult()
+        }
+
+        let results = placeList.places.map({ $0.place }).compactMap(constructPlace)
+
+        guard !results.isEmpty else {
+            return PartialResult()
+        }
+
+        return PartialResult(
+            skippedItem: false,
+            result: PlaceListResult(results)
+        )
+    }
+
     public override class func processData(_ data: SearchQuery.Data) -> [RichResult] {
         var richResults: [RichResult] = []
         // recipe and web results need to be merged into single RichResult objects
@@ -506,6 +760,26 @@ public class SearchController:
                                 RichResult(
                                     resultType: .RelatedSearches(result: parsedData),
                                     dataComplete: !relatedSearchesResult.skippedItem
+                                )
+                            )
+                        }
+                    case "Place":
+                        let placeResult = constructPlaceResult(from: result)
+                        if let parsedData = placeResult.result {
+                            richResults.append(
+                                RichResult(
+                                    resultType: .Place(result: parsedData),
+                                    dataComplete: !placeResult.skippedItem
+                                )
+                            )
+                        }
+                    case "PlaceList":
+                        let placeListResult = constructPlaceListResult(from: result)
+                        if let parsedData = placeListResult.result {
+                            richResults.append(
+                                RichResult(
+                                    resultType: .PlaceList(result: parsedData),
+                                    dataComplete: !placeListResult.skippedItem
                                 )
                             )
                         }
