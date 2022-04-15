@@ -24,7 +24,7 @@ struct SpaceDetailList: View {
     @StateObject var spaceCommentsModel = SpaceCommentsModel()
 
     var space: Space? {
-        primitive.manager.get(for: primitive.id)
+        primitive.space
     }
 
     var promoCardType: PromoCardType? {

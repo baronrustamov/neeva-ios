@@ -20,14 +20,15 @@ struct SpaceContainerView: View {
     @State private var headerVisible = true
     @ObservedObject var primitive: SpaceCardDetails
 
-    var space: Space {
-        primitive.manager.get(for: primitive.id)!
+    var space: Space? {
+        primitive.space
     }
 
     var body: some View {
         VStack(spacing: 0) {
             SpaceTopView(primitive: primitive, headerVisible: $headerVisible)
-            if primitive.allDetails.isEmpty && !(space.isDigest) {
+            if primitive.space == nil && primitive.allDetails.isEmpty && !(space?.isDigest ?? false)
+            {
                 EmptySpaceView()
             } else {
                 SpaceDetailList(primitive: primitive, headerVisible: $headerVisible)

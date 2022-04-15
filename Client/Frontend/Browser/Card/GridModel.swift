@@ -118,8 +118,8 @@ class GridModel: ObservableObject {
 
     func openSpaceInDetailView(_ space: SpaceCardDetails) {
         DispatchQueue.main.async { [self] in
-            showingDetailView = true
             spaceCardModel.detailedSpace = space
+            showingDetailView = true
         }
     }
 
@@ -130,5 +130,6 @@ class GridModel: ObservableObject {
 
         spaceCardModel.detailedSpace?.showingDetails = false
         showingDetailView = false
+        spaceCardModel.detailedSpace = nil
     }
 }

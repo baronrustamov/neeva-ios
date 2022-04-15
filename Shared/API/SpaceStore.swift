@@ -101,6 +101,23 @@ public class Space: Hashable, Identifiable {
         self.notifications = notifications
     }
 
+    init(from model: SpacesDataQueryController.Space) {
+        self.id = SpaceID(value: model.id)
+        self.name = model.name
+        self.description = model.description
+        self.followers = model.followers
+        self.views = model.views
+        self.lastModifiedTs = ""
+        self.thumbnail = model.entities.first?.thumbnail
+        self.resultCount = 0
+        self.isDefaultSpace = false
+        self.isShared = false
+        self.isPublic = true
+        self.userACL = .publicView
+        self.acls = []
+        self.notifications = nil
+    }
+
     public var url: URL {
         NeevaConstants.appSpacesURL / id.value
     }
@@ -292,7 +309,9 @@ public class SpaceStore: ObservableObject {
         }
     }
 
-    public static func openSpace(spaceId: String, completion: @escaping (Error?) -> Void) {
+    public static func openSpace(
+        spaceId: String, completion: @escaping ((Result<Space, Error>)?) -> Void
+    ) {
         if spaceId == SpaceStore.dailyDigestID {
             shared.refresh {
                 shared.addDailyDigestToSpaces()
@@ -301,21 +320,44 @@ public class SpaceStore: ObservableObject {
         } else {
             SpacesDataQueryController.getSpacesData(spaceIds: [spaceId]) { result in
                 switch result {
-                case .success:
-                    Logger.browser.info("Space followed")
-                    shared.refresh()
-                    subscription = SpaceStore.shared.$state.sink {
-                        state in
-                        if case .ready = state {
-                            completion(nil)
-                            subscription?.cancel()
-                        }
+                case .success(let data):
+                    if let model = data.first {
+                        let space = Space(from: model)
+                        space.contentData = model.entities
+                        completion(.success(space))
                     }
                 case .failure(let error):
                     Logger.browser.error(error.localizedDescription)
-                    completion(error)
+                    completion(.failure(error))
                 }
             }
+        }
+    }
+
+    public static func openSpaceWithNoFollow(
+        spaceId: String, completion: @escaping ((Result<Space, Error>)?) -> Void
+    ) {
+        if spaceId == SpaceStore.dailyDigestID {
+            shared.refresh {
+                shared.addDailyDigestToSpaces()
+                completion(nil)
+            }
+        } else {
+            GraphQLAPI.shared.isAnonymous = true
+            SpacesDataQueryController.getSpacesData(spaceIds: [spaceId]) { result in
+                switch result {
+                case .success(let data):
+                    if let model = data.first {
+                        let space = Space(from: model)
+                        space.contentData = model.entities
+                        completion(.success(space))
+                    }
+                case .failure(let error):
+                    Logger.browser.error(error.localizedDescription)
+                    completion(.failure(error))
+                }
+            }
+            GraphQLAPI.shared.isAnonymous = false
         }
     }
 

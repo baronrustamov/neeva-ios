@@ -135,45 +135,28 @@ class BrowserModel: ObservableObject {
             if let existingSpace = existingSpace {
                 openSpace(spaceID: existingSpace.id)
                 gridModel.refreshDetailedSpace()
-            } else {
-                bvc.showTabTray()
-                gridModel.switcherState = .spaces
-                gridModel.isLoading = true
-            }
-
-            guard existingSpace == nil else {
                 return
             }
 
-            SpaceStore.openSpace(spaceId: spaceId) { [self] error in
-                if error != nil {
+            gridModel.isLoading = true
+            SpaceStore.openSpaceWithNoFollow(spaceId: spaceId) { [self] result in
+                guard let result = result else {
                     gridModel.isLoading = false
-
+                    return
+                }
+                switch result {
+                case .success(let model):
+                    let spaceCardDetails = SpaceCardDetails(
+                        space: model, manager: SpaceStore.shared)
+                    openSpace(detail: spaceCardDetails)
+                    gridModel.isLoading = false
+                    completion()
+                case .failure:
+                    gridModel.isLoading = false
                     ToastDefaults().showToast(
                         with: "Unable to find Space",
                         toastViewManager: toastViewManager
                     )
-
-                    return
-                }
-
-                let spaceCardModel = bvc.gridModel.spaceCardModel
-                if let _ = spaceCardModel.allDetails.first(where: { $0.id == spaceId }) {
-                    gridModel.isLoading = false
-                    openSpace(spaceID: spaceId, animate: false)
-                    completion()
-                } else {
-                    followPublicSpaceSubscription = spaceCardModel.objectWillChange.sink {
-                        [self] in  // OK to hold a strong ref as this should terminate.
-                        if let _ = spaceCardModel.allDetails.first(where: { $0.id == spaceId }) {
-                            openSpace(
-                                spaceID: spaceId, animate: false)
-                            completion()
-                            followPublicSpaceSubscription = nil
-                        }
-
-                        gridModel.isLoading = false
-                    }
                 }
             }
         }
@@ -190,6 +173,10 @@ class BrowserModel: ObservableObject {
             return
         }
 
+        gridModel.openSpaceInDetailView(detail)
+    }
+
+    func openSpace(detail: SpaceCardDetails) {
         gridModel.openSpaceInDetailView(detail)
     }
 

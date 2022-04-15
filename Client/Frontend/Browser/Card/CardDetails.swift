@@ -365,10 +365,12 @@ class SpaceEntityThumbnail: CardDetails, AccessingManagerProvider {
     typealias Manager = Space
 
     var manager: Space {
-        SpaceStore.shared.get(for: spaceID) ?? SpaceStore.suggested.get(for: spaceID) ?? .empty()
+        space ?? SpaceStore.shared.get(for: spaceID) ?? SpaceStore.suggested.get(for: spaceID)
+            ?? .empty()
     }
 
     let spaceID: String
+    let space: Space?
     var data: SpaceEntityData
 
     var id: String
@@ -422,10 +424,11 @@ class SpaceEntityThumbnail: CardDetails, AccessingManagerProvider {
         techDocURL ?? productPreviewURL ?? richEntityPreviewURL
     }
 
-    init(data: SpaceEntityData, spaceID: String) {
+    init(data: SpaceEntityData, spaceID: String, space: Space? = nil) {
         self.spaceID = spaceID
         self.data = data
         self.id = data.id
+        self.space = space
         if let thumbnailData = data.thumbnail?.dataURIBody {
             self.imageThumbnailModel = .init(imageData: thumbnailData)
         }
@@ -494,18 +497,16 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
     }
 
     var space: Space? {
-        manager.get(for: id)
+        spaceRef ?? manager.get(for: id)
     }
 
-    private init(id: String, manager: SpaceStore) {
-        self.id = id
+    private var spaceRef: Space? = nil
+
+    init(space: Space, manager: SpaceStore) {
+        self.id = space.id.id
         self.manager = manager
-
+        self.spaceRef = space
         updateDetails()
-    }
-
-    convenience init(space: Space, manager: SpaceStore) {
-        self.init(id: space.id.id, manager: manager)
     }
 
     var thumbnail: some View {
@@ -529,8 +530,8 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
 
     func updateDetails() {
         allDetails =
-            manager.get(for: id)?.contentData?
-            .map { SpaceEntityThumbnail(data: $0, spaceID: id) } ?? []
+            space?.contentData?
+            .map { SpaceEntityThumbnail(data: $0, spaceID: id, space: spaceRef) } ?? []
         allDetailsWithExclusionList = allDetails.filter({
             $0.data.url?.absoluteString.hasPrefix(NeevaConstants.appSpacesURL.absoluteString)
                 ?? false
