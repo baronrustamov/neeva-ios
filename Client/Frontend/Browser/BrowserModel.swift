@@ -119,12 +119,6 @@ class BrowserModel: ObservableObject {
         spaceId: String, bvc: BrowserViewController, isIncognito: Bool = false,
         completion: @escaping () -> Void
     ) {
-        guard NeevaUserInfo.shared.hasLoginCookie() else {
-            var spaceURL = NeevaConstants.appSpacesURL
-            spaceURL.appendPathComponent(spaceId)
-            bvc.switchToTabForURLOrOpen(spaceURL, isIncognito: isIncognito)
-            return
-        }
 
         let existingSpace = gridModel.spaceCardModel.allDetails.first(where: { $0.id == spaceId })
         DispatchQueue.main.async { [self] in
