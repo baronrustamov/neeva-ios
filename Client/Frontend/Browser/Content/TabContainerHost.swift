@@ -41,8 +41,6 @@ class TabContainerModel: ObservableObject {
     /// Current content UI that is showing
     @Published private(set) var currentContentUI: ContentUIType
 
-    @Published private(set) var recipeModel: RecipeViewModel
-
     private var subscription: AnyCancellable? = nil
 
     private let zeroQueryModel: ZeroQueryModel
@@ -56,7 +54,6 @@ class TabContainerModel: ObservableObject {
 
         self.webContainerType = type
         self.currentContentUI = type
-        self.recipeModel = RecipeViewModel(tabManager: tabManager)
         self.zeroQueryModel = bvc.zeroQueryModel
         self.tabCardModel = bvc.tabCardModel
         self.overlayManager = bvc.overlayManager
@@ -69,12 +66,6 @@ class TabContainerModel: ObservableObject {
             }
 
             self.webContainerType = .webPage(webView)
-
-            if NeevaFeatureFlags[.recipeCheatsheet] && !bvc.incognitoModel.isIncognito {
-                if let url = webView.url {
-                    self.recipeModel.updateContentWithURL(url: url)
-                }
-            }
         }
     }
 

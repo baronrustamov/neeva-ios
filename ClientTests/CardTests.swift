@@ -434,7 +434,7 @@ class CardTests: XCTestCase {
         let tab1 = manager.addTab()
         let tab2 = manager.addTab()
         let tab3 = manager.addTab(afterTab: tab2)
-        manager.selectedTab = tab2
+        manager.selectTab(tab2, notify: false)
         manager.removeTabs([tab2, tab3])
         if let tab = tabCardModel.allDetails.first(where: { $0.id == tab1.id }) {
             XCTAssertEqual(tab.isSelected, true)

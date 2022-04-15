@@ -149,7 +149,6 @@ struct ShareAddedSpaceView: View {
                 subscription = SpaceStore.shared.$state.sink { state in
                     if case .ready = state {
                         refreshing = false
-                        chromeModel.urlInSpace = SpaceStore.shared.urlInASpace(request.url)
                         subscription?.cancel()
                         if let updater = request.updater, let entity = space?.contentData?.first?.id
                         {

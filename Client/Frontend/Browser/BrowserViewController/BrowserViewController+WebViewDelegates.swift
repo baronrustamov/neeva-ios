@@ -960,10 +960,6 @@ extension BrowserViewController: WKNavigationDelegate {
 
             // increment page load count
             PerformanceLogger.shared.incrementPageLoad(url: url)
-
-            if NeevaFeatureFlags[.recipeCheatsheet] && !self.incognitoModel.isIncognito {
-                self.tabContainerModel.recipeModel.updateContentWithURL(url: url)
-            }
         }
 
         // The document has changed. This metadata is now invalid.

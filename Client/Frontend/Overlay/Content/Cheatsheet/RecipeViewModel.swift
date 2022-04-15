@@ -2,30 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import Combine
 import Foundation
 import Shared
 
 class RecipeViewModel: ObservableObject {
-    @Published private(set) var recipe: Recipe =
-        Recipe(
-            title: "",
-            imageURL: "",
-            totalTime: nil,
-            prepTime: nil,
-            yield: nil,
-            ingredients: nil,
-            instructions: nil,
-            recipeRating: nil,
-            reviews: nil,
-            preference: .noPreference
-        )
-    @Published private(set) var relatedQuery: String? = nil
+    @Published private(set) var currentURL: URL?
+    private var currentRequest: Cancellable?
 
-    init(tabManager: TabManager) {
-        if let url = tabManager.selectedTab?.url?.absoluteString {
-            setupRecipeData(url: url)
-        }
-    }
+    @Published private(set) var recipe: Recipe?
+    @Published private(set) var relatedQuery: String? = nil
 
     static public func isRecipeAllowed(url: URL) -> Bool {
         guard let host = url.host, let baseDomain = url.baseDomain else { return false }
@@ -33,33 +19,29 @@ class RecipeViewModel: ObservableObject {
             || DomainAllowList.recipeDomains[baseDomain] ?? false
     }
 
-    public func updateContentWithURL(url: URL) {
-        if Self.isRecipeAllowed(url: url) {
-            setupRecipeData(url: url.absoluteString)
-        } else {
+    public func updateContentWithURL(url: URL?) {
+        currentURL = url
+        guard let url = url,
+            Self.isRecipeAllowed(url: url)
+        else {
             reset()
+            return
         }
+        setupRecipeData(url: url.absoluteString)
     }
 
     private func reset() {
-        self.recipe = Recipe(
-            title: "",
-            imageURL: "",
-            totalTime: nil,
-            prepTime: nil,
-            yield: nil,
-            ingredients: nil,
-            instructions: nil,
-            recipeRating: nil,
-            reviews: nil,
-            preference: .noPreference
-        )
+        currentRequest?.cancel()
+        currentRequest = nil
+        self.recipe = nil
         self.relatedQuery = nil
     }
 
     private func setupRecipeData(url: String) {
         GraphQLAPI.shared.isAnonymous = true
-        CheatsheetQueryController.getCheatsheetInfo(url: url, title: "") { result in
+        currentRequest = CheatsheetQueryController.getCheatsheetInfo(
+            url: url, title: ""
+        ) { result in
             switch result {
             case .success(let cheatsheetInfo):
                 let data = cheatsheetInfo[0]

@@ -20,6 +20,10 @@ class TabManager: NSObject {
     let profile: Profile
     let incognitoModel: IncognitoModel
 
+    var isIncognito: Bool {
+        incognitoModel.isIncognito
+    }
+
     let delaySelectingNewPopupTab: TimeInterval = 0.1
 
     static var all = WeakList<TabManager>()
@@ -37,26 +41,14 @@ class TabManager: NSObject {
     var didRestoreAllTabs: Bool = false
 
     // Use `selectedTabPublisher` to observe changes to `selectedTab`.
-    var selectedTab: Tab?
-    var selectedTabPublisher = PassthroughSubject<Tab?, Never>()
+    private(set) var selectedTab: Tab?
+    private(set) var selectedTabPublisher = CurrentValueSubject<Tab?, Never>(nil)
+    /// A publisher that forwards the url from the current selectedTab
+    private(set) var selectedTabURLPublisher = CurrentValueSubject<URL?, Never>(nil)
+    private var selectedTabSubscription: AnyCancellable?
+    private var selectedTabURLSubscription: AnyCancellable?
 
     let navDelegate: TabManagerNavDelegate
-
-    public static func makeWebViewConfig(isIncognito: Bool) -> WKWebViewConfiguration {
-        let configuration = WKWebViewConfiguration()
-        configuration.dataDetectorTypes = [.phoneNumber]
-        configuration.processPool = WKProcessPool()
-        configuration.preferences.javaScriptCanOpenWindowsAutomatically = !Defaults[.blockPopups]
-        // We do this to go against the configuration of the <meta name="viewport">
-        // tag to behave the same way as Safari :-(
-        configuration.ignoresViewportScaleLimits = true
-        if isIncognito {
-            configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
-        }
-        configuration.setURLSchemeHandler(InternalSchemeHandler(), forURLScheme: InternalURL.scheme)
-
-        return configuration
-    }
 
     // A WKWebViewConfiguration used for normal tabs
     lazy var configuration: WKWebViewConfiguration = {
@@ -87,6 +79,13 @@ class TabManager: NSObject {
         return tabs.filter { $0.isIncognito }
     }
 
+    var count: Int {
+        assert(Thread.isMainThread)
+
+        return tabs.count
+    }
+
+    // MARK: - Init
     init(profile: Profile, scene: UIScene, incognitoModel: IncognitoModel) {
         assert(Thread.isMainThread)
         self.profile = profile
@@ -108,23 +107,27 @@ class TabManager: NSObject {
             object: nil)
 
         ScreenCaptureHelper.defaultHelper.subscribeToTabUpdates(
-            from: selectedTabPublisher.eraseToAnyPublisher())
+            from: selectedTabPublisher.eraseToAnyPublisher()
+        )
+
+        selectedTabSubscription =
+            selectedTabPublisher
+            .sink { [weak self] tab in
+                self?.selectedTabURLSubscription?.cancel()
+                if tab == nil {
+                    self?.selectedTabURLPublisher.send(nil)
+                }
+                self?.selectedTabURLSubscription = tab?.$url
+                    .sink {
+                        self?.selectedTabURLPublisher.send($0)
+                    }
+            }
     }
 
     func addNavigationDelegate(_ delegate: WKNavigationDelegate) {
         assert(Thread.isMainThread)
 
         self.navDelegate.insert(delegate)
-    }
-
-    var count: Int {
-        assert(Thread.isMainThread)
-
-        return tabs.count
-    }
-
-    var isIncognito: Bool {
-        incognitoModel.isIncognito
     }
 
     subscript(index: Int) -> Tab? {
@@ -455,5 +458,23 @@ class TabManager: NSObject {
             temp[group.key] = tabGroupDict[group.key]
         }
         tabGroupDict = temp
+    }
+}
+
+extension TabManager {
+    public static func makeWebViewConfig(isIncognito: Bool) -> WKWebViewConfiguration {
+        let configuration = WKWebViewConfiguration()
+        configuration.dataDetectorTypes = [.phoneNumber]
+        configuration.processPool = WKProcessPool()
+        configuration.preferences.javaScriptCanOpenWindowsAutomatically = !Defaults[.blockPopups]
+        // We do this to go against the configuration of the <meta name="viewport">
+        // tag to behave the same way as Safari :-(
+        configuration.ignoresViewportScaleLimits = true
+        if isIncognito {
+            configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
+        }
+        configuration.setURLSchemeHandler(InternalSchemeHandler(), forURLScheme: InternalURL.scheme)
+
+        return configuration
     }
 }

@@ -108,12 +108,6 @@ class ToastDefaults: NSObject {
                 if let spaceID = request.targetSpaceID {
                     SpaceStore.shared.refreshSpace(spaceID: spaceID, url: request.url)
                 }
-                self.refreshListener = SpaceStore.shared.$state.sink { [request] state in
-                    if case .ready = state {
-                        bvc.chromeModel.urlInSpace = SpaceStore.shared.urlInASpace(request.url)
-                        self.refreshListener?.cancel()
-                    }
-                }
             }
         }
 

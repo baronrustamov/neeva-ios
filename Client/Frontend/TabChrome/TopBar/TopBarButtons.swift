@@ -45,6 +45,8 @@ struct TopBarNeevaButton: View {
             CheatsheetTooltipPopoverView()
                 .frame(maxWidth: 270)
         }
+        .grayscale((!chromeModel.isPage || chromeModel.isErrorPage) ? 1 : 0)
+        .disabled(!chromeModel.isPage || chromeModel.isErrorPage)
     }
 }
 

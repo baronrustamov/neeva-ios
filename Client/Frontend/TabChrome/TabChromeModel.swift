@@ -9,7 +9,7 @@ import SwiftUI
 
 class TabChromeModel: ObservableObject {
     @Published var canGoBack: Bool
-
+    @Published var canGoForward: Bool
     var canReturnToSuggestions: Bool {
         guard let selectedTab = topBarDelegate?.tabManager.selectedTab,
             let currentItem = selectedTab.webView?.backForwardList.currentItem
@@ -24,16 +24,17 @@ class TabChromeModel: ObservableObject {
         return query.location == .suggestion
     }
 
-    @Published var canGoForward: Bool
-    @Published var urlInSpace: Bool = false
-
     /// True when the toolbar is inline with the location view
     /// (when in landscape or on iPad)
     @Published var inlineToolbar: Bool
 
-    @Published var isPage: Bool
+    @Published private(set) var isPage: Bool
+    @Published private(set) var isErrorPage: Bool = false
+    @Published private(set) var urlInSpace: Bool = false
+    private var spaceRefreshSubscription: AnyCancellable?
 
     /// True when user has clicked education on SRP and is now not on an SRP
+    private(set) var recipeModel = RecipeViewModel()
     @Published var showTryCheatsheetPopover: Bool = false
     private var publishedTabObserver: AnyCancellable?
     private var tryCheatsheetPopoverObserver: AnyCancellable?
@@ -45,6 +46,8 @@ class TabChromeModel: ObservableObject {
 
     var appActiveRefreshSubscription: AnyCancellable? = nil
     private var subscriptions: Set<AnyCancellable> = []
+
+    private var urlSubscription: AnyCancellable?
     weak var topBarDelegate: TopBarDelegate? {
         didSet {
             $isEditingLocation
@@ -74,7 +77,7 @@ class TabChromeModel: ObservableObject {
                     }
                 }
                 .store(in: &subscriptions)
-            setupTryCheatsheetPopoverObserver()
+            setupURLObserver()
         }
     }
     weak var toolbarDelegate: ToolbarDelegate?
@@ -118,6 +121,8 @@ class TabChromeModel: ObservableObject {
         self.isPage = isPage
         self.inlineToolbar = inlineToolbar
         self.estimatedProgress = estimatedProgress
+
+        setupTryCheatsheetPopoverObserver()
     }
 
     /// Calls the address bar to be selected and enter editing mode
@@ -135,57 +140,95 @@ class TabChromeModel: ObservableObject {
         SceneDelegate.getBVC(with: topBarDelegate?.tabManager.scene).hideZeroQuery()
     }
 
-    func setupTryCheatsheetPopoverObserver() {
-        publishedTabObserver?.cancel()
+    private func setupURLObserver() {
+        urlSubscription?.cancel()
+        spaceRefreshSubscription?.cancel()
+
+        guard let tabManager = topBarDelegate?.tabManager else {
+            return
+        }
+
+        urlSubscription = Publishers.CombineLatest(
+            tabManager.selectedTabPublisher,
+            tabManager.selectedTabURLPublisher
+        ).sink { [weak self] tab, url in
+            guard let self = self else {
+                return
+            }
+            if let tab = tab,
+                !tab.isIncognito
+            {
+                self.recipeModel.updateContentWithURL(url: url)
+            }
+
+            self.isPage = url?.displayURL?.isWebPage() ?? false
+            self.isErrorPage = InternalURL(url)?.isErrorPage ?? false
+        }
+
+        spaceRefreshSubscription = Publishers.CombineLatest(
+            SpaceStore.shared.$state,
+            tabManager.selectedTabURLPublisher
+        )
+        .map { state, url -> Bool? in
+            guard case .ready = state else {
+                return nil
+            }
+            guard let url = url else {
+                return false
+            }
+            return SpaceStore.shared.urlInASpace(url)
+        }
+        .receive(on: DispatchQueue.main)
+        .sink { [weak self] result in
+            if let result = result {
+                self?.urlInSpace = result
+            }
+        }
+    }
+
+    private func setupTryCheatsheetPopoverObserver() {
         tryCheatsheetPopoverObserver?.cancel()
 
-        guard let tabManager = topBarDelegate?.tabManager,
-            let tabContainerModel = topBarDelegate?.tabContainerModel
-        else { return }
-
-        publishedTabObserver = tabManager.selectedTabPublisher
-            .sink { [weak self] tab in
-                self?.tryCheatsheetPopoverObserver?.cancel()
-                guard let tab = tab else { return }
-                self?.tryCheatsheetPopoverObserver = Publishers.CombineLatest3(
-                    Defaults.publisher(.showTryCheatsheetPopover),
-                    tabContainerModel.recipeModel.$recipe,
-                    tab.$url
-                )
-                .map { showPopover, recipe, url -> Bool in
-                    // extra check in case the query flag changed between launches
-                    guard let url = url else { return false }
-                    // if recipe cheatsheet would've been shown, show popover
-                    if !recipe.title.isEmpty,
-                        !Defaults[.seenTryCheatsheetPopoverOnRecipe],
-                        RecipeViewModel.isRecipeAllowed(url: url)
-                    {
-                        return true
-                    }
-                    // else show popover if seen SRP intro screen
-                    if showPopover.newValue,
-                        // cheatsheet is not used on NeevaDomain
-                        !NeevaConstants.isInNeevaDomain(url),
-                        // avoid flashing the popover when app launches
-                        !(url.scheme == InternalURL.scheme)
-                    {
-                        return true
-                    }
-                    return false
-                }
-                .receive(on: DispatchQueue.main)
-                .sink { [weak self] in
-                    self?.showTryCheatsheetPopover = $0
-                    // switching tab right after setting the bool sometimes does not trigger a UI change
-                    self?.objectWillChange.send()
-                }
+        tryCheatsheetPopoverObserver = Publishers.CombineLatest3(
+            Defaults.publisher(.showTryCheatsheetPopover),
+            recipeModel.$currentURL,
+            recipeModel.$recipe
+        )
+        .map { showPopover, url, recipe -> Bool in
+            guard let url = url else {
+                return false
             }
+
+            if let recipe = recipe,
+                !recipe.title.isEmptyOrWhitespace(),
+                !Defaults[.seenTryCheatsheetPopoverOnRecipe],
+                RecipeViewModel.isRecipeAllowed(url: url)
+            {
+                return true
+            }
+            // else show popover if seen SRP intro screen
+            if showPopover.newValue,
+                // cheatsheet is not used on NeevaDomain
+                !NeevaConstants.isInNeevaDomain(url),
+                // avoid flashing the popover when app launches
+                !(url.scheme == InternalURL.scheme)
+            {
+                return true
+            }
+            return false
+        }
+        .receive(on: DispatchQueue.main)
+        .sink { [weak self] in
+            self?.showTryCheatsheetPopover = $0
+            // switching tab right after setting the bool sometimes does not trigger a UI change
+            self?.objectWillChange.send()
+        }
     }
 
     func clearCheatsheetPopoverFlags() {
         Defaults[.showTryCheatsheetPopover] = false
-        if let recipeModel = topBarDelegate?.tabContainerModel.recipeModel,
-            !recipeModel.recipe.title.isEmpty
+        if let recipe = recipeModel.recipe,
+            !recipe.title.isEmpty
         {
             Defaults[.seenTryCheatsheetPopoverOnRecipe] = true
         }

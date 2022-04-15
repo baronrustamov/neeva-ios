@@ -225,7 +225,7 @@ enum TabToolbarButtons {
                 action: action
             )
             .accessibilityValue(model.urlInSpace ? "Page is in a Space" : "")
-            .disabled(incognitoModel.isIncognito || !model.isPage)
+            .disabled(incognitoModel.isIncognito || !model.isPage || model.isErrorPage)
         }
     }
 
