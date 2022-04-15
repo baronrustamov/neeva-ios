@@ -1392,6 +1392,14 @@
 		E677F0541D94247300ECF1FB /* Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E677F0531D94247300ECF1FB /* Metadata.swift */; };
 		E67B0B312807221D008D1CCD /* GasFeeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67B0B302807221D008D1CCD /* GasFeeModel.swift */; };
 		E67B0B3228088242008D1CCD /* WalletHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E677D1DA28069AA80060869F /* WalletHeader.swift */; };
+		E67B0B352809AF0E008D1CCD /* UnlockedThemesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67B0B332809AEB9008D1CCD /* UnlockedThemesView.swift */; };
+		E67B0B372809B210008D1CCD /* BalancesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67B0B362809B210008D1CCD /* BalancesView.swift */; };
+		E67B0B392809B30E008D1CCD /* AccountInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67B0B382809B30E008D1CCD /* AccountInfoView.swift */; };
+		E67B0B3B2809B9D3008D1CCD /* OpenSessionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67B0B3A2809B9D3008D1CCD /* OpenSessionsView.swift */; };
+		E67B0B3D2809BBDC008D1CCD /* YourNFTsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67B0B3C2809BBDC008D1CCD /* YourNFTsView.swift */; };
+		E67B0B3F2809BC75008D1CCD /* WalletStyleModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67B0B3E2809BC75008D1CCD /* WalletStyleModifier.swift */; };
+		E67B0B412809BC8C008D1CCD /* WalletListSeparatorModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67B0B402809BC8C008D1CCD /* WalletListSeparatorModifier.swift */; };
+		E67B0B432809BCA9008D1CCD /* SessionActionsModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67B0B422809BCA9008D1CCD /* SessionActionsModifier.swift */; };
 		E67CD27027F33BB5007BFE58 /* RecommendedSpacesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64024E727F2432300D65B63 /* RecommendedSpacesView.swift */; };
 		E67CD27127F33BBE007BFE58 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64024E527F242DA00D65B63 /* View+Extensions.swift */; };
 		E67CD27227F33BC1007BFE58 /* Web3SuggestedSitesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64024E327F2426E00D65B63 /* Web3SuggestedSitesViewModel.swift */; };
@@ -2703,6 +2711,14 @@
 		E677F0441D9423FB00ECF1FB /* SQLiteMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteMetadata.swift; sourceTree = "<group>"; };
 		E677F0531D94247300ECF1FB /* Metadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metadata.swift; sourceTree = "<group>"; };
 		E67B0B302807221D008D1CCD /* GasFeeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GasFeeModel.swift; sourceTree = "<group>"; };
+		E67B0B332809AEB9008D1CCD /* UnlockedThemesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockedThemesView.swift; sourceTree = "<group>"; };
+		E67B0B362809B210008D1CCD /* BalancesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalancesView.swift; sourceTree = "<group>"; };
+		E67B0B382809B30E008D1CCD /* AccountInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountInfoView.swift; sourceTree = "<group>"; };
+		E67B0B3A2809B9D3008D1CCD /* OpenSessionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSessionsView.swift; sourceTree = "<group>"; };
+		E67B0B3C2809BBDC008D1CCD /* YourNFTsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourNFTsView.swift; sourceTree = "<group>"; };
+		E67B0B3E2809BC75008D1CCD /* WalletStyleModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletStyleModifier.swift; sourceTree = "<group>"; };
+		E67B0B402809BC8C008D1CCD /* WalletListSeparatorModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletListSeparatorModifier.swift; sourceTree = "<group>"; };
+		E67B0B422809BCA9008D1CCD /* SessionActionsModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionActionsModifier.swift; sourceTree = "<group>"; };
 		E67CD27B27F49B1F007BFE58 /* easy_privacy_web3.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = easy_privacy_web3.json; sourceTree = "<group>"; };
 		E683F0A51E92E0820035D990 /* MockableHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockableHistory.swift; sourceTree = "<group>"; };
 		E683F0C11E93D4E90035D990 /* DictionaryExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryExtensions.swift; sourceTree = "<group>"; };
@@ -3962,6 +3978,14 @@
 				E63B18E427FB69B5001BA0B0 /* WalletServerManager.swift */,
 				E677D1D7280699CA0060869F /* GasFeeView.swift */,
 				E677D1DA28069AA80060869F /* WalletHeader.swift */,
+				E67B0B332809AEB9008D1CCD /* UnlockedThemesView.swift */,
+				E67B0B362809B210008D1CCD /* BalancesView.swift */,
+				E67B0B382809B30E008D1CCD /* AccountInfoView.swift */,
+				E67B0B3A2809B9D3008D1CCD /* OpenSessionsView.swift */,
+				E67B0B3C2809BBDC008D1CCD /* YourNFTsView.swift */,
+				E67B0B3E2809BC75008D1CCD /* WalletStyleModifier.swift */,
+				E67B0B402809BC8C008D1CCD /* WalletListSeparatorModifier.swift */,
+				E67B0B422809BCA9008D1CCD /* SessionActionsModifier.swift */,
 			);
 			path = NeevaWallet;
 			sourceTree = "<group>";
@@ -6565,6 +6589,7 @@
 				4A42C44227E58487003B9826 /* TabChromeModel.swift in Sources */,
 				4A42C44327E58487003B9826 /* TopSitesManager.swift in Sources */,
 				4A42C44427E58487003B9826 /* OpenInAppOverlayView.swift in Sources */,
+				E67B0B3F2809BC75008D1CCD /* WalletStyleModifier.swift in Sources */,
 				4A42C44527E58487003B9826 /* ShareSpaceView.swift in Sources */,
 				4A42C44627E58487003B9826 /* SimulatedSwipeViewRepresentable.swift in Sources */,
 				4A42C44727E58487003B9826 /* DownloadOverlayView.swift in Sources */,
@@ -6610,6 +6635,7 @@
 				4A42C46E27E58487003B9826 /* ReaderMode.swift in Sources */,
 				4A42C46F27E58487003B9826 /* SessionData.swift in Sources */,
 				E67CD27027F33BB5007BFE58 /* RecommendedSpacesView.swift in Sources */,
+				E67B0B3B2809B9D3008D1CCD /* OpenSessionsView.swift in Sources */,
 				4A42C47027E58487003B9826 /* SettingsView.swift in Sources */,
 				4A42C47127E58487003B9826 /* SessionInfoView.swift in Sources */,
 				4A42C47227E58487003B9826 /* CarouselProgressView.swift in Sources */,
@@ -6629,6 +6655,7 @@
 				4A42C47F27E58487003B9826 /* DispatchQueueExtensions.swift in Sources */,
 				E63B18DB27F79348001BA0B0 /* CookieCutterModel.swift in Sources */,
 				E910925E280510B100EE0109 /* PlaceViews.swift in Sources */,
+				E67B0B392809B30E008D1CCD /* AccountInfoView.swift in Sources */,
 				4A42C48027E58487003B9826 /* AddOrUpdateSpaceView.swift in Sources */,
 				4A42C48127E58487003B9826 /* ViewRef.swift in Sources */,
 				4A42C48227E58487003B9826 /* OverlayModifiers.swift in Sources */,
@@ -6641,6 +6668,7 @@
 				4A42C48827E58487003B9826 /* Environment.swift in Sources */,
 				4A42C48927E58487003B9826 /* BrowserViewController+UIDropInteractionDelegate.swift in Sources */,
 				4A42C48A27E58487003B9826 /* PrivilegedRequest.swift in Sources */,
+				E67B0B372809B210008D1CCD /* BalancesView.swift in Sources */,
 				4A42C48B27E58487003B9826 /* SendFeedbackPanel.swift in Sources */,
 				4A42C48C27E58487003B9826 /* DownloadOverlayContent.swift in Sources */,
 				4A42C48D27E58487003B9826 /* (null) in Sources */,
@@ -6648,8 +6676,11 @@
 				4AB8160627EA662E0017203D /* ScreenCaptureHelper.swift in Sources */,
 				4A42C48F27E58487003B9826 /* OverlayGenerics.swift in Sources */,
 				4A42C49027E58487003B9826 /* GroupedRowButtonView.swift in Sources */,
+				E67B0B412809BC8C008D1CCD /* WalletListSeparatorModifier.swift in Sources */,
+				E67B0B432809BCA9008D1CCD /* SessionActionsModifier.swift in Sources */,
 				4A42C49127E58487003B9826 /* ImageThumbnailView.swift in Sources */,
 				E67CD27427F33BCA007BFE58 /* ZeroQueryPlaceholder.swift in Sources */,
+				E67B0B3D2809BBDC008D1CCD /* YourNFTsView.swift in Sources */,
 				4A42C49327E58487003B9826 /* TrackingPreventionUtils.swift in Sources */,
 				4A42C49427E58487003B9826 /* NavSuggestionView.swift in Sources */,
 				4A42C49527E58487003B9826 /* ZeroQueryView.swift in Sources */,
@@ -6736,6 +6767,7 @@
 				4A42C4DE27E58487003B9826 /* BrowserViewController+WebViewDelegates.swift in Sources */,
 				4A42C4DF27E58487003B9826 /* DebugSettingsSection.swift in Sources */,
 				4A42C4E027E58487003B9826 /* CardViewControllers.swift in Sources */,
+				E67B0B352809AF0E008D1CCD /* UnlockedThemesView.swift in Sources */,
 				4A42C4E127E58487003B9826 /* SpaceNoteEntityView.swift in Sources */,
 				4A42C4E227E58487003B9826 /* AppDelegate.swift in Sources */,
 				4A42C4E327E58487003B9826 /* CompactCard.swift in Sources */,
