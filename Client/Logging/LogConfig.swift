@@ -671,6 +671,8 @@ public struct LogConfig {
     public struct Attribute {
         /// Is selected tab in private mode
         public static let IsInPrivateMode = "IsInPrivateMode"
+        /// Number of all tabs (normal + incognito) opened
+        public static let AllTabsOpened = "AllTabsOpened"
         /// Number of normal tabs opened
         public static let NormalTabsOpened = "NormalTabsOpened"
         /// Number of incognito tabs opened

@@ -11,6 +11,7 @@ import WebKit
 import XCGLogger
 
 private var debugTabCount = 0
+private let log = Logger.browser
 
 func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
     var recent = tabs.first
@@ -679,8 +680,9 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
     }
 
     func addContentScript(_ helper: TabContentScript, name: String, forTab tab: Tab) {
-        if helpers[name] != nil {
-            assertionFailure("Duplicate helper added: \(name)")
+        guard helpers[name] == nil else {
+            log.info("Duplicate helper script added: \(name)")
+            return
         }
 
         helpers[name] = helper

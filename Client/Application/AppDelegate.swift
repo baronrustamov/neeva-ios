@@ -316,7 +316,33 @@ extension AppDelegate {
             )
         }
 
+        attributes.append(
+            ClientLogCounterAttribute(
+                key: LogConfig.Attribute.AllTabsOpened,
+                value: "\(SceneDelegate.getTabManagerOrNil()?.tabs.count ?? 0)"
+            )
+        )
+
         ClientLogger.shared.logCounter(.LowMemoryWarning, attributes: attributes)
+
+        // Turn all but the newest x Tabs into Zombie Tabs.
+        if FeatureFlag[.lowMemoryZombieTabs] {
+            let maximumNumberOfAliveTabs = 10
+
+            for sceneDelegate in SceneDelegate.getAllSceneDelegates() {
+                // Filter tabs for each Scene
+                let tabManager = sceneDelegate.bvc.tabManager
+                let tabs = tabManager.tabs.sorted {
+                    $0.lastExecutedTime ?? Timestamp() > $1.lastExecutedTime ?? Timestamp()
+                }
+
+                tabs.enumerated().forEach { index, tab in
+                    if index >= maximumNumberOfAliveTabs {
+                        tab.close()
+                    }
+                }
+            }
+        }
     }
 
     private var memoryFootprint: mach_vm_size_t? {

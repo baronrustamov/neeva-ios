@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     private var scene: UIScene?
 
-    private var bvc: BrowserViewController!
+    var bvc: BrowserViewController!
     private var geigerCounter: KMCGeigerCounter?
 
     private static var activeSceneCount: Int = 0
