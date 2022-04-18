@@ -15,7 +15,6 @@ struct OverlayView: View {
     @State var safeArea: CGFloat = 0
     @State var keyboardHidden = true
     @State var presentSheet = false
-    @State var isVisible = false
 
     var limitToOverlayType: [OverlayType]?
     var canDisplay: Bool {
@@ -40,7 +39,7 @@ struct OverlayView: View {
 
     @ViewBuilder
     var content: some View {
-        if isVisible, canDisplay {
+        if canDisplay {
             switch overlayManager.currentOverlay {
             case .backForwardList(let backForwardList):
                 backForwardList
@@ -111,14 +110,6 @@ struct OverlayView: View {
                         ? chromeModel.bottomBarHeight - scrollingControlModel.footerBottomOffset
                         : 0
                 )
-        }.onAppear {
-            isVisible = true
-        }.onDisappear {
-            isVisible = false
-        }.onChange(of: canDisplay) { _ in
-            if !canDisplay, isVisible {
-                overlayManager.hideCurrentOverlay(animate: false)
-            }
         }
     }
 }

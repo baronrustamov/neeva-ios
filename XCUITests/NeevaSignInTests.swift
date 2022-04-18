@@ -119,4 +119,13 @@ class NeevaSignInTests: BaseTestCase {
         doSignIn()
         doSignOut()
     }
+
+    func testSignInUIAppearsFromSettings() {
+        goToSettings()
+
+        waitForExistence(app.buttons["Sign In or Join Neeva"])
+        app.buttons["Sign In or Join Neeva"].tap()
+
+        waitForExistence(app.staticTexts["Welcome To Neeva"])
+    }
 }
