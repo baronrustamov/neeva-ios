@@ -55,8 +55,8 @@ struct WalletSequenceContent: View {
                             let stats = collection.stats
                         {
                             WalletSequenceSiteHeader(
-                                iconURL: collection.imageURL,
-                                domain: collection.name,
+                                iconURL: collection.imageURL ?? .aboutBlank,
+                                domain: collection.name ?? "",
                                 trusted: model.trustSignal == .trusted
                             )
                             CompactStatsView(stats: stats)
@@ -88,6 +88,7 @@ struct WalletSequenceContent: View {
                             sequence: sequence,
                             wallet: wallet,
                             balance: model.balanceFor(chainToUse.currency),
+                            walletDisplayName: model.walletDisplayName,
                             userSelectedChain: $userSelectedChain
                         )
                     }

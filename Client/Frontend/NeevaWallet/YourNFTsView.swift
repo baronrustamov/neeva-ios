@@ -27,7 +27,7 @@ struct YourNFTsView: View {
             ScrollView(
                 .horizontal, showsIndicators: false,
                 content: {
-                    HStack {
+                    LazyHStack {
                         ForEach(
                             assetStore.assets, id: \.id,
                             content: { asset in

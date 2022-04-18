@@ -400,7 +400,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
         #if XYZ
             DispatchQueue.main.async {
-                AssetStore.shared.refresh()
+                self.web3Model.initializeWallet()
             }
         #endif
     }

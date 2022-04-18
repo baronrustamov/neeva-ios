@@ -149,3 +149,11 @@ query getDomainTrustSignals($input: DomainTrustSignalsInput!) {
     signal
   }
 }
+
+query CryptoWallet($query: String!) {
+  cryptoWallet(q: $query) {
+    address
+    ens
+    ownerName
+  }
+}

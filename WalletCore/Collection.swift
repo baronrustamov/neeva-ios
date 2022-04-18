@@ -10,12 +10,12 @@ public struct Collection: Codable, Hashable {
         """
 
     public let bannerImageURL: URL?
-    public let description: String
+    public let description: String?
     public let externalURL: URL?
     public let safelistRequestStatus: SafelistRequestStatus
-    public let imageURL: URL
+    public let imageURL: URL?
     public let largeImageURL: URL?
-    public let name: String
+    public let name: String?
     public let stats: CollectionStats?
 
     public let openSeaSlug: String

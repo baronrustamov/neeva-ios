@@ -295,16 +295,18 @@ public struct WalletSequenceBottomInfoPanel: View {
     let sequence: SequenceInfo
     let wallet: WalletAccessor
     let balance: String?
+    let walletDisplayName: String
 
     @Binding var userSelectedChain: EthNode?
 
     public init(
-        sequence: SequenceInfo, wallet: WalletAccessor, balance: String?,
+        sequence: SequenceInfo, wallet: WalletAccessor, balance: String?, walletDisplayName: String,
         userSelectedChain: Binding<EthNode?>
     ) {
         self.sequence = sequence
         self.wallet = wallet
         self.balance = balance
+        self.walletDisplayName = walletDisplayName
         self._userSelectedChain = userSelectedChain
     }
 
@@ -381,13 +383,11 @@ public struct WalletSequenceBottomInfoPanel: View {
         default:
             HStack(spacing: 8) {
                 Circle().fill(WalletTheme.gradient).frame(width: 22, height: 22)
-                Text(
-                    "\(String(wallet.publicAddress.prefix(3)))...\(String(wallet.publicAddress.suffix(3)))"
-                )
-                .withFont(.labelLarge)
-                .lineLimit(1)
-                .foregroundColor(.label)
-                .frame(maxWidth: 100, alignment: .leading)
+                Text(walletDisplayName)
+                    .withFont(.labelLarge)
+                    .lineLimit(1)
+                    .gradientForeground()
+                    .frame(maxWidth: 150, alignment: .leading)
             }
         }
     }

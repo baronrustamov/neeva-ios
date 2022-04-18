@@ -56,6 +56,18 @@ class Web3Model: ObservableObject {
         @Published var matchingCollection: Collection?
         @Published var showingMaliciousSiteWarning = false
         @Published var desktopSession = false
+        @Published var walletInfo = WalletQuery.WalletInfo(ens: [])
+
+        var walletDisplayName: String {
+            if walletInfo.ens?.isEmpty == false, let ens = walletInfo.ownerName {
+                return ens
+            } else if !Defaults[.cryptoPublicKey].isEmpty {
+                return
+                    "\(String(Defaults[.cryptoPublicKey].prefix(3)))...\(String(Defaults[.cryptoPublicKey].suffix(3)))"
+            } else {
+                return ""
+            }
+        }
         var gasFeeModel: GasFeeModel = GasFeeModel()
 
         var serverManager: WalletServerManager?
@@ -197,6 +209,35 @@ class Web3Model: ObservableObject {
                     self.balances[token] = balance
                     self.objectWillChange.send()
                 }
+            }
+        }
+
+        func initializeWallet() {
+            let publicAddress = Defaults[.cryptoPublicKey]
+            if !publicAddress.isEmpty {
+                DispatchQueue.global(qos: .userInitiated).async {
+                    if self.wallet?.addressInKeystore.isEmpty == true {
+                        self.wallet = WalletAccessor()
+                    }
+                    WalletQuery.getWalletInfo(query: publicAddress) { result in
+                        switch result {
+                        case .failure(let error):
+                            Logger.browser.info("Wallet info query failed with \(error)")
+                        case .success(let walletInfo):
+                            self.walletInfo = walletInfo
+                        }
+                    }
+                    self.updateBalances()
+
+                }
+                AssetStore.shared.refresh()
+                if !Defaults[.walletOnboardingDone] {
+                    DispatchQueue.main.async {
+                        self.showWalletPanelHalfScreen()
+                    }
+                    Defaults[.walletOnboardingDone] = true
+                }
+
             }
         }
 
@@ -367,22 +408,7 @@ class Web3Model: ObservableObject {
                 content: AnyView(
                     CryptoWalletView(dismiss: {
                         self.presenter.dismissCurrentOverlay()
-                        if !Defaults[.cryptoPublicKey].isEmpty,
-                            self.wallet?.ethereumAddress == nil
-                        {
-                            DispatchQueue.global(qos: .userInitiated).async {
-                                self.wallet = WalletAccessor()
-                                self.updateBalances()
-                            }
-                            AssetStore.shared.refresh()
-                            if !Defaults[.walletOnboardingDone] {
-                                DispatchQueue.main.async {
-                                    self.showWalletPanelHalfScreen()
-                                }
-                                Defaults[.walletOnboardingDone] = true
-                            }
-
-                        }
+                        self.initializeWallet()
                     })
                     .environmentObject(self)
                     .overlayIsFixedHeight(isFixedHeight: true)
@@ -573,7 +599,9 @@ class Web3Model: ObservableObject {
 #if XYZ
     extension Web3Model: WalletServerManagerDelegate {
         func shouldShowToast(for message: LocalizedStringKey) {
-            self.toastDelegate?.shouldShowToast(for: message)
+            DispatchQueue.main.async {
+                self.toastDelegate?.shouldShowToast(for: message)
+            }
         }
 
         func updateCurrentSequence(_ sequence: SequenceInfo) {

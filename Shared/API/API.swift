@@ -7130,6 +7130,124 @@ public final class GetDomainTrustSignalsQuery: GraphQLQuery {
   }
 }
 
+public final class CryptoWalletQuery: GraphQLQuery {
+  /// The raw GraphQL definition of this operation.
+  public let operationDefinition: String =
+    """
+    query CryptoWallet($query: String!) {
+      cryptoWallet(q: $query) {
+        __typename
+        address
+        ens
+        ownerName
+      }
+    }
+    """
+
+  public let operationName: String = "CryptoWallet"
+
+  public let operationIdentifier: String? = "2bb49a288228f4cb3fc99f793c060f455fd8733666364103aa9536df42ba9786"
+
+  public var query: String
+
+  public init(query: String) {
+    self.query = query
+  }
+
+  public var variables: GraphQLMap? {
+    return ["query": query]
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["Query"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("cryptoWallet", arguments: ["q": GraphQLVariable("query")], type: .object(CryptoWallet.selections)),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(cryptoWallet: CryptoWallet? = nil) {
+      self.init(unsafeResultMap: ["__typename": "Query", "cryptoWallet": cryptoWallet.flatMap { (value: CryptoWallet) -> ResultMap in value.resultMap }])
+    }
+
+    /// Get a wallet by ENS or wallet address
+    public var cryptoWallet: CryptoWallet? {
+      get {
+        return (resultMap["cryptoWallet"] as? ResultMap).flatMap { CryptoWallet(unsafeResultMap: $0) }
+      }
+      set {
+        resultMap.updateValue(newValue?.resultMap, forKey: "cryptoWallet")
+      }
+    }
+
+    public struct CryptoWallet: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["Wallet"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("address", type: .scalar(String.self)),
+          GraphQLField("ens", type: .list(.nonNull(.scalar(String.self)))),
+          GraphQLField("ownerName", type: .scalar(String.self)),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(address: String? = nil, ens: [String]? = nil, ownerName: String? = nil) {
+        self.init(unsafeResultMap: ["__typename": "Wallet", "address": address, "ens": ens, "ownerName": ownerName])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      public var address: String? {
+        get {
+          return resultMap["address"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "address")
+        }
+      }
+
+      public var ens: [String]? {
+        get {
+          return resultMap["ens"] as? [String]
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "ens")
+        }
+      }
+
+      public var ownerName: String? {
+        get {
+          return resultMap["ownerName"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "ownerName")
+        }
+      }
+    }
+  }
+}
+
 public final class SearchQuery: GraphQLQuery {
   /// The raw GraphQL definition of this operation.
   public let operationDefinition: String =
@@ -7613,7 +7731,7 @@ public final class SearchQuery: GraphQLQuery {
 
   public let operationName: String = "Search"
 
-  public let operationIdentifier: String? = "6ebbd1cee60e8e0567665900a9fdd73d920e4c3ad23c8e932813afbbf267df18"
+  public let operationIdentifier: String? = "b8aa85dea0b29b56f00bafee8edba941a075abe2305c2645b8dc5f4da011c103"
 
   public var query: String
 

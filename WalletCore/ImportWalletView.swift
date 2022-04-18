@@ -44,7 +44,7 @@ public struct ImportWalletView: View {
                         .autocapitalization(.none)
                         .frame(maxWidth: .infinity)
                 }
-                Text("Type or paste your Secret Recovery Phrase")
+                Text("Type or paste your Secret Phrase, public address, or ENS domain")
                     .withFont(.bodyLarge)
                     .foregroundColor(.secondary)
                     .allowsHitTesting(false)
@@ -76,8 +76,13 @@ public struct ImportWalletView: View {
                 .buttonStyle(DashboardButtonStyle())
                 .padding(.horizontal, 16)
                 .frame(maxWidth: .infinity, alignment: .leading)
-            } else {
-                Spacer().frame(height: 10)
+            } else if !isFocused {
+                Text(
+                    "**Not ready to import your wallet?** Start by inputting a public address or ENS domain. You can always import your wallet at another time."
+                )
+                .withFont(.bodyMedium)
+                .foregroundColor(.secondaryLabel)
+                .multilineTextAlignment(.center)
             }
             Button(action: onImport) {
                 HStack {

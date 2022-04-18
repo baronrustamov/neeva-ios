@@ -13,6 +13,10 @@ struct UnlockedThemesView: View {
     @State var isExpanded: Bool = true
     let unlockedThemes: [Web3Theme]
 
+    var hasCredentials: Bool {
+        NeevaConstants.cryptoKeychain[string: NeevaConstants.cryptoSecretPhrase] != nil
+    }
+
     var body: some View {
         Section(
             content: {
@@ -25,7 +29,14 @@ struct UnlockedThemesView: View {
         .modifier(WalletListSeparatorModifier())
     }
 
-    private var content: some View {
+    @ViewBuilder private var content: some View {
+        if !unlockedThemes.isEmpty && !hasCredentials {
+            Text("Import credentials to unlock!")
+                .withFont(.headingSmall)
+                .gradientForeground()
+                .frame(maxWidth: .infinity, alignment: .center)
+                .modifier(WalletListSeparatorModifier())
+        }
         ForEach(
             unlockedThemes.sorted(by: { $0.rawValue > $1.rawValue }),
             id: \.rawValue
@@ -33,6 +44,8 @@ struct UnlockedThemesView: View {
             if isExpanded {
                 Button(
                     action: {
+                        guard hasCredentials else { return }
+
                         if let slug = theme.asset?.collection?.openSeaSlug {
                             Defaults[.currentTheme] = slug == currentTheme ? "" : slug
                             if !currentTheme.isEmpty {
@@ -87,9 +100,10 @@ struct UnlockedThemesView: View {
             }
             Spacer()
             Symbol(
-                decorative: currentTheme
-                    == asset?.collection?.openSeaSlug
-                    ? .checkmarkCircleFill : .circle,
+                decorative: hasCredentials
+                    ? (currentTheme
+                        == asset?.collection?.openSeaSlug
+                        ? .checkmarkCircleFill : .circle) : .lockCircle,
                 size: 24
             )
             .foregroundColor(.label)

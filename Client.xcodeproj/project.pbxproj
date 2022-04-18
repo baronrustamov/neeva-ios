@@ -728,6 +728,7 @@
 		4AB8161027EBC3190017203D /* ConversionLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62FC4AA27E9162600848461 /* ConversionLogger.swift */; };
 		4AC534F127F3B86A0084C62B /* XYZLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4A7AC46327F27470001EFB8F /* XYZLaunchScreen.xib */; };
 		4AC6658F26C20A5A00019C24 /* ZeroQueryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AC6658E26C20A5900019C24 /* ZeroQueryModel.swift */; };
+		4AD1C68C280A13480004955F /* CryptoWalletQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD1C68B280A13480004955F /* CryptoWalletQuery.swift */; };
 		4AD771AE2729C4C000B6769D /* PreviewEntities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD771AD2729C4C000B6769D /* PreviewEntities.swift */; };
 		4AD771B027322BCF00B6769D /* SpaceHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD771AF27322BCF00B6769D /* SpaceHeaderView.swift */; };
 		4AD771B42734F06900B6769D /* EntityInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD771B32734F06800B6769D /* EntityInfoView.swift */; };
@@ -2063,6 +2064,7 @@
 		4AB678B726EAA8160078F61B /* SpacesIntro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacesIntro.swift; sourceTree = "<group>"; };
 		4AB8160A27EADCEF0017203D /* XYZIntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XYZIntroView.swift; sourceTree = "<group>"; };
 		4AC6658E26C20A5900019C24 /* ZeroQueryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroQueryModel.swift; sourceTree = "<group>"; };
+		4AD1C68B280A13480004955F /* CryptoWalletQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoWalletQuery.swift; sourceTree = "<group>"; };
 		4AD771AD2729C4C000B6769D /* PreviewEntities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewEntities.swift; sourceTree = "<group>"; };
 		4AD771AF27322BCF00B6769D /* SpaceHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceHeaderView.swift; sourceTree = "<group>"; };
 		4AD771B32734F06800B6769D /* EntityInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityInfoView.swift; sourceTree = "<group>"; };
@@ -3469,6 +3471,7 @@
 				4A93B5572781318900CD5415 /* CollectionViews.swift */,
 				4A72AFC3278E43AF0057E58B /* CommunitySubmissionRequest.swift */,
 				4AA285AE278BA884001993EE /* ConnectWallet.swift */,
+				4AD1C68B280A13480004955F /* CryptoWalletQuery.swift */,
 				BCAAA0D4276D9B420013223E /* CryptoConfig.swift */,
 				4A9EFAE627ADB8BB00F3ED7F /* CurrencyStore.swift */,
 				4A447A6D27CDC2A200B141F6 /* EIP712.swift */,
@@ -6970,6 +6973,7 @@
 				4A8CE5FD27CD41C000735C75 /* ShowPhrasesView.swift in Sources */,
 				4A8CE5FE27CD41C000735C75 /* TransactionFee.swift in Sources */,
 				4A8CE60027CD41C000735C75 /* WalletAccessor.swift in Sources */,
+				4AD1C68C280A13480004955F /* CryptoWalletQuery.swift in Sources */,
 				4A8CE60127CD41C000735C75 /* WalletCore.h in Sources */,
 				4A8CE5EA27CCA36900735C75 /* NeevaWalletStyle.swift in Sources */,
 				4A8CE60927CD802C00735C75 /* WalletConnectHandlers.swift in Sources */,
@@ -7893,7 +7897,7 @@
 				CODE_SIGN_ENTITLEMENTS = Client/Entitlements/Neevaxyz.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 36;
+				CURRENT_PROJECT_VERSION = 42;
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				INFOPLIST_FILE = Client/XYZClient.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -7904,7 +7908,7 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
-				MARKETING_VERSION = 1.1.12;
+				MARKETING_VERSION = 1.1.18;
 				NEEVA_BUNDLE_DISPLAY_NAME = Neevaxyz;
 				NEEVA_ROOT_BUNDLE_INDENTIFIER = xyz.neeva.app.ios.browser;
 				OTHER_SWIFT_FLAGS = "-DXYZ $(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_NEEVA -DPROD";
@@ -7929,7 +7933,7 @@
 				CODE_SIGN_ENTITLEMENTS = Client/Entitlements/NeevaxyzDev.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 36;
+				CURRENT_PROJECT_VERSION = 42;
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				INCLUDE_SETTINGS_BUNDLE = NO;
 				INFOPLIST_FILE = Client/XYZClient.plist;
@@ -7942,7 +7946,7 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
-				MARKETING_VERSION = 1.1.12;
+				MARKETING_VERSION = 1.1.18;
 				NEEVA_BUNDLE_DISPLAY_NAME = "Neevaxyz ($(USER))";
 				NEEVA_ROOT_BUNDLE_INDENTIFIER = "xyz.neeva.app.ios.browser-dev";
 				OTHER_SWIFT_FLAGS = "-DXYZ";

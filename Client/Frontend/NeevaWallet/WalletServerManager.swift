@@ -10,16 +10,6 @@ import WalletConnectSwift
 import WalletCore
 import web3swift
 
-protocol ToastDelegate: AnyObject {
-    func shouldShowToast(for message: LocalizedStringKey)
-}
-
-protocol WalletServerManagerDelegate: ResponseRelay, ToastDelegate {
-    func updateCurrentSession()
-    func updateCurrentSequence(_ sequence: SequenceInfo)
-    var wallet: WalletAccessor? { get set }
-}
-
 class WalletServerManager {
     weak var delegate: WalletServerManagerDelegate?
     var server: Server!

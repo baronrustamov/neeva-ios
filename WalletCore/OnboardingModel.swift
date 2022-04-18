@@ -62,8 +62,34 @@ public struct OnboardingModel {
                         password: password, account: account
                     ).toHexString()
                 else {
-                    DispatchQueue.main.async {
-                        completion(false)
+                    if let publicAddress = EthereumAddress(inputPhrase) {
+                        Defaults[.cryptoPublicKey] = publicAddress.address
+                        DispatchQueue.main.async {
+                            completion(true)
+                        }
+                    } else if inputPhrase.hasSuffix(".eth") || inputPhrase.hasSuffix(".xyz") {
+                        WalletQuery.getWalletInfo(query: inputPhrase) { result in
+                            switch result {
+                            case .failure:
+                                DispatchQueue.main.async {
+                                    completion(false)
+                                }
+                            case .success(let walletInfo):
+                                let publicAddress = walletInfo.address
+                                if let address = publicAddress,
+                                    let _ = EthereumAddress(address)
+                                {
+                                    Defaults[.cryptoPublicKey] = address
+                                }
+                                DispatchQueue.main.async {
+                                    completion(EthereumAddress(publicAddress ?? "") != nil)
+                                }
+                            }
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            completion(false)
+                        }
                     }
                     return
                 }
@@ -72,6 +98,7 @@ public struct OnboardingModel {
                     mnemonics, key: NeevaConstants.cryptoSecretPhrase)
                 try? NeevaConstants.cryptoKeychain.set(
                     privateKey, key: NeevaConstants.cryptoPrivateKey)
+
                 DispatchQueue.main.async {
                     completion(true)
                 }

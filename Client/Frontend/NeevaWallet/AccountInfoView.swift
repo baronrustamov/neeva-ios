@@ -24,10 +24,6 @@ struct AccountInfoView: View {
     @Environment(\.hideOverlay) var hideOverlay
     let model: Web3Model
 
-    var addressText: String {
-        "\(String(Defaults[.cryptoPublicKey].prefix(3)))...\(String(Defaults[.cryptoPublicKey].suffix(3)))"
-    }
-
     var body: some View {
         VStack(spacing: 0) {
             Circle()
@@ -35,8 +31,9 @@ struct AccountInfoView: View {
                 .frame(width: 48, height: 48)
                 .padding(8)
             HStack(spacing: 0) {
-                Text(addressText)
+                Text(model.walletDisplayName)
                     .withFont(.headingXLarge)
+                    .gradientForeground()
                     .lineLimit(1)
                 overflowMenu
             }
@@ -85,6 +82,21 @@ struct AccountInfoView: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 12)
+            if NeevaConstants.cryptoKeychain[string: NeevaConstants.cryptoSecretPhrase] == nil {
+                Button(
+                    action: {
+                        viewState = .importWallet
+                    },
+                    label: {
+                        HStack(spacing: 4) {
+                            Symbol(decorative: .lockShield, style: .bodyMedium)
+                            Text("Import Wallet Credentials")
+                        }
+                    }
+                )
+                .buttonStyle(DashboardButtonStyle())
+                .padding(.bottom, 12)
+            }
         }
         .padding(.top, 24)
         .modifier(WalletListSeparatorModifier())
@@ -114,9 +126,9 @@ struct AccountInfoView: View {
                 .frame(width: 34, height: 34)
                 .padding(4)
             VStack(alignment: .leading, spacing: 0) {
-                Text(addressText)
+                Text(model.walletDisplayName)
                     .withFont(.bodyMedium)
-                    .foregroundColor(.label)
+                    .gradientForeground()
                     .lineLimit(1)
                 if let balance = model.balanceFor(.ether) {
                     Text("\(balance) ETH")
@@ -134,20 +146,24 @@ struct AccountInfoView: View {
             action: { showOverflowSheet = true },
             label: {
                 Symbol(decorative: .chevronDown, style: .headingXLarge)
-                    .foregroundColor(.label)
+                    .foregroundColor(.wallet.gradientEnd)
             }
         ).sheet(
             isPresented: $showOverflowSheet, onDismiss: {},
             content: {
                 VStack {
                     sheetHeader("Wallets")
-                    Button(
-                        action: onExportWallet,
-                        label: {
-                            Text("View Secret Recovery Phrase")
-                                .frame(maxWidth: .infinity)
-                        }
-                    ).buttonStyle(.wallet(.secondary))
+                    if let _ =
+                        NeevaConstants.cryptoKeychain[string: NeevaConstants.cryptoSecretPhrase]
+                    {
+                        Button(
+                            action: onExportWallet,
+                            label: {
+                                Text("View Secret Recovery Phrase")
+                                    .frame(maxWidth: .infinity)
+                            }
+                        ).buttonStyle(.wallet(.secondary))
+                    }
                     Button(
                         action: {
                             showConfirmRemoveWalletAlert = true

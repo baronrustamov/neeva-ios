@@ -12,6 +12,16 @@ import SwiftUI
 import WalletConnectSwift
 import web3swift
 
+public protocol ToastDelegate: AnyObject {
+    func shouldShowToast(for message: LocalizedStringKey)
+}
+
+public protocol WalletServerManagerDelegate: ResponseRelay, ToastDelegate {
+    func updateCurrentSession()
+    func updateCurrentSequence(_ sequence: SequenceInfo)
+    var wallet: WalletAccessor? { get set }
+}
+
 public protocol ResponseRelay {
     var publicAddress: String { get }
     func send(_ response: Response)
@@ -42,14 +52,21 @@ extension Response {
 }
 
 public class PersonalSignHandler: RequestHandler {
-    let relay: ResponseRelay
+    let relay: WalletServerManagerDelegate
 
-    public init(relay: ResponseRelay) {
+    public init(relay: WalletServerManagerDelegate) {
         self.relay = relay
     }
 
     public func canHandle(request: Request) -> Bool {
-        return request.method == "personal_sign"
+        guard request.method == "personal_sign" else { return false }
+
+        if let _ = NeevaConstants.cryptoKeychain[string: NeevaConstants.cryptoSecretPhrase] {
+            return true
+        } else {
+            relay.shouldShowToast(for: "You need to import your wallet credentials")
+            return false
+        }
     }
 
     public func handle(request: Request) {
@@ -79,14 +96,21 @@ public class PersonalSignHandler: RequestHandler {
 }
 
 public class SendTransactionHandler: RequestHandler {
-    let relay: ResponseRelay
+    let relay: WalletServerManagerDelegate
 
-    public init(relay: ResponseRelay) {
+    public init(relay: WalletServerManagerDelegate) {
         self.relay = relay
     }
 
     public func canHandle(request: Request) -> Bool {
-        return request.method == "eth_sendTransaction"
+        guard request.method == "eth_sendTransaction" else { return false }
+
+        if let _ = NeevaConstants.cryptoKeychain[string: NeevaConstants.cryptoSecretPhrase] {
+            return true
+        } else {
+            relay.shouldShowToast(for: "You need to import your wallet credentials")
+            return false
+        }
     }
 
     public func handle(request: Request) {
@@ -116,14 +140,21 @@ public class SendTransactionHandler: RequestHandler {
 }
 
 public class SignTypedDataHandler: RequestHandler {
-    let relay: ResponseRelay
+    let relay: WalletServerManagerDelegate
 
-    public init(relay: ResponseRelay) {
+    public init(relay: WalletServerManagerDelegate) {
         self.relay = relay
     }
 
     public func canHandle(request: Request) -> Bool {
-        return request.method == "eth_signTypedData"
+        guard request.method == "eth_signTypedData" else { return false }
+
+        if let _ = NeevaConstants.cryptoKeychain[string: NeevaConstants.cryptoSecretPhrase] {
+            return true
+        } else {
+            relay.shouldShowToast(for: "You need to import your wallet credentials")
+            return false
+        }
     }
 
     public func handle(request: Request) {

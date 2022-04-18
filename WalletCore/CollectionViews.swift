@@ -215,7 +215,7 @@ public struct CollectionView: View {
                             .foregroundColor(.ui.adaptive.blue)
                             .frame(width: 16, height: 16)
                     }
-                    Text(collection.name)
+                    Text(collection.name ?? "")
                         .withFont(.labelLarge)
                         .foregroundColor(
                             collection.safelistRequestStatus >= .approved

@@ -33,6 +33,13 @@ struct AssetView: View {
     let asset: Asset
     let cardSize: CGFloat = 100
 
+    var contractAddress: String {
+        guard let address = asset.contract?.address else {
+            return ""
+        }
+        return address
+    }
+
     var body: some View {
         VStack {
             titleView
@@ -66,14 +73,14 @@ struct AssetView: View {
     private var neevaButton: some View {
         createCircularButton(
             with:
-                "https://neeva.xyz/search?q=\(asset.contract?.address)&contractAddress=\(asset.contract?.address)&tokenID=\(asset.tokenID)",
+                "https://neeva.xyz/search?q=\(contractAddress)&contractAddress=\(contractAddress)&tokenID=\(asset.tokenID ?? "")",
             assetUrl: SearchEngine.nft.icon)
     }
 
     private var openSeaButton: some View {
         createCircularButton(
-            with: "https://opensea.io/assets/\(asset.contract?.address)/\(asset.tokenID)",
-            assetUrl: URL("https://opensea.io/static/images/favicon/180x180.png"))
+            with: "https://opensea.io/assets/\(contractAddress)/\(asset.tokenID ?? "")",
+            assetUrl: URL(string: "https://opensea.io/static/images/favicon/180x180.png"))
     }
 
     private func createCircularButton(with urlString: String, assetUrl: URL?) -> some View {
@@ -81,6 +88,7 @@ struct AssetView: View {
             guard let url = URL(string: urlString) else {
                 return
             }
+
             DispatchQueue.main.async {
                 web3Model.openURL(url)
             }

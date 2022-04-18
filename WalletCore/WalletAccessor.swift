@@ -18,6 +18,7 @@ public struct WalletAccessor {
     let password: String
     let web3: web3?
     let polygonWeb3: web3?
+    var walletInfo = WalletQuery.WalletInfo(ens: [])
 
     func web3(on chain: EthNode) -> web3? {
         switch chain {
@@ -36,6 +37,7 @@ public struct WalletAccessor {
         self.web3 = try? Web3.new(EthNode.Ethereum.url ?? .aboutBlank)
         self.polygonWeb3 = try? Web3.new(EthNode.Polygon.url ?? .aboutBlank)
         self.password = CryptoConfig.shared.password
+
         let key = NeevaConstants.cryptoKeychain[string: NeevaConstants.cryptoPrivateKey] ?? ""
         let formattedKey = key.trimmingCharacters(in: .whitespacesAndNewlines)
         let dataKey = Data.fromHex(formattedKey)!
@@ -64,8 +66,12 @@ public struct WalletAccessor {
         return EthereumAddress(publicAddress)
     }
 
+    public var addressInKeystore: String {
+        keystore?.addresses?.first?.address ?? ""
+    }
+
     public var publicAddress: String {
-        return keystore?.addresses?.first?.address ?? ""
+        return Defaults[.cryptoPublicKey]
     }
 
     public func sign(on chain: EthNode, message: String) throws -> String {

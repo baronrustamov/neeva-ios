@@ -19,18 +19,22 @@ public class AssetStore: ObservableObject {
     public var collections = Set<Collection>()
     public var availableThemes = Set<Web3Theme>()
 
-    public func refresh() {
+    public func refresh(cursor: String? = nil) {
         guard
             let url = URL(
                 string:
-                    "https://api.opensea.io/api/v1/assets?order_direction=desc&offset=0&owner=\(Defaults[.cryptoPublicKey])"
+                    "https://api.opensea.io/api/v1/assets?order_direction=desc\(cursor == nil ? "" : ("&cursor=" + (cursor?.addingPercentEncoding(withAllowedCharacters: .alphanumerics))!))&limit=50&owner=\(Defaults[.cryptoPublicKey])"
             )
         else {
             return
         }
+        if cursor == nil {
+            assets = []
+        }
         DispatchQueue.main.async {
             self.state = .syncing
         }
+
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         if let apiKey = Bundle.main.object(forInfoDictionaryKey: "OPENSEA_API_KEY") as? String {
@@ -48,7 +52,7 @@ public class AssetStore: ObservableObject {
                 return
             }
             DispatchQueue.main.async {
-                self.assets = result.assets
+                self.assets.append(contentsOf: result.assets)
                 self.assets.forEach({
                     guard let collection = $0.collection else { return }
                     if let theme = Web3Theme.allCases.first(
@@ -59,6 +63,9 @@ public class AssetStore: ObservableObject {
                     self.collections.insert(collection)
                 })
                 self.state = .ready
+                if result.next?.isEmpty == false {
+                    self.refresh(cursor: result.next!)
+                }
             }
         }.resume()
     }
@@ -95,6 +102,8 @@ public class AssetStore: ObservableObject {
 
 public struct AssetsResult: Codable {
     public let assets: [Asset]
+    public let previous: String?
+    public let next: String?
 }
 
 public struct CollectionResult: Codable {
