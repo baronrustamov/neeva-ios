@@ -1138,6 +1138,45 @@ class BrowserViewController: UIViewController, ModalPresenter {
                 }
             }
         }
+
+        // if on neeva search result path and never signed in, user is in preview
+        // mode, and we will show the preview mode sign up prompt
+        // we will show the promp for both incognito and normal mode
+        if let url = webView.url, url.origin == NeevaConstants.appURL.origin {
+            if !Defaults[.signedInOnce] && NeevaConstants.currentTarget == .client {
+                if let query = SearchEngine.current.queryForSearchURL(url),
+                    Defaults[.previewModeQueries].count == Defaults[.maxQueryLimit]
+                        || Defaults[.previewModeQueries].count % Defaults[.signupPromptInterval]
+                            == 0
+                {
+                    self.showModal(
+                        style: OverlayStyle(
+                            showTitle: false,
+                            backgroundColor: .systemBackground,
+                            nonDismissible: true
+                        )
+                    ) {
+                        SignUpTwoButtonsPromptViewOverlayContent(
+                            query: query,
+                            skippable: Defaults[.previewModeQueries].count
+                                != Defaults[.maxQueryLimit],
+                            openOtherSignUpOption: { marketingEmailOptOut in
+                                self.presentIntroViewController(
+                                    true, onOtherOptionsPage: true,
+                                    marketingEmailOptOut: marketingEmailOptOut)
+                            },
+                            openSignIn: {
+                                self.presentIntroViewController(true, signInMode: true)
+                            }
+                        )
+                        .padding(.top, 4)
+                        .environment(\.openInNewTab) { url, _ in
+                            self.openURLInNewTab(url)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     func showTabTray() {
