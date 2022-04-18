@@ -41,6 +41,7 @@ class GridModel: ObservableObject {
     }
     @Published var needsScrollToSelectedTab: Int = 0
     var scrollToCompletion: (() -> Void)?
+    var canResizeGrid = true
 
     // Spaces
     @Published var isLoading = false

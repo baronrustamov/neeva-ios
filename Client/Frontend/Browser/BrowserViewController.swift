@@ -340,6 +340,8 @@ class BrowserViewController: UIViewController, ModalPresenter {
             self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil
         }
+
+        gridModel.canResizeGrid = false
     }
 
     @objc func tappedTopArea() {
@@ -363,6 +365,8 @@ class BrowserViewController: UIViewController, ModalPresenter {
         webViewContainerBackdrop.alpha = 1
         presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
         presentedViewController?.view.alpha = 0
+
+        gridModel.canResizeGrid = false
     }
 
     @objc func appDidBecomeActiveNotification() {
@@ -403,6 +407,8 @@ class BrowserViewController: UIViewController, ModalPresenter {
                 self.web3Model.initializeWallet()
             }
         #endif
+
+        gridModel.canResizeGrid = true
     }
 
     override func viewDidLoad() {
