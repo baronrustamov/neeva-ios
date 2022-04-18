@@ -28,7 +28,7 @@ public enum FeatureFlag: String, CaseIterable, RawRepresentable {
     case customSearchEngine = "Custom Search Engine"
     case swipeToCloseTabs = "Swipe to close tabs"
     case cookieCutter = "Cookie Cutter"
-    case gasFee = "Show Gas Fee UI"
+    case newWeb3Features = "New Web3 Features"
     case lowMemoryZombieTabs = "Low Memory Zombie Tabs"
 
     public init?(caseName: String) {

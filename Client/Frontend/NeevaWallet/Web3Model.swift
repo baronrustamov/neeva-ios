@@ -160,7 +160,7 @@ class Web3Model: ObservableObject {
         ]
 
         func balanceFor(_ token: TokenType) -> String? {
-            balances[token]!
+            return balances[token] ?? "0"
         }
 
         init(presenter: WalletConnectPresenter, tabManager: TabManager) {
@@ -230,7 +230,11 @@ class Web3Model: ObservableObject {
                     self.updateBalances()
 
                 }
-                AssetStore.shared.refresh()
+                AssetStore.shared.refresh(onCompletion: {
+                    if FeatureFlag[.newWeb3Features] {
+                        AssetStore.shared.fetchCollections()
+                    }
+                })
                 if !Defaults[.walletOnboardingDone] {
                     DispatchQueue.main.async {
                         self.showWalletPanelHalfScreen()

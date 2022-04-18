@@ -82,7 +82,7 @@ extension Web3Theme {
 
     @ViewBuilder
     public func walletButton(with tintColor: Color) -> some View {
-        if Web3Theme.showGasFeeInToolbar, FeatureFlag[.gasFee] {
+        if Web3Theme.showGasFeeInToolbar, FeatureFlag[.newWeb3Features] {
             VStack(alignment: .center, spacing: 0) {
                 walletButtonContent
                 gasIcon(with: tintColor)

@@ -206,7 +206,10 @@ struct AccountInfoView: View {
                         AssetStore.shared.assets.removeAll()
                         AssetStore.shared.availableThemes.removeAll()
                         AssetStore.shared.collections.removeAll()
-
+                        model.walletInfo = WalletQuery.WalletInfo(ens: [])
+                        model.balances.keys.forEach({
+                            model.balances[$0] = nil
+                        })
                     }),
                 .cancel(),
             ])

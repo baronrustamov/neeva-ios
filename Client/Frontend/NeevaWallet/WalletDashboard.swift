@@ -15,7 +15,7 @@ struct WalletDashboard: View {
         NavigationView {
             List {
                 AccountInfoView(viewState: $viewState, model: model)
-                if FeatureFlag[.gasFee] {
+                if FeatureFlag[.newWeb3Features] {
                     GasFeeView(gasFeeModel: model.gasFeeModel)
                 }
                 BalancesView(model: model)

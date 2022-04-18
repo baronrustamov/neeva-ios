@@ -161,6 +161,11 @@
 		3BF4B8E91D38497A00493393 /* BaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF4B8E81D38497A00493393 /* BaseTestCase.swift */; };
 		3BFCBF201E04B1C50070C042 /* UIImageViewExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFCBF1F1E04B1C50070C042 /* UIImageViewExtensionsTests.swift */; };
 		3FCCFF9827E943390058A055 /* Web3Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCCFF9727E943390058A055 /* Web3Theme.swift */; };
+		3FC15D6A27E915BA005F71CE /* Web3NetworkProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC15D6927E915BA005F71CE /* Web3NetworkProvider.swift */; };
+		3FC15D6C27E91A0E005F71CE /* URLRequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC15D6B27E91A0E005F71CE /* URLRequestBuilder.swift */; };
+		3FC15D6F27E91A31005F71CE /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC15D6E27E91A31005F71CE /* NetworkError.swift */; };
+		3FC15D7227E91A8D005F71CE /* OpenSeaAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC15D7127E91A8D005F71CE /* OpenSeaAPI.swift */; };
+		3FC15D7427E922C3005F71CE /* CurrencyStoreAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC15D7327E922C3005F71CE /* CurrencyStoreAPI.swift */; };
 		3FE1BC2327D91DC9004122F8 /* SpaceTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE1BC2227D91DC9004122F8 /* SpaceTopView.swift */; };
 		3FE1BC2527DB922D004122F8 /* ScapeImageEntityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE1BC2427DB922D004122F8 /* ScapeImageEntityView.swift */; };
 		3FE1BC2727DBB43E004122F8 /* SpaceListContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE1BC2627DBB43E004122F8 /* SpaceListContentView.swift */; };
@@ -1972,6 +1977,11 @@
 		3DEFED071F55EBE300F8620C /* TrackingProtectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionTests.swift; sourceTree = "<group>"; };
 		3FC15D7527E924A8005F71CE /* Web3Toolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Web3Toolbar.swift; sourceTree = "<group>"; };
 		3FCCFF9727E943390058A055 /* Web3Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Web3Theme.swift; sourceTree = "<group>"; };
+		3FC15D6927E915BA005F71CE /* Web3NetworkProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Web3NetworkProvider.swift; sourceTree = "<group>"; };
+		3FC15D6B27E91A0E005F71CE /* URLRequestBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequestBuilder.swift; sourceTree = "<group>"; };
+		3FC15D6E27E91A31005F71CE /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
+		3FC15D7127E91A8D005F71CE /* OpenSeaAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSeaAPI.swift; sourceTree = "<group>"; };
+		3FC15D7327E922C3005F71CE /* CurrencyStoreAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyStoreAPI.swift; sourceTree = "<group>"; };
 		3FE1BC2227D91DC9004122F8 /* SpaceTopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceTopView.swift; sourceTree = "<group>"; };
 		3FE1BC2427DB922D004122F8 /* ScapeImageEntityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScapeImageEntityView.swift; sourceTree = "<group>"; };
 		3FE1BC2627DBB43E004122F8 /* SpaceListContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceListContentView.swift; sourceTree = "<group>"; };
@@ -3419,6 +3429,26 @@
 			path = XCUITests;
 			sourceTree = "<group>";
 		};
+		3FC15D6D27E91A1A005F71CE /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				3FC15D7027E91A7E005F71CE /* APIs */,
+				3FC15D6927E915BA005F71CE /* Web3NetworkProvider.swift */,
+				3FC15D6B27E91A0E005F71CE /* URLRequestBuilder.swift */,
+				3FC15D6E27E91A31005F71CE /* NetworkError.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		3FC15D7027E91A7E005F71CE /* APIs */ = {
+			isa = PBXGroup;
+			children = (
+				3FC15D7127E91A8D005F71CE /* OpenSeaAPI.swift */,
+				3FC15D7327E922C3005F71CE /* CurrencyStoreAPI.swift */,
+			);
+			path = APIs;
+			sourceTree = "<group>";
+		};
 		4A1D054E26696B6D00D63333 /* Card */ = {
 			isa = PBXGroup;
 			children = (
@@ -3465,6 +3495,7 @@
 		4A8CE5BC27CCA07700735C75 /* WalletCore */ = {
 			isa = PBXGroup;
 			children = (
+				3FC15D6D27E91A1A005F71CE /* Network */,
 				4A93B553277F8AA100CD5415 /* Asset.swift */,
 				4A93B555277F8AE200CD5415 /* AssetStore.swift */,
 				4A93B551277F80C700CD5415 /* Collection.swift */,
@@ -6965,12 +6996,16 @@
 				4A8CE5F727CD41C000735C75 /* CryptoConfig.swift in Sources */,
 				4A8CE5F827CD41C000735C75 /* CurrencyStore.swift in Sources */,
 				E67B0B312807221D008D1CCD /* GasFeeModel.swift in Sources */,
+				3FC15D7427E922C3005F71CE /* CurrencyStoreAPI.swift in Sources */,
 				4A447A6E27CDC2A200B141F6 /* EIP712.swift in Sources */,
 				4A8CE5F927CD41C000735C75 /* ImportWalletView.swift in Sources */,
+				3FC15D6A27E915BA005F71CE /* Web3NetworkProvider.swift in Sources */,
 				4A8CE5FA27CD41C000735C75 /* ScannerView.swift in Sources */,
 				4AB8160B27EADCEF0017203D /* XYZIntroView.swift in Sources */,
 				4A8CE5FB27CD41C000735C75 /* SendForm.swift in Sources */,
 				4A8CE5FD27CD41C000735C75 /* ShowPhrasesView.swift in Sources */,
+				3FC15D6F27E91A31005F71CE /* NetworkError.swift in Sources */,
+				3FC15D7227E91A8D005F71CE /* OpenSeaAPI.swift in Sources */,
 				4A8CE5FE27CD41C000735C75 /* TransactionFee.swift in Sources */,
 				4A8CE60027CD41C000735C75 /* WalletAccessor.swift in Sources */,
 				4AD1C68C280A13480004955F /* CryptoWalletQuery.swift in Sources */,
@@ -6985,6 +7020,7 @@
 				4A8CE5E927CCA22100735C75 /* CommunitySubmissionRequest.swift in Sources */,
 				4A8CE60F27CD8ACC00735C75 /* WelcomeStarterView.swift in Sources */,
 				4A8CE5F427CD3F2D00735C75 /* TransactionViews.swift in Sources */,
+				3FC15D6C27E91A0E005F71CE /* URLRequestBuilder.swift in Sources */,
 				4A8CE5E427CCA1DD00735C75 /* Collection.swift in Sources */,
 				4A8CE61127CD8B0F00735C75 /* Confetti.swift in Sources */,
 				4A8CE5E327CCA1DD00735C75 /* Asset.swift in Sources */,

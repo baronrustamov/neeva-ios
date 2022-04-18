@@ -77,26 +77,19 @@ struct TickerResponse: Codable {
 
 public struct CurrencyStore {
     public static let shared = CurrencyStore()
+
     public func refresh() {
-        guard
-            let url = URL(
-                string:
-                    "https://api.coingecko.com/api/v3/simple/price?ids=ethereum%2Cmatic-network%2Cusd-coin%2Ctether%2Cshiba-inu&vs_currencies=usd&include_24hr_change=true&include_last_updated_at=true"
-            )
-        else { return }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard error == nil, let data = data else { return }
-
-            guard let result = try? JSONDecoder().decode(TickerResponse.self, from: data) else {
-                return
-            }
-            Defaults[.tickerResponse] = try! JSONEncoder().encode(result)
-        }.resume()
+        Web3NetworkProvider.default.request(
+            target: CurrencyStoreAPI.currencies,
+            model: TickerResponse.self,
+            completion: { response in
+                switch response {
+                case .success(let result):
+                    Defaults[.tickerResponse] = try! JSONEncoder().encode(result)
+                case .failure(let error):
+                    print(error)
+                }
+            })
     }
 
 }
