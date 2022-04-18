@@ -951,7 +951,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
     fileprivate func popToBVC() {
         if browserModel.showGrid {
             // Hides CardGrid
-            browserModel.hideWithNoAnimation()
+            browserModel.hideGridWithNoAnimation()
 
             // Closes any Space that may be open
             gridModel.spaceCardModel.detailedSpace = nil
@@ -1141,9 +1141,9 @@ class BrowserViewController: UIViewController, ModalPresenter {
         updateFindInPageVisibility(visible: false)
 
         if zeroQueryModel.isLazyTab {
-            browserModel.showWithNoAnimation()
+            browserModel.showGridWithNoAnimation()
         } else {
-            browserModel.show()
+            browserModel.showGridWithAnimation()
         }
 
         if let tab = tabManager.selectedTab {
@@ -1153,9 +1153,9 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
     func hideCardGrid(withAnimation: Bool) {
         if withAnimation {
-            browserModel.hideWithAnimation()
+            browserModel.hideGridWithAnimation()
         } else {
-            browserModel.hideWithNoAnimation()
+            browserModel.hideGridWithNoAnimation()
         }
     }
 

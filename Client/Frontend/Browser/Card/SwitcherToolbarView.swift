@@ -123,7 +123,7 @@ struct SwitcherToolbarView: View {
                     switch gridModel.switcherState {
                     case .tabs:
                         toolbarModel.openLazyTab()
-                        browserModel.hideWithNoAnimation()
+                        browserModel.hideGridWithNoAnimation()
                     case .spaces:
                         toolbarModel.createNewSpace()
                     }
@@ -145,9 +145,9 @@ struct SwitcherToolbarView: View {
                 SecondaryMenuButton(action: {
                     switch gridModel.switcherState {
                     case .tabs:
-                        browserModel.hideWithAnimation()
+                        browserModel.hideGridWithAnimation()
                     case .spaces:
-                        browserModel.hideWithNoAnimation()
+                        browserModel.hideGridWithNoAnimation()
                     }
                 }) { button in
                     let font = UIFont.systemFont(ofSize: 16, weight: .semibold)

@@ -31,7 +31,7 @@ struct CardGridBackground: View {
     var body: some View {
         color
             .accessibilityAction(.escape) {
-                browserModel.hideWithAnimation()
+                browserModel.hideGridWithAnimation()
             }
             .onAnimationCompleted(
                 for: browserModel.showGrid,

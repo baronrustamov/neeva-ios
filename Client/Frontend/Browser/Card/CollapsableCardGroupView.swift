@@ -69,7 +69,7 @@ struct CollapsedCardGroupView: View {
                                         TabGroupRowIndex: rowIndex, selectedChildTabIndex: index,
                                         expanded: false, numTabs: groupDetails.allDetails.count))
 
-                                browserModel.hideWithAnimation()
+                                browserModel.hideGridWithAnimation()
                             }
                     }
                 }
@@ -136,7 +136,7 @@ struct ExpandedCardGroupRowView: View {
                                 attributes: getLogCounterAttributesForTabGroups(
                                     TabGroupRowIndex: rowIndex, selectedChildTabIndex: index + 1,
                                     expanded: true, numTabs: groupDetails.allDetails.count))
-                            browserModel.hideWithAnimation()
+                            browserModel.hideGridWithAnimation()
                         }
                 }
                 if isLastRowSingleTab(range, groupDetails) {

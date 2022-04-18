@@ -137,7 +137,7 @@ struct SpaceTopView: View {
                                 .environmentObject(spacesModel)
                                 .environmentObject(tabModel)
                                 .environment(\.onOpenURL) { url in
-                                    browserModel.hideWithNoAnimation()
+                                    browserModel.hideGridWithNoAnimation()
                                     spacesModel.detailedSpace = nil
                                     onOpenURL(url)
                                 }

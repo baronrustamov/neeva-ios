@@ -126,7 +126,7 @@ struct SpaceDetailList: View {
                             onSelected: {
                                 guard let url = details.data.url else { return }
                                 gridModel.closeDetailView()
-                                browserModel.hideWithNoAnimation()
+                                browserModel.hideGridWithNoAnimation()
 
                                 let bvc = SceneDelegate.getBVC(with: tabModel.manager.scene)
                                 if let navPath = NavigationPath.navigationPath(
@@ -314,7 +314,7 @@ struct ListStyleModifier: ViewModifier {
                     \.openURL,
                     OpenURLAction(handler: {
                         openURLForSpace($0, spaceModel.detailedSpace!.id)
-                        browserModel.hideWithNoAnimation()
+                        browserModel.hideGridWithNoAnimation()
 
                         return .handled
                     })

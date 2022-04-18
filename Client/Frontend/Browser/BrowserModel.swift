@@ -34,12 +34,12 @@ class BrowserModel: ObservableObject {
     var toastViewManager: ToastViewManager
     var notificationViewManager: NotificationViewManager
 
-    func show() {
+    func showGridWithAnimation() {
         if gridModel.switcherState != .tabs {
             gridModel.switcherState = .tabs
         }
         if gridModel.tabCardModel.allDetails.isEmpty {
-            showWithNoAnimation()
+            showGridWithNoAnimation()
         } else {
             if FeatureFlag[.enableTimeBasedSwitcher] {
                 gridModel.tabCardModel.contentVisibilityPublisher.send()
@@ -52,7 +52,7 @@ class BrowserModel: ObservableObject {
         }
     }
 
-    func showWithNoAnimation() {
+    func showGridWithNoAnimation() {
         if FeatureFlag[.enableTimeBasedSwitcher] {
             gridModel.tabCardModel.contentVisibilityPublisher.send()
         }
@@ -76,7 +76,7 @@ class BrowserModel: ObservableObject {
         }
     }
 
-    func hideWithAnimation() {
+    func hideGridWithAnimation() {
         assert(!gridModel.tabCardModel.allDetails.isEmpty)
         gridModel.scrollToSelectedTab { [self] in
             cardTransitionModel.update(to: .visibleForTrayHidden)
@@ -84,7 +84,7 @@ class BrowserModel: ObservableObject {
         }
     }
 
-    func hideWithNoAnimation() {
+    func hideGridWithNoAnimation() {
         gridModel.scrollToSelectedTab()
         cardTransitionModel.update(to: .hidden)
 
@@ -102,7 +102,7 @@ class BrowserModel: ObservableObject {
         if showGrid {
             cardTransitionModel.update(to: .hidden)
         } else {
-            hideWithNoAnimation()
+            hideGridWithNoAnimation()
         }
     }
 

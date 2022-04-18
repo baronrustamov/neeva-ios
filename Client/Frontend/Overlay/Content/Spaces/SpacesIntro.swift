@@ -203,7 +203,7 @@ struct EmptySpaceView: View {
             Button(
                 action: {
                     spacesModel.detailedSpace = nil
-                    browserModel.hideWithNoAnimation()
+                    browserModel.hideGridWithNoAnimation()
                     onOpenURL(learnMoreURL)
                 },
                 label: {
