@@ -50,12 +50,11 @@ class TabCardModel: CardModel {
     private(set) var allTabGroupDetails: [TabGroupCardDetails] = []
 
     @Default(.tabGroupExpanded) private var tabGroupExpanded: Set<String>
-    var contentVisibilityPublisher = PassthroughSubject<Void, Never>()
     var needsUpdateRows: Bool = false
     static let todayRowHeaderID: String = "today-header"
     static let lastweekRowHeaderID: String = "lastWeek-header"
 
-    func updateRows() {
+    private func updateRows() {
         if FeatureFlag[.enableTimeBasedSwitcher] {
             timeBasedIncognitoRows[.today] = buildRows(incognito: true, byTime: .today)
             timeBasedNormalRows[.today] = buildRows(incognito: false, byTime: .today)
@@ -71,6 +70,13 @@ class TabCardModel: CardModel {
         // Defer signaling until after we have finished updating. This way our state is
         // completely consistent with TabManager prior to accessing allDetails, etc.
         self.objectWillChange.send()
+    }
+
+    func updateRowsIfNeeded() {
+        if needsUpdateRows {
+            needsUpdateRows = false
+            updateRows()
+        }
     }
 
     func getRows(incognito: Bool) -> [Row] {
@@ -119,16 +125,6 @@ class TabCardModel: CardModel {
                     return
                 }
                 self.needsUpdateRows = true
-            }.store(in: &subscription)
-
-            contentVisibilityPublisher.sink { [weak self] _ in
-                guard let self = self else {
-                    return
-                }
-                if self.needsUpdateRows {
-                    self.updateRows()
-                    self.needsUpdateRows = false
-                }
             }.store(in: &subscription)
         }
 
@@ -199,7 +195,7 @@ class TabCardModel: CardModel {
         var multipleCellTypes: Bool = false
     }
 
-    func filterTabByTime(tab: Tab, byTime: TimeFilter) -> Bool {
+    private func filterTabByTime(tab: Tab, byTime: TimeFilter) -> Bool {
         // The fallback value won't be used. tab.lastExecutedTime is
         // guaranteed to be non-nil in configureTab()
         let lastExecutedTime = tab.lastExecutedTime ?? Date.nowMilliseconds()
@@ -225,7 +221,7 @@ class TabCardModel: CardModel {
         }
     }
 
-    func buildRows(incognito: Bool, byTime: TimeFilter? = nil) -> [Row] {
+    private func buildRows(incognito: Bool, byTime: TimeFilter? = nil) -> [Row] {
         var rows: [Row] = []
 
         var allDetailsFiltered = allDetails.filter { tabCard in
@@ -432,7 +428,7 @@ class TabCardModel: CardModel {
         }
     }
 
-    func getAllDetails(matchingIncognitoState: Bool?) -> [TabCardDetails] {
+    private func getAllDetails(matchingIncognitoState: Bool?) -> [TabCardDetails] {
         if let matchingIncognitoState = matchingIncognitoState {
             return matchingIncognitoState ? incognitoDetails : normalDetails
         } else {
@@ -443,6 +439,10 @@ class TabCardModel: CardModel {
     func rearrangeAllDetails(fromIndex: Int, toIndex: Int) {
         allDetails.rearrange(from: fromIndex, to: toIndex)
         updateRows()
+    }
+
+    func buildRowsForTesting() -> [Row] {
+        buildRows(incognito: false)
     }
 }
 

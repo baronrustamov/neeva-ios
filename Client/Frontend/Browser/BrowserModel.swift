@@ -42,7 +42,7 @@ class BrowserModel: ObservableObject {
             showGridWithNoAnimation()
         } else {
             if FeatureFlag[.enableTimeBasedSwitcher] {
-                gridModel.tabCardModel.contentVisibilityPublisher.send()
+                gridModel.tabCardModel.updateRowsIfNeeded()
             }
             gridModel.scrollToSelectedTab { [self] in
                 cardTransitionModel.update(to: .visibleForTrayShow)
@@ -54,7 +54,7 @@ class BrowserModel: ObservableObject {
 
     func showGridWithNoAnimation() {
         if FeatureFlag[.enableTimeBasedSwitcher] {
-            gridModel.tabCardModel.contentVisibilityPublisher.send()
+            gridModel.tabCardModel.updateRowsIfNeeded()
         }
         gridModel.scrollToSelectedTab()
         cardTransitionModel.update(to: .hidden)
