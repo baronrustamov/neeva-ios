@@ -86,10 +86,7 @@ struct TabGridContainer: View {
                 withAnimation(nil) {
                     scrollProxy.scrollTo(selectedRowId)
                 }
-            }
-            if let completion = gridModel.scrollToCompletion {
-                gridModel.scrollToCompletion = nil
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: completion)
+                DispatchQueue.main.async { gridModel.didVerticalScroll += 1 }
             }
         }
         .animation(nil)

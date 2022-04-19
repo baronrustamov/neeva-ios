@@ -38,12 +38,7 @@ struct CardGridBackground: View {
                 completion: browserModel.onCompletedCardTransition
             )
             .useEffect(deps: cardTransitionModel.state) { state in
-                // Ensure that the `Card` for the selected tab is visible. This way its
-                // `CardTransitionModifier` will be visible and run the animation.
                 if state != .hidden {
-                    // Allow some time for the `Card` to get created if it was previously
-                    // not visible. Compute `showGrid` before the the delay since the
-                    // card transition animation could complete before the callback runs.
                     let showGrid = (state == .visibleForTrayShow)
                     if browserModel.showGrid != showGrid {
                         withAnimation(CardTransitionUX.animation) {

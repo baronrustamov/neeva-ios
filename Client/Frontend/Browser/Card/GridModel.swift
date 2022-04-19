@@ -41,6 +41,9 @@ class GridModel: ObservableObject {
     }
     @Published var needsScrollToSelectedTab: Int = 0
     var scrollToCompletion: (() -> Void)?
+    @Published var didVerticalScroll: Int = 0
+    @Published var didHorizontalScroll: Int = 0
+
     var canResizeGrid = true
 
     // Spaces
@@ -65,6 +68,10 @@ class GridModel: ObservableObject {
         return tabManager.normalTabs.isEmpty
     }
 
+    // Ensure that the selected Card is visible by scrolling it into view
+    // synchronously, which causes the selected Card to be generated if
+    // needed. Runs `completion` once the selected Card is guaranteed to
+    // be visible and responsive to other state changes.
     func scrollToSelectedTab(completion: (() -> Void)? = nil) {
         scrollToCompletion = completion
         needsScrollToSelectedTab += 1
