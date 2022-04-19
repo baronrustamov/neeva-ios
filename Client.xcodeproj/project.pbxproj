@@ -959,6 +959,12 @@
 		85EFC04527C51EEC009460DE /* SwiftKeychainWrapper.xcframework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 85EFC02B27C5172A009460DE /* SwiftKeychainWrapper.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8A2401CB26BB4D75006ABF7D /* RatingsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2401CA26BB4D75006ABF7D /* RatingsCard.swift */; };
 		8A422E9B26E19783005CC814 /* AddOrUpdateSpaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A422E9A26E19783005CC814 /* AddOrUpdateSpaceView.swift */; };
+		8A72F7A7280F331700CC0FDB /* ArchivedTabsPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A72F7A6280F331700CC0FDB /* ArchivedTabsPanelView.swift */; };
+		8A72F7A8280F331700CC0FDB /* ArchivedTabsPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A72F7A6280F331700CC0FDB /* ArchivedTabsPanelView.swift */; };
+		8A72F7AA280F336400CC0FDB /* ArchivedTabsPanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A72F7A9280F336400CC0FDB /* ArchivedTabsPanelViewController.swift */; };
+		8A72F7AB280F336400CC0FDB /* ArchivedTabsPanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A72F7A9280F336400CC0FDB /* ArchivedTabsPanelViewController.swift */; };
+		8A72F7AD280F33F100CC0FDB /* ArchivedTabsPanelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A72F7AC280F33F100CC0FDB /* ArchivedTabsPanelModel.swift */; };
+		8A72F7AE280F33F100CC0FDB /* ArchivedTabsPanelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A72F7AC280F33F100CC0FDB /* ArchivedTabsPanelModel.swift */; };
 		8A78AA2527ED33C4002E7A86 /* TabGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A78AA2427ED33C4002E7A86 /* TabGroup.swift */; };
 		8AA6A4BE2808EC8C00AA4E76 /* ArchivedTabSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA6A4BD2808EC8C00AA4E76 /* ArchivedTabSettings.swift */; };
 		8AA97E4026AF36F300ACCCCF /* ZeroQueryCommonContextMenuActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA97E3F26AF36F300ACCCCF /* ZeroQueryCommonContextMenuActions.swift */; };
@@ -2379,6 +2385,9 @@
 		85EFC03627C51840009460DE /* SDWebImage.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SDWebImage.xcframework; path = Carthage/Build/SDWebImage.xcframework; sourceTree = "<group>"; };
 		8A2401CA26BB4D75006ABF7D /* RatingsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingsCard.swift; sourceTree = "<group>"; };
 		8A422E9A26E19783005CC814 /* AddOrUpdateSpaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddOrUpdateSpaceView.swift; sourceTree = "<group>"; };
+		8A72F7A6280F331700CC0FDB /* ArchivedTabsPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedTabsPanelView.swift; sourceTree = "<group>"; };
+		8A72F7A9280F336400CC0FDB /* ArchivedTabsPanelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedTabsPanelViewController.swift; sourceTree = "<group>"; };
+		8A72F7AC280F33F100CC0FDB /* ArchivedTabsPanelModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedTabsPanelModel.swift; sourceTree = "<group>"; };
 		8A78AA2427ED33C4002E7A86 /* TabGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroup.swift; sourceTree = "<group>"; };
 		8AA6A4BD2808EC8C00AA4E76 /* ArchivedTabSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedTabSettings.swift; sourceTree = "<group>"; };
 		8AA97E3F26AF36F300ACCCCF /* ZeroQueryCommonContextMenuActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroQueryCommonContextMenuActions.swift; sourceTree = "<group>"; };
@@ -3663,6 +3672,13 @@
 				4A9FCD4526F1074600725E17 /* SocialShare.swift */,
 				4AD771B727387B1F00B6769D /* SpaceGeneratorView.swift */,
 				4AD771AF27322BCF00B6769D /* SpaceHeaderView.swift */,
+				4ADF3F3C2692A73300CB1B98 /* SwitcherToolbarView.swift */,
+				8AAB76FB2720B88A0015B2C1 /* TabGroupContextMenu.swift */,
+				C8CD99E127B2CEAF009BD3DB /* CardTransitionModel.swift */,
+				8AC7A592280D2B5F00176E7E /* ArchivedTabsView.swift */,
+				8A72F7A6280F331700CC0FDB /* ArchivedTabsPanelView.swift */,
+				8A72F7A9280F336400CC0FDB /* ArchivedTabsPanelViewController.swift */,
+				8A72F7AC280F33F100CC0FDB /* ArchivedTabsPanelModel.swift */,
 			);
 			path = Card;
 			sourceTree = "<group>";
@@ -7211,9 +7227,11 @@
 				4A42C53827E58487003B9826 /* AppHostSetting.swift in Sources */,
 				4A42C53927E58487003B9826 /* SwiftUIHelpers.swift in Sources */,
 				4A42C53A27E58487003B9826 /* SystemsHelper.swift in Sources */,
+				8A72F7AB280F336400CC0FDB /* ArchivedTabsPanelViewController.swift in Sources */,
 				4A42C53B27E58487003B9826 /* UIImageViewExtensions.swift in Sources */,
 				4A42C53C27E58487003B9826 /* TabManager.swift in Sources */,
 				4A42C53D27E58487003B9826 /* DismissBackgroundView.swift in Sources */,
+				8A72F7A8280F331700CC0FDB /* ArchivedTabsPanelView.swift in Sources */,
 				4A42C53E27E58487003B9826 /* PressReportingButtonStyle.swift in Sources */,
 				E63B18E627FB69DF001BA0B0 /* WalletServerManager.swift in Sources */,
 				4A42C53F27E58487003B9826 /* FindInPageView.swift in Sources */,
@@ -7271,6 +7289,7 @@
 				4A42C57027E58487003B9826 /* OverlayView.swift in Sources */,
 				4A42C57127E58487003B9826 /* NotificationPermissionHelper.swift in Sources */,
 				4A42C57227E58487003B9826 /* LocationViewTouchHandler.swift in Sources */,
+				8A72F7AE280F33F100CC0FDB /* ArchivedTabsPanelModel.swift in Sources */,
 				4A42C57327E58487003B9826 /* GridModel.swift in Sources */,
 				20318F2628237A43003B03C1 /* DebounceObject.swift in Sources */,
 				4A42C57427E58487003B9826 /* FindInPageModel.swift in Sources */,
@@ -7492,6 +7511,7 @@
 				66A187C527A1C4DC006B3295 /* GroupedButtonView.swift in Sources */,
 				66E34CDA2710E83600F30A3D /* LocalNotificiations.swift in Sources */,
 				662D8CD626939C3F0000364A /* SceneDelegate.swift in Sources */,
+				8A72F7A7280F331700CC0FDB /* ArchivedTabsPanelView.swift in Sources */,
 				C94D40652683B48A003A6766 /* LocationTextFieldIcon.swift in Sources */,
 				6650585C26E68D0900C9CD51 /* BaseNotification.swift in Sources */,
 				4AB50DA726FA8CC300B75AFA /* ShareAddedSpaceView.swift in Sources */,
@@ -7561,6 +7581,7 @@
 				4A3D299126850CB60082F293 /* CardGrid.swift in Sources */,
 				EBFDB790211C83A5005CCA2F /* BrowserViewController+FindInPage.swift in Sources */,
 				677DFDB82838C0EF00E879D3 /* DefaultBrowserInterstitialWelcomeView.swift in Sources */,
+				8A72F7AD280F33F100CC0FDB /* ArchivedTabsPanelModel.swift in Sources */,
 				BC86023B26E9B7F300D1C188 /* ProductClusterView.swift in Sources */,
 				BC15D22B26FA575A00FDF6A7 /* AuthButton.swift in Sources */,
 				20F2889227FD1BA9005A8A79 /* HistoryPanelModel.swift in Sources */,
@@ -7829,6 +7850,7 @@
 				C94D4099268BAADC003A6766 /* SecondaryMenuButton.swift in Sources */,
 				D3A9949C1A3686BD008AD1AC /* BrowserViewController.swift in Sources */,
 				59A681BDFC95A19F05E07223 /* SuggestionsContent.swift in Sources */,
+				8A72F7AA280F336400CC0FDB /* ArchivedTabsPanelViewController.swift in Sources */,
 				6679BBBA276AAFD700290041 /* SpacesFilterView.swift in Sources */,
 				32FAB3DF27B62A5F00FEBDFE /* NeevaScopeLoadingKeyFrameView.swift in Sources */,
 				C9BED4C12667FA91001D9C77 /* SuggestedSearchViews.swift in Sources */,

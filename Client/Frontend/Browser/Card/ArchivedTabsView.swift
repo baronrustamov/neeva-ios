@@ -8,6 +8,7 @@ import SwiftUI
 
 struct ArchivedTabsView: View {
     var containerGeometry: CGSize
+    @EnvironmentObject var tabModel: TabCardModel
     @Environment(\.openSettings) private var openSettings
 
     @Default(.archivedTabsDuration) var archivedTabsDuration
@@ -23,6 +24,10 @@ struct ArchivedTabsView: View {
         }
     }
 
+    var bvc: BrowserViewController {
+        SceneDelegate.getBVC(with: tabModel.manager.scene)
+    }
+
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
             Color.secondarySystemFill
@@ -30,7 +35,9 @@ struct ArchivedTabsView: View {
                 .padding(.horizontal, -CardGridUX.GridSpacing)
 
             Button(
-                action: {},
+                action: {
+                    bvc.present(ArchivedTabsPanelViewController(bvc: bvc), animated: true)
+                },
                 label: {
                     HStack {
                         Spacer()
