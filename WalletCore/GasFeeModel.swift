@@ -46,7 +46,7 @@ public class GasFeeModel: ObservableObject {
     }
 
     public func configureTimer(with wallet: WalletAccessor?, chain: EthNode = EthNode.Ethereum) {
-        timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { [weak self] _ in
+        timer = Timer.scheduledTimer(withTimeInterval: 200, repeats: true) { [weak self] _ in
             guard let self = self, let wallet = wallet else { return }
             wallet.gasPrice(
                 on: chain,
