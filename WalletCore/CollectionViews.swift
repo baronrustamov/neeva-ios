@@ -174,10 +174,17 @@ struct CollectionStatsView: View {
 }
 
 public struct CollectionView: View {
-    let collection: Collection
+    @ObservedObject var assetStore: AssetStore = AssetStore.shared
+    private let collectionRef: Collection
+    private let collectionSlug: String
+
+    private var collection: Collection {
+        assetStore.collections.first(where: { $0.openSeaSlug == collectionSlug }) ?? collectionRef
+    }
 
     public init(collection: Collection) {
-        self.collection = collection
+        self.collectionRef = collection
+        self.collectionSlug = collection.openSeaSlug
     }
 
     public var body: some View {
@@ -190,6 +197,7 @@ public struct CollectionView: View {
                     .resizable()
                     .scaledToFill()
                     .frame(maxHeight: 128)
+                    .clipped()
                 Image("opensea-badge")
                     .resizable()
                     .scaledToFit()

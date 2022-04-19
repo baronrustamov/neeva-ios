@@ -13,7 +13,7 @@ struct Web3Toolbar: View {
     private let onLongPress: () -> Void
     private let overFlowMenuAction: () -> Void
     private let showTabsAction: () -> Void
-    private let openLazyTabAction: () -> Void
+    private let zeroQueryAction: () -> Void
     @EnvironmentObject var model: Web3Model
 
     init(
@@ -23,7 +23,7 @@ struct Web3Toolbar: View {
         onLongPress: @escaping () -> Void,
         overFlowMenuAction: @escaping () -> Void,
         showTabsAction: @escaping () -> Void,
-        openLazyTabAction: @escaping () -> Void
+        zeroQueryAction: @escaping () -> Void
     ) {
         self.opacity = opacity
         self.buildTabsMenu = buildTabsMenu
@@ -31,7 +31,7 @@ struct Web3Toolbar: View {
         self.onLongPress = onLongPress
         self.overFlowMenuAction = overFlowMenuAction
         self.showTabsAction = showTabsAction
-        self.openLazyTabAction = openLazyTabAction
+        self.zeroQueryAction = zeroQueryAction
     }
 
     var body: some View {
@@ -49,8 +49,8 @@ struct Web3Toolbar: View {
             TabToolbarButtons.NeevaWallet(
                 assetStore: AssetStore.shared, gasFeeModel: model.gasFeeModel
             )
-            TabToolbarButtons.LazyTabButton(
-                action: openLazyTabAction
+            TabToolbarButtons.HomeButton(
+                action: zeroQueryAction
             )
             TabToolbarButtons.ShowTabs(
                 weight: .medium,

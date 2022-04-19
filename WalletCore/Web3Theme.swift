@@ -131,11 +131,11 @@ extension Web3Theme {
     }
 
     @ViewBuilder
-    public var lazyTabButton: some View {
+    public var homeButton: some View {
         switch self {
         case .azuki, .coolCats, .default:
             Symbol(
-                .plus,
+                .house,
                 size: 20,
                 weight: .medium,
                 label: .TabToolbarBackAccessibilityLabel

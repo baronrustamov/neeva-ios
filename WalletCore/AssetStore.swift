@@ -78,16 +78,11 @@ public class AssetStore: ObservableObject {
                 guard let self = self else { return }
                 switch response {
                 case .success(let result):
-                    if let current = self.collections.first(where: {
-                        $0.openSeaSlug == result.collection.openSeaSlug
-                    }) {
-                        self.collections.remove(current)
-                    }
+                    self.collections.remove(result.collection)
                     self.collections.insert(result.collection)
                     onFetch(result.collection)
                     self.state = .ready
-                case .failure(let error):
-                    print(error)
+                case .failure:
                     self.state = .error
                 }
             })
@@ -95,17 +90,18 @@ public class AssetStore: ObservableObject {
 
     public func fetchCollections(_ onCompletion: (() -> Void)? = nil) {
         let params: Parameters = [
-            "offset": "0",
-            "owner": Defaults[.cryptoPublicKey],
+            "limit": "300",
+            "asset_owner": Defaults[.cryptoPublicKey],
         ]
         Web3NetworkProvider.default.request(
             target: OpenSeaAPI.collections(params: params),
-            model: CollectionsResult.self,
+            model: [Collection].self,
             completion: { [weak self] response in
                 guard let self = self else { return }
                 switch response {
                 case .success(let result):
-                    result.collections.forEach({
+                    result.forEach({
+                        self.collections.remove($0)
                         self.collections.insert($0)
                     })
                     self.state = .ready
@@ -126,8 +122,4 @@ public struct AssetsResult: Codable {
 
 public struct CollectionResult: Codable {
     public let collection: Collection
-}
-
-public struct CollectionsResult: Codable {
-    public let collections: [Collection]
 }

@@ -146,17 +146,20 @@ struct ZeroQueryView: View {
 
     @ViewBuilder
     private func contentView(_ parentGeom: GeometryProxy) -> some View {
-        if NeevaConstants.currentTarget == .xyz {
+        #if XYZ
             promoCardView(parentGeom)
             suggestedSitesView(parentGeom)
             browseNFTsView
+            if FeatureFlag[.newWeb3Features] {
+                yourCollectionsView
+            }
             searchesView
-        } else {
+        #else
             promoCardView(parentGeom)
             suggestedSitesView(parentGeom)
             searchesView
             spacesView
-        }
+        #endif
     }
 
     @ViewBuilder
@@ -291,6 +294,16 @@ struct ZeroQueryView: View {
             withHome: false,
             viewModel: Web3SuggestedSitesViewModel())
     }
+
+    #if XYZ
+        @ViewBuilder
+        private var yourCollectionsView: some View {
+            ZeroQueryHeader(
+                title: "Your Collections"
+            )
+            YourCollectionsView(bvc: viewModel.bvc)
+        }
+    #endif
 }
 
 #if DEBUG

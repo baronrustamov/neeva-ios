@@ -197,13 +197,13 @@ enum TabToolbarButtons {
     #endif
 
     #if XYZ
-        struct LazyTabButton: View {
+        struct HomeButton: View {
             let action: () -> Void
             @Default(.currentTheme) var currentTheme
 
             var body: some View {
                 TabToolbarButton(
-                    label: Web3Theme(with: currentTheme).lazyTabButton,
+                    label: Web3Theme(with: currentTheme).homeButton,
                     action: action
                 )
             }

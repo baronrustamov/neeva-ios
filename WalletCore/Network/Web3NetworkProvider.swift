@@ -41,16 +41,16 @@ extension Web3NetworkProvider: NetworkProviding {
                 }
                 return
             }
-
-            guard let result = try? JSONDecoder().decode(T.self, from: data) else {
+            do {
+                let result = try JSONDecoder().decode(T.self, from: data)
                 DispatchQueue.main.async {
-                    completion(.failure(NetworkError.cannotParseResponse))
+                    completion(.success(result))
                 }
-                return
-            }
-
-            DispatchQueue.main.async {
-                completion(.success(result))
+            } catch {
+                print(error)
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
             }
         }.resume()
     }

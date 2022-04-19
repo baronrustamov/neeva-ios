@@ -34,7 +34,7 @@ struct TabToolbarView: View {
                     onLongPress: { performAction(.longPressBackForward) },
                     overFlowMenuAction: { performAction(.overflow) },
                     showTabsAction: { performAction(.showTabs) },
-                    openLazyTabAction: { performAction(.openLazyTab) }
+                    zeroQueryAction: { performAction(.showZeroQuery) }
                 )
             #else
                 normalTabToolbar

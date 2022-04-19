@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct Collection: Codable, Hashable {
+public struct Collection: Codable {
     public static let scrapeForOpenSeaLink = """
         Array.prototype.map.call(document.querySelectorAll('div a'), function links(element) {var link=element['href']; return link}).filter(function(el) {return el.startsWith('https://opensea.io')}).map(function(el) { return el.split('opensea.io/collection/')[1]})
         """
@@ -47,6 +47,18 @@ public struct Collection: Codable, Hashable {
         case twitterHandle = "twitter_username"
         case instagramHandle = "instagram_username"
         case stats = "stats"
+    }
+}
+
+extension Collection: Equatable {
+    public static func == (lhs: Collection, rhs: Collection) -> Bool {
+        return lhs.openSeaSlug == rhs.openSeaSlug
+    }
+}
+
+extension Collection: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(openSeaSlug)
     }
 }
 
