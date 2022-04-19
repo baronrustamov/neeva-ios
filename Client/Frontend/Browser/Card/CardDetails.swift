@@ -179,6 +179,12 @@ public class TabCardDetails: CardDetails, AccessingManagerProvider,
         false
     }
 
+    // Override Equatable implementation since we store a Tab instance, and as a result of
+    // tab restore, it is possible for two Tab instances to have the same ID.
+    public static func == (lhs: TabCardDetails, rhs: TabCardDetails) -> Bool {
+        lhs.tab == rhs.tab
+    }
+
     // Avoiding keeping a reference to classes both to minimize surface area these Card classes have
     // access to, but also to not worry about reference copying while using CardDetails for View updates.
     init(tab: Tab, manager: TabManager, isChild: Bool = false) {
