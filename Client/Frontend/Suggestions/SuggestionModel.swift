@@ -227,7 +227,7 @@ class SuggestionModel: ObservableObject {
                 self.error = nil
                 self.rowQuerySuggestions = rowQuerySuggestions
                 // Add a search query suggestion for the URL if it doesn't exist
-                if URIFixup.getURL(searchQuery) != nil,
+                if URLFixup.getURL(searchQuery) != nil,
                     !(rowQuerySuggestions.compactMap {
                         switch $0 {
                         case .query(let query):

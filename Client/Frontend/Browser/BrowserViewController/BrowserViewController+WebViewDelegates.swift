@@ -729,7 +729,10 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        if !(url.scheme?.contains("neeva") ?? true) {
+        // Only show OpenInAppOverlay for schemes other than Neeva,
+        if !(url.scheme?.contains("neeva") ?? true),
+            navigationAction.targetFrame?.isMainFrame ?? false  // and from the main frame.
+        {
             showOverlay(forExternalUrl: url)
         }
 

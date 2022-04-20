@@ -235,7 +235,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        let isNoSuggestionQuery = URIFixup.getURL(textField.text ?? "") == nil
+        let isNoSuggestionQuery = URLFixup.getURL(textField.text ?? "") == nil
         let interaction: LogConfig.Interaction =
             suggestionModel.completion == nil
             ? (isNoSuggestionQuery

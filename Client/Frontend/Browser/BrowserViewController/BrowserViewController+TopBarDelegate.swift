@@ -70,7 +70,7 @@ extension BrowserViewController: TopBarDelegate {
 
         let currentTab = tabManager.selectedTab
 
-        if let fixupURL = URIFixup.getURL(text), !isSearchQuerySuggestion {
+        if let fixupURL = URLFixup.getURL(text), !isSearchQuerySuggestion {
             // The user entered a URL, so use it.
             finishEditingAndSubmit(fixupURL, visitType: VisitType.typed, forTab: currentTab)
             return

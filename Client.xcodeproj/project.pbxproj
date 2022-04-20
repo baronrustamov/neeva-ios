@@ -514,7 +514,7 @@
 		4A42C54727E58487003B9826 /* CloseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9299E35268F9CF300758795 /* CloseButton.swift */; };
 		4A42C54827E58487003B9826 /* DefaultBrowserIntestitialOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67462B2B27D8363D00141379 /* DefaultBrowserIntestitialOnboardingView.swift */; };
 		4A42C54927E58487003B9826 /* HTTPAuthPromptOverlayContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C832BF5E26E0A9E400B9A1F8 /* HTTPAuthPromptOverlayContent.swift */; };
-		4A42C54A27E58487003B9826 /* URIFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C744CC1A687D6C004CE85D /* URIFixup.swift */; };
+		4A42C54A27E58487003B9826 /* URLFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C744CC1A687D6C004CE85D /* URLFixup.swift */; };
 		4A42C54B27E58487003B9826 /* CheatsheetTooltipPopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32D95B0327A37C8100447507 /* CheatsheetTooltipPopoverView.swift */; };
 		4A42C54C27E58487003B9826 /* ReadabilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A961171AC041C40069AD6F /* ReadabilityService.swift */; };
 		4A42C54D27E58487003B9826 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BE7B251B054D4400641031 /* main.swift */; };
@@ -1262,8 +1262,8 @@
 		D3BF8CBB1B7425570007AFE6 /* DiskImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BF8CBA1B7425570007AFE6 /* DiskImageStore.swift */; };
 		D3C3696E1CC6B78800348A61 /* LocalRequestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C3696D1CC6B78800348A61 /* LocalRequestHelper.swift */; };
 		D3C3EB651B6FF44000388E9A /* SessionRestoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C3EB641B6FF44000388E9A /* SessionRestoreTests.swift */; };
-		D3C744CD1A687D6C004CE85D /* URIFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C744CC1A687D6C004CE85D /* URIFixup.swift */; };
-		D3C744CF1A687D6C004CE85D /* URIFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C744CC1A687D6C004CE85D /* URIFixup.swift */; };
+		D3C744CD1A687D6C004CE85D /* URLFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C744CC1A687D6C004CE85D /* URLFixup.swift */; };
+		D3C744CF1A687D6C004CE85D /* URLFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C744CC1A687D6C004CE85D /* URLFixup.swift */; };
 		D3CFD3641CC5605B0064AB4A /* SecurityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CFD3631CC5605B0064AB4A /* SecurityTests.swift */; };
 		D3D488591ABB54CD00A93597 /* FileAccessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D488581ABB54CD00A93597 /* FileAccessorTests.swift */; };
 		D3E171C21A841EAD00AB44CD /* KIFHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = D3E171C11A841EAD00AB44CD /* KIFHelper.js */; };
@@ -2615,7 +2615,7 @@
 		D3BF8CBC1B7472FA0007AFE6 /* DiskImageStoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiskImageStoreTests.swift; sourceTree = "<group>"; };
 		D3C3696D1CC6B78800348A61 /* LocalRequestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalRequestHelper.swift; sourceTree = "<group>"; };
 		D3C3EB641B6FF44000388E9A /* SessionRestoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionRestoreTests.swift; sourceTree = "<group>"; };
-		D3C744CC1A687D6C004CE85D /* URIFixup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URIFixup.swift; sourceTree = "<group>"; };
+		D3C744CC1A687D6C004CE85D /* URLFixup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLFixup.swift; sourceTree = "<group>"; };
 		D3CFD3631CC5605B0064AB4A /* SecurityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecurityTests.swift; sourceTree = "<group>"; };
 		D3D488581ABB54CD00A93597 /* FileAccessorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileAccessorTests.swift; sourceTree = "<group>"; };
 		D3E171C11A841EAD00AB44CD /* KIFHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = KIFHelper.js; sourceTree = "<group>"; };
@@ -4622,7 +4622,7 @@
 				23F2C365244E44FA00FA4496 /* Tabs */,
 				D029A04820A62DB0001DB72F /* TemporaryDocument.swift */,
 				1D0BA05B24F46A0400D731B5 /* TopSitesManager.swift */,
-				D3C744CC1A687D6C004CE85D /* URIFixup.swift */,
+				D3C744CC1A687D6C004CE85D /* URLFixup.swift */,
 			);
 			path = Browser;
 			sourceTree = "<group>";
@@ -6933,7 +6933,7 @@
 				4A42C54827E58487003B9826 /* DefaultBrowserIntestitialOnboardingView.swift in Sources */,
 				4A42C54927E58487003B9826 /* HTTPAuthPromptOverlayContent.swift in Sources */,
 				E677D1D22800E89E0060869F /* HistoryPanelView.swift in Sources */,
-				4A42C54A27E58487003B9826 /* URIFixup.swift in Sources */,
+				4A42C54A27E58487003B9826 /* URLFixup.swift in Sources */,
 				E67CD27627F33BD1007BFE58 /* SuggestedXYZSearchesView.swift in Sources */,
 				4A42C54B27E58487003B9826 /* CheatsheetTooltipPopoverView.swift in Sources */,
 				4A42C54C27E58487003B9826 /* ReadabilityService.swift in Sources */,
@@ -7502,7 +7502,7 @@
 				C9299E36268F9CF300758795 /* CloseButton.swift in Sources */,
 				67462B2C27D8363D00141379 /* DefaultBrowserIntestitialOnboardingView.swift in Sources */,
 				C832BF5F26E0A9E400B9A1F8 /* HTTPAuthPromptOverlayContent.swift in Sources */,
-				D3C744CD1A687D6C004CE85D /* URIFixup.swift in Sources */,
+				D3C744CD1A687D6C004CE85D /* URLFixup.swift in Sources */,
 				32D95B0427A37C8100447507 /* CheatsheetTooltipPopoverView.swift in Sources */,
 				E4A961181AC041C40069AD6F /* ReadabilityService.swift in Sources */,
 				D3BE7B261B054D4400641031 /* main.swift in Sources */,
@@ -7613,7 +7613,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA6B2AC41D41F02D00429414 /* Punycode.swift in Sources */,
-				D3C744CF1A687D6C004CE85D /* URIFixup.swift in Sources */,
+				D3C744CF1A687D6C004CE85D /* URLFixup.swift in Sources */,
 				EB94075320850C9F00702E05 /* photon-colors.swift in Sources */,
 				E418D0D91A251B3200CAE47A /* Profile.swift in Sources */,
 				E68F36AD1EA698650048CF44 /* PanelDataObservers.swift in Sources */,

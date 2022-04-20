@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-class URIFixup {
+class URLFixup {
     static func getURL(_ entry: String) -> URL? {
         if let url = URL(string: entry), InternalURL.isValid(url: url) {
             return URL(string: entry)
