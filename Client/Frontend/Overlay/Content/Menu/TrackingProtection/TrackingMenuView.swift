@@ -215,18 +215,19 @@ struct TrackingMenuView: View {
             TrackingMenuProtectionRowButton(
                 preventTrackers: $viewModel.preventTrackersForCurrentPage)
 
-            if FeatureFlag[.newTrackingProtectionSettings] {
-                GroupedCellButton(action: { isShowingPopup = true }) {
-                    HStack {
-                        Text("Advanced Privacy Settings").withFont(.bodyLarge)
-                        Spacer()
-                        Symbol(decorative: .shieldLefthalfFill)
-                    }.foregroundColor(.label)
-                }
-                .sheet(isPresented: $isShowingPopup) {
-                    TrackingMenuSettingsView(domain: "example.com")
-                }
-            }
+            // TODO: reenable if we want to enable advanced privacy settings
+            // if FeatureFlag[.newTrackingProtectionSettings] {
+            //    GroupedCellButton(action: { isShowingPopup = true }) {
+            //        HStack {
+            //            Text("Advanced Privacy Settings").withFont(.bodyLarge)
+            //            Spacer()
+            //            Symbol(decorative: .shieldLefthalfFill)
+            //        }.foregroundColor(.label)
+            //    }
+            //    .sheet(isPresented: $isShowingPopup) {
+            //        TrackingMenuSettingsView(domain: "example.com")
+            //    }
+            //}
         }
         .fixedSize(horizontal: true, vertical: true)
         .onAppear {

@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 import Shared
+import Defaults
 
 struct TPPageStats {
     var domains: [String]
@@ -52,6 +53,14 @@ class TPStatsBlocklistChecker {
     }
 
     func startup() {
+        self.loadStatsParser()
+        Defaults.observe(keys: .contentBlockingEnabled, .contentBlockingStrength, options: []) { [weak self] in
+            guard let self = self else { return }
+            self.loadStatsParser()
+        }.tieToLifetime(of: self)
+    }
+
+    private func loadStatsParser() {
         DispatchQueue.global().async {
             let parser = TPStatsBlocklists()
             parser.load()
@@ -119,7 +128,7 @@ class TPStatsBlocklists {
         // keeping in mind the stats can't distinguish block vs cookie-block,
         // only that an url did or didn't match.
         for blockListFile in [
-            NeevaConstants.currentTarget == .xyz ? BlocklistFileName.easyPrivacyWeb3 : BlocklistFileName.easyPrivacy,
+            NeevaConstants.currentTarget == .xyz ? BlocklistFileName.easyPrivacyStrict : BlocklistFileName.easyPrivacy,
             ] {
             let list: [[String: AnyObject]]
             do {

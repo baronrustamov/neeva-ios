@@ -9,21 +9,25 @@ import Defaults
 
 enum BlocklistCategory: CaseIterable {
     case easyPrivacy
-    case easyPrivacyWeb3
+    case easyPrivacyStrict
+    case easyListAdBlock
 
     static func fromFile(_ file: BlocklistFileName) -> BlocklistCategory {
         switch file {
         case .easyPrivacy:
             return .easyPrivacy
-        case .easyPrivacyWeb3:
-            return .easyPrivacyWeb3
+        case .easyPrivacyStrict:
+            return .easyPrivacyStrict
+        case .easyListAdBlock:
+            return .easyListAdBlock
         }
     }
 }
 
 enum BlocklistFileName: String, CaseIterable {
     case easyPrivacy = "easy_privacy"
-    case easyPrivacyWeb3 = "easy_privacy_web3"
+    case easyPrivacyStrict = "easy_privacy_strict"
+    case easyListAdBlock = "easy_list"
 
     var filename: String { return self.rawValue }
 
@@ -33,8 +37,10 @@ enum BlocklistFileName: String, CaseIterable {
         switch strength {
         case .easyPrivacy:
             return BlocklistFileName.easyPrivacyStrength
-        case .easyPrivacyWeb3:
-            return [.easyPrivacyWeb3]
+        case .easyPrivacyStrict:
+            return [.easyPrivacyStrict]
+        case .easyListAdBlock:
+            return [.easyListAdBlock]
         }
     }
 }
@@ -56,10 +62,8 @@ class ContentBlocker {
                 }
             }
         }
-
-        Defaults.observe(.contentBlockingEnabled, options: []) { [weak self] change in
+        Defaults.observe(keys: .contentBlockingEnabled, .contentBlockingStrength, options: []) { [weak self] in
             guard let self = self else { return }
-
             self.prefsChanged()
         }.tieToLifetime(of: self)
     }
@@ -223,11 +227,11 @@ extension ContentBlocker {
     func compileListsNotInStore(completion: @escaping () -> Void) {
         //let blocklists = BlocklistFileName.allCases.map { $0.filename }
         var blocklists = [String]()
-        blocklists = [
-            NeevaConstants.currentTarget == .xyz ?
-                BlocklistFileName.easyPrivacyWeb3.filename :
-                BlocklistFileName.easyPrivacy.filename
-        ]
+        blocklists = NeevaConstants.currentTarget == .xyz
+            ? [BlocklistFileName.easyPrivacyStrict.filename]
+            : FeatureFlag[.newTrackingProtectionSettings]
+                ? BlocklistFileName.allCases.map { $0.filename }
+                : [BlocklistFileName.easyPrivacy.filename]
         let deferreds: [Deferred<Void>] = blocklists.map { filename in
             let result = Deferred<Void>()
             ruleStore.lookUpContentRuleList(forIdentifier: filename) { contentRuleList, error in

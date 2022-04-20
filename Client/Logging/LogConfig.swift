@@ -55,6 +55,10 @@ public struct LogConfig {
         case TurnOnGlobalBlockTracking
         /// Turn off block tracking from settings
         case TurnOffGlobalBlockTracking
+        /// Turn on ad block tracking from settings
+        case TurnOnGlobalAdBlockTracking
+        /// Turn off ad block tracking from settings
+        case TurnOffGlobalAdBlockTracking
 
         // MARK: overflow menu
         /// Click the plus new tab button
@@ -450,6 +454,8 @@ public struct LogConfig {
         case .TurnOffBlockTracking: return .UI
         case .TurnOnGlobalBlockTracking: return .UI
         case .TurnOffGlobalBlockTracking: return .UI
+        case .TurnOnGlobalAdBlockTracking: return .UI
+        case .TurnOffGlobalAdBlockTracking: return .UI
 
         case .didTakeScreenshot: return .UI
         case .screenCaptureStarted: return .UI

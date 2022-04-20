@@ -43,34 +43,54 @@ struct TrackingMenuSettingsView: View {
 }
 
 struct TrackingAttribution: View {
-    // @Environment(\.onOpenURL) var openURL
+    @Environment(\.onOpenURL) var openURL
+
     var body: some View {
-        EmptyView()
-        // TODO: re-enable this with correct attribution
-        //        Section(header: Group {
-        //            Button(action: { openURL(URL(string: "https://easylist.to/pages/about.html")!) }) {
-        //                Label {
-        //                    Text("Tracking rules courtesy The EasyList Authors")
-        //                } icon: {
-        //                    Symbol(.ccBy, size: 13, relativeTo: .footnote)
-        //                }
-        //            }
-        //            .font(.footnote)
-        //            .accentColor(.secondaryLabel)
-        //            .textCase(nil)
-        //        }) {}
+        if #available(iOS 15.0, *) {
+            Section(
+                footer:
+                    Text("Tracking rules courtesy of [The EasyList Authors](https://easylist.to/)")
+            ) {}
+        } else {
+            Section(
+                footer:
+                    Button(
+                        action: {
+                            openURL(URL(string: "https://easylist.to/pages/about.html")!)
+                        },
+                        label: {
+                            Text("Tracking rules courtesy of The EasyList Authors")
+                        }
+                    )
+                    .font(.footnote)
+                    .accentColor(.secondaryLabel)
+                    .textCase(nil)
+            ) {}
+        }
     }
 }
 
 struct TrackingSettingsBlock: View {
-    @Default(.blockThirdPartyTrackingCookies) var blockTrackingCookies: Bool
-    @Default(.blockThirdPartyTrackingRequests) var blockTrackingRequests: Bool
-    @Default(.upgradeAllToHttps) var upgradeToHTTPS: Bool
+    // TODO: revisit these params when we have the final UX
+    // @Default(.blockThirdPartyTrackingCookies) var blockTrackingCookies: Bool
+    // @Default(.blockThirdPartyTrackingRequests) var blockTrackingRequests: Bool
+    // @Default(.upgradeAllToHttps) var upgradeToHTTPS: Bool
+
+    @Default(.contentBlockingEnabled) private var contentBlockingEnabled
+    @Default(.contentBlockingStrength) private var contentBlockingStrength
 
     var body: some View {
-        Toggle("Block tracking cookies", isOn: $blockTrackingCookies)
-        Toggle("Block tracking requests", isOn: $blockTrackingRequests)
-        Toggle("Update requests to HTTPS", isOn: $upgradeToHTTPS)
+        // Toggle("Block tracking cookies", isOn: $blockTrackingCookies)
+        // Toggle("Block tracking requests", isOn: $blockTrackingRequests)
+        // Toggle("Update requests to HTTPS", isOn: $upgradeToHTTPS)
+        Toggle("Enable Protection", isOn: $contentBlockingEnabled)
+
+        Picker("Protection Mode", selection: $contentBlockingStrength) {
+            ForEach(BlockingStrength.allCases) { strength in
+                Text(strength.name.capitalized)
+                    .tag(strength.rawValue)
+            }
+        }
     }
 }
 

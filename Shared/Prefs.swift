@@ -59,6 +59,8 @@ extension Defaults.Keys {
     public static let customSearchEngine = Defaults.Key<String?>("profile_customSearchEngine")
     public static let confirmCloseAllTabs = Defaults.Key(
         "profile.confirmCloseAllTabs", default: true)
+    public static let contentBlockingStrength =
+        Defaults.Key<String>("contentBlockingStrength", default: "easyPrivacy")
 
     // MARK: - debug settings
     public static let enableAuthLogging = Defaults.BoolKey("profile_enableAuthLogging")

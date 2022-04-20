@@ -7,13 +7,28 @@ import Shared
 import WebKit
 
 extension Defaults.Keys {
+    // TODO: migrate to a new naming without dot so publisher/observer work
     static let contentBlockingEnabled = Defaults.Key<Bool>(
         "profile.prefkey.trackingprotection.normalbrowsing", default: true)
 }
 
-enum BlockingStrength: String, Codable {
+enum BlockingStrength: String, Codable, CaseIterable, Identifiable {
     case easyPrivacy
-    case easyPrivacyWeb3
+    case easyPrivacyStrict
+    case easyListAdBlock
+
+    var id: String { self.rawValue }
+
+    var name: String {
+        switch self {
+        case .easyPrivacy:
+            return "Block cookie (Easy Privacy)"
+        case .easyPrivacyStrict:
+            return "Block request (Easy Privacy)"
+        case .easyListAdBlock:
+            return "Strict (Ad Block Easy List)"
+        }
+    }
 }
 
 /// Neeva-specific implementation of tab content blocking.
@@ -39,8 +54,17 @@ class NeevaTabContentBlocker: TabContentBlocker, TabContentScript {
 
     func setupForTab() {
         guard let tab = tab else { return }
-        let rules = BlocklistFileName.listsForMode(
-            strength: NeevaConstants.currentTarget == .xyz ? .easyPrivacyWeb3 : .easyPrivacy)
+        var strength: BlockingStrength = .easyPrivacy
+        if NeevaConstants.currentTarget == .xyz {
+            strength = .easyPrivacyStrict
+        } else {
+            if FeatureFlag[.newTrackingProtectionSettings],
+                let strEnum = BlockingStrength(rawValue: Defaults[.contentBlockingStrength])
+            {
+                strength = strEnum
+            }
+        }
+        let rules = BlocklistFileName.listsForMode(strength: strength)
         ContentBlocker.shared.setupTrackingProtection(
             forTab: tab, isEnabled: isEnabled, rules: rules)
     }

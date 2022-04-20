@@ -882,6 +882,7 @@
 		671208D727F147B00084C1C8 /* IntentHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3234500627EA73D800F16237 /* IntentHelper.swift */; };
 		671208D827F147B60084C1C8 /* ContentVisibilityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61D068F27ED27E10075F65E /* ContentVisibilityModel.swift */; };
 		67292D3326AD2CF200DB1BFA /* AnnotationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67292D3226AD2CF200DB1BFA /* AnnotationType.swift */; };
+		672D1C58280A0A3B0043F4E6 /* easy_list.json in Resources */ = {isa = PBXBuildFile; fileRef = 672D1C57280A0A3A0043F4E6 /* easy_list.json */; };
 		673C85D826E090DF006C21B0 /* SuggestionModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673C85D726E090DF006C21B0 /* SuggestionModelTests.swift */; };
 		674439C627BEDFE400749F75 /* UIApplicationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674439C527BEDFE400749F75 /* UIApplicationExtensions.swift */; };
 		674439C827BEEE9000749F75 /* NeevaExperimentExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674439C727BEEE9000749F75 /* NeevaExperimentExtensions.swift */; };
@@ -896,6 +897,8 @@
 		6786EA772759545A00B53127 /* CrashReporter in Frameworks */ = {isa = PBXBuildFile; productRef = 6786EA762759545A00B53127 /* CrashReporter */; };
 		6786EA792761C58300B53127 /* libswift_Concurrency.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 6786EA782761C58300B53127 /* libswift_Concurrency.tbd */; settings = {ATTRIBUTES = (Weak, ); }; };
 		6789191F2800A6B1006AF55D /* FirstRunTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6789191E2800A6B1006AF55D /* FirstRunTests.swift */; };
+		6790EFC5281098AC0033F5FD /* easy_privacy_strict.json in Resources */ = {isa = PBXBuildFile; fileRef = 6790EFC4281098AC0033F5FD /* easy_privacy_strict.json */; };
+		6790EFC6281098AC0033F5FD /* easy_privacy_strict.json in Resources */ = {isa = PBXBuildFile; fileRef = 6790EFC4281098AC0033F5FD /* easy_privacy_strict.json */; };
 		67942DD826F14F2A0023F623 /* NotificationPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67942DD726F14F2A0023F623 /* NotificationPromptView.swift */; };
 		679BB17C2714D069002F60FE /* easy_privacy.json in Resources */ = {isa = PBXBuildFile; fileRef = 679BB17B2714D069002F60FE /* easy_privacy.json */; };
 		67AA22F226C476F300F33D09 /* BrowserViewController+OverflowMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67AA22F126C476F300F33D09 /* BrowserViewController+OverflowMenu.swift */; };
@@ -1417,7 +1420,6 @@
 		E67CD27527F33BCD007BFE58 /* ZeroQueryUX.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64024E927F2437800D65B63 /* ZeroQueryUX.swift */; };
 		E67CD27627F33BD1007BFE58 /* SuggestedXYZSearchesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63DBA5627F339FC001B7A68 /* SuggestedXYZSearchesView.swift */; };
 		E67CD27727F33C3B007BFE58 /* TabGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A78AA2427ED33C4002E7A86 /* TabGroup.swift */; };
-		E67CD27D27F49B1F007BFE58 /* easy_privacy_web3.json in Resources */ = {isa = PBXBuildFile; fileRef = E67CD27B27F49B1F007BFE58 /* easy_privacy_web3.json */; };
 		E683F0A61E92E0820035D990 /* MockableHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E683F0A51E92E0820035D990 /* MockableHistory.swift */; };
 		E683F0C21E93D4E90035D990 /* DictionaryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E683F0C11E93D4E90035D990 /* DictionaryExtensions.swift */; };
 		E68F36981EA694000048CF44 /* PanelDataObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68F36971EA694000048CF44 /* PanelDataObservers.swift */; };
@@ -2235,6 +2237,7 @@
 		66FA64C3270E62A5008BAEAD /* ReaderModeBlocklist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeBlocklist.swift; sourceTree = "<group>"; };
 		670029C0272D1A5C00EBB968 /* ScheduleNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleNotificationView.swift; sourceTree = "<group>"; };
 		67292D3226AD2CF200DB1BFA /* AnnotationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationType.swift; sourceTree = "<group>"; };
+		672D1C57280A0A3A0043F4E6 /* easy_list.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = easy_list.json; sourceTree = "<group>"; };
 		673C85D726E090DF006C21B0 /* SuggestionModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionModelTests.swift; sourceTree = "<group>"; };
 		674439C527BEDFE400749F75 /* UIApplicationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplicationExtensions.swift; sourceTree = "<group>"; };
 		674439C727BEEE9000749F75 /* NeevaExperimentExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeevaExperimentExtensions.swift; sourceTree = "<group>"; };
@@ -2247,6 +2250,7 @@
 		677858C626CB377700274BC3 /* APIExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIExtension.swift; sourceTree = "<group>"; };
 		6786EA782761C58300B53127 /* libswift_Concurrency.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswift_Concurrency.tbd; path = usr/lib/swift/libswift_Concurrency.tbd; sourceTree = SDKROOT; };
 		6789191E2800A6B1006AF55D /* FirstRunTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstRunTests.swift; sourceTree = "<group>"; };
+		6790EFC4281098AC0033F5FD /* easy_privacy_strict.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = easy_privacy_strict.json; sourceTree = "<group>"; };
 		67942DD726F14F2A0023F623 /* NotificationPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPromptView.swift; sourceTree = "<group>"; };
 		679BB17B2714D069002F60FE /* easy_privacy.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = easy_privacy.json; sourceTree = "<group>"; };
 		67AA22F126C476F300F33D09 /* BrowserViewController+OverflowMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+OverflowMenu.swift"; sourceTree = "<group>"; };
@@ -2737,7 +2741,6 @@
 		E67B0B422809BCA9008D1CCD /* SessionActionsModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionActionsModifier.swift; sourceTree = "<group>"; };
 		E67B0B44280EFA07008D1CCD /* YourCollectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourCollectionsView.swift; sourceTree = "<group>"; };
 		E67B0B46280F016D008D1CCD /* YourCollectionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourCollectionDetailView.swift; sourceTree = "<group>"; };
-		E67CD27B27F49B1F007BFE58 /* easy_privacy_web3.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = easy_privacy_web3.json; sourceTree = "<group>"; };
 		E683F0A51E92E0820035D990 /* MockableHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockableHistory.swift; sourceTree = "<group>"; };
 		E683F0C11E93D4E90035D990 /* DictionaryExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryExtensions.swift; sourceTree = "<group>"; };
 		E68F36971EA694000048CF44 /* PanelDataObservers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanelDataObservers.swift; sourceTree = "<group>"; };
@@ -4880,6 +4883,8 @@
 		EBB894F4219398E500EB91A0 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				6790EFC4281098AC0033F5FD /* easy_privacy_strict.json */,
+				672D1C57280A0A3A0043F4E6 /* easy_list.json */,
 				679BB17B2714D069002F60FE /* easy_privacy.json */,
 				4A255AB5265C4A2A00422839 /* TrackingPreventionConfig.swift */,
 				4A255AB0265C48EB00422839 /* TrackingPreventionRules.swift */,
@@ -4889,7 +4894,6 @@
 				EBB894F8219398E500EB91A0 /* ContentBlocker.swift */,
 				EBB894F9219398E500EB91A0 /* ContentBlocker+Safelist.swift */,
 				EBB894FA219398E500EB91A0 /* TabContentBlocker+ContentScript.swift */,
-				E67CD27B27F49B1F007BFE58 /* easy_privacy_web3.json */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -5941,7 +5945,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A42C58B27E58487003B9826 /* CertError.html in Resources */,
-				E67CD27D27F49B1F007BFE58 /* easy_privacy_web3.json in Resources */,
 				4A42C58C27E58487003B9826 /* OfflineError.css in Resources */,
 				4A42C58D27E58487003B9826 /* TopSites in Resources */,
 				4A42C58E27E58487003B9826 /* FiraSans-SemiBold.ttf in Resources */,
@@ -5960,6 +5963,7 @@
 				4A42C59A27E58487003B9826 /* nicons-600.ttf in Resources */,
 				4A42C59B27E58487003B9826 /* Roobert-Regular.otf in Resources */,
 				4A42C59C27E58487003B9826 /* Reader.html in Resources */,
+				6790EFC6281098AC0033F5FD /* easy_privacy_strict.json in Resources */,
 				4A42C59D27E58487003B9826 /* NewYorkMedium-RegularItalic.otf in Resources */,
 				4AC534F127F3B86A0084C62B /* XYZLaunchScreen.xib in Resources */,
 				4A42C59E27E58487003B9826 /* InfoPlist.strings in Resources */,
@@ -6173,11 +6177,13 @@
 				E4B7B7681A793CF20022C5E0 /* FiraSans-Bold.ttf in Resources */,
 				E4B7B7781A793CF20022C5E0 /* FiraSans-Italic.ttf in Resources */,
 				4A9EFAF027B0BFD100F3ED7F /* README.md in Resources */,
+				6790EFC5281098AC0033F5FD /* easy_privacy_strict.json in Resources */,
 				0BA1E00E1B03FB0B007675AF /* NetError.html in Resources */,
 				23BEA768251A99ED00A014BF /* NewYorkMedium-BoldItalic.otf in Resources */,
 				C9DACFEB269CEFE600456020 /* KMCGeigerCounterTick.aiff in Resources */,
 				BC93EE862654E31300D1AA07 /* Color.xcassets in Resources */,
 				E4A961381AC06FA50069AD6F /* ReaderViewLoading.html in Resources */,
+				672D1C58280A0A3B0043F4E6 /* easy_list.json in Resources */,
 				E4ECCDAE1AB131770005E717 /* FiraSans-Medium.ttf in Resources */,
 				E4424B3C1AC71FB400F44C38 /* FiraSans-Book.ttf in Resources */,
 				39A35AED1C0662A3006B9E87 /* SpotlightHelper.js in Resources */,

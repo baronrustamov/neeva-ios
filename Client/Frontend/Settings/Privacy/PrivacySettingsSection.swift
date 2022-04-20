@@ -36,7 +36,7 @@ struct PrivacySettingsSection: View {
             if FeatureFlag[.newTrackingProtectionSettings] {
                 makeNavigationLink(title: "Tracking Protection") {
                     List {
-                        Section(header: Text("Global Privacy Settings").padding(.top, 21)) {
+                        Section(header: Text("Global Privacy Settings")) {
                             TrackingSettingsBlock()
                         }
 
