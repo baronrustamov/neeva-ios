@@ -316,31 +316,30 @@ extension AppDelegate {
             )
         }
 
+        let tabs = SceneDelegate.getTabManagerOrNil()?.tabs ?? []
+        let numberOfZombieTabs: Int = {
+            tabs.filter { $0.webView == nil }.count
+        }()
+
         attributes.append(
             ClientLogCounterAttribute(
                 key: LogConfig.Attribute.AllTabsOpened,
-                value: "\(SceneDelegate.getTabManagerOrNil()?.tabs.count ?? 0)"
+                value: "\(tabs.count)"
+            )
+        )
+
+        attributes.append(
+            ClientLogCounterAttribute(
+                key: LogConfig.Attribute.NumberOfZombieTabs,
+                value: "\(numberOfZombieTabs)"
             )
         )
 
         ClientLogger.shared.logCounter(.LowMemoryWarning, attributes: attributes)
 
-        // Turn all but the newest x Tabs into Zombie Tabs.
         if FeatureFlag[.lowMemoryZombieTabs] {
-            let maximumNumberOfAliveTabs = 10
-
             for sceneDelegate in SceneDelegate.getAllSceneDelegates() {
-                // Filter tabs for each Scene
-                let tabManager = sceneDelegate.bvc.tabManager
-                let tabs = tabManager.tabs.sorted {
-                    $0.lastExecutedTime ?? Timestamp() > $1.lastExecutedTime ?? Timestamp()
-                }
-
-                tabs.enumerated().forEach { index, tab in
-                    if index >= maximumNumberOfAliveTabs {
-                        tab.close()
-                    }
-                }
+                sceneDelegate.bvc.tabManager.makeTabsIntoZombies()
             }
         }
     }

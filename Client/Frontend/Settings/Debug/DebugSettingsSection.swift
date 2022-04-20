@@ -63,8 +63,18 @@ struct DebugSettingsSection: View {
                     NotificationSettingsView()
                 }
             }
+
             DebugDBSettingsSection()
-            DecorativeSection {
+
+            Section(header: Text(verbatim: "Performance")) {
+                Button(String("Make all tabs zombies (excluding selected)")) {
+                    guard let tabManager = SceneDelegate.getTabManagerOrNil() else {
+                        return
+                    }
+
+                    tabManager.makeTabsIntoZombies(tabsToKeepAlive: 1)
+                }
+
                 Button(String("Create 100 tabs")) {
                     guard let tabManager = SceneDelegate.getTabManagerOrNil() else {
                         return

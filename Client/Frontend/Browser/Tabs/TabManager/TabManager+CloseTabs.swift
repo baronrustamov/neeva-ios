@@ -145,4 +145,19 @@ extension TabManager {
                 })
         }
     }
+
+    // MARK: - Zombie Tabs
+    /// Turns all but the newest x Tabs into Zombie Tabs.
+    func makeTabsIntoZombies(tabsToKeepAlive: Int = 10) {
+        // Filter tabs for each Scene
+        let tabs = tabs.sorted {
+            $0.lastExecutedTime ?? Timestamp() > $1.lastExecutedTime ?? Timestamp()
+        }
+
+        tabs.enumerated().forEach { index, tab in
+            if tab != selectedTab, index >= tabsToKeepAlive {
+                tab.close()
+            }
+        }
+    }
 }

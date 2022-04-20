@@ -677,6 +677,8 @@ public struct LogConfig {
         public static let NormalTabsOpened = "NormalTabsOpened"
         /// Number of incognito tabs opened
         public static let IncognitoTabsOpened = "PrivateTabsOpened"
+        /// Number of zombie tabs opened
+        public static let NumberOfZombieTabs = "NumberOfZombieTabs"
         /// Number of tab groups in total
         public static let numTabGroupsTotal = "NumTabGroupsTotal"
         /// Number of tabs inside all the tab groups
