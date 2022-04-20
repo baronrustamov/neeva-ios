@@ -70,7 +70,11 @@ query CheatsheetInfo($input: String!, $title: String) {
         }
       }
     }
-    BacklinkURL
+    BacklinkURL {
+        URL
+        Title
+        Domain
+    }
   }
 }
 
