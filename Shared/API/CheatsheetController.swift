@@ -109,7 +109,7 @@ public class CheatsheetQueryController:
         public var priceHistory: PriceHistory?
         public var memorizedQuery: [String]?
         public var recipe: Recipe?
-        public var backlinkURL: [String]?
+        public var backlinkURL: [CheatsheetInfoQuery.Data.GetCheatsheetInfo.BacklinkUrl]?
     }
 
     private var url: URL
@@ -207,7 +207,7 @@ public class CheatsheetQueryController:
 
         if let backlinks = data.getCheatsheetInfo?.backlinkUrl {
             // remove empty string
-            result.backlinkURL = backlinks.filter({ $0 != "" })
+            result.backlinkURL = backlinks
         }
 
         return [result]

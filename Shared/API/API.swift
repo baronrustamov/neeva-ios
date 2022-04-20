@@ -5242,14 +5242,19 @@ public final class CheatsheetInfoQuery: GraphQLQuery {
             }
           }
         }
-        BacklinkURL
+        BacklinkURL {
+          __typename
+          URL
+          Title
+          Domain
+        }
       }
     }
     """
 
   public let operationName: String = "CheatsheetInfo"
 
-  public let operationIdentifier: String? = "2592047ecfaf990326a3b9bb352a4f365639f9901f8c3247aded1363a64579cf"
+  public let operationIdentifier: String? = "422e4417613bf0b750377a4859ed317f52095d0c2bbe507a1552edb5c51c86d5"
 
   public var input: String
   public var title: String?
@@ -5302,7 +5307,7 @@ public final class CheatsheetInfoQuery: GraphQLQuery {
           GraphQLField("PriceHistory", type: .object(PriceHistory.selections)),
           GraphQLField("MemorizedQuery", type: .list(.nonNull(.scalar(String.self)))),
           GraphQLField("Recipe", type: .object(Recipe.selections)),
-          GraphQLField("BacklinkURL", type: .list(.nonNull(.scalar(String.self)))),
+          GraphQLField("BacklinkURL", type: .list(.nonNull(.object(BacklinkUrl.selections)))),
         ]
       }
 
@@ -5312,8 +5317,8 @@ public final class CheatsheetInfoQuery: GraphQLQuery {
         self.resultMap = unsafeResultMap
       }
 
-      public init(reviewUrl: [String]? = nil, priceHistory: PriceHistory? = nil, memorizedQuery: [String]? = nil, recipe: Recipe? = nil, backlinkUrl: [String]? = nil) {
-        self.init(unsafeResultMap: ["__typename": "CheatsheetAnnotationData", "ReviewURL": reviewUrl, "PriceHistory": priceHistory.flatMap { (value: PriceHistory) -> ResultMap in value.resultMap }, "MemorizedQuery": memorizedQuery, "Recipe": recipe.flatMap { (value: Recipe) -> ResultMap in value.resultMap }, "BacklinkURL": backlinkUrl])
+      public init(reviewUrl: [String]? = nil, priceHistory: PriceHistory? = nil, memorizedQuery: [String]? = nil, recipe: Recipe? = nil, backlinkUrl: [BacklinkUrl]? = nil) {
+        self.init(unsafeResultMap: ["__typename": "CheatsheetAnnotationData", "ReviewURL": reviewUrl, "PriceHistory": priceHistory.flatMap { (value: PriceHistory) -> ResultMap in value.resultMap }, "MemorizedQuery": memorizedQuery, "Recipe": recipe.flatMap { (value: Recipe) -> ResultMap in value.resultMap }, "BacklinkURL": backlinkUrl.flatMap { (value: [BacklinkUrl]) -> [ResultMap] in value.map { (value: BacklinkUrl) -> ResultMap in value.resultMap } }])
       }
 
       public var __typename: String {
@@ -5361,12 +5366,12 @@ public final class CheatsheetInfoQuery: GraphQLQuery {
         }
       }
 
-      public var backlinkUrl: [String]? {
+      public var backlinkUrl: [BacklinkUrl]? {
         get {
-          return resultMap["BacklinkURL"] as? [String]
+          return (resultMap["BacklinkURL"] as? [ResultMap]).flatMap { (value: [ResultMap]) -> [BacklinkUrl] in value.map { (value: ResultMap) -> BacklinkUrl in BacklinkUrl(unsafeResultMap: value) } }
         }
         set {
-          resultMap.updateValue(newValue, forKey: "BacklinkURL")
+          resultMap.updateValue(newValue.flatMap { (value: [BacklinkUrl]) -> [ResultMap] in value.map { (value: BacklinkUrl) -> ResultMap in value.resultMap } }, forKey: "BacklinkURL")
         }
       }
 
@@ -6015,6 +6020,65 @@ public final class CheatsheetInfoQuery: GraphQLQuery {
                 resultMap.updateValue(newValue, forKey: "actualStars")
               }
             }
+          }
+        }
+      }
+
+      public struct BacklinkUrl: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["BacklinkEntry"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("URL", type: .scalar(String.self)),
+            GraphQLField("Title", type: .scalar(String.self)),
+            GraphQLField("Domain", type: .scalar(String.self)),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(url: String? = nil, title: String? = nil, domain: String? = nil) {
+          self.init(unsafeResultMap: ["__typename": "BacklinkEntry", "URL": url, "Title": title, "Domain": domain])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        public var url: String? {
+          get {
+            return resultMap["URL"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "URL")
+          }
+        }
+
+        public var title: String? {
+          get {
+            return resultMap["Title"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "Title")
+          }
+        }
+
+        public var domain: String? {
+          get {
+            return resultMap["Domain"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "Domain")
           }
         }
       }

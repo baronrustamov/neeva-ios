@@ -47,24 +47,28 @@ struct ReviewURLButton: View {
 
 struct RedditBacklinkButton: View {
     let url: URL
+    let title: String?
+
     @Environment(\.onOpenURLForCheatsheet) var onOpenURLForCheatsheet
 
     var body: some View {
         Button(action: {
             onOpenURLForCheatsheet(url, String(describing: Self.self))
         }) {
-            getHostName()
+            getHostName(title: title)
         }
     }
 
     @ViewBuilder
-    func getHostName() -> some View {
+    func getHostName(title: String?) -> some View {
         let lastPath = url.lastPathComponent
             .replacingOccurrences(of: "/", with: "")
             .replacingOccurrences(of: "_", with: " ")
 
+        let label = title ?? ""
+
         HStack {
-            Text(lastPath).bold()
+            Text(label == "" ? lastPath : label).bold()
         }
         .withFont(unkerned: .bodyMedium)
         .lineLimit(1)
@@ -373,13 +377,15 @@ public struct CheatsheetMenuView: View {
 
     @ViewBuilder
     var redditBacklinkSession: some View {
-        if model.cheatsheetInfo?.backlinkURL?.count ?? 0 > 0 {
+        if let backlinks = model.cheatsheetInfo?.backlinkURL, backlinks.count > 0 {
             VStack(alignment: .leading, spacing: 20) {
                 Text("From Reddit").withFont(.headingMedium)
-                ForEach(model.cheatsheetInfo?.backlinkURL ?? [], id: \.self) { backlink in
-                    if let url = URL(string: backlink) {
+                ForEach(0..<backlinks.count) { index in
+                    if let urlContent = backlinks[index].url,
+                        let url = URL(string: urlContent)
+                    {
                         // construct reddit link
-                        RedditBacklinkButton(url: url)
+                        RedditBacklinkButton(url: url, title: backlinks[index].title)
                     }
                 }
             }
