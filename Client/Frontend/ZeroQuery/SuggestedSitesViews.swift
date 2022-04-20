@@ -84,7 +84,7 @@ private struct SuggestedItemBackgroundModifier: ViewModifier {
 struct SuggestedHomeView: View {
     var title: String {
         NeevaConstants.currentTarget == .xyz
-            ? Defaults[.cryptoPublicKey].isEmpty ? "You" : "Your NFTs" : "Home"
+            ? Defaults[.cryptoPublicKey].isEmpty ? "You" : "Your Wallet" : "Home"
     }
     @State private var shareTargetView: UIView!
 

@@ -7,7 +7,7 @@ import WalletCore
 
 struct BalancesView: View {
     @State var isExpanded: Bool = true
-    let model: Web3Model
+    @ObservedObject var model: Web3Model
 
     var body: some View {
         Section(

@@ -23,7 +23,7 @@ private class XYZIntroViewModel {
             text: "Beat scammers! Receive warnings before connecting"),
         XYZIntroModel(
             image: "xyzintro-3",
-            text: "Stake, swap tokens, and buy NFTs on web3 sites"),
+            text: "Stake, swap tokens, and connect to dApps"),
     ]
 }
 

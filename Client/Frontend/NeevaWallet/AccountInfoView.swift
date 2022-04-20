@@ -22,7 +22,7 @@ struct AccountInfoView: View {
     @Binding var viewState: ViewState
 
     @Environment(\.hideOverlay) var hideOverlay
-    let model: Web3Model
+    @ObservedObject var model: Web3Model
 
     var body: some View {
         VStack(spacing: 0) {
@@ -208,7 +208,7 @@ struct AccountInfoView: View {
                         AssetStore.shared.collections.removeAll()
                         model.walletInfo = WalletQuery.WalletInfo(ens: [])
                         model.balances.keys.forEach({
-                            model.balances[$0] = nil
+                            model.balances[$0] = "0"
                         })
                     }),
                 .cancel(),

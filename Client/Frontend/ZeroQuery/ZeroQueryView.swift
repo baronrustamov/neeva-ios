@@ -287,7 +287,7 @@ struct ZeroQueryView: View {
     @ViewBuilder
     private var browseNFTsView: some View {
         ZeroQueryHeader(
-            title: "Browse NFTs"
+            title: "Browse Web3"
         )
         SuggestedSitesView(
             isExpanded: false,

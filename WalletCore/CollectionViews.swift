@@ -190,14 +190,22 @@ public struct CollectionView: View {
     public var body: some View {
         VStack(spacing: 0) {
             ZStack(alignment: .topTrailing) {
-                WebImage(url: collection.bannerImageURL)
-                    .placeholder {
-                        Color.TrayBackground
-                    }
-                    .resizable()
-                    .scaledToFill()
-                    .frame(maxHeight: 128)
-                    .clipped()
+                WebImage(
+                    url: collection.bannerImageURL,
+                    context: [
+                        .imageThumbnailPixelSize: CGSize(
+                            width: 512,
+                            height: 512),
+                        .imagePreserveAspectRatio: true,
+                    ]
+                )
+                .placeholder {
+                    Color.TrayBackground
+                }
+                .resizable()
+                .scaledToFill()
+                .frame(maxHeight: 128)
+                .clipped()
                 Image("opensea-badge")
                     .resizable()
                     .scaledToFit()
@@ -211,6 +219,7 @@ public struct CollectionView: View {
                     }
                     .resizable()
                     .scaledToFit()
+                    .background(Color.background)
                     .frame(width: 48, height: 48)
                     .clipShape(Circle())
                     .roundedOuterBorder(cornerRadius: 24, color: .white, lineWidth: 2)

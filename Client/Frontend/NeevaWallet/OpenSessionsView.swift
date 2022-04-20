@@ -14,7 +14,7 @@ struct OpenSessionsView: View {
     @State var sessionToDisconnect: Session? = nil
     @Default(.sessionsPeerIDs) var savedSessions
 
-    let model: Web3Model
+    @ObservedObject var model: Web3Model
 
     var body: some View {
         Section(

@@ -207,7 +207,9 @@ class Web3Model: ObservableObject {
             balances.keys.forEach { token in
                 wallet?.tokenBalance(token: token) { balance in
                     self.balances[token] = balance
-                    self.objectWillChange.send()
+                    DispatchQueue.main.async {
+                        self.objectWillChange.send()
+                    }
                 }
             }
         }
@@ -224,11 +226,12 @@ class Web3Model: ObservableObject {
                         case .failure(let error):
                             Logger.browser.info("Wallet info query failed with \(error)")
                         case .success(let walletInfo):
-                            self.walletInfo = walletInfo
+                            DispatchQueue.main.async {
+                                self.walletInfo = walletInfo
+                            }
                         }
                     }
                     self.updateBalances()
-
                 }
                 AssetStore.shared.refresh(onCompletion: {
                     if FeatureFlag[.newWeb3Features] {
