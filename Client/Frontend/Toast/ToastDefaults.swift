@@ -20,7 +20,6 @@ class ToastDefaults: NSObject {
         let toastView = toastViewManager.makeToast(
             text: LocalizedStringKey(text), checkmark: checkmark)
         toast = toastView
-        toastViewManager.enqueue(view: toastView)
     }
 
     func showToastForClosedTabs(_ savedTabs: [SavedTab], tabManager: TabManager) {
@@ -44,9 +43,7 @@ class ToastDefaults: NSObject {
                     }))
 
             let toastViewManager = SceneDelegate.getBVC(with: tabManager.scene).toastViewManager
-            let toastView = toastViewManager.makeToast(content: toastContent)
-            toast = toastView
-            toastViewManager.enqueue(view: toastView)
+            toast = toastViewManager.makeToast(content: toastContent)
         }
     }
 
@@ -87,11 +84,9 @@ class ToastDefaults: NSObject {
             normalContent: normalContent, completedContent: completedContent,
             failedContent: failedContent)
 
-        let toastView = toastViewManager.makeToast(
+        toast = toastViewManager.makeToast(
             content: toastContent, toastProgressViewModel: toastProgressViewModel,
             autoDismiss: false)
-        toast = toastView
-        toastViewManager.enqueue(view: toastView, at: .first)
     }
 
     func showToastForAddToSpaceUI(bvc: BrowserViewController, request: AddToSpaceRequest) {
@@ -147,11 +142,9 @@ class ToastDefaults: NSObject {
             failedContent: failedContent)
 
         let toastViewManager = bvc.toastViewManager
-        let toastView = toastViewManager.makeToast(
+        toast = toastViewManager.makeToast(
             content: toastContent, toastProgressViewModel: toastProgressViewModel,
             autoDismiss: false)
-        toast = toastView
-        toastViewManager.enqueue(view: toastView)
     }
 
     func showToastForRemoveFromSpace(
@@ -182,11 +175,9 @@ class ToastDefaults: NSObject {
             failedContent: failedContent)
 
         let toastViewManager = bvc.toastViewManager
-        let toastView = toastViewManager.makeToast(
+        toast = toastViewManager.makeToast(
             content: toastContent, toastProgressViewModel: toastProgressViewModel,
             autoDismiss: false)
-        toast = toastView
-        toastViewManager.enqueue(view: toastView)
     }
 
     func showToastForFeedback(request: FeedbackRequest, toastViewManager: ToastViewManager) {
@@ -194,11 +185,9 @@ class ToastDefaults: NSObject {
         let toastContent = ToastViewContent(
             normalContent: normalContent)
 
-        let toastView = toastViewManager.makeToast(
+        toast = toastViewManager.makeToast(
             content: toastContent,
             toastProgressViewModel: toastProgressViewModel)
-        toast = toastView
-        toastViewManager.enqueue(view: toastView)
     }
 
     func showToastForSetPreferredProvider(
@@ -236,11 +225,9 @@ class ToastDefaults: NSObject {
             normalContent: normalContent, completedContent: completedContent,
             failedContent: failedContent)
 
-        let toastView = toastViewManager.makeToast(
+        toast = toastViewManager.makeToast(
             content: toastContent,
             toastProgressViewModel: toastProgressViewModel, autoDismiss: false)
-        toast = toastView
-        toastViewManager.enqueue(view: toastView)
     }
 
     func showToastForSwitchToTab(_ tab: Tab?, incognito: Bool, tabManager: TabManager) {
@@ -253,7 +240,7 @@ class ToastDefaults: NSObject {
                 ? "New Incognito Tab opened"
                 : "New Tab opened"
 
-            toastViewManager.makeToast(
+            toast = toastViewManager.makeToast(
                 text: toastLabelText,
                 buttonText: "Switch",
                 buttonAction: {
@@ -263,7 +250,7 @@ class ToastDefaults: NSObject {
                         presentedViewController.dismiss(animated: true, completion: nil)
                     }
                 }
-            ).enqueue(manager: toastViewManager)
+            )
         }
     }
 

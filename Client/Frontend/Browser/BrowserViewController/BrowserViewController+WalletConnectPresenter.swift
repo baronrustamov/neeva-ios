@@ -43,7 +43,5 @@ extension BrowserViewController: ToastDelegate {
     func shouldShowToast(for message: LocalizedStringKey) {
         print(message)
         toastViewManager.makeToast(text: message)
-            .enqueue(manager: toastViewManager)
     }
-
 }

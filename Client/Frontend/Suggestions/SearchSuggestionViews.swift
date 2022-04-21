@@ -755,7 +755,7 @@ func copySuggestion(value: String?, scene: UIScene) {
     UIPasteboard.general.string = value
 
     let toastManager = SceneDelegate.getBVC(with: scene).toastViewManager
-    toastManager.makeToast(text: "Copied to clipboard").enqueue(manager: toastManager)
+    toastManager.makeToast(text: "Copied to clipboard")
 }
 
 struct SuggestionView_Previews: PreviewProvider {

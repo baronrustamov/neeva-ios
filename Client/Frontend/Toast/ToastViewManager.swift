@@ -16,9 +16,13 @@ class ToastViewManager: QueuedViewManager<ToastView> {
         let content = ToastViewContent(
             normalContent: ToastStateContent(
                 text: text, buttonText: buttonText, buttonAction: buttonAction))
-        return ToastView(
+
+        let toast = ToastView(
             displayTime: displayTime, autoDismiss: autoDismiss,
             content: content, toastProgressViewModel: toastProgressViewModel, checkmark: checkmark)
+        toast.enqueue(manager: self)
+
+        return toast
     }
 
     public func makeToast(
@@ -26,9 +30,12 @@ class ToastViewManager: QueuedViewManager<ToastView> {
         toastProgressViewModel: ToastProgressViewModel? = nil,
         displayTime: Double = 4.5, autoDismiss: Bool = true
     ) -> ToastView {
-        return ToastView(
+        let toast = ToastView(
             displayTime: displayTime, autoDismiss: autoDismiss,
             content: content, toastProgressViewModel: toastProgressViewModel)
+        toast.enqueue(manager: self)
+
+        return toast
     }
 
     override func present(_ view: ToastView, height: CGFloat = 80) {

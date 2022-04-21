@@ -137,7 +137,6 @@ struct ShareToSocialView: View {
                         UIPasteboard.general.url = url
 
                         toastViewManager.makeToast(text: "URL copied to clipboard")
-                            .enqueue(manager: toastViewManager)
                     })
                 })
             Spacer()

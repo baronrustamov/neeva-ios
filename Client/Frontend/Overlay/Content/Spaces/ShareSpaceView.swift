@@ -231,7 +231,7 @@ struct ShareSpaceView: View {
                             text: sharedUsers == 1
                                 ? "Success! Space shared with 1 person"
                                 : "Success! Space shared with \(sharedUsers) people"
-                        ).enqueue(manager: toastViewManager)
+                        )
                     }
 
                     isPresented = false

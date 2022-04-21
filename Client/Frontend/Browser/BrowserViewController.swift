@@ -912,7 +912,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
             buttonAction: {
                 self.tabManager.selectTab(tab, notify: true)
             }
-        ).enqueue(manager: toastViewManager)
+        )
     }
 
     func openBlankNewTab(isIncognito: Bool = false) {

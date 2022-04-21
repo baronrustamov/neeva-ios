@@ -61,7 +61,7 @@ struct NonEssentialCookieSettings: View {
                             buttonAction: {
                                 self.presentationMode.wrappedValue.dismiss()
                             }))
-                ).enqueue(manager: toastViewManager)
+                )
             }
         }
     }
