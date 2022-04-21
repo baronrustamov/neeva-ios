@@ -135,7 +135,7 @@ extension Web3Theme {
         switch self {
         case .azuki, .coolCats, .default:
             Symbol(
-                .house,
+                FeatureFlag[.newWeb3Features] ? .house : .plus,
                 size: 20,
                 weight: .medium,
                 label: .TabToolbarBackAccessibilityLabel

@@ -422,6 +422,29 @@ class Web3Model: ObservableObject {
                 ), completion: {})
         }
 
+        func showWalletCredentialsPrompt() {
+            presenter.showModal(
+                style: .spaces,
+                headerButton: nil,
+                content: {
+                    ImportCredentialsView(importCredentials: {
+                        self.presenter.presentFullScreenModal(
+                            content: AnyView(
+                                CryptoWalletView(
+                                    viewState: .importWallet,
+                                    dismiss: {
+                                        self.presenter.dismissCurrentOverlay()
+                                        self.initializeWallet()
+                                    }
+                                )
+                                .environmentObject(self)
+                                .overlayIsFixedHeight(isFixedHeight: true)
+                            ), completion: {})
+                    })
+                    .overlayIsFixedHeight(isFixedHeight: true)
+                }, onDismiss: {})
+        }
+
         func showWalletPanelHalfScreen() {
             presenter.showModal(
                 style: .grouped,

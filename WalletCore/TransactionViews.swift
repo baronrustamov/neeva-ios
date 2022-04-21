@@ -291,6 +291,99 @@ public struct MaliciousSiteView: View {
     }
 }
 
+public struct ImportCredentialsView: View {
+    @Environment(\.hideOverlay) private var hideOverlaySheet
+    let importCredentials: () -> Void
+
+    public init(importCredentials: @escaping () -> Void) {
+        self.importCredentials = importCredentials
+    }
+
+    public var body: some View {
+        VStack(spacing: 24) {
+            VStack(spacing: 12) {
+                Image("wallet-wordmark")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 20)
+                    .padding(.vertical, 8)
+                Symbol(decorative: .lockShield, size: 36)
+                    .gradientForeground()
+                    .padding(4)
+                    .background(Color.background)
+                    .clipShape(Circle())
+                Text("Securely import your wallet credentials")
+                    .withFont(.headingLarge)
+                    .foregroundColor(.label)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .multilineTextAlignment(.center)
+
+                VStack(spacing: 8) {
+                    HStack(spacing: 4) {
+                        Symbol(decorative: .signature, style: .bodyLarge)
+                            .frame(minWidth: 32)
+                        Text("Sign into dApps")
+                            .withFont(unkerned: .bodyLarge)
+                            .foregroundColor(.secondaryLabel)
+                    }.frame(maxWidth: .infinity, alignment: .leading)
+
+                    HStack(spacing: 4) {
+                        Symbol(decorative: .creditcardFill, style: .bodyLarge)
+                            .frame(minWidth: 32)
+                        Text("Purchase NFTs")
+                            .withFont(unkerned: .bodyLarge)
+                            .foregroundColor(.secondaryLabel)
+                    }.frame(maxWidth: .infinity, alignment: .leading)
+                    HStack(spacing: 4) {
+                        Symbol(decorative: .lockOpenFill, style: .bodyLarge)
+                            .frame(minWidth: 32)
+                        Text("Unlock customized experiences")
+                            .withFont(unkerned: .bodyLarge)
+                            .foregroundColor(.secondaryLabel)
+                    }.frame(maxWidth: .infinity, alignment: .leading)
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .padding(12)
+            .background(WalletTheme.gradient.opacity(0.08))
+            .cornerRadius(12)
+
+            Text(
+                "You should only enter your these credentials while importing a wallet, never on any other screen"
+            )
+            .withFont(.bodyMedium)
+            .foregroundColor(.secondaryLabel)
+            .fixedSize(horizontal: false, vertical: true)
+            .multilineTextAlignment(.center)
+            VStack(spacing: 16) {
+                Button(
+                    action: {
+                        hideOverlaySheet()
+                        DispatchQueue.main.async {
+                            importCredentials()
+                        }
+                    },
+                    label: {
+                        Text("Import Wallet Credentials")
+                            .frame(maxWidth: .infinity)
+                    }
+                ).buttonStyle(.wallet(.primary))
+                Button(
+                    action: {
+                        hideOverlaySheet()
+                    },
+                    label: {
+                        Text("Ask Again Later")
+                            .frame(maxWidth: .infinity)
+                    }
+                ).buttonStyle(.wallet(.secondary))
+            }.padding(.bottom, 16)
+        }
+        .padding(12)
+        .padding(.bottom, 24)
+    }
+}
+
 public struct WalletSequenceBottomInfoPanel: View {
     let sequence: SequenceInfo
     let wallet: WalletAccessor

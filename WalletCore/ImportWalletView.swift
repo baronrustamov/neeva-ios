@@ -44,13 +44,17 @@ public struct ImportWalletView: View {
                         .autocapitalization(.none)
                         .frame(maxWidth: .infinity)
                 }
-                Text("Type or paste your Secret Phrase, public address, or ENS domain")
-                    .withFont(.bodyLarge)
-                    .foregroundColor(.secondary)
-                    .allowsHitTesting(false)
-                    .animation(nil)
-                    .opacity(inputPhrase.isEmpty && !isFocused ? 1 : 0)
-                    .animation(.easeInOut(duration: 0.2))
+                Text(
+                    Defaults[.cryptoPublicKey].isEmpty
+                        ? "Type or paste your Secret Phrase, public address, or ENS domain"
+                        : "Type or paste your Secret Phrase"
+                )
+                .withFont(.bodyLarge)
+                .foregroundColor(.secondary)
+                .allowsHitTesting(false)
+                .animation(nil)
+                .opacity(inputPhrase.isEmpty && !isFocused ? 1 : 0)
+                .animation(.easeInOut(duration: 0.2))
             }
             .padding(12)
             .roundedOuterBorder(
@@ -78,7 +82,9 @@ public struct ImportWalletView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             } else if !isFocused {
                 Text(
-                    "**Not ready to import your wallet?** Start by inputting a public address or ENS domain. You can always import your wallet at another time."
+                    Defaults[.cryptoPublicKey].isEmpty
+                        ? "**Not ready to import your wallet?** Start by inputting a public address or ENS domain. You can always import your wallet at another time."
+                        : "You should only enter your secret phrase while importing a wallet, never on any other screen"
                 )
                 .withFont(.bodyMedium)
                 .foregroundColor(.secondaryLabel)

@@ -7975,7 +7975,7 @@
 				CODE_SIGN_ENTITLEMENTS = Client/Entitlements/Neevaxyz.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 50;
+				CURRENT_PROJECT_VERSION = 52;
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				INFOPLIST_FILE = Client/XYZClient.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -7986,7 +7986,7 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
-				MARKETING_VERSION = 1.1.26;
+				MARKETING_VERSION = 1.1.28;
 				NEEVA_BUNDLE_DISPLAY_NAME = Neevaxyz;
 				NEEVA_ROOT_BUNDLE_INDENTIFIER = xyz.neeva.app.ios.browser;
 				OTHER_SWIFT_FLAGS = "-DXYZ $(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_NEEVA -DPROD";
@@ -8011,7 +8011,7 @@
 				CODE_SIGN_ENTITLEMENTS = Client/Entitlements/NeevaxyzDev.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 50;
+				CURRENT_PROJECT_VERSION = 52;
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				INCLUDE_SETTINGS_BUNDLE = NO;
 				INFOPLIST_FILE = Client/XYZClient.plist;
@@ -8024,7 +8024,7 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
-				MARKETING_VERSION = 1.1.26;
+				MARKETING_VERSION = 1.1.28;
 				NEEVA_BUNDLE_DISPLAY_NAME = "Neevaxyz ($(USER))";
 				NEEVA_ROOT_BUNDLE_INDENTIFIER = "xyz.neeva.app.ios.browser-dev";
 				OTHER_SWIFT_FLAGS = "-DXYZ";

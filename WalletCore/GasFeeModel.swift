@@ -46,17 +46,22 @@ public class GasFeeModel: ObservableObject {
     }
 
     public func configureTimer(with wallet: WalletAccessor?, chain: EthNode = EthNode.Ethereum) {
+        guard let wallet = wallet else { return }
+        updateGasPrice(with: wallet, chain: chain)
         timer = Timer.scheduledTimer(withTimeInterval: 200, repeats: true) { [weak self] _ in
-            guard let self = self, let wallet = wallet else { return }
-            wallet.gasPrice(
-                on: chain,
-                completion: { price in
-                    DispatchQueue.main.async {
-                        self.gasPrice = self.format(price: price)
-                        self.gasFeeState = GasFeeState(with: self.gasPrice)
-                    }
-                })
+            self?.updateGasPrice(with: wallet, chain: chain)
         }
+    }
+
+    private func updateGasPrice(with wallet: WalletAccessor, chain: EthNode = EthNode.Ethereum) {
+        wallet.gasPrice(
+            on: chain,
+            completion: { price in
+                DispatchQueue.main.async {
+                    self.gasPrice = self.format(price: price)
+                    self.gasFeeState = GasFeeState(with: self.gasPrice)
+                }
+            })
     }
 
     private func format(price: BigUInt?) -> Double {

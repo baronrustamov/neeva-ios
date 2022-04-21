@@ -39,6 +39,7 @@ public protocol ResponseRelay {
     ) throws -> String
     func sign(on chain: EthNode, message: String) throws -> String
     func sign(on chain: EthNode, message: Data) throws -> String
+    func showWalletCredentialsPrompt()
 }
 
 extension Response {
@@ -64,7 +65,7 @@ public class PersonalSignHandler: RequestHandler {
         if let _ = NeevaConstants.cryptoKeychain[string: NeevaConstants.cryptoSecretPhrase] {
             return true
         } else {
-            relay.shouldShowToast(for: "You need to import your wallet credentials")
+            relay.showWalletCredentialsPrompt()
             return false
         }
     }
@@ -108,7 +109,7 @@ public class SendTransactionHandler: RequestHandler {
         if let _ = NeevaConstants.cryptoKeychain[string: NeevaConstants.cryptoSecretPhrase] {
             return true
         } else {
-            relay.shouldShowToast(for: "You need to import your wallet credentials")
+            relay.showWalletCredentialsPrompt()
             return false
         }
     }
@@ -152,7 +153,7 @@ public class SignTypedDataHandler: RequestHandler {
         if let _ = NeevaConstants.cryptoKeychain[string: NeevaConstants.cryptoSecretPhrase] {
             return true
         } else {
-            relay.shouldShowToast(for: "You need to import your wallet credentials")
+            relay.showWalletCredentialsPrompt()
             return false
         }
     }
