@@ -197,7 +197,7 @@ struct CardsContainer: View {
                         )
                     }
                 }
-                .offset(x: (gridModel.switcherState == .spaces ? 0 : geom.size.width))
+                .offset(x: (gridModel.switcherState == .spaces ? 0 : geom.widthIncludingSafeArea))
                 .accessibilityElement(children: .contain)
                 .accessibilityLabel("Spaces")
                 .accessibilityHidden(gridModel.switcherState != .spaces)
@@ -225,7 +225,8 @@ struct CardsContainer: View {
                 }
                 .offset(
                     x: (gridModel.switcherState == .tabs
-                        ? (incognitoModel.isIncognito ? geom.size.width : 0) : -geom.size.width)
+                        ? (incognitoModel.isIncognito ? geom.widthIncludingSafeArea : 0)
+                        : -geom.widthIncludingSafeArea)
                 )
                 .accessibilityElement(children: .contain)
                 .accessibilityLabel("Tabs")
@@ -245,7 +246,8 @@ struct CardsContainer: View {
                 }
                 .offset(
                     x: (gridModel.switcherState == .tabs
-                        ? (incognitoModel.isIncognito ? 0 : -geom.size.width) : -geom.size.width)
+                        ? (incognitoModel.isIncognito ? 0 : -geom.widthIncludingSafeArea)
+                        : -geom.widthIncludingSafeArea)
                 )
                 .accessibilityElement(children: .contain)
                 .accessibilityLabel("Incognito Tabs")

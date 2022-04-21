@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import SwiftUI
 import UIKit
 
 extension CGRect {
@@ -18,5 +19,11 @@ extension CGRect {
 extension UIEdgeInsets {
     init(equalInset inset: CGFloat) {
         self.init(top: inset, left: inset, bottom: inset, right: inset)
+    }
+}
+
+extension GeometryProxy {
+    var widthIncludingSafeArea: CGFloat {
+        size.width + safeAreaInsets.leading + safeAreaInsets.trailing
     }
 }
