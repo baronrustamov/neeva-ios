@@ -222,7 +222,7 @@ class LocalNotitifications {
             body =
                 "Find the best reviewed products around the web, never ads. See the difference!"
             timeInterval = TimeInterval(Defaults[.productSearchPromoTimeInterval])
-            let query = "Best Headphones"
+            let query = "best headphones"
             if let encodedQuery = query.addingPercentEncoding(
                 withAllowedCharacters: .urlQueryAllowed), !encodedQuery.isEmpty
             {

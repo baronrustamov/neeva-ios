@@ -7,7 +7,7 @@ import SwiftUI
 
 struct SuggestedPreviewSearchesView: View {
     @Environment(\.onOpenURL) private var openURL
-    let queryList = ["Best Headphones", "Lemon Bar Recipe", "React Hooks"]
+    let queryList = ["best headphones", "lemon bar recipe", "react hooks"]
 
     var body: some View {
         VStack(spacing: 0) {
