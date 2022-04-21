@@ -12,7 +12,7 @@ extension XCUIElement {
             self.tap()
         } else {
             let coordinate: XCUICoordinate = self.coordinate(
-                withNormalizedOffset: CGVector(dx: 0.0, dy: 0.0))
+                withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
             coordinate.tap()
         }
     }
