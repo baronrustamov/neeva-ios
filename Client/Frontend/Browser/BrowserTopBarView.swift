@@ -57,11 +57,6 @@ struct BrowserTopBarView: View {
                         bvc.hideZeroQuery()
                     }
                 }
-            ).environment(
-                \.openSettings,
-                { page in
-                    bvc.openSettings(openPage: page)
-                }
             )
         }
     }

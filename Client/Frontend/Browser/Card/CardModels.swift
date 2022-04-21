@@ -56,6 +56,8 @@ class TabCardModel: CardModel {
 
     private func updateRows() {
         if FeatureFlag[.enableTimeBasedSwitcher] {
+            // Ensure representative tab is the most recently used tab in a tab group.
+            updateRepresentativeTabs()
             timeBasedIncognitoRows[.today] = buildRows(incognito: true, byTime: .today)
             timeBasedNormalRows[.today] = buildRows(incognito: false, byTime: .today)
             timeBasedIncognitoRows[.lastWeek] = buildRows(
@@ -93,6 +95,10 @@ class TabCardModel: CardModel {
             }
         } else {
             returnValue = incognito ? incognitoRows : normalRows
+        }
+
+        for id in 0..<returnValue.count {
+            returnValue[id].index = id + 1
         }
 
         return returnValue
@@ -199,8 +205,12 @@ class TabCardModel: CardModel {
         // The fallback value won't be used. tab.lastExecutedTime is
         // guaranteed to be non-nil in configureTab()
         let lastExecutedTime = tab.lastExecutedTime ?? Date.nowMilliseconds()
-        let minusOneDayToCurrentDate = Calendar.current.date(
-            byAdding: .day, value: -1, to: Date())
+        let minusOneDayToCurrentDate =
+            FeatureFlag[.demoteAfter15secondsTimeBasedSwitcher]
+            ? Calendar.current.date(
+                byAdding: .second, value: -15, to: Date())
+            : Calendar.current.date(
+                byAdding: .day, value: -1, to: Date())
         guard let startOfOneDayAgo = minusOneDayToCurrentDate else {
             return true
         }
@@ -359,10 +369,6 @@ class TabCardModel: CardModel {
             rows.insert(Row(cells: [Row.Cell.sectionHeader(byTime)]), at: 0)
         }
 
-        for id in 0..<rows.count {
-            rows[id].index = id + 1
-        }
-
         return rows
     }
 
@@ -380,8 +386,7 @@ class TabCardModel: CardModel {
         .map { TabCardDetails(tab: $0, manager: manager) }
 
         // Tab Group related updates
-        representativeTabs = manager.getAllTabGroup()
-            .reduce(into: [Tab]()) { $0.append($1.children.first!) }
+        updateRepresentativeTabs()
         allTabGroupDetails = manager.getAllTabGroup().map {
             TabGroupCardDetails(tabGroup: $0, tabManager: manager)
         }
@@ -399,6 +404,16 @@ class TabCardModel: CardModel {
         }
 
         updateRows()
+    }
+
+    private func updateRepresentativeTabs() {
+        if FeatureFlag[.enableTimeBasedSwitcher] {
+            representativeTabs = manager.getAllTabGroup()
+                .reduce(into: [Tab]()) { $0.append(manager.getMostRecentChild($1)!) }
+        } else {
+            representativeTabs = manager.getAllTabGroup()
+                .reduce(into: [Tab]()) { $0.append($1.children.first!) }
+        }
     }
 
     private func modifyAllDetailsFilteredPromotingPinnedTabs(

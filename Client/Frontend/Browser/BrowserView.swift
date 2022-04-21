@@ -133,6 +133,12 @@ struct BrowserView: View {
             OverlayView()
         }
         .environment(\.safeArea, safeArea)
+        .environment(
+            \.openSettings,
+            { page in
+                bvc.openSettings(openPage: page)
+            }
+        )
         .environmentObject(browserModel)
         .environmentObject(browserModel.incognitoModel)
         .environmentObject(browserModel.cardTransitionModel)

@@ -20,10 +20,12 @@ struct DetailedSettingsLabel: View {
 }
 
 struct GeneralSettingsSection: View {
+    @State var showArchivedTabsSettings = false
     @Default(.showSearchSuggestions) var showSearchSuggestions
     @Default(.blockPopups) var blockPopups
     @Default(.contextMenuShowLinkPreviews) var showLinkPreviews
     @Default(.confirmCloseAllTabs) var confirmCloseAllTabs
+    @EnvironmentObject var browserModel: BrowserModel
 
     var body: some View {
         NavigationLink(
@@ -58,6 +60,13 @@ struct GeneralSettingsSection: View {
                 title: "Require Confirmation",
                 description: "When Closing All Tabs"
             )
+        }
+        if FeatureFlag[.enableArchivedTabsView] {
+            NavigationLink(isActive: $showArchivedTabsSettings) {
+                ArchivedTabSettings()
+            } label: {
+                Text("Keep Tabs")
+            }
         }
     }
 }

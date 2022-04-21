@@ -38,6 +38,7 @@ struct TabGridContainer: View {
     }
 
     @Environment(\.columns) private var columns
+    @State var cardStackGeom: CGSize = CGSize.zero
 
     var selectedRowId: TabCardModel.Row.ID? {
         // note: this is still WIP, it's working but can remove some of the code
@@ -76,8 +77,37 @@ struct TabGridContainer: View {
     var body: some View {
         Group {
             LazyVStack(alignment: .leading, spacing: 0) {
-                SingleLevelTabCardsView(containerGeometry: geom, incognito: isIncognito)
+                // When there aren't enough tabs to make the scroll view scrollable, we build a VStack
+                // with spacer to pin ArchivedTabsView at the bottom of the scrollView.
+                if FeatureFlag[.enableTimeBasedSwitcher] && !isIncognito
+                    && geom.size.height >= cardStackGeom.height
+                {
+                    VStack(alignment: .leading, spacing: 0) {
+                        SingleLevelTabCardsView(containerGeometry: geom, incognito: isIncognito)
+                        Spacer()
+                        if FeatureFlag[.enableArchivedTabsView]
+                            && tabModel.getRows(incognito: isIncognito).count > 0
+                        {
+                            ArchivedTabsView(containerGeometry: geom.size)
+                        }
+                    }.frame(minWidth: geom.size.width, minHeight: geom.size.height)
+                } else {
+                    SingleLevelTabCardsView(containerGeometry: geom, incognito: isIncognito)
+                    if FeatureFlag[.enableArchivedTabsView] && !isIncognito
+                        && tabModel.getRows(incognito: isIncognito).count > 0
+                    {
+                        ArchivedTabsView(containerGeometry: geom.size)
+                    }
+                }
             }
+            .background(
+                GeometryReader { proxy in
+                    Color.clear
+                        .useEffect(deps: proxy.size) { newValue in
+                            cardStackGeom = newValue
+                        }
+                }
+            )
         }
         .environment(\.aspectRatio, CardUX.DefaultTabCardRatio)
         .padding(.vertical, !FeatureFlag[.enableTimeBasedSwitcher] ? (landscapeMode ? 8 : 16) : 0)
@@ -145,6 +175,7 @@ struct CardsContainer: View {
     // Used to rebuild the scene when switching between portrait and landscape.
     @State var orientation: UIDeviceOrientation = .unknown
     @State var generationId: Int = 0
+    @State var containerGeom: CGSize = CGSize.zero
 
     let columns: [GridItem]
 
@@ -181,6 +212,16 @@ struct CardsContainer: View {
                     }.onAppear {
                         gridModel.scrollToSelectedTab()
                     }
+
+                    // isolate ArchivedTabsView when there is no tab to make it not scrollable
+                    if FeatureFlag[.enableArchivedTabsView]
+                        && tabModel.getRows(incognito: false).count == 0
+                    {
+                        VStack {
+                            Spacer()
+                            ArchivedTabsView(containerGeometry: containerGeom)
+                        }.frame(width: containerGeom.width, height: containerGeom.height)
+                    }
                 }
                 .offset(
                     x: (gridModel.switcherState == .tabs
@@ -211,6 +252,9 @@ struct CardsContainer: View {
                 .accessibilityValue(Text("\(tabModel.manager.incognitoTabs.count) tabs"))
                 .accessibilityHidden(
                     gridModel.switcherState != .tabs || !incognitoModel.isIncognito)
+            }
+            .useEffect(deps: geom.size) { newValue in
+                containerGeom = newValue
             }
         }
         .id(generationId)

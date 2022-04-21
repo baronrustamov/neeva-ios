@@ -441,6 +441,12 @@ class TabManager: NSObject {
         removeTabs(item.children, showToast: showToast)
     }
 
+    func getMostRecentChild(_ item: TabGroup) -> Tab? {
+        return item.children.max(by: { lhs, rhs in
+            lhs.lastExecutedTime ?? 0 < rhs.lastExecutedTime ?? 0
+        })
+    }
+
     func cleanUpTabGroupNames() {
         // Write tab group name into dictionary
         tabGroups.forEach { group in

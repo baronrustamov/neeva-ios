@@ -19,6 +19,7 @@ extension EnvironmentValues {
 
 public enum SettingsPage {
     case cookieCutter
+    case archivedTabs
 }
 
 struct SettingsView: View {
@@ -44,11 +45,11 @@ struct SettingsView: View {
                     }
 
                     Section(header: Text("General")) {
-                        GeneralSettingsSection()
+                        GeneralSettingsSection(showArchivedTabsSettings: openPage == .archivedTabs)
                     }
 
                     Section(header: Text("Privacy")) {
-                        PrivacySettingsSection()
+                        PrivacySettingsSection(openCookieCutterPage: openPage == .cookieCutter)
                     }
 
                     Section(header: Text("Support")) {
