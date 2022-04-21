@@ -22,7 +22,7 @@ struct NFTSuggestionGroup: Codable {
     }
 }
 
-struct NFTSuggestion: Codable {
+public struct NFTSuggestion: Codable {
     let type: NFTSuggestionType
     let displayText: String
     let image: String?
@@ -31,7 +31,7 @@ struct NFTSuggestion: Codable {
     enum CodingKeys: String, CodingKey {
         case type = "Type"
         case displayText = "DisplayText"
-        case image = "Image"
+        case image = "ImageURL"
         case actionURL = "ActionURL"
     }
 

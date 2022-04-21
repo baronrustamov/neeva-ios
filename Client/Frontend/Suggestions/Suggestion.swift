@@ -24,7 +24,7 @@ public enum Suggestion {
     case editCurrentURL(TabCardDetails)
     case editCurrentQuery(String, URL)
     case findInPage(String)
-    case xyzQuery(String)
+    case xyzQuery(NFTSuggestion)
 
     public struct Bang {
         public let shortcut: String

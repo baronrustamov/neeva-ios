@@ -60,8 +60,8 @@ public struct SearchSuggestionView: View {
             TabSuggestionView(suggestion: tab)
         case .findInPage(let query):
             FindInPageSuggestionView(query: query)
-        case .xyzQuery(let query):
-            XYZQueryView(query: query)
+        case .xyzQuery(let suggestion):
+            XYZQueryView(suggestion: suggestion)
         case .editCurrentQuery(let query, let url):
             EditCurrentQuerySuggestionView(suggestion: (query, url))
         }
@@ -713,25 +713,39 @@ private struct FindInPageSuggestionView: View {
 }
 
 private struct XYZQueryView: View {
-    let query: String
+    let suggestion: NFTSuggestion
 
     @State var focused: Bool = false
     @EnvironmentObject public var model: SuggestionModel
 
-    var label: some View {
-        Text(query)
+    private var label: some View {
+        Text(suggestion.displayText)
             .withFont(.bodyLarge)
             .lineLimit(1)
+    }
+
+    @ViewBuilder
+    private var icon: some View {
+        if let imageUrl = URL(string: suggestion.image ?? "") {
+            WebImage(url: imageUrl)
+                .resizable()
+                .frame(
+                    width: SuggestionViewUX.ThumbnailSize, height: SuggestionViewUX.ThumbnailSize
+                )
+                .cornerRadius(6)
+        } else {
+            Symbol(decorative: .magnifyingglass)
+        }
     }
 
     var body: some View {
         SuggestionView(
             action: nil,
-            icon: Symbol(decorative: .magnifyingglass),
+            icon: icon,
             label: label,
             secondaryLabel: EmptyView(),
             detail: EmptyView(),
-            suggestion: Suggestion.xyzQuery(query)
+            suggestion: Suggestion.xyzQuery(suggestion)
         )
         .environmentObject(model)
     }

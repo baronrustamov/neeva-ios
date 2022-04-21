@@ -341,7 +341,7 @@ class SuggestionModel: ObservableObject {
                     !groups.isEmpty
                 else { return }
                 xyzQuerySuggestions = groups[0].suggestions.prefix(3).map { suggestedQuery in
-                    .xyzQuery(suggestedQuery.displayText)
+                    .xyzQuery(suggestedQuery)
                 }
             }
         }.resume()
@@ -662,9 +662,9 @@ class SuggestionModel: ObservableObject {
         case .findInPage(let query):
             interaction = .FindOnPageSuggestion
             bvc.updateFindInPageVisibility(visible: true, query: query)
-        case .xyzQuery(let query):
+        case .xyzQuery(let suggestion):
             interaction = .XYZSearchSuggestion
-            bvc.urlBar(didSubmitText: query, isSearchQuerySuggestion: false)
+            bvc.urlBar(didSubmitText: suggestion.displayText, isSearchQuerySuggestion: false)
         case .editCurrentQuery(let query, let url):
             hideZeroQuery = false
 
