@@ -140,6 +140,7 @@ struct CardsContainer: View {
     @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var gridModel: GridModel
     @EnvironmentObject var incognitoModel: IncognitoModel
+    @EnvironmentObject var chromeModel: TabChromeModel
 
     // Used to rebuild the scene when switching between portrait and landscape.
     @State var orientation: UIDeviceOrientation = .unknown
@@ -172,7 +173,7 @@ struct CardsContainer: View {
 
                 // Normal Tabs
                 ZStack {
-                    EmptyCardGrid(isIncognito: false)
+                    EmptyCardGrid(isIncognito: false, isTopBar: chromeModel.inlineToolbar)
                         .opacity(tabModel.normalDetails.isEmpty ? 1 : 0)
 
                     CardScrollContainer(columns: columns) { scrollProxy in
@@ -192,7 +193,7 @@ struct CardsContainer: View {
 
                 // Incognito Tabs
                 ZStack {
-                    EmptyCardGrid(isIncognito: true)
+                    EmptyCardGrid(isIncognito: true, isTopBar: chromeModel.inlineToolbar)
                         .opacity(tabModel.incognitoDetails.isEmpty ? 1 : 0)
 
                     CardScrollContainer(columns: columns) { scrollProxy in

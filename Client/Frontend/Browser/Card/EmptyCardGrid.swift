@@ -6,13 +6,14 @@ import SwiftUI
 
 struct EmptyCardGrid: View {
     let isIncognito: Bool
+    let isTopBar: Bool
 
     var body: some View {
         VStack {
             Image(decorative: isIncognito ? "EmptyTabTrayIncognito" : "EmptyTabTray")
             Text(isIncognito ? "Create and manage incognito tabs" : "Create and manage tabs")
                 .withFont(.headingXLarge)
-            Text("Tap + below to create a new tab")
+            Text("Tap + \(isTopBar ? "above" : "below") to create a new tab")
                 .withFont(.bodyMedium)
         }
         .accessibilityElement(children: .combine)
@@ -23,7 +24,9 @@ struct EmptyCardGrid: View {
 
 struct EmptyCardGrid_Previews: PreviewProvider {
     static var previews: some View {
-        EmptyCardGrid(isIncognito: false)
-        EmptyCardGrid(isIncognito: true)
+        VStack {
+            EmptyCardGrid(isIncognito: false, isTopBar: false)
+            EmptyCardGrid(isIncognito: true, isTopBar: true)
+        }
     }
 }

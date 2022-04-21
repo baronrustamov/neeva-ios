@@ -23,12 +23,8 @@ struct BrowserTopBarView: View {
         tabContainerModel.currentContentUI == .previewHome
     }
 
-    private var useTopToolbar: Bool {
-        verticalSizeClass == .compact || horizontalSizeClass == .regular
-    }
-
     @ViewBuilder var switcherTopBar: some View {
-        if useTopToolbar {
+        if chromeModel.inlineToolbar {
             SwitcherToolbarView(top: true)
         } else {
             GridPicker()

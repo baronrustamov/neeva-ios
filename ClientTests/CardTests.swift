@@ -39,6 +39,8 @@ class CardTests: XCTestCase {
     var tabCardModel: TabCardModel!
     var spaceCardModel: SpaceCardModel!
     var switcherToolbarModel: SwitcherToolbarModel!
+    var chromeModel: TabChromeModel!
+
     @Default(.tabGroupExpanded) private var tabGroupExpanded: Set<String>
 
     fileprivate let spyDidSelectedTabChange =
@@ -61,6 +63,8 @@ class CardTests: XCTestCase {
             incognitoModel: incognitoModel, switcherToolbarModel: switcherToolbarModel,
             toastViewManager: ToastViewManager(window: UIWindow()),
             notificationViewManager: NotificationViewManager(window: UIWindow()))
+        chromeModel = TabChromeModel()
+
         manager.didRestoreAllTabs = true
 
         SpaceStore.shared = .createMock([.stackOverflow, .savedForLater, .shared, .public])
@@ -390,6 +394,7 @@ class CardTests: XCTestCase {
         .environmentObject(tabCardModel)
         .environmentObject(spaceCardModel)
         .environmentObject(gridModel)
+        .environmentObject(chromeModel)
 
         let tabGridContainer = try cardContainer.inspect().find(TabGridContainer.self)
         XCTAssertNotNil(tabGridContainer)
@@ -422,6 +427,7 @@ class CardTests: XCTestCase {
         .environmentObject(tabCardModel)
         .environmentObject(spaceCardModel)
         .environmentObject(gridModel)
+        .environmentObject(chromeModel)
 
         let spaceCardsView = try cardContainer.inspect().find(SpaceCardsView.self)
         XCTAssertNotNil(spaceCardsView)
