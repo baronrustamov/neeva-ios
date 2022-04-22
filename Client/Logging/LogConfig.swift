@@ -178,6 +178,8 @@ public struct LogConfig {
         case PreviewPromptOtherSignupOptions
         /// Clicked sign in on preview prompt
         case PreviewPromptSignIn
+        /// Clicked sign up in preview mode for preferred providers
+        case PreviewPreferredProviderSignIn
         /// Preview home impression
         case PreviewHomeImpression
         /// Clicked on sample query on the home page
@@ -450,6 +452,7 @@ public struct LogConfig {
         case .ClickBack: return .UI
         case .ClickForward: return .UI
         case .LongPressForward: return .UI
+        case .PreviewPreferredProviderSignIn: return .UI
         case .TurnOnBlockTracking: return .UI
         case .TurnOffBlockTracking: return .UI
         case .TurnOnGlobalBlockTracking: return .UI

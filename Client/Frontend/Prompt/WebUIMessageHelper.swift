@@ -5,6 +5,23 @@ import WebKit
 
 let messageHandlerName = "webui"
 
+private enum WebUIMessageName: String {
+    case showSignUp
+    case unknown
+}
+
+private struct WebUIMessage {
+    let id: String
+    let name: WebUIMessageName
+    let data: [String: Any]
+
+    init(id: String, name: String, data: [String: Any]) {
+        self.id = id
+        self.name = .init(rawValue: name) ?? .unknown
+        self.data = data
+    }
+}
+
 class WebUIMessageHelper: TabContentScript {
     fileprivate weak var tab: Tab?
     fileprivate weak var webView: WKWebView?
@@ -37,30 +54,31 @@ class WebUIMessageHelper: TabContentScript {
         guard let result = message.body as? [String: Any],
             let id = result["id"] as? String,
             let name = result["name"] as? String,
-            let tourStep = TourStep(rawValue: name)
+            let data = result["data"] as? [String: Any]
         else { return }
 
-        if tourStep == .skipTour || tourStep == .completeTour {
-            handleShouldShowNotificationPrompt(id: id, tourStep: tourStep)
-        }
+        let webuiMessage = WebUIMessage(id: id, name: name, data: data)
 
-        if NeevaFeatureFlags[.browserQuests] {
-            handleQuestEvent(id: id, tourStep: tourStep)
-        }
+        handleWebUIMessage(webuiMessage)
     }
 
-    func handleQuestEvent(id: String, tourStep: TourStep) {
+    fileprivate func handleWebUIMessage(_ message: WebUIMessage) {
         let bvc = SceneDelegate.getBVC(with: tabManager?.scene)
 
-        switch tourStep {
-        case .promptSpaceInNeevaMenu, .promptFeedbackInNeevaMenu, .promptSettingsInNeevaMenu:
-            TourManager.shared.setActiveStep(
-                id: id, stepName: tourStep, webView: self.webView! as WKWebView)
-            bvc.showQuestNeevaMenuPrompt()
-        case .openFeedbackPanelWithInputFieldHighlight:
-            TourManager.shared.setActiveStep(
-                id: id, stepName: tourStep, webView: self.webView! as WKWebView)
-            showFeedbackPanel(bvc: bvc)
+        switch message.name {
+        case .showSignUp:
+            if let source = message.data["source"] as? String {
+                switch source {
+                case "previewPreferredProvider":
+                    ClientLogger.shared.logCounter(
+                        .PreviewPreferredProviderSignIn,
+                        attributes: EnvironmentHelper.shared.getFirstRunAttributes())
+                default:
+                    break
+                }
+            }
+
+            bvc.presentIntroViewController(true)
         default:
             break
         }
