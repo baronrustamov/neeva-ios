@@ -95,7 +95,7 @@ struct SpaceDetailList: View {
                     }
 
                     if spacesModel.detailedSpace != nil && primitive.allDetails.isEmpty
-                        && !(space?.isDigest ?? false)
+                        && !(space?.isDigest ?? false) && primitive.isFollowing
                     {
                         EmptySpaceView()
                     }

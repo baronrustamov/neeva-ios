@@ -495,6 +495,9 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
     var id: String
     var item: Space? { manager.get(for: id) }
     var closeButtonImage: UIImage? = nil
+    var isFollowing: Bool {
+        manager.allSpaces.contains { $0.id == id }
+    }
     @Published var allDetails: [SpaceEntityThumbnail] = []
     @Published var allDetailsWithExclusionList: [SpaceEntityThumbnail] = []
 
@@ -511,8 +514,12 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
     init(space: Space, manager: SpaceStore) {
         self.id = space.id.id
         self.manager = manager
-        self.spaceRef = space
-        updateDetails()
+        setSpace(space)
+    }
+
+    init(id: String, manager: SpaceStore) {
+        self.id = id
+        self.manager = manager
     }
 
     var thumbnail: some View {
@@ -532,6 +539,12 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
                 Spacer(minLength: 12)
             }
         }.shadow(radius: 0)
+    }
+
+    func setSpace(_ space: Space) {
+        guard id == space.id.id else { return }
+        self.spaceRef = space
+        updateDetails()
     }
 
     func updateDetails() {

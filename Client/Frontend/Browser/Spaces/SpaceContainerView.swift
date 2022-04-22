@@ -28,6 +28,7 @@ struct SpaceContainerView: View {
         VStack(spacing: 0) {
             SpaceTopView(primitive: primitive, headerVisible: $headerVisible)
             if primitive.space == nil && primitive.allDetails.isEmpty && !(space?.isDigest ?? false)
+                && primitive.isFollowing
             {
                 EmptySpaceView()
             } else {

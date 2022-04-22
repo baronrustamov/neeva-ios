@@ -791,6 +791,13 @@ class SpaceCardModel: CardModel {
                 Defaults[.seenBlackFridayNotifyPromo] = true
             })
     }
+
+    func updateSpaceWithNoFollow(id: String, manager: SpaceStore) {
+        manager.openSpaceWithNoFollow(spaceId: id) { [weak self] space in
+            guard let self = self else { return }
+            self.detailedSpace?.setSpace(space)
+        }
+    }
 }
 
 class SiteCardModel: CardModel {

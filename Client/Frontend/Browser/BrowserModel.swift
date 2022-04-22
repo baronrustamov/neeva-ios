@@ -132,27 +132,7 @@ class BrowserModel: ObservableObject {
                 return
             }
 
-            gridModel.isLoading = true
-            SpaceStore.openSpaceWithNoFollow(spaceId: spaceId) { [self] result in
-                guard let result = result else {
-                    gridModel.isLoading = false
-                    return
-                }
-                switch result {
-                case .success(let model):
-                    let spaceCardDetails = SpaceCardDetails(
-                        space: model, manager: SpaceStore.shared)
-                    openSpace(detail: spaceCardDetails)
-                    gridModel.isLoading = false
-                    completion()
-                case .failure:
-                    gridModel.isLoading = false
-                    ToastDefaults().showToast(
-                        with: "Unable to find Space",
-                        toastViewManager: toastViewManager
-                    )
-                }
-            }
+            gridModel.openSpaceInDetailView(spaceId)
         }
     }
 
@@ -167,10 +147,6 @@ class BrowserModel: ObservableObject {
             return
         }
 
-        gridModel.openSpaceInDetailView(detail)
-    }
-
-    func openSpace(detail: SpaceCardDetails) {
         gridModel.openSpaceInDetailView(detail)
     }
 

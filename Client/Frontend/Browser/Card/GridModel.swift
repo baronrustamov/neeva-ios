@@ -124,9 +124,19 @@ class GridModel: ObservableObject {
         tabMenu.createRecentlyClosedTabsMenu()
     }
 
-    func openSpaceInDetailView(_ space: SpaceCardDetails) {
+    func openSpaceInDetailView(_ space: SpaceCardDetails?) {
         DispatchQueue.main.async { [self] in
             spaceCardModel.detailedSpace = space
+            showingDetailView = true
+        }
+    }
+
+    func openSpaceInDetailView(_ id: String?) {
+        guard let id = id else { return }
+        DispatchQueue.main.async { [self] in
+            spaceCardModel.detailedSpace = SpaceCardDetails(id: id, manager: SpaceStore.shared)
+            refreshDetailedSpace()
+            spaceCardModel.updateSpaceWithNoFollow(id: id, manager: SpaceStore.shared)
             showingDetailView = true
         }
     }

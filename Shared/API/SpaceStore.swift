@@ -334,31 +334,26 @@ public class SpaceStore: ObservableObject {
         }
     }
 
-    public static func openSpaceWithNoFollow(
-        spaceId: String, completion: @escaping ((Result<Space, Error>)?) -> Void
+    public func openSpaceWithNoFollow(
+        spaceId: String, completion: @escaping (Space) -> Void
     ) {
-        if spaceId == SpaceStore.dailyDigestID {
-            shared.refresh {
-                shared.addDailyDigestToSpaces()
-                completion(nil)
-            }
-        } else {
-            GraphQLAPI.shared.isAnonymous = true
-            SpacesDataQueryController.getSpacesData(spaceIds: [spaceId]) { result in
-                switch result {
-                case .success(let data):
-                    if let model = data.first {
-                        let space = Space(from: model)
-                        space.contentData = model.entities
-                        completion(.success(space))
-                    }
-                case .failure(let error):
-                    Logger.browser.error(error.localizedDescription)
-                    completion(.failure(error))
+        GraphQLAPI.shared.isAnonymous = true
+        state = .refreshing
+        SpacesDataQueryController.getSpacesData(spaceIds: [spaceId]) { result in
+            switch result {
+            case .success(let data):
+                if let model = data.first {
+                    let space = Space(from: model)
+                    space.contentData = model.entities
+                    completion(space)
+                    self.state = .ready
                 }
+            case .failure(let error):
+                Logger.browser.error(error.localizedDescription)
+                self.state = .failed(error)
             }
-            GraphQLAPI.shared.isAnonymous = false
         }
+        GraphQLAPI.shared.isAnonymous = false
     }
 
     public static func followSpace(spaceId: String, completion: @escaping () -> Void) {
