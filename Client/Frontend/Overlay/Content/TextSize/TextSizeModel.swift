@@ -5,6 +5,8 @@
 import Combine
 import WebKit
 
+// Having page zoom issues? Take a look at an earlier commit (e.g., a2139914469ec4aa97364f66735295339601c8d0).
+// A fallback page zoom method was removed to simplify the code.
 class TextSizeModel: ObservableObject {
     private let webView: WKWebView
 
@@ -17,58 +19,29 @@ class TextSizeModel: ObservableObject {
             webView
             .publisher(for: \.pageZoom, options: .new)
             .sink { [weak self] _ in self?.objectWillChange.send() }
-
-        #if !USE_PRIVATE_WEB_VIEW_ZOOM_API
-            // The fallback API tries to scale the text up and down — like Chrome for iOS does
-            webView.evaluateJavaScript("document.body.style.webkitTextSizeAdjust") { amount, _ in
-                if let amount = amount as? String,
-                    amount.hasSuffix("%"),
-                    let percent = Double(amount.dropLast())
-                {
-                    self.suppressUpdate = true
-                    self.pageZoom = CGFloat(percent / 100)
-                }
-            }
-        #endif
     }
 
-    #if USE_PRIVATE_WEB_VIEW_ZOOM_API
-        private var observer: AnyCancellable?
-        /// Remove `-DUSE_PRIVATE_WEB_VIEW_ZOOM_API` from `Client/Configuration/Common.xcconfig` to switch to the `-webkit-text-size-adjust`-based zoom implementation
-        var pageZoom: CGFloat {
-            get {
-                webView.neeva_zoomAmount
-            }
-            set {
-                objectWillChange.send()
-                webView.neeva_zoomAmount = newValue
-                let originalOffset = webView.scrollView.contentOffset
-                // Fix the scroll position after changing zoom level
-                let newOffset = CGPoint(
-                    x: originalOffset.x, y: originalOffset.y * newValue / pageZoom)
-                observer = webView.scrollView.publisher(for: \.contentOffset)
-                    .sink { offset in
-                        if offset != originalOffset {
-                            self.webView.scrollView.contentOffset = newOffset
-                            self.observer = nil
-                        }
+    private var observer: AnyCancellable?
+    var pageZoom: CGFloat {
+        get {
+            webView.neeva_zoomAmount
+        }
+        set {
+            objectWillChange.send()
+            webView.neeva_zoomAmount = newValue
+            let originalOffset = webView.scrollView.contentOffset
+            // Fix the scroll position after changing zoom level
+            let newOffset = CGPoint(
+                x: originalOffset.x, y: originalOffset.y * newValue / pageZoom)
+            observer = webView.scrollView.publisher(for: \.contentOffset)
+                .sink { offset in
+                    if offset != originalOffset {
+                        self.webView.scrollView.contentOffset = newOffset
+                        self.observer = nil
                     }
-            }
-        }
-    #else
-        private var suppressUpdate = false
-        var pageZoom: CGFloat = 1 {
-            didSet {
-                objectWillChange.send()
-                if suppressUpdate {
-                    suppressUpdate = false
-                } else {
-                    webView.evaluateJavaScript(
-                        "document.body.style.webkitTextSizeAdjust = '\(pageZoom * 100)%'")
                 }
-            }
         }
-    #endif
+    }
 
     // observed from Safari on iOS 14.6 (18F72)
     let levels: [CGFloat] = [0.5, 0.75, 0.85, 1, 1.15, 1.25, 1.5, 1.75, 2, 2.5, 3]

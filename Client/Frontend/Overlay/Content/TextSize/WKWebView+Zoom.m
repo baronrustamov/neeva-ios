@@ -9,7 +9,6 @@
 // We can’t use `performSelector` because the return type is CGFloat, not an object.
 // We can’t use Swift because NSInvocation is unavailable in Swift.
 
-#ifdef USE_PRIVATE_WEB_VIEW_ZOOM_API
 @implementation WKWebView (Zoom)
 
 - (CGFloat)neeva_zoomAmount {
@@ -42,4 +41,3 @@
 }
 
 @end
-#endif
