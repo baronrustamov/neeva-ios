@@ -11,6 +11,7 @@ struct BrowserBottomBarView: View {
     @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var chromeModel: TabChromeModel
     @EnvironmentObject var overlayManager: OverlayManager
+    @EnvironmentObject var tabContainerModel: TabContainerModel
 
     @ViewBuilder var toolbar: some View {
         if !browserModel.showGrid && !chromeModel.inlineToolbar && !chromeModel.isEditingLocation {
@@ -33,6 +34,7 @@ struct BrowserBottomBarView: View {
         ZStack {
             if !chromeModel.inlineToolbar && !chromeModel.isEditingLocation
                 && !chromeModel.keyboardShowing && !overlayManager.hideBottomBar
+                && tabContainerModel.currentContentUI != .previewHome
             {
                 toolbar
                     .transition(.opacity)
