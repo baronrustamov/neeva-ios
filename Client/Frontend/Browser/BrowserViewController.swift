@@ -1509,6 +1509,19 @@ extension BrowserViewController: UIPopoverPresentationControllerDelegate {
         displayedPopoverController = nil
         updateDisplayedPopoverProperties = nil
     }
+
+    override func present(
+        _ viewControllerToPresent: UIViewController, animated flag: Bool,
+        completion: (() -> Void)? = nil
+    ) {
+        if let imagePicker = viewControllerToPresent as? UIImagePickerController {
+            // Force the image picker to use a PageSheet, prevents a bug where
+            // the BrowserView content would be shrunk until the app reloads.
+            imagePicker.modalPresentationStyle = .pageSheet
+        }
+
+        super.present(viewControllerToPresent, animated: flag, completion: completion)
+    }
 }
 
 extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
