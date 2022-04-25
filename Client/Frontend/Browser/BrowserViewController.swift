@@ -723,12 +723,12 @@ class BrowserViewController: UIViewController, ModalPresenter {
         let overlayView = OverlaySheetRootView(
             style: style,
             content: { AnyView(erasing: content()) },
-            onDismiss: {
-                self.overlayManager.hideCurrentOverlay()
+            onDismiss: { rootView in
                 onDismiss?()
+                self.overlayManager.hide(overlay: .sheet(rootView))
             },
-            onOpenURL: { url in
-                self.overlayManager.hideCurrentOverlay()
+            onOpenURL: { url, rootView in
+                self.overlayManager.hide(overlay: .sheet(rootView))
                 self.openURLInNewTabPreservingIncognitoState(url)
             },
             headerButton: headerButton,
@@ -746,12 +746,12 @@ class BrowserViewController: UIViewController, ModalPresenter {
     ) {
         let popoverView = PopoverRootView(
             style: style, content: { AnyView(erasing: content()) },
-            onDismiss: {
-                self.overlayManager.hideCurrentOverlay()
+            onDismiss: { rootView in
                 onDismiss?()
+                self.overlayManager.hide(overlay: .popover(rootView))
             },
-            onOpenURL: { url in
-                self.overlayManager.hideCurrentOverlay()
+            onOpenURL: { url, rootView in
+                self.overlayManager.hide(overlay: .popover(rootView))
                 self.openURLInNewTabPreservingIncognitoState(url)
             }, headerButton: headerButton)
 

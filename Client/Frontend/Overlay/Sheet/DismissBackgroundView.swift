@@ -9,6 +9,7 @@ struct DismissBackgroundView: View {
     let opacity: Double
     var position: OverlaySheetPosition = .dismissed
     let onDismiss: () -> Void
+    var waitForAnimation: Bool = true
 
     var body: some View {
         // The semi-transparent backdrop used to shade the content that lies below
@@ -20,7 +21,12 @@ struct DismissBackgroundView: View {
                 .modifier(
                     DismissalObserverModifier(
                         backdropOpacity: self.opacity,
-                        position: position, onDismiss: self.onDismiss))
+                        position: position,
+                        onDismiss: {
+                            if waitForAnimation {
+                                self.onDismiss()
+                            }
+                        }))
         }
         .buttonStyle(.highlightless)
         .accessibilityHint("Dismiss pop-up window")

@@ -5,15 +5,6 @@
 import SwiftUI
 
 extension EnvironmentValues {
-    private struct OverlayModelKey: EnvironmentKey {
-        static let defaultValue = OverlaySheetModel()
-    }
-
-    public var overlayModel: OverlaySheetModel {
-        get { self[OverlayModelKey.self] }
-        set { self[OverlayModelKey.self] = newValue }
-    }
-
     private struct OverlayMinHeightToFillScrollViewKey: EnvironmentKey {
         static let defaultValue: CGFloat = .zero
     }
@@ -27,15 +18,20 @@ extension EnvironmentValues {
 struct PopoverRootView: View {
     var style: OverlayStyle
     var content: () -> AnyView
-    var onDismiss: () -> Void
-    var onOpenURL: (URL) -> Void
+    var onDismiss: (PopoverRootView) -> Void
+    var onOpenURL: (URL, PopoverRootView) -> Void
     let headerButton: OverlayHeaderButton?
 
     var body: some View {
-        PopoverView(style: style, onDismiss: onDismiss, headerButton: headerButton) {
+        PopoverView(style: style, onDismiss: { onDismiss(self) }, headerButton: headerButton) {
             content()
-                .environment(\.onOpenURL, self.onOpenURL)
-                .environment(\.hideOverlay, onDismiss)
+                .environment(
+                    \.onOpenURL,
+                    { url in
+                        self.onOpenURL(url, self)
+                    }
+                )
+                .environment(\.hideOverlay, { self.onDismiss(self) })
         }
     }
 }
@@ -48,8 +44,8 @@ struct OverlaySheetRootView: View {
 
     let style: OverlayStyle
     let content: () -> AnyView
-    let onDismiss: () -> Void
-    let onOpenURL: (URL) -> Void
+    let onDismiss: (OverlaySheetRootView) -> Void
+    let onOpenURL: (URL, OverlaySheetRootView) -> Void
     let headerButton: OverlayHeaderButton?
     let headerContent: () -> AnyView
 
@@ -57,8 +53,8 @@ struct OverlaySheetRootView: View {
         overlayPosition: OverlaySheetPosition = Self.defaultOverlayPosition,
         style: OverlayStyle,
         content: @escaping () -> AnyView,
-        onDismiss: @escaping () -> Void,
-        onOpenURL: @escaping (URL) -> Void,
+        onDismiss: @escaping (OverlaySheetRootView) -> Void,
+        onOpenURL: @escaping (URL, OverlaySheetRootView) -> Void,
         headerButton: OverlayHeaderButton?,
         headerContent: @escaping () -> AnyView = { AnyView(erasing: EmptyView()) }
     ) {
@@ -77,16 +73,21 @@ struct OverlaySheetRootView: View {
             model: overlayModel,
             style: style,
             onDismiss: {
-                onDismiss()
+                onDismiss(self)
                 overlayModel.hide()
             },
             headerButton: headerButton,
             headerContent: headerContent
         ) {
             content()
-                .environment(\.onOpenURL, self.onOpenURL)
-                .environment(\.hideOverlay, { self.overlayModel.hide() })
-                .environment(\.overlayModel, overlayModel)
+                .environment(
+                    \.onOpenURL,
+                    { url in
+                        self.onOpenURL(url, self)
+                    }
+                )
+                .environment(\.hideOverlay, { self.onDismiss(self) })
+                .environmentObject(overlayModel)
         }
     }
 

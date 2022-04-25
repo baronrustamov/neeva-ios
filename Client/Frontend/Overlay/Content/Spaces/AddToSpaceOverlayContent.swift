@@ -9,7 +9,7 @@ import SwiftUI
 /// present the `AddToSpaceView` UI.
 struct AddToSpaceOverlayContent: View {
     @Environment(\.hideOverlay) private var hideOverlay
-    @Environment(\.overlayModel) private var overlayModel
+    @EnvironmentObject private var overlayModel: OverlaySheetModel
 
     @ObservedObject var request: AddToSpaceRequest
 

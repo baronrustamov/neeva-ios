@@ -25,6 +25,7 @@ public enum OverflowMenuAction {
 extension BrowserViewController {
     func perform(overflowMenuAction: OverflowMenuAction, targetButtonView: UIView?) {
         overlayManager.hideCurrentOverlay()
+
         let overflowMenuAttribute = ClientLogCounterAttribute(
             key: LogConfig.UIInteractionAttribute.fromActionType,
             value: String(describing: OverflowMenuAction.self)

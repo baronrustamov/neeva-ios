@@ -169,6 +169,22 @@ class OverlayManager: ObservableObject {
         }
     }
 
+    /// Hides a specific Overlay.
+    public func hide(
+        overlay: OverlayType,
+        animate: Bool = true, showNext: Bool = true, completion: (() -> Void)? = nil
+    ) {
+        guard let currentOverlay = currentOverlay, currentOverlay == overlay else {
+            return
+        }
+
+        hideCurrentOverlay(
+            ofPriorities: nil, animate: animate, showNext: showNext, completion: completion)
+    }
+
+    /// Hides a the current Overlay.
+    /// - Parameters:
+    ///     - ofPriority: Only hide the current Overlay if it matches this priority.
     public func hideCurrentOverlay(
         ofPriority: OverlayPriority?,
         animate: Bool = true, showNext: Bool = true, completion: (() -> Void)? = nil
@@ -183,6 +199,9 @@ class OverlayManager: ObservableObject {
         }
     }
 
+    /// Hides a the current Overlay.
+    /// - Parameters:
+    ///     - ofPriorities: Only hide the current Overlay if it matches one of passed priorities.
     public func hideCurrentOverlay(
         ofPriorities: [OverlayPriority]? = nil,
         animate: Bool = true, showNext: Bool = true, completion: (() -> Void)? = nil
@@ -226,7 +245,7 @@ class OverlayManager: ObservableObject {
             }
 
             switch overlay {
-            case .backForwardList:
+            case .backForwardList, .sheet:
                 slideAndFadeOut(offset: 0)
             case .fullScreenModal, .popover:
                 showFullScreenPopoverSheet = false
