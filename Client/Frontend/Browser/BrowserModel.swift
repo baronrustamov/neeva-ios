@@ -38,7 +38,9 @@ class BrowserModel: ObservableObject {
         if gridModel.switcherState != .tabs {
             gridModel.switcherState = .tabs
         }
-        if gridModel.tabCardModel.allDetails.isEmpty {
+        if gridModel.tabCardModel.getAllDetails(matchingIncognitoState: incognitoModel.isIncognito)
+            .isEmpty
+        {
             showGridWithNoAnimation()
         } else {
             if FeatureFlag[.enableTimeBasedSwitcher] {

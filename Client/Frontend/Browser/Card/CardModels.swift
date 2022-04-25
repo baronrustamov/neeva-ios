@@ -443,7 +443,7 @@ class TabCardModel: CardModel {
         }
     }
 
-    private func getAllDetails(matchingIncognitoState: Bool?) -> [TabCardDetails] {
+    func getAllDetails(matchingIncognitoState: Bool?) -> [TabCardDetails] {
         if let matchingIncognitoState = matchingIncognitoState {
             return matchingIncognitoState ? incognitoDetails : normalDetails
         } else {
