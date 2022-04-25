@@ -223,9 +223,8 @@ struct TabLocationView: View {
             .environmentObject(BrightnessModel())
             .environmentObject(
                 TextSizeModel(
-                    webView: (readerModeModel.tabManager
-                        .selectedTab?
-                        .webView)!))
+                    tab: readerModeModel.tabManager
+                        .selectedTab!))
         }
     }
 }

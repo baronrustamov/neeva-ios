@@ -73,9 +73,9 @@ extension BrowserViewController {
                 .ClickTextSize,
                 attributes: EnvironmentHelper.shared.getAttributes() + [overflowMenuAttribute]
             )
-            if let webView = tabManager.selectedTab?.webView {
+            if let selectedTab = tabManager.selectedTab {
                 UserActivityHandler.presentTextSizeView(
-                    webView: webView)
+                    tab: selectedTab)
             }
         case .desktopSite:
             ClientLogger.shared.logCounter(

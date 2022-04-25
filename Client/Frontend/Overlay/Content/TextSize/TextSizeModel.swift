@@ -8,38 +8,34 @@ import WebKit
 // Having page zoom issues? Take a look at an earlier commit (e.g., a2139914469ec4aa97364f66735295339601c8d0).
 // A fallback page zoom method was removed to simplify the code.
 class TextSizeModel: ObservableObject {
-    private let webView: WKWebView
+    private let tab: Tab
 
-    var objectWillChange = ObservableObjectPublisher()
-    private var subscription: AnyCancellable?
-
-    init(webView: WKWebView) {
-        self.webView = webView
-        self.subscription =
-            webView
-            .publisher(for: \.pageZoom, options: .new)
-            .sink { [weak self] _ in self?.objectWillChange.send() }
+    init(tab: Tab) {
+        self.tab = tab
     }
 
+    // If tab.webView is nil here, something is very wrong
     private var observer: AnyCancellable?
     var pageZoom: CGFloat {
         get {
-            webView.neeva_zoomAmount
+            tab.webView?.neeva_zoomAmount ?? 1.0
         }
         set {
             objectWillChange.send()
-            webView.neeva_zoomAmount = newValue
-            let originalOffset = webView.scrollView.contentOffset
-            // Fix the scroll position after changing zoom level
-            let newOffset = CGPoint(
-                x: originalOffset.x, y: originalOffset.y * newValue / pageZoom)
-            observer = webView.scrollView.publisher(for: \.contentOffset)
-                .sink { offset in
-                    if offset != originalOffset {
-                        self.webView.scrollView.contentOffset = newOffset
-                        self.observer = nil
+            if let webView = tab.webView {
+                webView.neeva_zoomAmount = newValue
+                let originalOffset = webView.scrollView.contentOffset
+                // Fix the scroll position after changing zoom level
+                let newOffset = CGPoint(
+                    x: originalOffset.x, y: originalOffset.y * newValue / pageZoom)
+                observer = webView.scrollView.publisher(for: \.contentOffset)
+                    .sink { offset in
+                        if offset != originalOffset {
+                            webView.scrollView.contentOffset = newOffset
+                            self.observer = nil
+                        }
                     }
-                }
+            }
         }
     }
 

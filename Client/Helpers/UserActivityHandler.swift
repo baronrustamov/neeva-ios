@@ -110,11 +110,11 @@ class UserActivityHandler {
         tab.userActivity = userActivity
     }
 
-    class func presentTextSizeView(webView: WKWebView) {
-        let bvc = SceneDelegate.getBVC(for: webView)
+    class func presentTextSizeView(tab: Tab) {
+        let bvc = SceneDelegate.getBVC(for: tab.webView)
         bvc.showAsModalOverlaySheet(style: .grouped) {
             TextSizeView(
-                model: TextSizeModel(webView: webView)
+                model: TextSizeModel(tab: tab)
             ) {
                 bvc.overlayManager.hideCurrentOverlay(ofPriority: .modal)
             }

@@ -30,17 +30,3 @@ struct TextSizeView: View {
         }.overlayIsFixedHeight(isFixedHeight: true)
     }
 }
-
-struct ZoomMenuView_Previews: PreviewProvider {
-    private struct Preview: View {
-        @ObservedObject var model: TextSizeModel
-        var body: some View {
-            TextSizeView(model: model, onDismiss: {})
-                .overlay(Text(model.label))
-        }
-    }
-
-    static var previews: some View {
-        Preview(model: TextSizeModel(webView: WKWebView()))
-    }
-}
