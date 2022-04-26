@@ -40,10 +40,14 @@ class URLFixup {
 
         // If there is a ".", prepend "https://" and try again. Since this
         // is strictly an "https://" URL, we also require a host.
-        if let url = punycodedURL("https://\(escaped)"), url.host != nil {
+        if let url = punycodedURL("https://\(escaped)"), let host = url.host {
+            #if XYZ
+                if host.hasSuffix(".eth") {
+                    return nil
+                }
+            #endif
             return url
         }
-
         return nil
     }
 
