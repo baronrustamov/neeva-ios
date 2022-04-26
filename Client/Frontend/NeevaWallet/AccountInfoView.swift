@@ -17,18 +17,18 @@ struct AccountInfoView: View {
     @State var showQRScanner: Bool = false
     @State var showOverflowSheet: Bool = false
     @State var showConfirmRemoveWalletAlert = false
+    @State var showProfilePicturePicker: Bool = false
     @State var qrCodeStr: String = ""
     @State var copyAddressText = "Copy Address"
     @Binding var viewState: ViewState
 
     @Environment(\.hideOverlay) var hideOverlay
     @ObservedObject var model: Web3Model
+    @ObservedObject var assetStore: AssetStore = AssetStore.shared
 
     var body: some View {
         VStack(spacing: 0) {
-            Circle()
-                .fill(WalletTheme.gradient)
-                .frame(width: 48, height: 48)
+            WalletProfilePicture(size: CGSize(width: 48, height: 48))
                 .padding(8)
             HStack(spacing: 0) {
                 Text(model.walletDisplayName)
@@ -121,10 +121,17 @@ struct AccountInfoView: View {
                 })
         }.padding(.vertical, 8)
         HStack(spacing: 10) {
-            Circle()
-                .fill(WalletTheme.gradient)
-                .frame(width: 34, height: 34)
-                .padding(4)
+            ZStack {
+                WalletProfilePicture(size: CGSize(width: 34, height: 34))
+                if !assetStore.assets.isEmpty {
+                    Symbol(decorative: .pencilCircleFill, weight: .regular)
+                        .foregroundColor(Color.label)
+                        .background(Color.DefaultBackground)
+                        .clipShape(Circle())
+                        .frame(width: 12, height: 12)
+                        .offset(x: 12, y: -12)
+                }
+            }.padding(4)
             VStack(alignment: .leading, spacing: 0) {
                 Text(model.walletDisplayName)
                     .withFont(.bodyMedium)
@@ -137,7 +144,11 @@ struct AccountInfoView: View {
                 }
             }
             Spacer()
-        }.padding(.vertical, 16)
+        }
+        .padding(.vertical, 16)
+        .onTapGesture {
+            showProfilePicturePicker.toggle()
+        }
     }
 
     @ViewBuilder
@@ -153,6 +164,9 @@ struct AccountInfoView: View {
             content: {
                 VStack {
                     sheetHeader("Wallets")
+                    if showProfilePicturePicker, !assetStore.assets.isEmpty {
+                        WalletProfilePicturePicker(assetStore: assetStore)
+                    }
                     if let _ =
                         NeevaConstants.cryptoKeychain[string: NeevaConstants.cryptoSecretPhrase]
                     {
@@ -253,6 +267,66 @@ struct AccountInfoView: View {
             context.evaluatePolicy(
                 .deviceOwnerAuthentication, localizedReason: reason,
                 reply: onAuth)
+        }
+    }
+
+}
+
+struct WalletProfilePicturePicker: View {
+    @Default(.walletProfilePictureAssetId) var assetId
+    @ObservedObject var assetStore: AssetStore
+
+    var body: some View {
+        ScrollView(
+            .horizontal, showsIndicators: false,
+            content: {
+                LazyHStack {
+                    ForEach(
+                        assetStore.assets, id: \.id,
+                        content: { asset in
+                            assetView(asset)
+                        })
+                }.padding(.horizontal, 2)
+            }
+        )
+        .frame(height: 36)
+        .padding(.vertical, 12)
+    }
+
+    @ViewBuilder
+    private func assetView(_ asset: Asset) -> some View {
+        if let imageUrl = asset.imageURL {
+            WebImage(
+                url: imageUrl,
+                context: [
+                    .imageThumbnailPixelSize: CGSize(
+                        width: 64,
+                        height: 64)
+                ]
+            )
+            .resizable()
+            .frame(width: 32, height: 32)
+            .aspectRatio(contentMode: .fill)
+            .clipShape(Circle())
+            .modifier(GradientSelection(id: asset.id))
+            .padding(.vertical, 2)
+            .onTapGesture {
+                assetId = asset.id
+            }
+        }
+    }
+
+    struct GradientSelection: ViewModifier {
+        let id: Int?
+        @Default(.walletProfilePictureAssetId) var assetId
+
+        func body(content: Content) -> some View {
+            if id == assetId {
+                content
+                    .overlay(Circle().stroke(WalletTheme.gradient, lineWidth: 2))
+            } else {
+                content
+            }
         }
     }
 

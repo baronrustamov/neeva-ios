@@ -475,7 +475,7 @@ public struct WalletSequenceBottomInfoPanel: View {
             )
         default:
             HStack(spacing: 8) {
-                Circle().fill(WalletTheme.gradient).frame(width: 22, height: 22)
+                WalletProfilePicture(size: CGSize(width: 22, height: 22))
                 Text(walletDisplayName)
                     .withFont(.labelLarge)
                     .lineLimit(1)
