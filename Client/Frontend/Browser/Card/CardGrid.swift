@@ -164,7 +164,9 @@ struct CardGrid: View {
             }
         }.useEffect(
             deps: geom.size.width, topToolbar, perform: updateCardSize
-        ).ignoresSafeArea(.keyboard)
+        ).useEffect(deps: gridModel.canResizeGrid) { _ in
+            updateCardSize(width: geom.size.width, topToolbar: topToolbar)
+        }.ignoresSafeArea(.keyboard)
     }
 }
 
