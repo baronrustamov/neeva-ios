@@ -63,6 +63,9 @@ class TabManager: NSObject {
     // enables undo of recently closed tabs
     /// supports closing/restoring a group of tabs or a single tab (alone in an array)
     var recentlyClosedTabs = [[SavedTab]]()
+    var recentlyClosedTabsFlattened: [SavedTab] {
+        Array(recentlyClosedTabs.joined())
+    }
 
     // groups tabs closed together in a certain amount of time into one Toast
     let toastGroupTimerInterval: TimeInterval = 1.5
@@ -218,7 +221,9 @@ class TabManager: NSObject {
         // Are we okay with that happening here?
         incognitoModel.update(isIncognito: tab?.isIncognito ?? isIncognito)
 
-        store.preserveTabs(tabs, selectedTab: selectedTab, for: scene)
+        store.preserveTabs(
+            tabs, existingSavedTabs: recentlyClosedTabsFlattened,
+            selectedTab: selectedTab, for: scene)
 
         assert(tab === selectedTab, "Expected tab is selected")
 

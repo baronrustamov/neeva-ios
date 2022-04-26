@@ -11,13 +11,16 @@ private let log = Logger.browser
 
 extension TabManager {
     func preserveTabs() {
-        store.preserveTabs(tabs, selectedTab: selectedTab, for: scene)
+        store.preserveTabs(
+            tabs, existingSavedTabs: recentlyClosedTabsFlattened,
+            selectedTab: selectedTab, for: scene)
     }
 
     func storeChanges() {
         saveTabs(toProfile: profile, normalTabs)
         store.preserveTabs(
-            tabs, selectedTab: selectedTab, for: scene)
+            tabs, existingSavedTabs: recentlyClosedTabsFlattened,
+            selectedTab: selectedTab, for: scene)
     }
 
     private func hasTabsToRestoreAtStartup() -> Bool {

@@ -81,9 +81,9 @@ open class DiskImageStore {
     /// entry that already exists (identified by `key`) will be skipped over w/o
     /// writing to the saved file, and any existing entries not referenced by
     /// `entries` will be deleted. Other new entries will be added.
-    open func updateAll(_ entries: [Entry]) {
+    open func updateAll(_ entries: [Entry], extraKeysToKeep: Set<String> = []) {
         processor.performTask {
-            var keysToKeep = Set<String>()
+            var keysToKeep = extraKeysToKeep
 
             for entry in entries {
                 keysToKeep.insert(entry.key)

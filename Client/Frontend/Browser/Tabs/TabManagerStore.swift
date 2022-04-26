@@ -56,7 +56,9 @@ class TabManagerStore {
         return url.path
     }
 
-    fileprivate func prepareSavedTabs(fromTabs tabs: [Tab], selectedTab: Tab?) -> [SavedTab]? {
+    fileprivate func prepareSavedTabs(
+        fromTabs tabs: [Tab], existingSavedTabs: [SavedTab], selectedTab: Tab?
+    ) -> [SavedTab]? {
         var savedTabs = [SavedTab]()
         var screenshots: [DiskImageStore.Entry] = []
 
@@ -69,7 +71,11 @@ class TabManagerStore {
                 screenshots.append(.init(key: uuid.uuidString, image: image))
             }
         }
-        imageStore?.updateAll(screenshots)
+
+        imageStore?.updateAll(
+            screenshots,
+            extraKeysToKeep: Set(existingSavedTabs.compactMap { $0.screenshotUUID?.uuidString })
+        )
 
         return savedTabs.isEmpty ? nil : savedTabs
     }
@@ -86,12 +92,16 @@ class TabManagerStore {
     // Async write of the tab state. In most cases, code doesn't care about performing an operation
     // after this completes. Deferred completion is called always, regardless of Data.write return value.
     // Write failures (i.e. due to read locks) are considered inconsequential, as preserveTabs will be called frequently.
-    func preserveTabs(_ tabs: [Tab], selectedTab: Tab?, for scene: UIScene) {
+    func preserveTabs(
+        _ tabs: [Tab], existingSavedTabs: [SavedTab], selectedTab: Tab?, for scene: UIScene
+    ) {
         log.info("Preserve tabs for scene: \(scene.session.persistentIdentifier)")
 
         assert(Thread.isMainThread)
 
-        guard let savedTabs = prepareSavedTabs(fromTabs: tabs, selectedTab: selectedTab),
+        guard
+            let savedTabs = prepareSavedTabs(
+                fromTabs: tabs, existingSavedTabs: existingSavedTabs, selectedTab: selectedTab),
             let path = tabSavePath(withId: scene.session.persistentIdentifier)
         else {
             clearArchive(for: scene)
