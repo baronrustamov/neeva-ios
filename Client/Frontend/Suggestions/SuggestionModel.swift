@@ -692,7 +692,7 @@ class SuggestionModel: ObservableObject {
         }
 
         if hideZeroQuery {
-            bvc.hideZeroQuery(suggestionTapped: true)
+            bvc.hideZeroQuery()
         }
     }
 

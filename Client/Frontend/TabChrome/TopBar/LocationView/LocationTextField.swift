@@ -242,6 +242,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
                 ? .NoSuggestionQuery
                 : .NoSuggestionURL)
             : .AutocompleteSuggestion
+
         let additionalClientAttribute =
             [
                 ClientLogCounterAttribute(

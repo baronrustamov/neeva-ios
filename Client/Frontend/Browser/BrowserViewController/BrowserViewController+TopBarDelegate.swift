@@ -81,7 +81,6 @@ extension BrowserViewController: TopBarDelegate {
             let url = SearchEngine.current.searchURLFrom(searchQuery: text, queryItems: queryItems)
         {
             finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: currentTab)
-
             searchQueryModel.queryItems = nil
 
             return

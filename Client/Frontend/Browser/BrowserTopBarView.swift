@@ -54,7 +54,7 @@ struct BrowserTopBarView: View {
                     if bvc.zeroQueryModel.isLazyTab {
                         bvc.closeLazyTab()
                     } else {
-                        bvc.hideZeroQuery()
+                        bvc.hideZeroQuery(wasCancelled: true)
                     }
                 }
             )

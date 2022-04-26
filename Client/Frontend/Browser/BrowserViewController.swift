@@ -607,12 +607,12 @@ class BrowserViewController: UIViewController, ModalPresenter {
         }
     }
 
-    public func hideZeroQuery(suggestionTapped: Bool = false) {
+    public func hideZeroQuery(wasCancelled: Bool = false) {
         chromeModel.setEditingLocation(to: false)
 
         DispatchQueue.main.async { [self] in
             tabContainerModel.updateContent(.hideZeroQuery)
-            zeroQueryModel.reset(bvc: self, suggestionTapped: suggestionTapped)
+            zeroQueryModel.reset(bvc: self, wasCancelled: wasCancelled)
 
             if tabContainerModel.currentContentUI == .previewHome {
                 browserModel.scrollingControlModel.showToolbars(animated: true)
@@ -795,11 +795,14 @@ class BrowserViewController: UIViewController, ModalPresenter {
             if zeroQueryModel.openedFrom == .backButton {
                 // Once user changes current URL from the back button, the forward history list needs
                 // to be overriden. Going back, and THEN loading the request accomplishes that.
+
                 DispatchQueue.main.async {
                     tab.webView?.goBack()
+
                     guard let nav = tab.loadRequest(URLRequest(url: url)) else {
                         return
                     }
+
                     self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
                 }
             } else if let nav = tab.loadRequest(URLRequest(url: url)) {
