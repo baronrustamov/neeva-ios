@@ -43,8 +43,7 @@ class GridModel: ObservableObject {
     var scrollToCompletion: (() -> Void)?
     @Published var didVerticalScroll: Int = 0
     @Published var didHorizontalScroll: Int = 0
-
-    var canResizeGrid = true
+    @Published var canResizeGrid = true
 
     // Spaces
     @Published var isLoading = false
