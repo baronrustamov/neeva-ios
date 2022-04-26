@@ -514,7 +514,7 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
     init(space: Space, manager: SpaceStore) {
         self.id = space.id.id
         self.manager = manager
-        setSpace(space)
+        updateDetails()
     }
 
     init(id: String, manager: SpaceStore) {
