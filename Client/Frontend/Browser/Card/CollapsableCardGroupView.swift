@@ -149,6 +149,7 @@ struct ExpandedCardGroupRowView: View {
                 .bottom, SingleLevelTabCardsViewUX.TabGroupCarouselBottomPadding
             )
             .padding(.leading, CardGridUX.GridSpacing)
+            .padding(.top, CardUX.ShadowRadius)
         }
         .animation(nil)
         .transition(.fade)
