@@ -235,12 +235,12 @@ class NotificationManager: ObservableObject {
             if flagsUpdated {
                 let notificationContent = NeevaFeatureFlags.latestValue(.localNotificationContent)
                 let neevaPromo =
-                    LocalNotitifications.parseNotificationPromoContent(content: notificationContent)
+                    LocalNotifications.parseNotificationPromoContent(content: notificationContent)
                 if let neevaPromo = neevaPromo,
                     neevaPromo.promoId != Defaults[.lastScheduledNeevaPromoID]
                 {
-                    LocalNotitifications.scheduleNeevaPromoCallbackIfAuthorized(
-                        callSite: LocalNotitifications.ScheduleCallSite.featureFlagUpdate
+                    LocalNotifications.scheduleNeevaPromoCallbackIfAuthorized(
+                        callSite: LocalNotifications.ScheduleCallSite.featureFlagUpdate
                     )
                 }
             }
@@ -258,9 +258,10 @@ class NotificationManager: ObservableObject {
                 handleNeevaPromoNotification(
                     promoId: notification.promoId, urlStr: notification.localURL, bvc: bvc)
             case .neevaOnboardingNewsProvider, .neevaOnboardingProductSearch,
-                .neevaOnboardingFastTap:
+                .neevaOnboardingFastTap, .neevaOnboardingDefaultBrowser:
                 handleOnboardingNotification(
-                    promoId: notification.promoId, urlStr: notification.localURL, bvc: bvc)
+                    promoId: notification.promoId, urlStr: notification.localURL, bvc: bvc,
+                    type: notification.type)
             }
         }
 
@@ -286,12 +287,15 @@ class NotificationManager: ObservableObject {
         let urlStr =
             request.content.userInfo[
                 NotificationManager.notificationKey.localNotificationURL] as? String
+        let notificationType = NotificationType(rawValue: request.identifier)
 
         switch NotificationType(rawValue: request.identifier) {
         case .neevaPromo:
             handleNeevaPromoNotification(promoId: promoId, urlStr: urlStr, bvc: bvc)
-        case .neevaOnboardingNewsProvider, .neevaOnboardingProductSearch, .neevaOnboardingFastTap:
-            handleOnboardingNotification(promoId: promoId, urlStr: urlStr, bvc: bvc)
+        case .neevaOnboardingNewsProvider, .neevaOnboardingProductSearch, .neevaOnboardingFastTap,
+            .neevaOnboardingDefaultBrowser:
+            handleOnboardingNotification(
+                promoId: promoId, urlStr: urlStr, bvc: bvc, type: notificationType)
         case .none:
             break
         }
@@ -317,17 +321,17 @@ class NotificationManager: ObservableObject {
     private func handleNeevaPromoNotification(
         promoId: String?, urlStr: String?, bvc: BrowserViewController
     ) {
-        var tapAction: LocalNotitifications.LocalNotificationTapAction
+        var tapAction: LocalNotifications.LocalNotificationTapAction
         if !NeevaUserInfo.shared.isUserLoggedIn {
             bvc.presentIntroViewController(true)
-            tapAction = LocalNotitifications.LocalNotificationTapAction.openIntroView
+            tapAction = LocalNotifications.LocalNotificationTapAction.openIntroView
         } else {
             if let urlStr = urlStr, let url = URL(string: urlStr) {
                 bvc.openURLInNewTab(url)
-                tapAction = LocalNotitifications.LocalNotificationTapAction.openCustomURL
+                tapAction = LocalNotifications.LocalNotificationTapAction.openCustomURL
             } else {
                 bvc.openURLInNewTab(NeevaConstants.appWelcomeToursURL)
-                tapAction = LocalNotitifications.LocalNotificationTapAction.openWelcomeTour
+                tapAction = LocalNotifications.LocalNotificationTapAction.openWelcomeTour
             }
         }
 
@@ -352,7 +356,7 @@ class NotificationManager: ObservableObject {
     }
 
     private func handleOnboardingNotification(
-        promoId: String?, urlStr: String?, bvc: BrowserViewController
+        promoId: String?, urlStr: String?, bvc: BrowserViewController, type: NotificationType?
     ) {
         var attributes: [ClientLogCounterAttribute] = []
         if let promoId = promoId {
@@ -368,13 +372,15 @@ class NotificationManager: ObservableObject {
             attributes: attributes
         )
 
-        if !NeevaUserInfo.shared.isUserLoggedIn {
-            bvc.presentIntroViewController(true)
-        } else {
-            if let urlStr = urlStr, let url = URL(string: urlStr) {
-                bvc.openURLInNewTab(url)
+        if type != .neevaOnboardingDefaultBrowser {
+            if !NeevaUserInfo.shared.isUserLoggedIn {
+                bvc.presentIntroViewController(true)
             } else {
-                bvc.openURLInNewTab(NeevaConstants.appWelcomeToursURL)
+                if let urlStr = urlStr, let url = URL(string: urlStr) {
+                    bvc.openURLInNewTab(url)
+                } else {
+                    bvc.openURLInNewTab(NeevaConstants.appWelcomeToursURL)
+                }
             }
         }
     }

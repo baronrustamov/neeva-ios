@@ -529,7 +529,10 @@ class BrowserViewController: UIViewController, ModalPresenter {
     override func viewDidAppear(_ animated: Bool) {
         if NeevaConstants.currentTarget != .xyz {
             if !Defaults[.introSeen] {
-                presentDefaultBrowserFirstRun()
+                let arm = NeevaExperiment.startExperiment(for: .defaultBrowserRemindMeLater)
+                presentDefaultBrowserFirstRun(
+                    isInDefaultBrowserEnhancementExp: arm == .isInDefaultBrowserEnhancementExp)
+                NeevaExperiment.logStartExperiment(for: .defaultBrowserRemindMeLater)
             }
         }
 

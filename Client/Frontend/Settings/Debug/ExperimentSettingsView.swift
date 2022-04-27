@@ -28,6 +28,12 @@ struct ExperimentSettingsView: View {
                 //    value: $valueText,
                 //    experiment: .defaultBrowserPromptV2
                 //)
+
+                OptionalPrefilledStringField<NeevaExperiment.DefaultBrowserRemindMeLater>(
+                    "DefaultBrowserRemindMeLater",
+                    value: $valueText,
+                    experiment: .defaultBrowserRemindMeLater
+                )
             }
         }
         .listStyle(.insetGrouped)

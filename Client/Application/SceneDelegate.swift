@@ -99,8 +99,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         checkUserActivenessLastWeek()
         checkUserForegroundActivity()
 
-        LocalNotitifications.scheduleNeevaPromoCallbackIfAuthorized(
-            callSite: LocalNotitifications.ScheduleCallSite.enterForeground
+        LocalNotifications.scheduleNeevaPromoCallbackIfAuthorized(
+            callSite: LocalNotifications.ScheduleCallSite.enterForeground
         )
 
         bvc.downloadQueue.resumeAll()

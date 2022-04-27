@@ -31,7 +31,7 @@ class DefaultBrowserInterstitialOnboardingViewController: UIHostingController<
                         .background(Color.clear)
                 }
                 DefaultBrowserInterstitialOnboardingView(
-                    trigger: .defaultBrowserPromoCard,
+                    trigger: triggerFrom,
                     showSkipButton: false,
                     skipAction: {},
                     buttonAction: {
@@ -78,6 +78,8 @@ class DefaultBrowserInterstitialOnboardingViewController: UIHostingController<
 struct DefaultBrowserInterstitialWelcomeScreen: View {
     @State private var switchToDefaultBrowserScreen = false
 
+    var isInDefaultBrowserEnhancementExp: Bool = false
+
     var skipAction: () -> Void
     var buttonAction: () -> Void
 
@@ -85,6 +87,7 @@ struct DefaultBrowserInterstitialWelcomeScreen: View {
         if switchToDefaultBrowserScreen {
             DefaultBrowserInterstitialOnboardingView(
                 trigger: .defaultBrowserFirstScreen,
+                isInDefaultBrowserEnhancementExp: isInDefaultBrowserEnhancementExp,
                 skipAction: skipAction,
                 buttonAction: buttonAction
             )
@@ -143,6 +146,7 @@ public enum OpenDefaultBrowserOnboardingTrigger: String {
     case defaultBrowserFirstScreen
     case defaultBrowserPromoCard
     case defaultBrowserSettings
+    case defaultBrowserReminderNotification
 
     var defaultBrowserIntent: Bool {
         true  // Update if we ever have other reasons to guide users to system settings.
@@ -154,136 +158,157 @@ struct DefaultBrowserInterstitialOnboardingView: View {
 
     var trigger: OpenDefaultBrowserOnboardingTrigger = .defaultBrowserFirstScreen
     var showSkipButton: Bool = true
+    var isInDefaultBrowserEnhancementExp: Bool = false
 
     var skipAction: () -> Void
     var buttonAction: () -> Void
 
     var body: some View {
-        VStack {
-            Spacer()
-
-            VStack(alignment: .leading) {
-                Text("Make Neeva your Default Browser")
-                    .font(.system(size: 32, weight: .light))
-
-                Text(
-                    "Block invasive trackers across the Web. Open links safely with blazing fast browsing and peace of mind."
-                )
-                .withFont(.bodyLarge)
-                .foregroundColor(.secondaryLabel)
+        ZStack {
+            if isInDefaultBrowserEnhancementExp {
+                VStack {
+                    HStack {
+                        Spacer()
+                        CloseButton(action: {
+                            tapSkip()
+                            didTakeAction = true
+                        })
+                        .padding(.trailing, 20)
+                        .padding(.top, 40)
+                        .background(Color.clear)
+                    }
+                    Spacer()
+                }
             }
-            .padding(.horizontal, 32)
+            VStack {
+                Spacer()
 
-            Spacer()
+                VStack(alignment: .leading) {
+                    Text("Make Neeva your Default Browser")
+                        .font(.system(size: 32, weight: .light))
 
-            VStack(alignment: .leading) {
-                Text("Follow these 3 easy steps:")
+                    Text(
+                        "Block invasive trackers across the Web. Open links safely with blazing fast browsing and peace of mind."
+                    )
                     .withFont(.bodyLarge)
                     .foregroundColor(.secondaryLabel)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }.frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 32)
-            VStack(alignment: .leading, spacing: 10) {
-                HStack {
-                    Symbol(decorative: .gear, size: 16)
+                }
+                .padding(.horizontal, 32)
+
+                Spacer()
+
+                VStack(alignment: .leading) {
+                    Text("Follow these 3 easy steps:")
+                        .withFont(.bodyLarge)
                         .foregroundColor(.secondaryLabel)
-                        .frame(width: 32, height: 32)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 4)
-                                .stroke(Color(UIColor.systemGray5), lineWidth: 1)
-                        )
-                    Text("1. Open Neeva Settings")
-                        .withFont(.bodyXLarge)
-                        .padding(.leading, 15)
-                }
-                Divider()
-                HStack {
-                    Symbol(decorative: .chevronForward, size: 16)
-                        .foregroundColor(.secondaryLabel)
-                        .frame(width: 32, height: 32)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 4)
-                                .stroke(Color(UIColor.systemGray5), lineWidth: 1)
-                        )
-
-                    Text("2. Tap Default Browser App")
-                        .withFont(.bodyXLarge)
-                        .padding(.leading, 15)
-                }
-                Divider()
-                HStack {
-                    Image("neevaMenuIcon")
-                        .frame(width: 32, height: 32)
-                        .background(Color(.white))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 4)
-                                .stroke(Color(UIColor.systemGray5), lineWidth: 1)
-                        )
-                        .clipShape(RoundedRectangle(cornerRadius: 4))
-
-                    Text("3. Select Neeva")
-                        .withFont(.bodyXLarge)
-                        .padding(.leading, 15)
-                }
-            }.padding(20)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 16)
-                        .stroke(Color(UIColor.systemGray5), lineWidth: 5)
-                )
-                .padding(.horizontal, 16)
-
-            Spacer()
-
-            Button(
-                action: {
-                    buttonAction()
-                    didTakeAction = true
-                    Defaults[.lastDefaultBrowserInterstitialChoice] =
-                        DefaultBrowserInterstitialChoice.openSettings.rawValue
-                    ClientLogger.shared.logCounter(
-                        .DefaultBrowserOnboardingInterstitialOpen,
-                        attributes: [
-                            ClientLogCounterAttribute(
-                                key:
-                                    LogConfig.PromoCardAttribute
-                                    .defaultBrowserInterstitialTrigger,
-                                value: trigger.rawValue
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }.frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 32)
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack {
+                        Symbol(decorative: .gear, size: 16)
+                            .foregroundColor(.secondaryLabel)
+                            .frame(width: 32, height: 32)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 4)
+                                    .stroke(Color(UIColor.systemGray5), lineWidth: 1)
                             )
-                        ]
+                        Text("1. Open Neeva Settings")
+                            .withFont(.bodyXLarge)
+                            .padding(.leading, 15)
+                    }
+                    Divider()
+                    HStack {
+                        Symbol(decorative: .chevronForward, size: 16)
+                            .foregroundColor(.secondaryLabel)
+                            .frame(width: 32, height: 32)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 4)
+                                    .stroke(Color(UIColor.systemGray5), lineWidth: 1)
+                            )
+
+                        Text("2. Tap Default Browser App")
+                            .withFont(.bodyXLarge)
+                            .padding(.leading, 15)
+                    }
+                    Divider()
+                    HStack {
+                        Image("neevaMenuIcon")
+                            .frame(width: 32, height: 32)
+                            .background(Color(.white))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 4)
+                                    .stroke(Color(UIColor.systemGray5), lineWidth: 1)
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: 4))
+
+                        Text("3. Select Neeva")
+                            .withFont(.bodyXLarge)
+                            .padding(.leading, 15)
+                    }
+                }.padding(20)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(Color(UIColor.systemGray5), lineWidth: 5)
                     )
-                    UIApplication.shared.openSettings(
-                        triggerFrom: trigger
-                    )
-                },
-                label: {
-                    Text("Open Neeva Settings")
-                        .withFont(.labelLarge)
-                        .foregroundColor(.brand.white)
-                        .padding(13)
-                        .frame(maxWidth: .infinity)
-                }
-            )
-            .buttonStyle(.neeva(.primary))
-            .padding(.horizontal, 16)
-            if showSkipButton {
+                    .padding(.horizontal, 16)
+
+                Spacer()
+
                 Button(
                     action: {
-                        tapSkip()
+                        buttonAction()
                         didTakeAction = true
+                        Defaults[.lastDefaultBrowserInterstitialChoice] =
+                            DefaultBrowserInterstitialChoice.openSettings.rawValue
+                        ClientLogger.shared.logCounter(
+                            .DefaultBrowserOnboardingInterstitialOpen,
+                            attributes: [
+                                ClientLogCounterAttribute(
+                                    key:
+                                        LogConfig.PromoCardAttribute
+                                        .defaultBrowserInterstitialTrigger,
+                                    value: trigger.rawValue
+                                )
+                            ]
+                        )
+                        UIApplication.shared.openSettings(
+                            triggerFrom: trigger
+                        )
                     },
                     label: {
-                        Text("Skip for Now")
+                        Text("Open Neeva Settings")
+                            .withFont(.labelLarge)
+                            .foregroundColor(.brand.white)
+                            .padding(13)
+                            .frame(maxWidth: .infinity)
+                    }
+                )
+                .buttonStyle(.neeva(.primary))
+                .padding(.horizontal, 16)
+                if showSkipButton {
+                    Button(
+                        action: {
+                            isInDefaultBrowserEnhancementExp ? tapRemindMe() : tapSkip()
+                            didTakeAction = true
+                        },
+                        label: {
+                            Text(
+                                isInDefaultBrowserEnhancementExp
+                                    ? "Remind Me Later" : "Skip for Now"
+                            )
                             .withFont(.labelLarge)
                             .foregroundColor(.ui.adaptive.blue)
                             .padding(13)
                             .frame(maxWidth: .infinity)
                             .padding(.horizontal, 16)
-                    }
-                )
-                .padding(.top, 10)
-                .padding(.bottom, 30)
-            } else {
-                Spacer()
+                        }
+                    )
+                    .padding(.top, 10)
+                    .padding(.bottom, 30)
+                } else {
+                    Spacer()
+                }
             }
         }
         .onDisappear {
@@ -292,6 +317,30 @@ struct DefaultBrowserInterstitialOnboardingView: View {
             }
         }
         .padding(.bottom, 20)
+    }
+
+    private func tapRemindMe() {
+        NotificationPermissionHelper.shared.requestPermissionIfNeeded(
+            completion: { authorized in
+                if authorized {
+                    LocalNotifications.scheduleNeevaOnboardingCallback(
+                        notificationType: .neevaOnboardingDefaultBrowser)
+                }
+            }, openSettingsIfNeeded: false, callSite: .defaultBrowserInterstitial
+        )
+        skipAction()
+        Defaults[.lastDefaultBrowserInterstitialChoice] =
+            DefaultBrowserInterstitialChoice.skipForNow.rawValue
+        ClientLogger.shared.logCounter(
+            .DefaultBrowserOnboardingInterstitialRemind,
+            attributes: [
+                ClientLogCounterAttribute(
+                    key:
+                        LogConfig.PromoCardAttribute.defaultBrowserInterstitialTrigger,
+                    value: trigger.rawValue
+                )
+            ]
+        )
     }
 
     private func tapSkip() {

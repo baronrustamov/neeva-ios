@@ -37,6 +37,7 @@ struct InternalSettingsView: View {
     @Default(.newsProviderPromoTimeInterval) var newsProviderPromoTimeInterval
     @Default(.seenNotificationPermissionPromo) var seenNotificationPermissionPromo
     @Default(.fastTapPromoTimeInterval) var fastTapPromoTimeInterval
+    @Default(.defaultBrowserPromoTimeInterval) var defaultBrowserPromoTimeInterval
     @Default(.seenBlackFridayFollowPromo) var seenBlackFridayFollowPromo
     @Default(.seenBlackFridayNotifyPromo) var seenBlackFridayNotifyPromo
     @Default(.previewModeQueries) var previewModeQueries
@@ -229,6 +230,9 @@ struct InternalSettingsView: View {
                     "newsProviderPromoTimeInterval", number: $newsProviderPromoTimeInterval)
 
                 NumberField("fastTapPromoTimeInterval", number: $fastTapPromoTimeInterval)
+
+                NumberField(
+                    "defaultBrowserPromoTimeInterval", number: $defaultBrowserPromoTimeInterval)
             }
 
             makeNavigationLink(title: String("Spotlight Search")) {

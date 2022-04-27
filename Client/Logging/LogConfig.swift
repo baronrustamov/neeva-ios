@@ -210,6 +210,7 @@ public struct LogConfig {
         /// Close default browser promo card
         case CloseDefaultBrowserPromo
         case DefaultBrowserOnboardingInterstitialSkip
+        case DefaultBrowserOnboardingInterstitialRemind
         case DefaultBrowserOnboardingInterstitialOpen
         /// Promo card impression (without 2 second)
         case DefaultBrowserPromoCardImp
@@ -432,6 +433,7 @@ public struct LogConfig {
             || category == .Stability
             || category == .PromoCard
             || category == .Web3
+            || category == .Notification
     }
 
     // MARK: - Category
@@ -529,6 +531,7 @@ public struct LogConfig {
         case .PreviewTapFakeSearchInput: return .FirstRun
         case .PreviewHomeSignin: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialSkip: return .FirstRun
+        case .DefaultBrowserOnboardingInterstitialRemind: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialOpen: return .FirstRun
         case .DefaultBrowserInterstitialImp: return .FirstRun
         case .DefaultBrowserInterstitialImpSkipToBrowser: return .FirstRun

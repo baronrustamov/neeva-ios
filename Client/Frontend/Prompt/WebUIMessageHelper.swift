@@ -54,8 +54,13 @@ class WebUIMessageHelper: TabContentScript {
         guard let result = message.body as? [String: Any],
             let id = result["id"] as? String,
             let name = result["name"] as? String,
+            let tourStep = TourStep(rawValue: name),
             let data = result["data"] as? [String: Any]
         else { return }
+
+        if tourStep == .skipTour || tourStep == .completeTour {
+            handleShouldShowNotificationPrompt(id: id, tourStep: tourStep)
+        }
 
         let webuiMessage = WebUIMessage(id: id, name: name, data: data)
 
