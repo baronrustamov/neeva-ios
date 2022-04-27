@@ -249,9 +249,9 @@ class LocalNotifications {
             timeInterval = TimeInterval(Defaults[.fastTapPromoTimeInterval])
             deeplinkUrl = "neeva://fast-tap?query=tv%20shows"
         case .neevaOnboardingDefaultBrowser:
-            title = "Safe, Blazing Fast Browsing. Every Time"
+            title = "Make Neeva your Default Browser"
             body =
-                "Ditch those trackers slowing you down. Make Neeva your default browser and see the difference for yourself."
+                "Ditch those trackers slowing you down. Get safe, blazing fast browsing and see the difference for yourself."
             timeInterval = TimeInterval(Defaults[.defaultBrowserPromoTimeInterval])
             deeplinkUrl = "neeva://open-default-browser-education"
         default:
