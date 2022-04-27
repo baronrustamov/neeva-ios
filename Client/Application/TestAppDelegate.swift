@@ -169,6 +169,12 @@ class TestAppDelegate: AppDelegate {
             Defaults[.introSeen] = false
         }
 
+        if launchArguments.contains(LaunchArguments.ForceExperimentControlArm) {
+            NeevaExperiment.forceExperimentArm(
+                experiment: .defaultBrowserRemindMeLater,
+                experimentArm: NeevaExperiment.DefaultBrowserRemindMeLater.control.rawValue)
+        }
+
         // Set signInOnce
         if launchArguments.contains(LaunchArguments.SetSignInOnce) {
             Defaults[.signedInOnce] = true

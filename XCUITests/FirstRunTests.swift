@@ -10,6 +10,7 @@ class FirstRunTests: BaseTestCase {
         // for the current test name, add the db fixture used
         launchArguments = [
             LaunchArguments.ReactivateIntro, LaunchArguments.SkipWhatsNew,
+            LaunchArguments.ForceExperimentControlArm,
         ]
 
         super.setUp()
