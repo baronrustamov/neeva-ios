@@ -1446,6 +1446,8 @@
 		E6FF6ACA1D873CFF0070C294 /* PageMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF6AC91D873CFF0070C294 /* PageMetadata.swift */; };
 		E910925E280510B100EE0109 /* PlaceViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E975C93727F23A3200945FD3 /* PlaceViews.swift */; };
 		E910925F280510B400EE0109 /* PlaceViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E975C93927F3BABE00945FD3 /* PlaceViewModels.swift */; };
+		E942D4342810778300B4A3EC /* KnowledgeCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E942D4332810778300B4A3EC /* KnowledgeCardView.swift */; };
+		E942D4352810962400B4A3EC /* KnowledgeCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E942D4332810778300B4A3EC /* KnowledgeCardView.swift */; };
 		E94B7DEB27E4F96B003D8F13 /* QueryButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94B7DEA27E4F96B003D8F13 /* QueryButtonView.swift */; };
 		E9529C6527DC96C70009B434 /* NewsResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9529C6427DC96C70009B434 /* NewsResultsView.swift */; };
 		E975C93827F23A3200945FD3 /* PlaceViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E975C93727F23A3200945FD3 /* PlaceViews.swift */; };
@@ -2770,6 +2772,7 @@
 		E6F9653B1B2F1D5D0034B023 /* NSURLExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSURLExtensionsTests.swift; sourceTree = "<group>"; };
 		E6FF6AC91D873CFF0070C294 /* PageMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageMetadata.swift; sourceTree = "<group>"; };
 		E88B487A9436F764525B0F64 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
+		E942D4332810778300B4A3EC /* KnowledgeCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnowledgeCardView.swift; sourceTree = "<group>"; };
 		E94B7DEA27E4F96B003D8F13 /* QueryButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryButtonView.swift; sourceTree = "<group>"; };
 		E9529C6427DC96C70009B434 /* NewsResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsResultsView.swift; sourceTree = "<group>"; };
 		E975C93727F23A3200945FD3 /* PlaceViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceViews.swift; sourceTree = "<group>"; };
@@ -4005,6 +4008,7 @@
 				BC248769273382E5003A6867 /* RelatedSearchesView.swift */,
 				BCF864C62763FF9400E94B3A /* WebResultView.swift */,
 				E94B7DEA27E4F96B003D8F13 /* QueryButtonView.swift */,
+				E942D4332810778300B4A3EC /* KnowledgeCardView.swift */,
 			);
 			path = Cheatsheet;
 			sourceTree = "<group>";
@@ -6674,6 +6678,7 @@
 				4A42C44D27E58487003B9826 /* ScapeImageEntityView.swift in Sources */,
 				4A42C44E27E58487003B9826 /* SpaceTopView.swift in Sources */,
 				4A42C44F27E58487003B9826 /* TabEventHandlers.swift in Sources */,
+				E942D4352810962400B4A3EC /* KnowledgeCardView.swift in Sources */,
 				4A42C45027E58487003B9826 /* SpaceEntityDetailView.swift in Sources */,
 				4A42C45127E58487003B9826 /* AssetView.swift in Sources */,
 				E63B18DC27F79368001BA0B0 /* CookieCutterSettings.swift in Sources */,
@@ -7499,6 +7504,7 @@
 				67942DD826F14F2A0023F623 /* NotificationPromptView.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
 				661AFF1A2727A4840099B3E4 /* CardGridOverflowMenuView.swift in Sources */,
+				E942D4342810778300B4A3EC /* KnowledgeCardView.swift in Sources */,
 				4A227BE82758BE5B00A89322 /* SpaceComments.swift in Sources */,
 				C9BED4B92667D5D3001D9C77 /* Roobert.swift in Sources */,
 				67F2A52E27306AE900CAE11A /* NotificationSettingsView.swift in Sources */,

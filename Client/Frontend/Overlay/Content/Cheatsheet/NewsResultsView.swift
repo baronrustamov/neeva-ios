@@ -13,7 +13,7 @@ import SwiftUI
 struct NewsResultsView: View {
     @Environment(\.onOpenURLForCheatsheet) var onOpenURLForCheatsheet
 
-    let newsResults: NewsResults
+    let newsResults: NeevaScopeSearch.NewsResults
 
     var newsQueryURL: URL? {
         let components = URLComponents(url: newsResults.actionURL, resolvingAgainstBaseURL: false)
@@ -55,7 +55,7 @@ struct NewsResultsView: View {
 struct NewsResultItemView: View {
     @Environment(\.onOpenURLForCheatsheet) var onOpenURLForCheatsheet
 
-    let newsItem: NewsResult
+    let newsItem: NeevaScopeSearch.NewsResult
 
     let cornerRadius: CGFloat = 11
     let thumbnailSize = CGSize(width: 175, height: 100)

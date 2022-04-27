@@ -7,7 +7,7 @@ import Shared
 import SwiftUI
 
 struct BuyingGuideItem: View {
-    let guide: BuyingGuide
+    let guide: NeevaScopeSearch.BuyingGuide
     let index: Int
     let total: Int
     @Environment(\.onOpenURLForCheatsheet) var onOpenURLForCheatsheet
@@ -78,7 +78,7 @@ struct BuyingGuideItem: View {
 }
 
 struct BuyingGuideList: View {
-    let buyingGuides: [BuyingGuide]
+    let buyingGuides: [NeevaScopeSearch.BuyingGuide]
 
     var body: some View {
         ScrollView(.horizontal) {

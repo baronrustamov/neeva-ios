@@ -121,7 +121,7 @@ struct PlaceView: View {
     @State private var hourExpanded: Bool = false
     @State private var addressExpanded: Bool = false
 
-    var place: Place {
+    var place: NeevaScopeSearch.PlaceItem {
         viewModel.place
     }
     var categories: String? {
@@ -529,7 +529,7 @@ struct PlaceListView: View {
 
     @State private var enableMapInteraction: Bool = false
 
-    var placeList: [Place] { viewModel.placelist }
+    var placeList: [NeevaScopeSearch.PlaceItem] { viewModel.placelist }
 
     init(viewModel: PlaceListViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -638,7 +638,7 @@ struct PlaceListView: View {
     }
 
     private struct HeaderView: View {
-        let place: Place
+        let place: NeevaScopeSearch.PlaceItem
 
         var body: some View {
             VStack(alignment: .leading) {

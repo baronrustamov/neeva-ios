@@ -337,8 +337,10 @@ public struct CheatsheetMenuView: View {
     }
 
     @ViewBuilder
-    func renderRichResult(for richResult: SearchController.RichResult) -> some View {
-        switch richResult.resultType {
+    func renderRichResult(
+        for richResult: NeevaScopeSearch.SearchController.RichResult
+    ) -> some View {
+        switch richResult.result {
         case .ProductCluster(let productCluster):
             ProductClusterList(
                 products: productCluster, currentURL: model.currentPageURL?.absoluteString ?? ""
@@ -372,6 +374,8 @@ public struct CheatsheetMenuView: View {
             } else {
                 PlaceListView(viewModel: PlaceListViewModel(placeListResult))
             }
+        case .RichEntity(result: let richEntityResult):
+            KnowledgeCardView(richEntity: richEntityResult)
         }
     }
 

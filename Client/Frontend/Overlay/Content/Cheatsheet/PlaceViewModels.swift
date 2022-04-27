@@ -19,7 +19,7 @@ struct PlaceAnnotation: Identifiable {
         address
     }
 
-    init(from place: Place) {
+    init(from place: NeevaScopeSearch.PlaceItem) {
         self.lat = place.position.lat
         self.lon = place.position.lon
         self.address = place.address.full
@@ -55,7 +55,7 @@ class PlaceViewModel: ObservableObject {
         return formatter
     }()
 
-    let place: Place
+    let place: NeevaScopeSearch.PlaceItem
 
     // Core Location Objects for Displaying and Opening Maps
     private var resolvedPlaceMark: CLPlacemark?
@@ -100,7 +100,7 @@ class PlaceViewModel: ObservableObject {
         return URL(string: "tel://\(telephone)")
     }
 
-    init(_ place: Place) {
+    init(_ place: NeevaScopeSearch.PlaceItem) {
         print("init")
         self.place = place
 
@@ -128,7 +128,9 @@ class PlaceViewModel: ObservableObject {
         }
     }
 
-    class func sortAndFormatOperatingHour(from hours: [Place.Hour]) -> [LocalizedOperatingHour] {
+    class func sortAndFormatOperatingHour(from hours: [NeevaScopeSearch.PlaceItem.Hour])
+        -> [LocalizedOperatingHour]
+    {
         // fill in days that are missing because they are closed
         return stride(from: 0, through: 6, by: 1).map { yelpDay -> (LocalizedOperatingHour, Int) in
             // put the days from API response into gregorian calendar
@@ -175,13 +177,13 @@ class PlaceListViewModel: ObservableObject {
 
     static let geocoder = CLGeocoder()
 
-    let placelist: [Place]
+    let placelist: [NeevaScopeSearch.PlaceItem]
 
     let annotatedMapItems: [PlaceAnnotation]
     let placeIndex: [PlaceAnnotation.ID: Int]
     let telephoneURLs: [URL?]
 
-    init(_ placelist: [Place]) {
+    init(_ placelist: [NeevaScopeSearch.PlaceItem]) {
         self.placelist = placelist
 
         annotatedMapItems = placelist.map {

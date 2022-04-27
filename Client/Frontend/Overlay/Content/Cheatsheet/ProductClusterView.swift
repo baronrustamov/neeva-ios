@@ -7,7 +7,7 @@ import Shared
 import SwiftUI
 
 struct ProductClusterItem: View {
-    let product: Product
+    let product: NeevaScopeSearch.Product
     let currentURL: String
 
     @Environment(\.onOpenURLForCheatsheet) var onOpenURLForCheatsheet
@@ -72,7 +72,7 @@ struct ProductClusterItem: View {
 }
 
 struct ProductClusterList: View {
-    let products: [Product]
+    let products: [NeevaScopeSearch.Product]
     let currentURL: String
 
     var body: some View {

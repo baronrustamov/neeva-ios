@@ -37,6 +37,37 @@ query Search($query: String!) {
         snippet
         typeSpecific {
           __typename
+          ... on RichEntity {
+            richEntity {
+              description
+              images {
+                height
+                hostPageURL
+                name
+                provider {
+                  type
+                  url
+                }
+                thumbnailURL
+                width
+              }
+              title
+              subTitle
+              url
+              wikipediaURL
+              isCollapsed
+              socialNetworks {
+                text
+                url
+                icon
+              }
+              secondarySocialNetworks {
+                text
+                url
+                icon
+              }
+            }
+          }
           ... on Place {
             place {
               id

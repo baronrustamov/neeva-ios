@@ -3793,6 +3793,91 @@ public enum SubResultsSemantics: RawRepresentable, Equatable, Hashable, CaseIter
   }
 }
 
+public enum EntitySocialNetworkProfileIcon: RawRepresentable, Equatable, Hashable, CaseIterable, Apollo.JSONDecodable, Apollo.JSONEncodable {
+  public typealias RawValue = String
+  case wikipedia
+  case facebook
+  case twitter
+  case instagram
+  case pinterest
+  case youtube
+  case linkedin
+  case imdb
+  case rottentomatoes
+  case crunchbase
+  case unknown
+  /// Auto generated constant for unknown enum values
+  case __unknown(RawValue)
+
+  public init?(rawValue: RawValue) {
+    switch rawValue {
+      case "wikipedia": self = .wikipedia
+      case "facebook": self = .facebook
+      case "twitter": self = .twitter
+      case "instagram": self = .instagram
+      case "pinterest": self = .pinterest
+      case "youtube": self = .youtube
+      case "linkedin": self = .linkedin
+      case "imdb": self = .imdb
+      case "rottentomatoes": self = .rottentomatoes
+      case "crunchbase": self = .crunchbase
+      case "unknown": self = .unknown
+      default: self = .__unknown(rawValue)
+    }
+  }
+
+  public var rawValue: RawValue {
+    switch self {
+      case .wikipedia: return "wikipedia"
+      case .facebook: return "facebook"
+      case .twitter: return "twitter"
+      case .instagram: return "instagram"
+      case .pinterest: return "pinterest"
+      case .youtube: return "youtube"
+      case .linkedin: return "linkedin"
+      case .imdb: return "imdb"
+      case .rottentomatoes: return "rottentomatoes"
+      case .crunchbase: return "crunchbase"
+      case .unknown: return "unknown"
+      case .__unknown(let value): return value
+    }
+  }
+
+  public static func == (lhs: EntitySocialNetworkProfileIcon, rhs: EntitySocialNetworkProfileIcon) -> Bool {
+    switch (lhs, rhs) {
+      case (.wikipedia, .wikipedia): return true
+      case (.facebook, .facebook): return true
+      case (.twitter, .twitter): return true
+      case (.instagram, .instagram): return true
+      case (.pinterest, .pinterest): return true
+      case (.youtube, .youtube): return true
+      case (.linkedin, .linkedin): return true
+      case (.imdb, .imdb): return true
+      case (.rottentomatoes, .rottentomatoes): return true
+      case (.crunchbase, .crunchbase): return true
+      case (.unknown, .unknown): return true
+      case (.__unknown(let lhsValue), .__unknown(let rhsValue)): return lhsValue == rhsValue
+      default: return false
+    }
+  }
+
+  public static var allCases: [EntitySocialNetworkProfileIcon] {
+    return [
+      .wikipedia,
+      .facebook,
+      .twitter,
+      .instagram,
+      .pinterest,
+      .youtube,
+      .linkedin,
+      .imdb,
+      .rottentomatoes,
+      .crunchbase,
+      .unknown,
+    ]
+  }
+}
+
 public enum PlaceSubType: RawRepresentable, Equatable, Hashable, CaseIterable, Apollo.JSONDecodable, Apollo.JSONEncodable {
   public typealias RawValue = String
   case unknown
@@ -7362,6 +7447,43 @@ public final class SearchQuery: GraphQLQuery {
             snippet
             typeSpecific {
               __typename
+              ... on RichEntity {
+                __typename
+                richEntity {
+                  __typename
+                  description
+                  images {
+                    __typename
+                    height
+                    hostPageURL
+                    name
+                    provider {
+                      __typename
+                      type
+                      url
+                    }
+                    thumbnailURL
+                    width
+                  }
+                  title
+                  subTitle
+                  url
+                  wikipediaURL
+                  isCollapsed
+                  socialNetworks {
+                    __typename
+                    text
+                    url
+                    icon
+                  }
+                  secondarySocialNetworks {
+                    __typename
+                    text
+                    url
+                    icon
+                  }
+                }
+              }
               ... on Place {
                 __typename
                 place {
@@ -7795,7 +7917,7 @@ public final class SearchQuery: GraphQLQuery {
 
   public let operationName: String = "Search"
 
-  public let operationIdentifier: String? = "b8aa85dea0b29b56f00bafee8edba941a075abe2305c2645b8dc5f4da011c103"
+  public let operationIdentifier: String? = "ba0e66b4bbdc8874bc582dd2570b30b33a4fa03cde9edf0793fbc47c22336a25"
 
   public var query: String
 
@@ -8696,7 +8818,7 @@ public final class SearchQuery: GraphQLQuery {
             public static var selections: [GraphQLSelection] {
               return [
                 GraphQLTypeCase(
-                  variants: ["Place": AsPlace.selections, "PlaceList": AsPlaceList.selections, "Web": AsWeb.selections, "ProductClusters": AsProductClusters.selections, "RecipeBlock": AsRecipeBlock.selections, "RelatedSearches": AsRelatedSearches.selections, "TechDoc": AsTechDoc.selections],
+                  variants: ["RichEntity": AsRichEntity.selections, "Place": AsPlace.selections, "PlaceList": AsPlaceList.selections, "Web": AsWeb.selections, "ProductClusters": AsProductClusters.selections, "RecipeBlock": AsRecipeBlock.selections, "RelatedSearches": AsRelatedSearches.selections, "TechDoc": AsTechDoc.selections],
                   default: [
                     GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
                   ]
@@ -8898,10 +9020,6 @@ public final class SearchQuery: GraphQLQuery {
               return TypeSpecific(unsafeResultMap: ["__typename": "RelatedQnA"])
             }
 
-            public static func makeRichEntity() -> TypeSpecific {
-              return TypeSpecific(unsafeResultMap: ["__typename": "RichEntity"])
-            }
-
             public static func makePPRanking() -> TypeSpecific {
               return TypeSpecific(unsafeResultMap: ["__typename": "PPRanking"])
             }
@@ -8978,6 +9096,10 @@ public final class SearchQuery: GraphQLQuery {
               return TypeSpecific(unsafeResultMap: ["__typename": "Weather"])
             }
 
+            public static func makeRichEntity(richEntity: AsRichEntity.RichEntity? = nil) -> TypeSpecific {
+              return TypeSpecific(unsafeResultMap: ["__typename": "RichEntity", "richEntity": richEntity.flatMap { (value: AsRichEntity.RichEntity) -> ResultMap in value.resultMap }])
+            }
+
             public static func makePlace(place: AsPlace.Place) -> TypeSpecific {
               return TypeSpecific(unsafeResultMap: ["__typename": "Place", "place": place.resultMap])
             }
@@ -9012,6 +9134,432 @@ public final class SearchQuery: GraphQLQuery {
               }
               set {
                 resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            public var asRichEntity: AsRichEntity? {
+              get {
+                if !AsRichEntity.possibleTypes.contains(__typename) { return nil }
+                return AsRichEntity(unsafeResultMap: resultMap)
+              }
+              set {
+                guard let newValue = newValue else { return }
+                resultMap = newValue.resultMap
+              }
+            }
+
+            public struct AsRichEntity: GraphQLSelectionSet {
+              public static let possibleTypes: [String] = ["RichEntity"]
+
+              public static var selections: [GraphQLSelection] {
+                return [
+                  GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                  GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                  GraphQLField("richEntity", type: .object(RichEntity.selections)),
+                ]
+              }
+
+              public private(set) var resultMap: ResultMap
+
+              public init(unsafeResultMap: ResultMap) {
+                self.resultMap = unsafeResultMap
+              }
+
+              public init(richEntity: RichEntity? = nil) {
+                self.init(unsafeResultMap: ["__typename": "RichEntity", "richEntity": richEntity.flatMap { (value: RichEntity) -> ResultMap in value.resultMap }])
+              }
+
+              public var __typename: String {
+                get {
+                  return resultMap["__typename"]! as! String
+                }
+                set {
+                  resultMap.updateValue(newValue, forKey: "__typename")
+                }
+              }
+
+              public var richEntity: RichEntity? {
+                get {
+                  return (resultMap["richEntity"] as? ResultMap).flatMap { RichEntity(unsafeResultMap: $0) }
+                }
+                set {
+                  resultMap.updateValue(newValue?.resultMap, forKey: "richEntity")
+                }
+              }
+
+              public struct RichEntity: GraphQLSelectionSet {
+                public static let possibleTypes: [String] = ["RichEntityData"]
+
+                public static var selections: [GraphQLSelection] {
+                  return [
+                    GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                    GraphQLField("description", type: .scalar(String.self)),
+                    GraphQLField("images", type: .list(.nonNull(.object(Image.selections)))),
+                    GraphQLField("title", type: .scalar(String.self)),
+                    GraphQLField("subTitle", type: .scalar(String.self)),
+                    GraphQLField("url", type: .scalar(String.self)),
+                    GraphQLField("wikipediaURL", type: .scalar(String.self)),
+                    GraphQLField("isCollapsed", type: .scalar(Bool.self)),
+                    GraphQLField("socialNetworks", type: .list(.nonNull(.object(SocialNetwork.selections)))),
+                    GraphQLField("secondarySocialNetworks", type: .list(.nonNull(.object(SecondarySocialNetwork.selections)))),
+                  ]
+                }
+
+                public private(set) var resultMap: ResultMap
+
+                public init(unsafeResultMap: ResultMap) {
+                  self.resultMap = unsafeResultMap
+                }
+
+                public init(description: String? = nil, images: [Image]? = nil, title: String? = nil, subTitle: String? = nil, url: String? = nil, wikipediaUrl: String? = nil, isCollapsed: Bool? = nil, socialNetworks: [SocialNetwork]? = nil, secondarySocialNetworks: [SecondarySocialNetwork]? = nil) {
+                  self.init(unsafeResultMap: ["__typename": "RichEntityData", "description": description, "images": images.flatMap { (value: [Image]) -> [ResultMap] in value.map { (value: Image) -> ResultMap in value.resultMap } }, "title": title, "subTitle": subTitle, "url": url, "wikipediaURL": wikipediaUrl, "isCollapsed": isCollapsed, "socialNetworks": socialNetworks.flatMap { (value: [SocialNetwork]) -> [ResultMap] in value.map { (value: SocialNetwork) -> ResultMap in value.resultMap } }, "secondarySocialNetworks": secondarySocialNetworks.flatMap { (value: [SecondarySocialNetwork]) -> [ResultMap] in value.map { (value: SecondarySocialNetwork) -> ResultMap in value.resultMap } }])
+                }
+
+                public var __typename: String {
+                  get {
+                    return resultMap["__typename"]! as! String
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "__typename")
+                  }
+                }
+
+                public var description: String? {
+                  get {
+                    return resultMap["description"] as? String
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "description")
+                  }
+                }
+
+                public var images: [Image]? {
+                  get {
+                    return (resultMap["images"] as? [ResultMap]).flatMap { (value: [ResultMap]) -> [Image] in value.map { (value: ResultMap) -> Image in Image(unsafeResultMap: value) } }
+                  }
+                  set {
+                    resultMap.updateValue(newValue.flatMap { (value: [Image]) -> [ResultMap] in value.map { (value: Image) -> ResultMap in value.resultMap } }, forKey: "images")
+                  }
+                }
+
+                public var title: String? {
+                  get {
+                    return resultMap["title"] as? String
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "title")
+                  }
+                }
+
+                public var subTitle: String? {
+                  get {
+                    return resultMap["subTitle"] as? String
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "subTitle")
+                  }
+                }
+
+                public var url: String? {
+                  get {
+                    return resultMap["url"] as? String
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "url")
+                  }
+                }
+
+                public var wikipediaUrl: String? {
+                  get {
+                    return resultMap["wikipediaURL"] as? String
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "wikipediaURL")
+                  }
+                }
+
+                public var isCollapsed: Bool? {
+                  get {
+                    return resultMap["isCollapsed"] as? Bool
+                  }
+                  set {
+                    resultMap.updateValue(newValue, forKey: "isCollapsed")
+                  }
+                }
+
+                public var socialNetworks: [SocialNetwork]? {
+                  get {
+                    return (resultMap["socialNetworks"] as? [ResultMap]).flatMap { (value: [ResultMap]) -> [SocialNetwork] in value.map { (value: ResultMap) -> SocialNetwork in SocialNetwork(unsafeResultMap: value) } }
+                  }
+                  set {
+                    resultMap.updateValue(newValue.flatMap { (value: [SocialNetwork]) -> [ResultMap] in value.map { (value: SocialNetwork) -> ResultMap in value.resultMap } }, forKey: "socialNetworks")
+                  }
+                }
+
+                public var secondarySocialNetworks: [SecondarySocialNetwork]? {
+                  get {
+                    return (resultMap["secondarySocialNetworks"] as? [ResultMap]).flatMap { (value: [ResultMap]) -> [SecondarySocialNetwork] in value.map { (value: ResultMap) -> SecondarySocialNetwork in SecondarySocialNetwork(unsafeResultMap: value) } }
+                  }
+                  set {
+                    resultMap.updateValue(newValue.flatMap { (value: [SecondarySocialNetwork]) -> [ResultMap] in value.map { (value: SecondarySocialNetwork) -> ResultMap in value.resultMap } }, forKey: "secondarySocialNetworks")
+                  }
+                }
+
+                public struct Image: GraphQLSelectionSet {
+                  public static let possibleTypes: [String] = ["EntityImage"]
+
+                  public static var selections: [GraphQLSelection] {
+                    return [
+                      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                      GraphQLField("height", type: .scalar(Int.self)),
+                      GraphQLField("hostPageURL", type: .scalar(String.self)),
+                      GraphQLField("name", type: .scalar(String.self)),
+                      GraphQLField("provider", type: .list(.nonNull(.object(Provider.selections)))),
+                      GraphQLField("thumbnailURL", type: .scalar(String.self)),
+                      GraphQLField("width", type: .scalar(Int.self)),
+                    ]
+                  }
+
+                  public private(set) var resultMap: ResultMap
+
+                  public init(unsafeResultMap: ResultMap) {
+                    self.resultMap = unsafeResultMap
+                  }
+
+                  public init(height: Int? = nil, hostPageUrl: String? = nil, name: String? = nil, provider: [Provider]? = nil, thumbnailUrl: String? = nil, width: Int? = nil) {
+                    self.init(unsafeResultMap: ["__typename": "EntityImage", "height": height, "hostPageURL": hostPageUrl, "name": name, "provider": provider.flatMap { (value: [Provider]) -> [ResultMap] in value.map { (value: Provider) -> ResultMap in value.resultMap } }, "thumbnailURL": thumbnailUrl, "width": width])
+                  }
+
+                  public var __typename: String {
+                    get {
+                      return resultMap["__typename"]! as! String
+                    }
+                    set {
+                      resultMap.updateValue(newValue, forKey: "__typename")
+                    }
+                  }
+
+                  public var height: Int? {
+                    get {
+                      return resultMap["height"] as? Int
+                    }
+                    set {
+                      resultMap.updateValue(newValue, forKey: "height")
+                    }
+                  }
+
+                  public var hostPageUrl: String? {
+                    get {
+                      return resultMap["hostPageURL"] as? String
+                    }
+                    set {
+                      resultMap.updateValue(newValue, forKey: "hostPageURL")
+                    }
+                  }
+
+                  public var name: String? {
+                    get {
+                      return resultMap["name"] as? String
+                    }
+                    set {
+                      resultMap.updateValue(newValue, forKey: "name")
+                    }
+                  }
+
+                  public var provider: [Provider]? {
+                    get {
+                      return (resultMap["provider"] as? [ResultMap]).flatMap { (value: [ResultMap]) -> [Provider] in value.map { (value: ResultMap) -> Provider in Provider(unsafeResultMap: value) } }
+                    }
+                    set {
+                      resultMap.updateValue(newValue.flatMap { (value: [Provider]) -> [ResultMap] in value.map { (value: Provider) -> ResultMap in value.resultMap } }, forKey: "provider")
+                    }
+                  }
+
+                  public var thumbnailUrl: String? {
+                    get {
+                      return resultMap["thumbnailURL"] as? String
+                    }
+                    set {
+                      resultMap.updateValue(newValue, forKey: "thumbnailURL")
+                    }
+                  }
+
+                  public var width: Int? {
+                    get {
+                      return resultMap["width"] as? Int
+                    }
+                    set {
+                      resultMap.updateValue(newValue, forKey: "width")
+                    }
+                  }
+
+                  public struct Provider: GraphQLSelectionSet {
+                    public static let possibleTypes: [String] = ["EntityImageProvider"]
+
+                    public static var selections: [GraphQLSelection] {
+                      return [
+                        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                        GraphQLField("type", type: .scalar(String.self)),
+                        GraphQLField("url", type: .scalar(String.self)),
+                      ]
+                    }
+
+                    public private(set) var resultMap: ResultMap
+
+                    public init(unsafeResultMap: ResultMap) {
+                      self.resultMap = unsafeResultMap
+                    }
+
+                    public init(type: String? = nil, url: String? = nil) {
+                      self.init(unsafeResultMap: ["__typename": "EntityImageProvider", "type": type, "url": url])
+                    }
+
+                    public var __typename: String {
+                      get {
+                        return resultMap["__typename"]! as! String
+                      }
+                      set {
+                        resultMap.updateValue(newValue, forKey: "__typename")
+                      }
+                    }
+
+                    public var type: String? {
+                      get {
+                        return resultMap["type"] as? String
+                      }
+                      set {
+                        resultMap.updateValue(newValue, forKey: "type")
+                      }
+                    }
+
+                    public var url: String? {
+                      get {
+                        return resultMap["url"] as? String
+                      }
+                      set {
+                        resultMap.updateValue(newValue, forKey: "url")
+                      }
+                    }
+                  }
+                }
+
+                public struct SocialNetwork: GraphQLSelectionSet {
+                  public static let possibleTypes: [String] = ["EntitySocialNetworkProfile"]
+
+                  public static var selections: [GraphQLSelection] {
+                    return [
+                      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                      GraphQLField("text", type: .scalar(String.self)),
+                      GraphQLField("url", type: .scalar(String.self)),
+                      GraphQLField("icon", type: .scalar(EntitySocialNetworkProfileIcon.self)),
+                    ]
+                  }
+
+                  public private(set) var resultMap: ResultMap
+
+                  public init(unsafeResultMap: ResultMap) {
+                    self.resultMap = unsafeResultMap
+                  }
+
+                  public init(text: String? = nil, url: String? = nil, icon: EntitySocialNetworkProfileIcon? = nil) {
+                    self.init(unsafeResultMap: ["__typename": "EntitySocialNetworkProfile", "text": text, "url": url, "icon": icon])
+                  }
+
+                  public var __typename: String {
+                    get {
+                      return resultMap["__typename"]! as! String
+                    }
+                    set {
+                      resultMap.updateValue(newValue, forKey: "__typename")
+                    }
+                  }
+
+                  public var text: String? {
+                    get {
+                      return resultMap["text"] as? String
+                    }
+                    set {
+                      resultMap.updateValue(newValue, forKey: "text")
+                    }
+                  }
+
+                  public var url: String? {
+                    get {
+                      return resultMap["url"] as? String
+                    }
+                    set {
+                      resultMap.updateValue(newValue, forKey: "url")
+                    }
+                  }
+
+                  public var icon: EntitySocialNetworkProfileIcon? {
+                    get {
+                      return resultMap["icon"] as? EntitySocialNetworkProfileIcon
+                    }
+                    set {
+                      resultMap.updateValue(newValue, forKey: "icon")
+                    }
+                  }
+                }
+
+                public struct SecondarySocialNetwork: GraphQLSelectionSet {
+                  public static let possibleTypes: [String] = ["EntitySocialNetworkProfile"]
+
+                  public static var selections: [GraphQLSelection] {
+                    return [
+                      GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                      GraphQLField("text", type: .scalar(String.self)),
+                      GraphQLField("url", type: .scalar(String.self)),
+                      GraphQLField("icon", type: .scalar(EntitySocialNetworkProfileIcon.self)),
+                    ]
+                  }
+
+                  public private(set) var resultMap: ResultMap
+
+                  public init(unsafeResultMap: ResultMap) {
+                    self.resultMap = unsafeResultMap
+                  }
+
+                  public init(text: String? = nil, url: String? = nil, icon: EntitySocialNetworkProfileIcon? = nil) {
+                    self.init(unsafeResultMap: ["__typename": "EntitySocialNetworkProfile", "text": text, "url": url, "icon": icon])
+                  }
+
+                  public var __typename: String {
+                    get {
+                      return resultMap["__typename"]! as! String
+                    }
+                    set {
+                      resultMap.updateValue(newValue, forKey: "__typename")
+                    }
+                  }
+
+                  public var text: String? {
+                    get {
+                      return resultMap["text"] as? String
+                    }
+                    set {
+                      resultMap.updateValue(newValue, forKey: "text")
+                    }
+                  }
+
+                  public var url: String? {
+                    get {
+                      return resultMap["url"] as? String
+                    }
+                    set {
+                      resultMap.updateValue(newValue, forKey: "url")
+                    }
+                  }
+
+                  public var icon: EntitySocialNetworkProfileIcon? {
+                    get {
+                      return resultMap["icon"] as? EntitySocialNetworkProfileIcon
+                    }
+                    set {
+                      resultMap.updateValue(newValue, forKey: "icon")
+                    }
+                  }
+                }
               }
             }
 

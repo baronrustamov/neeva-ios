@@ -7,7 +7,7 @@ import Shared
 import SwiftUI
 
 struct InlineSearchProductItem: View {
-    let product: InlineSearchProduct
+    let product: NeevaScopeSearch.InlineSearchProduct
     @Environment(\.onOpenURLForCheatsheet) var onOpenURLForCheatsheet
 
     var body: some View {
@@ -61,7 +61,7 @@ struct InlineSearchProductItem: View {
 }
 
 struct InlineSearchProductList: View {
-    let inlineSearchProducts: [InlineSearchProduct]
+    let inlineSearchProducts: [NeevaScopeSearch.InlineSearchProduct]
 
     var body: some View {
         ScrollView(.horizontal) {

@@ -8,7 +8,7 @@ import Shared
 import SwiftUI
 
 public class CheatsheetMenuViewModel: ObservableObject {
-    typealias RichResult = SearchController.RichResult
+    typealias RichResult = NeevaScopeSearch.SearchController.RichResult
 
     private weak var tab: Tab?
 
@@ -18,7 +18,7 @@ public class CheatsheetMenuViewModel: ObservableObject {
 
     @Published private(set) var cheatsheetDataLoading: Bool
     private(set) var cheatsheetInfo: CheatsheetQueryController.CheatsheetInfo?
-    private(set) var searchRichResults: [SearchController.RichResult]?
+    private(set) var searchRichResults: [RichResult]?
     private(set) var cheatsheetDataError: Error?
     private(set) var searchRichResultsError: Error?
 
@@ -198,7 +198,7 @@ public class CheatsheetMenuViewModel: ObservableObject {
     }
 
     private func getRichResultByQuery(_ query: String) {
-        SearchController.getRichResult(query: query) { searchResult in
+        NeevaScopeSearch.SearchController.getRichResult(query: query) { searchResult in
             switch searchResult {
             case .success(let richResults):
                 // log if a bad URL was received
@@ -212,7 +212,7 @@ public class CheatsheetMenuViewModel: ObservableObject {
 
                 // Create Children ViewModels if corresponding results exist
                 self.searchRichResults?.forEach { result in
-                    switch result.resultType {
+                    switch result.result {
                     case .Place(let result):
                         if self.placeViewModel == nil {
                             self.placeViewModel = PlaceViewModel(result)
@@ -238,8 +238,8 @@ public class CheatsheetMenuViewModel: ObservableObject {
             .ignoreFragment, .ignoreLastSlash, .normalizeHost,
         ]
         return richResults.compactMap { richResult -> RichResult? in
-            switch richResult.resultType {
-            case .ProductCluster, .Place, .PlaceList:
+            switch richResult.result {
+            case .ProductCluster, .Place, .PlaceList, .RichEntity:
                 return richResult
             case .RecipeBlock(let result):
                 let filteredRecipes = result.filter {
@@ -250,7 +250,7 @@ public class CheatsheetMenuViewModel: ObservableObject {
                 }
                 return RichResult(
                     id: richResult.id,
-                    resultType: .RecipeBlock(result: filteredRecipes)
+                    result: .RecipeBlock(result: filteredRecipes)
                 )
             case .RelatedSearches:
                 return richResult
@@ -263,7 +263,7 @@ public class CheatsheetMenuViewModel: ObservableObject {
                 }
                 return RichResult(
                     id: richResult.id,
-                    resultType: .WebGroup(result: filteredResults)
+                    result: .WebGroup(result: filteredResults)
                 )
             case .NewsGroup(let result):
                 let filteredNews = result.news.filter {
@@ -276,7 +276,7 @@ public class CheatsheetMenuViewModel: ObservableObject {
                 newResult.news = filteredNews
                 return RichResult(
                     id: richResult.id,
-                    resultType: .NewsGroup(result: newResult)
+                    result: .NewsGroup(result: newResult)
                 )
             }
         }

@@ -33,59 +33,60 @@ public enum PreviewEntity: Equatable {
             return false
         }
     }
-}
 
-public struct NewsItem {
-    public let title: String
-    public let snippet: String
-    public let url: URL
-    public let thumbnailURL: URL?
-    public let providerName: String
-    public let datePublished: String
-    public let faviconURL: URL?
-    public let domain: String?
+    public struct NewsItem {
+        public let title: String
+        public let snippet: String
+        public let url: URL
+        public let thumbnailURL: URL?
+        public let providerName: String
+        public let datePublished: String
+        public let faviconURL: URL?
+        public let domain: String?
 
-    public var formattedDatePublished: String {
-        let originalDateFormatter = DateFormatter()
-        originalDateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        originalDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        let convertedDate = originalDateFormatter.date(from: datePublished)
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMM dd"
-        return formatter.string(from: convertedDate ?? Date())
+        public var formattedDatePublished: String {
+            let originalDateFormatter = DateFormatter()
+            originalDateFormatter.locale = Locale(identifier: "en_US_POSIX")
+            originalDateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+            let convertedDate = originalDateFormatter.date(from: datePublished)
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MMM dd"
+            return formatter.string(from: convertedDate ?? Date())
+        }
     }
-}
 
-public struct RichEntity {
-    public let id: String
-    public let title: String
-    public let description: String
-    public let imageURL: URL?
-}
-
-public struct TechDoc {
-    public let id: String
-    public let title: String
-    public let body: NSMutableAttributedString?
-}
-
-public struct ProductRating {
-    public let numReviews: Int?
-    public let productStars: Double
-}
-
-public struct RetailProduct {
-    public let id: String
-    public let url: URL
-    public let title: String
-    public let description: [String]
-    public let currentPrice: Double
-    public let ratingSummary: ProductRating?
-
-    public var formattedPrice: String {
-        let numberFormatter = NumberFormatter()
-        numberFormatter.numberStyle = .currency
-        numberFormatter.locale = Locale(identifier: "en_US")
-        return numberFormatter.string(from: (currentPrice as NSNumber)) ?? ""
+    public struct RichEntity {
+        public let id: String
+        public let title: String
+        public let description: String
+        public let imageURL: URL?
     }
+
+    public struct TechDoc {
+        public let id: String
+        public let title: String
+        public let body: NSMutableAttributedString?
+    }
+
+    public struct ProductRating {
+        public let numReviews: Int?
+        public let productStars: Double
+    }
+
+    public struct RetailProduct {
+        public let id: String
+        public let url: URL
+        public let title: String
+        public let description: [String]
+        public let currentPrice: Double
+        public let ratingSummary: ProductRating?
+
+        public var formattedPrice: String {
+            let numberFormatter = NumberFormatter()
+            numberFormatter.numberStyle = .currency
+            numberFormatter.locale = Locale(identifier: "en_US")
+            return numberFormatter.string(from: (currentPrice as NSNumber)) ?? ""
+        }
+    }
+
 }

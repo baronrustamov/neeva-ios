@@ -42,7 +42,7 @@ struct ProviderInfo: View {
 }
 
 struct ProductInfoView: View {
-    let product: RetailProduct
+    let product: PreviewEntity.RetailProduct
     let url: URL
 
     var body: some View {
@@ -77,7 +77,7 @@ struct ProductInfoView: View {
 }
 
 struct NewsInfoView: View {
-    let newsItem: NewsItem
+    let newsItem: PreviewEntity.NewsItem
 
     var body: some View {
         HStack(spacing: 4) {

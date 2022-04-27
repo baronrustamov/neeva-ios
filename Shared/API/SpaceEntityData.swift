@@ -21,6 +21,12 @@ public struct SpaceEntityData {
     typealias EntityNewsItem = GetSpacesDataQuery.Data.GetSpace.Space
         .Space.Entity.SpaceEntity.Content.TypeSpecific.AsNewsItem.NewsItem
 
+    typealias NewsItem = PreviewEntity.NewsItem
+    typealias RichEntity = PreviewEntity.RichEntity
+    typealias RetailProduct = PreviewEntity.RetailProduct
+    typealias TechDoc = PreviewEntity.TechDoc
+    typealias ProductRating = PreviewEntity.ProductRating
+
     public let id: String
     public let url: URL?
     public let title: String?

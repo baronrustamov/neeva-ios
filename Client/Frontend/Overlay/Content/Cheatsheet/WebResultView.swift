@@ -7,7 +7,7 @@ import Shared
 import SwiftUI
 
 struct WebResultHeader: View {
-    let item: WebResult
+    let item: NeevaScopeSearch.WebResult
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -40,7 +40,7 @@ struct WebResultHeader: View {
 }
 
 struct WebResultItem: View {
-    let item: WebResult
+    let item: NeevaScopeSearch.WebResult
     @Environment(\.onOpenURLForCheatsheet) var onOpenURLForCheatsheet
 
     var body: some View {
@@ -89,7 +89,7 @@ struct WebResultItem: View {
 struct WebResultList: View {
     @Environment(\.onOpenURLForCheatsheet) var onOpenURLForCheatsheet
 
-    let webResult: [WebResult]
+    let webResult: [NeevaScopeSearch.WebResult]
     let currentCheatsheetQueryAsURL: URL?
     let showQueryString: Bool
 
