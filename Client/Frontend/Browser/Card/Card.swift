@@ -224,9 +224,12 @@ struct Card<Details>: View where Details: CardDetails {
 
                 if let tabDetails = details as? TabCardDetails {
                     button
-                        .padding(1.5)
-                        .contextMenu(menuItems: tabDetails.contextMenu)
-                        .padding(-1.5)
+                        .if(!animate) { view in
+                            view
+                                .padding(1.5)
+                                .contextMenu(menuItems: tabDetails.contextMenu)
+                                .padding(-1.5)
+                        }
                 } else {
                     button
                 }
@@ -277,7 +280,10 @@ struct Card<Details>: View where Details: CardDetails {
                     view.modifier(DragToCloseInteraction(action: details.onClose))
                 }
         }
-        .scaleEffect(isPressed ? 0.95 : 1)
+        .if(!animate) { view in
+            view
+                .scaleEffect(isPressed ? 0.95 : 1)
+        }
     }
 
     private struct ActionsModifier: ViewModifier {
