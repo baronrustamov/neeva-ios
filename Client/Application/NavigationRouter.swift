@@ -28,6 +28,7 @@ enum NavigationPath {
     case spaceDigest
     case fastTap(String, Bool)
     case configNewsProvider(isIncognito: Bool)
+    case openDefaultBrowserEducation
     #if XYZ
         case walletConnect(wcURL: WCURL)
     #endif
@@ -92,6 +93,8 @@ enum NavigationPath {
             #endif
             return nil
 
+        } else if urlString.starts(with: "\(scheme)://open-default-browser-education") {
+            self = .openDefaultBrowserEducation
         } else {
             return nil
         }
@@ -116,6 +119,8 @@ enum NavigationPath {
         case .configNewsProvider(let isIncognito):
             NavigationPath.handleURL(
                 url: NeevaConstants.configureNewsProviderURL, isIncognito: isIncognito, with: bvc)
+        case .openDefaultBrowserEducation:
+            NavigationPath.handleOpenDefaultBrowserEducation(with: bvc)
         #if XYZ
             case .walletConnect(let wcURL):
                 bvc.connectWallet(to: wcURL)
@@ -229,6 +234,10 @@ enum NavigationPath {
     private static func handleSpaceDigest(with bvc: BrowserViewController) {
         guard NeevaFeatureFlags[.enableSpaceDigestDeeplink] else { return }
         bvc.browserModel.openSpaceDigest(bvc: bvc)
+    }
+
+    private static func handleOpenDefaultBrowserEducation(with bvc: BrowserViewController) {
+        bvc.presentDBOnboardingViewController(triggerFrom: .defaultBrowserReminderNotification)
     }
 
     private static func handleSpace(

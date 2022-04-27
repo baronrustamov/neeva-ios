@@ -132,6 +132,8 @@ extension Defaults.Keys {
         "newsProviderPromoTimeInterval", default: 86400)
     public static let fastTapPromoTimeInterval = Defaults.Key<Int>(
         "fastTapPromoTimeInterval", default: 432000)
+    public static let defaultBrowserPromoTimeInterval = Defaults.Key<Int>(
+        "defaultBrowserPromoTimeInterval", default: 259200)
     /// 0: Undecided, 1: Accepted, 2: Denied
     public static let notificationPermissionState = Defaults.Key<Int>(
         "notificationPermissionState", default: 0)

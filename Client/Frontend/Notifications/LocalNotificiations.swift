@@ -7,7 +7,7 @@ import Foundation
 import Shared
 import UserNotifications
 
-class LocalNotitifications {
+class LocalNotifications {
     static let notificationManager = NotificationManager.shared
 
     struct NeevaPromo {
@@ -61,13 +61,16 @@ class LocalNotitifications {
             })
     }
 
-    static func scheduleNeevaOnboardingCallback(notificationType: NotificationType) {
+    static func scheduleNeevaOnboardingCallback(
+        notificationType: NotificationType
+    ) {
         rescheduleNotificationIfNeeded(
             for: notificationType,
             completion: { exists, rescheduled in
                 var scheduled = rescheduled
                 if !exists {
-                    scheduled = createNeevaOnboardingCallback(notificationType: notificationType)
+                    scheduled = createNeevaOnboardingCallback(
+                        notificationType: notificationType)
                 }
                 if scheduled {
                     let attributes = [
@@ -146,6 +149,9 @@ class LocalNotitifications {
                 case .neevaOnboardingFastTap:
                     rescheduled = createNeevaOnboardingCallback(
                         notificationType: .neevaOnboardingFastTap)
+                case .neevaOnboardingDefaultBrowser:
+                    rescheduled = createNeevaOnboardingCallback(
+                        notificationType: .neevaOnboardingDefaultBrowser)
                 }
             }
 
@@ -209,7 +215,9 @@ class LocalNotitifications {
         }
     }
 
-    private static func createNeevaOnboardingCallback(notificationType: NotificationType) -> Bool {
+    private static func createNeevaOnboardingCallback(
+        notificationType: NotificationType
+    ) -> Bool {
         var title: String?
         var body: String?
         var timeInterval: TimeInterval?
@@ -240,6 +248,12 @@ class LocalNotitifications {
                 "Skip the search results page with FastTap, and go directly to the website of your choice. Start typing and see for yourself!"
             timeInterval = TimeInterval(Defaults[.fastTapPromoTimeInterval])
             deeplinkUrl = "neeva://fast-tap?query=tv%20shows"
+        case .neevaOnboardingDefaultBrowser:
+            title = "Safe, Blazing Fast Browsing. Every Time"
+            body =
+                "Ditch those trackers slowing you down. Make Neeva your default browser and see the difference for yourself."
+            timeInterval = TimeInterval(Defaults[.defaultBrowserPromoTimeInterval])
+            deeplinkUrl = "neeva://open-default-browser-education"
         default:
             break
         }

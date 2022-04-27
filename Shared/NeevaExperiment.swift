@@ -72,9 +72,18 @@ extension NeevaExperiment {
     //        case showDBPrompt
     //    }
 
+    /* Experiment Example */
+    public enum DefaultBrowserRemindMeLater: String, ExperimentArms {
+        case control
+        case isInDefaultBrowserEnhancementExp
+    }
 }
 
 // Experiment Example */
 //extension NeevaExperiment.Experiment where Arm == NeevaExperiment.DefaultBrowserV2 {
 //public static let defaultBrowserPromptV2 = Self()
 //}
+
+extension NeevaExperiment.Experiment where Arm == NeevaExperiment.DefaultBrowserRemindMeLater {
+    public static let defaultBrowserRemindMeLater = Self()
+}

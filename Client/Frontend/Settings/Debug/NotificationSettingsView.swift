@@ -37,6 +37,23 @@ struct NotificationSettingsView: View {
                         .foregroundColor(Color.label)
                 }
 
+                Button {
+                    NotificationPermissionHelper.shared.requestPermissionIfNeeded(
+                        completion: { authorized in
+                            if authorized {
+                                DispatchQueue.main.async {
+                                    Defaults[.defaultBrowserPromoTimeInterval] = 10
+                                    LocalNotifications.scheduleNeevaOnboardingCallback(
+                                        notificationType: .neevaOnboardingDefaultBrowser)
+                                }
+                            }
+                        }, openSettingsIfNeeded: false, callSite: .defaultBrowserInterstitial
+                    )
+                } label: {
+                    Text("Schedule Default Browser Notification in 10 seconds")
+                        .foregroundColor(Color.label)
+                }
+
                 if let token = Defaults[.notificationToken] {
                     HStack {
                         Text("Notification Token")

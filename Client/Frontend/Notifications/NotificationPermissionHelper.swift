@@ -21,6 +21,7 @@ public enum NotificationAuthorizationCallSite: String {
     case promoCard
     case settings
     case blackFriday
+    case defaultBrowserInterstitial
 }
 
 class NotificationPermissionHelper {
@@ -122,8 +123,8 @@ class NotificationPermissionHelper {
                     NotificationPermissionStatus.authorized.rawValue
 
                 self.registerAuthorizedNotification()
-                LocalNotitifications.scheduleNeevaPromoCallback(
-                    callSite: LocalNotitifications.ScheduleCallSite.authorizeNotification
+                LocalNotifications.scheduleNeevaPromoCallback(
+                    callSite: LocalNotifications.ScheduleCallSite.authorizeNotification
                 )
             }
     }
@@ -143,6 +144,10 @@ class NotificationPermissionHelper {
     }
 
     func registerDeviceTokenWithServer(deviceToken: String) {
+        guard NeevaUserInfo.shared.hasLoginCookie() else {
+            return
+        }
+
         #if DEBUG
             let environment = "sandbox"
         #else
