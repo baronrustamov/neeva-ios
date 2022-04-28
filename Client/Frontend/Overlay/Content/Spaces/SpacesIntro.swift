@@ -48,7 +48,6 @@ struct SpacesShareIntroOverlayContent: View {
             secondButtonText: "Not now",
             firstButtonPressed: {
                 onShare()
-                onDismiss()
             },
             secondButtonPressed: onDismiss
         )

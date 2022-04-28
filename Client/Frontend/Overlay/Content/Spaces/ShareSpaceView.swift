@@ -384,11 +384,10 @@ struct ShareSpaceView: View {
                                         seenSpacesShareIntro = true
                                     },
                                     onShare: {
-                                        onShared()
                                         bvc.overlayManager.hideCurrentOverlay(ofPriority: .modal)
-
+                                        spaceModel.changePublicACL(space: space, add: true)
                                         seenSpacesShareIntro = true
-                                        self.isPublic = true
+                                        onShared()
                                     })
                             })
                     }
