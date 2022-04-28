@@ -88,6 +88,8 @@ class TabManager: NSObject {
         return tabs.count
     }
 
+    var cookieCutterModel: CookieCutterModel?
+
     // MARK: - Init
     init(profile: Profile, scene: UIScene, incognitoModel: IncognitoModel) {
         assert(Thread.isMainThread)

@@ -146,6 +146,7 @@ struct BrowserView: View {
         .environmentObject(browserModel.scrollingControlModel)
         .environmentObject(browserModel.switcherToolbarModel)
         .environmentObject(browserModel.toastViewManager)
+        .environmentObject(browserModel.cookieCutterModel)
         .environmentObject(chromeModel)
         .environmentObject(bvc.gridModel)
         .environmentObject(bvc.gridModel.spaceCardModel)

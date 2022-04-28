@@ -25,6 +25,7 @@ for (let [name, files] of Object.entries(needsFirefoxFile)) {
 }
 
 module.exports = {
+  target: 'node',
   mode: "production",
   entry: {
     AllFramesAtDocumentStart,

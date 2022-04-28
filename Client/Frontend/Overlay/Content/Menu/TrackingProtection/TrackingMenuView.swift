@@ -53,7 +53,6 @@ class TrackingStatsViewModel: ObservableObject {
                 self.selectedTab?.reload()
                 self.refreshStats()
             }
-
         }
     }
 
@@ -190,6 +189,7 @@ struct WhosTrackingYouView: View {
 
 struct TrackingMenuView: View {
     @EnvironmentObject var viewModel: TrackingStatsViewModel
+    @EnvironmentObject var cookieCutterModel: CookieCutterModel
 
     @State private var isShowingPopup = false
 
@@ -201,7 +201,8 @@ struct TrackingMenuView: View {
 
                     if FeatureFlag[.cookieCutter] {
                         // TODO: Make this actually track a number
-                        TrackingMenuFirstRowElement(label: "Cookies", num: 0)
+                        TrackingMenuFirstRowElement(
+                            label: "Cookies", num: cookieCutterModel.cookiesBlocked)
                     } else {
                         TrackingMenuFirstRowElement(label: "Domains", num: viewModel.numDomains)
                     }

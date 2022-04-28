@@ -210,6 +210,8 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
         super.init(nibName: nil, bundle: nil)
 
+        self.tabManager.cookieCutterModel = browserModel.cookieCutterModel
+
         chromeModel.topBarDelegate = self
         chromeModel.toolbarDelegate = self
         #if XYZ

@@ -63,6 +63,7 @@
 		1DA3CE6724EEE86C00422BB2 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075641E37F7AB006961AC /* AppInfo.swift */; };
 		1DDAD13E24F0651C007623C8 /* TopSitesWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDAD13C24F064F7007623C8 /* TopSitesWidget.swift */; };
 		1DF426CF251BDF6A0086386A /* photon-colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C49854D206173C800893DAE /* photon-colors.swift */; };
+		200976852810EA620055A02B /* CookieCutterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200976842810EA620055A02B /* CookieCutterHelper.swift */; };
 		2026EC1C27F3D2F900817053 /* CookieCutterSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2026EC1B27F3D2F900817053 /* CookieCutterSettings.swift */; };
 		2026EC1F27F3E51400817053 /* CookieCutterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2026EC1E27F3E51400817053 /* CookieCutterModel.swift */; };
 		2026EC2127F4070900817053 /* NonEssentialCookieSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2026EC2027F4070900817053 /* NonEssentialCookieSettings.swift */; };
@@ -71,6 +72,7 @@
 		206954A827FF449E000360D6 /* RecentlyClosedTabsPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206954A727FF449E000360D6 /* RecentlyClosedTabsPanelView.swift */; };
 		209CD9A327DBF9F20069675C /* TabGroupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209CD9A227DBF9F20069675C /* TabGroupTests.swift */; };
 		20A5D15327F6A43E00DB88FE /* HistoryPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A5D15227F6A43E00DB88FE /* HistoryPanelView.swift */; };
+		20E51A112819D8BB00394720 /* CookieCutterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200976842810EA620055A02B /* CookieCutterHelper.swift */; };
 		20ED47CE27F28235002E3ADF /* BrowserViewController+IntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20ED47CD27F28235002E3ADF /* BrowserViewController+IntroView.swift */; };
 		20F2889227FD1BA9005A8A79 /* HistoryPanelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F2889127FD1BA9005A8A79 /* HistoryPanelModel.swift */; };
 		20F2889427FD20B4005A8A79 /* HistoryPanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F2889327FD20B4005A8A79 /* HistoryPanelViewController.swift */; };
@@ -1870,6 +1872,7 @@
 		1DA3CE5E24EEE7C600422BB2 /* SiteArchiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteArchiver.swift; sourceTree = "<group>"; };
 		1DA3CE6224EEE83200422BB2 /* SavedTab+ConfigureExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SavedTab+ConfigureExtension.swift"; sourceTree = "<group>"; };
 		1DDAD13C24F064F7007623C8 /* TopSitesWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesWidget.swift; sourceTree = "<group>"; };
+		200976842810EA620055A02B /* CookieCutterHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCutterHelper.swift; sourceTree = "<group>"; };
 		2026EC1B27F3D2F900817053 /* CookieCutterSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCutterSettings.swift; sourceTree = "<group>"; };
 		2026EC1E27F3E51400817053 /* CookieCutterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCutterModel.swift; sourceTree = "<group>"; };
 		2026EC2027F4070900817053 /* NonEssentialCookieSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonEssentialCookieSettings.swift; sourceTree = "<group>"; };
@@ -4223,6 +4226,7 @@
 			isa = PBXGroup;
 			children = (
 				D3BA7E0D1B0E934F00153782 /* ContextMenuHelper.swift */,
+				200976842810EA620055A02B /* CookieCutterHelper.swift */,
 				D01017F4219CB6BD009CBB5A /* DownloadContentScript.swift */,
 				D3B6923E1B9F9A58004B87A4 /* FindInPageHelper.swift */,
 				D0E55C4E1FB4FD23006DC274 /* FormPostHelper.swift */,
@@ -6804,6 +6808,7 @@
 				4A42C4B627E58487003B9826 /* WebViewContainer.swift in Sources */,
 				4A42C4B727E58487003B9826 /* TrackingMenuView.swift in Sources */,
 				4A42C4B827E58487003B9826 /* TabManager+TabEventHandler.swift in Sources */,
+				20E51A112819D8BB00394720 /* CookieCutterHelper.swift in Sources */,
 				4A42C4B927E58487003B9826 /* OverflowMenuOverlayContent.swift in Sources */,
 				4A42C4BA27E58487003B9826 /* AppDelegate+UNUserNotificationCenterDelegate.swift in Sources */,
 				4A42C4BB27E58487003B9826 /* DebugSettingsRestartPromptView.swift in Sources */,
@@ -7243,6 +7248,7 @@
 				BCF248492670973400ACAD11 /* BrowserViewController+Quests.swift in Sources */,
 				20F2889427FD20B4005A8A79 /* HistoryPanelViewController.swift in Sources */,
 				C98E405D26585709003AC0E2 /* PrivacySettingsSection.swift in Sources */,
+				200976852810EA620055A02B /* CookieCutterHelper.swift in Sources */,
 				EB1C84BF212EFFBF001489DF /* BrowserViewController+ReaderMode.swift in Sources */,
 				C8A4E91B275567A700421040 /* TabContainerHost.swift in Sources */,
 				4AB07F29276C4E6300C85ED4 /* SingleLevelTabCardsView.swift in Sources */,

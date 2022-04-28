@@ -64,6 +64,7 @@ class NeevaTabContentBlocker: TabContentBlocker, TabContentScript {
                 strength = strEnum
             }
         }
+
         let rules = BlocklistFileName.listsForMode(strength: strength)
         ContentBlocker.shared.setupTrackingProtection(
             forTab: tab, isEnabled: isEnabled, rules: rules)
@@ -71,6 +72,7 @@ class NeevaTabContentBlocker: TabContentBlocker, TabContentScript {
 
     @objc override func notifiedTabSetupRequired() {
         setupForTab()
+
         if let tab = tab as? Tab {
             TabEvent.post(.didChangeContentBlocking, for: tab)
         }

@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import Shared
 import Storage
 
 extension TabManager: TabEventHandler {
@@ -13,6 +14,18 @@ extension TabManager: TabEventHandler {
     }
 
     func tabDidChangeContentBlocking(_ tab: Tab) {
+        tab.removeContentScript(name: CookieCutterHelper.name())
+
+        if FeatureFlag[.cookieCutter],
+            let domain = tab.currentURL()?.host,
+            !TrackingPreventionConfig.trackersAllowedFor(domain),
+            let cookieCutterModel = cookieCutterModel
+        {
+            tab.addContentScript(
+                CookieCutterHelper(cookieCutterModel: cookieCutterModel),
+                name: CookieCutterHelper.name())
+        }
+
         tab.reload()
     }
 }

@@ -107,8 +107,10 @@ class TrackingUITests: XCTestCase {
     }
 
     func testTrackingUIFirstRow() throws {
-        let ui = TrackingMenuView().environmentObject(
-            TrackingStatsViewModel(testingData: trackingData))
+        let ui = TrackingMenuView()
+            .environmentObject(TrackingStatsViewModel(testingData: trackingData))
+            .environmentObject(CookieCutterModel())
+
         let firstRowElements = try ui.inspect().findAll(TrackingMenuFirstRowElement.self)
         XCTAssertEqual(firstRowElements.count, 2)
 
@@ -121,8 +123,10 @@ class TrackingUITests: XCTestCase {
     }
 
     func testWhosTrackingYou() throws {
-        let ui = TrackingMenuView().environmentObject(
-            TrackingStatsViewModel(testingData: trackingData))
+        let ui = TrackingMenuView()
+            .environmentObject(TrackingStatsViewModel(testingData: trackingData))
+            .environmentObject(CookieCutterModel())
+
         let whosTrackingYouElements = try ui.inspect().findAll(WhosTrackingYouElement.self)
         XCTAssertEqual(whosTrackingYouElements.count, 3)
 
@@ -142,13 +146,16 @@ class TrackingUITests: XCTestCase {
         domainsGoogle.forEach { tempStats = tempStats.create(host: $0) }
         domainsAmazon.forEach { tempStats = tempStats.create(host: $0) }
         domainsUnknownSource.forEach { tempStats = tempStats.create(host: $0) }
-        let ui = TrackingMenuView().environmentObject(
-            TrackingStatsViewModel(
-                testingData:
-                    TrackingEntity.getTrackingDataForCurrentTab(stats: tempStats)))
+        let ui = TrackingMenuView()
+            .environmentObject(
+                TrackingStatsViewModel(
+                    testingData:
+                        TrackingEntity.getTrackingDataForCurrentTab(stats: tempStats))
+            )
+            .environmentObject(CookieCutterModel())
+
         let whosTrackingYouElements = try ui.inspect().findAll(WhosTrackingYouElement.self)
         XCTAssertEqual(whosTrackingYouElements.count, 2)
-
         XCTAssertEqual(
             try whosTrackingYouElements[0].find(Kern.self).text()
                 .string(locale: Locale(identifier: "en")), "15")
@@ -177,7 +184,11 @@ class TrackingUITests: XCTestCase {
         manager.selectTab(tab, notify: true)
         tab.setURL("https://neeva.com")
         model = TrackingStatsViewModel(tabManager: manager)
-        let ui = TrackingMenuView().environmentObject(model)
+
+        let ui = TrackingMenuView()
+            .environmentObject(model)
+            .environmentObject(CookieCutterModel())
+
         let rowButton = try ui.inspect().find(TrackingMenuProtectionRowButton.self).actualView()
         XCTAssertNotNil(rowButton)
         let toggle = try rowButton.inspect().find(ViewType.Toggle.self)

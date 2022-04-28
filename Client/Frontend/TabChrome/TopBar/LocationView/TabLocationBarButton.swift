@@ -25,6 +25,7 @@ struct LocationViewTrackingButton: View {
     @Environment(\.openSettings) private var openSettings
     @EnvironmentObject private var incognitoModel: IncognitoModel
     @EnvironmentObject private var trackingStatsModel: TrackingStatsViewModel
+    @EnvironmentObject private var cookieCutterModel: CookieCutterModel
 
     let currentDomain: String
 
@@ -43,7 +44,9 @@ struct LocationViewTrackingButton: View {
             backgroundColor: .systemGroupedBackground,
             arrowDirections: [.up, .down]
         ) {
-            TrackingMenuView().environmentObject(trackingStatsModel)
+            TrackingMenuView()
+                .environmentObject(trackingStatsModel)
+                .environmentObject(cookieCutterModel)
                 .environment(\.openSettings, openSettings)
         }
     }

@@ -23,6 +23,7 @@ extension Defaults.Keys {
 }
 
 class CookieCutterModel: ObservableObject {
+    // MARK: - Properties
     @Published var cookieNoticeStateShouldReset = false
     @Published var cookieNotices: CookieNotices {
         didSet {
@@ -38,6 +39,7 @@ class CookieCutterModel: ObservableObject {
             socialCookiesAllowed = allowed
         }
     }
+    @Published var cookiesBlocked = 0
 
     // User selected settings.
     @Default(.marketingCookies) var marketingCookiesAllowed {
@@ -56,6 +58,13 @@ class CookieCutterModel: ObservableObject {
         }
     }
 
+    // MARK: - Methods
+    func cookieWasHandled() {
+        // This does not do anything yet.
+        // In the future, this will be called to present education material about
+        // Cookie Cutter when it is first run.
+    }
+
     private func checkIfCookieNoticeStateShouldReset() {
         if cookieNotices == .userSelected
             && !marketingCookiesAllowed
@@ -66,6 +75,7 @@ class CookieCutterModel: ObservableObject {
         }
     }
 
+    // MARK: - init
     init() {
         self.cookieNotices = Defaults[.cookieNotices]
     }

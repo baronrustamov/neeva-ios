@@ -7,7 +7,9 @@ import Storage
 
 // Helper functions for test cases
 extension TabManager {
-    convenience init(profile: Profile, imageStore: DiskImageStore?) {
+    convenience init(
+        profile: Profile, imageStore: DiskImageStore?
+    ) {
         assert(Thread.isMainThread)
 
         let scene = SceneDelegate.getCurrentScene(for: nil)

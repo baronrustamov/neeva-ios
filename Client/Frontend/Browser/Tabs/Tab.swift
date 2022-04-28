@@ -530,6 +530,10 @@ class Tab: NSObject, ObservableObject {
         return contentScriptManager.getContentScript(name)
     }
 
+    func removeContentScript(name: String) {
+        contentScriptManager.removeContentScript(name, forTab: self)
+    }
+
     func hideContent(_ animated: Bool = false) {
         webView?.isUserInteractionEnabled = false
         if animated {
@@ -697,6 +701,11 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
 
     func getContentScript(_ name: String) -> TabContentScript? {
         return helpers[name]
+    }
+
+    func removeContentScript(_ name: String, forTab tab: Tab) {
+        tab.webView?.configuration.userContentController.removeScriptMessageHandler(
+            forName: name)
     }
 }
 

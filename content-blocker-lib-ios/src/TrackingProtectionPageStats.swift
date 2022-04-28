@@ -91,7 +91,6 @@ func wildcardContentBlockerDomainToRegex(domain: String) -> String? {
 }
 
 class TPStatsBlocklists {
-
     class Rule {
         let regex: String
         let loadType: LoadType
