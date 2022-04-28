@@ -37,6 +37,7 @@ public struct EmailForm: View {
     @State private var passwordStrength: PasswordStrength = .none
     @State private var passwordStrengthColor: Color = Color.gray
     @State private var passwordStrengthPercent = 0.0
+    @State private var showPassword = false
 
     var action: () -> Void
 
@@ -67,19 +68,39 @@ public struct EmailForm: View {
 
             if !model.onSignInMode {
                 VStack {
-                    SecureField("Password (required)", text: $password)
+                    ZStack(alignment: .trailing) {
+                        Group {
+                            if showPassword == true {
+                                TextField("Password (required)", text: $password)
+                            } else {
+                                SecureField("Password (required)", text: $password)
+                            }
+                        }
+                        // the default height of a `TextField`, `SecureField`s are a smidge shorter
+                        .frame(height: 24.666667)
+                        .disableAutocorrection(true)
+                        .autocapitalization(.none)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .onChange(of: password, perform: passwordOnChange)
                         .textContentType(.newPassword)
                         .padding()
                         .overlay(
                             RoundedRectangle(cornerRadius: 12.0)
-                                .stroke(
-                                    Color(UIColor.systemGray5), lineWidth: 1.0)
+                                .stroke(Color(UIColor.systemGray5), lineWidth: 1.0)
                         )
-                        .disableAutocorrection(true)
-                        .autocapitalization(.none)
-                        .fixedSize(horizontal: false, vertical: true)
                         .background(Color.brand.white)
-                        .onChange(of: password, perform: passwordOnChange)
+
+                        Button(
+                            action: {
+                                self.showPassword.toggle()
+                            },
+                            label: {
+                                Symbol(decorative: .eye, style: .bodyLarge)
+                            }
+                        )
+                        .foregroundColor(showPassword ? .label : .secondaryLabel)
+                        .padding()
+                    }
 
                     if passwordStrength != .none {
                         VStack(alignment: .leading) {
