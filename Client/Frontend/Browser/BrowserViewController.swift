@@ -1929,6 +1929,7 @@ extension BrowserViewController {
             )
             .environmentObject(self.chromeModel)
             .environmentObject(self.browserModel)
+            .environmentObject(self.overlayManager)
         } onDismiss: {
             if request.state != .initial
                 && request.state != .savingToSpace
