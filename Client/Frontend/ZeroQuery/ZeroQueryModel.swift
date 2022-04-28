@@ -117,34 +117,14 @@ class ZeroQueryModel: ObservableObject {
             Defaults[.didDismissDefaultBrowserCard] = true
         }
 
-        let notSeenInterstitial =
-            !Defaults[.didShowDefaultBrowserInterstitial]
-            && !Defaults[.didShowDefaultBrowserInterstitialFromSkipToBrowser]
+        // TODO: refactor the promo card triggering logic to make it easier to customize
+        let promoCardTypeArm = NeevaExperiment.arm(for: .promoCardTypeAfterFirstRun)
 
-        if NeevaConstants.currentTarget == .client && !Defaults[.didDismissDefaultBrowserCard]
-            && !Defaults[.didSetDefaultBrowser]
-            && Defaults[.didFirstNavigation]
-            && (notSeenInterstitial
-                || satisfyDefaultBrowserPromoFreqRule()
-                || DefaultBrowserInterstitialChoice(
-                    rawValue: Defaults[.lastDefaultBrowserInterstitialChoice]) == .skipForNow)
+        if (promoCardTypeArm == .control || promoCardTypeArm == nil)
+            && shouldShowDefaultBrowserPromoCard()
         {
-            ClientLogger.shared.logCounter(.DefaultBrowserPromoCardImp)
-            promoCard = .defaultBrowser {
-                ClientLogger.shared.logCounter(
-                    .PromoDefaultBrowser,
-                    attributes: EnvironmentHelper.shared.getAttributes()
-                )
-                self.bvc.presentDBOnboardingViewController(triggerFrom: .defaultBrowserPromoCard)
-            } onClose: {
-                ClientLogger.shared.logCounter(
-                    .CloseDefaultBrowserPromo,
-                    attributes: EnvironmentHelper.shared.getAttributes()
-                )
-                self.promoCard = nil
-                Defaults[.didDismissDefaultBrowserCard] = true
-            }
-        } else if !Defaults[.signedInOnce] {
+            promoCard = defaultPromoCard()
+        } else if !Defaults[.signedInOnce] && !Defaults[.didDismissPreviewSignUpCard] {
             #if XYZ
                 if Defaults[.cryptoPublicKey].isEmpty {
                     promoCard = .walletPromo {
@@ -160,6 +140,13 @@ class ZeroQueryModel: ObservableObject {
                             .PreviewModePromoSignup,
                             attributes: EnvironmentHelper.shared.getFirstRunAttributes())
                         self.signIn()
+                    } onClose: {
+                        ClientLogger.shared.logCounter(
+                            .ClosePreviewSignUprPromo,
+                            attributes: EnvironmentHelper.shared.getAttributes()
+                        )
+                        self.promoCard = nil
+                        Defaults[.didDismissPreviewSignUpCard] = true
                     }
                 } else {
                     promoCard = nil
@@ -177,7 +164,9 @@ class ZeroQueryModel: ObservableObject {
                 self.promoCard = nil
                 Defaults[.didDismissReferralPromoCard] = true
             }
-        } else if !NeevaUserInfo.shared.hasLoginCookie() {
+        } else if !NeevaUserInfo.shared.hasLoginCookie()
+            && (Defaults[.signedInOnce] || !Defaults[.didDismissPreviewSignUpCard])
+        {
             promoCard = .neevaSignIn {
                 ClientLogger.shared.logCounter(
                     .PromoSignin, attributes: EnvironmentHelper.shared.getFirstRunAttributes())
@@ -208,6 +197,8 @@ class ZeroQueryModel: ObservableObject {
                     Defaults[.seenBlackFridayFollowPromo] = true
                     self.promoCard = nil
                 })
+        } else if promoCardTypeArm == .previewSignUp && shouldShowDefaultBrowserPromoCard() {
+            promoCard = defaultPromoCard()
         } else {
             promoCard = nil
         }
@@ -234,6 +225,23 @@ class ZeroQueryModel: ObservableObject {
         }
     }
 
+    func defaultPromoCard() -> PromoCardType? {
+        return .defaultBrowser {
+            ClientLogger.shared.logCounter(
+                .PromoDefaultBrowser,
+                attributes: EnvironmentHelper.shared.getAttributes()
+            )
+            self.bvc.presentDBOnboardingViewController(triggerFrom: .defaultBrowserPromoCard)
+        } onClose: {
+            ClientLogger.shared.logCounter(
+                .CloseDefaultBrowserPromo,
+                attributes: EnvironmentHelper.shared.getAttributes()
+            )
+            self.promoCard = nil
+            Defaults[.didDismissDefaultBrowserCard] = true
+        }
+    }
+
     func satisfyDefaultBrowserPromoFreqRule() -> Bool {
         return Defaults[.numOfDailyZeroQueryImpression] != 0
             && Defaults[.numOfDailyZeroQueryImpression]
@@ -241,6 +249,20 @@ class ZeroQueryModel: ObservableObject {
             && Defaults[.numOfDailyZeroQueryImpression]
                 <= DefaultBrowserPromoRules.nthZeroQueryImpression
                 * DefaultBrowserPromoRules.maxDailyPromoImpression
+    }
+
+    func shouldShowDefaultBrowserPromoCard() -> Bool {
+        let notSeenInterstitial =
+            !Defaults[.didShowDefaultBrowserInterstitial]
+            && !Defaults[.didShowDefaultBrowserInterstitialFromSkipToBrowser]
+
+        return NeevaConstants.currentTarget == .client && !Defaults[.didDismissDefaultBrowserCard]
+            && !Defaults[.didSetDefaultBrowser]
+            && Defaults[.didFirstNavigation]
+            && (notSeenInterstitial
+                || satisfyDefaultBrowserPromoFreqRule()
+                || DefaultBrowserInterstitialChoice(
+                    rawValue: Defaults[.lastDefaultBrowserInterstitialChoice]) == .skipForNow)
     }
 
     func updateSuggestedSites() {

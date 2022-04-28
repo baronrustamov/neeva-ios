@@ -19,7 +19,7 @@ enum AppRatingSystemDialogRule {
 }
 
 enum PromoCardType {
-    case previewModeSignUp(action: () -> Void)
+    case previewModeSignUp(action: () -> Void, onClose: () -> Void)
     case neevaSignIn(action: () -> Void)
     case defaultBrowser(action: () -> Void, onClose: () -> Void)
     case referralPromo(action: () -> Void, onClose: () -> Void)
@@ -30,7 +30,7 @@ enum PromoCardType {
 
     var action: () -> Void {
         switch self {
-        case .previewModeSignUp(let action), .neevaSignIn(let action):
+        case .previewModeSignUp(let action, _), .neevaSignIn(let action):
             return action
         case .defaultBrowser(let action, _):
             return action
@@ -51,11 +51,11 @@ enum PromoCardType {
     var title: some View {
         switch self {
         case .previewModeSignUp:
-            Text("Welcome to Neeva. The only ad-free, private search engine.")
+            Text("Get the most out of Neeva's private search and browsing.")
         case .neevaSignIn:
             Text("Get safer, richer and better\nsearch when you sign in")
         case .defaultBrowser:
-            Text("Browse in peace,\nalways")
+            Text("Get the most out of Neeva's private search and browsing.")
         case .referralPromo:
             (Text("Win ") + Text("$5000").fontWeight(.medium)
                 + Text(" by inviting friends to join Neeva"))
@@ -84,7 +84,13 @@ enum PromoCardType {
                     .padding(.horizontal, 20)
             }
         case .defaultBrowser:
-            Text("Set as Default Browser")
+            HStack(spacing: 8) {
+                Image("neevaMenuIcon")
+                    .renderingMode(.template)
+                    .frame(width: 18, height: 16)
+                Text("Set as Default Browser")
+                    .padding(.horizontal, 20)
+            }
         case .referralPromo:
             HStack(spacing: 8) {
                 Text("Tell me more")
@@ -106,7 +112,7 @@ enum PromoCardType {
         case .previewModeSignUp, .neevaSignIn:
             return .brand.adaptive.polar
         case .defaultBrowser:
-            return .brand.adaptive.pistachio
+            return .brand.adaptive.polar
         case .referralPromo:
             return Color(light: .hex(0xFFEAD1), dark: .hex(0xF8C991))
         case .notificationPermission,
@@ -214,7 +220,6 @@ struct PromoCard: View {
             Button(action: onClose) {
                 Symbol(.xmark, weight: .semibold, label: "Dismiss")
                     .foregroundColor(Color.ui.gray70)
-                    .padding()
             }
         } else if case .referralPromo(_, let onClose) = type {
             Button(action: onClose) {
@@ -232,6 +237,11 @@ struct PromoCard: View {
                     .foregroundColor(Color.ui.gray70)
             }
         } else if case .blackFridayNotifyPromo(_, let onClose) = type {
+            Button(action: onClose) {
+                Symbol(.xmark, weight: .semibold, label: "Dismiss")
+                    .foregroundColor(Color.ui.gray70)
+            }
+        } else if case .previewModeSignUp(_, let onClose) = type {
             Button(action: onClose) {
                 Symbol(.xmark, weight: .semibold, label: "Dismiss")
                     .foregroundColor(Color.ui.gray70)

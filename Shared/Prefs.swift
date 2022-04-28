@@ -180,6 +180,9 @@ extension Defaults.Keys {
     // MARK: - default browser
     public static let didDismissDefaultBrowserCard = Defaults.BoolKey(
         "profile.didDismissDefaultBrowserCard")
+    public static let didDismissPreviewSignUpCard = Defaults.BoolKey(
+        "profile.didDismissPreviewSignUpCard")
+
     public static let didShowDefaultBrowserInterstitial = Defaults.BoolKey(
         "didShowDefaultBrowserInterstitial")
     // keeping interstitial shown state separately for skip to browser case so we can

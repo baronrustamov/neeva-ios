@@ -533,6 +533,9 @@ class BrowserViewController: UIViewController, ModalPresenter {
                 presentDefaultBrowserFirstRun(
                     isInDefaultBrowserEnhancementExp: arm == .isInDefaultBrowserEnhancementExp)
                 NeevaExperiment.logStartExperiment(for: .defaultBrowserRemindMeLater)
+
+                _ = NeevaExperiment.startExperiment(for: .promoCardTypeAfterFirstRun)
+                NeevaExperiment.logStartExperiment(for: .promoCardTypeAfterFirstRun)
             }
         }
 
