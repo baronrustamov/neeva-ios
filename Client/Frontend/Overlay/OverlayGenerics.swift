@@ -16,6 +16,8 @@ extension EnvironmentValues {
 }
 
 struct PopoverRootView: View {
+    let overlayModel = OverlaySheetModel()
+
     var style: OverlayStyle
     var content: () -> AnyView
     var onDismiss: (PopoverRootView) -> Void
@@ -31,6 +33,9 @@ struct PopoverRootView: View {
                         self.onOpenURL(url, self)
                     }
                 )
+                // While it may not be used in popovers,
+                // some views require the OverlayModel as an EnvironmentObject.
+                .environmentObject(overlayModel)
                 .environment(\.hideOverlay, { self.onDismiss(self) })
         }
     }
