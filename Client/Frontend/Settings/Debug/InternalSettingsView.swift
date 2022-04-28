@@ -45,6 +45,7 @@ struct InternalSettingsView: View {
     @Default(.maxQueryLimit) var maxQueryLimit
     @Default(.signedInOnce) var signedInOnce
     @Default(.didDismissDefaultBrowserCard) var didDismissDefaultBrowserCard
+    @Default(.didDismissPreviewSignUpCard) var didDismissPreviewSignUpCard
     @Default(.didSetDefaultBrowser) var didSetDefaultBrowser
     @Default(.didShowDefaultBrowserInterstitial) var didShowDefaultBrowserInterstitial
     @Default(.didShowDefaultBrowserInterstitialFromSkipToBrowser)
@@ -104,6 +105,9 @@ struct InternalSettingsView: View {
                         String("didDismissDefaultBrowserCard"), isOn: $didDismissDefaultBrowserCard)
                     Toggle(
                         String("didDismissReferralPromoCard"), isOn: $didDismissReferralPromoCard)
+                    Toggle(
+                        String("didDismissPreviewSignUpCard"), isOn: $didDismissPreviewSignUpCard)
+
                     Toggle(String("ratingsCardHidden"), isOn: $ratingsCardHidden)
                     Toggle(
                         String("seenNotificationPermissionPromo"),

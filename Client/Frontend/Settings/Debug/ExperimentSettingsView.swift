@@ -10,7 +10,8 @@ struct ExperimentSettingsView: View {
     @Environment(\.dismissScreen) var dismissScreen
 
     let scrollViewAppearance = UINavigationBar.appearance().scrollEdgeAppearance
-    @State private var valueText: String?
+    @State private var valueTextDefaultBrowser: String?
+    @State private var valueTextPromoCard: String?
 
     var body: some View {
         List {
@@ -31,8 +32,14 @@ struct ExperimentSettingsView: View {
 
                 OptionalPrefilledStringField<NeevaExperiment.DefaultBrowserRemindMeLater>(
                     "DefaultBrowserRemindMeLater",
-                    value: $valueText,
+                    value: $valueTextDefaultBrowser,
                     experiment: .defaultBrowserRemindMeLater
+                )
+
+                OptionalPrefilledStringField<NeevaExperiment.PromoCardTypeAfterFirstRun>(
+                    "PromoCardTypeAfterFirstRun",
+                    value: $valueTextPromoCard,
+                    experiment: .promoCardTypeAfterFirstRun
                 )
             }
         }
