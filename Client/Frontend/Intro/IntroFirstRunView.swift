@@ -49,6 +49,7 @@ struct FirstRunHomePage: View {
                     IntroButton(icon: nil, label: "Other sign up options", color: .brand.blue) {
                         logFirstRunOtherSignupOption()
                         model.onOtherOptionsPage = true
+                        model.onSignInMode = false
                     }
 
                     TermsAndPrivacyLinks(width: geom.size.width)
