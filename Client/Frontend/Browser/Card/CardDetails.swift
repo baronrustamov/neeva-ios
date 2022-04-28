@@ -496,7 +496,7 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
     var item: Space? { manager.get(for: id) }
     var closeButtonImage: UIImage? = nil
     var isFollowing: Bool {
-        manager.allSpaces.contains { $0.id == id }
+        manager.allSpaces.contains { $0.id.id == id }
     }
     @Published var allDetails: [SpaceEntityThumbnail] = []
     @Published var allDetailsWithExclusionList: [SpaceEntityThumbnail] = []
