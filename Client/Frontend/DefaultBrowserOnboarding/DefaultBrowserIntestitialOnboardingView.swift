@@ -153,6 +153,109 @@ public enum OpenDefaultBrowserOnboardingTrigger: String {
     }
 }
 
+struct DefaultBrowserEducationView: View {
+    private let timer = Timer.publish(every: 3, on:.main, in: .common).autoconnect()
+
+    @State private var currentIdx = 0
+
+    @State private var fontWeights : [Font.Weight] = [.medium, .light, .light]
+
+    var animateInstructions : Bool = false
+
+    let numOfImgs = 3
+
+    var body: some View {
+        //VStack {
+            if animateInstructions {
+                TabView(selection: $currentIdx) {
+                    ForEach(0..<numOfImgs, id:\.self) { num in
+                        Image("default-browser-education-\(num)")
+                            .resizable()
+                            .scaledToFill()
+                            .tag(num)
+                    }
+                }
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                .frame(height: 180)
+                .onReceive(timer) { _ in
+                    withAnimation(.linear(duration: 0.5)){
+                        currentIdx = currentIdx < numOfImgs-1 ? currentIdx + 1 : 0
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                            for i in 0..<fontWeights.count {
+                                fontWeights[i] = (i == currentIdx) ? .medium : .light
+                            }
+                        }
+                    }
+                }
+            } else {
+                Spacer()
+                VStack(alignment: .leading) {
+                    Text("Follow these 3 easy steps:")
+                        .withFont(.bodyLarge)
+                        .foregroundColor(.secondaryLabel)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }.frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 32)
+            }
+
+            VStack(alignment: .leading, spacing: 10) {
+                HStack {
+                    Symbol(decorative: .gear, size: 16)
+                        .foregroundColor(.secondaryLabel)
+                        .frame(width: 32, height: 32)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 4)
+                                .stroke(Color(UIColor.systemGray5), lineWidth: 1)
+                        )
+                    Text("1. Open Neeva Settings")
+                        .fontWeight(fontWeights[0])
+                        .withFont(.bodyXLarge)
+                        .padding(.leading, 15)
+                }
+                Divider()
+                HStack {
+                    Symbol(decorative: .chevronForward, size: 16)
+                        .foregroundColor(.secondaryLabel)
+                        .frame(width: 32, height: 32)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 4)
+                                .stroke(Color(UIColor.systemGray5), lineWidth: 1)
+                        )
+
+                    Text("2. Tap Default Browser App")
+                        .fontWeight(fontWeights[1])
+                        .withFont(.bodyXLarge)
+                        .padding(.leading, 15)
+                }
+                Divider()
+                HStack {
+                    Image("neevaMenuIcon")
+                        .frame(width: 32, height: 32)
+                        .background(Color(.white))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 4)
+                                .stroke(Color(UIColor.systemGray5), lineWidth: 1)
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
+
+                    Text("3. Select Neeva")
+                        .fontWeight(fontWeights[2])
+                        .withFont(.bodyXLarge)
+                        .padding(.leading, 15)
+                }
+            }
+            .padding(20)
+            .if(!animateInstructions) { view in
+                view.overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(Color(UIColor.systemGray5), lineWidth: 5)
+                )
+            }
+            .padding(.horizontal, 16)
+        //}
+    }
+}
+
 struct DefaultBrowserInterstitialOnboardingView: View {
     @State private var didTakeAction = false
 
@@ -195,63 +298,7 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                 }
                 .padding(.horizontal, 32)
 
-                Spacer()
-
-                VStack(alignment: .leading) {
-                    Text("Follow these 3 easy steps:")
-                        .withFont(.bodyLarge)
-                        .foregroundColor(.secondaryLabel)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }.frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 32)
-                VStack(alignment: .leading, spacing: 10) {
-                    HStack {
-                        Symbol(decorative: .gear, size: 16)
-                            .foregroundColor(.secondaryLabel)
-                            .frame(width: 32, height: 32)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 4)
-                                    .stroke(Color(UIColor.systemGray5), lineWidth: 1)
-                            )
-                        Text("1. Open Neeva Settings")
-                            .withFont(.bodyXLarge)
-                            .padding(.leading, 15)
-                    }
-                    Divider()
-                    HStack {
-                        Symbol(decorative: .chevronForward, size: 16)
-                            .foregroundColor(.secondaryLabel)
-                            .frame(width: 32, height: 32)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 4)
-                                    .stroke(Color(UIColor.systemGray5), lineWidth: 1)
-                            )
-
-                        Text("2. Tap Default Browser App")
-                            .withFont(.bodyXLarge)
-                            .padding(.leading, 15)
-                    }
-                    Divider()
-                    HStack {
-                        Image("neevaMenuIcon")
-                            .frame(width: 32, height: 32)
-                            .background(Color(.white))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 4)
-                                    .stroke(Color(UIColor.systemGray5), lineWidth: 1)
-                            )
-                            .clipShape(RoundedRectangle(cornerRadius: 4))
-
-                        Text("3. Select Neeva")
-                            .withFont(.bodyXLarge)
-                            .padding(.leading, 15)
-                    }
-                }.padding(20)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(Color(UIColor.systemGray5), lineWidth: 5)
-                    )
-                    .padding(.horizontal, 16)
+                DefaultBrowserEducationView(animateInstructions: true)
 
                 Spacer()
 
