@@ -154,7 +154,7 @@ public class CheatsheetQueryController:
         }
 
         if let recipe = data.getCheatsheetInfo?.recipe {
-            let title = recipe.title ?? ""
+            let title = recipe.title?.removingHTMLencoding ?? ""
             let imageURL = recipe.imageUrl ?? ""
 
             var ingredients: [String] = []

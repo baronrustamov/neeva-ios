@@ -1448,6 +1448,9 @@
 		E6FF6ACA1D873CFF0070C294 /* PageMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF6AC91D873CFF0070C294 /* PageMetadata.swift */; };
 		E910925E280510B100EE0109 /* PlaceViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E975C93727F23A3200945FD3 /* PlaceViews.swift */; };
 		E910925F280510B400EE0109 /* PlaceViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E975C93927F3BABE00945FD3 /* PlaceViewModels.swift */; };
+		E942D4372818830700B4A3EC /* Strings+HTMLExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E942D4362818830700B4A3EC /* Strings+HTMLExtension.swift */; };
+		E942D43A2819BA8100B4A3EC /* HTMLEntities in Frameworks */ = {isa = PBXBuildFile; productRef = E942D4392819BA8100B4A3EC /* HTMLEntities */; };
+		E942D43C2819BB3200B4A3EC /* HTMLEntities in Frameworks */ = {isa = PBXBuildFile; productRef = E942D43B2819BB3200B4A3EC /* HTMLEntities */; };
 		E942D4342810778300B4A3EC /* KnowledgeCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E942D4332810778300B4A3EC /* KnowledgeCardView.swift */; };
 		E942D4352810962400B4A3EC /* KnowledgeCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E942D4332810778300B4A3EC /* KnowledgeCardView.swift */; };
 		E94B7DEB27E4F96B003D8F13 /* QueryButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94B7DEA27E4F96B003D8F13 /* QueryButtonView.swift */; };
@@ -2775,6 +2778,7 @@
 		E6F9653B1B2F1D5D0034B023 /* NSURLExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSURLExtensionsTests.swift; sourceTree = "<group>"; };
 		E6FF6AC91D873CFF0070C294 /* PageMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageMetadata.swift; sourceTree = "<group>"; };
 		E88B487A9436F764525B0F64 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
+		E942D4362818830700B4A3EC /* Strings+HTMLExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Strings+HTMLExtension.swift"; sourceTree = "<group>"; };
 		E942D4332810778300B4A3EC /* KnowledgeCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnowledgeCardView.swift; sourceTree = "<group>"; };
 		E94B7DEA27E4F96B003D8F13 /* QueryButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryButtonView.swift; sourceTree = "<group>"; };
 		E9529C6427DC96C70009B434 /* NewsResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsResultsView.swift; sourceTree = "<group>"; };
@@ -2846,6 +2850,7 @@
 				C9C18E5F265599C4004710CD /* Introspect in Frameworks */,
 				C9C18E2326559322004710CD /* KeychainAccess in Frameworks */,
 				C9C18E45265595EC004710CD /* Apollo in Frameworks */,
+				E942D43C2819BB3200B4A3EC /* HTMLEntities in Frameworks */,
 				C9C18E4226559567004710CD /* Reachability in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2862,6 +2867,7 @@
 				C8E18F1E222EDE4500E30E52 /* Accelerate.framework in Frameworks */,
 				E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */,
 				E6231C011B90A44F005ABB0D /* libz.tbd in Frameworks */,
+				E942D43A2819BA8100B4A3EC /* HTMLEntities in Frameworks */,
 				E4B3348A1BBF23F9004E2BFF /* AdSupport.framework in Frameworks */,
 				85EFC01F27C5158D009460DE /* GCDWebServers.xcframework in Frameworks */,
 				0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */,
@@ -4754,6 +4760,7 @@
 				064741F8AE308A64808E6265 /* Shared.strings */,
 				9403451493EE3ADAAEFA2EB1 /* Storage.strings */,
 				D35210E01CB2F16600FC5DCB /* Strings.swift */,
+				E942D4362818830700B4A3EC /* Strings+HTMLExtension.swift */,
 				E4E0BB161AFBC9E4008D6260 /* Supporting Files */,
 				C9C18DCE26558FF2004710CD /* SystemColors.swift */,
 				E650758E1E37F7AB006961AC /* SystemUtils.swift */,
@@ -5287,6 +5294,7 @@
 				C9C18E52265597C0004710CD /* SFSafeSymbols */,
 				C9C18E5E265599C4004710CD /* Introspect */,
 				C82719EC26FE734500EC9EF9 /* Defaults */,
+				E942D43B2819BB3200B4A3EC /* HTMLEntities */,
 			);
 			productName = Shared;
 			productReference = 288A2D861AB8B3260023ABC3 /* Shared.framework */;
@@ -5664,6 +5672,7 @@
 			name = Client;
 			packageProductDependencies = (
 				6786EA762759545A00B53127 /* CrashReporter */,
+				E942D4392819BA8100B4A3EC /* HTMLEntities */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -5867,6 +5876,7 @@
 				BCAAA0CE276D979B0013223E /* XCRemoteSwiftPackageReference "web3swift" */,
 				4A93B53B2775909500CD5415 /* XCRemoteSwiftPackageReference "WalletConnectSwift" */,
 				BC532EED278C00550027CA11 /* XCRemoteSwiftPackageReference "CodeScanner" */,
+				E942D4382819BA8100B4A3EC /* XCRemoteSwiftPackageReference "swift-html-entities" */,
 			);
 			productRefGroup = F84B21BF1A090F8100AAB793 /* Products */;
 			projectDirPath = "";
@@ -6447,6 +6457,7 @@
 				E65075AA1E37F7AB006961AC /* URLProtectionSpaceExtensions.swift in Sources */,
 				EB7FFFC820A9D38D003E1E34 /* AlertController.swift in Sources */,
 				C9BED4BF2667F83E001D9C77 /* SSOProvider.swift in Sources */,
+				E942D4372818830700B4A3EC /* Strings+HTMLExtension.swift in Sources */,
 				B61D068E27ED22FB0075F65E /* DebugCounter.swift in Sources */,
 				C9C18E4E26559766004710CD /* AddToSpaceView.swift in Sources */,
 				C9C18E5426559827004710CD /* Space.swift in Sources */,
@@ -9904,6 +9915,14 @@
 				minimumVersion = 2.0.2;
 			};
 		};
+		E942D4382819BA8100B4A3EC /* XCRemoteSwiftPackageReference "swift-html-entities" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Kitura/swift-html-entities.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -9971,6 +9990,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C9DF56C2266A89EA009A2E6C /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
 			productName = SDWebImageSwiftUI;
+		};
+		E942D4392819BA8100B4A3EC /* HTMLEntities */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E942D4382819BA8100B4A3EC /* XCRemoteSwiftPackageReference "swift-html-entities" */;
+			productName = HTMLEntities;
+		};
+		E942D43B2819BB3200B4A3EC /* HTMLEntities */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E942D4382819BA8100B4A3EC /* XCRemoteSwiftPackageReference "swift-html-entities" */;
+			productName = HTMLEntities;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
