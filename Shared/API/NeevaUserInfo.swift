@@ -96,6 +96,10 @@ public class NeevaUserInfo: ObservableObject {
         }
     }
 
+    public func reload() {
+        self.fetch()
+    }
+
     public func didLogOut() {
         clearCache()
         isUserLoggedIn = false
