@@ -34,7 +34,6 @@ class TabChromeModel: ObservableObject {
     private var spaceRefreshSubscription: AnyCancellable?
 
     /// True when user has clicked education on SRP and is now not on an SRP
-    private(set) var recipeModel = RecipeViewModel()
     @Published var showTryCheatsheetPopover: Bool = false
     private var publishedTabObserver: AnyCancellable?
     private var tryCheatsheetPopoverObserver: AnyCancellable?
@@ -121,8 +120,6 @@ class TabChromeModel: ObservableObject {
         self.isPage = isPage
         self.inlineToolbar = inlineToolbar
         self.estimatedProgress = estimatedProgress
-
-        setupTryCheatsheetPopoverObserver()
     }
 
     /// Calls the address bar to be selected and enter editing mode
@@ -143,6 +140,7 @@ class TabChromeModel: ObservableObject {
     private func setupURLObserver() {
         urlSubscription?.cancel()
         spaceRefreshSubscription?.cancel()
+        tryCheatsheetPopoverObserver?.cancel()
 
         guard let tabManager = topBarDelegate?.tabManager else {
             return
@@ -154,11 +152,6 @@ class TabChromeModel: ObservableObject {
         ).sink { [weak self] tab, url in
             guard let self = self else {
                 return
-            }
-            if let tab = tab,
-                !tab.isIncognito
-            {
-                self.recipeModel.updateContentWithURL(url: url)
             }
 
             self.isPage = url?.displayURL?.isWebPage() ?? false
@@ -184,28 +177,22 @@ class TabChromeModel: ObservableObject {
                 self?.urlInSpace = result
             }
         }
-    }
 
-    private func setupTryCheatsheetPopoverObserver() {
-        tryCheatsheetPopoverObserver?.cancel()
-
-        tryCheatsheetPopoverObserver = Publishers.CombineLatest3(
+        tryCheatsheetPopoverObserver = Publishers.CombineLatest(
             Defaults.publisher(.showTryCheatsheetPopover),
-            recipeModel.$currentURL,
-            recipeModel.$recipe
+            tabManager.selectedTabURLPublisher
         )
-        .map { showPopover, url, recipe -> Bool in
+        .map { showPopover, url -> Bool in
             guard let url = url else {
                 return false
             }
 
-            if let recipe = recipe,
-                !recipe.title.isEmptyOrWhitespace(),
-                !Defaults[.seenTryCheatsheetPopoverOnRecipe],
-                RecipeViewModel.isRecipeAllowed(url: url)
+            if !Defaults[.seenTryCheatsheetPopoverOnRecipe],
+                DomainAllowList.isRecipeAllowed(url: url)
             {
                 return true
             }
+
             // else show popover if seen SRP intro screen
             if showPopover.newValue,
                 // cheatsheet is not used on NeevaDomain
@@ -227,8 +214,8 @@ class TabChromeModel: ObservableObject {
 
     func clearCheatsheetPopoverFlags() {
         Defaults[.showTryCheatsheetPopover] = false
-        if let recipe = recipeModel.recipe,
-            !recipe.title.isEmpty
+        if let currentURL = topBarDelegate?.tabManager.selectedTabURLPublisher.value,
+            DomainAllowList.isRecipeAllowed(url: currentURL)
         {
             Defaults[.seenTryCheatsheetPopoverOnRecipe] = true
         }

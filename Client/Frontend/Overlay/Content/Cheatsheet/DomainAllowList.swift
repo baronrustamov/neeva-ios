@@ -180,4 +180,13 @@ public enum DomainAllowList {
         "womenshealthmag.com": true,
         "yummly.com": true,
     ]
+
+    static public func isRecipeAllowed(url: URL) -> Bool {
+        guard let host = url.host,
+            let baseDomain = url.baseDomain
+        else {
+            return false
+        }
+        return recipeDomains[host, default: false] || recipeDomains[baseDomain, default: false]
+    }
 }

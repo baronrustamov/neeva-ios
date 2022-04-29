@@ -573,7 +573,6 @@
 		4A42C58227E58487003B9826 /* BrowserViewController+KeyCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F457A91F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift */; };
 		4A42C58327E58487003B9826 /* SearchEngineSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A840EC027889E8C005F6003 /* SearchEngineSettings.swift */; };
 		4A42C58427E58487003B9826 /* RatingsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2401CA26BB4D75006ABF7D /* RatingsCard.swift */; };
-		4A42C58527E58487003B9826 /* RecipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC93328B2714790C00B9BE1C /* RecipeViewModel.swift */; };
 		4A42C58627E58487003B9826 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88F97626630F39007C203D /* Card.swift */; };
 		4A42C58727E58487003B9826 /* WebServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40FAB0B1A7ABB77009CB80D /* WebServer.swift */; };
 		4A42C58827E58487003B9826 /* TwoLineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A68B1F857A8638598A63A0 /* TwoLineCell.swift */; };
@@ -985,7 +984,6 @@
 		BC8ABEA226D88F2500E4A415 /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8ABEA126D88F2500E4A415 /* SearchController.swift */; };
 		BC8EE02C271A3CBB00D6BE2A /* PreferredProviderRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8EE02B271A3CBB00D6BE2A /* PreferredProviderRequest.swift */; };
 		BC8EE06B271CEA6A00D6BE2A /* DomainAllowList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8EE06A271CEA6A00D6BE2A /* DomainAllowList.swift */; };
-		BC93328C2714790C00B9BE1C /* RecipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC93328B2714790C00B9BE1C /* RecipeViewModel.swift */; };
 		BC93328E2715324700B9BE1C /* OktaAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC93328D2715324700B9BE1C /* OktaAuth.swift */; };
 		BC93EE862654E31300D1AA07 /* Color.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BC93EE852654E31300D1AA07 /* Color.xcassets */; };
 		BC9478E32740FCCD00623D6C /* PreviewHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9478E22740FCCD00623D6C /* PreviewHomeView.swift */; };
@@ -2345,7 +2343,6 @@
 		BC8ABEA126D88F2500E4A415 /* SearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
 		BC8EE02B271A3CBB00D6BE2A /* PreferredProviderRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredProviderRequest.swift; sourceTree = "<group>"; };
 		BC8EE06A271CEA6A00D6BE2A /* DomainAllowList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainAllowList.swift; sourceTree = "<group>"; };
-		BC93328B2714790C00B9BE1C /* RecipeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewModel.swift; sourceTree = "<group>"; };
 		BC93328D2715324700B9BE1C /* OktaAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaAuth.swift; sourceTree = "<group>"; };
 		BC93EE852654E31300D1AA07 /* Color.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Color.xcassets; sourceTree = "<group>"; };
 		BC9478E22740FCCD00623D6C /* PreviewHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewHomeView.swift; sourceTree = "<group>"; };
@@ -4012,7 +4009,6 @@
 				E975C93927F3BABE00945FD3 /* PlaceViewModels.swift */,
 				BC86023A26E9B7F300D1C188 /* ProductClusterView.swift */,
 				BCC7CA49270401AC004714C0 /* RecipeView.swift */,
-				BC93328B2714790C00B9BE1C /* RecipeViewModel.swift */,
 				BCA4D73027226E8000AE5A15 /* RelatedRecipeView.swift */,
 				BC248769273382E5003A6867 /* RelatedSearchesView.swift */,
 				BCF864C62763FF9400E94B3A /* WebResultView.swift */,
@@ -7044,7 +7040,6 @@
 				4A42C58227E58487003B9826 /* BrowserViewController+KeyCommands.swift in Sources */,
 				4A42C58327E58487003B9826 /* SearchEngineSettings.swift in Sources */,
 				4A42C58427E58487003B9826 /* RatingsCard.swift in Sources */,
-				4A42C58527E58487003B9826 /* RecipeViewModel.swift in Sources */,
 				4A42C58627E58487003B9826 /* Card.swift in Sources */,
 				4A42C58727E58487003B9826 /* WebServer.swift in Sources */,
 				4A42C58827E58487003B9826 /* TwoLineCell.swift in Sources */,
@@ -7621,7 +7616,6 @@
 				C8F457AA1F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift in Sources */,
 				1A840EC127889E8C005F6003 /* SearchEngineSettings.swift in Sources */,
 				8A2401CB26BB4D75006ABF7D /* RatingsCard.swift in Sources */,
-				BC93328C2714790C00B9BE1C /* RecipeViewModel.swift in Sources */,
 				4A88F97726630F39007C203D /* Card.swift in Sources */,
 				E40FAB0C1A7ABB77009CB80D /* WebServer.swift in Sources */,
 				59A68D66379CFA85C4EAF00B /* TwoLineCell.swift in Sources */,
