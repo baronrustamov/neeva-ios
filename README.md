@@ -31,7 +31,7 @@ Want to contribute but don't know where to start? Here is a list of [good first 
    cd neeva-ios
    sh ./bootstrap.sh
    ```
-1. Open `Client.xcodeproj` in Xcode.
+1. Open `Neeva.xcworkspace` in Xcode.
 1. Build the `Client` scheme in Xcode.
 
 ## Building User Scripts
