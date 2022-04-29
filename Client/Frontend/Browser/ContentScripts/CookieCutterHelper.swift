@@ -6,13 +6,15 @@ import Foundation
 
 /// Corresponds with messages sent from CookieCutterHelper.js
 private enum CookieScriptMessage: String {
-    case noticeHandled = "cookie notice handled"
-    case increaseCounter = "increase cookie stats"
-    case started = "started running"
+    case getPreferences = "get-preferences"
+    case increaseCounter = "increase-cookie-stats"
+    case noticeHandled = "cookie-notice-handled"
+    case started = "started-running"
 }
 
 class CookieCutterHelper: TabContentScript {
     let cookieCutterModel: CookieCutterModel
+    var currentWebView: WKWebView?
 
     // MARK: - Script Methods
     static func name() -> String {
@@ -27,17 +29,36 @@ class CookieCutterHelper: TabContentScript {
         _ userContentController: WKUserContentController,
         didReceiveScriptMessage message: WKScriptMessage
     ) {
-        guard let data = message.body as? [String: Any], let update = data["update"] as? String
+        guard
+            let data = message.body as? [String: Any], let update = data["update"] as? String
         else {
             return
         }
 
         if let scriptMessage = CookieScriptMessage(rawValue: update) {
             switch scriptMessage {
-            case .noticeHandled:
-                cookieCutterModel.cookieWasHandled()
+            case .getPreferences:
+                do {
+                    guard
+                        let escapedEncoded = String(
+                            data: try JSONEncoder().encode([
+                                "marketing": cookieCutterModel.marketingCookiesAllowed,
+                                "analytic": cookieCutterModel.analyticCookiesAllowed,
+                                "social": cookieCutterModel.socialCookiesAllowed,
+                            ]), encoding: .utf8)
+                    else { return }
+
+                    if let currentWebView = currentWebView {
+                        currentWebView.evaluateJavascriptInDefaultContentWorld(
+                            "__firefox__.setPreference(\(escapedEncoded))")
+                    }
+                } catch {
+                    print("Error encoding escaped value: \(error)")
+                }
             case .increaseCounter:
                 cookieCutterModel.cookiesBlocked += 1
+            case .noticeHandled:
+                cookieCutterModel.cookieWasHandled()
             case .started:
                 cookieCutterModel.cookiesBlocked = 0
             }

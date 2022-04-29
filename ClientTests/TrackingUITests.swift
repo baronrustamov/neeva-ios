@@ -117,9 +117,12 @@ class TrackingUITests: XCTestCase {
         XCTAssertEqual(
             try firstRowElements[0].findAll(Kern.self)[1].text()
                 .string(locale: Locale(identifier: "en")), "29")
-        XCTAssertEqual(
-            try firstRowElements[1].findAll(Kern.self)[1].text()
-                .string(locale: Locale(identifier: "en")), "16")
+
+        if !FeatureFlag[.cookieCutter] {
+            XCTAssertEqual(
+                try firstRowElements[1].findAll(Kern.self)[1].text()
+                    .string(locale: Locale(identifier: "en")), "16")
+        }
     }
 
     func testWhosTrackingYou() throws {

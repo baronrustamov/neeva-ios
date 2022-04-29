@@ -21,9 +21,10 @@ extension TabManager: TabEventHandler {
             !TrackingPreventionConfig.trackersAllowedFor(domain),
             let cookieCutterModel = cookieCutterModel
         {
-            tab.addContentScript(
-                CookieCutterHelper(cookieCutterModel: cookieCutterModel),
-                name: CookieCutterHelper.name())
+            let cookieCutterHelper = CookieCutterHelper(cookieCutterModel: cookieCutterModel)
+            cookieCutterHelper.currentWebView = tab.webView
+
+            tab.addContentScript(cookieCutterHelper, name: CookieCutterHelper.name())
         }
 
         tab.reload()
