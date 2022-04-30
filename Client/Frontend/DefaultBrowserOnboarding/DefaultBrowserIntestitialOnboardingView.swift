@@ -160,25 +160,31 @@ struct DefaultBrowserEducationView: View {
         static let imgAnimationTimerInterval = 2.5
     }
 
-    private let timer = Timer.publish(every: DefaultBrowserEducationUX.imgAnimationTimerInterval, on: .main, in: .common).autoconnect()
+    private let timer = Timer.publish(
+        every: DefaultBrowserEducationUX.imgAnimationTimerInterval, on: .main, in: .common
+    ).autoconnect()
 
     @State private var currentIdx = 0
 
-    @State private var fontColors: [Color] = [.primary, .tertiaryLabel , .tertiaryLabel]
+    @State private var fontColors: [Color] = [.primary, .tertiaryLabel, .tertiaryLabel]
     @State private var iconOverlays: [Bool] = [false, true, true]
 
     var animateInstructions: Bool = false
 
     var geometrySize: CGSize
 
-    private let imgs = ["default-browser-education-0", "default-browser-education-1", "default-browser-education-2"]
+    private let imgs = [
+        "default-browser-education-0", "default-browser-education-1", "default-browser-education-2",
+    ]
     @State private var fadeOut = false
 
     var body: some View {
         if animateInstructions && geometrySize.height > 667 {
-            Image("\(imgs[currentIdx])").resizable().frame(height: DefaultBrowserEducationUX.screenshotHeight)
-                .opacity(fadeOut ? 0.05 : 1)
-                .animation(.easeInOut(duration: DefaultBrowserEducationUX.fadeAnimationTime))
+            Image("\(imgs[currentIdx])").resizable().frame(
+                height: DefaultBrowserEducationUX.screenshotHeight
+            )
+            .opacity(fadeOut ? 0.05 : 1)
+            .animation(.easeInOut(duration: DefaultBrowserEducationUX.fadeAnimationTime))
         } else {
             Spacer()
             VStack(alignment: .leading) {
@@ -196,7 +202,7 @@ struct DefaultBrowserEducationView: View {
                 Symbol(decorative: .gear, size: 16)
                     .foregroundColor(fontColors[0])
                     .frame(width: 32, height: 32)
-                    .if(iconOverlays[0]){view in view.overlay(Color.white.opacity(0.6))}
+                    .if(iconOverlays[0]) { view in view.overlay(Color.white.opacity(0.6)) }
                     .overlay(
                         RoundedRectangle(cornerRadius: 4)
                             .stroke(Color(UIColor.systemGray5), lineWidth: 1)
@@ -213,7 +219,7 @@ struct DefaultBrowserEducationView: View {
                 Symbol(decorative: .chevronForward, size: 16)
                     .foregroundColor(fontColors[1])
                     .frame(width: 32, height: 32)
-                    .if(iconOverlays[1]){view in view.overlay(Color.white.opacity(0.6))}
+                    .if(iconOverlays[1]) { view in view.overlay(Color.white.opacity(0.6)) }
                     .overlay(
                         RoundedRectangle(cornerRadius: 4)
                             .stroke(Color(UIColor.systemGray5), lineWidth: 1)
@@ -228,7 +234,7 @@ struct DefaultBrowserEducationView: View {
             HStack {
                 Image("neevaMenuIcon")
                     .frame(width: 32, height: 32)
-                    .if(iconOverlays[2]){view in view.overlay(Color.white.opacity(0.6))}
+                    .if(iconOverlays[2]) { view in view.overlay(Color.white.opacity(0.6)) }
                     .background(Color(.white))
                     .overlay(
                         RoundedRectangle(cornerRadius: 4)
@@ -254,7 +260,9 @@ struct DefaultBrowserEducationView: View {
             view.onReceive(timer) { _ in
                 if geometrySize.height > 667 {
                     self.fadeOut.toggle()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + DefaultBrowserEducationUX.fadeAnimationTime) {
+                    DispatchQueue.main.asyncAfter(
+                        deadline: .now() + DefaultBrowserEducationUX.fadeAnimationTime
+                    ) {
                         withAnimation {
                             currentIdx = currentIdx < imgs.count - 1 ? currentIdx + 1 : 0
                             self.fadeOut.toggle()
@@ -322,7 +330,8 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                     }
                     .padding(.horizontal, 32)
 
-                    DefaultBrowserEducationView(animateInstructions: true, geometrySize: geometry.size)
+                    DefaultBrowserEducationView(
+                        animateInstructions: true, geometrySize: geometry.size)
 
                     Spacer()
 
