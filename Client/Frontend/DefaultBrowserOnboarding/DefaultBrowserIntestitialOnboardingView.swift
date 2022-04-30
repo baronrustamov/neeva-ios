@@ -154,39 +154,31 @@ public enum OpenDefaultBrowserOnboardingTrigger: String {
 }
 
 struct DefaultBrowserEducationView: View {
-    private let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
+    private enum DefaultBrowserEducationUX {
+        static let fadeAnimationTime = 0.6
+        static let screenshotHeight = 215.0
+        static let imgAnimationTimerInterval = 2.5
+    }
+
+    private let timer = Timer.publish(every: DefaultBrowserEducationUX.imgAnimationTimerInterval, on: .main, in: .common).autoconnect()
 
     @State private var currentIdx = 0
 
-    @State private var fontWeights: [Font.Weight] = [.medium, .light, .light]
+    @State private var fontColors: [Color] = [.primary, .tertiaryLabel , .tertiaryLabel]
+    @State private var iconOverlays: [Bool] = [false, true, true]
 
     var animateInstructions: Bool = false
 
-    let numOfImgs = 3
+    var geometrySize: CGSize
+
+    private let imgs = ["default-browser-education-0", "default-browser-education-1", "default-browser-education-2"]
+    @State private var fadeOut = false
 
     var body: some View {
-        //VStack {
-        if animateInstructions {
-            TabView(selection: $currentIdx) {
-                ForEach(0..<numOfImgs, id: \.self) { num in
-                    Image("default-browser-education-\(num)")
-                        .resizable()
-                        .scaledToFill()
-                        .tag(num)
-                }
-            }
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-            .frame(height: 180)
-            .onReceive(timer) { _ in
-                withAnimation(.linear(duration: 0.5)) {
-                    currentIdx = currentIdx < numOfImgs - 1 ? currentIdx + 1 : 0
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                        for i in 0..<fontWeights.count {
-                            fontWeights[i] = (i == currentIdx) ? .medium : .light
-                        }
-                    }
-                }
-            }
+        if animateInstructions && geometrySize.height > 667 {
+            Image("\(imgs[currentIdx])").resizable().frame(height: DefaultBrowserEducationUX.screenshotHeight)
+                .opacity(fadeOut ? 0.05 : 1)
+                .animation(.easeInOut(duration: DefaultBrowserEducationUX.fadeAnimationTime))
         } else {
             Spacer()
             VStack(alignment: .leading) {
@@ -199,31 +191,36 @@ struct DefaultBrowserEducationView: View {
         }
 
         VStack(alignment: .leading, spacing: 10) {
+            // TODO: build an instruction row component
             HStack {
                 Symbol(decorative: .gear, size: 16)
-                    .foregroundColor(.secondaryLabel)
+                    .foregroundColor(fontColors[0])
                     .frame(width: 32, height: 32)
+                    .if(iconOverlays[0]){view in view.overlay(Color.white.opacity(0.6))}
                     .overlay(
                         RoundedRectangle(cornerRadius: 4)
                             .stroke(Color(UIColor.systemGray5), lineWidth: 1)
+                            .foregroundColor(.red)
+                            .opacity(0.6)
                     )
                 Text("1. Open Neeva Settings")
-                    .fontWeight(fontWeights[0])
+                    .foregroundColor(fontColors[0])
                     .withFont(.bodyXLarge)
                     .padding(.leading, 15)
             }
             Divider()
             HStack {
                 Symbol(decorative: .chevronForward, size: 16)
-                    .foregroundColor(.secondaryLabel)
+                    .foregroundColor(fontColors[1])
                     .frame(width: 32, height: 32)
+                    .if(iconOverlays[1]){view in view.overlay(Color.white.opacity(0.6))}
                     .overlay(
                         RoundedRectangle(cornerRadius: 4)
                             .stroke(Color(UIColor.systemGray5), lineWidth: 1)
                     )
 
                 Text("2. Tap Default Browser App")
-                    .fontWeight(fontWeights[1])
+                    .foregroundColor(fontColors[1])
                     .withFont(.bodyXLarge)
                     .padding(.leading, 15)
             }
@@ -231,6 +228,7 @@ struct DefaultBrowserEducationView: View {
             HStack {
                 Image("neevaMenuIcon")
                     .frame(width: 32, height: 32)
+                    .if(iconOverlays[2]){view in view.overlay(Color.white.opacity(0.6))}
                     .background(Color(.white))
                     .overlay(
                         RoundedRectangle(cornerRadius: 4)
@@ -239,7 +237,7 @@ struct DefaultBrowserEducationView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 4))
 
                 Text("3. Select Neeva")
-                    .fontWeight(fontWeights[2])
+                    .foregroundColor(fontColors[2])
                     .withFont(.bodyXLarge)
                     .padding(.leading, 15)
             }
@@ -252,7 +250,32 @@ struct DefaultBrowserEducationView: View {
             )
         }
         .padding(.horizontal, 16)
-        //}
+        .if(animateInstructions) { view in
+            view.onReceive(timer) { _ in
+                if geometrySize.height > 667 {
+                    self.fadeOut.toggle()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + DefaultBrowserEducationUX.fadeAnimationTime) {
+                        withAnimation {
+                            currentIdx = currentIdx < imgs.count - 1 ? currentIdx + 1 : 0
+                            self.fadeOut.toggle()
+                        }
+                        animateInstructionRow()
+                    }
+                } else {
+                    currentIdx = currentIdx < imgs.count - 1 ? currentIdx + 1 : 0
+                    animateInstructionRow()
+                }
+            }
+        }
+    }
+
+    func animateInstructionRow() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+            for i in 0..<fontColors.count {
+                fontColors[i] = (i == currentIdx) ? .primary : .tertiaryLabel
+                iconOverlays[i] = (i == currentIdx) ? false : true
+            }
+        }
     }
 }
 
@@ -267,103 +290,105 @@ struct DefaultBrowserInterstitialOnboardingView: View {
     var buttonAction: () -> Void
 
     var body: some View {
-        ZStack {
-            if isInDefaultBrowserEnhancementExp {
-                VStack {
-                    HStack {
+        GeometryReader { geometry in
+            ZStack {
+                if isInDefaultBrowserEnhancementExp {
+                    VStack {
+                        HStack {
+                            Spacer()
+                            CloseButton(action: {
+                                tapSkip()
+                                didTakeAction = true
+                            })
+                            .padding(.trailing, 20)
+                            .padding(.top, 40)
+                            .background(Color.clear)
+                        }
                         Spacer()
-                        CloseButton(action: {
-                            tapSkip()
-                            didTakeAction = true
-                        })
-                        .padding(.trailing, 20)
-                        .padding(.top, 40)
-                        .background(Color.clear)
                     }
+                }
+                VStack {
                     Spacer()
-                }
-            }
-            VStack {
-                Spacer()
 
-                VStack(alignment: .leading) {
-                    Text("Make Neeva your Default Browser")
-                        .font(.system(size: 32, weight: .light))
+                    VStack(alignment: .leading) {
+                        Text("Make Neeva your Default Browser")
+                            .font(.system(size: 32, weight: .light))
 
-                    Text(
-                        "Block invasive trackers across the Web. Open links safely with blazing fast browsing and peace of mind."
-                    )
-                    .withFont(.bodyLarge)
-                    .foregroundColor(.secondaryLabel)
-                }
-                .padding(.horizontal, 32)
-
-                DefaultBrowserEducationView(animateInstructions: true)
-
-                Spacer()
-
-                Button(
-                    action: {
-                        buttonAction()
-                        didTakeAction = true
-                        Defaults[.lastDefaultBrowserInterstitialChoice] =
-                            DefaultBrowserInterstitialChoice.openSettings.rawValue
-                        ClientLogger.shared.logCounter(
-                            .DefaultBrowserOnboardingInterstitialOpen,
-                            attributes: [
-                                ClientLogCounterAttribute(
-                                    key:
-                                        LogConfig.PromoCardAttribute
-                                        .defaultBrowserInterstitialTrigger,
-                                    value: trigger.rawValue
-                                )
-                            ]
+                        Text(
+                            "Block invasive trackers across the Web. Open links safely with blazing fast browsing and peace of mind."
                         )
-                        UIApplication.shared.openSettings(
-                            triggerFrom: trigger
-                        )
-                    },
-                    label: {
-                        Text("Open Neeva Settings")
-                            .withFont(.labelLarge)
-                            .foregroundColor(.brand.white)
-                            .padding(13)
-                            .frame(maxWidth: .infinity)
+                        .withFont(.bodyLarge)
+                        .foregroundColor(.secondaryLabel)
                     }
-                )
-                .buttonStyle(.neeva(.primary))
-                .padding(.horizontal, 16)
-                if showSkipButton {
+                    .padding(.horizontal, 32)
+
+                    DefaultBrowserEducationView(animateInstructions: true, geometrySize: geometry.size)
+
+                    Spacer()
+
                     Button(
                         action: {
-                            isInDefaultBrowserEnhancementExp ? tapRemindMe() : tapSkip()
+                            buttonAction()
                             didTakeAction = true
+                            Defaults[.lastDefaultBrowserInterstitialChoice] =
+                                DefaultBrowserInterstitialChoice.openSettings.rawValue
+                            ClientLogger.shared.logCounter(
+                                .DefaultBrowserOnboardingInterstitialOpen,
+                                attributes: [
+                                    ClientLogCounterAttribute(
+                                        key:
+                                            LogConfig.PromoCardAttribute
+                                            .defaultBrowserInterstitialTrigger,
+                                        value: trigger.rawValue
+                                    )
+                                ]
+                            )
+                            UIApplication.shared.openSettings(
+                                triggerFrom: trigger
+                            )
                         },
                         label: {
-                            Text(
-                                isInDefaultBrowserEnhancementExp
-                                    ? "Remind Me Later" : "Skip for Now"
-                            )
-                            .withFont(.labelLarge)
-                            .foregroundColor(.ui.adaptive.blue)
-                            .padding(13)
-                            .frame(maxWidth: .infinity)
-                            .padding(.horizontal, 16)
+                            Text("Open Neeva Settings")
+                                .withFont(.labelLarge)
+                                .foregroundColor(.brand.white)
+                                .padding(13)
+                                .frame(maxWidth: .infinity)
                         }
                     )
-                    .padding(.top, 10)
-                    .padding(.bottom, 30)
-                } else {
-                    Spacer()
+                    .buttonStyle(.neeva(.primary))
+                    .padding(.horizontal, 16)
+                    if showSkipButton {
+                        Button(
+                            action: {
+                                isInDefaultBrowserEnhancementExp ? tapRemindMe() : tapSkip()
+                                didTakeAction = true
+                            },
+                            label: {
+                                Text(
+                                    isInDefaultBrowserEnhancementExp
+                                        ? "Remind Me Later" : "Skip for Now"
+                                )
+                                .withFont(.labelLarge)
+                                .foregroundColor(.ui.adaptive.blue)
+                                .padding(13)
+                                .frame(maxWidth: .infinity)
+                                .padding(.horizontal, 16)
+                            }
+                        )
+                        .padding(.top, 10)
+                        .padding(.bottom, 30)
+                    } else {
+                        Spacer()
+                    }
                 }
             }
-        }
-        .onDisappear {
-            if !didTakeAction {
-                tapSkip()
+            .onDisappear {
+                if !didTakeAction {
+                    tapSkip()
+                }
             }
+            .padding(.bottom, 20)
         }
-        .padding(.bottom, 20)
     }
 
     private func tapRemindMe() {
