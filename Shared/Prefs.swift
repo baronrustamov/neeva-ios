@@ -184,6 +184,8 @@ extension Defaults.Keys {
         "profile.didDismissDefaultBrowserCard")
     public static let didDismissPreviewSignUpCard = Defaults.BoolKey(
         "profile.didDismissPreviewSignUpCard")
+    public static let introSeenDate = Defaults.Key<Date?>(
+        "introSeenDate")
 
     public static let didShowDefaultBrowserInterstitial = Defaults.BoolKey(
         "didShowDefaultBrowserInterstitial")

@@ -22,6 +22,7 @@ public enum NotificationAuthorizationCallSite: String {
     case settings
     case blackFriday
     case defaultBrowserInterstitial
+    case appLaunch
 }
 
 class NotificationPermissionHelper {

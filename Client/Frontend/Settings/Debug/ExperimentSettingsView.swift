@@ -41,6 +41,12 @@ struct ExperimentSettingsView: View {
                     value: $valueTextPromoCard,
                     experiment: .promoCardTypeAfterFirstRun
                 )
+
+                OptionalPrefilledStringField<NeevaExperiment.NotificatonPromptOnAppLaunch>(
+                    "NotificationPromptOnAppLaunch",
+                    value: $valueTextPromoCard,
+                    experiment: .notificatonPromptOnAppLaunch
+                )
             }
         }
         .listStyle(.insetGrouped)

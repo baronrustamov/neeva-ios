@@ -58,6 +58,7 @@ struct InternalSettingsView: View {
     @Default(.firstRunImpressionLogged) var firstRunImpressionLogged
     @Default(.lastReportedConversionEvent) var lastReportedConversionEvent
     @Default(.lastDefaultBrowserInterstitialChoice) var lastDefaultBrowserInterstitialChoice
+    @Default(.introSeenDate) var introSeenDate
 
     var body: some View {
         List {
@@ -117,6 +118,22 @@ struct InternalSettingsView: View {
                     Toggle(
                         String("didTriggerSystemReviewDialog"), isOn: $didTriggerSystemReviewDialog)
                     NumberField(String("numberOfAppForeground"), number: $numberOfAppForeground)
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(verbatim: "introSeenDate")
+                            Text(
+                                verbatim:
+                                    "\(introSeenDate?.timeIntervalSince1970 ?? 0)"
+                            )
+                            .foregroundColor(.secondaryLabel)
+                            .font(.caption)
+                        }
+                        Spacer()
+                        Button(String("Clear")) { introSeenDate = nil }
+                            .font(.body)
+                            .accentColor(.red)
+                            .buttonStyle(.borderless)
+                    }
                 }
                 Section(header: Text(verbatim: "Conversion Logging")) {
                     NumberField("lastReportedConversionEvent", number: $lastReportedConversionEvent)

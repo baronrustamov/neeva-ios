@@ -187,6 +187,11 @@ extension Date {
     public func timeDiffInMilliseconds(from: Date) -> Int {
         return Int(from.timeIntervalSince1970 * 1000 - timeIntervalSince1970 * 1000)
     }
+
+    public func hoursBetweenDate(toDate: Date) -> Int {
+        let components = Calendar.current.dateComponents([.hour], from: self, to: toDate)
+        return components.hour ?? 0
+    }
 }
 
 let MaxTimestampAsDouble = Double(UInt64.max)

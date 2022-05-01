@@ -244,6 +244,9 @@ class ZeroQueryModel: ObservableObject {
 
     func satisfyDefaultBrowserPromoFreqRule() -> Bool {
         return Defaults[.numOfDailyZeroQueryImpression] != 0
+            && (Defaults[.introSeenDate] == nil
+                || Defaults[.introSeenDate]?.hoursBetweenDate(toDate: Date()) ?? 0
+                    >= DefaultBrowserPromoRules.hoursAfterInterstitialForPromoCard)
             && Defaults[.numOfDailyZeroQueryImpression]
                 % DefaultBrowserPromoRules.nthZeroQueryImpression == 0
             && Defaults[.numOfDailyZeroQueryImpression]

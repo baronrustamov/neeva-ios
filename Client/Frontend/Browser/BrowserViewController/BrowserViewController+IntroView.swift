@@ -153,9 +153,20 @@ extension BrowserViewController {
             Defaults[.didShowDefaultBrowserInterstitialFromSkipToBrowser] = true
             Defaults[.introSeen] = true
             Defaults[.firstRunSeenAndNotSignedIn] = true
+            Defaults[.introSeenDate] = Date()
             ClientLogger.shared.logCounter(
                 .DefaultBrowserInterstitialImp
             )
+
+            let arm = NeevaExperiment.startExperiment(for: .notificatonPromptOnAppLaunch)
+            NeevaExperiment.logStartExperiment(for: .notificatonPromptOnAppLaunch)
+
+            if arm == .askForNotificatonPromptOnAppLaunch {
+                NotificationPermissionHelper.shared.requestPermissionIfNeeded(
+                    completion: { authorized in
+                    }, openSettingsIfNeeded: false, callSite: .appLaunch
+                )
+            }
         }
     }
 
