@@ -12,7 +12,7 @@ struct AddToSpaceOverlayContent: View {
     @EnvironmentObject private var overlayModel: OverlaySheetModel
 
     @ObservedObject var request: AddToSpaceRequest
-    @ObservedObject var userInfo: NeevaUserInfo
+    @ObservedObject var userInfo: NeevaUserInfo = NeevaUserInfo.shared
 
     let bvc: BrowserViewController
     let importData: SpaceImportHandler?
@@ -23,22 +23,13 @@ struct AddToSpaceOverlayContent: View {
                 && (request.state == .creatingSpace || request.state == .initial))
     }
 
-    init(request: AddToSpaceRequest, bvc: BrowserViewController, importData: SpaceImportHandler?) {
-        self.request = request
-        self.bvc = bvc
-        self.importData = importData
-        self.userInfo = NeevaUserInfo.shared
-
-        // check if the user has verified their email since the last session update
-        if self.userInfo.isUserLoggedIn, !self.userInfo.isVerified, !self.userInfo.isLoading {
-            self.userInfo.reload()
-        }
-    }
-
     @ViewBuilder
     var content: some View {
         if userInfo.isUserLoggedIn, !userInfo.isVerified {
             EmailVerificationPrompt(email: userInfo.email ?? "", dismiss: hideOverlay)
+                .onAppear {
+                    userInfo.reload()
+                }
         } else if request.state == .savedToSpace || request.state == .savingToSpace {
             VStack {
                 Spacer()

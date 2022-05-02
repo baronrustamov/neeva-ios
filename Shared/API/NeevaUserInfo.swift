@@ -97,7 +97,9 @@ public class NeevaUserInfo: ObservableObject {
     }
 
     public func reload() {
-        self.fetch()
+        if !self.isLoading {
+            self.fetch()
+        }
     }
 
     public func didLogOut() {
