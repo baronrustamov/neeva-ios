@@ -132,10 +132,10 @@ public struct CheatsheetMenuView: View {
     @State var height: CGFloat = 0
     @State var openSupport: Bool = false
 
-    private let menuAction: (OverflowMenuAction) -> Void
+    private let support: (UIImage?) -> Void
 
-    init(menuAction: @escaping (OverflowMenuAction) -> Void) {
-        self.menuAction = menuAction
+    init(support: @escaping (UIImage?) -> Void) {
+        self.support = support
     }
 
     public var body: some View {
@@ -224,7 +224,7 @@ public struct CheatsheetMenuView: View {
                                             attributes: EnvironmentHelper.shared.getAttributes()
                                                 + model.loggerAttributes
                                         )
-                                        menuAction(.support(screenshot: image))
+                                        support(image)
                                     }
                                 }
                         }
@@ -493,6 +493,6 @@ public struct CheatsheetMenuView: View {
 
 struct CheatsheetMenuView_Previews: PreviewProvider {
     static var previews: some View {
-        CheatsheetMenuView(menuAction: { _ in })
+        CheatsheetMenuView(support: { _ in })
     }
 }
