@@ -130,6 +130,7 @@ struct CardScrollContainer<Content: View>: View {
     @EnvironmentObject var spacesModel: SpaceCardModel
     @EnvironmentObject var gridModel: GridModel
     @EnvironmentObject var tabModel: TabCardModel
+    @EnvironmentObject var browserModel: BrowserModel
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) private var verticalSizeClass
@@ -158,6 +159,9 @@ struct CardScrollContainer<Content: View>: View {
                 scrollView.bounces = false
                 return
             }
+
+            scrollView.isScrollEnabled =
+                (browserModel.cardTransitionModel.state != .visibleForTrayHidden)
         }
     }
 }
