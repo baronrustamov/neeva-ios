@@ -14,7 +14,6 @@ public enum FeatureFlag: String, CaseIterable, RawRepresentable {
     case cardStrip = "Carousel of cards instead of tab strip"
     case topCardStrip = "Top Card Strip"
     case debugURLBar = "URL Bar Debug Mode"
-    case dragAndDropTabs = "Drag and drop tabs in tab switcher"
     case enableTimeBasedSwitcher = "Enable time based tab switcher"
     case demoteAfter15secondsTimeBasedSwitcher =
         "demote tabs after 15 seconds in time based switcher"

@@ -401,9 +401,12 @@ class TabManager: NSObject {
 
     func rearrangeTabs(fromIndex: Int, toIndex: Int, notify: Bool) {
         tabs.rearrange(from: fromIndex, to: toIndex)
+
         if notify {
             tabsUpdatedPublisher.send()
         }
+
+        preserveTabs()
     }
 
     // Tab Group related functions
