@@ -545,7 +545,7 @@ public struct LogConfig {
         case .ResolvedAttributionToken: return .FirstRun
         case .ResolvedAttributionTokenError: return .FirstRun
         case .ResolvedAttributionTokenRetryError: return .FirstRun
-        case .FirstNavigation: return . FirstRun
+        case .FirstNavigation: return .FirstRun
 
         // MARK: - PromoCard
         case .PromoCardAppear: return .PromoCard
