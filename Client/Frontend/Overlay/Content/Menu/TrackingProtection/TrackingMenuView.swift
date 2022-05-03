@@ -55,6 +55,7 @@ class TrackingStatsViewModel: ObservableObject {
             }
         }
     }
+    @Published var showTrackingStatsViewPopover = false
 
     var viewVisible: Bool = false
 
@@ -202,7 +203,7 @@ struct TrackingMenuView: View {
                     if FeatureFlag[.cookieCutter] {
                         // TODO: Make this actually track a number
                         TrackingMenuFirstRowElement(
-                            label: "Cookies", num: cookieCutterModel.cookiesBlocked)
+                            label: "Cookie Notices", num: cookieCutterModel.cookiesBlocked)
                     } else {
                         TrackingMenuFirstRowElement(label: "Domains", num: viewModel.numDomains)
                     }
@@ -238,5 +239,6 @@ struct TrackingMenuView: View {
         .onDisappear {
             viewModel.viewVisible = false
         }
+        .padding(.top, 6)
     }
 }

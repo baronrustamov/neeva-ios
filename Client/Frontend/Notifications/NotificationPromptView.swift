@@ -37,15 +37,17 @@ struct NotificationPromptView: View {
             Button(
                 action: {
                     NotificationPermissionHelper.shared.requestPermissionIfNeeded(
-                        completion: { authorized in
-                            if authorized {
-                                LocalNotifications.scheduleAllNeevaOnboardingCallbackIfAuthorized()
-                            }
-                            DispatchQueue.main.async {
-                                hideOverlay()
-                            }
-                        }, openSettingsIfNeeded: false, callSite: .tourFlow
-                    )
+                        openSettingsIfNeeded: false, callSite: .tourFlow
+                    ) { authorized in
+                        if authorized {
+                            LocalNotifications.scheduleAllNeevaOnboardingCallbackIfAuthorized()
+                        }
+
+                        DispatchQueue.main.async {
+                            hideOverlay()
+                        }
+                    }
+
                     ClientLogger.shared.logCounter(.NotificationPromptEnable)
                 },
                 label: {

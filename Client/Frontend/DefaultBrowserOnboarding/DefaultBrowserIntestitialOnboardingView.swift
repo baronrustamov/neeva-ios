@@ -286,6 +286,7 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                 )
                 .buttonStyle(.neeva(.primary))
                 .padding(.horizontal, 16)
+
                 if showSkipButton {
                     Button(
                         action: {
@@ -321,13 +322,14 @@ struct DefaultBrowserInterstitialOnboardingView: View {
 
     private func tapRemindMe() {
         NotificationPermissionHelper.shared.requestPermissionIfNeeded(
-            completion: { authorized in
-                if authorized {
-                    LocalNotifications.scheduleNeevaOnboardingCallback(
-                        notificationType: .neevaOnboardingDefaultBrowser)
-                }
-            }, openSettingsIfNeeded: false, callSite: .defaultBrowserInterstitial
-        )
+            openSettingsIfNeeded: false, callSite: .defaultBrowserInterstitial
+        ) { authorized in
+            if authorized {
+                LocalNotifications.scheduleNeevaOnboardingCallback(
+                    notificationType: .neevaOnboardingDefaultBrowser)
+            }
+        }
+
         skipAction()
         Defaults[.lastDefaultBrowserInterstitialChoice] =
             DefaultBrowserInterstitialChoice.skipForNow.rawValue

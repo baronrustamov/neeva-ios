@@ -12,6 +12,9 @@ enum CookieNotices: CaseIterable, Encodable, Decodable {
 }
 
 extension Defaults.Keys {
+    static let cookieCutterOnboardingShowed = Defaults.Key<Bool>(
+        "profile.prefkey.cookieCutter.onboardingShowed", default: false)
+
     fileprivate static let cookieNotices = Defaults.Key<CookieNotices>(
         "profile.prefkey.cookieCutter.cookieNotices", default: .declineNonEssential)
     fileprivate static let marketingCookies = Defaults.Key<Bool>(
@@ -59,10 +62,21 @@ class CookieCutterModel: ObservableObject {
     }
 
     // MARK: - Methods
-    func cookieWasHandled() {
-        // This does not do anything yet.
-        // In the future, this will be called to present education material about
-        // Cookie Cutter when it is first run.
+    func cookieWasHandled(bvc: BrowserViewController) {
+        if !Defaults[.cookieCutterOnboardingShowed] {
+            Defaults[.cookieCutterOnboardingShowed] = true
+
+            bvc.showModal(style: OverlayStyle(showTitle: false)) {
+                CookieCutterOnboardingView {
+                    bvc.overlayManager.hideCurrentOverlay(ofPriority: .modal)
+                    bvc.trackingStatsViewModel.showTrackingStatsViewPopover = true
+                } onDismiss: {
+                    bvc.overlayManager.hideCurrentOverlay(ofPriority: .modal)
+                }
+                .overlayIsFixedHeight(isFixedHeight: true)
+                .environmentObject(bvc.trackingStatsViewModel)
+            }
+        }
     }
 
     private func checkIfCookieNoticeStateShouldReset() {

@@ -779,11 +779,10 @@ class SpaceCardModel: CardModel {
                 ClientLogger.shared.logCounter(
                     .BlackFridayNotifyPromo)
                 NotificationPermissionHelper.shared.requestPermissionIfNeeded(
-                    completion: { authorized in
-                        Defaults[.seenBlackFridayNotifyPromo] = true
-                    },
                     callSite: .blackFriday
-                )
+                ) { _ in
+                    Defaults[.seenBlackFridayNotifyPromo] = true
+                }
             },
             onClose: {
                 ClientLogger.shared.logCounter(

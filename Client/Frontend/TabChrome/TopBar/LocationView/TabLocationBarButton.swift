@@ -20,8 +20,6 @@ struct TabLocationBarButton<Label: View>: View {
 }
 
 struct LocationViewTrackingButton: View {
-    @State private var showingPopover = false
-
     @Environment(\.openSettings) private var openSettings
     @EnvironmentObject private var incognitoModel: IncognitoModel
     @EnvironmentObject private var trackingStatsModel: TrackingStatsViewModel
@@ -34,13 +32,13 @@ struct LocationViewTrackingButton: View {
             incognitoModel.isIncognito
             ? Image("incognito", label: Text("Tracking Protection, Incognito"))
             : Image("tracking-protection", label: Text("Tracking Protection"))
+
         TabLocationBarButton(label: label.renderingMode(.template)) {
             ClientLogger.shared.logCounter(
                 .OpenShield, attributes: EnvironmentHelper.shared.getAttributes())
-            showingPopover = true
-        }
-        .presentAsPopover(
-            isPresented: $showingPopover,
+            trackingStatsModel.showTrackingStatsViewPopover = true
+        }.presentAsPopover(
+            isPresented: $trackingStatsModel.showTrackingStatsViewPopover,
             backgroundColor: .systemGroupedBackground,
             arrowDirections: [.up, .down]
         ) {

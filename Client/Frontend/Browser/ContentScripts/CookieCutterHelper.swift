@@ -42,9 +42,9 @@ class CookieCutterHelper: TabContentScript {
                     guard
                         let escapedEncoded = String(
                             data: try JSONEncoder().encode([
-                                "marketing": cookieCutterModel.marketingCookiesAllowed,
-                                "analytic": cookieCutterModel.analyticCookiesAllowed,
-                                "social": cookieCutterModel.socialCookiesAllowed,
+                                "marketing": !cookieCutterModel.marketingCookiesAllowed,
+                                "analytic": !cookieCutterModel.analyticCookiesAllowed,
+                                "social": !cookieCutterModel.socialCookiesAllowed,
                             ]), encoding: .utf8)
                     else { return }
 
@@ -58,7 +58,8 @@ class CookieCutterHelper: TabContentScript {
             case .increaseCounter:
                 cookieCutterModel.cookiesBlocked += 1
             case .noticeHandled:
-                cookieCutterModel.cookieWasHandled()
+                let bvc = SceneDelegate.getBVC(for: currentWebView)
+                cookieCutterModel.cookieWasHandled(bvc: bvc)
             case .started:
                 cookieCutterModel.cookiesBlocked = 0
             }

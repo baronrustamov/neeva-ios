@@ -67,11 +67,15 @@
 		2026EC1C27F3D2F900817053 /* CookieCutterSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2026EC1B27F3D2F900817053 /* CookieCutterSettings.swift */; };
 		2026EC1F27F3E51400817053 /* CookieCutterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2026EC1E27F3E51400817053 /* CookieCutterModel.swift */; };
 		2026EC2127F4070900817053 /* NonEssentialCookieSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2026EC2027F4070900817053 /* NonEssentialCookieSettings.swift */; };
+		205132B128208DB0003AAE96 /* SheetHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205132B028208DB0003AAE96 /* SheetHeader.swift */; };
+		205132B3282093B0003AAE96 /* CookieCutterOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205132B2282093B0003AAE96 /* CookieCutterOnboardingView.swift */; };
 		206954A427FF4257000360D6 /* SiteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206954A327FF4257000360D6 /* SiteListView.swift */; };
 		206954A627FF425B000360D6 /* SiteRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206954A527FF425B000360D6 /* SiteRowView.swift */; };
 		206954A827FF449E000360D6 /* RecentlyClosedTabsPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206954A727FF449E000360D6 /* RecentlyClosedTabsPanelView.swift */; };
 		209CD9A327DBF9F20069675C /* TabGroupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209CD9A227DBF9F20069675C /* TabGroupTests.swift */; };
 		20A5D15327F6A43E00DB88FE /* HistoryPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A5D15227F6A43E00DB88FE /* HistoryPanelView.swift */; };
+		20D21E362820C19800A7C384 /* SheetHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205132B028208DB0003AAE96 /* SheetHeader.swift */; };
+		20D21E372820C1A800A7C384 /* CookieCutterOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205132B2282093B0003AAE96 /* CookieCutterOnboardingView.swift */; };
 		20E51A112819D8BB00394720 /* CookieCutterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200976842810EA620055A02B /* CookieCutterHelper.swift */; };
 		20ED47CE27F28235002E3ADF /* BrowserViewController+IntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20ED47CD27F28235002E3ADF /* BrowserViewController+IntroView.swift */; };
 		20F2889227FD1BA9005A8A79 /* HistoryPanelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F2889127FD1BA9005A8A79 /* HistoryPanelModel.swift */; };
@@ -1876,6 +1880,8 @@
 		2026EC1B27F3D2F900817053 /* CookieCutterSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCutterSettings.swift; sourceTree = "<group>"; };
 		2026EC1E27F3E51400817053 /* CookieCutterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCutterModel.swift; sourceTree = "<group>"; };
 		2026EC2027F4070900817053 /* NonEssentialCookieSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonEssentialCookieSettings.swift; sourceTree = "<group>"; };
+		205132B028208DB0003AAE96 /* SheetHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetHeader.swift; sourceTree = "<group>"; };
+		205132B2282093B0003AAE96 /* CookieCutterOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCutterOnboardingView.swift; sourceTree = "<group>"; };
 		206954A327FF4257000360D6 /* SiteListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteListView.swift; sourceTree = "<group>"; };
 		206954A527FF425B000360D6 /* SiteRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteRowView.swift; sourceTree = "<group>"; };
 		206954A727FF449E000360D6 /* RecentlyClosedTabsPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyClosedTabsPanelView.swift; sourceTree = "<group>"; };
@@ -3132,6 +3138,7 @@
 			isa = PBXGroup;
 			children = (
 				2026EC1E27F3E51400817053 /* CookieCutterModel.swift */,
+				205132B2282093B0003AAE96 /* CookieCutterOnboardingView.swift */,
 			);
 			path = CookieCutter;
 			sourceTree = "<group>";
@@ -3905,6 +3912,7 @@
 				C8A4D2C3262886B900192B4D /* OverlaySheetView.swift */,
 				666CDFA7278D35DB004A9B1E /* DismissBackgroundView.swift */,
 				4A9F654A27229E3400B7C06E /* BottomSheetView.swift */,
+				205132B028208DB0003AAE96 /* SheetHeader.swift */,
 			);
 			path = Sheet;
 			sourceTree = "<group>";
@@ -6855,6 +6863,7 @@
 				4A42C4DB27E58487003B9826 /* Web3Model.swift in Sources */,
 				4A42C4DC27E58487003B9826 /* QuickLinkSelection.intentdefinition in Sources */,
 				4A42C4DD27E58487003B9826 /* UIViewExtensions.swift in Sources */,
+				20D21E372820C1A800A7C384 /* CookieCutterOnboardingView.swift in Sources */,
 				4A42C4DE27E58487003B9826 /* BrowserViewController+WebViewDelegates.swift in Sources */,
 				4A42C4DF27E58487003B9826 /* DebugSettingsSection.swift in Sources */,
 				4A42C4E027E58487003B9826 /* CardViewControllers.swift in Sources */,
@@ -6958,6 +6967,7 @@
 				4A42C53527E58487003B9826 /* TrackingProtectionPageStats.swift in Sources */,
 				4A42C53627E58487003B9826 /* ScreenshotHelper.swift in Sources */,
 				E910925F280510B400EE0109 /* PlaceViewModels.swift in Sources */,
+				20D21E362820C19800A7C384 /* SheetHeader.swift in Sources */,
 				4A42C53727E58487003B9826 /* PopoverView.swift in Sources */,
 				4A42C53827E58487003B9826 /* AppHostSetting.swift in Sources */,
 				4A42C53927E58487003B9826 /* SwiftUIHelpers.swift in Sources */,
@@ -7244,6 +7254,7 @@
 				EB9A179D20E69A7F00B12184 /* Theme.swift in Sources */,
 				66EE7D9526CD5F02004BD435 /* HTTPAuthPromptOverlayView.swift in Sources */,
 				C9C18E6626559B9C004710CD /* ClientLogger.swift in Sources */,
+				205132B3282093B0003AAE96 /* CookieCutterOnboardingView.swift in Sources */,
 				C868193B27AF9C1A002ECEEF /* IncognitoModel.swift in Sources */,
 				E64024E227F2424E00D65B63 /* ZeroQueryPlaceholder.swift in Sources */,
 				C9E5F2CB2678F05E00025A7F /* Popover.swift in Sources */,
@@ -7358,6 +7369,7 @@
 				4A255AB2265C48EC00422839 /* TrackingPreventionUtils.swift in Sources */,
 				6751BABB26AA173D007FC7EA /* NavSuggestionView.swift in Sources */,
 				4AA14F20264C7954003B815A /* ZeroQueryView.swift in Sources */,
+				205132B128208DB0003AAE96 /* SheetHeader.swift in Sources */,
 				6672D0DC27A46E8300CEFFC2 /* IntroViewModel.swift in Sources */,
 				C832BF5926DEE0BB00B9A1F8 /* AddToSpaceOverlayContent.swift in Sources */,
 				66C3C76C267A8858002B50B1 /* ToastView.swift in Sources */,

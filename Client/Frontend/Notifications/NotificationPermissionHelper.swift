@@ -23,6 +23,7 @@ public enum NotificationAuthorizationCallSite: String {
     case blackFriday
     case defaultBrowserInterstitial
     case appLaunch
+    case cookieCutterOnboarding
 }
 
 class NotificationPermissionHelper {
@@ -50,9 +51,9 @@ class NotificationPermissionHelper {
     }
 
     func requestPermissionIfNeeded(
-        completion: ((Bool) -> Void)? = nil,
         openSettingsIfNeeded: Bool = false,
-        callSite: NotificationAuthorizationCallSite
+        callSite: NotificationAuthorizationCallSite,
+        completion: ((Bool) -> Void)? = nil
     ) {
         isAuthorized { [self] authorized in
             guard !authorized else {

@@ -163,9 +163,7 @@ extension BrowserViewController {
 
             if arm == .askForNotificatonPromptOnAppLaunch {
                 NotificationPermissionHelper.shared.requestPermissionIfNeeded(
-                    completion: { authorized in
-                    }, openSettingsIfNeeded: false, callSite: .appLaunch
-                )
+                    openSettingsIfNeeded: false, callSite: .appLaunch)
             }
         }
     }

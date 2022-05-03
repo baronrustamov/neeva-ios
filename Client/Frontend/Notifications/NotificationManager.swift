@@ -258,7 +258,8 @@ class NotificationManager: ObservableObject {
                 handleNeevaPromoNotification(
                     promoId: notification.promoId, urlStr: notification.localURL, bvc: bvc)
             case .neevaOnboardingNewsProvider, .neevaOnboardingProductSearch,
-                .neevaOnboardingFastTap, .neevaOnboardingDefaultBrowser:
+                .neevaOnboardingFastTap, .neevaOnboardingDefaultBrowser,
+                .neevaOnboardingCookieCutter:
                 handleOnboardingNotification(
                     promoId: notification.promoId, urlStr: notification.localURL, bvc: bvc,
                     type: notification.type)
@@ -293,7 +294,7 @@ class NotificationManager: ObservableObject {
         case .neevaPromo:
             handleNeevaPromoNotification(promoId: promoId, urlStr: urlStr, bvc: bvc)
         case .neevaOnboardingNewsProvider, .neevaOnboardingProductSearch, .neevaOnboardingFastTap,
-            .neevaOnboardingDefaultBrowser:
+            .neevaOnboardingDefaultBrowser, .neevaOnboardingCookieCutter:
             handleOnboardingNotification(
                 promoId: promoId, urlStr: urlStr, bvc: bvc, type: notificationType)
         case .none:

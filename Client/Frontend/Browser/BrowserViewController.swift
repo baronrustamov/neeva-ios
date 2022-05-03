@@ -27,6 +27,7 @@ protocol ModalPresenter {
     func showModal<Content: View>(
         style: OverlayStyle,
         headerButton: OverlayHeaderButton?,
+        toPosition: OverlaySheetPosition,
         content: @escaping () -> Content,
         onDismiss: (() -> Void)?)
     func presentFullScreenModal(content: AnyView, completion: (() -> Void)?)
@@ -673,12 +674,14 @@ class BrowserViewController: UIViewController, ModalPresenter {
     func showModal<Content: View>(
         style: OverlayStyle,
         headerButton: OverlayHeaderButton? = nil,
+        toPosition: OverlaySheetPosition = .middle,
         @ViewBuilder content: @escaping () -> Content,
         onDismiss: (() -> Void)? = nil
     ) {
         showModal(
             style: style,
             headerButton: headerButton,
+            toPosition: toPosition,
             headerContent: { EmptyView() },
             content: content,
             onDismiss: onDismiss
@@ -688,6 +691,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
     func showModal<Content: View, HeaderContent: View>(
         style: OverlayStyle,
         headerButton: OverlayHeaderButton? = nil,
+        toPosition: OverlaySheetPosition = .middle,
         @ViewBuilder headerContent: @escaping () -> HeaderContent,
         @ViewBuilder content: @escaping () -> Content,
         onDismiss: (() -> Void)? = nil
@@ -695,6 +699,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
         if !chromeModel.inlineToolbar {
             showAsModalOverlaySheet(
                 style: style,
+                toPosition: toPosition,
                 content: content,
                 onDismiss: onDismiss,
                 headerButton: headerButton,
@@ -708,12 +713,14 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
     func showAsModalOverlaySheet<Content: View>(
         style: OverlayStyle,
+        toPosition: OverlaySheetPosition = .middle,
         @ViewBuilder content: @escaping () -> Content,
         onDismiss: (() -> Void)? = nil,
         headerButton: OverlayHeaderButton? = nil
     ) {
         showAsModalOverlaySheet(
             style: style,
+            toPosition: toPosition,
             content: content,
             onDismiss: onDismiss,
             headerButton: nil,
@@ -723,12 +730,14 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
     func showAsModalOverlaySheet<Content: View, HeaderContent: View>(
         style: OverlayStyle,
+        toPosition: OverlaySheetPosition = .middle,
         @ViewBuilder content: @escaping () -> Content,
         onDismiss: (() -> Void)? = nil,
         headerButton: OverlayHeaderButton? = nil,
         @ViewBuilder headerContent: @escaping () -> HeaderContent
     ) {
         let overlayView = OverlaySheetRootView(
+            overlayPosition: toPosition,
             style: style,
             content: { AnyView(erasing: content()) },
             onDismiss: { rootView in

@@ -13,6 +13,7 @@ enum ClearableDataType: String, Identifiable, Codable, CaseIterable {
     case cookies = "Cookies"
     case trackingProtection = "Tracking Protection"
     case cookieCutterExclusions = "Cookie Cutter Exclusions"
+
     #if XYZ
         case dapps = "Connected dApps"
     #endif
