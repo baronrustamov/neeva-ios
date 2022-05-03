@@ -206,6 +206,7 @@ public struct CheatsheetMenuView: View {
                 }
             } else {
                 cheatsheetContent
+                    .selectableIfAvailable(true)
                     .background(
                         GeometryReader { proxy in
                             Color.clear
