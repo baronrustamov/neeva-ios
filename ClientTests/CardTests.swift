@@ -446,4 +446,12 @@ class CardTests: XCTestCase {
             XCTAssertEqual(tab.isSelected, true)
         }
     }
+
+    func testSelectedTabAfterSwitchingMdoe() {
+        let tab1 = manager.addTab()
+        let _ = manager.addTab(isIncognito: true)
+        manager.selectTab(tab1, notify: true)
+        manager.toggleIncognitoMode(clearSelectedTab: false)
+        XCTAssertEqual(tab1.tabUUID, manager.selectedTab?.tabUUID)
+    }
 }

@@ -31,6 +31,7 @@ class GridModel: ObservableObject {
         }
     }
     @Published var gridCanAnimate = false
+    @Published var switchModeWithoutAnimation = false
     @Published var showingDetailView = false {
         didSet {
             // Reset when going from true to false
@@ -57,14 +58,6 @@ class GridModel: ObservableObject {
         self.spaceCardModel = SpaceCardModel()
 
         self.tabMenu = TabMenu(tabManager: tabManager)
-    }
-
-    var isShowingEmpty: Bool {
-        let tabManager = tabCardModel.manager
-        if tabManager.incognitoModel.isIncognito {
-            return tabManager.incognitoTabs.isEmpty
-        }
-        return tabManager.normalTabs.isEmpty
     }
 
     // Ensure that the selected Card is visible by scrolling it into view

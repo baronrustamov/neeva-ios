@@ -13,7 +13,9 @@ extension TabManager {
         addTabsToRecentlyClosed([tab], showToast: showToast)
         removeTab(tab, flushToDisk: true, notify: true)
 
-        if updateSelectedTab {
+        if let selectedTab = selectedTab, selectedTab.isIncognito == tab.isIncognito,
+            updateSelectedTab
+        {
             updateSelectedTabAfterRemovalOf(tab, deletedIndex: index, notify: true)
         }
     }
