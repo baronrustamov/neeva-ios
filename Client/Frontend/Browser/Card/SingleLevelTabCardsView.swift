@@ -59,6 +59,7 @@ struct SingleLevelTabCardsView: View {
                                 CardTransitionModifier(
                                     details: tabDetails, containerGeometry: containerGeometry)
                             )
+                            .padding(.top, 8)
                             .padding(.bottom, CardGridUX.GridSpacing)
                             .environment(\.selectionCompletion) {
                                 ClientLogger.shared.logCounter(
