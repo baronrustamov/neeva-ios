@@ -7,8 +7,9 @@ import Storage
 import WebKit
 
 extension TabManager {
-    func addTabsForURLs(
-        _ urls: [URL], zombie: Bool, shouldSelectTab: Bool = true, incognito: Bool = false
+    @discardableResult func addTabsForURLs(
+        _ urls: [URL], zombie: Bool = true, shouldSelectTab: Bool = true, incognito: Bool = false,
+        rootUUID: String? = nil
     ) -> [Tab] {
         assert(Thread.isMainThread)
 
@@ -22,6 +23,14 @@ extension TabManager {
                 self.addTab(
                     URLRequest(url: url), flushToDisk: false, zombie: zombie,
                     isIncognito: incognito, notify: false))
+        }
+
+        if let rootUUID = rootUUID {
+            for tab in newTabs {
+                tab.rootUUID = rootUUID
+            }
+
+            self.updateTabGroupsAndSendNotifications(notify: false)
         }
 
         // Select the most recent.
