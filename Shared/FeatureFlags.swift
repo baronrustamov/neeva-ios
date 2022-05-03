@@ -19,7 +19,6 @@ public enum FeatureFlag: String, CaseIterable, RawRepresentable {
         "demote tabs after 15 seconds in time based switcher"
     case enableArchivedTabsView = "Enable archivedTabsView in switcher"
     case inlineAccountSettings = "Inline Account Settings"
-    case newTrackingProtectionSettings = "New Tracking Protection Settings"
     case pinToTopSites = "Pin to Top Sites"
     case recommendedSpaces = "Recommended Spaces"
     case reverseChronologicalOrdering = "Sort tabs based on reverse chronological ordering"

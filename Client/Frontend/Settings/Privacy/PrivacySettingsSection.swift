@@ -33,32 +33,13 @@ struct PrivacySettingsSection: View {
         }
 
         if !FeatureFlag[.cookieCutter] {
-            if FeatureFlag[.newTrackingProtectionSettings] {
-                makeNavigationLink(title: "Tracking Protection") {
-                    List {
-                        Section(header: Text("Global Privacy Settings")) {
-                            TrackingSettingsBlock()
-                        }
-
-                        TrackingAttribution()
-                    }
-                    .listStyle(.insetGrouped)
-                    .applyToggleStyle()
-                    .onAppear {
-                        ClientLogger.shared.logCounter(
-                            .ViewTrackingProtection,
-                            attributes: EnvironmentHelper.shared.getAttributes())
-                    }
+            Toggle("Tracking Protection", isOn: $contentBlockingEnabled)
+                .onChange(of: contentBlockingEnabled) { enabled in
+                    ClientLogger.shared.logCounter(
+                        enabled ? .TurnOnGlobalBlockTracking : .TurnOffGlobalBlockTracking,
+                        attributes: EnvironmentHelper.shared.getAttributes()
+                    )
                 }
-            } else {
-                Toggle("Tracking Protection", isOn: $contentBlockingEnabled)
-                    .onChange(of: contentBlockingEnabled) { enabled in
-                        ClientLogger.shared.logCounter(
-                            enabled ? .TurnOnGlobalBlockTracking : .TurnOffGlobalBlockTracking,
-                            attributes: EnvironmentHelper.shared.getAttributes()
-                        )
-                    }
-            }
         }
 
         if FeatureFlag[.cookieCutter] {

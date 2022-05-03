@@ -50,21 +50,18 @@ struct CookieCutterSettings: View {
                             cookieCutterModel.cookieNotices = .userSelected
                         }
                     )
-                }.labelsHidden()
+                }.labelsHidden().pickerStyle(.inline)
             }
 
-            Section {
-                Toggle("Tracking Protection", isOn: $contentBlockingEnabled)
-                    .onChange(of: contentBlockingEnabled) { enabled in
-                        ClientLogger.shared.logCounter(
-                            enabled ? .TurnOnGlobalBlockTracking : .TurnOffGlobalBlockTracking,
-                            attributes: EnvironmentHelper.shared.getAttributes()
-                        )
-                    }
+            Section(
+                header: Text("TRACKING PROTECTION"),
+                footer:
+                    TrackingAttribution()
+            ) {
+                TrackingSettingsBlock()
             }
         }
         .listStyle(.insetGrouped)
-        .pickerStyle(.inline)
         .applyToggleStyle()
         .navigationTitle(Text("Cookie Cutter"))
     }
