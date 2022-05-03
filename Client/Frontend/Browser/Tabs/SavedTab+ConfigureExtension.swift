@@ -46,8 +46,15 @@ extension SavedTab {
     }
 
     func configureTab(_ tab: Tab, imageStore: DiskImageStore? = nil) {
-        // Since this is a restored tab, reset the URL to be loaded as that will be handled by the SessionRestoreHandler
-        tab.setURL(nil)
+        if sessionData == nil {
+            // If there's no session data, the tab was never loaded,
+            // set the URL to be what the tab was opened too.
+            tab.setURL(url)
+        } else {
+            // Since this is a restored tab, reset the URL to be,
+            // loaded as that will be handled by the SessionRestoreHandler
+            tab.setURL(nil)
+        }
 
         if let faviconURL = faviconURL {
             let icon = Favicon(url: faviconURL, date: Date())

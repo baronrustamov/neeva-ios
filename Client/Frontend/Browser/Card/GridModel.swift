@@ -133,7 +133,7 @@ class GridModel: ObservableObject {
         }
     }
 
-    func closeDetailView() {
+    func closeDetailView(switchToTabs: Bool = false) {
         guard showingDetailView else {
             return
         }
@@ -141,5 +141,9 @@ class GridModel: ObservableObject {
         spaceCardModel.detailedSpace?.showingDetails = false
         showingDetailView = false
         spaceCardModel.detailedSpace = nil
+
+        if switchToTabs {
+            switcherState = .tabs
+        }
     }
 }

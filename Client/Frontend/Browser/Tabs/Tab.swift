@@ -350,7 +350,9 @@ class Tab: NSObject, ObservableObject {
             }
         } else if let request = lastRequest {
             webView.load(request)
-        } else {
+        } else if let url = url {
+            webView.load(URLRequest(url: url))
+
             print(
                 "creating webview with no lastRequest and no session data: \(self.url?.description ?? "nil")"
             )

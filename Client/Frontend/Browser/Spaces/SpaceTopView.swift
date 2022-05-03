@@ -197,6 +197,18 @@ struct SpaceTopView: View {
         }
     }
 
+    @ViewBuilder var openAllURLsButton: some View {
+        if let space = space, let urls = space.contentURLs {
+            Button {
+                self.tabModel.manager.addTabsForURLs(
+                    Array(urls), shouldSelectTab: false, rootUUID: space.id.id)
+                self.gridModel.closeDetailView(switchToTabs: true)
+            } label: {
+                Label("Open all Space links", systemSymbol: .arrowUpRight)
+            }
+        }
+    }
+
     @ViewBuilder var deleteButton: some View {
         if let space = space {
             Button {
@@ -242,6 +254,8 @@ struct SpaceTopView: View {
                 if let space = space, !space.isDefaultSpace {
                     deleteButton
                 }
+
+                openAllURLsButton
 
                 if !headerVisible {
                     if canEdit {
