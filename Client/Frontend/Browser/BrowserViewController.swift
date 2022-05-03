@@ -1106,6 +1106,9 @@ class BrowserViewController: UIViewController, ModalPresenter {
             return
         }
 
+        if !Defaults[.didFirstNavigation] {
+            ClientLogger.shared.logCounter(.FirstNavigation)
+        }
         Defaults[.didFirstNavigation] = true
 
         if let url = webView.url {
