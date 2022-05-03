@@ -201,6 +201,8 @@ public struct LogConfig {
         /// Request AttributionToken error
         case ResolvedAttributionTokenError
         case ResolvedAttributionTokenRetryError
+        /// Log first navigation
+        case FirstNavigation
 
         // MARK: promo card
         /// Promo card is rendered on screen
@@ -543,6 +545,7 @@ public struct LogConfig {
         case .ResolvedAttributionToken: return .FirstRun
         case .ResolvedAttributionTokenError: return .FirstRun
         case .ResolvedAttributionTokenRetryError: return .FirstRun
+        case .FirstNavigation: return . FirstRun
 
         // MARK: - PromoCard
         case .PromoCardAppear: return .PromoCard
