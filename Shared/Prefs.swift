@@ -232,6 +232,11 @@ extension Defaults.Keys {
 
     public static let lastReportedConversionEvent = Defaults.Key<Int>(
         "lastReportedConversionEvent", default: -1)
+
+    public static let hasLogErrorFromFirstRunEvent = Defaults.Key<Bool>(
+        "hasLogErrorFromFirstRunEvent", default: false)
+    public static let lastFirstRunEventLogError = Defaults.Key<String>(
+        "lastFirstRunEventLogError", default: "")
 }
 
 // MARK: - Defaults Extension

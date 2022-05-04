@@ -203,6 +203,8 @@ public struct LogConfig {
         case ResolvedAttributionTokenRetryError
         /// Log first navigation
         case FirstNavigation
+        /// Log interstitial logging error
+        case LogErrorForInterstitialEvents
 
         // MARK: promo card
         /// Promo card is rendered on screen
@@ -546,6 +548,7 @@ public struct LogConfig {
         case .ResolvedAttributionTokenError: return .FirstRun
         case .ResolvedAttributionTokenRetryError: return .FirstRun
         case .FirstNavigation: return .FirstRun
+        case .LogErrorForInterstitialEvents: return .FirstRun
 
         // MARK: - PromoCard
         case .PromoCardAppear: return .PromoCard
@@ -730,6 +733,8 @@ public struct LogConfig {
         public static let AttributionTokenErrorToken = "AttributionTokenErrorToken"
         public static let AttributionTokenErrorDataStr = "AttributionTokenErrorDataStr"
         public static let AttributionTokenErrorResponseCode = "AttributionTokenErrorResponseCode"
+        /// First Run Logging Error
+        public static let FirstRunLogErrorMessage = "FirstRunLogErrorMessage"
     }
 
     public struct UIInteractionAttribute {
