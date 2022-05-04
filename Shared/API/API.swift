@@ -18051,6 +18051,229 @@ public final class GetRelatedSpacesQuery: GraphQLQuery {
   }
 }
 
+public final class GetRelatedSpacesCountQuery: GraphQLQuery {
+  /// The raw GraphQL definition of this operation.
+  public let operationDefinition: String =
+    """
+    query GetRelatedSpacesCount($spaceID: String!) {
+      getRelatedSpaces(input: {spaceID: $spaceID}) {
+        __typename
+        sharedAuthor {
+          __typename
+          space {
+            __typename
+            pageMetadata {
+              __typename
+              pageID
+            }
+          }
+        }
+      }
+    }
+    """
+
+  public let operationName: String = "GetRelatedSpacesCount"
+
+  public let operationIdentifier: String? = "290ea913d0b86ef24e39dd525ea3fff115086a39e162dea760ad4830c4129f70"
+
+  public var spaceID: String
+
+  public init(spaceID: String) {
+    self.spaceID = spaceID
+  }
+
+  public var variables: GraphQLMap? {
+    return ["spaceID": spaceID]
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["Query"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("getRelatedSpaces", arguments: ["input": ["spaceID": GraphQLVariable("spaceID")]], type: .object(GetRelatedSpace.selections)),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(getRelatedSpaces: GetRelatedSpace? = nil) {
+      self.init(unsafeResultMap: ["__typename": "Query", "getRelatedSpaces": getRelatedSpaces.flatMap { (value: GetRelatedSpace) -> ResultMap in value.resultMap }])
+    }
+
+    /// Returns a list of public spaces related to the given space
+    public var getRelatedSpaces: GetRelatedSpace? {
+      get {
+        return (resultMap["getRelatedSpaces"] as? ResultMap).flatMap { GetRelatedSpace(unsafeResultMap: $0) }
+      }
+      set {
+        resultMap.updateValue(newValue?.resultMap, forKey: "getRelatedSpaces")
+      }
+    }
+
+    public struct GetRelatedSpace: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["GetRelatedSpacesResponse"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("sharedAuthor", type: .object(SharedAuthor.selections)),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(sharedAuthor: SharedAuthor? = nil) {
+        self.init(unsafeResultMap: ["__typename": "GetRelatedSpacesResponse", "sharedAuthor": sharedAuthor.flatMap { (value: SharedAuthor) -> ResultMap in value.resultMap }])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      public var sharedAuthor: SharedAuthor? {
+        get {
+          return (resultMap["sharedAuthor"] as? ResultMap).flatMap { SharedAuthor(unsafeResultMap: $0) }
+        }
+        set {
+          resultMap.updateValue(newValue?.resultMap, forKey: "sharedAuthor")
+        }
+      }
+
+      public struct SharedAuthor: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["SpaceList"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("space", type: .nonNull(.list(.nonNull(.object(Space.selections))))),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(space: [Space]) {
+          self.init(unsafeResultMap: ["__typename": "SpaceList", "space": space.map { (value: Space) -> ResultMap in value.resultMap }])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        public var space: [Space] {
+          get {
+            return (resultMap["space"] as! [ResultMap]).map { (value: ResultMap) -> Space in Space(unsafeResultMap: value) }
+          }
+          set {
+            resultMap.updateValue(newValue.map { (value: Space) -> ResultMap in value.resultMap }, forKey: "space")
+          }
+        }
+
+        public struct Space: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["Space"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("pageMetadata", type: .object(PageMetadatum.selections)),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(pageMetadata: PageMetadatum? = nil) {
+            self.init(unsafeResultMap: ["__typename": "Space", "pageMetadata": pageMetadata.flatMap { (value: PageMetadatum) -> ResultMap in value.resultMap }])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          public var pageMetadata: PageMetadatum? {
+            get {
+              return (resultMap["pageMetadata"] as? ResultMap).flatMap { PageMetadatum(unsafeResultMap: $0) }
+            }
+            set {
+              resultMap.updateValue(newValue?.resultMap, forKey: "pageMetadata")
+            }
+          }
+
+          public struct PageMetadatum: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["PageMetadata"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("pageID", type: .scalar(String.self)),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(pageId: String? = nil) {
+              self.init(unsafeResultMap: ["__typename": "PageMetadata", "pageID": pageId])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            /// An optional identifier for the page.
+            public var pageId: String? {
+              get {
+                return resultMap["pageID"] as? String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "pageID")
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 public final class GetSpacesDataQuery: GraphQLQuery {
   /// The raw GraphQL definition of this operation.
   public let operationDefinition: String =

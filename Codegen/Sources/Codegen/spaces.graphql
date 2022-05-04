@@ -207,6 +207,18 @@ query GetRelatedSpaces($spaceID: String!) {
   }
 }
 
+query GetRelatedSpacesCount($spaceID: String!) {
+  getRelatedSpaces(input: { spaceID: $spaceID }) {
+    sharedAuthor {
+      space {
+        pageMetadata {
+          pageID
+        }
+      }
+    }
+  }
+}
+
 query GetSpacesData($ids: [String!]) {
   getSpace(input: { ids: $ids }) {
     space {

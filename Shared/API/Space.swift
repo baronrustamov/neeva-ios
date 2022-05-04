@@ -230,6 +230,37 @@ class RelatedSpacesQueryController: QueryController<
     }
 }
 
+class RelatedSpacesCountQueryController: QueryController<
+    GetRelatedSpacesCountQuery, Int
+>
+{
+
+    private var spaceID: String
+
+    public init(spaceID: String) {
+        self.spaceID = spaceID
+        super.init()
+    }
+
+    override func reload() {
+        self.perform(query: GetRelatedSpacesCountQuery(spaceID: spaceID))
+    }
+
+    override class func processData(_ data: GetRelatedSpacesCountQuery.Data)
+        -> Int
+    {
+        return data.getRelatedSpaces?.sharedAuthor?.space.count ?? 0
+
+    }
+
+    @discardableResult static func getSpacesData(
+        spaceID: String,
+        completion: @escaping (Result<Int, Error>) -> Void
+    ) -> Combine.Cancellable {
+        self.perform(query: GetRelatedSpacesCountQuery(spaceID: spaceID), completion: completion)
+    }
+}
+
 /// Retrieves all space title information for the given spaces
 class SuggestedSpacesQueryController: QueryController<
     GetSpacesTitleInfoQuery, [SuggestedSpacesQueryController.SpaceTitleInfo]

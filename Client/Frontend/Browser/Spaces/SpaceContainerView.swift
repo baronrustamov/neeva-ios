@@ -22,6 +22,7 @@ struct SpaceContainerView: View {
     var onProfileUIDismissed: (() -> Void)? = nil
     var isShowingProfileUI = false
     @State private var showingProfileUI = false
+    @State private var isVerifiedProfile = false
 
     var space: Space? {
         primitive.space
@@ -48,6 +49,7 @@ struct SpaceContainerView: View {
                 EmptyView()
             }
             .frame(width: 0, height: 0)
+
             if !(space?.isDigest ?? false) && primitive.allDetails.isEmpty && primitive.isFollowing
             {
                 EmptySpaceView()
@@ -56,11 +58,28 @@ struct SpaceContainerView: View {
                     primitive: primitive,
                     headerVisible: $headerVisible,
                     onShowProfileUI: {
-                        self.showingProfileUI = true
+                        if isVerifiedProfile {
+                            self.showingProfileUI = true
+                        }
                     })
             }
         }
         .navigationBarHidden(true)
+        .onAppear(perform: {
+            getSpacesCount()
+        })
+    }
+
+    private func getSpacesCount() {
+        guard let id = space?.id.id else { return }
+        SpaceStore.shared.getRelatedSpacesCount(with: id) { result in
+            switch result {
+            case .success(let count):
+                self.isVerifiedProfile = count > 0
+            case .failure:
+                return
+            }
+        }
     }
 
 }

@@ -663,4 +663,17 @@ public class SpaceStore: ObservableObject {
             }
         }
     }
+
+    public func getRelatedSpacesCount(
+        with spaceID: String, onCompletion completion: @escaping (Result<Int, Error>) -> Void
+    ) {
+        RelatedSpacesCountQueryController.getSpacesData(spaceID: spaceID) { result in
+            switch result {
+            case .success(let count):
+                completion(.success(count))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
 }
