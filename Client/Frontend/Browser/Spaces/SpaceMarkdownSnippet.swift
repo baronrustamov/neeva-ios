@@ -7,6 +7,7 @@ import SwiftUI
 struct SpaceMarkdownSnippet: View {
     let showDescriptions: Bool
     let snippet: String
+    var foregroundColor: Color = .secondaryLabel
 
     @ViewBuilder
     var content: some View {
@@ -25,7 +26,8 @@ struct SpaceMarkdownSnippet: View {
     var body: some View {
         content
             .lineLimit(showDescriptions ? nil : 3)
-            .modifier(DescriptionTextModifier())
+            .foregroundColor(foregroundColor)
             .fixedSize(horizontal: false, vertical: showDescriptions)
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
 }

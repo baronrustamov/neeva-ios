@@ -15,7 +15,7 @@ public struct SpaceID: Hashable, Identifiable {
 }
 
 public struct SpaceCommentData {
-    public typealias Profile = GetSpacesDataQuery.Data.GetSpace.Space.Space.Comment.Profile
+    public typealias Profile = SpacesMetadata.Comment.Profile
     public let id: String
     public let profile: Profile
     public let createdTs: String
@@ -62,6 +62,7 @@ public struct SpaceGeneratorData {
 public class Space: Hashable, Identifiable {
     public typealias Acl = ListSpacesQuery.Data.ListSpace.Space.Space.Acl
     public typealias Notification = ListSpacesQuery.Data.ListSpace.Space.Space.Notification
+    public typealias Owner = SpacesMetadata.Owner
 
     public var id: SpaceID
     public var name: String
@@ -78,12 +79,14 @@ public class Space: Hashable, Identifiable {
     public let acls: [Acl]
     public let notifications: [Notification]?
     public var isDigest = false
+    public var owner: Owner?
 
     init(
         id: SpaceID, name: String, description: String? = nil, followers: Int? = nil,
         views: Int? = nil, lastModifiedTs: String, thumbnail: String?,
         resultCount: Int, isDefaultSpace: Bool, isShared: Bool, isPublic: Bool,
-        userACL: SpaceACLLevel, acls: [Acl] = [], notifications: [Notification]? = nil
+        userACL: SpaceACLLevel, acls: [Acl] = [], notifications: [Notification]? = nil,
+        owner: Owner? = nil
     ) {
         self.id = id
         self.name = name
@@ -99,6 +102,7 @@ public class Space: Hashable, Identifiable {
         self.userACL = userACL
         self.acls = acls
         self.notifications = notifications
+        self.owner = owner
     }
 
     init(from model: SpacesDataQueryController.Space) {
@@ -114,8 +118,10 @@ public class Space: Hashable, Identifiable {
         self.isShared = false
         self.isPublic = true
         self.userACL = .publicView
+        self.owner = model.owner
         self.acls = []
         self.notifications = nil
+        self.contentData = model.entities
     }
 
     public var url: URL {
@@ -292,7 +298,7 @@ public class SpaceStore: ObservableObject {
                 id: SpaceID(value: id), name: "", description: nil,
                 followers: nil, views: nil, lastModifiedTs: "", thumbnail: nil, resultCount: 1,
                 isDefaultSpace: false, isShared: false, isPublic: true, userACL: .publicView,
-                acls: [], notifications: []))
+                acls: [], notifications: [], owner: nil))
         refreshSpace(spaceID: id)
         GraphQLAPI.shared.isAnonymous = false
     }
@@ -323,7 +329,6 @@ public class SpaceStore: ObservableObject {
                 case .success(let data):
                     if let model = data.first {
                         let space = Space(from: model)
-                        space.contentData = model.entities
                         completion(.success(space))
                     }
                 case .failure(let error):
@@ -408,7 +413,10 @@ public class SpaceStore: ObservableObject {
                     isPublic: space.hasPublicAcl ?? false,
                     userACL: userAcl,
                     acls: space.acl ?? [],
-                    notifications: space.notifications
+                    notifications: space.notifications,
+                    owner: SpacesMetadata.Owner(
+                        displayName: space.owner?.displayName ?? "",
+                        pictureUrl: space.owner?.pictureUrl ?? "")
                 )
 
                 /// Note, we avoid parsing `lastModifiedTs` here and instead just use it as
@@ -641,5 +649,18 @@ public class SpaceStore: ObservableObject {
             " \(spaces.count > 1 ? "were" : "was") updated with \(numberOfChanges) \(numberOfChanges > 1 ? "items" : "item") total"
 
         return description
+    }
+
+    public func getRelatedSpaces(
+        with spaceID: String, onCompletion completion: @escaping (Result<[Space], Error>) -> Void
+    ) {
+        RelatedSpacesQueryController.getSpacesData(spaceID: spaceID) { result in
+            switch result {
+            case .success(let response):
+                completion(.success(response.map({ Space(from: $0) })))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
     }
 }

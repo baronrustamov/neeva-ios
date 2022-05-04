@@ -9,6 +9,8 @@ import SwiftUI
 struct SpaceHeaderView: View {
     @EnvironmentObject var spaceModel: SpaceCardModel
     let space: Space
+    // This fixes iPad auto pop problem
+    var onShowProfileUI: () -> Void
 
     var owner: Space.Acl? {
         space.acls.first(where: { $0.acl == .owner })
@@ -25,27 +27,9 @@ struct SpaceHeaderView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text(displayTitle)
-                .withFont(.displayMedium)
-                .foregroundColor(.label)
-                .fixedSize(horizontal: false, vertical: true)
-                .lineLimit(2)
-            SpaceACLView(isPublic: space.isPublic, acls: space.acls)
-            if let description = space.description, !description.isEmpty {
-                if #available(iOS 15.0, *),
-                    let attributedDescription = try? AttributedString(markdown: description)
-                {
-                    Text(attributedDescription)
-                        .withFont(.bodyLarge)
-                        .foregroundColor(.label)
-                        .fixedSize(horizontal: false, vertical: true)
-                } else {
-                    Text(description)
-                        .withFont(.bodyLarge)
-                        .foregroundColor(.label)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-            }
+            titleView
+            aclView
+            descriptionView
             if !space.isDigest {
                 if space.isPublic {
                     if let followers = space.followers {
@@ -82,15 +66,43 @@ struct SpaceHeaderView: View {
         .background(Color.DefaultBackground)
 
     }
+
+    private var titleView: some View {
+        Text(displayTitle)
+            .withFont(.displayMedium)
+            .foregroundColor(.label)
+            .fixedSize(horizontal: false, vertical: true)
+            .lineLimit(2)
+    }
+
+    private var aclView: some View {
+        ZStack(alignment: .leading) {
+            Button(
+                action: {
+                    self.onShowProfileUI()
+                },
+                label: {
+                    SpaceACLView(isPublic: space.isPublic, acls: space.acls, owner: space.owner)
+                })
+        }
+    }
+
+    @ViewBuilder var descriptionView: some View {
+        if let description = space.description, !description.isEmpty {
+            SpaceMarkdownSnippet(
+                showDescriptions: true,
+                snippet: description,
+                foregroundColor: .label
+            )
+        }
+    }
 }
 
 struct SpaceACLView: View {
     let isPublic: Bool
     let acls: [Space.Acl]
 
-    var owner: Space.Acl? {
-        acls.first(where: { $0.acl == .owner })
-    }
+    var owner: SpacesMetadata.Owner?
 
     var secondACL: Space.Acl? {
         return acls.first(where: { $0.acl != .owner })
@@ -108,7 +120,7 @@ struct SpaceACLView: View {
     }
 
     var body: some View {
-        if let owner = owner?.profile {
+        if let owner = owner {
             if isPublic {
                 HStack(spacing: 12) {
                     ProfileImageView(pictureURL: owner.pictureUrl, displayName: owner.displayName)

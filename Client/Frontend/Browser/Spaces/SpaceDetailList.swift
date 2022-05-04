@@ -16,10 +16,9 @@ struct SpaceDetailList: View {
     @EnvironmentObject var spacesModel: SpaceCardModel
     @Environment(\.onOpenURLForSpace) var onOpenURLForSpace
     @Environment(\.shareURL) var shareURL
-
     @ObservedObject var primitive: SpaceCardDetails
     @Binding var headerVisible: Bool
-
+    var onShowProfileUI: () -> Void
     @State var addingComment = false
     @StateObject var spaceCommentsModel = SpaceCommentsModel()
 
@@ -83,7 +82,7 @@ struct SpaceDetailList: View {
                     }
 
                     if let space = space {
-                        SpaceHeaderView(space: space)
+                        SpaceHeaderView(space: space, onShowProfileUI: onShowProfileUI)
                             .modifier(ListSeparatorModifier())
                             .iPadOnlyID()
                             .onAppear {

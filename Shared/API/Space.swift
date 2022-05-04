@@ -41,6 +41,7 @@ class SpacesDataQueryController: QueryController<
         var description: String?
         var followers: Int?
         var views: Int?
+        var owner: SpacesMetadata.Owner?
         var entities: [SpaceEntityData]
         var comments: [SpaceCommentData]
         var generators: [SpaceGeneratorData]
@@ -57,13 +58,16 @@ class SpacesDataQueryController: QueryController<
         self.perform(query: GetSpacesDataQuery(ids: spaceIds))
     }
 
-    override class func processData(_ data: GetSpacesDataQuery.Data) -> [Space] {
+    override class func processData(_ data: GetSpacesDataQuery.Data) -> [SpacesDataQueryController
+        .Space]
+    {
         var result: [Space] = []
         if let spaces = data.getSpace?.space {
             for space in spaces {
+
                 if let id = space.pageMetadata?.pageId, let name = space.space?.name {
                     var spaceEntities: [SpaceEntityData] = []
-                    if let entities = space.space?.entities {
+                    if let entities = space.space?.fragments.spacesMetadata.entities {
                         for entity in entities {
                             guard let spaceEntity = entity.spaceEntity else {
                                 continue
@@ -95,7 +99,7 @@ class SpacesDataQueryController: QueryController<
                         }
                     }
                     var spaceComments: [SpaceCommentData] = []
-                    if let comments = space.space?.comments {
+                    if let comments = space.space?.fragments.spacesMetadata.comments {
                         for comment in comments {
                             if let id = comment.id, let profile = comment.profile,
                                 let createdTs = comment.createdTs, let comment = comment.comment
@@ -115,6 +119,7 @@ class SpacesDataQueryController: QueryController<
                         Space(
                             id: id, name: name, description: space.space?.description,
                             followers: space.stats?.followers, views: space.stats?.views,
+                            owner: space.space?.fragments.spacesMetadata.owner,
                             entities: spaceEntities, comments: spaceComments,
                             generators: spaceGenerators))
                 }
@@ -125,9 +130,103 @@ class SpacesDataQueryController: QueryController<
 
     @discardableResult static func getSpacesData(
         spaceIds: [String],
-        completion: @escaping (Result<[Space], Error>) -> Void
+        completion: @escaping (Result<[SpacesDataQueryController.Space], Error>) -> Void
     ) -> Combine.Cancellable {
         Self.perform(query: GetSpacesDataQuery(ids: spaceIds), completion: completion)
+    }
+}
+
+class RelatedSpacesQueryController: QueryController<
+    GetRelatedSpacesQuery, [SpacesDataQueryController.Space]
+>
+{
+
+    private var spaceID: String
+
+    public init(spaceID: String) {
+        self.spaceID = spaceID
+        super.init()
+    }
+
+    override func reload() {
+        self.perform(query: GetRelatedSpacesQuery(spaceID: spaceID))
+    }
+
+    override class func processData(_ data: GetRelatedSpacesQuery.Data)
+        -> [SpacesDataQueryController.Space]
+    {
+        var result: [SpacesDataQueryController.Space] = []
+        if let spaces = data.getRelatedSpaces?.sharedAuthor?.space {
+            for space in spaces {
+
+                if let id = space.pageMetadata?.pageId, let name = space.space?.name {
+                    var spaceEntities: [SpaceEntityData] = []
+                    if let entities = space.space?.fragments.spacesMetadata.entities {
+                        for entity in entities {
+                            guard let spaceEntity = entity.spaceEntity else {
+                                continue
+                            }
+                            spaceEntities.append(
+                                SpaceEntityData(
+                                    id: entity.metadata?.docId ?? "unknown-id",
+                                    url: URL(string: spaceEntity.url ?? ""),
+                                    title: spaceEntity.title,
+                                    snippet: spaceEntity.snippet,
+                                    thumbnail: spaceEntity.thumbnail,
+                                    previewEntity: SpaceEntityData.previewEntity(from: spaceEntity),
+                                    generatorID: spaceEntity.generator?.id)
+                            )
+                        }
+                    }
+                    var spaceGenerators: [SpaceGeneratorData] = []
+                    if let generators = space.space?.generators {
+                        for generator in generators {
+                            if let params = SpaceGeneratorData.params(from: generator.params ?? "")
+                            {
+                                spaceGenerators.append(
+                                    SpaceGeneratorData(
+                                        id: generator.id,
+                                        params: params
+                                    )
+                                )
+                            }
+                        }
+                    }
+                    var spaceComments: [SpaceCommentData] = []
+                    if let comments = space.space?.fragments.spacesMetadata.comments {
+                        for comment in comments {
+                            if let id = comment.id, let profile = comment.profile,
+                                let createdTs = comment.createdTs, let comment = comment.comment
+                            {
+                                spaceComments.append(
+                                    SpaceCommentData(
+                                        id: id,
+                                        profile: profile,
+                                        createdTs: createdTs,
+                                        comment: comment
+                                    )
+                                )
+                            }
+                        }
+                    }
+                    result.append(
+                        SpacesDataQueryController.Space(
+                            id: id, name: name, description: space.space?.description,
+                            followers: space.stats?.followers, views: space.stats?.views,
+                            owner: space.space?.fragments.spacesMetadata.owner,
+                            entities: spaceEntities, comments: spaceComments,
+                            generators: spaceGenerators))
+                }
+            }
+        }
+        return result
+    }
+
+    @discardableResult static func getSpacesData(
+        spaceID: String,
+        completion: @escaping (Result<[SpacesDataQueryController.Space], Error>) -> Void
+    ) -> Combine.Cancellable {
+        Self.perform(query: GetRelatedSpacesQuery(spaceID: spaceID), completion: completion)
     }
 }
 

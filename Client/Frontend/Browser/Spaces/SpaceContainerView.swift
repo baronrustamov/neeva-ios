@@ -19,6 +19,9 @@ enum SpaceViewUX {
 struct SpaceContainerView: View {
     @State private var headerVisible = true
     @ObservedObject var primitive: SpaceCardDetails
+    var onProfileUIDismissed: (() -> Void)? = nil
+    var isShowingProfileUI = false
+    @State private var showingProfileUI = false
 
     var space: Space? {
         primitive.space
@@ -26,12 +29,35 @@ struct SpaceContainerView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            SpaceTopView(primitive: primitive, headerVisible: $headerVisible)
+            SpaceTopView(
+                primitive: primitive, headerVisible: $headerVisible,
+                isShowingProfileUI: isShowingProfileUI,
+                onProfileUIDismissed: onProfileUIDismissed)
+            NavigationLink(isActive: $showingProfileUI) {
+                if let space = space {
+                    SpacesProfileView(
+                        spaceId: space.id.id,
+                        onBackTap: {
+                            self.showingProfileUI = false
+                        },
+                        owner: space.owner
+                    )
+                }
+
+            } label: {
+                EmptyView()
+            }
+            .frame(width: 0, height: 0)
             if !(space?.isDigest ?? false) && primitive.allDetails.isEmpty && primitive.isFollowing
             {
                 EmptySpaceView()
             } else {
-                SpaceDetailList(primitive: primitive, headerVisible: $headerVisible)
+                SpaceDetailList(
+                    primitive: primitive,
+                    headerVisible: $headerVisible,
+                    onShowProfileUI: {
+                        self.showingProfileUI = true
+                    })
             }
         }
         .navigationBarHidden(true)

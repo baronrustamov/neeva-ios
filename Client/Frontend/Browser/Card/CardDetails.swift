@@ -505,6 +505,10 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
         spaceRef ?? manager.get(for: id)
     }
 
+    var title: String {
+        space?.displayTitle ?? ""
+    }
+
     private var spaceRef: Space? = nil
 
     init(space: Space, manager: SpaceStore) {

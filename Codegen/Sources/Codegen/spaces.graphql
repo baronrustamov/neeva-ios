@@ -1,3 +1,111 @@
+fragment spacesMetadata on SpaceData {
+    name
+    description
+    owner {
+        displayName
+        pictureURL
+    }
+    generators {
+        id
+        params
+    }
+    comments {
+        id
+        profile {
+        displayName
+        pictureURL
+        }
+    createdTs
+        comment
+    }
+    entities {
+        metadata {
+        docID
+        }
+        spaceEntity {
+        url
+        title
+        snippet
+        thumbnail
+        generator {
+            id
+        }
+        content {
+            id
+            title
+            snippet
+            __typename
+            typeSpecific {
+            __typename
+            ... on TechDoc {
+                techDoc {
+                name
+                sections {
+                    body
+                }
+                }
+            }
+            ... on NewsItem {
+                newsItem {
+                title
+                snippet
+                url
+                thumbnailImage {
+                    url
+                }
+                providerName
+                datePublished
+                favIconURL
+                preference
+                domain
+                }
+            }
+            ... on Web {
+                web {
+                retailerProduct {
+                    url
+                    name
+                    description
+                    priceHistory {
+                    currentPrice
+                    }
+                    reviews {
+                    ratingSummary {
+                        numReviews
+                        rating {
+                        productStars
+                        }
+                    }
+                    }
+                }
+                recipes {
+                    title
+                    imageURL
+                    source
+                    totalTime
+                    recipeRating {
+                    recipeStars
+                    numReviews
+                    }
+                }
+                }
+            }
+            ... on RichEntity {
+                richEntity {
+                images {
+                    thumbnailURL
+                }
+                title
+                subTitle
+                }
+            }
+            }
+            actionURL
+        }
+        }
+    }
+}
+
 query ListSpaces($kind: ListSpacesKind = All) {
   listSpaces(input: {kind: $kind}) {
     requestID
@@ -8,6 +116,10 @@ query ListSpaces($kind: ListSpacesKind = All) {
       space {
         name
         lastModifiedTs
+        owner {
+            displayName
+            pictureURL
+        }
         notifications(input: {kind: HomeFeed}) {
           type
           timestamp
@@ -76,6 +188,25 @@ query GetSpacesTitleInfo($ids: [String!]) {
   }
 }
 
+query GetRelatedSpaces($spaceID: String!) {
+  getRelatedSpaces(input: { spaceID: $spaceID }) {
+    sharedAuthor {
+      space {
+        stats {
+          followers
+          views
+        }
+        pageMetadata {
+          pageID
+        }
+        space {
+          ...spacesMetadata
+        }
+      }
+    }
+  }
+}
+
 query GetSpacesData($ids: [String!]) {
   getSpace(input: { ids: $ids }) {
     space {
@@ -87,107 +218,7 @@ query GetSpacesData($ids: [String!]) {
         pageID
       }
       space {
-        name
-        description
-        generators {
-          id
-          params
-        }
-        comments {
-          id
-          profile {
-            displayName
-            pictureURL
-          }
-          createdTs
-          comment
-        }
-        entities {
-          metadata {
-            docID
-          }
-          spaceEntity {
-            url
-            title
-            snippet
-            thumbnail
-            generator {
-                id
-            }
-            content {
-              id
-              title
-              snippet
-              __typename
-              typeSpecific {
-                __typename
-                ... on TechDoc {
-                  techDoc {
-                    name
-                    sections {
-                      body
-                    }
-                  }
-                }
-                ... on NewsItem {
-                  newsItem {
-                    title
-                    snippet
-                    url
-                    thumbnailImage {
-                      url
-                    }
-                    providerName
-                    datePublished
-                    favIconURL
-                    preference
-                    domain
-                  }
-                }
-                ... on Web {
-                  web {
-                    retailerProduct {
-                      url
-                      name
-                      description
-                      priceHistory {
-                        currentPrice
-                      }
-                      reviews {
-                        ratingSummary {
-                          numReviews
-                          rating {
-                            productStars
-                          }
-                        }
-                      }
-                    }
-                    recipes {
-                      title
-                      imageURL
-                      source
-                      totalTime
-                      recipeRating {
-                        recipeStars
-                        numReviews
-                      }
-                    }
-                  }
-                }
-                ... on RichEntity {
-                  richEntity {
-                    images {
-                      thumbnailURL
-                    }
-                    title
-                    subTitle
-                  }
-                }
-              }
-              actionURL
-            }
-          }
-        }
+        ...spacesMetadata
       }
     }
   }
