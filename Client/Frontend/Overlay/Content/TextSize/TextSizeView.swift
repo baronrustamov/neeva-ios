@@ -19,7 +19,7 @@ struct TextSizeView: View {
 
                     Color.groupedBackground.frame(height: 1)
 
-                    GroupedCellButton("Reset") { model.pageZoom = 1 }
+                    GroupedCellButton("Reset", action: model.resetZoom)
                         .accentColor(.red)
 
                     Color.groupedBackground.frame(height: 1)

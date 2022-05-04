@@ -42,7 +42,8 @@ extension SavedTab {
             pinnedTime: tab.pinnedTime, lastExecutedTIme: tab.lastExecutedTime,
             faviconURL: tab.displayFavicon?.url, url: tab.url, sessionData: sessionData,
             uuid: tab.tabUUID, rootUUID: tab.rootUUID, parentUUID: tab.parentUUID ?? "",
-            tabIndex: tabIndex, parentSpaceID: tab.parentSpaceID ?? "")
+            tabIndex: tabIndex, parentSpaceID: tab.parentSpaceID ?? "",
+            pageZoom: tab.pageZoom)
     }
 
     func configureTab(_ tab: Tab, imageStore: DiskImageStore? = nil) {
@@ -84,5 +85,6 @@ extension SavedTab {
         tab.tabUUID = UUID ?? ""
         tab.rootUUID = rootUUID ?? ""
         tab.parentSpaceID = parentSpaceID ?? ""
+        tab.pageZoom = pageZoom ?? 1.0
     }
 }

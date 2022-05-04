@@ -22,9 +22,7 @@ struct TextSizeStepper: View {
 
                     Spacer()
 
-                    Button {
-                        model.pageZoom = 1
-                    } label: {
+                    Button(action: model.resetZoom) {
                         Symbol(decorative: .textformatSize, style: .headingLarge)
                             .foregroundColor(.label)
                     }
