@@ -162,8 +162,7 @@ extension BrowserViewController {
             NeevaExperiment.logStartExperiment(for: .notificatonPromptOnAppLaunch)
 
             if arm == .askForNotificatonPromptOnAppLaunch {
-                NotificationPermissionHelper.shared.requestPermissionIfNeeded(
-                    openSettingsIfNeeded: false, callSite: .appLaunch)
+                NotificationPermissionHelper.shared.requestPermissionIfNeeded(callSite: .appLaunch)
             }
         }
     }

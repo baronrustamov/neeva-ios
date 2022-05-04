@@ -322,7 +322,7 @@ struct DefaultBrowserInterstitialOnboardingView: View {
 
     private func tapRemindMe() {
         NotificationPermissionHelper.shared.requestPermissionIfNeeded(
-            openSettingsIfNeeded: false, callSite: .defaultBrowserInterstitial
+            callSite: .defaultBrowserInterstitial
         ) { authorized in
             if authorized {
                 LocalNotifications.scheduleNeevaOnboardingCallback(

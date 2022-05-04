@@ -22,7 +22,7 @@ struct NotificationSettingsView: View {
                 if NotificationPermissionHelper.shared.permissionStatus != .authorized {
                     Button {
                         NotificationPermissionHelper.shared.requestPermissionIfNeeded(
-                            openSettingsIfNeeded: true, callSite: .settings)
+                            showChangeInSettingsDialogIfNeeded: true, callSite: .settings)
                     } label: {
                         Text("Show Notification Auth Prompt")
                             .foregroundColor(Color.label)
@@ -39,7 +39,7 @@ struct NotificationSettingsView: View {
 
                 Button {
                     NotificationPermissionHelper.shared.requestPermissionIfNeeded(
-                        openSettingsIfNeeded: false, callSite: .defaultBrowserInterstitial
+                        callSite: .defaultBrowserInterstitial
                     ) { authorized in
                         if authorized {
                             DispatchQueue.main.async {

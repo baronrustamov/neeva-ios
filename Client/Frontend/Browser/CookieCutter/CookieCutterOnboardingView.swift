@@ -9,6 +9,7 @@ struct CookieCutterOnboardingView: View {
     @EnvironmentObject var trackingStatsViewModel: TrackingStatsViewModel
 
     let onOpenMyCookieCutter: () -> Void
+    let onRemindMeLater: () -> Void
     let onDismiss: () -> Void
 
     var body: some View {
@@ -47,19 +48,9 @@ struct CookieCutterOnboardingView: View {
                             .withFont(.labelLarge)
                             .foregroundColor(.brand.white)
                             .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(.neeva(.primary))
+                    }.buttonStyle(.neeva(.primary))
 
-                    Button {
-                        NotificationPermissionHelper.shared.requestPermissionIfNeeded(
-                            openSettingsIfNeeded: false, callSite: .defaultBrowserInterstitial
-                        ) { authorized in
-                            if authorized {
-                                LocalNotifications.scheduleNeevaOnboardingCallback(
-                                    notificationType: .neevaOnboardingCookieCutter)
-                            }
-                        }
-                    } label: {
+                    Button(action: onRemindMeLater) {
                         Text("Remind Me Later")
                             .withFont(.labelLarge)
                             .foregroundColor(.ui.adaptive.blue)
@@ -75,10 +66,9 @@ struct CookieCutterOnboardingView: View {
 
 struct CookieCutterOnboardingView_Previews: PreviewProvider {
     static var previews: some View {
-        CookieCutterOnboardingView {
-        } onDismiss: {
-        }.environmentObject(
-            TrackingStatsViewModel(
-                testingData: .init(numTrackers: 57, numDomains: 57, trackingEntities: [])))
+        CookieCutterOnboardingView(onOpenMyCookieCutter: {}, onRemindMeLater: {}, onDismiss: {})
+            .environmentObject(
+                TrackingStatsViewModel(
+                    testingData: .init(numTrackers: 57, numDomains: 57, trackingEntities: [])))
     }
 }

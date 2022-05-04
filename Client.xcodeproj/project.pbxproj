@@ -74,9 +74,11 @@
 		206954A827FF449E000360D6 /* RecentlyClosedTabsPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206954A727FF449E000360D6 /* RecentlyClosedTabsPanelView.swift */; };
 		209CD9A327DBF9F20069675C /* TabGroupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209CD9A227DBF9F20069675C /* TabGroupTests.swift */; };
 		20A5D15327F6A43E00DB88FE /* HistoryPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A5D15227F6A43E00DB88FE /* HistoryPanelView.swift */; };
-		20D297F6281DAA3B0036DDBA /* ZombieTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D297F5281DAA3B0036DDBA /* ZombieTabTests.swift */; };
+		20BB666C2821E0F0001FA7E9 /* ChangeNotificationPreferenceDialogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BB666B2821E0F0001FA7E9 /* ChangeNotificationPreferenceDialogView.swift */; };
+		20BB666E28220F11001FA7E9 /* ChangeNotificationPreferenceDialogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BB666B2821E0F0001FA7E9 /* ChangeNotificationPreferenceDialogView.swift */; };
 		20D21E362820C19800A7C384 /* SheetHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205132B028208DB0003AAE96 /* SheetHeader.swift */; };
 		20D21E372820C1A800A7C384 /* CookieCutterOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205132B2282093B0003AAE96 /* CookieCutterOnboardingView.swift */; };
+		20D297F6281DAA3B0036DDBA /* ZombieTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D297F5281DAA3B0036DDBA /* ZombieTabTests.swift */; };
 		20E51A112819D8BB00394720 /* CookieCutterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200976842810EA620055A02B /* CookieCutterHelper.swift */; };
 		20ED47CE27F28235002E3ADF /* BrowserViewController+IntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20ED47CD27F28235002E3ADF /* BrowserViewController+IntroView.swift */; };
 		20F2889227FD1BA9005A8A79 /* HistoryPanelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F2889127FD1BA9005A8A79 /* HistoryPanelModel.swift */; };
@@ -1887,6 +1889,7 @@
 		206954A727FF449E000360D6 /* RecentlyClosedTabsPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyClosedTabsPanelView.swift; sourceTree = "<group>"; };
 		209CD9A227DBF9F20069675C /* TabGroupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupTests.swift; sourceTree = "<group>"; };
 		20A5D15227F6A43E00DB88FE /* HistoryPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPanelView.swift; sourceTree = "<group>"; };
+		20BB666B2821E0F0001FA7E9 /* ChangeNotificationPreferenceDialogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeNotificationPreferenceDialogView.swift; sourceTree = "<group>"; };
 		20D297F5281DAA3B0036DDBA /* ZombieTabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZombieTabTests.swift; sourceTree = "<group>"; };
 		20ED47CD27F28235002E3ADF /* BrowserViewController+IntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+IntroView.swift"; sourceTree = "<group>"; };
 		20F2889127FD1BA9005A8A79 /* HistoryPanelModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPanelModel.swift; sourceTree = "<group>"; };
@@ -3669,6 +3672,7 @@
 				6614ACAF26F16F30003E244C /* NotificationList.swift */,
 				665CA48526F04FA4006E2F4D /* NotificationBadge.swift */,
 				6617174A27573C80005E05F4 /* NotificationViewManager.swift */,
+				20BB666B2821E0F0001FA7E9 /* ChangeNotificationPreferenceDialogView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -7026,6 +7030,7 @@
 				4A42C56D27E58487003B9826 /* WindowManager.swift in Sources */,
 				4A42C56E27E58487003B9826 /* NeevaFeatureFlagSettingsView.swift in Sources */,
 				4A42C56F27E58487003B9826 /* CardTransitionModel.swift in Sources */,
+				20BB666E28220F11001FA7E9 /* ChangeNotificationPreferenceDialogView.swift in Sources */,
 				4A42C57027E58487003B9826 /* OverlayView.swift in Sources */,
 				4A42C57127E58487003B9826 /* NotificationPermissionHelper.swift in Sources */,
 				4A42C57227E58487003B9826 /* LocationViewTouchHandler.swift in Sources */,
@@ -7360,6 +7365,7 @@
 				C832BF8726E3CA0900B9A1F8 /* SendFeedbackPanel.swift in Sources */,
 				C832BF5D26E0A8D500B9A1F8 /* DownloadOverlayContent.swift in Sources */,
 				C99646652655AA9A005FFE83 /* (null) in Sources */,
+				20BB666C2821E0F0001FA7E9 /* ChangeNotificationPreferenceDialogView.swift in Sources */,
 				1AC3F333278CDE7E000CCE09 /* TransitionExtensions.swift in Sources */,
 				66B7A0E926EAF5B000AB751A /* OverlayGenerics.swift in Sources */,
 				66A187C627A1C4DC006B3295 /* GroupedRowButtonView.swift in Sources */,

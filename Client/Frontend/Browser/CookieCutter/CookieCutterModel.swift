@@ -70,6 +70,15 @@ class CookieCutterModel: ObservableObject {
                 CookieCutterOnboardingView {
                     bvc.overlayManager.hideCurrentOverlay(ofPriority: .modal)
                     bvc.trackingStatsViewModel.showTrackingStatsViewPopover = true
+                } onRemindMeLater: {
+                    NotificationPermissionHelper.shared.requestPermissionIfNeeded(
+                        from: bvc,
+                        showChangeInSettingsDialogIfNeeded: true,
+                        callSite: .defaultBrowserInterstitial
+                    ) { _ in
+                        LocalNotifications.scheduleNeevaOnboardingCallback(
+                            notificationType: .neevaOnboardingCookieCutter)
+                    }
                 } onDismiss: {
                     bvc.overlayManager.hideCurrentOverlay(ofPriority: .modal)
                 }
