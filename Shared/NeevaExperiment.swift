@@ -73,11 +73,6 @@ extension NeevaExperiment {
     //    }
 
     /* Experiment Example */
-    public enum DefaultBrowserRemindMeLater: String, ExperimentArms {
-        case control
-        case isInDefaultBrowserEnhancementExp
-    }
-
     public enum PromoCardTypeAfterFirstRun: String, ExperimentArms {
         case control
         case previewSignUp
@@ -93,10 +88,6 @@ extension NeevaExperiment {
 //extension NeevaExperiment.Experiment where Arm == NeevaExperiment.DefaultBrowserV2 {
 //public static let defaultBrowserPromptV2 = Self()
 //}
-
-extension NeevaExperiment.Experiment where Arm == NeevaExperiment.DefaultBrowserRemindMeLater {
-    public static let defaultBrowserRemindMeLater = Self()
-}
 
 extension NeevaExperiment.Experiment
 where Arm == NeevaExperiment.PromoCardTypeAfterFirstRun {

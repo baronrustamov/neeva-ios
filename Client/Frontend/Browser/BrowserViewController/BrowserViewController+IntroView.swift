@@ -129,18 +129,13 @@ extension BrowserViewController {
 
 // MARK: - Default Browser
 extension BrowserViewController {
-    func presentDefaultBrowserFirstRun(isInDefaultBrowserEnhancementExp: Bool = false) {
+    func presentDefaultBrowserFirstRun() {
         // TODO: refactor the logic into view model
         overlayManager.presentFullScreenModal(
             content: AnyView(
-                DefaultBrowserInterstitialWelcomeScreen(
-                    isInDefaultBrowserEnhancementExp: isInDefaultBrowserEnhancementExp
-                ) {
+                DefaultBrowserInterstitialWelcomeScreen {
                     self.overlayManager.hideCurrentOverlay()
                 } buttonAction: {
-                    if !isInDefaultBrowserEnhancementExp {
-                        self.overlayManager.hideCurrentOverlay()
-                    }
                 }
                 .onAppear {
                     AppDelegate.setRotationLock(to: .portrait)

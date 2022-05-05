@@ -170,9 +170,7 @@ class TestAppDelegate: AppDelegate {
         }
 
         if launchArguments.contains(LaunchArguments.ForceExperimentControlArm) {
-            NeevaExperiment.forceExperimentArm(
-                experiment: .defaultBrowserRemindMeLater,
-                experimentArm: NeevaExperiment.DefaultBrowserRemindMeLater.control.rawValue)
+            // placeholder: add any control experiment arm here if needed
         }
 
         // Set signInOnce

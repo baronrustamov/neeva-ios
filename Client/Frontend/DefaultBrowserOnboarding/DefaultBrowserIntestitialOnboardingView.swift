@@ -78,8 +78,6 @@ class DefaultBrowserInterstitialOnboardingViewController: UIHostingController<
 struct DefaultBrowserInterstitialWelcomeScreen: View {
     @State private var switchToDefaultBrowserScreen = false
 
-    var isInDefaultBrowserEnhancementExp: Bool = false
-
     var skipAction: () -> Void
     var buttonAction: () -> Void
 
@@ -87,7 +85,6 @@ struct DefaultBrowserInterstitialWelcomeScreen: View {
         if switchToDefaultBrowserScreen {
             DefaultBrowserInterstitialOnboardingView(
                 trigger: .defaultBrowserFirstScreen,
-                isInDefaultBrowserEnhancementExp: isInDefaultBrowserEnhancementExp,
                 skipAction: skipAction,
                 buttonAction: buttonAction
             )
@@ -158,27 +155,24 @@ struct DefaultBrowserInterstitialOnboardingView: View {
 
     var trigger: OpenDefaultBrowserOnboardingTrigger = .defaultBrowserFirstScreen
     var showSkipButton: Bool = true
-    var isInDefaultBrowserEnhancementExp: Bool = false
 
     var skipAction: () -> Void
     var buttonAction: () -> Void
 
     var body: some View {
         ZStack {
-            if isInDefaultBrowserEnhancementExp {
-                VStack {
-                    HStack {
-                        Spacer()
-                        CloseButton(action: {
-                            tapSkip()
-                            didTakeAction = true
-                        })
-                        .padding(.trailing, 20)
-                        .padding(.top, 40)
-                        .background(Color.clear)
-                    }
+            VStack {
+                HStack {
                     Spacer()
+                    CloseButton(action: {
+                        tapSkip()
+                        didTakeAction = true
+                    })
+                    .padding(.trailing, 20)
+                    .padding(.top, 40)
+                    .background(Color.clear)
                 }
+                Spacer()
             }
             VStack {
                 Spacer()
@@ -290,19 +284,16 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                 if showSkipButton {
                     Button(
                         action: {
-                            isInDefaultBrowserEnhancementExp ? tapRemindMe() : tapSkip()
+                            tapRemindMe()
                             didTakeAction = true
                         },
                         label: {
-                            Text(
-                                isInDefaultBrowserEnhancementExp
-                                    ? "Remind Me Later" : "Skip for Now"
-                            )
-                            .withFont(.labelLarge)
-                            .foregroundColor(.ui.adaptive.blue)
-                            .padding(13)
-                            .frame(maxWidth: .infinity)
-                            .padding(.horizontal, 16)
+                            Text("Remind Me Later")
+                                .withFont(.labelLarge)
+                                .foregroundColor(.ui.adaptive.blue)
+                                .padding(13)
+                                .frame(maxWidth: .infinity)
+                                .padding(.horizontal, 16)
                         }
                     )
                     .padding(.top, 10)
