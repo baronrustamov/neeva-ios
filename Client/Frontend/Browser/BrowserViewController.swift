@@ -212,6 +212,11 @@ class BrowserViewController: UIViewController, ModalPresenter {
         super.init(nibName: nil, bundle: nil)
 
         self.tabManager.cookieCutterModel = browserModel.cookieCutterModel
+        self.tabManager.selectedTabPublisher.dropFirst().sink { [weak self] tab in
+            if tab == nil {
+                self?.showTabTray()
+            }
+        }.store(in: &subscriptions)
 
         chromeModel.topBarDelegate = self
         chromeModel.toolbarDelegate = self

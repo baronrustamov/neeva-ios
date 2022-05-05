@@ -85,7 +85,10 @@ extension TabManager {
         let viableTabs: [Tab] = tab.isIncognito ? incognitoTabs : normalTabs
         let bvc = SceneDelegate.getBVC(with: scene)
 
-        if closedLastNormalTab || closedLastIncognitoTab {
+        if closedLastNormalTab || closedLastIncognitoTab
+            || (FeatureFlag[.enableTimeBasedSwitcher]
+                ? !viableTabs.contains(where: { $0.wasLastExecuted(.today) }) : false)
+        {
             DispatchQueue.main.async {
                 self.selectTab(nil, notify: notify)
                 bvc.showTabTray()
@@ -103,6 +106,7 @@ extension TabManager {
                 }
             }
         }
+
     }
 
     // MARK: - Remove All Tabs

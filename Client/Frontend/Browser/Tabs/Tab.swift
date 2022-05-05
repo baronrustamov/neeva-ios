@@ -40,6 +40,11 @@ protocol TabDelegate {
     @objc optional func tab(_ tab: Tab, willDeleteWebView webView: WKWebView)
 }
 
+enum TimeFilter: String {
+    case today = "Today"
+    case lastWeek = "Last Week"
+}
+
 class Tab: NSObject, ObservableObject {
     let isIncognito: Bool
     @Published var isPinned: Bool = false
@@ -647,6 +652,36 @@ class Tab: NSObject, ObservableObject {
             }
         } else {
             browserViewController?.showAddToSpacesSheet(url: url, title: title, webView: webView)
+        }
+    }
+
+    func wasLastExecuted(_ byTime: TimeFilter) -> Bool {
+        // The fallback value won't be used. tab.lastExecutedTime is
+        // guaranteed to be non-nil in configureTab()
+        let lastExecutedTime = lastExecutedTime ?? Date.nowMilliseconds()
+        let minusOneDayToCurrentDate =
+            FeatureFlag[.demoteAfter15secondsTimeBasedSwitcher]
+            ? Calendar.current.date(
+                byAdding: .second, value: -15, to: Date())
+            : Calendar.current.date(
+                byAdding: .day, value: -1, to: Date())
+        guard let startOfOneDayAgo = minusOneDayToCurrentDate else {
+            return true
+        }
+        // timeIntervalSince1970 returns the number of seconds. It is converted
+        // to milliseconds by multiplying by 1000 to compare with lastExecutedTime
+        // which is stored in milliseconds.
+        switch byTime {
+        case .today:
+            return lastExecutedTime > Int64(startOfOneDayAgo.timeIntervalSince1970 * 1000)
+        case .lastWeek:
+            let minusOneWeekToCurrentDate = Calendar.current.date(
+                byAdding: .day, value: -7, to: Date())
+            guard let startOfLastWeek = minusOneWeekToCurrentDate else {
+                return true
+            }
+            return lastExecutedTime < Int64(startOfOneDayAgo.timeIntervalSince1970 * 1000)
+                && lastExecutedTime > Int64(startOfLastWeek.timeIntervalSince1970 * 1000)
         }
     }
 }

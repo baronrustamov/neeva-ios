@@ -39,8 +39,8 @@ class BrowserModel: ObservableObject {
         if gridModel.switcherState != .tabs {
             gridModel.switcherState = .tabs
         }
-        if gridModel.tabCardModel.getAllDetails(matchingIncognitoState: incognitoModel.isIncognito)
-            .isEmpty
+        if !gridModel.tabCardModel.getAllDetails(matchingIncognitoState: incognitoModel.isIncognito)
+            .contains(where: \.isSelected)
         {
             showGridWithNoAnimation()
         } else {

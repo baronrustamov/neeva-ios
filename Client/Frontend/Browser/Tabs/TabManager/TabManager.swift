@@ -389,9 +389,7 @@ class TabManager: NSObject {
     }
 
     func sendSelectTabNotifications(previous: Tab? = nil) {
-        if let tab = selectedTab {
-            selectedTabPublisher.send(tab)
-        }
+        selectedTabPublisher.send(selectedTab)
 
         if let tab = previous {
             TabEvent.post(.didLoseFocus, for: tab)
@@ -411,7 +409,6 @@ class TabManager: NSObject {
 
         preserveTabs()
     }
-
     // Tab Group related functions
     internal func updateTabGroupsAndSendNotifications(notify: Bool) {
         tabGroups = getAll()
