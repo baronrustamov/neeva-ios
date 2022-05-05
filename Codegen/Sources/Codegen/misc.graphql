@@ -74,6 +74,7 @@ query CheatsheetInfo($input: String!, $title: String) {
         URL
         Title
         Domain
+        Snippet
     }
   }
 }

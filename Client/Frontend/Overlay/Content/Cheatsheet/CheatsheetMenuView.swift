@@ -48,6 +48,7 @@ struct ReviewURLButton: View {
 struct RedditBacklinkButton: View {
     let url: URL
     let title: String?
+    let snippet: String?
 
     @Environment(\.onOpenURLForCheatsheet) var onOpenURLForCheatsheet
 
@@ -55,8 +56,17 @@ struct RedditBacklinkButton: View {
         Button(action: {
             onOpenURLForCheatsheet(url, String(describing: Self.self))
         }) {
-            getHostName(title: title)
+            VStack(alignment: .leading, spacing: 8) {
+                getHostName(title: title)
+                if let snippet = snippet {
+                    Text(snippet)
+                        .withFont(unkerned: .bodyMedium)
+                        .multilineTextAlignment(.leading)
+
+                }
+            }
         }
+        .foregroundColor(.label)
     }
 
     @ViewBuilder
@@ -68,11 +78,10 @@ struct RedditBacklinkButton: View {
         let label = title ?? ""
 
         HStack {
-            Text(label == "" ? lastPath : label).bold()
+            Text(label == "" ? lastPath : label)
         }
-        .withFont(unkerned: .bodyMedium)
+        .withFont(unkerned: .headingSmall)
         .lineLimit(1)
-        .padding(4)
     }
 
 }
@@ -384,17 +393,26 @@ public struct CheatsheetMenuView: View {
     var redditBacklinkSession: some View {
         if let backlinks = model.cheatsheetInfo?.backlinkURL, backlinks.count > 0 {
             VStack(alignment: .leading, spacing: 20) {
-                Text("From Reddit").withFont(.headingMedium)
+                HStack(alignment: .center) {
+                    Text("From Reddit").withFont(.headingXLarge)
+                    Spacer()
+                    Image("reddit-logo")
+                }
+                // only show reddit content until we figure out how to display content from other domain
                 ForEach(0..<backlinks.count) { index in
                     if let urlContent = backlinks[index].url,
-                        let url = URL(string: urlContent)
+                        let url = URL(string: urlContent),
+                        let domain = backlinks[index].domain,
+                        domain == "www.reddit.com"
                     {
                         // construct reddit link
-                        RedditBacklinkButton(url: url, title: backlinks[index].title)
+                        RedditBacklinkButton(
+                            url: url, title: backlinks[index].title,
+                            snippet: backlinks[index].snippet)
                     }
                 }
             }
-            .padding()
+            .padding(.vertical, 12)
         }
     }
 

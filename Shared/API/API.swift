@@ -5332,6 +5332,7 @@ public final class CheatsheetInfoQuery: GraphQLQuery {
           URL
           Title
           Domain
+          Snippet
         }
       }
     }
@@ -5339,7 +5340,7 @@ public final class CheatsheetInfoQuery: GraphQLQuery {
 
   public let operationName: String = "CheatsheetInfo"
 
-  public let operationIdentifier: String? = "422e4417613bf0b750377a4859ed317f52095d0c2bbe507a1552edb5c51c86d5"
+  public let operationIdentifier: String? = "0d5e9df6b7b5107c5c840747e13947eec0f6a3dcca920297ddceed901f4eefdc"
 
   public var input: String
   public var title: String?
@@ -6118,6 +6119,7 @@ public final class CheatsheetInfoQuery: GraphQLQuery {
             GraphQLField("URL", type: .scalar(String.self)),
             GraphQLField("Title", type: .scalar(String.self)),
             GraphQLField("Domain", type: .scalar(String.self)),
+            GraphQLField("Snippet", type: .scalar(String.self)),
           ]
         }
 
@@ -6127,8 +6129,8 @@ public final class CheatsheetInfoQuery: GraphQLQuery {
           self.resultMap = unsafeResultMap
         }
 
-        public init(url: String? = nil, title: String? = nil, domain: String? = nil) {
-          self.init(unsafeResultMap: ["__typename": "BacklinkEntry", "URL": url, "Title": title, "Domain": domain])
+        public init(url: String? = nil, title: String? = nil, domain: String? = nil, snippet: String? = nil) {
+          self.init(unsafeResultMap: ["__typename": "BacklinkEntry", "URL": url, "Title": title, "Domain": domain, "Snippet": snippet])
         }
 
         public var __typename: String {
@@ -6164,6 +6166,15 @@ public final class CheatsheetInfoQuery: GraphQLQuery {
           }
           set {
             resultMap.updateValue(newValue, forKey: "Domain")
+          }
+        }
+
+        public var snippet: String? {
+          get {
+            return resultMap["Snippet"] as? String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "Snippet")
           }
         }
       }
