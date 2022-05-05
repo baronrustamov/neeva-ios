@@ -12,8 +12,6 @@ enum TimeSection: Int, CaseIterable {
     case lastWeek
     case lastMonth
 
-    static let count = 5
-
     var title: String? {
         switch self {
         case .today:
