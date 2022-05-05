@@ -52,10 +52,26 @@ struct HistoryPanelView: View {
     @State var showRecentlyClosedTabs = false
     @State var showClearHistoryMenu = false
 
+    // History search
+    @StateObject var siteFilter = DebounceObject()
+    var useFilteredSites: Bool {
+        !siteFilter.debouncedText.isEmpty
+    }
+
     let onDismiss: () -> Void
 
     var historyList: some View {
         ScrollView {
+            SingleLineTextField(
+                icon: Symbol(decorative: .magnifyingglass, style: .labelLarge),
+                placeholder: "Search your history", text: $siteFilter.text
+            )
+            .padding(.bottom)
+            .accessibilityLabel(Text("History Search TextField"))
+            .onChange(of: siteFilter.debouncedText) { newValue in
+                model.searchForSites(with: newValue)
+            }
+
             // Recently closed tabs and clear history
             GroupedCell.Decoration {
                 VStack(spacing: 0) {
@@ -77,12 +93,15 @@ struct HistoryPanelView: View {
                         EmptyView()
                     }
                 }.accentColor(.label)
-            }.padding(.horizontal)
+            }
 
             // History List
             LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
                 ForEach(TimeSection.allCases, id: \.self) { section in
-                    let itemsInSection = model.groupedSites.itemsForSection(section.rawValue)
+                    let itemsInSection =
+                        useFilteredSites
+                        ? model.filteredSites.itemsForSection(section.rawValue)
+                        : model.groupedSites.itemsForSection(section.rawValue)
 
                     if itemsInSection.count > 0 {
                         Section(header: HistorySectionHeader(section: section)) {
@@ -99,8 +118,12 @@ struct HistoryPanelView: View {
                         }
                     }
                 }
-            }.padding(.top, 20).padding(.horizontal)
-        }.background(Color.groupedBackground.ignoresSafeArea(.container))
+            }.padding(.top, 20)
+        }
+        .padding(.horizontal)
+        .background(
+            Color.groupedBackground.ignoresSafeArea(.container)
+        )
     }
 
     @ViewBuilder

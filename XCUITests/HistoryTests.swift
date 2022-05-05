@@ -304,4 +304,18 @@ class HistoryTests: BaseTestCase {
             XCTAssertTrue(app.sheets.buttons[option].exists)
         }
     }
+
+    func testSearchHistory() {
+        openURL()
+        openURLInNewTab(path(forTestPage: "test-mozilla-book.html"))
+        waitUntilPageLoad()
+
+        goToHistory()
+
+        // Perform search and verify only the correct site is shown.
+        app.textFields["History Search TextField"].tap()
+        app.textFields["History Search TextField"].typeText("example.com")
+        waitForNoExistence(app.buttons["The Book of Mozilla"])
+        waitForExistence(app.staticTexts["https://example.com/"])
+    }
 }

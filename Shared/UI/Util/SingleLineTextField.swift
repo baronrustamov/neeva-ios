@@ -152,6 +152,7 @@ public struct SingleLineTextField<Icon: View>: View {
                 }
                 .accentColor(.tertiaryLabel)
                 .padding(.horizontal, 2)
+                .accessibilityLabel(Text("Clear"))
             }
 
             if let detailText = detailText, !showClearButton {

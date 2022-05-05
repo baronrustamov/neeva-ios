@@ -47,6 +47,9 @@ class HistoryPanelModel: ObservableObject {
 
     @Published var groupedSites = DateGroupedTableData<Site>()
 
+    // History search
+    @Published var filteredSites = DateGroupedTableData<Site>()
+
     var recentlyClosedTabs: [SavedTab] {
         Array(tabManager.recentlyClosedTabs.joined())
     }
@@ -64,27 +67,6 @@ class HistoryPanelModel: ObservableObject {
 
             self.addSiteDataToGroupedSites(result)
         }
-    }
-
-    func loadSiteData() -> Deferred<Maybe<Cursor<Site?>>> {
-        guard !isFetchInProgress, !profile.isShutdown else {
-            dataNeedsToBeReloaded = true
-            return deferMaybe(FetchInProgressError())
-        }
-
-        isFetchInProgress = true
-
-        return profile.history.getSitesByLastVisit(
-            limit: queryFetchLimit, offset: currentFetchOffset) >>== { result in
-                // Force 100ms delay between resolution of the last batch of results
-                // and the next time `fetchData()` can be called.
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    self.currentFetchOffset += self.queryFetchLimit
-                    self.isFetchInProgress = false
-                }
-
-                return deferMaybe(result)
-            }
     }
 
     func addSiteDataToGroupedSites(_ result: Maybe<Cursor<Site?>>) {
@@ -107,6 +89,51 @@ class HistoryPanelModel: ObservableObject {
 
         loadSiteData().uponQueue(.main) { result in
             self.addSiteDataToGroupedSites(result)
+        }
+    }
+
+    func searchForSites(with query: String) {
+        loadSiteData(with: query).uponQueue(.main) { result in
+            self.filteredSites = DateGroupedTableData<Site>()
+
+            if let sites = result.successValue {
+                for site in sites {
+                    guard let site = site as? Site, let latestVisit = site.latestVisit else {
+                        return
+                    }
+
+                    self.filteredSites.add(
+                        site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
+                }
+            }
+        }
+    }
+
+    // Retrieving
+    func loadSiteData() -> Deferred<Maybe<Cursor<Site?>>> {
+        guard !isFetchInProgress, !profile.isShutdown else {
+            dataNeedsToBeReloaded = true
+            return deferMaybe(FetchInProgressError())
+        }
+
+        isFetchInProgress = true
+
+        return profile.history.getSitesByLastVisit(
+            limit: queryFetchLimit, offset: currentFetchOffset) >>== { result in
+                // Force 100ms delay between resolution of the last batch of results
+                // and the next time `fetchData()` can be called.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self.currentFetchOffset += self.queryFetchLimit
+                    self.isFetchInProgress = false
+                }
+
+                return deferMaybe(result)
+            }
+    }
+
+    func loadSiteData(with query: String) -> Deferred<Maybe<Cursor<Site?>>> {
+        return profile.history.getSitesWithQuery(query: query) >>== { result in
+            return deferMaybe(result)
         }
     }
 

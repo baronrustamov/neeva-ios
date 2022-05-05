@@ -28,6 +28,9 @@ class MockableHistory: BrowserHistory, AccountRemovalDelegate, ResettableSyncSto
     func getSitesByLastVisit(limit: Int, offset: Int) -> Deferred<Maybe<Cursor<Site?>>> {
         fatalError()
     }
+    func getSitesWithQuery(query: String) -> Deferred<Maybe<Cursor<Site?>>> {
+        fatalError()
+    }
     func setTopSitesNeedsInvalidation() { fatalError() }
     func updateTopSitesCacheIfInvalidated() -> Deferred<Maybe<Bool>> { fatalError() }
     func setTopSitesCacheSize(_ size: Int32) { fatalError() }

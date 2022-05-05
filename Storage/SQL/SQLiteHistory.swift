@@ -653,20 +653,36 @@ extension SQLiteHistory: BrowserHistory {
         }
     }
 
-    public func getSitesByLastVisit(limit: Int, offset: Int) -> Deferred<Maybe<Cursor<Site?>>> {
-        let sql = """
+    // MARK: - Get Sites
+    // Note: When changing the SQL of one getSite function,
+    // the other should also be updated if applicable.
+    private static func selectSiteSharedSQL() -> String {
+        return """
             SELECT
                 history.id AS historyID, history.url, title, guid, domain_id, domain,
                 coalesce(max(CASE visits.is_local WHEN 1 THEN visits.date ELSE 0 END), 0) AS localVisitDate,
                 coalesce(max(CASE visits.is_local WHEN 0 THEN visits.date ELSE 0 END), 0) AS remoteVisitDate,
                 coalesce(count(visits.is_local), 0) AS visitCount
                 , iconID, iconURL, iconDate, iconType, iconWidth
+            """
+    }
+
+    private static func innerJoinSharedSQL() -> String {
+        return """
+            SELECT siteID, max(date) AS latestVisitDate
+            FROM visits
+            GROUP BY siteID
+            ORDER BY latestVisitDate DESC
+            """
+    }
+
+    public func getSitesByLastVisit(limit: Int, offset: Int) -> Deferred<Maybe<Cursor<Site?>>> {
+        let sql = """
+            \(Self.selectSiteSharedSQL())
+
             FROM history
                 INNER JOIN (
-                    SELECT siteID, max(date) AS latestVisitDate
-                    FROM visits
-                    GROUP BY siteID
-                    ORDER BY latestVisitDate DESC
+                    \(Self.innerJoinSharedSQL())
                     LIMIT \(limit)
                     OFFSET \(offset)
                 ) AS latestVisits ON
@@ -675,6 +691,27 @@ extension SQLiteHistory: BrowserHistory {
                 INNER JOIN visits ON visits.siteID = history.id
                 LEFT OUTER JOIN view_favicons_widest ON view_favicons_widest.siteID = history.id
             WHERE (history.is_deleted = 0)
+            GROUP BY history.id
+            ORDER BY latestVisits.latestVisitDate DESC
+            """
+
+        return db.runQueryConcurrently(
+            sql, args: nil, factory: SQLiteHistory.iconHistoryColumnFactory)
+    }
+
+    public func getSitesWithQuery(query: String) -> Deferred<Maybe<Cursor<Site?>>> {
+        let sql = """
+            \(Self.selectSiteSharedSQL())
+
+            FROM history
+                INNER JOIN (
+                    \(Self.innerJoinSharedSQL())
+                ) AS latestVisits ON
+                    latestVisits.siteID = history.id
+                INNER JOIN domains ON domains.id = history.domain_id
+                INNER JOIN visits ON visits.siteID = history.id
+                LEFT OUTER JOIN view_favicons_widest ON view_favicons_widest.siteID = history.id
+            WHERE (history.is_deleted = 0) AND (lower(title) LIKE '%\(query.lowercased())%' OR lower(history.url) LIKE '%\(query.lowercased())%')
             GROUP BY history.id
             ORDER BY latestVisits.latestVisitDate DESC
             """
