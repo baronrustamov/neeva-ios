@@ -30,12 +30,6 @@ struct ExperimentSettingsView: View {
                 //    experiment: .defaultBrowserPromptV2
                 //)
 
-                OptionalPrefilledStringField<NeevaExperiment.DefaultBrowserRemindMeLater>(
-                    "DefaultBrowserRemindMeLater",
-                    value: $valueTextDefaultBrowser,
-                    experiment: .defaultBrowserRemindMeLater
-                )
-
                 OptionalPrefilledStringField<NeevaExperiment.PromoCardTypeAfterFirstRun>(
                     "PromoCardTypeAfterFirstRun",
                     value: $valueTextPromoCard,
