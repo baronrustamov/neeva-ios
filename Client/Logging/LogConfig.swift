@@ -438,6 +438,7 @@ public struct LogConfig {
             || category == .PromoCard
             || category == .Web3
             || category == .Notification
+            || category == .Cheatsheet
     }
 
     // MARK: - Category
