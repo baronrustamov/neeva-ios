@@ -18,7 +18,7 @@ struct SiteListView: View {
 
     var body: some View {
         GroupedCell.Decoration {
-            VStack(spacing: 0) {
+            LazyVStack(spacing: 0) {
                 if let sites = sites {
                     ForEach(
                         Array(sites.enumerated()), id: \.element
@@ -45,6 +45,6 @@ struct SiteListView: View {
                     }
                 }
             }
-        }
+        }.padding(.bottom)
     }
 }
