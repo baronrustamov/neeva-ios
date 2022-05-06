@@ -16,7 +16,7 @@ class FirstRunTests: BaseTestCase {
         super.setUp()
     }
 
-    func testOpenNeevaSettings() throws {
+    func openNeevaSettings() {
         waitForExistence(app.buttons["Get Started"])
         app.buttons["Get Started"].tap()
 
@@ -30,17 +30,45 @@ class FirstRunTests: BaseTestCase {
 
         // foreground browser
         app.activate()
+    }
+
+    func testOpenNeevaSettingsAndClose() throws {
+        openNeevaSettings()
+
+        waitForExistence(app.buttons["close"])
+        app.buttons["close"].tap()
 
         openURL(websiteExample["url"]!)
         waitUntilPageLoad()
     }
 
-    func testSkipForNow() throws {
+    func testOpenNeevaSettingsAndRemind() throws {
+        openNeevaSettings()
+
+        waitForExistence(app.buttons["Remind Me Later"])
+        app.buttons["Remind Me Later"].tap()
+
+        openURL(websiteExample["url"]!)
+        waitUntilPageLoad()
+    }
+
+    func testRemindMeLater() throws {
         waitForExistence(app.buttons["Get Started"])
         app.buttons["Get Started"].tap()
 
-        waitForExistence(app.buttons["Skip for Now"])
-        app.buttons["Skip for Now"].tap()
+        waitForExistence(app.buttons["Remind Me Later"])
+        app.buttons["Remind Me Later"].tap()
+
+        openURL(websiteExample["url"]!)
+        waitUntilPageLoad()
+    }
+
+    func testDirectClose() throws {
+        waitForExistence(app.buttons["Get Started"])
+        app.buttons["Get Started"].tap()
+
+        waitForExistence(app.buttons["close"])
+        app.buttons["close"].tap()
 
         openURL(websiteExample["url"]!)
         waitUntilPageLoad()

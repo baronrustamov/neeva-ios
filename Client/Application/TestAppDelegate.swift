@@ -171,6 +171,9 @@ class TestAppDelegate: AppDelegate {
 
         if launchArguments.contains(LaunchArguments.ForceExperimentControlArm) {
             // placeholder: add any control experiment arm here if needed
+            NeevaExperiment.forceExperimentArm(
+                experiment: .notificatonPromptOnAppLaunch,
+                experimentArm: NeevaExperiment.NotificatonPromptOnAppLaunch.control.rawValue)
         }
 
         // Set signInOnce
