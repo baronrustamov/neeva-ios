@@ -1430,6 +1430,7 @@
 		E67CD27627F33BD1007BFE58 /* SuggestedXYZSearchesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63DBA5627F339FC001B7A68 /* SuggestedXYZSearchesView.swift */; };
 		E67CD27727F33C3B007BFE58 /* TabGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A78AA2427ED33C4002E7A86 /* TabGroup.swift */; };
 		E683793728200E8B005736D4 /* SpacesProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F64022281B2EB0008B7644 /* SpacesProfileView.swift */; };
+		E6837939282040BA005736D4 /* Web3TopBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6837938282040BA005736D4 /* Web3TopBarView.swift */; };
 		E683F0A61E92E0820035D990 /* MockableHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E683F0A51E92E0820035D990 /* MockableHistory.swift */; };
 		E683F0C21E93D4E90035D990 /* DictionaryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E683F0C11E93D4E90035D990 /* DictionaryExtensions.swift */; };
 		E68F36981EA694000048CF44 /* PanelDataObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68F36971EA694000048CF44 /* PanelDataObservers.swift */; };
@@ -2763,6 +2764,7 @@
 		E67B0B422809BCA9008D1CCD /* SessionActionsModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionActionsModifier.swift; sourceTree = "<group>"; };
 		E67B0B44280EFA07008D1CCD /* YourCollectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourCollectionsView.swift; sourceTree = "<group>"; };
 		E67B0B46280F016D008D1CCD /* YourCollectionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourCollectionDetailView.swift; sourceTree = "<group>"; };
+		E6837938282040BA005736D4 /* Web3TopBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Web3TopBarView.swift; sourceTree = "<group>"; };
 		E683F0A51E92E0820035D990 /* MockableHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockableHistory.swift; sourceTree = "<group>"; };
 		E683F0C11E93D4E90035D990 /* DictionaryExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryExtensions.swift; sourceTree = "<group>"; };
 		E68F36971EA694000048CF44 /* PanelDataObservers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanelDataObservers.swift; sourceTree = "<group>"; };
@@ -4077,6 +4079,7 @@
 				E67B0B422809BCA9008D1CCD /* SessionActionsModifier.swift */,
 				E67B0B44280EFA07008D1CCD /* YourCollectionsView.swift */,
 				E67B0B46280F016D008D1CCD /* YourCollectionDetailView.swift */,
+				E6837938282040BA005736D4 /* Web3TopBarView.swift */,
 			);
 			path = NeevaWallet;
 			sourceTree = "<group>";
@@ -6689,6 +6692,7 @@
 				4A42C44127E58487003B9826 /* TabToolbarButtons.swift in Sources */,
 				4A42C44227E58487003B9826 /* TabChromeModel.swift in Sources */,
 				4A42C44327E58487003B9826 /* TopSitesManager.swift in Sources */,
+				E6837939282040BA005736D4 /* Web3TopBarView.swift in Sources */,
 				4A42C44427E58487003B9826 /* OpenInAppOverlayView.swift in Sources */,
 				E67B0B3F2809BC75008D1CCD /* WalletStyleModifier.swift in Sources */,
 				4A42C44527E58487003B9826 /* ShareSpaceView.swift in Sources */,

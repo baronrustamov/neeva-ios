@@ -38,9 +38,13 @@ struct TopBarContent: View {
     let onCancel: () -> Void
 
     var body: some View {
-        TopBarView(
-            performTabToolbarAction: { chromeModel.topBarDelegate?.performTabToolbarAction($0) },
-            buildTabsMenu: { chromeModel.topBarDelegate?.tabToolbarTabsMenu(sourceView: $0) },
+        topBarView(
+            performTabToolbarAction: {
+                chromeModel.topBarDelegate?.performTabToolbarAction($0)
+            },
+            buildTabsMenu: {
+                chromeModel.topBarDelegate?.tabToolbarTabsMenu(sourceView: $0)
+            },
             onReload: {
                 switch chromeModel.reloadButton {
                 case .reload:
@@ -73,7 +77,8 @@ struct TopBarContent: View {
             newTab: newTab,
             onCancel: onCancel,
             onOverflowMenuAction: {
-                chromeModel.topBarDelegate?.perform(overflowMenuAction: $0, targetButtonView: $1)
+                chromeModel.topBarDelegate?.perform(
+                    overflowMenuAction: $0, targetButtonView: $1)
             }
         )
         .environmentObject(browserModel)
@@ -85,5 +90,45 @@ struct TopBarContent: View {
         .environmentObject(chromeModel)
         .environmentObject(readerModeModel)
         .environmentObject(web3Model)
+    }
+    @ViewBuilder func topBarView(
+        performTabToolbarAction: @escaping (ToolbarAction) -> Void,
+        buildTabsMenu: @escaping (_ sourceView: UIView) -> UIMenu?,
+        onReload: @escaping () -> Void,
+        onSubmit: @escaping (String) -> Void,
+        onShare: @escaping (UIView) -> Void,
+        buildReloadMenu: @escaping () -> UIMenu?,
+        onMenuAction: @escaping (OverflowMenuAction) -> Void,
+        newTab: @escaping () -> Void,
+        onCancel: @escaping () -> Void,
+        onOverflowMenuAction: @escaping (OverflowMenuAction, UIView) -> Void
+    ) -> some View {
+        #if XYZ
+            Web3TopBarView(
+                performTabToolbarAction: performTabToolbarAction,
+                buildTabsMenu: buildTabsMenu,
+                onReload: onReload,
+                onSubmit: onSubmit,
+                onShare: onShare,
+                buildReloadMenu: buildReloadMenu,
+                onMenuAction: onMenuAction,
+                newTab: newTab,
+                onCancel: onCancel,
+                onOverflowMenuAction: onOverflowMenuAction
+            )
+        #else
+            TopBarView(
+                performTabToolbarAction: performTabToolbarAction,
+                buildTabsMenu: buildTabsMenu,
+                onReload: onReload,
+                onSubmit: onSubmit,
+                onShare: onShare,
+                buildReloadMenu: buildReloadMenu,
+                onMenuAction: onMenuAction,
+                newTab: newTab,
+                onCancel: onCancel,
+                onOverflowMenuAction: onOverflowMenuAction
+            )
+        #endif
     }
 }
