@@ -65,8 +65,6 @@ class CardTests: XCTestCase {
             notificationViewManager: NotificationViewManager(window: UIWindow()))
         chromeModel = TabChromeModel()
 
-        manager.didRestoreAllTabs = true
-
         SpaceStore.shared = .createMock([.stackOverflow, .savedForLater, .shared, .public])
         spaceCardModel = SpaceCardModel()
     }

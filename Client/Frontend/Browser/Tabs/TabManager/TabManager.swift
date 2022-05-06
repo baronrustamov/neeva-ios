@@ -38,8 +38,6 @@ class TabManager: NSObject {
         getAllTabGroup().flatMap(\.children)
     }
 
-    var didRestoreAllTabs: Bool = false
-
     // Use `selectedTabPublisher` to observe changes to `selectedTab`.
     private(set) var selectedTab: Tab?
     private(set) var selectedTabPublisher = CurrentValueSubject<Tab?, Never>(nil)

@@ -114,9 +114,7 @@ class TabCardModel: CardModel {
     init(manager: TabManager) {
         self.manager = manager
 
-        manager.tabsUpdatedPublisher.filter({ [weak self] in
-            self?.manager.didRestoreAllTabs ?? false
-        }).sink { [weak self] in
+        manager.tabsUpdatedPublisher.sink { [weak self] in
             self?.onDataUpdated()
         }.store(in: &subscription)
 
