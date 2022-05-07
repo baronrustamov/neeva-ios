@@ -147,6 +147,8 @@ class OverlayManager: ObservableObject {
                 }
             case .notification:
                 slideAndFadeIn(offset: -ToastViewUX.height)
+            case .sheet:
+                slideAndFadeIn(offset: OverlaySheetUX.animationOffset)
             case .toast:
                 slideAndFadeIn(offset: ToastViewUX.height)
             default:
@@ -245,9 +247,15 @@ class OverlayManager: ObservableObject {
             }
 
             switch overlay {
-            case .backForwardList, .sheet:
+            case .backForwardList:
                 slideAndFadeOut(offset: 0)
             case .fullScreenModal, .popover:
+                if case .popover = overlay {
+                    withAnimation(animation) {
+                        opacity = 0
+                    }
+                }
+
                 showFullScreenPopoverSheet = false
 
                 // How long it takes for the system sheet to dismiss
@@ -258,6 +266,8 @@ class OverlayManager: ObservableObject {
                 }
             case .notification:
                 slideAndFadeOut(offset: -ToastViewUX.height)
+            case .sheet:
+                slideAndFadeOut(offset: OverlaySheetUX.animationOffset)
             case .toast:
                 slideAndFadeOut(offset: ToastViewUX.height)
             default:
