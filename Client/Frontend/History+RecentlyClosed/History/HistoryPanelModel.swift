@@ -83,7 +83,7 @@ class HistoryPanelModel: ObservableObject {
     }
 
     func loadNextItemsIfNeeded(from index: Int) {
-        guard index >= currentFetchOffset - 1 else {
+        guard index >= currentFetchOffset - 1, !isFetchInProgress else {
             return
         }
 
@@ -162,9 +162,9 @@ class HistoryPanelModel: ObservableObject {
         }
     }
 
-    func removeHistoryForURLAtIndexPath(site: Site) {
+    func removeItemFromHistory(site: Site) {
         profile.history.removeHistoryForURL(site.url).uponQueue(.main) { result in
-            self.reloadData()
+            self.groupedSites.remove(site)
         }
     }
 

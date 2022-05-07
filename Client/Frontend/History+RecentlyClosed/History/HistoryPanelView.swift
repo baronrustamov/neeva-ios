@@ -61,7 +61,7 @@ struct HistoryPanelView: View {
     let onDismiss: () -> Void
 
     var historyList: some View {
-        ScrollView {
+        ScrollView(showsIndicators: false) {
             SingleLineTextField(
                 icon: Symbol(decorative: .magnifyingglass, style: .labelLarge),
                 placeholder: "Search your history", text: $siteFilter.text
@@ -96,7 +96,7 @@ struct HistoryPanelView: View {
             }
 
             // History List
-            LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
+            VStack(spacing: 0) {
                 ForEach(TimeSection.allCases, id: \.self) { section in
                     let itemsInSection =
                         useFilteredSites
@@ -107,12 +107,14 @@ struct HistoryPanelView: View {
                         Section(header: HistorySectionHeader(section: section)) {
                             SiteListView(
                                 tabManager: model.tabManager,
+                                historyPanelModel: model,
                                 sites: itemsInSection,
+                                siteTimeSection: section,
                                 itemAtIndexAppeared: { index in
                                     model.loadNextItemsIfNeeded(from: index)
                                 },
                                 deleteSite: { site in
-                                    model.removeHistoryForURLAtIndexPath(site: site)
+                                    model.removeItemFromHistory(site: site)
                                 }
                             ).accessibilityLabel(Text("History List"))
                         }

@@ -8,8 +8,11 @@ import SwiftUI
 
 struct SiteListView: View {
     let tabManager: TabManager
+    var historyPanelModel: HistoryPanelModel? = nil
 
     var sites: [Site]? = nil
+    var siteTimeSection: TimeSection?
+
     var savedTabs: [SavedTab]? = nil
 
     var itemAtIndexAppeared: (Int) -> Void = { _ in }
@@ -24,9 +27,9 @@ struct SiteListView: View {
                         Array(sites.enumerated()), id: \.element
                     ) { index, site in
                         SiteRowView(tabManager: tabManager, site: site, deleteSite: deleteSite) {
-                            tappedItemAtIndex(index)
+                            tappedItemAtIndex(index + countOfPreviousSites())
                         }.onAppear {
-                            itemAtIndexAppeared(index)
+                            itemAtIndexAppeared(index + countOfPreviousSites())
                         }
 
                         Color.groupedBackground.frame(height: 1)
@@ -46,5 +49,20 @@ struct SiteListView: View {
                 }
             }
         }.padding(.bottom)
+    }
+
+    func countOfPreviousSites() -> Int {
+        guard let siteTimeSection = siteTimeSection, siteTimeSection.rawValue > 0,
+            let historyPanelModel = historyPanelModel
+        else {
+            return 0
+        }
+
+        var count = 0
+        for i in 0...(siteTimeSection.rawValue - 1) {
+            count += historyPanelModel.groupedSites.numberOfItemsForSection(i)
+        }
+
+        return count
     }
 }
