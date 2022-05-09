@@ -16,14 +16,11 @@ private struct XYZIntroModel: Identifiable, Codable {
 private class XYZIntroViewModel {
     @Published var dataSource: [XYZIntroModel] = [
         XYZIntroModel(
-            image: "xyzintro-1",
-            text: "Explore and browse web3 with integrated search"),
+            image: "xyzintro-3",
+            text: "Stake, swap tokens, and connect to dApps"),
         XYZIntroModel(
             image: "xyzintro-2",
             text: "Beat scammers! Receive warnings before connecting"),
-        XYZIntroModel(
-            image: "xyzintro-3",
-            text: "Stake, swap tokens, and connect to dApps"),
     ]
 }
 
@@ -58,8 +55,6 @@ public struct XYZIntroView: View {
                 .buttonStyle(.wallet(.primary))
                 .padding(.horizontal, 24)
                 .padding(.bottom, 50)
-                .opacity(self.selectionState == viewModel.dataSource[2].id ? 1 : 0)
-                .animation(.easeInOut)
             }
         }
     }

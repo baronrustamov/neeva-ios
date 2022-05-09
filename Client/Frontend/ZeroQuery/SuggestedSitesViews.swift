@@ -37,10 +37,6 @@ struct SuggestedNavigationView<Content: View>: View {
         }) {
             VStack(spacing: 2) {
                 icon()
-                    .frame(
-                        width: SuggestedSiteUX.IconSize, height: SuggestedSiteUX.IconSize,
-                        alignment: .center
-                    )
                     .modifier(SuggestedItemBackgroundModifier())
                 HStack {
                     if isPinnedSite {
@@ -71,9 +67,14 @@ private struct SuggestedItemBackgroundModifier: ViewModifier {
     func body(content: Content) -> some View {
         if NeevaConstants.currentTarget == .xyz {
             content
-                .hexagonClip()
+                .hexagonClip(with: SuggestedSiteUX.IconSize)
         } else {
             content
+                .frame(
+                    width: SuggestedSiteUX.IconSize,
+                    height: SuggestedSiteUX.IconSize,
+                    alignment: .center
+                )
                 .background(Color(light: .ui.gray97, dark: .systemFill))
                 .cornerRadius(SuggestedSiteUX.IconCornerRadius)
         }
@@ -172,7 +173,7 @@ struct SuggestedSiteView: View {
 
 struct SuggestedSitesView: View {
     let isExpanded: Bool
-    var withHome: Bool = true
+    var withHome: Bool = NeevaConstants.currentTarget == .client
     @ObservedObject var viewModel: SuggestedSitesViewModel
     @Environment(\.zeroQueryWidth) private var zeroQueryWidth
     @Environment(\.verticalSizeClass) private var verticalSizeClass

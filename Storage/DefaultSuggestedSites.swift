@@ -96,6 +96,16 @@ open class DefaultSuggestedSites {
                 title: "Gitcoin"
             ),
             SuggestedSiteData(
+                url: "https://quickswap.exchange",
+                bgColor: "0x000000",
+                imageUrl:
+                    "https://quickswap.exchange/logo_circle.png",
+                faviconUrl:
+                    "https://quickswap.exchange/logo_circle.png",
+                trackingId: 802,
+                title: "Quickswap"
+            ),
+            SuggestedSiteData(
                 url: "https://etherscan.io/",
                 bgColor: "0x000000",
                 imageUrl: "https://etherscan.io/images/brandassets/etherscan-logo-r.jpg",

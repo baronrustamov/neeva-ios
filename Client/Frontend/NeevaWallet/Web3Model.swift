@@ -434,7 +434,8 @@ class Web3Model: ObservableObject {
                         self.presenter.presentFullScreenModal(
                             content: AnyView(
                                 CryptoWalletView(
-                                    viewState: .importWallet,
+                                    viewState: Defaults[.cryptoPublicKey].isEmpty
+                                        ? .xyzIntro : .importWallet,
                                     dismiss: {
                                         self.presenter.dismissCurrentOverlay()
                                         self.initializeWallet()

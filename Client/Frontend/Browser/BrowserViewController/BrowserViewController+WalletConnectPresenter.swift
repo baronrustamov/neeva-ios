@@ -25,6 +25,7 @@ extension BrowserViewController: WalletConnectPresenter {
         #if XYZ
             guard let _ = web3Model.wallet?.ethereumAddress
             else {
+                web3Model.showWalletCredentialsPrompt()
                 return false
             }
 

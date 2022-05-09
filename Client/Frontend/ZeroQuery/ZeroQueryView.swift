@@ -147,10 +147,9 @@ struct ZeroQueryView: View {
     @ViewBuilder
     private func contentView(_ parentGeom: GeometryProxy) -> some View {
         #if XYZ
-            promoCardView(parentGeom)
             suggestedSitesView(parentGeom)
-            browseNFTsView
             if FeatureFlag[.newWeb3Features] {
+                browseNFTsView
                 yourCollectionsView
             }
             searchesView
@@ -219,7 +218,7 @@ struct ZeroQueryView: View {
 
         if Defaults[.signedInOnce] || NeevaConstants.currentTarget == .xyz {
             ZeroQueryHeader(
-                title: NeevaConstants.currentTarget == .xyz ? "Web3 Tools" : "Suggested sites",
+                title: "Suggested sites",
                 action: { expandSuggestedSites.advance() },
                 label: "\(expandSuggestedSites.verb) this section",
                 icon: expandSuggestedSites.icon
@@ -240,8 +239,7 @@ struct ZeroQueryView: View {
     @ViewBuilder
     private var searchesView: some View {
         ZeroQueryHeader(
-            title: NeevaConstants.currentTarget == .xyz
-                ? "Search on Ethereum (or the web)" : "Searches",
+            title: "Searches",
             action: { expandSearches.toggle() },
             label: "\(expandSearches ? "hides" : "shows") this section",
             icon: expandSearches ? .chevronUp : .chevronDown

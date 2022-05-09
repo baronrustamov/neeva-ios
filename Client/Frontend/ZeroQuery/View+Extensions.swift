@@ -45,37 +45,96 @@ extension View {
 
 extension View {
     @ViewBuilder
-    public func hexagonClip() -> some View {
-        ZStack {
-            Image("hexagon")
-                .resizable()
-                .scaledToFit()
+    public func hexagonClip(with size: CGFloat) -> some View {
+        #if XYZ
             self
-                .clipShape(Hexagon().rotation(.degrees(30)))
-                .blendMode(.multiply)
-        }
+                .frame(width: size * 4 / 5, height: size * 4 / 5)
+                .background(Color.white)
+                .clipShape(Hexagon())
+                .frame(width: size, height: size)
+                .background(WalletTheme.gradient.opacity(0.2))
+                .clipShape(Hexagon())
+        #else
+            self
+                .frame(width: size, height: size)
+                .background(Color.white)
+                .clipShape(Hexagon())
+        #endif
     }
 }
+
+struct HexagonParameters {
+    struct Segment {
+        let line: CGPoint
+        let curve: CGPoint
+        let control: CGPoint
+    }
+
+    static let segments = [
+        Segment(
+            line: CGPoint(x: 0.60, y: 0.05),
+            curve: CGPoint(x: 0.40, y: 0.05),
+            control: CGPoint(x: 0.50, y: 0.00)
+        ),
+        Segment(
+            line: CGPoint(x: 0.10, y: 0.25),
+            curve: CGPoint(x: 0.05, y: 0.35),
+            control: CGPoint(x: 0.05, y: 0.30)
+        ),
+        Segment(
+            line: CGPoint(x: 0.05, y: 0.65),
+            curve: CGPoint(x: 0.10, y: 0.75),
+            control: CGPoint(x: 0.05, y: 0.70)
+        ),
+        Segment(
+            line: CGPoint(x: 0.40, y: 0.95),
+            curve: CGPoint(x: 0.60, y: 0.95),
+            control: CGPoint(x: 0.50, y: 1.00)
+        ),
+        Segment(
+            line: CGPoint(x: 0.90, y: 0.75),
+            curve: CGPoint(x: 0.95, y: 0.65),
+            control: CGPoint(x: 0.95, y: 0.70)
+        ),
+        Segment(
+            line: CGPoint(x: 0.95, y: 0.35),
+            curve: CGPoint(x: 0.90, y: 0.25),
+            control: CGPoint(x: 0.95, y: 0.30)
+        ),
+    ]
+}
+
 struct Hexagon: Shape {
     func path(in rect: CGRect) -> Path {
-        // hypotenuse (we make it fit inside the available rect
-        let height = Double(min(rect.size.width, rect.size.height)) / 2.0
-        // center
-        let center = CGPoint(x: rect.midX, y: rect.midY)
         var path = Path()
-        for i in 0..<6 {
-            let angle = (Double(i) * (360.0 / Double(6))) * Double.pi / 180
-            // Calculate vertex position
-            let pt = CGPoint(
-                x: center.x + CGFloat(cos(angle) * height),
-                y: center.y + CGFloat(sin(angle) * height))
-            if i == 0 {
-                path.move(to: pt)  // move to first vertex
-            } else {
-                path.addLine(to: pt)  // draw line to next vertex
-            }
+        let width: CGFloat = min(rect.width, rect.height)
+        let height = width
+        path.move(
+            to: CGPoint(
+                x: width * 0.90,
+                y: height * (0.25)
+            )
+        )
+
+        HexagonParameters.segments.forEach { segment in
+            path.addLine(
+                to: CGPoint(
+                    x: width * segment.line.x,
+                    y: height * segment.line.y
+                )
+            )
+
+            path.addQuadCurve(
+                to: CGPoint(
+                    x: width * segment.curve.x,
+                    y: height * segment.curve.y
+                ),
+                control: CGPoint(
+                    x: width * segment.control.x,
+                    y: height * segment.control.y
+                )
+            )
         }
-        path.closeSubpath()
         return path
     }
 }

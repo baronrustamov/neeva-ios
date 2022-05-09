@@ -170,10 +170,9 @@ class SuggestionModel: ObservableObject {
             ? fetchNeevaSuggestions(for: searchQuery)
             : fetchGenericSuggestions(for: searchQuery)
 
-        if NeevaConstants.currentTarget == .xyz {
+        if NeevaConstants.currentTarget == .xyz && FeatureFlag[.newWeb3Features] {
             fetchNFTSuggestions(for: searchQuery)
         }
-
         // always insert the most recent query to the beginning of the array
         suggestionQueryQueue.insert((searchQuery, suggestionQuery), at: 0)
     }
