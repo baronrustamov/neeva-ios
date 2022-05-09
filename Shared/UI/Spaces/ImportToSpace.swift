@@ -100,16 +100,14 @@ public class SpaceImportHandler {
             completion?()
             return
         }
-        self.cancellable = AddToSpaceMutation(
-            input: AddSpaceResultByURLInput(
-                spaceId: spaceID!,
-                url: linkData.url.absoluteString,
-                title: linkData.title.isEmpty ? title : linkData.title,
-                data: "",
-                mediaType: "text/plain",
-                isBase64: false
-            )
-        ).perform { result in
+        self.cancellable = SpaceServiceProvider.shared.addToSpaceMutation(
+            spaceId: spaceID!,
+            url: linkData.url.absoluteString,
+            title: linkData.title.isEmpty ? title : linkData.title,
+            data: "",
+            mediaType: "text/plain",
+            isBase64: false
+        ) { result in
             self.cancellable = nil
             switch result {
             case .failure(_):

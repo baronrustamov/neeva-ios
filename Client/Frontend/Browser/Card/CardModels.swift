@@ -577,6 +577,7 @@ class SpaceCardModel: CardModel {
         }
     }
 
+    // TODO(jon): Convert to use SpaceService
     func add(spaceID: String, url: String, title: String, description: String? = nil) {
         DispatchQueue.main.async {
             let request = AddToSpaceWithURLRequest(

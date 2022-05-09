@@ -190,6 +190,10 @@ class TestAppDelegate: AppDelegate {
             BrowserViewController.createNewTabOnStartForTesting = true
         }
 
+        if launchArguments.contains(LaunchArguments.EnableMockSpaces) {
+            SpaceServiceProvider.shared = SpaceServiceMock()
+        }
+
         // Deferred to here in case the ClearProfile argument was set.
         if let loginCookie = loginCookie {
             NeevaUserInfo.shared.setLoginCookie(loginCookie)
