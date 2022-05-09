@@ -86,5 +86,7 @@ extension SavedTab {
         tab.rootUUID = rootUUID ?? ""
         tab.parentSpaceID = parentSpaceID ?? ""
         tab.pageZoom = pageZoom ?? 1.0
+        tab.url = url
+        tab.title = title
     }
 }

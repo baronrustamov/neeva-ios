@@ -5,6 +5,21 @@
 import Shared
 import SwiftUI
 
+struct ArchivedTabsSectionHeader: View {
+    let section: ArchivedTabTimeSection
+
+    var body: some View {
+        HStack {
+            Text(section.rawValue)
+                .fontWeight(.medium)
+            Spacer()
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.leading)
+        .padding(.vertical, 8)
+    }
+}
+
 struct ArchivedTabsPanelView: View {
     @ObservedObject var model: ArchivedTabsPanelModel
     let onDismiss: () -> Void
@@ -60,7 +75,14 @@ struct ArchivedTabsPanelView: View {
 
             LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
                 ForEach(ArchivedTabTimeSection.allCases, id: \.self) { section in
-                    let itemsInSection = model.groupedSites.itemsForSection(section.rawValue)
+                    let itemsInSection = model.groupedSites.itemsForSection(section: section)
+
+                    if itemsInSection.count > 0 {
+                        Section(header: ArchivedTabsSectionHeader(section: section)) {
+                            TabListView(tabManager: model.tabManager, tabs: itemsInSection)
+                                .environmentObject(model)
+                        }
+                    }
                 }
             }
 
@@ -82,5 +104,8 @@ struct ArchivedTabsPanelView: View {
                 }
         }
         .navigationViewStyle(.stack)
+        .onAppear {
+            model.loadData()
+        }
     }
 }

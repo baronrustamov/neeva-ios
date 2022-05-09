@@ -42,6 +42,8 @@ protocol TabDelegate {
 enum TimeFilter: String {
     case today = "Today"
     case lastWeek = "Last Week"
+    case lastMonth = "Last Month"
+    case overAMonth = "Over A Month"
 }
 
 class Tab: NSObject, ObservableObject {
@@ -99,9 +101,9 @@ class Tab: NSObject, ObservableObject {
     @Published private(set) var estimatedProgress: Double = 0
     @Published private(set) var canGoBack = false
     @Published private(set) var canGoForward = false
-    @Published private(set) var title: String?
+    @Published var title: String?
     /// For security reasons, the URL may differ from the web view’s URL.
-    @Published private(set) var url: URL?
+    @Published var url: URL?
 
     private var observer: AnyCancellable?
     var pageZoom: CGFloat = 1.0 {
@@ -681,7 +683,18 @@ class Tab: NSObject, ObservableObject {
                 byAdding: .second, value: -15, to: Date())
             : Calendar.current.date(
                 byAdding: .day, value: -1, to: Date())
-        guard let startOfOneDayAgo = minusOneDayToCurrentDate else {
+        let minusOneWeekToCurrentDate =
+            FeatureFlag[.aWeekTo30SecondsInTimeBasedSwitcher]
+            ? Calendar.current.date(
+                byAdding: .second, value: -30, to: Date())
+            : Calendar.current.date(
+                byAdding: .day, value: -7, to: Date())
+        let minusOneMonthToCurrentDate = Calendar.current.date(
+            byAdding: .month, value: -1, to: Date())
+        guard let startOfOneDayAgo = minusOneDayToCurrentDate,
+            let startOfLastWeek = minusOneWeekToCurrentDate,
+            let startOfLastMonth = minusOneMonthToCurrentDate
+        else {
             return true
         }
         // timeIntervalSince1970 returns the number of seconds. It is converted
@@ -691,13 +704,13 @@ class Tab: NSObject, ObservableObject {
         case .today:
             return lastExecutedTime > Int64(startOfOneDayAgo.timeIntervalSince1970 * 1000)
         case .lastWeek:
-            let minusOneWeekToCurrentDate = Calendar.current.date(
-                byAdding: .day, value: -7, to: Date())
-            guard let startOfLastWeek = minusOneWeekToCurrentDate else {
-                return true
-            }
             return lastExecutedTime < Int64(startOfOneDayAgo.timeIntervalSince1970 * 1000)
                 && lastExecutedTime > Int64(startOfLastWeek.timeIntervalSince1970 * 1000)
+        case .lastMonth:
+            return lastExecutedTime < Int64(startOfLastWeek.timeIntervalSince1970 * 1000)
+                && lastExecutedTime > Int64(startOfLastMonth.timeIntervalSince1970 * 1000)
+        case .overAMonth:
+            return lastExecutedTime < Int64(startOfLastMonth.timeIntervalSince1970 * 1000)
         }
     }
 }

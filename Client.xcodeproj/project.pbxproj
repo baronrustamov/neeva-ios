@@ -958,6 +958,8 @@
 		85EFC04327C51E8B009460DE /* XCGLogger.xcframework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 85EFC03327C51788009460DE /* XCGLogger.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		85EFC04527C51EEC009460DE /* SwiftKeychainWrapper.xcframework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 85EFC02B27C5172A009460DE /* SwiftKeychainWrapper.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8A2401CB26BB4D75006ABF7D /* RatingsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2401CA26BB4D75006ABF7D /* RatingsCard.swift */; };
+		8A35CEF7282891EC00E71CD1 /* TabListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A35CEF6282891EC00E71CD1 /* TabListView.swift */; };
+		8A35CEF8282891EC00E71CD1 /* TabListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A35CEF6282891EC00E71CD1 /* TabListView.swift */; };
 		8A422E9B26E19783005CC814 /* AddOrUpdateSpaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A422E9A26E19783005CC814 /* AddOrUpdateSpaceView.swift */; };
 		8A72F7A7280F331700CC0FDB /* ArchivedTabsPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A72F7A6280F331700CC0FDB /* ArchivedTabsPanelView.swift */; };
 		8A72F7A8280F331700CC0FDB /* ArchivedTabsPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A72F7A6280F331700CC0FDB /* ArchivedTabsPanelView.swift */; };
@@ -2384,6 +2386,7 @@
 		85EFC03327C51788009460DE /* XCGLogger.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = XCGLogger.xcframework; path = Carthage/Build/XCGLogger.xcframework; sourceTree = "<group>"; };
 		85EFC03627C51840009460DE /* SDWebImage.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SDWebImage.xcframework; path = Carthage/Build/SDWebImage.xcframework; sourceTree = "<group>"; };
 		8A2401CA26BB4D75006ABF7D /* RatingsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingsCard.swift; sourceTree = "<group>"; };
+		8A35CEF6282891EC00E71CD1 /* TabListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabListView.swift; sourceTree = "<group>"; };
 		8A422E9A26E19783005CC814 /* AddOrUpdateSpaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddOrUpdateSpaceView.swift; sourceTree = "<group>"; };
 		8A72F7A6280F331700CC0FDB /* ArchivedTabsPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedTabsPanelView.swift; sourceTree = "<group>"; };
 		8A72F7A9280F336400CC0FDB /* ArchivedTabsPanelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedTabsPanelViewController.swift; sourceTree = "<group>"; };
@@ -3679,6 +3682,7 @@
 				8A72F7A6280F331700CC0FDB /* ArchivedTabsPanelView.swift */,
 				8A72F7A9280F336400CC0FDB /* ArchivedTabsPanelViewController.swift */,
 				8A72F7AC280F33F100CC0FDB /* ArchivedTabsPanelModel.swift */,
+				8A35CEF6282891EC00E71CD1 /* TabListView.swift */,
 			);
 			path = Card;
 			sourceTree = "<group>";
@@ -6908,6 +6912,7 @@
 				4A42C43027E58487003B9826 /* BrowserViewController+ReaderMode.swift in Sources */,
 				E677D1D12800E88E0060869F /* HistoryPanelViewController.swift in Sources */,
 				4A42C43127E58487003B9826 /* TabContainerHost.swift in Sources */,
+				8A35CEF8282891EC00E71CD1 /* TabListView.swift in Sources */,
 				4A42C43227E58487003B9826 /* SingleLevelTabCardsView.swift in Sources */,
 				4A42C43327E58487003B9826 /* OverlayStepperModifier.swift in Sources */,
 				4A42C43427E58487003B9826 /* Suggestion.swift in Sources */,
@@ -7791,6 +7796,8 @@
 				C98E405B2658547A003AC0E2 /* GeneralSettingsSection.swift in Sources */,
 				66C3C76F267A8858002B50B1 /* ToastProgressView.swift in Sources */,
 				323E460A27C6C76900F325E2 /* SpotlightSettingsView.swift in Sources */,
+				8A35CEF7282891EC00E71CD1 /* TabListView.swift in Sources */,
+				3FE1BC2927DBB74E004122F8 /* SpaceMarkdownSnippet.swift in Sources */,
 				EBC4869D2195F58300CDA48D /* ErrorPageHelper.swift in Sources */,
 				66F97CC026F68C4A005A26C2 /* ReaderModePopover.swift in Sources */,
 				E63DBA5727F339FC001B7A68 /* SuggestedXYZSearchesView.swift in Sources */,

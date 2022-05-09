@@ -4,36 +4,47 @@
 
 import Shared
 
-enum ArchivedTabTimeSection: Int, CaseIterable {
-    case lastMonth
-    case older
-
-    var title: String? {
-        switch self {
-        case .lastMonth:
-            return "Last Month"
-        case .older:
-            return "Older"
-        }
-    }
+enum ArchivedTabTimeSection: String, CaseIterable {
+    case lastMonth = "Last Month"
+    case overAMonth = "More"
 }
 
 public struct ArchivedTabsData {
-    var lastMonth: [Tab] = []
-    var older: [Tab] = []
+    var sites: [ArchivedTabTimeSection: [Tab]] = [:]
+
+    func itemsForSection(section: ArchivedTabTimeSection) -> [Tab] {
+        return sites[section] ?? []
+    }
 }
 
 class ArchivedTabsPanelModel: ObservableObject {
     let tabManager: TabManager
+    var allTabsFiltered: [Tab] = []
     var groupedSites = ArchivedTabsData()
 
     func loadData() {
-        //        groupedSites.lastMonth = tabManager.tabs.filter {
-        //
-        //        }
+        groupedSites.sites[.lastMonth] = allTabsFiltered.filter {
+            $0.wasLastExecuted(.lastMonth)
+        }                
+
+        groupedSites.sites[.overAMonth] = allTabsFiltered.filter {
+            $0.wasLastExecuted(.overAMonth)
+        }
     }
 
     init(tabManager: TabManager) {
         self.tabManager = tabManager
+        
+        let representativeTabs = self.tabManager.getAllTabGroup()
+            .reduce(into: [Tab]()) { $0.append($1.children.first!) }
+        let tabsWithExclusionList = self.tabManager.getAll().filter {
+            !self.tabManager.childTabs.contains($0)
+        }
+
+        allTabsFiltered = tabManager.tabs.filter { tab in
+            return (representativeTabs.contains(tab)
+                    || tabsWithExclusionList.contains{$0.id == tab.id}) && !tab.isIncognito
+        }
+
     }
 }

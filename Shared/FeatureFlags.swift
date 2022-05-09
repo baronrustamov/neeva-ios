@@ -17,6 +17,8 @@ public enum FeatureFlag: String, CaseIterable, RawRepresentable {
     case enableTimeBasedSwitcher = "Enable time based tab switcher"
     case demoteAfter15secondsTimeBasedSwitcher =
         "demote tabs after 15 seconds in time based switcher"
+    case aWeekTo30SecondsInTimeBasedSwitcher =
+        "turn a week into 30 seconds in time based switcher"
     case enableArchivedTabsView = "Enable archivedTabsView in switcher"
     case inlineAccountSettings = "Inline Account Settings"
     case pinToTopSites = "Pin to Top Sites"
