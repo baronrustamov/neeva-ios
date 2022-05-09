@@ -96,31 +96,37 @@ struct HistoryPanelView: View {
             }
 
             // History List
-            VStack(spacing: 0) {
-                ForEach(TimeSection.allCases, id: \.self) { section in
-                    let itemsInSection =
-                        useFilteredSites
-                        ? model.filteredSites.itemsForSection(section.rawValue)
-                        : model.groupedSites.itemsForSection(section.rawValue)
+            if model.isFetchInProgress {
+                Spacer()
+                LoadingView("Loading your history...")
+                Spacer()
+            } else {
+                VStack(spacing: 0) {
+                    ForEach(TimeSection.allCases, id: \.self) { section in
+                        let itemsInSection =
+                            useFilteredSites
+                            ? model.filteredSites.itemsForSection(section.rawValue)
+                            : model.groupedSites.itemsForSection(section.rawValue)
 
-                    if itemsInSection.count > 0 {
-                        Section(header: HistorySectionHeader(section: section)) {
-                            SiteListView(
-                                tabManager: model.tabManager,
-                                historyPanelModel: model,
-                                sites: itemsInSection,
-                                siteTimeSection: section,
-                                itemAtIndexAppeared: { index in
-                                    model.loadNextItemsIfNeeded(from: index)
-                                },
-                                deleteSite: { site in
-                                    model.removeItemFromHistory(site: site)
-                                }
-                            ).accessibilityLabel(Text("History List"))
+                        if itemsInSection.count > 0 {
+                            Section(header: HistorySectionHeader(section: section)) {
+                                SiteListView(
+                                    tabManager: model.tabManager,
+                                    historyPanelModel: model,
+                                    sites: itemsInSection,
+                                    siteTimeSection: section,
+                                    itemAtIndexAppeared: { index in
+                                        model.loadNextItemsIfNeeded(from: index)
+                                    },
+                                    deleteSite: { site in
+                                        model.removeItemFromHistory(site: site)
+                                    }
+                                ).accessibilityLabel(Text("History List"))
+                            }
                         }
                     }
-                }
-            }.padding(.top, 20)
+                }.padding(.top, 20)
+            }
         }
         .padding(.horizontal)
         .background(
@@ -130,7 +136,7 @@ struct HistoryPanelView: View {
 
     @ViewBuilder
     var content: some View {
-        if model.groupedSites.isEmpty {
+        if model.groupedSites.isEmpty && !model.isFetchInProgress {
             Text("Websites you've visted\nrecently will show up here.")
                 .multilineTextAlignment(.center)
                 .accessibilityLabel(Text("History List Empty"))

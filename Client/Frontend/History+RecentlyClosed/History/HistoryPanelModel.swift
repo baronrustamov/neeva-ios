@@ -42,10 +42,10 @@ class HistoryPanelModel: ObservableObject {
 
     private let queryFetchLimit = 100
     private var currentFetchOffset = 0
-    private var isFetchInProgress = false
     private var dataNeedsToBeReloaded = false
 
     @Published var groupedSites = DateGroupedTableData<Site>()
+    @Published var isFetchInProgress = false
 
     // History search
     @Published var filteredSites = DateGroupedTableData<Site>()
@@ -132,7 +132,13 @@ class HistoryPanelModel: ObservableObject {
     }
 
     func loadSiteData(with query: String) -> Deferred<Maybe<Cursor<Site?>>> {
+        self.isFetchInProgress = true
+
         return profile.history.getSitesWithQuery(query: query) >>== { result in
+            DispatchQueue.main.async {
+                self.isFetchInProgress = false
+            }
+
             return deferMaybe(result)
         }
     }
