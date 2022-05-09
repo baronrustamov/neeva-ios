@@ -49,6 +49,8 @@ class TabCardModel: CardModel {
     static let todayRowHeaderID: String = "today-header"
     static let lastweekRowHeaderID: String = "lastWeek-header"
 
+    private(set) var tabsDidChange = false
+
     private func updateRows() {
         if FeatureFlag[.enableTimeBasedSwitcher] {
             // Ensure representative tab is the most recently used tab in a tab group.
@@ -115,7 +117,14 @@ class TabCardModel: CardModel {
         self.manager = manager
 
         manager.tabsUpdatedPublisher.sink { [weak self] in
+            self?.tabsDidChange = true
             self?.onDataUpdated()
+            // 'tabsDidChange' is used by CardScrollContainer to set its animation
+            // to .default. This is needed to handle a bug which the scroll view
+            // doesn't get pushed down when the bottom tab is closed.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self?.tabsDidChange = false
+            }
         }.store(in: &subscription)
 
         if FeatureFlag[.enableTimeBasedSwitcher] {

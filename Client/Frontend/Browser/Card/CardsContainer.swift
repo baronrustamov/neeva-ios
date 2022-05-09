@@ -144,8 +144,14 @@ struct CardScrollContainer<Content: View>: View {
         ScrollView(.vertical, showsIndicators: false) {
             ScrollViewReader(content: content)
         }
-        // Fixes a bug where scrollView would stutter at the edge
-        .animation(gridModel.gridCanAnimate ? .interactiveSpring() : nil)
+        // Fixes two animation bugs:
+        // 1. scrollView would stutter at the edge without making the animation nil
+        // 2. scrollView wouldn't push down when the bottom tab is closed if the
+        // animation is nil
+        .animation(
+            (gridModel.gridCanAnimate
+                ? .interactiveSpring() : tabModel.tabsDidChange ? .default : nil)
+        )
         .accessibilityIdentifier("CardGrid")
         .environment(\.columns, columns)
         .introspectScrollView { scrollView in
