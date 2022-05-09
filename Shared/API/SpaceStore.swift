@@ -204,6 +204,8 @@ public class SpaceStore: ObservableObject {
         allSpaces.filter { $0.userACL >= .edit }
     }
 
+    private var allProfiles: [Set<String>: [Space]] = [:]
+
     private var disableRefresh = false
 
     private var urlToSpacesMap: [URL: [Space]] = [:]
@@ -651,13 +653,31 @@ public class SpaceStore: ObservableObject {
         return description
     }
 
+    private func getCachedProfile(with spaceID: String) -> [Space]? {
+        if let profile = allProfiles.first(where: { $0.key.contains(where: { $0 == spaceID }) }) {
+            return profile.value
+        }
+        return nil
+    }
+
     public func getRelatedSpaces(
-        with spaceID: String, onCompletion completion: @escaping (Result<[Space], Error>) -> Void
+        with spaceID: String,
+        forceUpdate: Bool = false,
+        onCompletion completion: @escaping (Result<[Space], Error>) -> Void
     ) {
+
+        if !forceUpdate, let cachedProfile = getCachedProfile(with: spaceID) {
+            completion(.success(cachedProfile))
+            return
+        }
+
         RelatedSpacesQueryController.getSpacesData(spaceID: spaceID) { result in
             switch result {
             case .success(let response):
-                completion(.success(response.map({ Space(from: $0) })))
+                let spaces = response.map({ Space(from: $0) })
+                let ids = Set(response.map({ $0.id }))
+                self.allProfiles[ids] = spaces
+                completion(.success(spaces))
             case .failure(let error):
                 completion(.failure(error))
             }
@@ -667,6 +687,11 @@ public class SpaceStore: ObservableObject {
     public func getRelatedSpacesCount(
         with spaceID: String, onCompletion completion: @escaping (Result<Int, Error>) -> Void
     ) {
+        if let cachedProfile = getCachedProfile(with: spaceID) {
+            completion(.success(cachedProfile.count))
+            return
+        }
+
         RelatedSpacesCountQueryController.getSpacesData(spaceID: spaceID) { result in
             switch result {
             case .success(let count):
