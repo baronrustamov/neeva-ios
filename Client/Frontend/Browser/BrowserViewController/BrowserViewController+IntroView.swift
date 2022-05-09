@@ -148,6 +148,7 @@ extension BrowserViewController {
             Defaults[.didShowDefaultBrowserInterstitialFromSkipToBrowser] = true
             Defaults[.introSeen] = true
             Defaults[.firstRunSeenAndNotSignedIn] = true
+            Defaults[.didDismissDefaultBrowserInterstitial] = false
             Defaults[.introSeenDate] = Date()
             ClientLogger.shared.logCounter(
                 .DefaultBrowserInterstitialImp
@@ -156,9 +157,38 @@ extension BrowserViewController {
             let arm = NeevaExperiment.startExperiment(for: .notificatonPromptOnAppLaunch)
             NeevaExperiment.logStartExperiment(for: .notificatonPromptOnAppLaunch)
 
+            _ = NeevaExperiment.startExperiment(for: .defaultBrowserChangeButton)
+            NeevaExperiment.logStartExperiment(for: .defaultBrowserChangeButton)
+
             if arm == .askForNotificatonPromptOnAppLaunch {
                 NotificationPermissionHelper.shared.requestPermissionIfNeeded(callSite: .appLaunch)
             }
+        }
+    }
+
+    func restoreDefaultBrowserFirstRun() {
+        overlayManager.presentFullScreenModal(
+            content: AnyView(
+                DefaultBrowserInterstitialOnboardingView(
+                    restoreFromBackground: true,
+                    closeAction: {
+                        self.overlayManager.hideCurrentOverlay()
+                    },
+                    buttonAction: {
+                    }
+                )
+                .onAppear {
+                    AppDelegate.setRotationLock(to: .portrait)
+                }
+                .onDisappear {
+                    AppDelegate.setRotationLock(to: .all)
+                }
+            ),
+            animate: false
+        ) {
+            ClientLogger.shared.logCounter(
+                .DefaultBrowserInterstitialRestoreImp
+            )
         }
     }
 

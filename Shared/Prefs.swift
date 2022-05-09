@@ -204,6 +204,9 @@ extension Defaults.Keys {
     public static let lastDefaultBrowserInterstitialChoice = Defaults.Key<Int>(
         "lastDefaultBrowserInterstitialChoice", default: 0)
 
+    public static let didDismissDefaultBrowserInterstitial = Defaults.Key<Bool?>(
+        "didDismissDefaultBrowserInterstitial")
+
     // MARK: - Spotlight Search
     public static let createUserActivities = Defaults.BoolKey("createUserActivities", default: true)
     public static let makeActivityAvailForSearch = Defaults.BoolKey(

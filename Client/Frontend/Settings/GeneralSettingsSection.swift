@@ -32,7 +32,9 @@ struct GeneralSettingsSection: View {
             "Default Browser",
             destination:
                 DefaultBrowserInterstitialOnboardingView(
-                    trigger: .defaultBrowserSettings, showSkipButton: false
+                    trigger: .defaultBrowserSettings,
+                    showRemindButton: NeevaExperiment.arm(for: .defaultBrowserChangeButton)
+                        == .changeButton
                 ) {
                 } buttonAction: {
                 }

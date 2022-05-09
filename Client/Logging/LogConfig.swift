@@ -192,8 +192,6 @@ public struct LogConfig {
         case DefaultBrowserInterstitialImp
         /// Start an experiment
         case StartExperiment
-        /// Default browser interstitial impression (skip to browser)
-        case DefaultBrowserInterstitialImpSkipToBrowser
         /// Tap on Get started in welcome screen
         case GetStartedInWelcome
         /// Resolved AdService attributionToken (if one exists)
@@ -205,6 +203,8 @@ public struct LogConfig {
         case FirstNavigation
         /// Log interstitial logging error
         case LogErrorForInterstitialEvents
+        /// Default browser interstitial restore imp
+        case DefaultBrowserInterstitialRestoreImp
 
         // MARK: promo card
         /// Promo card is rendered on screen
@@ -541,7 +541,6 @@ public struct LogConfig {
         case .DefaultBrowserOnboardingInterstitialRemind: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialOpen: return .FirstRun
         case .DefaultBrowserInterstitialImp: return .FirstRun
-        case .DefaultBrowserInterstitialImpSkipToBrowser: return .FirstRun
         case .OpenDefaultBrowserURL: return .FirstRun
         case .StartExperiment: return .FirstRun
         case .GetStartedInWelcome: return .FirstRun
@@ -550,6 +549,7 @@ public struct LogConfig {
         case .ResolvedAttributionTokenRetryError: return .FirstRun
         case .FirstNavigation: return .FirstRun
         case .LogErrorForInterstitialEvents: return .FirstRun
+        case .DefaultBrowserInterstitialRestoreImp: return .FirstRun
 
         // MARK: - PromoCard
         case .PromoCardAppear: return .PromoCard

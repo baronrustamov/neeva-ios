@@ -174,6 +174,10 @@ class TestAppDelegate: AppDelegate {
             NeevaExperiment.forceExperimentArm(
                 experiment: .notificatonPromptOnAppLaunch,
                 experimentArm: NeevaExperiment.NotificatonPromptOnAppLaunch.control.rawValue)
+
+            NeevaExperiment.forceExperimentArm(
+                experiment: .defaultBrowserChangeButton,
+                experimentArm: NeevaExperiment.DefaultBrowserChangeButton.control.rawValue)
         }
 
         // Set signInOnce
