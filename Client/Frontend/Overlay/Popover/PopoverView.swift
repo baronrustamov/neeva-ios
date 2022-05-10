@@ -14,7 +14,22 @@ struct PopoverView<Content: View>: View {
     let style: OverlayStyle
     let onDismiss: () -> Void
     let headerButton: OverlayHeaderButton?
+    let useScrollView: Bool
     let content: () -> Content
+
+    init(
+        style: OverlayStyle,
+        onDismiss: @escaping () -> Void,
+        headerButton: OverlayHeaderButton? = nil,
+        useScrollView: Bool = true,
+        @ViewBuilder content: @escaping () -> Content
+    ) {
+        self.style = style
+        self.onDismiss = onDismiss
+        self.headerButton = headerButton
+        self.useScrollView = useScrollView
+        self.content = content
+    }
 
     var horizontalPadding: CGFloat {
         paddingForSizeClass(horizontalSizeClass)
@@ -48,11 +63,12 @@ struct PopoverView<Content: View>: View {
                             SheetHeaderView(title: title, onDismiss: onDismiss)
                         }
 
-                        ScrollView(.vertical, showsIndicators: false) {
-                            content()
-                                .onPreferenceChange(OverlayTitlePreferenceKey.self) {
-                                    self.title = $0
-                                }
+                        if useScrollView {
+                            ScrollView(.vertical, showsIndicators: false) {
+                                presentedContent
+                            }
+                        } else {
+                            presentedContent
                         }
                     }
                     .padding(14)
@@ -75,6 +91,14 @@ struct PopoverView<Content: View>: View {
             }
             .accessibilityAction(.escape, onDismiss)
         }
+    }
+
+    @ViewBuilder
+    var presentedContent: some View {
+        content()
+            .onPreferenceChange(OverlayTitlePreferenceKey.self) {
+                self.title = $0
+            }
     }
 
     func paddingForSizeClass(_ sizeClass: UserInterfaceSizeClass?) -> CGFloat {

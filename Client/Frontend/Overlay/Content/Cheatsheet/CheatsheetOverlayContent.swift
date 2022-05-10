@@ -33,7 +33,7 @@ struct CheatsheetOverlayHostView: View {
 
     @ViewBuilder
     func makePopover<Content: View>(content: Content) -> some View {
-        PopoverView(style: .cheatsheet, onDismiss: dismiss, headerButton: nil) {
+        PopoverView(style: .cheatsheet, onDismiss: dismiss, headerButton: nil, useScrollView: false) {
             content
         }
     }
