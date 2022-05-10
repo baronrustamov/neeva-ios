@@ -10,23 +10,26 @@ struct ZeroQueryHeader: View {
     var action: (() -> Void)?
     var label: LocalizedStringKey?
     var icon: Nicon?
+    var hideToggle: Bool
 
     var body: some View {
         if let action = action, let label = label, let icon = icon {
             HStack {
                 titleView
                 Spacer()
-                Button(action: action) {
-                    // decorative because the toggle action is expressed on the header view itself.
-                    // This button is not an accessibility element.
-                    Symbol(decorative: icon, size: ZeroQueryUX.ToggleIconSize, weight: .medium)
-                        .frame(
-                            width: ZeroQueryUX.ToggleButtonSize,
-                            height: ZeroQueryUX.ToggleButtonSize,
-                            alignment: .center
-                        )
-                        .background(Color(light: .ui.gray98, dark: .systemFill)).clipShape(
-                            Circle())
+                if !hideToggle {
+                    Button(action: action) {
+                        // decorative because the toggle action is expressed on the header view itself.
+                        // This button is not an accessibility element.
+                        Symbol(decorative: icon, size: ZeroQueryUX.ToggleIconSize, weight: .medium)
+                            .frame(
+                                width: ZeroQueryUX.ToggleButtonSize,
+                                height: ZeroQueryUX.ToggleButtonSize,
+                                alignment: .center
+                            )
+                            .background(Color(light: .ui.gray98, dark: .systemFill)).clipShape(
+                                Circle())
+                    }
                 }
             }
             .accessibilityElement(children: .ignore)

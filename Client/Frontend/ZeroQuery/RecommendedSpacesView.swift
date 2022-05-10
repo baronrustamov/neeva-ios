@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import Defaults
 import Shared
 import SwiftUI
 
@@ -15,10 +16,11 @@ struct RecommendedSpacesView: View {
             let space = store.allSpaces.first(where: { $0.id.id == suggestedSpaceId })
         {
             ZeroQueryHeader(
-                title: "\(space.name)",
+                title: "From the Neeva Community",
                 action: { expandSuggestedSpace.advance() },
                 label: "\(expandSuggestedSpace.verb) this section",
-                icon: expandSuggestedSpace.icon
+                icon: expandSuggestedSpace.icon,
+                hideToggle: !Defaults[.didFirstNavigation]
             )
             if expandSuggestedSpace != .hidden {
                 CompactSpaceDetailList(

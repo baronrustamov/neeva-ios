@@ -311,7 +311,6 @@
 		4A42C47127E58487003B9826 /* SessionInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A93B54E277EA7E100CD5415 /* SessionInfoView.swift */; };
 		4A42C47227E58487003B9826 /* CarouselProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A46E4E326730D790001687E /* CarouselProgressView.swift */; };
 		4A42C47327E58487003B9826 /* NeevaUserFlagSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC39A1E26C6532B00EEC559 /* NeevaUserFlagSettingsView.swift */; };
-		4A42C47427E58487003B9826 /* PreviewHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9478E22740FCCD00623D6C /* PreviewHomeView.swift */; };
 		4A42C47527E58487003B9826 /* ToastDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6643042F267C19D200674549 /* ToastDefaults.swift */; };
 		4A42C47627E58487003B9826 /* FocusHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F4C1092045DB2E00746155 /* FocusHelper.swift */; };
 		4A42C47727E58487003B9826 /* BrowserPrimitive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB2039F267D4EEC00920F39 /* BrowserPrimitive.swift */; };
@@ -366,7 +365,6 @@
 		4A42C4AA27E58487003B9826 /* ReaderModeCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B423BD1AB9FE6A007E66C8 /* ReaderModeCache.swift */; };
 		4A42C4AB27E58487003B9826 /* PromoCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADC541F265DA2CD00A210CE /* PromoCard.swift */; };
 		4A42C4AC27E58487003B9826 /* NavSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6751BAB826AA08FB007FC7EA /* NavSuggestion.swift */; };
-		4A42C4AD27E58487003B9826 /* SuggestedPreviewSearchesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC76F9182747182D0067C6A6 /* SuggestedPreviewSearchesView.swift */; };
 		4A42C4AE27E58487003B9826 /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC7CA49270401AC004714C0 /* RecipeView.swift */; };
 		4A42C4AF27E58487003B9826 /* LogConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C18E6326559B9C004710CD /* LogConfig.swift */; };
 		4A42C4B027E58487003B9826 /* OpenInAppOverlayContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C832BF5A26E0A7A400B9A1F8 /* OpenInAppOverlayContent.swift */; };
@@ -988,7 +986,6 @@
 		BC6D34872622D4DE0050DEC4 /* Roobert-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = BC6D34812622D4DE0050DEC4 /* Roobert-Regular.otf */; };
 		BC6D34882622D4DE0050DEC4 /* Roobert-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = BC6D34822622D4DE0050DEC4 /* Roobert-SemiBold.otf */; };
 		BC6D34892622D4DE0050DEC4 /* Roobert-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = BC6D34832622D4DE0050DEC4 /* Roobert-Medium.otf */; };
-		BC76F9192747182D0067C6A6 /* SuggestedPreviewSearchesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC76F9182747182D0067C6A6 /* SuggestedPreviewSearchesView.swift */; };
 		BC85E226264F407C0068092F /* TourPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC85E225264F407C0068092F /* TourPromptView.swift */; };
 		BC85E240264F40B80068092F /* SearchBarTourPromptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC85E23F264F40B80068092F /* SearchBarTourPromptViewController.swift */; };
 		BC86023B26E9B7F300D1C188 /* ProductClusterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC86023A26E9B7F300D1C188 /* ProductClusterView.swift */; };
@@ -997,7 +994,6 @@
 		BC8EE06B271CEA6A00D6BE2A /* DomainAllowList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8EE06A271CEA6A00D6BE2A /* DomainAllowList.swift */; };
 		BC93328E2715324700B9BE1C /* OktaAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC93328D2715324700B9BE1C /* OktaAuth.swift */; };
 		BC93EE862654E31300D1AA07 /* Color.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BC93EE852654E31300D1AA07 /* Color.xcassets */; };
-		BC9478E32740FCCD00623D6C /* PreviewHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9478E22740FCCD00623D6C /* PreviewHomeView.swift */; };
 		BCA4D73127226E8000AE5A15 /* RelatedRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA4D73027226E8000AE5A15 /* RelatedRecipeView.swift */; };
 		BCC1388F2656CBDB0018D87D /* nicons-400.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BCC1388E2656CBDB0018D87D /* nicons-400.ttf */; };
 		BCC138902656CBDB0018D87D /* nicons-400.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BCC1388E2656CBDB0018D87D /* nicons-400.ttf */; };
@@ -2358,7 +2354,6 @@
 		BC6D34812622D4DE0050DEC4 /* Roobert-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roobert-Regular.otf"; sourceTree = "<group>"; };
 		BC6D34822622D4DE0050DEC4 /* Roobert-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roobert-SemiBold.otf"; sourceTree = "<group>"; };
 		BC6D34832622D4DE0050DEC4 /* Roobert-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roobert-Medium.otf"; sourceTree = "<group>"; };
-		BC76F9182747182D0067C6A6 /* SuggestedPreviewSearchesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestedPreviewSearchesView.swift; sourceTree = "<group>"; };
 		BC85E225264F407C0068092F /* TourPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TourPromptView.swift; sourceTree = "<group>"; };
 		BC85E23F264F40B80068092F /* SearchBarTourPromptViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarTourPromptViewController.swift; sourceTree = "<group>"; };
 		BC86023A26E9B7F300D1C188 /* ProductClusterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductClusterView.swift; sourceTree = "<group>"; };
@@ -2367,7 +2362,6 @@
 		BC8EE06A271CEA6A00D6BE2A /* DomainAllowList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainAllowList.swift; sourceTree = "<group>"; };
 		BC93328D2715324700B9BE1C /* OktaAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaAuth.swift; sourceTree = "<group>"; };
 		BC93EE852654E31300D1AA07 /* Color.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Color.xcassets; sourceTree = "<group>"; };
-		BC9478E22740FCCD00623D6C /* PreviewHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewHomeView.swift; sourceTree = "<group>"; };
 		BCA4D73027226E8000AE5A15 /* RelatedRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelatedRecipeView.swift; sourceTree = "<group>"; };
 		BCAAA0D4276D9B420013223E /* CryptoConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoConfig.swift; sourceTree = "<group>"; };
 		BCAAA0D6276D9B800013223E /* CryptoWalletView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoWalletView.swift; sourceTree = "<group>"; };
@@ -4718,7 +4712,6 @@
 				BC15D22A26FA575A00FDF6A7 /* AuthButton.swift */,
 				BC15D22C26FA5F9C00FDF6A7 /* OtherOptionsPage.swift */,
 				BC93328D2715324700B9BE1C /* OktaAuth.swift */,
-				BC9478E22740FCCD00623D6C /* PreviewHomeView.swift */,
 				BCC7737A27443E7F008E7538 /* SignUpOneButtonPromptView.swift */,
 				BC6239DF27476BC8004A036F /* SignUpTwoButtonsPromptView.swift */,
 			);
@@ -5203,7 +5196,6 @@
 				4ADC541F265DA2CD00A210CE /* PromoCard.swift */,
 				8A2401CA26BB4D75006ABF7D /* RatingsCard.swift */,
 				E64024E727F2432300D65B63 /* RecommendedSpacesView.swift */,
-				BC76F9182747182D0067C6A6 /* SuggestedPreviewSearchesView.swift */,
 				C9BED4C02667FA91001D9C77 /* SuggestedSearchViews.swift */,
 				C9BED4BC2667E453001D9C77 /* SuggestedSitesViews.swift */,
 				C9F49CB6266E5E1800F3408A /* SuggestedSpaceViews.swift */,
@@ -6765,7 +6757,6 @@
 				4A42C47127E58487003B9826 /* SessionInfoView.swift in Sources */,
 				4A42C47227E58487003B9826 /* CarouselProgressView.swift in Sources */,
 				4A42C47327E58487003B9826 /* NeevaUserFlagSettingsView.swift in Sources */,
-				4A42C47427E58487003B9826 /* PreviewHomeView.swift in Sources */,
 				4A42C47527E58487003B9826 /* ToastDefaults.swift in Sources */,
 				4A42C47627E58487003B9826 /* FocusHelper.swift in Sources */,
 				4A42C47727E58487003B9826 /* BrowserPrimitive.swift in Sources */,
@@ -6836,7 +6827,6 @@
 				4A42C4AB27E58487003B9826 /* PromoCard.swift in Sources */,
 				4AE5FC6A27ED9492005E6E9A /* ImpressionLoggerModifier.swift in Sources */,
 				4A42C4AC27E58487003B9826 /* NavSuggestion.swift in Sources */,
-				4A42C4AD27E58487003B9826 /* SuggestedPreviewSearchesView.swift in Sources */,
 				4A42C4AE27E58487003B9826 /* RecipeView.swift in Sources */,
 				4A42C4AF27E58487003B9826 /* LogConfig.swift in Sources */,
 				4A42C4B027E58487003B9826 /* OpenInAppOverlayContent.swift in Sources */,
@@ -7364,7 +7354,6 @@
 				C9AFE6E726583F5A000C5A03 /* SettingsView.swift in Sources */,
 				4A46E4E426730D790001687E /* CarouselProgressView.swift in Sources */,
 				BCC39A1F26C6532B00EEC559 /* NeevaUserFlagSettingsView.swift in Sources */,
-				BC9478E32740FCCD00623D6C /* PreviewHomeView.swift in Sources */,
 				66430430267C19D200674549 /* ToastDefaults.swift in Sources */,
 				39F4C10A2045DB2E00746155 /* FocusHelper.swift in Sources */,
 				4AB203A0267D4EEC00920F39 /* BrowserPrimitive.swift in Sources */,
@@ -7423,7 +7412,6 @@
 				E4B423BE1AB9FE6A007E66C8 /* ReaderModeCache.swift in Sources */,
 				4ADC5420265DA2CD00A210CE /* PromoCard.swift in Sources */,
 				6751BAB926AA08FB007FC7EA /* NavSuggestion.swift in Sources */,
-				BC76F9192747182D0067C6A6 /* SuggestedPreviewSearchesView.swift in Sources */,
 				BCC7CA4A270401AC004714C0 /* RecipeView.swift in Sources */,
 				C9C18E6526559B9C004710CD /* LogConfig.swift in Sources */,
 				C832BF5B26E0A7A400B9A1F8 /* OpenInAppOverlayContent.swift in Sources */,

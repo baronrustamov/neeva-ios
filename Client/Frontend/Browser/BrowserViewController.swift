@@ -332,10 +332,8 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
         displayedPopoverController?.dismiss(animated: true, completion: nil)
 
-        if tabContainerModel.currentContentUI != .previewHome {
-            coordinator.animate { [self] context in
-                browserModel.scrollingControlModel.showToolbars(animated: false)
-            }
+        coordinator.animate { [self] context in
+            browserModel.scrollingControlModel.showToolbars(animated: false)
         }
     }
 
@@ -394,9 +392,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
             })
 
         // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
-        if tabContainerModel.currentContentUI != .previewHome {
-            browserModel.scrollingControlModel.showToolbars(animated: false)
-        }
+        browserModel.scrollingControlModel.showToolbars(animated: false)
 
         if NeevaUserInfo.shared.isUserLoggedIn {
             DispatchQueue.main.async {
@@ -404,7 +400,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
             }
         }
 
-        if FeatureFlag[.enableSuggestedSpaces] {
+        if NeevaConstants.currentTarget == .client {
             DispatchQueue.main.async {
                 SpaceStore.suggested.refresh()
             }
@@ -522,7 +518,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
                     self.showZeroQuery()
                 #else
                     if !Defaults[.didFirstNavigation] {
-                        self.showPreviewHome()
+                        self.showZeroQuery()
                     } else {
                         self.showTabTray()
                     }
@@ -627,16 +623,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
         DispatchQueue.main.async { [self] in
             tabContainerModel.updateContent(.hideZeroQuery)
             zeroQueryModel.reset(bvc: self, wasCancelled: wasCancelled)
-
-            if tabContainerModel.currentContentUI == .previewHome {
-                browserModel.scrollingControlModel.showToolbars(animated: true)
-            }
         }
-    }
-
-    public func showPreviewHome() {
-        tabContainerModel.updateContent(.showPreviewHome)
-        browserModel.scrollingControlModel.showToolbars(animated: false)
     }
 
     fileprivate func updateInZeroQuery(_ url: URL?) {

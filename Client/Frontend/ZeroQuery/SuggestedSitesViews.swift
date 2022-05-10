@@ -255,36 +255,3 @@ struct SuggestedSitesView: View {
         }
     }
 }
-
-#if DEBUG
-    struct SuggestedSitesViews_Previews: PreviewProvider {
-        static var previews: some View {
-            HStack {
-                SuggestedSiteView(
-                    site: .init(url: "https://example.com", title: "Example", id: 1),
-                    isPinnedSite: false)
-                SuggestedSiteView(
-                    site: .init(url: "https://twitter.com", title: "Twitter", id: 2),
-                    isPinnedSite: true)
-                SuggestedSiteView(
-                    site: .init(url: "https://google.com", title: "Google", id: 3),
-                    isPinnedSite: true)
-                SuggestedSiteView(
-                    site: .init(url: "https://youtube.com", title: "Youtube", id: 4),
-                    isPinnedSite: true)
-                SuggestedSiteView(
-                    site: .init(url: "https://nba.com", title: "NBA", id: 5),
-                    isPinnedSite: true)
-                SuggestedSiteView(
-                    site: .init(url: "https://mlb.com", title: "MLB", id: 6),
-                    isPinnedSite: true)
-            }.padding().previewLayout(.sizeThatFits)
-            Group {
-                SuggestedSitesView(isExpanded: false, viewModel: SuggestedSitesViewModel.preview)
-                SuggestedSitesView(isExpanded: true, viewModel: SuggestedSitesViewModel.preview)
-            }
-            .previewLayout(.sizeThatFits)
-            .environment(\.zeroQueryWidth, 375)
-        }
-    }
-#endif

@@ -222,7 +222,7 @@ struct CompactSpaceDetailList: View {
 
     private var dataSource: [SpaceEntityThumbnail] {
         if state == .compact {
-            return Array(primitive.allDetailsWithExclusionList.prefix(upTo: 5))
+            return Array(primitive.allDetailsWithExclusionList.prefix(5))
         }
         return primitive.allDetailsWithExclusionList
     }
@@ -240,6 +240,7 @@ struct CompactSpaceDetailList: View {
                             HStack(alignment: .center, spacing: 12) {
                                 details.thumbnail.frame(width: 36, height: 36).cornerRadius(8)
                                 Text(details.title).withFont(.labelMedium).foregroundColor(.label)
+                                    .lineLimit(1)
                                 Spacer()
                             }.padding(.horizontal, 16)
                         })

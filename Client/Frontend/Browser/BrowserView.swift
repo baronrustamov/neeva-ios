@@ -71,14 +71,8 @@ struct BrowserView: View {
     let browserModel: BrowserModel
     let chromeModel: TabChromeModel
 
-    @ObservedObject var tabContainerModel: TabContainerModel
-
     @State var safeArea = EdgeInsets()
     @State var topBarHeight: CGFloat = .zero
-
-    private var isShowingPreviewHome: Bool {
-        tabContainerModel.currentContentUI == .previewHome
-    }
 
     // MARK: - Views
     var mainContent: some View {
@@ -89,12 +83,10 @@ struct BrowserView: View {
                         // Tab content or CardGrid
                         BrowserContentView(bvc: bvc, cardGrid: CardGrid(geom: geom))
                             .environment(\.shareURL, bvc.shareURL(url:view:))
-                            .if(!isShowingPreviewHome) {
-                                $0.padding(
-                                    UIConstants.enableBottomURLBar ? .bottom : .top,
-                                    topBarHeight
-                                )
-                            }
+                            .padding(
+                                UIConstants.enableBottomURLBar ? .bottom : .top,
+                                topBarHeight
+                            )
                             .background(Color.background)
 
                         // Top Bar
@@ -163,6 +155,5 @@ struct BrowserView: View {
         self.bvc = bvc
         self.browserModel = bvc.browserModel
         self.chromeModel = bvc.chromeModel
-        self.tabContainerModel = bvc.tabContainerModel
     }
 }

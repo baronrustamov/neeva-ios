@@ -13,7 +13,6 @@ enum ContentUIType: Equatable {
     case zeroQuery
     case suggestions
     case blank
-    case previewHome
 }
 
 enum ContentUIVisibilityEvent {
@@ -21,7 +20,6 @@ enum ContentUIVisibilityEvent {
     case hideZeroQuery
     case showSuggestions
     case hideSuggestions
-    case showPreviewHome
 }
 
 class TabContainerModel: ObservableObject {
@@ -73,7 +71,7 @@ class TabContainerModel: ObservableObject {
         // TODO(darin): We should get rid of the notion of .blank. We should be showing the empty
         // card grid in this case instead.
         !Defaults[.didFirstNavigation] && NeevaConstants.currentTarget != .xyz
-            ? .previewHome : .blank
+            ? .zeroQuery : .blank
     }
 
     func updateContent(_ event: ContentUIVisibilityEvent) {
@@ -101,13 +99,7 @@ class TabContainerModel: ObservableObject {
                 zeroQueryModel.targetTab = .defaultValue
             }
         case .hideZeroQuery:
-            if !Defaults[.didFirstNavigation] && NeevaConstants.currentTarget != .xyz {
-                currentContentUI = .previewHome
-            } else {
-                currentContentUI = webContainerType
-            }
-        case .showPreviewHome:
-            currentContentUI = .previewHome
+            currentContentUI = webContainerType
         }
     }
 }
@@ -207,11 +199,6 @@ struct TabContainerContent: View {
                         )
                     }
                 }
-            case .previewHome:
-                PreviewHomeView(bvc: bvc)
-                    .environment(\.onOpenURL) { url in
-                        bvc.tabManager.createOrSwitchToTab(for: url)
-                    }
             case .blank:
                 ZeroQueryContent(model: zeroQueryModel)
                     .environmentObject(suggestedSearchesModel)
