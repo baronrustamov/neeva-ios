@@ -13,12 +13,14 @@ struct CheatsheetOverlayHostView: View {
 
     private var showAsPopover: Bool { tabChromeModel.inlineToolbar }
 
+    private let dismiss: () -> Void
     private let openSupport: (UIImage?) -> Void
     private let openURL: (URL) -> Void
 
-    init(openSupport: @escaping (UIImage?) -> Void, tabManager: TabManager) {
+    init(openSupport: @escaping (UIImage?) -> Void, dismiss: @escaping ()-> Void, tabManager: TabManager) {
         self.model = tabManager.selectedTab?.cheatsheetModel ?? CheatsheetMenuViewModel(tab: nil)
 
+        self.dismiss = dismiss
         self.openSupport = openSupport
         self.openURL = { url in
             tabManager.createOrSwitchToTab(for: url)
@@ -27,6 +29,13 @@ struct CheatsheetOverlayHostView: View {
 
     var body: some View {
         EmptyView()
+    }
+
+    @ViewBuilder
+    func makePopover<Content: View>(content: Content) -> some View {
+        PopoverView(style: .cheatsheet, onDismiss: dismiss, headerButton: nil) {
+            content
+        }
     }
 
     @ViewBuilder
