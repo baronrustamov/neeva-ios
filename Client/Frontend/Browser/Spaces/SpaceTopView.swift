@@ -19,6 +19,8 @@ struct SpaceTopView: View {
     @State private var showConfirmDeleteAlert = false
     @ObservedObject var primitive: SpaceCardDetails
     @Binding var headerVisible: Bool
+    let isShowingProfileUI: Bool
+    var onProfileUIDismissed: (() -> Void)? = nil
 
     var space: Space? {
         primitive.manager.get(for: primitive.id)
@@ -36,7 +38,11 @@ struct SpaceTopView: View {
         HStack {
             Button(
                 action: {
-                    self.gridModel.closeDetailView()
+                    if isShowingProfileUI {
+                        onProfileUIDismissed?()
+                    } else {
+                        gridModel.closeDetailView()
+                    }
                 },
                 label: {
                     Symbol(.arrowBackward, label: "Return to all Spaces view")
@@ -197,6 +203,18 @@ struct SpaceTopView: View {
         }
     }
 
+    @ViewBuilder var openAllURLsButton: some View {
+        if let space = space, let urls = space.contentURLs {
+            Button {
+                self.tabModel.manager.addTabsForURLs(
+                    Array(urls), shouldSelectTab: false, rootUUID: space.id.id)
+                self.gridModel.closeDetailView(switchToTabs: true)
+            } label: {
+                Label("Open all Space links", systemSymbol: .arrowUpRight)
+            }
+        }
+    }
+
     @ViewBuilder var deleteButton: some View {
         if let space = space {
             Button {
@@ -242,6 +260,8 @@ struct SpaceTopView: View {
                 if let space = space, !space.isDefaultSpace {
                     deleteButton
                 }
+
+                openAllURLsButton
 
                 if !headerVisible {
                     if canEdit {

@@ -42,10 +42,13 @@ class HistoryPanelModel: ObservableObject {
 
     private let queryFetchLimit = 100
     private var currentFetchOffset = 0
-    private var isFetchInProgress = false
     private var dataNeedsToBeReloaded = false
 
     @Published var groupedSites = DateGroupedTableData<Site>()
+    @Published var isFetchInProgress = false
+
+    // History search
+    @Published var filteredSites = DateGroupedTableData<Site>()
 
     var recentlyClosedTabs: [SavedTab] {
         Array(tabManager.recentlyClosedTabs.joined())
@@ -66,6 +69,47 @@ class HistoryPanelModel: ObservableObject {
         }
     }
 
+    func addSiteDataToGroupedSites(_ result: Maybe<Cursor<Site?>>) {
+        if let sites = result.successValue {
+            for site in sites {
+                guard let site = site as? Site, let latestVisit = site.latestVisit else {
+                    return
+                }
+
+                self.groupedSites.add(
+                    site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
+            }
+        }
+    }
+
+    func loadNextItemsIfNeeded(from index: Int) {
+        guard index >= currentFetchOffset - 1, !isFetchInProgress else {
+            return
+        }
+
+        loadSiteData().uponQueue(.main) { result in
+            self.addSiteDataToGroupedSites(result)
+        }
+    }
+
+    func searchForSites(with query: String) {
+        loadSiteData(with: query).uponQueue(.main) { result in
+            self.filteredSites = DateGroupedTableData<Site>()
+
+            if let sites = result.successValue {
+                for site in sites {
+                    guard let site = site as? Site, let latestVisit = site.latestVisit else {
+                        return
+                    }
+
+                    self.filteredSites.add(
+                        site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
+                }
+            }
+        }
+    }
+
+    // Retrieving
     func loadSiteData() -> Deferred<Maybe<Cursor<Site?>>> {
         guard !isFetchInProgress, !profile.isShutdown else {
             dataNeedsToBeReloaded = true
@@ -87,26 +131,15 @@ class HistoryPanelModel: ObservableObject {
             }
     }
 
-    func addSiteDataToGroupedSites(_ result: Maybe<Cursor<Site?>>) {
-        if let sites = result.successValue {
-            for site in sites {
-                guard let site = site as? Site, let latestVisit = site.latestVisit else {
-                    return
-                }
+    func loadSiteData(with query: String) -> Deferred<Maybe<Cursor<Site?>>> {
+        self.isFetchInProgress = true
 
-                self.groupedSites.add(
-                    site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
+        return profile.history.getSitesWithQuery(query: query) >>== { result in
+            DispatchQueue.main.async {
+                self.isFetchInProgress = false
             }
-        }
-    }
 
-    func loadNextItemsIfNeeded(from index: Int) {
-        guard index >= currentFetchOffset - 1 else {
-            return
-        }
-
-        loadSiteData().uponQueue(.main) { result in
-            self.addSiteDataToGroupedSites(result)
+            return deferMaybe(result)
         }
     }
 
@@ -135,9 +168,9 @@ class HistoryPanelModel: ObservableObject {
         }
     }
 
-    func removeHistoryForURLAtIndexPath(site: Site) {
+    func removeItemFromHistory(site: Site) {
         profile.history.removeHistoryForURL(site.url).uponQueue(.main) { result in
-            self.reloadData()
+            self.groupedSites.remove(site)
         }
     }
 

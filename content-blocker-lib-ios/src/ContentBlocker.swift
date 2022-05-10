@@ -229,7 +229,7 @@ extension ContentBlocker {
         var blocklists = [String]()
         blocklists = NeevaConstants.currentTarget == .xyz
             ? [BlocklistFileName.easyPrivacyStrict.filename]
-            : FeatureFlag[.newTrackingProtectionSettings]
+            : FeatureFlag[.cookieCutter]
                 ? BlocklistFileName.allCases.map { $0.filename }
                 : [BlocklistFileName.easyPrivacy.filename]
         let deferreds: [Deferred<Void>] = blocklists.map { filename in

@@ -27,8 +27,23 @@ struct TrackingPreventionConfig {
     static func trackersAllowedFor(_ domain: String) -> Bool {
         Defaults[.unblockedDomains].contains(domain)
     }
-
+    
+    static func trackersPreventedFor(_ domain: String) -> Bool {
+        !Defaults[.unblockedDomains].contains(domain)
+    }
+    
     static func updateAllowList(with domain: String, allowed: Bool, completion: (() -> ())? = nil) {
+        updateAllowList(with: domain, allowed: allowed) { _ in
+            completion?()
+        }
+    }
+
+    static func updateAllowList(with domain: String, allowed: Bool, completionWithUpdateRequired: ((Bool) -> ())? = nil) {
+        guard trackersAllowedFor(domain) != allowed else {
+            completionWithUpdateRequired?(false)
+            return
+        }
+        
         if allowed {
             allowTrackersFor(domain)
         } else {
@@ -37,7 +52,7 @@ struct TrackingPreventionConfig {
 
         ContentBlocker.shared.removeAllRulesInStore {
             ContentBlocker.shared.compileListsNotInStore {
-                completion?()
+                completionWithUpdateRequired?(true)
             }
         }
     }

@@ -12,8 +12,6 @@ enum TimeSection: Int, CaseIterable {
     case lastWeek
     case lastMonth
 
-    static let count = 5
-
     var title: String? {
         switch self {
         case .today:
@@ -54,10 +52,26 @@ struct HistoryPanelView: View {
     @State var showRecentlyClosedTabs = false
     @State var showClearHistoryMenu = false
 
+    // History search
+    @StateObject var siteFilter = DebounceObject()
+    var useFilteredSites: Bool {
+        !siteFilter.debouncedText.isEmpty
+    }
+
     let onDismiss: () -> Void
 
     var historyList: some View {
-        ScrollView {
+        ScrollView(showsIndicators: false) {
+            SingleLineTextField(
+                icon: Symbol(decorative: .magnifyingglass, style: .labelLarge),
+                placeholder: "Search your history", text: $siteFilter.text
+            )
+            .padding(.bottom)
+            .accessibilityLabel(Text("History Search TextField"))
+            .onChange(of: siteFilter.debouncedText) { newValue in
+                model.searchForSites(with: newValue)
+            }
+
             // Recently closed tabs and clear history
             GroupedCell.Decoration {
                 VStack(spacing: 0) {
@@ -79,35 +93,50 @@ struct HistoryPanelView: View {
                         EmptyView()
                     }
                 }.accentColor(.label)
-            }.padding(.horizontal)
+            }
 
             // History List
-            LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
-                ForEach(TimeSection.allCases, id: \.self) { section in
-                    let itemsInSection = model.groupedSites.itemsForSection(section.rawValue)
+            if model.isFetchInProgress && model.groupedSites.isEmpty {
+                Spacer()
+                LoadingView("Loading your history...")
+                Spacer()
+            } else {
+                VStack(spacing: 0) {
+                    ForEach(TimeSection.allCases, id: \.self) { section in
+                        let itemsInSection =
+                            useFilteredSites
+                            ? model.filteredSites.itemsForSection(section.rawValue)
+                            : model.groupedSites.itemsForSection(section.rawValue)
 
-                    if itemsInSection.count > 0 {
-                        Section(header: HistorySectionHeader(section: section)) {
-                            SiteListView(
-                                tabManager: model.tabManager,
-                                sites: itemsInSection,
-                                itemAtIndexAppeared: { index in
-                                    model.loadNextItemsIfNeeded(from: index)
-                                },
-                                deleteSite: { site in
-                                    model.removeHistoryForURLAtIndexPath(site: site)
-                                }
-                            ).accessibilityLabel(Text("History List"))
+                        if itemsInSection.count > 0 {
+                            Section(header: HistorySectionHeader(section: section)) {
+                                SiteListView(
+                                    tabManager: model.tabManager,
+                                    historyPanelModel: model,
+                                    sites: itemsInSection,
+                                    siteTimeSection: section,
+                                    itemAtIndexAppeared: { index in
+                                        model.loadNextItemsIfNeeded(from: index)
+                                    },
+                                    deleteSite: { site in
+                                        model.removeItemFromHistory(site: site)
+                                    }
+                                ).accessibilityLabel(Text("History List"))
+                            }
                         }
                     }
-                }
-            }.padding(.top, 20).padding(.horizontal)
-        }.background(Color.groupedBackground.ignoresSafeArea(.container))
+                }.padding(.top, 20)
+            }
+        }
+        .padding(.horizontal)
+        .background(
+            Color.groupedBackground.ignoresSafeArea(.container)
+        )
     }
 
     @ViewBuilder
     var content: some View {
-        if model.groupedSites.isEmpty {
+        if model.groupedSites.isEmpty && !model.isFetchInProgress {
             Text("Websites you've visted\nrecently will show up here.")
                 .multilineTextAlignment(.center)
                 .accessibilityLabel(Text("History List Empty"))

@@ -22,11 +22,11 @@ enum BlockingStrength: String, Codable, CaseIterable, Identifiable {
     var name: String {
         switch self {
         case .easyPrivacy:
-            return "Block cookie (Easy Privacy)"
+            return "Block cookies"
         case .easyPrivacyStrict:
-            return "Block request (Easy Privacy)"
+            return "Block cookies (strict)"
         case .easyListAdBlock:
-            return "Strict (Ad Block Easy List)"
+            return "Ad blocker"
         }
     }
 }
@@ -58,7 +58,7 @@ class NeevaTabContentBlocker: TabContentBlocker, TabContentScript {
         if NeevaConstants.currentTarget == .xyz {
             strength = .easyPrivacyStrict
         } else {
-            if FeatureFlag[.newTrackingProtectionSettings],
+            if FeatureFlag[.cookieCutter],
                 let strEnum = BlockingStrength(rawValue: Defaults[.contentBlockingStrength])
             {
                 strength = strEnum

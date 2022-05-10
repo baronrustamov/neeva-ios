@@ -5,8 +5,6 @@
 import Combine
 import WebKit
 
-// Having page zoom issues? Take a look at an earlier commit (e.g., a2139914469ec4aa97364f66735295339601c8d0).
-// A fallback page zoom method was removed to simplify the code.
 class TextSizeModel: ObservableObject {
     private let tab: Tab
 
@@ -14,44 +12,23 @@ class TextSizeModel: ObservableObject {
         self.tab = tab
     }
 
-    // If tab.webView is nil here, something is very wrong
-    private var observer: AnyCancellable?
-    var pageZoom: CGFloat {
-        get {
-            tab.webView?.neeva_zoomAmount ?? 1.0
-        }
-        set {
-            objectWillChange.send()
-            if let webView = tab.webView {
-                webView.neeva_zoomAmount = newValue
-                let originalOffset = webView.scrollView.contentOffset
-                // Fix the scroll position after changing zoom level
-                let newOffset = CGPoint(
-                    x: originalOffset.x, y: originalOffset.y * newValue / pageZoom)
-                observer = webView.scrollView.publisher(for: \.contentOffset)
-                    .sink { offset in
-                        if offset != originalOffset {
-                            webView.scrollView.contentOffset = newOffset
-                            self.observer = nil
-                        }
-                    }
-            }
-        }
-    }
-
     // observed from Safari on iOS 14.6 (18F72)
     let levels: [CGFloat] = [0.5, 0.75, 0.85, 1, 1.15, 1.25, 1.5, 1.75, 2, 2.5, 3]
 
-    var canZoomIn: Bool { pageZoom != levels.last }
-    var canZoomOut: Bool { pageZoom != levels.first }
+    var canZoomIn: Bool { tab.pageZoom != levels.last }
+    var canZoomOut: Bool { tab.pageZoom != levels.first }
+
+    func resetZoom() {
+        tab.pageZoom = 1.0
+    }
 
     func zoomIn() {
-        if pageZoom < levels.first! {
-            pageZoom = levels.first!
-        } else if pageZoom < levels.last! {
+        if tab.pageZoom < levels.first! {
+            tab.pageZoom = levels.first!
+        } else if tab.pageZoom < levels.last! {
             for (lower, upper) in zip(levels, levels.dropFirst()) {
-                if lower <= pageZoom, pageZoom < upper {
-                    pageZoom = upper
+                if lower <= tab.pageZoom, tab.pageZoom < upper {
+                    tab.pageZoom = upper
                     return
                 }
             }
@@ -60,12 +37,12 @@ class TextSizeModel: ObservableObject {
     }
 
     func zoomOut() {
-        if pageZoom > levels.last! {
-            pageZoom = levels.last!
-        } else if pageZoom > levels.first! {
+        if tab.pageZoom > levels.last! {
+            tab.pageZoom = levels.last!
+        } else if tab.pageZoom > levels.first! {
             for (lower, upper) in zip(levels, levels.dropFirst()) {
-                if lower < pageZoom, pageZoom <= upper {
-                    pageZoom = lower
+                if lower < tab.pageZoom, tab.pageZoom <= upper {
+                    tab.pageZoom = lower
                     return
                 }
             }
@@ -80,14 +57,14 @@ class TextSizeModel: ObservableObject {
     }()
 
     var label: String {
-        let percent = formatter.string(from: pageZoom as NSNumber)!
+        let percent = formatter.string(from: tab.pageZoom as NSNumber)!
         if !canZoomIn {
             return "maximum, \(percent)"
         }
         if !canZoomOut {
             return "minimum, \(percent)"
         }
-        if pageZoom == 1 {
+        if tab.pageZoom == 1 {
             return "default, \(percent)"
         }
         return percent

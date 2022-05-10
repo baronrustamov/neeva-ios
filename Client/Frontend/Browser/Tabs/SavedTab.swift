@@ -22,6 +22,7 @@ class SavedTab: NSObject, NSCoding {
     var parentUUID: String?
     var tabIndex: Int?
     var parentSpaceID: String?
+    var pageZoom: CGFloat?
 
     var jsonDictionary: [String: AnyObject] {
         let title: String = self.title ?? "null"
@@ -40,6 +41,7 @@ class SavedTab: NSObject, NSCoding {
             "parentUUID": self.UUID as AnyObject,
             "tabIndex": self.tabIndex as AnyObject,
             "parentSpaceID": self.parentSpaceID as AnyObject,
+            "pageZoom": self.pageZoom as AnyObject,
         ]
 
         if let sessionDataInfo = self.sessionData?.jsonDictionary {
@@ -53,7 +55,7 @@ class SavedTab: NSObject, NSCoding {
         screenshotUUID: UUID?, isSelected: Bool, title: String?, isIncognito: Bool, isPinned: Bool,
         pinnedTime: TimeInterval?, lastExecutedTIme: Timestamp?,
         faviconURL: URL?, url: URL?, sessionData: SessionData?, uuid: String, rootUUID: String,
-        parentUUID: String, tabIndex: Int?, parentSpaceID: String
+        parentUUID: String, tabIndex: Int?, parentSpaceID: String, pageZoom: CGFloat
     ) {
         self.screenshotUUID = screenshotUUID
         self.isSelected = isSelected
@@ -70,6 +72,7 @@ class SavedTab: NSObject, NSCoding {
         self.parentUUID = parentUUID
         self.tabIndex = tabIndex
         self.parentSpaceID = parentSpaceID
+        self.pageZoom = pageZoom
 
         super.init()
     }
@@ -90,6 +93,7 @@ class SavedTab: NSObject, NSCoding {
         self.parentUUID = coder.decodeObject(forKey: "parentUUID") as? String
         self.tabIndex = coder.decodeObject(forKey: "tabIndex") as? Int
         self.parentSpaceID = coder.decodeObject(forKey: "parentSpaceID") as? String
+        self.pageZoom = coder.decodeObject(forKey: "pageZoom") as? CGFloat
     }
 
     func encode(with coder: NSCoder) {
@@ -108,5 +112,6 @@ class SavedTab: NSObject, NSCoding {
         coder.encode(parentUUID, forKey: "parentUUID")
         coder.encode(tabIndex, forKey: "tabIndex")
         coder.encode(parentSpaceID, forKey: "parentSpaceID")
+        coder.encode(pageZoom, forKey: "pageZoom")
     }
 }

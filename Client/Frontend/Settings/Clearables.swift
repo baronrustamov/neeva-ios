@@ -101,8 +101,8 @@ class TrackingProtectionClearable: Clearable {
 
 class CookieCutterExclusionsClearable: Clearable {
     func clear() -> Success {
-        // TODO: Actually clear this data
-        let result = Success()
-        return result
+        // Since Cookie Cutter uses the Tracking Protection exclusion list,
+        // just clear that.
+        return TrackingProtectionClearable().clear()
     }
 }

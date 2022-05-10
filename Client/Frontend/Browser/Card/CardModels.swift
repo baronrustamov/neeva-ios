@@ -24,11 +24,6 @@ protocol CardModel: ThumbnailModel {
     func onDataUpdated()
 }
 
-enum TimeFilter: String {
-    case today = "Today"
-    case lastWeek = "Last Week"
-}
-
 class TabCardModel: CardModel {
     private var subscription: Set<AnyCancellable> = Set()
 
@@ -53,6 +48,8 @@ class TabCardModel: CardModel {
     var needsUpdateRows: Bool = false
     static let todayRowHeaderID: String = "today-header"
     static let lastweekRowHeaderID: String = "lastWeek-header"
+
+    private(set) var tabsDidChange = false
 
     private func updateRows() {
         if FeatureFlag[.enableTimeBasedSwitcher] {
@@ -119,15 +116,20 @@ class TabCardModel: CardModel {
     init(manager: TabManager) {
         self.manager = manager
 
-        manager.tabsUpdatedPublisher.filter({ [weak self] in
-            self?.manager.didRestoreAllTabs ?? false
-        }).sink { [weak self] in
+        manager.tabsUpdatedPublisher.sink { [weak self] in
+            self?.tabsDidChange = true
             self?.onDataUpdated()
+            // 'tabsDidChange' is used by CardScrollContainer to set its animation
+            // to .default. This is needed to handle a bug which the scroll view
+            // doesn't get pushed down when the bottom tab is closed.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self?.tabsDidChange = false
+            }
         }.store(in: &subscription)
 
         if FeatureFlag[.enableTimeBasedSwitcher] {
             manager.selectedTabPublisher.sink { [weak self] tab in
-                guard let self = self else {
+                guard let self = self, let _ = tab else {
                     return
                 }
                 self.needsUpdateRows = true
@@ -201,37 +203,7 @@ class TabCardModel: CardModel {
         var multipleCellTypes: Bool = false
     }
 
-    private func filterTabByTime(tab: Tab, byTime: TimeFilter) -> Bool {
-        // The fallback value won't be used. tab.lastExecutedTime is
-        // guaranteed to be non-nil in configureTab()
-        let lastExecutedTime = tab.lastExecutedTime ?? Date.nowMilliseconds()
-        let minusOneDayToCurrentDate =
-            FeatureFlag[.demoteAfter15secondsTimeBasedSwitcher]
-            ? Calendar.current.date(
-                byAdding: .second, value: -15, to: Date())
-            : Calendar.current.date(
-                byAdding: .day, value: -1, to: Date())
-        guard let startOfOneDayAgo = minusOneDayToCurrentDate else {
-            return true
-        }
-        // timeIntervalSince1970 returns the number of seconds. It is converted
-        // to milliseconds by multiplying by 1000 to compare with lastExecutedTime
-        // which is stored in milliseconds.
-        switch byTime {
-        case .today:
-            return lastExecutedTime > Int64(startOfOneDayAgo.timeIntervalSince1970 * 1000)
-        case .lastWeek:
-            let minusOneWeekToCurrentDate = Calendar.current.date(
-                byAdding: .day, value: -7, to: Date())
-            guard let startOfLastWeek = minusOneWeekToCurrentDate else {
-                return true
-            }
-            return lastExecutedTime < Int64(startOfOneDayAgo.timeIntervalSince1970 * 1000)
-                && lastExecutedTime > Int64(startOfLastWeek.timeIntervalSince1970 * 1000)
-        }
-    }
-
-    private func buildRows(incognito: Bool, byTime: TimeFilter? = nil) -> [Row] {
+    func buildRows(incognito: Bool, byTime: TimeFilter? = nil) -> [Row] {
         var rows: [Row] = []
 
         var allDetailsFiltered = allDetails.filter { tabCard in
@@ -241,7 +213,7 @@ class TabCardModel: CardModel {
                 || allDetailsWithExclusionList.contains { $0.id == tabCard.id })
                 && tab.isIncognito == incognito
                 && (FeatureFlag[.enableTimeBasedSwitcher]
-                    ? filterTabByTime(tab: tab, byTime: byTime!) : true)
+                    ? tab.wasLastExecuted(byTime!) : true)
         }
 
         modifyAllDetailsFilteredPromotingPinnedTabs(&allDetailsFiltered)
@@ -614,6 +586,7 @@ class SpaceCardModel: CardModel {
         }
     }
 
+    // TODO(jon): Convert to use SpaceService
     func add(spaceID: String, url: String, title: String, description: String? = nil) {
         DispatchQueue.main.async {
             let request = AddToSpaceWithURLRequest(
@@ -779,11 +752,10 @@ class SpaceCardModel: CardModel {
                 ClientLogger.shared.logCounter(
                     .BlackFridayNotifyPromo)
                 NotificationPermissionHelper.shared.requestPermissionIfNeeded(
-                    completion: { authorized in
-                        Defaults[.seenBlackFridayNotifyPromo] = true
-                    },
                     callSite: .blackFriday
-                )
+                ) { _ in
+                    Defaults[.seenBlackFridayNotifyPromo] = true
+                }
             },
             onClose: {
                 ClientLogger.shared.logCounter(

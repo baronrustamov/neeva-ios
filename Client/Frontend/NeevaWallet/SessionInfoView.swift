@@ -134,6 +134,7 @@ struct SessionInfoButton: View {
             action: {
                 web3Model.presenter.showModal(
                     style: .spaces, headerButton: nil,
+                    toPosition: .middle,
                     content: {
                         SessionInfoView(session: dAppSession)
                             .padding(.top, -12)

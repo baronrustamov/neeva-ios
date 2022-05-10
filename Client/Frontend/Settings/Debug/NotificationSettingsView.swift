@@ -22,7 +22,7 @@ struct NotificationSettingsView: View {
                 if NotificationPermissionHelper.shared.permissionStatus != .authorized {
                     Button {
                         NotificationPermissionHelper.shared.requestPermissionIfNeeded(
-                            openSettingsIfNeeded: true, callSite: .settings)
+                            showChangeInSettingsDialogIfNeeded: true, callSite: .settings)
                     } label: {
                         Text("Show Notification Auth Prompt")
                             .foregroundColor(Color.label)
@@ -39,16 +39,16 @@ struct NotificationSettingsView: View {
 
                 Button {
                     NotificationPermissionHelper.shared.requestPermissionIfNeeded(
-                        completion: { authorized in
-                            if authorized {
-                                DispatchQueue.main.async {
-                                    Defaults[.defaultBrowserPromoTimeInterval] = 10
-                                    LocalNotifications.scheduleNeevaOnboardingCallback(
-                                        notificationType: .neevaOnboardingDefaultBrowser)
-                                }
+                        callSite: .defaultBrowserInterstitial
+                    ) { authorized in
+                        if authorized {
+                            DispatchQueue.main.async {
+                                Defaults[.defaultBrowserPromoTimeInterval] = 10
+                                LocalNotifications.scheduleNeevaOnboardingCallback(
+                                    notificationType: .neevaOnboardingDefaultBrowser)
                             }
-                        }, openSettingsIfNeeded: false, callSite: .defaultBrowserInterstitial
-                    )
+                        }
+                    }
                 } label: {
                     Text("Schedule Default Browser Notification in 10 seconds")
                         .foregroundColor(Color.label)

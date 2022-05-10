@@ -30,49 +30,47 @@ struct NotificationPromptView: View {
             }
             .padding(.horizontal, 32)
             .fixedSize(horizontal: false, vertical: true)
+
             Image("notification-prompt", bundle: .main)
                 .resizable()
                 .frame(width: 259, height: 222)
                 .padding(32)
-            Button(
-                action: {
-                    NotificationPermissionHelper.shared.requestPermissionIfNeeded(
-                        completion: { authorized in
-                            if authorized {
-                                LocalNotifications.scheduleAllNeevaOnboardingCallbackIfAuthorized()
-                            }
-                            DispatchQueue.main.async {
-                                hideOverlay()
-                            }
-                        }, openSettingsIfNeeded: false, callSite: .tourFlow
-                    )
-                    ClientLogger.shared.logCounter(.NotificationPromptEnable)
-                },
-                label: {
-                    Text("Enable notifications")
-                        .withFont(.labelLarge)
-                        .foregroundColor(.brand.white)
-                        .padding(13)
-                        .frame(maxWidth: .infinity)
+
+            Button {
+                NotificationPermissionHelper.shared.requestPermissionIfNeeded(callSite: .tourFlow) {
+                    authorized in
+                    if authorized {
+                        LocalNotifications.scheduleAllNeevaOnboardingCallbackIfAuthorized()
+                    }
+
+                    DispatchQueue.main.async {
+                        hideOverlay()
+                    }
                 }
-            )
+
+                ClientLogger.shared.logCounter(.NotificationPromptEnable)
+            } label: {
+                Text("Enable notifications")
+                    .withFont(.labelLarge)
+                    .foregroundColor(.brand.white)
+                    .padding(13)
+                    .frame(maxWidth: .infinity)
+            }
             .buttonStyle(.neeva(.primary))
             .padding(.top, 36)
             .padding(.horizontal, 16)
-            Button(
-                action: {
-                    hideOverlay()
-                    ClientLogger.shared.logCounter(.NotificationPromptSkip)
-                },
-                label: {
-                    Text("Skip for now")
-                        .withFont(.labelLarge)
-                        .foregroundColor(.ui.adaptive.blue)
-                        .padding(13)
-                        .frame(maxWidth: .infinity)
-                        .padding(.horizontal, 16)
-                }
-            ).padding(.top, 10)
+
+            Button {
+                hideOverlay()
+                ClientLogger.shared.logCounter(.NotificationPromptSkip)
+            } label: {
+                Text("Skip for now")
+                    .withFont(.labelLarge)
+                    .foregroundColor(.ui.adaptive.blue)
+                    .padding(13)
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 16)
+            }.padding(.top, 10)
         }
         .padding(.bottom, 20)
     }

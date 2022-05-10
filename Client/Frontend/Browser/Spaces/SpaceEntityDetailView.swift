@@ -110,8 +110,28 @@ struct SpaceActionsModifier: ViewModifier {
         }
     }
 
+    var editAddToSpaceButtons: some View {
+        VStack {
+            if details.ACL >= .edit {
+                Button {
+                    editSpaceItem()
+                } label: {
+                    Label("Edit item", systemSymbol: .squareAndPencil)
+                }
+            }
+
+            Button {
+                addToAnotherSpace(
+                    (details.data.url)!,
+                    details.title, details.description)
+            } label: {
+                Label("Add to another Space", systemSymbol: .docOnDoc)
+            }
+        }
+    }
+
     func body(content: Content) -> some View {
-        if #available(iOS 15.0, *) {
+        if #available(iOS 15.0, *), !UIDevice.current.useTabletInterface {
             content
                 .swipeActions(edge: .trailing) {
                     Button(role: .destructive) {
@@ -143,29 +163,27 @@ struct SpaceActionsModifier: ViewModifier {
                     }
                 }
         } else {
-            content
-                .contextMenu(
-                    ContextMenu(menuItems: {
-                        if details.ACL >= .edit {
-                            Button(
-                                action: {
-                                    editSpaceItem()
-                                },
-                                label: {
-                                    Label("Edit item", systemSymbol: .squareAndPencil)
-                                })
+            if #available(iOS 15.0, *) {
+                content
+                    .contextMenu(
+                        ContextMenu {
+                            editAddToSpaceButtons
+
+                            Button(role: .destructive) {
+                                onDelete()
+                            } label: {
+                                Label("Delete", systemSymbol: .trash)
+                            }
                         }
-                        Button(
-                            action: {
-                                addToAnotherSpace(
-                                    (details.data.url)!,
-                                    details.title, details.description)
-                            },
-                            label: {
-                                Label("Add to another Space", systemSymbol: .docOnDoc)
-                            })
-                    })
-                )
+                    )
+            } else {
+                content
+                    .contextMenu(
+                        ContextMenu {
+                            editAddToSpaceButtons
+                        }
+                    )
+            }
         }
     }
 }

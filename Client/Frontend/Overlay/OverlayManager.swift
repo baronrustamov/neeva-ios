@@ -71,14 +71,16 @@ class OverlayManager: ObservableObject {
     /// (Overlay, Animate, Completion])
     var queuedOverlays = [(OverlayType, Bool, (() -> Void)?)]()
 
-    public func presentFullScreenModal(content: AnyView, completion: (() -> Void)? = nil) {
+    public func presentFullScreenModal(
+        content: AnyView, animate: Bool = true, completion: (() -> Void)? = nil
+    ) {
         let content = AnyView(
             content
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .ignoresSafeArea()
         )
 
-        show(overlay: .fullScreenModal(content), completion: completion)
+        show(overlay: .fullScreenModal(content), animate: animate, completion: completion)
     }
 
     public func show(overlay: OverlayType, animate: Bool = true, completion: (() -> Void)? = nil) {
@@ -147,6 +149,8 @@ class OverlayManager: ObservableObject {
                 }
             case .notification:
                 slideAndFadeIn(offset: -ToastViewUX.height)
+            case .sheet:
+                slideAndFadeIn(offset: OverlaySheetUX.animationOffset)
             case .toast:
                 slideAndFadeIn(offset: ToastViewUX.height)
             default:
@@ -155,6 +159,9 @@ class OverlayManager: ObservableObject {
                 }
             }
         } else {
+            if case .fullScreenModal = overlay {
+                showFullScreenPopoverSheet = true
+            }
             displaying = true
         }
 
@@ -245,9 +252,15 @@ class OverlayManager: ObservableObject {
             }
 
             switch overlay {
-            case .backForwardList, .sheet:
+            case .backForwardList:
                 slideAndFadeOut(offset: 0)
             case .fullScreenModal, .popover:
+                if case .popover = overlay {
+                    withAnimation(animation) {
+                        opacity = 0
+                    }
+                }
+
                 showFullScreenPopoverSheet = false
 
                 // How long it takes for the system sheet to dismiss
@@ -258,6 +271,8 @@ class OverlayManager: ObservableObject {
                 }
             case .notification:
                 slideAndFadeOut(offset: -ToastViewUX.height)
+            case .sheet:
+                slideAndFadeOut(offset: OverlaySheetUX.animationOffset)
             case .toast:
                 slideAndFadeOut(offset: ToastViewUX.height)
             default:

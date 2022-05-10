@@ -34,48 +34,7 @@ open class DefaultSuggestedSites {
     ]
 
     public static let sites = [
-        "default": [
-            SuggestedSiteData(
-                url: "https://m.facebook.com/",
-                bgColor: "0x385185",
-                imageUrl: "asset://suggestedsites_facebook",
-                faviconUrl: "asset://defaultFavicon",
-                trackingId: 632,
-                title: .DefaultSuggestedFacebook
-            ),
-            SuggestedSiteData(
-                url: "https://m.youtube.com/",
-                bgColor: "0xcd201f",
-                imageUrl: "asset://suggestedsites_youtube",
-                faviconUrl: "asset://defaultFavicon",
-                trackingId: 631,
-                title: .DefaultSuggestedYouTube
-            ),
-            SuggestedSiteData(
-                url: "https://www.amazon.com/",
-                bgColor: "0x000000",
-                imageUrl: "asset://suggestedsites_amazon",
-                faviconUrl: "asset://defaultFavicon",
-                trackingId: 630,
-                title: .DefaultSuggestedAmazon
-            ),
-            SuggestedSiteData(
-                url: "https://www.wikipedia.org/",
-                bgColor: "0x000000",
-                imageUrl: "asset://suggestedsites_wikipedia",
-                faviconUrl: "asset://defaultFavicon",
-                trackingId: 629,
-                title: .DefaultSuggestedWikipedia
-            ),
-            SuggestedSiteData(
-                url: "https://mobile.twitter.com/home",
-                bgColor: "0x55acee",
-                imageUrl: "asset://suggestedsites_twitter",
-                faviconUrl: "asset://defaultFavicon",
-                trackingId: 628,
-                title: .DefaultSuggestedTwitter
-            ),
-        ],
+        "default": [],
         "web3": [
             SuggestedSiteData(
                 url: "https://app.uniswap.org/",
@@ -94,6 +53,16 @@ open class DefaultSuggestedSites {
                     "https://s.gitcoin.co/static/v2/images/favicon.ico/apple-touch-icon.486115005c66.png",
                 trackingId: 801,
                 title: "Gitcoin"
+            ),
+            SuggestedSiteData(
+                url: "https://quickswap.exchange",
+                bgColor: "0x000000",
+                imageUrl:
+                    "https://quickswap.exchange/logo_circle.png",
+                faviconUrl:
+                    "https://quickswap.exchange/logo_circle.png",
+                trackingId: 802,
+                title: "Quickswap"
             ),
             SuggestedSiteData(
                 url: "https://etherscan.io/",

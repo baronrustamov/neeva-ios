@@ -212,8 +212,16 @@ public class TabCardDetails: CardDetails, AccessingManagerProvider,
 
     // This function is called when the user drop their item
     public func performDrop(info: DropInfo) -> Bool {
-        guard let draggingDetail = Self.dragState?.draggingDetail else {
-            return true
+        Self.dragState = nil
+        return true
+    }
+
+    // This function is called right when an item is dragged onto another item
+    public func dropEntered(info: DropInfo) {
+        guard let _ = Self.dragState?.tabCardModel,
+            let draggingDetail = Self.dragState?.draggingDetail
+        else {
+            return
         }
 
         let fromIndex =
@@ -227,41 +235,29 @@ public class TabCardDetails: CardDetails, AccessingManagerProvider,
             } ?? 0
 
         if fromIndex != toIndex {
-            manager.rearrangeTabs(fromIndex: fromIndex, toIndex: toIndex, notify: false)
+            if interactWithGroupOrPinnedTabs() {
+                return
+            }
+            manager.rearrangeTabs(fromIndex: fromIndex, toIndex: toIndex, notify: true)
         }
-
-        Self.dragState = nil
-
-        return true
     }
 
-    // This function is called right when an item is dragged onto another item
-    public func dropEntered(info: DropInfo) {
+    private func interactWithGroupOrPinnedTabs() -> Bool {
         guard let tabCardModel = Self.dragState?.tabCardModel,
             let draggingDetail = Self.dragState?.draggingDetail
         else {
-            return
+            return false
         }
-
-        let fromIndex =
-            tabCardModel.allDetails.firstIndex {
-                $0.id == draggingDetail.id
-            } ?? 0
 
         let toIndex =
             tabCardModel.allDetails.firstIndex {
                 $0.id == self.id
             } ?? 0
 
-        if fromIndex != toIndex {
-            // disable interaction to and from pinned tabs
-            if tabCardModel.allDetails[fromIndex].isPinned
-                || tabCardModel.allDetails[toIndex].isPinned
-            {
-                return
-            }
-            tabCardModel.rearrangeAllDetails(fromIndex: fromIndex, toIndex: toIndex)
-        }
+        // disable dropping on tab groups or pinned tabs
+        return tabCardModel.allTabGroupDetails.contains(where: { $0.id == self.rootID })
+            || tabCardModel.allDetails[toIndex].isPinned
+
     }
 
     // this function will be called when the dragging state of an item has changed, including
@@ -507,6 +503,10 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
 
     var space: Space? {
         spaceRef ?? manager.get(for: id)
+    }
+
+    var title: String {
+        space?.displayTitle ?? ""
     }
 
     private var spaceRef: Space? = nil

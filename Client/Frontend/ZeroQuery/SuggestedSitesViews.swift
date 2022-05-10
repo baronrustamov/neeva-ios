@@ -37,10 +37,6 @@ struct SuggestedNavigationView<Content: View>: View {
         }) {
             VStack(spacing: 2) {
                 icon()
-                    .frame(
-                        width: SuggestedSiteUX.IconSize, height: SuggestedSiteUX.IconSize,
-                        alignment: .center
-                    )
                     .modifier(SuggestedItemBackgroundModifier())
                 HStack {
                     if isPinnedSite {
@@ -71,9 +67,14 @@ private struct SuggestedItemBackgroundModifier: ViewModifier {
     func body(content: Content) -> some View {
         if NeevaConstants.currentTarget == .xyz {
             content
-                .hexagonClip()
+                .hexagonClip(with: SuggestedSiteUX.IconSize)
         } else {
             content
+                .frame(
+                    width: SuggestedSiteUX.IconSize,
+                    height: SuggestedSiteUX.IconSize,
+                    alignment: .center
+                )
                 .background(Color(light: .ui.gray97, dark: .systemFill))
                 .cornerRadius(SuggestedSiteUX.IconCornerRadius)
         }
@@ -172,7 +173,7 @@ struct SuggestedSiteView: View {
 
 struct SuggestedSitesView: View {
     let isExpanded: Bool
-    var withHome: Bool = true
+    var withHome: Bool = NeevaConstants.currentTarget == .client
     @ObservedObject var viewModel: SuggestedSitesViewModel
     @Environment(\.zeroQueryWidth) private var zeroQueryWidth
     @Environment(\.verticalSizeClass) private var verticalSizeClass
@@ -254,36 +255,3 @@ struct SuggestedSitesView: View {
         }
     }
 }
-
-#if DEBUG
-    struct SuggestedSitesViews_Previews: PreviewProvider {
-        static var previews: some View {
-            HStack {
-                SuggestedSiteView(
-                    site: .init(url: "https://example.com", title: "Example", id: 1),
-                    isPinnedSite: false)
-                SuggestedSiteView(
-                    site: .init(url: "https://twitter.com", title: "Twitter", id: 2),
-                    isPinnedSite: true)
-                SuggestedSiteView(
-                    site: .init(url: "https://google.com", title: "Google", id: 3),
-                    isPinnedSite: true)
-                SuggestedSiteView(
-                    site: .init(url: "https://youtube.com", title: "Youtube", id: 4),
-                    isPinnedSite: true)
-                SuggestedSiteView(
-                    site: .init(url: "https://nba.com", title: "NBA", id: 5),
-                    isPinnedSite: true)
-                SuggestedSiteView(
-                    site: .init(url: "https://mlb.com", title: "MLB", id: 6),
-                    isPinnedSite: true)
-            }.padding().previewLayout(.sizeThatFits)
-            Group {
-                SuggestedSitesView(isExpanded: false, viewModel: SuggestedSitesViewModel.preview)
-                SuggestedSitesView(isExpanded: true, viewModel: SuggestedSitesViewModel.preview)
-            }
-            .previewLayout(.sizeThatFits)
-            .environment(\.zeroQueryWidth, 375)
-        }
-    }
-#endif

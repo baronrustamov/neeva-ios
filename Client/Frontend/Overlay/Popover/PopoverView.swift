@@ -41,45 +41,11 @@ struct PopoverView<Content: View>: View {
                 .accessibilitySortPriority(-1)
 
                 VStack {
-                    if let headerButton = headerButton {
-                        HStack(spacing: 0) {
-                            Spacer().layoutPriority(0.5)
-                            Button(
-                                action: {
-                                    headerButton.action()
-                                    onDismiss()
-                                },
-                                label: {
-                                    HStack(spacing: 10) {
-                                        Text(headerButton.text)
-                                            .withFont(.labelLarge)
-                                        Symbol(decorative: headerButton.icon)
-                                    }
-                                    .frame(maxWidth: .infinity)
-                                }
-                            )
-                            .buttonStyle(.neeva(.primary))
-                            .layoutPriority(0.5)
-                        }
-                    }
+                    SheetHeaderButtonView(headerButton: headerButton, onDismiss: onDismiss)
 
                     VStack {
                         if style.showTitle, let title = title {
-                            HStack(spacing: 0) {
-                                Text(title)
-                                    .withFont(.headingXLarge)
-                                    .foregroundColor(.label)
-                                    .padding(.leading, 16)
-
-                                Spacer()
-
-                                Button(action: onDismiss) {
-                                    Symbol(.xmark, style: .headingXLarge, label: "Close")
-                                        .foregroundColor(.tertiaryLabel)
-                                        .tapTargetFrame()
-                                        .padding(.trailing, 4.5)
-                                }
-                            }
+                            SheetHeaderView(title: title, onDismiss: onDismiss)
                         }
 
                         ScrollView(.vertical, showsIndicators: false) {

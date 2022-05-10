@@ -18,7 +18,7 @@ extension TabManager: TabEventHandler {
 
         if FeatureFlag[.cookieCutter],
             let domain = tab.currentURL()?.host,
-            !TrackingPreventionConfig.trackersAllowedFor(domain),
+            TrackingPreventionConfig.trackersPreventedFor(domain),
             let cookieCutterModel = cookieCutterModel
         {
             let cookieCutterHelper = CookieCutterHelper(cookieCutterModel: cookieCutterModel)

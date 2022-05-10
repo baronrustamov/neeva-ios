@@ -17,17 +17,11 @@ public class OverlaySheetModel: ObservableObject {
     @Published private(set) var backdropOpacity: Double = 0.0
 
     func show(defaultPosition: OverlaySheetPosition = .middle) {
-        withAnimation(.easeOut(duration: OverlaySheetUX.animationDuration)) {
-            self.position = defaultPosition
-            self.backdropOpacity = OverlaySheetUX.backdropMaxOpacity
-        }
+        self.position = defaultPosition
+        self.backdropOpacity = OverlaySheetUX.backdropMaxOpacity
     }
 
     func hide() {
-        withAnimation(.easeOut(duration: OverlaySheetUX.animationDuration)) {
-            self.deltaHeight = 0
-            self.position = .dismissed
-            self.backdropOpacity = 0.0
-        }
+        self.deltaHeight = 0
     }
 }

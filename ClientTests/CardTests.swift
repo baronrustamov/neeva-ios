@@ -65,8 +65,6 @@ class CardTests: XCTestCase {
             notificationViewManager: NotificationViewManager(window: UIWindow()))
         chromeModel = TabChromeModel()
 
-        manager.didRestoreAllTabs = true
-
         SpaceStore.shared = .createMock([.stackOverflow, .savedForLater, .shared, .public])
         spaceCardModel = SpaceCardModel()
     }
@@ -445,5 +443,13 @@ class CardTests: XCTestCase {
         if let tab = tabCardModel.allDetails.first(where: { $0.id == tab1.id }) {
             XCTAssertEqual(tab.isSelected, true)
         }
+    }
+
+    func testSelectedTabAfterSwitchingMdoe() {
+        let tab1 = manager.addTab()
+        let _ = manager.addTab(isIncognito: true)
+        manager.selectTab(tab1, notify: true)
+        manager.toggleIncognitoMode(clearSelectedTab: false)
+        XCTAssertEqual(tab1.tabUUID, manager.selectedTab?.tabUUID)
     }
 }

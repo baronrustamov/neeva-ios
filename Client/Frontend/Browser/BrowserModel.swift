@@ -17,6 +17,7 @@ class BrowserModel: ObservableObject {
                 // Ensure that the switcher is reset in case a previous drag was not
                 // properly completed.
                 switcherToolbarModel.dragOffset = nil
+                gridModel.switchModeWithoutAnimation = false
             }
         }
     }
@@ -38,8 +39,8 @@ class BrowserModel: ObservableObject {
         if gridModel.switcherState != .tabs {
             gridModel.switcherState = .tabs
         }
-        if gridModel.tabCardModel.getAllDetails(matchingIncognitoState: incognitoModel.isIncognito)
-            .isEmpty
+        if !gridModel.tabCardModel.getAllDetails(matchingIncognitoState: incognitoModel.isIncognito)
+            .contains(where: \.isSelected)
         {
             showGridWithNoAnimation()
         } else {
@@ -80,6 +81,12 @@ class BrowserModel: ObservableObject {
 
     func hideGridWithAnimation() {
         assert(!gridModel.tabCardModel.allDetails.isEmpty)
+        if let selectedTab = tabManager.selectedTab,
+            incognitoModel.isIncognito != selectedTab.isIncognito
+        {
+            gridModel.switchModeWithoutAnimation = true
+            incognitoModel.toggle()
+        }
         gridModel.scrollToSelectedTab { [self] in
             cardTransitionModel.update(to: .visibleForTrayHidden)
             gridModel.closeDetailView()

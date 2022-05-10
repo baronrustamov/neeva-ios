@@ -38,8 +38,6 @@ class TabManager: NSObject {
         getAllTabGroup().flatMap(\.children)
     }
 
-    var didRestoreAllTabs: Bool = false
-
     // Use `selectedTabPublisher` to observe changes to `selectedTab`.
     private(set) var selectedTab: Tab?
     private(set) var selectedTabPublisher = CurrentValueSubject<Tab?, Never>(nil)
@@ -286,7 +284,8 @@ class TabManager: NSObject {
     }
 
     func toggleIncognitoMode(
-        fromTabTray: Bool = true, clearSelectedTab: Bool = true, openLazyTab: Bool = true
+        fromTabTray: Bool = true, clearSelectedTab: Bool = true, openLazyTab: Bool = true,
+        selectNewTab: Bool = false
     ) {
         let bvc = SceneDelegate.getBVC(with: scene)
 
@@ -297,21 +296,23 @@ class TabManager: NSObject {
 
         incognitoModel.toggle()
 
-        if let mostRecentTab = mostRecentTab(inTabs: isIncognito ? incognitoTabs : normalTabs) {
-            selectTab(mostRecentTab, notify: true)
-        } else if isIncognito && openLazyTab {  // no empty tab tray in incognito
-            bvc.openLazyTab(openedFrom: fromTabTray ? .tabTray : .openTab(selectedTab))
-        } else {
-            let placeholderTab = Tab(
-                bvc: bvc, configuration: configuration, isIncognito: isIncognito)
+        if selectNewTab {
+            if let mostRecentTab = mostRecentTab(inTabs: isIncognito ? incognitoTabs : normalTabs) {
+                selectTab(mostRecentTab, notify: true)
+            } else if isIncognito && openLazyTab {  // no empty tab tray in incognito
+                bvc.openLazyTab(openedFrom: fromTabTray ? .tabTray : .openTab(selectedTab))
+            } else {
+                let placeholderTab = Tab(
+                    bvc: bvc, configuration: configuration, isIncognito: isIncognito)
 
-            // Creates a placeholder Tab to make sure incognito is switched in the Top Bar
-            select(placeholderTab)
+                // Creates a placeholder Tab to make sure incognito is switched in the Top Bar
+                select(placeholderTab)
+            }
         }
     }
 
     func switchIncognitoMode(
-        incognito: Bool, fromTabTray: Bool = true, clearSelectedTab: Bool = true,
+        incognito: Bool, fromTabTray: Bool = true, clearSelectedTab: Bool = false,
         openLazyTab: Bool = true
     ) {
         if isIncognito != incognito {
@@ -386,9 +387,7 @@ class TabManager: NSObject {
     }
 
     func sendSelectTabNotifications(previous: Tab? = nil) {
-        if let tab = selectedTab {
-            selectedTabPublisher.send(tab)
-        }
+        selectedTabPublisher.send(selectedTab)
 
         if let tab = previous {
             TabEvent.post(.didLoseFocus, for: tab)
@@ -401,11 +400,13 @@ class TabManager: NSObject {
 
     func rearrangeTabs(fromIndex: Int, toIndex: Int, notify: Bool) {
         tabs.rearrange(from: fromIndex, to: toIndex)
+
         if notify {
             tabsUpdatedPublisher.send()
         }
-    }
 
+        preserveTabs()
+    }
     // Tab Group related functions
     internal func updateTabGroupsAndSendNotifications(notify: Bool) {
         tabGroups = getAll()

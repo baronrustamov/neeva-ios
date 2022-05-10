@@ -48,6 +48,13 @@ extension TabManager: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        if let pageZoom = selectedTab?.pageZoom,
+            webView.value(forKey: "viewScale") as? CGFloat != pageZoom
+        {
+            // Trigger the didSet hook
+            selectedTab?.pageZoom = pageZoom
+        }
+
         // tab restore uses internal pages, so don't call storeChanges unnecessarily on startup
         if let url = webView.url {
             if let internalUrl = InternalURL(url), internalUrl.isSessionRestore {

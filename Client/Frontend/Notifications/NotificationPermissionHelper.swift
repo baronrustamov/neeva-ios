@@ -23,6 +23,7 @@ public enum NotificationAuthorizationCallSite: String {
     case blackFriday
     case defaultBrowserInterstitial
     case appLaunch
+    case cookieCutterOnboarding
 }
 
 class NotificationPermissionHelper {
@@ -50,9 +51,10 @@ class NotificationPermissionHelper {
     }
 
     func requestPermissionIfNeeded(
-        completion: ((Bool) -> Void)? = nil,
-        openSettingsIfNeeded: Bool = false,
-        callSite: NotificationAuthorizationCallSite
+        from bvc: BrowserViewController? = nil,
+        showChangeInSettingsDialogIfNeeded: Bool = false,
+        callSite: NotificationAuthorizationCallSite,
+        completion: ((Bool) -> Void)? = nil
     ) {
         isAuthorized { [self] authorized in
             guard !authorized else {
@@ -75,10 +77,14 @@ class NotificationPermissionHelper {
                     )
 
                     self.requestPermissionFromSystem(completion: completion, callSite: callSite)
-                } else if openSettingsIfNeeded {
+                } else if showChangeInSettingsDialogIfNeeded,
+                    let bvc = bvc ?? SceneDelegate.getBVCOrNil()
+                {
                     /// If we can't show the iOS system notification because the user denied our first request,
-                    /// this will take them to system settings to enable notifications there.
-                    SystemsHelper.openSystemSettingsNeevaPage()
+                    /// ask the user if they would like to change that in settings.
+                    self.showChangeNotificationPreferencesInSettingsDialog(from: bvc)
+                    completion?(false)
+                } else {
                     completion?(false)
                 }
             }
@@ -128,6 +134,17 @@ class NotificationPermissionHelper {
                     callSite: LocalNotifications.ScheduleCallSite.authorizeNotification
                 )
             }
+    }
+
+    func showChangeNotificationPreferencesInSettingsDialog(from bvc: BrowserViewController) {
+        bvc.showModal(style: .grouped) {
+            ChangeNotificationPreferenceDialogView {
+                SystemsHelper.openSystemSettingsNeevaPage()
+                bvc.overlayManager.hideCurrentOverlay(ofPriority: .modal)
+            } onCancel: {
+                bvc.overlayManager.hideCurrentOverlay(ofPriority: .modal)
+            }
+        }
     }
 
     func registerAuthorizedNotification() {

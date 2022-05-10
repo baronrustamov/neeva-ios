@@ -46,7 +46,7 @@ public struct ErrorView: View {
 
     var isLoginError: Bool {
         guard let first = gqlErrors?.first, gqlErrors?.count == 1 else { return false }
-        return first == "login required to access this field"
+        return first == "login required to access this field" || first == "unauthorized access"
     }
 
     public var body: some View {

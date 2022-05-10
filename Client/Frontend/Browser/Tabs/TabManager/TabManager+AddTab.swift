@@ -7,8 +7,9 @@ import Storage
 import WebKit
 
 extension TabManager {
-    func addTabsForURLs(
-        _ urls: [URL], zombie: Bool, shouldSelectTab: Bool = true, incognito: Bool = false
+    @discardableResult func addTabsForURLs(
+        _ urls: [URL], zombie: Bool = true, shouldSelectTab: Bool = true, incognito: Bool = false,
+        rootUUID: String? = nil
     ) -> [Tab] {
         assert(Thread.isMainThread)
 
@@ -22,6 +23,14 @@ extension TabManager {
                 self.addTab(
                     URLRequest(url: url), flushToDisk: false, zombie: zombie,
                     isIncognito: incognito, notify: false))
+        }
+
+        if let rootUUID = rootUUID {
+            for tab in newTabs {
+                tab.rootUUID = rootUUID
+            }
+
+            self.updateTabGroupsAndSendNotifications(notify: false)
         }
 
         // Select the most recent.
@@ -224,16 +233,15 @@ extension TabManager {
             var tab: Tab!
             if let tabIndex = savedTab.tabIndex {
                 tab = addTab(
-                    urlRequest, atIndex: tabIndex, flushToDisk: false, zombie: false,
+                    urlRequest, atIndex: tabIndex, flushToDisk: false, zombie: true,
                     isIncognito: isIncognito, notify: false)
             } else {
                 tab = addTab(
                     urlRequest, afterTab: getTabForUUID(uuid: savedTab.parentUUID ?? ""),
-                    flushToDisk: false, zombie: false, isIncognito: isIncognito, notify: false)
+                    flushToDisk: false, zombie: true, isIncognito: isIncognito, notify: false)
             }
 
             savedTab.configureTab(tab, imageStore: store.imageStore)
-            tab.restore(tab.webView!)
 
             if savedTab.isSelected {
                 selectedSavedTab = tab
@@ -247,7 +255,7 @@ extension TabManager {
         // Prevents a sticky tab tray
         SceneDelegate.getBVC(with: scene).browserModel.cardTransitionModel.update(to: .hidden)
 
-        if let selectedSavedTab = selectedSavedTab, shouldSelectTab {
+        if let selectedSavedTab = selectedSavedTab, shouldSelectTab, selectedTab == nil {
             self.selectTab(selectedSavedTab, notify: true)
         }
 

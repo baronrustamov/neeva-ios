@@ -129,18 +129,13 @@ extension BrowserViewController {
 
 // MARK: - Default Browser
 extension BrowserViewController {
-    func presentDefaultBrowserFirstRun(isInDefaultBrowserEnhancementExp: Bool = false) {
+    func presentDefaultBrowserFirstRun() {
         // TODO: refactor the logic into view model
         overlayManager.presentFullScreenModal(
             content: AnyView(
-                DefaultBrowserInterstitialWelcomeScreen(
-                    isInDefaultBrowserEnhancementExp: isInDefaultBrowserEnhancementExp
-                ) {
+                DefaultBrowserInterstitialWelcomeScreen {
                     self.overlayManager.hideCurrentOverlay()
                 } buttonAction: {
-                    if !isInDefaultBrowserEnhancementExp {
-                        self.overlayManager.hideCurrentOverlay()
-                    }
                 }
                 .onAppear {
                     AppDelegate.setRotationLock(to: .portrait)
@@ -153,20 +148,40 @@ extension BrowserViewController {
             Defaults[.didShowDefaultBrowserInterstitialFromSkipToBrowser] = true
             Defaults[.introSeen] = true
             Defaults[.firstRunSeenAndNotSignedIn] = true
+            Defaults[.didDismissDefaultBrowserInterstitial] = false
             Defaults[.introSeenDate] = Date()
             ClientLogger.shared.logCounter(
                 .DefaultBrowserInterstitialImp
             )
 
-            let arm = NeevaExperiment.startExperiment(for: .notificatonPromptOnAppLaunch)
-            NeevaExperiment.logStartExperiment(for: .notificatonPromptOnAppLaunch)
+            _ = NeevaExperiment.startExperiment(for: .defaultBrowserChangeButton)
+            NeevaExperiment.logStartExperiment(for: .defaultBrowserChangeButton)
+        }
+    }
 
-            if arm == .askForNotificatonPromptOnAppLaunch {
-                NotificationPermissionHelper.shared.requestPermissionIfNeeded(
-                    completion: { authorized in
-                    }, openSettingsIfNeeded: false, callSite: .appLaunch
+    func restoreDefaultBrowserFirstRun() {
+        overlayManager.presentFullScreenModal(
+            content: AnyView(
+                DefaultBrowserInterstitialOnboardingView(
+                    restoreFromBackground: true,
+                    closeAction: {
+                        self.overlayManager.hideCurrentOverlay()
+                    },
+                    buttonAction: {
+                    }
                 )
-            }
+                .onAppear {
+                    AppDelegate.setRotationLock(to: .portrait)
+                }
+                .onDisappear {
+                    AppDelegate.setRotationLock(to: .all)
+                }
+            ),
+            animate: false
+        ) {
+            ClientLogger.shared.logCounter(
+                .DefaultBrowserInterstitialRestoreImp
+            )
         }
     }
 

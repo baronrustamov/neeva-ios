@@ -67,7 +67,6 @@ struct YourCollectionItemView: View {
     var body: some View {
         WebImage(url: collection.imageURL)
             .resizable()
-            .frame(width: blockSize, height: blockSize)
-            .hexagonClip()
+            .hexagonClip(with: blockSize)
     }
 }

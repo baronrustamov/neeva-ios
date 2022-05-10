@@ -27,6 +27,7 @@ protocol ModalPresenter {
     func showModal<Content: View>(
         style: OverlayStyle,
         headerButton: OverlayHeaderButton?,
+        toPosition: OverlaySheetPosition,
         content: @escaping () -> Content,
         onDismiss: (() -> Void)?)
     func presentFullScreenModal(content: AnyView, completion: (() -> Void)?)
@@ -211,6 +212,11 @@ class BrowserViewController: UIViewController, ModalPresenter {
         super.init(nibName: nil, bundle: nil)
 
         self.tabManager.cookieCutterModel = browserModel.cookieCutterModel
+        self.tabManager.selectedTabPublisher.dropFirst().sink { [weak self] tab in
+            if tab == nil {
+                self?.showTabTray()
+            }
+        }.store(in: &subscriptions)
 
         chromeModel.topBarDelegate = self
         chromeModel.toolbarDelegate = self
@@ -326,10 +332,8 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
         displayedPopoverController?.dismiss(animated: true, completion: nil)
 
-        if tabContainerModel.currentContentUI != .previewHome {
-            coordinator.animate { [self] context in
-                browserModel.scrollingControlModel.showToolbars(animated: false)
-            }
+        coordinator.animate { [self] context in
+            browserModel.scrollingControlModel.showToolbars(animated: false)
         }
     }
 
@@ -388,9 +392,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
             })
 
         // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
-        if tabContainerModel.currentContentUI != .previewHome {
-            browserModel.scrollingControlModel.showToolbars(animated: false)
-        }
+        browserModel.scrollingControlModel.showToolbars(animated: false)
 
         if NeevaUserInfo.shared.isUserLoggedIn {
             DispatchQueue.main.async {
@@ -398,7 +400,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
             }
         }
 
-        if FeatureFlag[.enableSuggestedSpaces] {
+        if NeevaConstants.currentTarget == .client {
             DispatchQueue.main.async {
                 SpaceStore.suggested.refresh()
             }
@@ -514,12 +516,9 @@ class BrowserViewController: UIViewController, ModalPresenter {
             } else if self.tabManager.normalTabs.isEmpty {
                 #if XYZ
                     self.showZeroQuery()
-                    if !Defaults[.walletIntroSeen] {
-                        self.web3Model.showWalletPanel()
-                    }
                 #else
                     if !Defaults[.didFirstNavigation] {
-                        self.showPreviewHome()
+                        self.showZeroQuery()
                     } else {
                         self.showTabTray()
                     }
@@ -531,13 +530,16 @@ class BrowserViewController: UIViewController, ModalPresenter {
     override func viewDidAppear(_ animated: Bool) {
         if NeevaConstants.currentTarget != .xyz {
             if !Defaults[.introSeen] {
-                let arm = NeevaExperiment.startExperiment(for: .defaultBrowserRemindMeLater)
-                presentDefaultBrowserFirstRun(
-                    isInDefaultBrowserEnhancementExp: arm == .isInDefaultBrowserEnhancementExp)
-                NeevaExperiment.logStartExperiment(for: .defaultBrowserRemindMeLater)
+                presentDefaultBrowserFirstRun()
 
                 _ = NeevaExperiment.startExperiment(for: .promoCardTypeAfterFirstRun)
                 NeevaExperiment.logStartExperiment(for: .promoCardTypeAfterFirstRun)
+            } else if let didDismiss = Defaults[.didDismissDefaultBrowserInterstitial],
+                !didDismiss
+                    && !Defaults[.didFirstNavigation]
+                    && NeevaExperiment.arm(for: .defaultBrowserChangeButton) == .changeButton
+            {
+                restoreDefaultBrowserFirstRun()
             }
         }
 
@@ -621,16 +623,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
         DispatchQueue.main.async { [self] in
             tabContainerModel.updateContent(.hideZeroQuery)
             zeroQueryModel.reset(bvc: self, wasCancelled: wasCancelled)
-
-            if tabContainerModel.currentContentUI == .previewHome {
-                browserModel.scrollingControlModel.showToolbars(animated: true)
-            }
         }
-    }
-
-    public func showPreviewHome() {
-        tabContainerModel.updateContent(.showPreviewHome)
-        browserModel.scrollingControlModel.showToolbars(animated: false)
     }
 
     fileprivate func updateInZeroQuery(_ url: URL?) {
@@ -673,12 +666,14 @@ class BrowserViewController: UIViewController, ModalPresenter {
     func showModal<Content: View>(
         style: OverlayStyle,
         headerButton: OverlayHeaderButton? = nil,
+        toPosition: OverlaySheetPosition = .middle,
         @ViewBuilder content: @escaping () -> Content,
         onDismiss: (() -> Void)? = nil
     ) {
         showModal(
             style: style,
             headerButton: headerButton,
+            toPosition: toPosition,
             headerContent: { EmptyView() },
             content: content,
             onDismiss: onDismiss
@@ -688,6 +683,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
     func showModal<Content: View, HeaderContent: View>(
         style: OverlayStyle,
         headerButton: OverlayHeaderButton? = nil,
+        toPosition: OverlaySheetPosition = .middle,
         @ViewBuilder headerContent: @escaping () -> HeaderContent,
         @ViewBuilder content: @escaping () -> Content,
         onDismiss: (() -> Void)? = nil
@@ -695,6 +691,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
         if !chromeModel.inlineToolbar {
             showAsModalOverlaySheet(
                 style: style,
+                toPosition: toPosition,
                 content: content,
                 onDismiss: onDismiss,
                 headerButton: headerButton,
@@ -708,12 +705,14 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
     func showAsModalOverlaySheet<Content: View>(
         style: OverlayStyle,
+        toPosition: OverlaySheetPosition = .middle,
         @ViewBuilder content: @escaping () -> Content,
         onDismiss: (() -> Void)? = nil,
         headerButton: OverlayHeaderButton? = nil
     ) {
         showAsModalOverlaySheet(
             style: style,
+            toPosition: toPosition,
             content: content,
             onDismiss: onDismiss,
             headerButton: nil,
@@ -723,12 +722,14 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
     func showAsModalOverlaySheet<Content: View, HeaderContent: View>(
         style: OverlayStyle,
+        toPosition: OverlaySheetPosition = .middle,
         @ViewBuilder content: @escaping () -> Content,
         onDismiss: (() -> Void)? = nil,
         headerButton: OverlayHeaderButton? = nil,
         @ViewBuilder headerContent: @escaping () -> HeaderContent
     ) {
         let overlayView = OverlaySheetRootView(
+            overlayPosition: toPosition,
             style: style,
             content: { AnyView(erasing: content()) },
             onDismiss: { rootView in
@@ -1097,6 +1098,9 @@ class BrowserViewController: UIViewController, ModalPresenter {
             return
         }
 
+        if !Defaults[.didFirstNavigation] {
+            ClientLogger.shared.logCounter(.FirstNavigation)
+        }
         Defaults[.didFirstNavigation] = true
 
         if let url = webView.url {

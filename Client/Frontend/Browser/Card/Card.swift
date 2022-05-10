@@ -161,7 +161,6 @@ struct FittedCard<Details>: View where Details: CardDetails {
 struct Card<Details>: View where Details: CardDetails {
     @ObservedObject var details: Details
     var dragToClose = false
-    var dragNDrop = FeatureFlag[.dragAndDropTabs]
     /// Whether — if this card is selected — the blue border should be drawn
     var showsSelection = true
     var animate = false
@@ -207,7 +206,10 @@ struct Card<Details>: View where Details: CardDetails {
                             alignment: .top
                         )
                         .clipped()
-                        .if(dragNDrop && tabCardDetail != nil && !tabCardDetail!.isChild) { view in
+                        .if(
+                            tabCardDetail != nil && !tabCardDetail!.isChild
+                                && !tabCardDetail!.isPinned
+                        ) { view in
                             view
                                 .modifier(DragModifier(tabCardDetail: tabCardDetail!))
                         }

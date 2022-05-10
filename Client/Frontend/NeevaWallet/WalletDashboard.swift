@@ -20,7 +20,9 @@ struct WalletDashboard: View {
                 }
                 BalancesView(model: model)
                 OpenSessionsView(model: model)
-                YourNFTsView(assetStore: assetStore)
+                if FeatureFlag[.newWeb3Features] {
+                    YourNFTsView(assetStore: assetStore)
+                }
                 UnlockedThemesView(unlockedThemes: model.unlockedThemes)
             }
             .modifier(WalletListStyleModifier())

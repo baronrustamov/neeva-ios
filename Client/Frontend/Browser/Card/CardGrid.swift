@@ -89,6 +89,7 @@ struct CardGrid: View {
             SpaceContainerView(primitive: detailedSpace)
                 .environment(\.onOpenURLForSpace, onOpenURLForSpace)
                 .environment(\.shareURL, shareURL)
+                .environment(\.columns, columns)
         }
     }
 

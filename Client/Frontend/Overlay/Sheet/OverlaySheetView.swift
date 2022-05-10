@@ -25,6 +25,8 @@ enum OverlaySheetUX {
 
     /// Bottom padding applied to the sheet content
     static let bottomPadding: CGFloat = 18
+
+    static let animationOffset: CGFloat = 500
 }
 
 public struct OverlayHeaderButton {
@@ -175,19 +177,9 @@ struct OverlaySheetView<Content: View, HeaderContent: View>: View, KeyboardReada
                     .padding(.top, 8)
             }
 
-            HStack(spacing: 0) {
+            HStack {
                 if style.showTitle, let title = title {
-                    Text(title)
-                        .withFont(.headingMedium)
-                        .foregroundColor(.label)
-                        .padding(.leading, 16)
-                    Spacer()
-                    Button(action: onDismiss) {
-                        Symbol(.xmark, style: .headingMedium, label: "Close")
-                            .foregroundColor(.tertiaryLabel)
-                            .tapTargetFrame()
-                            .padding(.trailing, 4.5)
-                    }
+                    SheetHeaderView(title: title, onDismiss: onDismiss)
                 } else {
                     Spacer()
                 }
@@ -262,7 +254,10 @@ struct OverlaySheetView<Content: View, HeaderContent: View>: View, KeyboardReada
         GeometryReader { outerGeometry in
             DismissBackgroundView(
                 opacity: model.backdropOpacity, position: model.position,
-                onDismiss: style.nonDismissible ? {} : onDismiss)
+                onDismiss: style.nonDismissible ? {} : onDismiss
+            )
+            .animation(nil)
+            .transition(.fade)
 
             VStack(spacing: 0) {
                 // The height of this spacer is what controls the apparent height of
@@ -296,29 +291,9 @@ struct OverlaySheetView<Content: View, HeaderContent: View>: View, KeyboardReada
             .background(
                 VStack {
                     if case .middle = model.position {
-                        HStack(spacing: 0) {
-                            Spacer().layoutPriority(0.5)
-
-                            if let headerButton = headerButton {
-                                Button(
-                                    action: {
-                                        headerButton.action()
-                                        model.hide()
-                                    },
-                                    label: {
-                                        HStack(spacing: 10) {
-                                            Text(headerButton.text)
-                                                .withFont(.labelLarge)
-                                            Symbol(decorative: headerButton.icon)
-                                        }
-                                        .frame(maxWidth: .infinity)
-                                    }
-                                )
-                                .buttonStyle(.neeva(.primary))
-                                .padding(.horizontal, 6)
-                                .layoutPriority(0.5)
-                            }
-                        }
+                        SheetHeaderButtonView(headerButton: headerButton, onDismiss: onDismiss)
+                            .padding(.horizontal, 8)
+                            .environmentObject(model)
 
                         headerContent()
                             .frame(maxWidth: .infinity)

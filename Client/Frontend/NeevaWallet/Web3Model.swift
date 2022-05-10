@@ -313,6 +313,7 @@ class Web3Model: ObservableObject {
                 presenter.showModal(
                     style: .spaces,
                     headerButton: nil,
+                    toPosition: .middle,
                     content: {
                         MaliciousSiteView(
                             domain: domain,
@@ -403,6 +404,7 @@ class Web3Model: ObservableObject {
             presenter.showModal(
                 style: .spaces,
                 headerButton: nil,
+                toPosition: .middle,
                 content: {
                     WalletSequenceContent(model: self)
                         .overlayIsFixedHeight(isFixedHeight: true)
@@ -426,12 +428,14 @@ class Web3Model: ObservableObject {
             presenter.showModal(
                 style: .spaces,
                 headerButton: nil,
+                toPosition: .middle,
                 content: {
                     ImportCredentialsView(importCredentials: {
                         self.presenter.presentFullScreenModal(
                             content: AnyView(
                                 CryptoWalletView(
-                                    viewState: .importWallet,
+                                    viewState: Defaults[.cryptoPublicKey].isEmpty
+                                        ? .xyzIntro : .importWallet,
                                     dismiss: {
                                         self.presenter.dismissCurrentOverlay()
                                         self.initializeWallet()
@@ -449,6 +453,7 @@ class Web3Model: ObservableObject {
             presenter.showModal(
                 style: .grouped,
                 headerButton: nil,
+                toPosition: .middle,
                 content: {
                     CryptoWalletView(dismiss: { self.presenter.dismissCurrentOverlay() })
                         .frame(minHeight: 500)

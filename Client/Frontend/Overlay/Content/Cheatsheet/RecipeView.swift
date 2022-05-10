@@ -99,36 +99,7 @@ struct RecipeView: View {
                 .padding(.bottom, 2)
                 Divider()
                     .padding(.vertical, 6)
-                if let ingredients = ingredients {
-                    Text("Ingredients")
-                        .withFont(.headingMedium)
-                    ForEach(
-                        (expanded || ingredients.count < 3)
-                            ? ingredients[..<ingredients.count]
-                            : ingredients[..<3],
-                        id: \.self
-                    ) {
-                        Text(cleanupText(input: $0))
-                            .withFont(.bodyMedium)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                }
-                if expanded {
-                    Divider()
-                        .padding(.vertical, 6)
-                    if let instructions = instructions {
-                        Text("Instructions")
-                            .withFont(.headingMedium)
-                        ForEach(instructions.indices, id: \.self) { i in
-                            HStack(alignment: .top) {
-                                Text("\(i+1). ")
-                                Text("\(cleanupText(input: instructions[i]))")
-                            }
-                            .withFont(unkerned: .bodyMedium)
-                            .fixedSize(horizontal: false, vertical: true)
-                        }
-                    }
-                }
+                listings
 
                 expandButton
                     .onChange(of: expanded) { _ in
@@ -186,29 +157,61 @@ struct RecipeView: View {
     }
 
     @ViewBuilder
-    var expandButton: some View {
-        ZStack(alignment: .bottom) {
-            if !expanded {
-                Rectangle()
-                    .fill(Color.DefaultBackground)
-                    .blur(radius: 20, opaque: false)
-                    .frame(height: 90)
-            }
-            Button(action: toggleShowMoreRecipeButton) {
-                HStack(alignment: .center) {
-                    Text("\(expanded ? "Hide" : "See") Full Recipe")
-                    Image(systemSymbol: expanded ? .chevronUp : .chevronDown)
-                        .renderingMode(.template)
-                        .font(.system(size: 16))
-                }
-                .withFont(unkerned: .bodyLarge)
-                .frame(maxWidth: .infinity, maxHeight: 48)
-                .foregroundColor(Color.label)
-                .background(Capsule().fill(Color.ui.quarternary))
+    var listings: some View {
+        if let ingredients = ingredients {
+            Text("Ingredients")
+                .withFont(.headingMedium)
+            ForEach(
+                (expanded || ingredients.count < 3)
+                    ? ingredients[..<ingredients.count]
+                    : ingredients[..<3],
+                id: \.self
+            ) {
+                Text(cleanupText(input: $0))
+                    .withFont(.bodyMedium)
+                    .fixedSize(horizontal: false, vertical: true)
             }
         }
+        if expanded {
+            Divider()
+                .padding(.vertical, 6)
+            if let instructions = instructions {
+                Text("Instructions")
+                    .withFont(.headingMedium)
+                ForEach(instructions.indices, id: \.self) { i in
+                    HStack(alignment: .top) {
+                        Text("\(i+1). ")
+                        Text("\(cleanupText(input: instructions[i]))")
+                    }
+                    .withFont(unkerned: .bodyMedium)
+                    .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    var expandButton: some View {
+        Button(action: toggleShowMoreRecipeButton) {
+            HStack(alignment: .center) {
+                Text("\(expanded ? "Hide" : "See") Full Recipe")
+                Image(systemSymbol: expanded ? .chevronUp : .chevronDown)
+                    .renderingMode(.template)
+                    .font(.system(size: 16))
+            }
+            .withFont(unkerned: .bodyLarge)
+            .frame(maxWidth: .infinity, maxHeight: 48)
+            .foregroundColor(Color.label)
+            .background(Capsule().fill(Color.ui.quarternary))
+        }
         .frame(maxWidth: .infinity, minHeight: 48)
-        .padding(.top, expanded ? 10 : -40)
+        .background(
+            Rectangle()
+                .fill(Color.DefaultBackground)
+                .blur(radius: 20, opaque: false)
+                .frame(height: 90)
+                .opacity(expanded ? 0 : 1)
+        )
     }
 
     func toggleShowMoreRecipeButton() {

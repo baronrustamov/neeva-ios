@@ -25,6 +25,7 @@ extension BrowserViewController: WalletConnectPresenter {
         #if XYZ
             guard let _ = web3Model.wallet?.ethereumAddress
             else {
+                web3Model.showWalletCredentialsPrompt()
                 return false
             }
 
@@ -41,7 +42,6 @@ extension BrowserViewController: WalletConnectPresenter {
 
 extension BrowserViewController: ToastDelegate {
     func shouldShowToast(for message: LocalizedStringKey) {
-        print(message)
         toastViewManager.makeToast(text: message)
     }
 }

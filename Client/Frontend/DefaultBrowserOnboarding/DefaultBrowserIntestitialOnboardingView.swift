@@ -32,8 +32,9 @@ class DefaultBrowserInterstitialOnboardingViewController: UIHostingController<
                 }
                 DefaultBrowserInterstitialOnboardingView(
                     trigger: triggerFrom,
-                    showSkipButton: false,
-                    skipAction: {},
+                    showRemindButton: NeevaExperiment.arm(for: .defaultBrowserChangeButton)
+                        == .changeButton,
+                    closeAction: {},
                     buttonAction: {
                         openSettings()
                     }
@@ -46,8 +47,12 @@ class DefaultBrowserInterstitialOnboardingViewController: UIHostingController<
         super.init(rootView: Content(openSettings: {}, onCancel: {}, triggerFrom: triggerFrom))
         self.rootView = Content(
             openSettings: { [weak self] in
-                self?.dismiss(animated: true) {
+                if NeevaExperiment.arm(for: .defaultBrowserChangeButton) == .changeButton {
                     didOpenSettings()
+                } else {
+                    self?.dismiss(animated: true) {
+                        didOpenSettings()
+                    }
                 }
                 // Don't show default browser card if this button is tapped
                 Defaults[.didDismissDefaultBrowserCard] = true
@@ -78,17 +83,14 @@ class DefaultBrowserInterstitialOnboardingViewController: UIHostingController<
 struct DefaultBrowserInterstitialWelcomeScreen: View {
     @State private var switchToDefaultBrowserScreen = false
 
-    var isInDefaultBrowserEnhancementExp: Bool = false
-
-    var skipAction: () -> Void
+    var closeAction: () -> Void
     var buttonAction: () -> Void
 
     var body: some View {
         if switchToDefaultBrowserScreen {
             DefaultBrowserInterstitialOnboardingView(
                 trigger: .defaultBrowserFirstScreen,
-                isInDefaultBrowserEnhancementExp: isInDefaultBrowserEnhancementExp,
-                skipAction: skipAction,
+                closeAction: closeAction,
                 buttonAction: buttonAction
             )
         } else {
@@ -155,22 +157,44 @@ public enum OpenDefaultBrowserOnboardingTrigger: String {
 
 struct DefaultBrowserInterstitialOnboardingView: View {
     @State private var didTakeAction = false
+    @State private var openButtonText: String
+    @State private var remindButtonText: String
 
     var trigger: OpenDefaultBrowserOnboardingTrigger = .defaultBrowserFirstScreen
-    var showSkipButton: Bool = true
-    var isInDefaultBrowserEnhancementExp: Bool = false
+    var showRemindButton: Bool
 
-    var skipAction: () -> Void
+    var inButtonTextExperiment: Bool =
+        NeevaExperiment.arm(for: .defaultBrowserChangeButton) == .changeButton
+    @State var restoreFromBackground: Bool = false
+
+    var closeAction: () -> Void
     var buttonAction: () -> Void
+
+    init(
+        trigger: OpenDefaultBrowserOnboardingTrigger = .defaultBrowserFirstScreen,
+        showRemindButton: Bool = true, restoreFromBackground: Bool = false,
+        closeAction: @escaping (() -> Void), buttonAction: @escaping (() -> Void)
+    ) {
+        self.trigger = trigger
+        self.showRemindButton = showRemindButton
+        self.closeAction = closeAction
+        self.buttonAction = buttonAction
+        self.restoreFromBackground = restoreFromBackground
+
+        openButtonText = restoreFromBackground ? "Back to Settings" : "Open Neeva Settings"
+        remindButtonText =
+            inButtonTextExperiment
+            ? (restoreFromBackground ? "Continue to Neeva" : "Maybe Later") : "Remind Me Later"
+    }
 
     var body: some View {
         ZStack {
-            if isInDefaultBrowserEnhancementExp {
+            if !inButtonTextExperiment {
                 VStack {
                     HStack {
                         Spacer()
                         CloseButton(action: {
-                            tapSkip()
+                            tapClose()
                             didTakeAction = true
                         })
                         .padding(.trailing, 20)
@@ -259,6 +283,15 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                     action: {
                         buttonAction()
                         didTakeAction = true
+                        if inButtonTextExperiment {
+                            openButtonText = "Back to Settings"
+                            if Defaults[.didDismissDefaultBrowserInterstitial] == false
+                                && !Defaults[.didFirstNavigation]
+                            {
+                                remindButtonText = "Continue to Neeva"
+                                restoreFromBackground = true
+                            }
+                        }
                         Defaults[.lastDefaultBrowserInterstitialChoice] =
                             DefaultBrowserInterstitialChoice.openSettings.rawValue
                         ClientLogger.shared.logCounter(
@@ -277,7 +310,7 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                         )
                     },
                     label: {
-                        Text("Open Neeva Settings")
+                        Text(openButtonText)
                             .withFont(.labelLarge)
                             .foregroundColor(.brand.white)
                             .padding(13)
@@ -286,22 +319,24 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                 )
                 .buttonStyle(.neeva(.primary))
                 .padding(.horizontal, 16)
-                if showSkipButton {
+
+                if showRemindButton {
                     Button(
                         action: {
-                            isInDefaultBrowserEnhancementExp ? tapRemindMe() : tapSkip()
+                            if restoreFromBackground {
+                                tapClose()
+                            } else {
+                                tapRemindMe()
+                            }
                             didTakeAction = true
                         },
                         label: {
-                            Text(
-                                isInDefaultBrowserEnhancementExp
-                                    ? "Remind Me Later" : "Skip for Now"
-                            )
-                            .withFont(.labelLarge)
-                            .foregroundColor(.ui.adaptive.blue)
-                            .padding(13)
-                            .frame(maxWidth: .infinity)
-                            .padding(.horizontal, 16)
+                            Text(remindButtonText)
+                                .withFont(.labelLarge)
+                                .foregroundColor(.ui.adaptive.blue)
+                                .padding(13)
+                                .frame(maxWidth: .infinity)
+                                .padding(.horizontal, 16)
                         }
                     )
                     .padding(.top, 10)
@@ -313,22 +348,24 @@ struct DefaultBrowserInterstitialOnboardingView: View {
         }
         .onDisappear {
             if !didTakeAction {
-                tapSkip()
+                tapClose()
             }
+            Defaults[.didDismissDefaultBrowserInterstitial] = true
         }
         .padding(.bottom, 20)
     }
 
     private func tapRemindMe() {
         NotificationPermissionHelper.shared.requestPermissionIfNeeded(
-            completion: { authorized in
-                if authorized {
-                    LocalNotifications.scheduleNeevaOnboardingCallback(
-                        notificationType: .neevaOnboardingDefaultBrowser)
-                }
-            }, openSettingsIfNeeded: false, callSite: .defaultBrowserInterstitial
-        )
-        skipAction()
+            callSite: .defaultBrowserInterstitial
+        ) { authorized in
+            if authorized {
+                LocalNotifications.scheduleNeevaOnboardingCallback(
+                    notificationType: .neevaOnboardingDefaultBrowser)
+            }
+        }
+
+        closeAction()
         Defaults[.lastDefaultBrowserInterstitialChoice] =
             DefaultBrowserInterstitialChoice.skipForNow.rawValue
         ClientLogger.shared.logCounter(
@@ -343,8 +380,8 @@ struct DefaultBrowserInterstitialOnboardingView: View {
         )
     }
 
-    private func tapSkip() {
-        skipAction()
+    private func tapClose() {
+        closeAction()
         Defaults[.lastDefaultBrowserInterstitialChoice] =
             DefaultBrowserInterstitialChoice.skipForNow.rawValue
         ClientLogger.shared.logCounter(
@@ -363,7 +400,7 @@ struct DefaultBrowserInterstitialOnboardingView: View {
 struct DefaultBrowserInterstitialOnboardingView_Previews: PreviewProvider {
     static var previews: some View {
         DefaultBrowserInterstitialOnboardingView(
-            skipAction: {
+            closeAction: {
             },
             buttonAction: {
             }

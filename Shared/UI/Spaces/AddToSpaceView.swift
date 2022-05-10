@@ -142,17 +142,11 @@ public class AddToSpaceRequest: ObservableObject {
             // Note: This creates a reference cycle between self and the mutation.
             // This means even if all other references are dropped to self, then
             // the mutation will attempt to run to completion.
-            self.cancellable = AddToSpaceMutation(
-                input: AddSpaceResultByURLInput(
-                    spaceId: id,
-                    url: self.url.absoluteString,
-                    title: self.title,
-                    thumbnail: thumbnailString,
-                    data: self.description,
-                    mediaType: "text/plain",
-                    isBase64: false
-                )
-            ).perform { result in
+            self.cancellable = SpaceServiceProvider.shared.addToSpaceMutation(
+                spaceId: id, url: self.url.absoluteString, title: self.title,
+                thumbnail: thumbnailString, data: self.description, mediaType: "text/plain",
+                isBase64: false
+            ) { result in
                 self.cancellable = nil
                 switch result {
                 case .failure(let error):

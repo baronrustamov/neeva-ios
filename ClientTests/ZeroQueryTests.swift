@@ -138,15 +138,6 @@ class ZeroQueryTests: XCTestCase {
         XCTAssertEqual(group.count, 1)
     }
 
-    func testDeletionOfSingleSuggestedSite() {
-        let siteToDelete = TopSitesHandler.defaultTopSites()[0]
-
-        zQM.hideURLFromTopSites(siteToDelete)
-        let newSites = TopSitesHandler.defaultTopSites()
-
-        XCTAssertNil(newSites.first { $0.url == siteToDelete.url })
-    }
-
     func testDeletionOfAllDefaultSites() {
         let defaultSites = TopSitesHandler.defaultTopSites()
         defaultSites.forEach({

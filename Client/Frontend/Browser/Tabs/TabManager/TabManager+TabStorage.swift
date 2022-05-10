@@ -46,7 +46,6 @@ extension TabManager {
             !DebugSettingsBundleOptions.skipSessionRestore, hasTabsToRestoreAtStartup()
         else {
             log.info("Skipping tab restore")
-            didRestoreAllTabs = true
             tabsUpdatedPublisher.send()
             return false
         }

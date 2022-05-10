@@ -12,26 +12,37 @@ class SuggestedSitesViewModel: ObservableObject {
     init(sites: [Site]) {
         self.sites = sites
     }
+}
 
-    #if DEBUG
-        static let preview = SuggestedSitesViewModel(
-            sites: [
-                .init(url: "https://amazon.com", title: "Amazon", id: 1),
-                .init(url: "https://youtube.com", title: "YouTube", id: 2),
-                .init(url: "https://twitter.com", title: "Twitter", id: 3),
-                .init(url: "https://facebook.com", title: "Facebook", id: 4),
-                .init(url: "https://facebook.com", title: "Facebook", id: 5),
-                .init(url: "https://twitter.com", title: "Twitter", id: 6),
-            ]
-        )
-    #endif
+struct SuggestedSearch {
+    let id: UUID = UUID()
+    let query: String
+    let site: Site
+    let isExample: Bool
+}
+
+let exampleQueries: [SuggestedSearch] = ["best headphones", "lemon bar recipe", "react hooks"].map {
+    query in
+    SuggestedSearch(
+        query: query,
+        site: .init(url: SearchEngine.current.searchURLForQuery(query)!),
+        isExample: true)
 }
 
 class SuggestedSearchesModel: ObservableObject {
-    @Published private(set) var suggestedQueries = [(query: String, site: Site)]()
+    @Published private(set) var suggestedQueries: [SuggestedSearch] = []
 
-    init(suggestedQueries: [(String, Site)]) {
+    init(suggestedQueries: [SuggestedSearch]) {
         self.suggestedQueries = suggestedQueries
+    }
+
+    func suggestions() -> [SuggestedSearch] {
+        self.suggestedQueries
+            + exampleQueries.filter { example in
+                !self.suggestedQueries.contains { history in
+                    example.query == history.query
+                }
+            }
     }
 
     var searchUrlForQuery: String {
@@ -73,7 +84,7 @@ class SuggestedSearchesModel: ObservableObject {
                     !queries.contains(query)
                 {
                     queries.insert(query)
-                    return (query, site)
+                    return SuggestedSearch(query: query, site: site, isExample: false)
                 } else {
                     return nil
                 }
@@ -81,7 +92,10 @@ class SuggestedSearchesModel: ObservableObject {
             if let topFrecentHistorySite = topFrecentHistorySite,
                 let topFrecentHistoryQuery = topFrecentHistoryQuery
             {
-                self.suggestedQueries.insert((topFrecentHistoryQuery, topFrecentHistorySite), at: 0)
+                self.suggestedQueries.insert(
+                    SuggestedSearch(
+                        query: topFrecentHistoryQuery, site: topFrecentHistorySite, isExample: false
+                    ), at: 0)
             }
 
             completion?()

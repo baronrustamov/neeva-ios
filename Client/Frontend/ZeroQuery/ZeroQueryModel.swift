@@ -273,7 +273,7 @@ class ZeroQueryModel: ObservableObject {
             TopSitesHandler.getTopSites(
                 profile: self.profile
             ).uponQueue(.main) { result in
-                self.suggestedSitesViewModel.sites = Array(result.prefix(7))
+                self.suggestedSitesViewModel.sites = Array(result.prefix(8))
             }
         }
     }

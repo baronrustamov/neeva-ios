@@ -90,8 +90,23 @@ public class ClientLogger {
         ).perform { result in
             switch result {
             case .failure(let error):
-                print("LogMutation Error: \(error)")
+                if path == .FirstRunImpression
+                    || path == .GetStartedInWelcome
+                {
+                    Defaults[.hasLogErrorFromFirstRunEvent] = true
+                    Defaults[.lastFirstRunEventLogError] = error.localizedDescription
+                }
             case .success:
+                if Defaults[.hasLogErrorFromFirstRunEvent] {
+                    Defaults[.hasLogErrorFromFirstRunEvent] = false
+                    ClientLogger.shared.logCounter(
+                        .LogErrorForInterstitialEvents,
+                        attributes: [
+                            ClientLogCounterAttribute(
+                                key: LogConfig.Attribute.FirstRunLogErrorMessage,
+                                value: Defaults[.lastFirstRunEventLogError])
+                        ])
+                }
                 break
             }
         }

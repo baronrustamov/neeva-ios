@@ -104,7 +104,7 @@ class KeyboardShortcutTests: UITestBase {
         // Make sure Lazy Tab popped up
         tester().waitForView(withAccessibilityLabel: "Cancel")
 
-        XCTAssert(bvc.tabManager.selectedTab?.isIncognito == true)
+        XCTAssert(bvc.incognitoModel.isIncognito == true)
         reset()
     }
 

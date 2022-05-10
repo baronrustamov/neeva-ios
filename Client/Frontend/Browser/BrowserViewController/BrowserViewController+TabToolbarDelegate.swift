@@ -121,7 +121,8 @@ extension BrowserViewController: ToolbarDelegate {
         }
 
         let switchPrivacyMode = { [self] (_: UIAction) in
-            tabManager.toggleIncognitoMode(fromTabTray: false)
+            tabManager.toggleIncognitoMode(
+                fromTabTray: false, clearSelectedTab: false, selectNewTab: true)
         }
 
         var switchModeTitle = Strings.openIncognitoModeTitle

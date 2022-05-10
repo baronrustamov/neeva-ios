@@ -137,21 +137,13 @@ class LocalNotifications {
             var rescheduled = false
             if exists {
                 notificationManager.cancelLocalNotification(identifier: type.rawValue)
+
                 switch type {
                 case .neevaPromo:
                     rescheduled = createNeevaPromoCallback()
-                case .neevaOnboardingProductSearch:
+                default:
                     rescheduled = createNeevaOnboardingCallback(
-                        notificationType: .neevaOnboardingProductSearch)
-                case .neevaOnboardingNewsProvider:
-                    rescheduled = createNeevaOnboardingCallback(
-                        notificationType: .neevaOnboardingNewsProvider)
-                case .neevaOnboardingFastTap:
-                    rescheduled = createNeevaOnboardingCallback(
-                        notificationType: .neevaOnboardingFastTap)
-                case .neevaOnboardingDefaultBrowser:
-                    rescheduled = createNeevaOnboardingCallback(
-                        notificationType: .neevaOnboardingDefaultBrowser)
+                        notificationType: type)
                 }
             }
 
@@ -254,6 +246,10 @@ class LocalNotifications {
                 "Ditch those trackers slowing you down. Get safe, blazing fast browsing and see the difference for yourself."
             timeInterval = TimeInterval(Defaults[.defaultBrowserPromoTimeInterval])
             deeplinkUrl = "neeva://open-default-browser-education"
+        case .neevaOnboardingCookieCutter:
+            // Placeholder content, WIP (#3282).
+            // TODO: Finalize copy and TimeInterval
+            break
         default:
             break
         }

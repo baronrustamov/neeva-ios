@@ -6,20 +6,20 @@ import Foundation
 import UIKit
 
 public struct SpaceEntityData {
-    typealias SpaceEntity = GetSpacesDataQuery.Data.GetSpace.Space.Space.Entity.SpaceEntity
-    typealias EntityRecipe = GetSpacesDataQuery.Data.GetSpace.Space.Space.Entity.SpaceEntity.Content
+    typealias SpaceEntity = SpacesMetadata.Entity.SpaceEntity
+    typealias EntityRecipe = SpacesMetadata.Entity.SpaceEntity.Content
         .TypeSpecific.AsWeb.Web.Recipe
-    typealias EntityRichEntity = GetSpacesDataQuery.Data.GetSpace.Space
-        .Space.Entity.SpaceEntity.Content.TypeSpecific.AsRichEntity.RichEntity
-    typealias EntityRetailProduct = GetSpacesDataQuery.Data.GetSpace.Space
-        .Space.Entity.SpaceEntity.Content.TypeSpecific.AsWeb.Web.RetailerProduct
-    typealias EntityProductRating = GetSpacesDataQuery.Data.GetSpace.Space
-        .Space.Entity.SpaceEntity.Content.TypeSpecific.AsWeb.Web.RetailerProduct.Review
+    typealias EntityRichEntity = SpacesMetadata.Entity.SpaceEntity.Content.TypeSpecific.AsRichEntity
+        .RichEntity
+    typealias EntityRetailProduct = SpacesMetadata.Entity.SpaceEntity.Content.TypeSpecific.AsWeb.Web
+        .RetailerProduct
+    typealias EntityProductRating = SpacesMetadata.Entity.SpaceEntity.Content.TypeSpecific.AsWeb.Web
+        .RetailerProduct.Review
         .RatingSummary
-    typealias EntityTechDoc = GetSpacesDataQuery.Data.GetSpace.Space
-        .Space.Entity.SpaceEntity.Content.TypeSpecific.AsTechDoc.TechDoc
-    typealias EntityNewsItem = GetSpacesDataQuery.Data.GetSpace.Space
-        .Space.Entity.SpaceEntity.Content.TypeSpecific.AsNewsItem.NewsItem
+    typealias EntityTechDoc = SpacesMetadata.Entity.SpaceEntity.Content.TypeSpecific.AsTechDoc
+        .TechDoc
+    typealias EntityNewsItem = SpacesMetadata.Entity.SpaceEntity.Content.TypeSpecific.AsNewsItem
+        .NewsItem
 
     typealias NewsItem = PreviewEntity.NewsItem
     typealias RichEntity = PreviewEntity.RichEntity

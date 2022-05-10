@@ -14,28 +14,44 @@ struct SuggestedSearchesView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            if model.suggestedQueries.isEmpty {
-                ZeroQueryPlaceholder(label: "Your searches go here")
-            }
-            ForEach(model.suggestedQueries.prefix(3), id: \.1) { query, site in
-                Button(action: {
-                    ClientLogger.shared.logCounter(LogConfig.Interaction.openSuggestedSearch)
-                    openURL(site.url)
-                }) {
-                    HStack {
-                        Symbol(decorative: .clock)
-                        Text(query.trimmingCharacters(in: .whitespacesAndNewlines))
-                            .foregroundColor(.label)
-                        Spacer()
-                    }
-                    .frame(height: 37)
-                    .padding(.horizontal, ZeroQueryUX.Padding)
+            ForEach(model.suggestions().prefix(3), id: \.id) { suggestedSearch in
+                Button(
+                    action: {
+                        if suggestedSearch.isExample {
+                            var attributes = EnvironmentHelper.shared.getFirstRunAttributes()
+                            attributes.append(
+                                ClientLogCounterAttribute(
+                                    key: "sample query",
+                                    value: suggestedSearch.query))
 
-                }
-                .onDrag { NSItemProvider(url: site.url) }
+                            ClientLogger.shared.logCounter(
+                                .PreviewSampleQueryClicked, attributes: attributes)
+                        } else {
+                            ClientLogger.shared.logCounter(
+                                LogConfig.Interaction.openSuggestedSearch)
+                        }
+
+                        openURL(suggestedSearch.site.url)
+                    },
+                    label: {
+                        HStack {
+                            Symbol(
+                                decorative: suggestedSearch.isExample ? .magnifyingglass : .clock)
+                            Text(
+                                suggestedSearch.query.trimmingCharacters(
+                                    in: .whitespacesAndNewlines)
+                            )
+                            .foregroundColor(.label)
+                            Spacer()
+                        }
+                        .frame(height: 37)
+                        .padding(.horizontal, ZeroQueryUX.Padding)
+                    }
+                )
+                .onDrag { NSItemProvider(url: suggestedSearch.site.url) }
                 .buttonStyle(.tableCell)
                 .overlay(
-                    Button(action: { setSearchInput(query) }) {
+                    Button(action: { setSearchInput(suggestedSearch.query) }) {
                         VStack {
                             Spacer(minLength: 0)
                             Symbol(decorative: .arrowUpLeft)
@@ -48,40 +64,11 @@ struct SuggestedSearchesView: View {
                 )
                 .contextMenu {
                     ZeroQueryCommonContextMenuActions(
-                        siteURL: site.url, title: nil, description: nil)
+                        siteURL: suggestedSearch.site.url, title: nil, description: nil)
                 }
             }
         }
         .accentColor(Color(light: .ui.gray70, dark: .secondaryLabel))
         .padding(.top, 7)
-    }
-}
-
-struct SuggestedSearchesView_Previews: PreviewProvider {
-    static var previews: some View {
-        VStack(spacing: 0) {
-            ZeroQueryHeader(
-                title: "Searches",
-                action: {},
-                label: "hide searches",
-                icon: .chevronUp
-            )
-            SuggestedSearchesView()
-                .environmentObject(
-                    SuggestedSearchesModel(
-                        suggestedQueries: [
-                            ("lebron james", .init(url: "https://neeva.com", title: "", id: 1)),
-                            ("neeva", .init(url: "https://neeva.com", title: "", id: 2)),
-                            //                            ("knives out", .init(url: "https://neeva.com", title: "", id: 3)),
-                            (
-                                "    transition: all 0.25s;\n",
-                                .init(url: "https://neeva.com", title: "", id: 4)
-                            ),
-                        ]
-                    )
-                )
-        }
-        .padding(.bottom)
-        .previewLayout(.sizeThatFits)
     }
 }

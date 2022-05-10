@@ -42,12 +42,20 @@ extension SavedTab {
             pinnedTime: tab.pinnedTime, lastExecutedTIme: tab.lastExecutedTime,
             faviconURL: tab.displayFavicon?.url, url: tab.url, sessionData: sessionData,
             uuid: tab.tabUUID, rootUUID: tab.rootUUID, parentUUID: tab.parentUUID ?? "",
-            tabIndex: tabIndex, parentSpaceID: tab.parentSpaceID ?? "")
+            tabIndex: tabIndex, parentSpaceID: tab.parentSpaceID ?? "",
+            pageZoom: tab.pageZoom)
     }
 
     func configureTab(_ tab: Tab, imageStore: DiskImageStore? = nil) {
-        // Since this is a restored tab, reset the URL to be loaded as that will be handled by the SessionRestoreHandler
-        tab.setURL(nil)
+        if sessionData == nil {
+            // If there's no session data, the tab was never loaded,
+            // set the URL to be what the tab was opened too.
+            tab.setURL(url)
+        } else {
+            // Since this is a restored tab, reset the URL to be,
+            // loaded as that will be handled by the SessionRestoreHandler
+            tab.setURL(nil)
+        }
 
         if let faviconURL = faviconURL {
             let icon = Favicon(url: faviconURL, date: Date())
@@ -77,5 +85,6 @@ extension SavedTab {
         tab.tabUUID = UUID ?? ""
         tab.rootUUID = rootUUID ?? ""
         tab.parentSpaceID = parentSpaceID ?? ""
+        tab.pageZoom = pageZoom ?? 1.0
     }
 }

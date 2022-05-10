@@ -23,6 +23,7 @@ public class NeevaUserInfo: ObservableObject {
     @Published public private(set) var isVerified = false
 
     /// Using optimistic approach, the user is considered `LoggedIn = true` until we receive a login required GraphQL error.
+    // TODO: consider not taking the optimistic approach; preview mode code paths should be able to depend on this
     @Published public private(set) var isUserLoggedIn: Bool = true
 
     // TODO: fetch this from the API!
@@ -97,7 +98,9 @@ public class NeevaUserInfo: ObservableObject {
     }
 
     public func reload() {
-        self.fetch()
+        if !self.isLoading {
+            self.fetch()
+        }
     }
 
     public func didLogOut() {

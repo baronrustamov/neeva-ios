@@ -19,6 +19,26 @@ struct CollapsedCardGroupView: View {
     @EnvironmentObject private var gridModel: GridModel
 
     @State private var frame = CGRect.zero
+    @State private var isFirstVisible = true
+    @State private var isLastVisible = false
+
+    var cornersToRound: CornerSet {
+        if groupDetails.allDetails.count <= 2 || groupDetails.isExpanded
+            || (isFirstVisible && isLastVisible)
+        {
+            return .all
+        }
+
+        if isFirstVisible {
+            return .leading
+        }
+
+        if isLastVisible {
+            return .trailing
+        }
+
+        return .all
+    }
 
     var body: some View {
         if groupDetails.allDetails.count <= columns.count {
@@ -26,7 +46,7 @@ struct CollapsedCardGroupView: View {
             ExpandedCardGroupRowView(
                 groupDetails: groupDetails, containerGeometry: containerGeometry,
                 range: 0..<groupDetails.allDetails.count, rowIndex: rowIndex,
-                nextToCells: nextToCells
+                nextToCells: nextToCells, singleLined: true
             )
         } else {
             VStack(spacing: 0) {
@@ -37,11 +57,7 @@ struct CollapsedCardGroupView: View {
             .transition(.fade)
             .background(
                 Color.secondarySystemFill
-                    .cornerRadius(
-                        24,
-                        corners: groupDetails.allDetails.count <= 2 || groupDetails.isExpanded
-                            ? .all : .leading
-                    )
+                    .cornerRadius(24, corners: cornersToRound)
             )
         }
     }
@@ -55,6 +71,7 @@ struct CollapsedCardGroupView: View {
                 ) {
                     ForEach(Array(groupDetails.allDetails.enumerated()), id: \.1.id) {
                         index, childTabDetail in
+
                         FittedCard(details: childTabDetail, dragToClose: false)
                             .modifier(
                                 CardTransitionModifier(
@@ -70,6 +87,19 @@ struct CollapsedCardGroupView: View {
                                         expanded: false, numTabs: groupDetails.allDetails.count))
 
                                 browserModel.hideGridWithAnimation()
+                            }.visibleStateChanged { isVisible in
+                                let isFirst = index == 0
+                                let isLast = index == groupDetails.allDetails.count - 1
+
+                                withAnimation {
+                                    if isFirst {
+                                        isFirstVisible = isVisible
+                                    }
+
+                                    if isLast {
+                                        isLastVisible = isVisible
+                                    }
+                                }
                             }
                     }
                 }
@@ -93,7 +123,9 @@ struct CollapsedCardGroupView: View {
                 // instantiated. This works by referencing an input parameter (groupDetails), which causes
                 // SwiftUI to think that this ViewModifier needs to be evaluated again.
                 let _ = groupDetails
-                scrollView.clipsToBounds = false
+
+                // Fixes a bug where the Card would get clipped during opening/closing animation.
+                scrollView.clipsToBounds = browserModel.cardTransitionModel.state == .hidden
             }
         }
     }
@@ -105,10 +137,23 @@ struct ExpandedCardGroupRowView: View {
     var range: Range<Int>
     let rowIndex: Int?
     let nextToCells: Bool
+    var singleLined: Bool = false
 
     @Environment(\.aspectRatio) private var aspectRatio
     @Environment(\.cardSize) private var size
     @EnvironmentObject var browserModel: BrowserModel
+
+    var horizontalPadding: CGFloat {
+        nextToCells ? 6 : 0
+    }
+
+    var maxWidth: CGFloat {
+        let numberOfCards = groupDetails.allDetails[range].count
+        let widthForCards = size * numberOfCards
+        let cardSpacing = CardGridUX.GridSpacing * (numberOfCards + 1)
+
+        return widthForCards + cardSpacing + (horizontalPadding * 2)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -131,7 +176,6 @@ struct ExpandedCardGroupRowView: View {
                                 containerGeometry: containerGeometry)
                         )
                         .environment(\.selectionCompletion) {
-
                             ClientLogger.shared.logCounter(
                                 .tabInTabGroupClicked,
                                 attributes: getLogCounterAttributesForTabGroups(
@@ -140,6 +184,7 @@ struct ExpandedCardGroupRowView: View {
                             browserModel.hideGridWithAnimation()
                         }
                 }
+
                 if isLastRowSingleTab(range, groupDetails) {
                     Spacer()
                 }
@@ -163,8 +208,10 @@ struct ExpandedCardGroupRowView: View {
                     isLastRow(range, groupDetails) ? 24 : 0,
                     corners: .bottom
                 )
-                .padding(.horizontal, nextToCells ? 6 : 0)
-        )
+                .padding(.horizontal, horizontalPadding)
+        ).if(nextToCells || singleLined) {
+            $0.frame(maxWidth: maxWidth)
+        }
     }
 
     func isLastRow(_ rowInfo: Range<Int>, _ groupDetails: TabGroupCardDetails) -> Bool {

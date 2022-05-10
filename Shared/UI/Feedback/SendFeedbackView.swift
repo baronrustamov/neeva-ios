@@ -290,7 +290,7 @@ public struct SendFeedbackView: View {
                         shareResults: shareResults,
                         requestId: (requestId?.isEmpty ?? true) ? nil : requestId,
                         geoLocationStatus: geoLocationStatus,
-                        source: NeevaUserInfo.shared.isUserLoggedIn ? .iosApp : .iosAppLoggedOut,
+                        source: .iosWeb3App,
                         screenshot: shareScreenshot && NeevaFeatureFlags[.feedbackScreenshot]
                             ? editedScreenshot.reduceAndConvertToBase64(maxSize: 800) : nil,
                         userProvidedEmail: email.isEmpty ? nil : email

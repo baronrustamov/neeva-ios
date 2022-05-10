@@ -189,3 +189,10 @@ private struct TextFieldAlert: ViewModifier {
             }
     }
 }
+
+extension View {
+    func visibleStateChanged(onChange: @escaping (Bool) -> Void) -> some View {
+        self.onAppear { onChange(true) }
+            .onDisappear { onChange(false) }
+    }
+}

@@ -156,17 +156,19 @@ struct SwitcherToolbarView: View {
                         attributes: [NSAttributedString.Key.font: font])
                     button.setAttributedTitle(title, for: .normal)
                     button.setTitleColor(
-                        gridModel.isShowingEmpty ? .secondaryLabel : .label, for: .normal)
+                        tabModel.manager.selectedTab == nil ? .secondaryLabel : .label, for: .normal
+                    )
                     button.setDynamicMenu {
                         gridModel.buildCloseAllTabsMenu(sourceView: button)
                     }
-                    button.isEnabled = !gridModel.isShowingEmpty
+                    button.isEnabled = tabModel.manager.selectedTab != nil
                     button.accessibilityLabel = "Done"
                 }
                 .tapTargetFrame()
                 .accessibilityLabel(String.TabTrayDoneAccessibilityLabel)
                 .accessibilityIdentifier("TabTrayController.doneButton")
-                .accessibilityValue(Text(gridModel.isShowingEmpty ? "Disabled" : "Enabled"))
+                .accessibilityValue(
+                    Text(tabModel.manager.selectedTab == nil ? "Disabled" : "Enabled"))
             }
             .padding(.horizontal, 16)
             .frame(

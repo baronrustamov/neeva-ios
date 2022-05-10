@@ -17,7 +17,7 @@ let closedWebPageLabel = "localhost:\(serverPort)/test-fixture/test-mozilla-book
 class HistoryTests: BaseTestCase {
     let testWithDB = [
         "testOpenHistoryFromBrowserContextMenuOptions", "testClearHistoryFromSettings",
-        "testClearRecentHistory",
+        "testClearRecentHistory", "testSearchHistory",
     ]
 
     // This DDBB contains those 4 websites listed in the name
@@ -303,5 +303,22 @@ class HistoryTests: BaseTestCase {
         for option in clearRecentHistoryOptions {
             XCTAssertTrue(app.sheets.buttons[option].exists)
         }
+    }
+
+    func testSearchHistory() {
+        goToHistory()
+
+        // Make sure sites are visible before search.
+        waitForExistence(app.staticTexts["Example Domain"])
+        waitForExistence(app.buttons["Twitter"])
+
+        // Select TextField.
+        waitForHittable(app.textFields["History Search TextField"])
+        app.textFields["History Search TextField"].tap(force: true)
+
+        // Perform search and verify only the correct site is shown.
+        app.textFields["History Search TextField"].typeText("example.com")
+        waitForNoExistence(app.buttons["Twitter"])
+        waitForExistence(app.staticTexts["Example Domain"])
     }
 }

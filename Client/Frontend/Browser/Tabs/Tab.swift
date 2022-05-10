@@ -40,6 +40,11 @@ protocol TabDelegate {
     @objc optional func tab(_ tab: Tab, willDeleteWebView webView: WKWebView)
 }
 
+enum TimeFilter: String {
+    case today = "Today"
+    case lastWeek = "Last Week"
+}
+
 class Tab: NSObject, ObservableObject {
     let isIncognito: Bool
     @Published var isPinned: Bool = false
@@ -96,6 +101,28 @@ class Tab: NSObject, ObservableObject {
     @Published private(set) var title: String?
     /// For security reasons, the URL may differ from the web view’s URL.
     @Published private(set) var url: URL?
+
+    private var observer: AnyCancellable?
+    var pageZoom: CGFloat = 1.0 {
+        didSet {
+            if let webView = webView {
+                webView.setValue(pageZoom, forKey: "viewScale")
+
+                // This effectively "pins" the top left of the content while the
+                // WKWebView is being zoomed. There's probably a better way to do this
+                let originalOffset = webView.scrollView.contentOffset
+                let newOffset = CGPoint(
+                    x: originalOffset.x, y: originalOffset.y * pageZoom)
+                observer = webView.scrollView.publisher(for: \.contentOffset)
+                    .sink { offset in
+                        if offset != originalOffset {
+                            webView.scrollView.contentOffset = newOffset
+                            self.observer = nil
+                        }
+                    }
+            }
+        }
+    }
 
     // MARK: - Cheatsheet Properties
     /// Cheatsheet info for current url
@@ -350,7 +377,9 @@ class Tab: NSObject, ObservableObject {
             }
         } else if let request = lastRequest {
             webView.load(request)
-        } else {
+        } else if let url = url {
+            webView.load(URLRequest(url: url))
+
             print(
                 "creating webview with no lastRequest and no session data: \(self.url?.description ?? "nil")"
             )
@@ -623,6 +652,36 @@ class Tab: NSObject, ObservableObject {
             }
         } else {
             browserViewController?.showAddToSpacesSheet(url: url, title: title, webView: webView)
+        }
+    }
+
+    func wasLastExecuted(_ byTime: TimeFilter) -> Bool {
+        // The fallback value won't be used. tab.lastExecutedTime is
+        // guaranteed to be non-nil in configureTab()
+        let lastExecutedTime = lastExecutedTime ?? Date.nowMilliseconds()
+        let minusOneDayToCurrentDate =
+            FeatureFlag[.demoteAfter15secondsTimeBasedSwitcher]
+            ? Calendar.current.date(
+                byAdding: .second, value: -15, to: Date())
+            : Calendar.current.date(
+                byAdding: .day, value: -1, to: Date())
+        guard let startOfOneDayAgo = minusOneDayToCurrentDate else {
+            return true
+        }
+        // timeIntervalSince1970 returns the number of seconds. It is converted
+        // to milliseconds by multiplying by 1000 to compare with lastExecutedTime
+        // which is stored in milliseconds.
+        switch byTime {
+        case .today:
+            return lastExecutedTime > Int64(startOfOneDayAgo.timeIntervalSince1970 * 1000)
+        case .lastWeek:
+            let minusOneWeekToCurrentDate = Calendar.current.date(
+                byAdding: .day, value: -7, to: Date())
+            guard let startOfLastWeek = minusOneWeekToCurrentDate else {
+                return true
+            }
+            return lastExecutedTime < Int64(startOfOneDayAgo.timeIntervalSince1970 * 1000)
+                && lastExecutedTime > Int64(startOfLastWeek.timeIntervalSince1970 * 1000)
         }
     }
 }
