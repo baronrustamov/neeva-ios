@@ -168,8 +168,7 @@ public class SpaceStore: ObservableObject {
     public static var suggested = SpaceStore(
         suggestedID: "xlvaUJmdPRSrcqRHPEzVPuWf4RP74EyHvz5QvxLN")
 
-    public static var promotionalSpaceId =
-        "-ysvXOiH2HWXsXeN_QaVFzwWEF_ASvtOW_yylJEM"
+    public static var promotionalSpaceId = "-ysvXOiH2HWXsXeN_QaVFzwWEF_ASvtOW_yylJEM"
     public static let dailyDigestID = "spaceDailyDigest"
     public static let dailyDigestSeeMoreID = "\(SpaceStore.dailyDigestID)SeeMore"
 

@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import Defaults
 import SwiftUI
 
 private enum BrowserTopBarViewUX {
@@ -14,14 +15,9 @@ struct BrowserTopBarView: View {
     @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var chromeModel: TabChromeModel
     @EnvironmentObject var gridModel: GridModel
-    @EnvironmentObject var tabContainerModel: TabContainerModel
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) private var verticalSizeClass
-
-    private var isShowingPreviewHome: Bool {
-        tabContainerModel.currentContentUI == .previewHome
-    }
 
     @ViewBuilder var switcherTopBar: some View {
         if chromeModel.inlineToolbar {
@@ -52,7 +48,11 @@ struct BrowserTopBarView: View {
                 },
                 onCancel: {
                     if bvc.zeroQueryModel.isLazyTab {
-                        bvc.closeLazyTab()
+                        if !Defaults[.didFirstNavigation] {
+                            chromeModel.setEditingLocation(to: false)
+                        } else {
+                            bvc.closeLazyTab()
+                        }
                     } else {
                         bvc.hideZeroQuery(wasCancelled: true)
                     }
@@ -70,39 +70,37 @@ struct BrowserTopBarView: View {
     }
 
     var body: some View {
-        if !isShowingPreviewHome || browserModel.showGrid {
-            VStack {
-                if UIConstants.enableBottomURLBar {
-                    Spacer()
-                }
+        VStack {
+            if UIConstants.enableBottomURLBar {
+                Spacer()
+            }
 
-                if !UIConstants.enableBottomURLBar, chromeModel.inlineToolbar {
-                    topBar
-                        .background(
-                            Group {
-                                // invisible tap area to show the toolbars since modern iOS
-                                // does not have a status bar in landscape.
-                                Color.clear
-                                    .ignoresSafeArea()
-                                    .frame(
-                                        height: BrowserTopBarViewUX
-                                            .ShowHeaderTapAreaHeight
-                                    )
-                                    // without this, the area isn’t tappable because it’s invisible
-                                    .contentShape(Rectangle())
-                                    .onTapGesture {
-                                        browserModel.scrollingControlModel
-                                            .showToolbars(
-                                                animated: true)
-                                    }
-                            }, alignment: .top)
-                } else {
-                    topBar
-                }
+            if !UIConstants.enableBottomURLBar, chromeModel.inlineToolbar {
+                topBar
+                    .background(
+                        Group {
+                            // invisible tap area to show the toolbars since modern iOS
+                            // does not have a status bar in landscape.
+                            Color.clear
+                                .ignoresSafeArea()
+                                .frame(
+                                    height: BrowserTopBarViewUX
+                                        .ShowHeaderTapAreaHeight
+                                )
+                                // without this, the area isn’t tappable because it’s invisible
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    browserModel.scrollingControlModel
+                                        .showToolbars(
+                                            animated: true)
+                                }
+                        }, alignment: .top)
+            } else {
+                topBar
+            }
 
-                if !UIConstants.enableBottomURLBar {
-                    Spacer()
-                }
+            if !UIConstants.enableBottomURLBar {
+                Spacer()
             }
         }
     }
