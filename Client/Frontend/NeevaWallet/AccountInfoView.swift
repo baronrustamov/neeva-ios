@@ -40,9 +40,10 @@ struct AccountInfoView: View {
 
             HStack(spacing: 12) {
                 Button(action: {
-                    UIPasteboard.general.setValue(
-                        Defaults[.cryptoPublicKey],
-                        forPasteboardType: kUTTypePlainText as String)
+                    UIPasteboard.general.setObjects(
+                        [Defaults[.cryptoPublicKey]], localOnly: false,
+                        expirationDate: Date().addingTimeInterval(30)
+                    )
 
                     copyAddressText = "Copied!"
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
