@@ -7,19 +7,22 @@ import SwiftUI
 
 struct CheatsheetOverlayHostView: View {
     @Environment(\.hideOverlay) private var hideOverlay
-    @EnvironmentObject private var tabChromModel: TabChromeModel
+    @EnvironmentObject private var tabChromeModel: TabChromeModel
 
     @ObservedObject private var model: CheatsheetMenuViewModel
 
-    private let tabManager: TabManager
+    private var showAsPopover: Bool { tabChromeModel.inlineToolbar }
 
     private let openSupport: (UIImage?) -> Void
+    private let openURL: (URL) -> Void
 
     init(openSupport: @escaping (UIImage?) -> Void, tabManager: TabManager) {
-        self.openSupport = openSupport
-
         self.model = tabManager.selectedTab?.cheatsheetModel ?? CheatsheetMenuViewModel(tab: nil)
-        self.tabManager = tabManager
+
+        self.openSupport = openSupport
+        self.openURL = { url in
+            tabManager.createOrSwitchToTab(for: url)
+        }
     }
 
     var body: some View {
@@ -45,7 +48,7 @@ struct CheatsheetOverlayHostView: View {
                             ClientLogCounterAttribute(key: "url", value: url.absoluteString),
                         ]
                 )
-                self.tabManager.createOrSwitchToTab(for: url)
+                self.openURL(url)
             }
     }
 }
