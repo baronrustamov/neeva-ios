@@ -5,6 +5,43 @@
 import Shared
 import SwiftUI
 
+struct ButtonView: View {
+    let tab: Tab
+    let tabManager: TabManager
+    
+    private let padding: CGFloat = 4
+    
+    @Environment(\.selectionCompletion) private var selectionCompletion: () -> Void
+    
+    var body: some View {
+        Button {
+            tabManager.select(tab)
+            selectionCompletion()
+        } label: {
+            HStack {
+                FaviconView(forSiteUrl: tab.url ?? "")
+                    .frame(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize)
+                    .padding(.trailing, padding)
+                
+                VStack(alignment: .leading, spacing: padding) {
+                    Text(tab.title ?? "")
+                        .foregroundColor(.label)
+
+                    Text(tab.url?.absoluteString ?? "")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }.lineLimit(1)
+
+                Spacer()
+            }
+            .padding(.trailing, -6)
+            .padding(.horizontal, GroupedCellUX.padding)
+            .padding(.vertical, 10)
+            .frame(minHeight: GroupedCellUX.minCellHeight)
+        }
+    }
+}
+
 struct TabListView: View {
     @Environment(\.onOpenURL) var openURL
     @Environment(\.selectionCompletion) private var selectionCompletion: () -> Void
@@ -18,31 +55,19 @@ struct TabListView: View {
         LazyVStack(spacing: 0) {
             ForEach(tabs, id: \.self) { tab in
                 if let url = tab.url { // should get rid of this unwrapping
-                    // if tab is in a tab group, Do a LazyVStack of Buttons                    
-                    Button {
-                        tabManager.select(tab)
-                        selectionCompletion()
-                    } label: {
-                        HStack {
-                            FaviconView(forSiteUrl: url)
-                                .frame(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize)
-                                .padding(.trailing, padding)
-                            
-                            VStack(alignment: .leading, spacing: padding) {
-                                Text(tab.title ?? "")
-                                    .foregroundColor(.label)
-
-                                Text(url.absoluteString)
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }.lineLimit(1)
-
-                            Spacer()
+                    if model.representativeTabs.contains(tab) {
+                        if let tabGroup = model.tabManager.getTabGroup(for: tab.rootUUID)?.children {
+                            LazyVStack {
+                                ForEach(tabGroup.filter {
+                                    return $0.wasLastExecuted(.lastMonth)
+                                }, id: \.self) { filteredTab in
+                                    ButtonView(tab: filteredTab, tabManager: tabManager)
+                                }
+                            }
+                            .background(Color.blue)
                         }
-                        .padding(.trailing, -6)
-                        .padding(.horizontal, GroupedCellUX.padding)
-                        .padding(.vertical, 10)
-                        .frame(minHeight: GroupedCellUX.minCellHeight)
+                    } else {
+                        ButtonView(tab: tab, tabManager: tabManager)
                     }
                 }
             }
