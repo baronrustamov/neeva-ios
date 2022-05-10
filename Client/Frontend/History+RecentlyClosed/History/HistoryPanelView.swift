@@ -96,7 +96,7 @@ struct HistoryPanelView: View {
             }
 
             // History List
-            if model.isFetchInProgress {
+            if model.isFetchInProgress && model.groupedSites.isEmpty {
                 Spacer()
                 LoadingView("Loading your history...")
                 Spacer()
