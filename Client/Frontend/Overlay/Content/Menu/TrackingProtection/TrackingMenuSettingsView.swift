@@ -7,20 +7,14 @@ import Shared
 import SwiftUI
 
 struct TrackingMenuSettingsView: View {
-    @Default(.unblockedDomains) var unblockedDomains: Set<String>
-
-    @State var domainIsNotSafelisted: Bool = false {
-        didSet {
-            TrackingPreventionConfig.updateAllowList(with: domain, allowed: !domainIsNotSafelisted)
-        }
-    }
+    @EnvironmentObject var viewModel: TrackingStatsViewModel
 
     let domain: String
     var body: some View {
         NavigationView {
             List {
                 Section(header: Text("On \(domain)").padding(.top, 21)) {
-                    Toggle("Tracking Prevention", isOn: $domainIsNotSafelisted)
+                    Toggle("Tracking Prevention", isOn: $viewModel.preventTrackersForCurrentPage)
                 }
                 Section(header: Text("Global Privacy Settings")) {
                     TrackingSettingsBlock()
@@ -36,9 +30,7 @@ struct TrackingMenuSettingsView: View {
             }
             .listStyle(.insetGrouped)
             .applyToggleStyle()
-        }.navigationViewStyle(.stack).onAppear {
-            domainIsNotSafelisted = !unblockedDomains.contains(domain)
-        }
+        }.navigationViewStyle(.stack)
     }
 }
 
