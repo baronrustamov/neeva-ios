@@ -36,12 +36,6 @@ struct ExperimentSettingsView: View {
                     experiment: .promoCardTypeAfterFirstRun
                 )
 
-                OptionalPrefilledStringField<NeevaExperiment.NotificatonPromptOnAppLaunch>(
-                    "NotificationPromptOnAppLaunch",
-                    value: $valueTextPromoCard,
-                    experiment: .notificatonPromptOnAppLaunch
-                )
-
                 OptionalPrefilledStringField<NeevaExperiment.DefaultBrowserChangeButton>(
                     "DefaultBrowserChangeButton",
                     value: $valueTextPromoCard,

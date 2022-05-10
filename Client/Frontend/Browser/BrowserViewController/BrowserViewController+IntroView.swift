@@ -154,15 +154,8 @@ extension BrowserViewController {
                 .DefaultBrowserInterstitialImp
             )
 
-            let arm = NeevaExperiment.startExperiment(for: .notificatonPromptOnAppLaunch)
-            NeevaExperiment.logStartExperiment(for: .notificatonPromptOnAppLaunch)
-
             _ = NeevaExperiment.startExperiment(for: .defaultBrowserChangeButton)
             NeevaExperiment.logStartExperiment(for: .defaultBrowserChangeButton)
-
-            if arm == .askForNotificatonPromptOnAppLaunch {
-                NotificationPermissionHelper.shared.requestPermissionIfNeeded(callSite: .appLaunch)
-            }
         }
     }
 

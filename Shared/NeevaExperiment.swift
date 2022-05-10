@@ -78,11 +78,6 @@ extension NeevaExperiment {
         case previewSignUp
     }
 
-    public enum NotificatonPromptOnAppLaunch: String, ExperimentArms {
-        case control
-        case askForNotificatonPromptOnAppLaunch
-    }
-
     public enum DefaultBrowserChangeButton: String, ExperimentArms {
         case control
         case changeButton
@@ -97,10 +92,6 @@ extension NeevaExperiment {
 extension NeevaExperiment.Experiment
 where Arm == NeevaExperiment.PromoCardTypeAfterFirstRun {
     public static let promoCardTypeAfterFirstRun = Self()
-}
-
-extension NeevaExperiment.Experiment where Arm == NeevaExperiment.NotificatonPromptOnAppLaunch {
-    public static let notificatonPromptOnAppLaunch = Self()
 }
 
 extension NeevaExperiment.Experiment where Arm == NeevaExperiment.DefaultBrowserChangeButton {
