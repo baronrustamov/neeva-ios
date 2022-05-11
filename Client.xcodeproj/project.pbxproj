@@ -1492,6 +1492,8 @@
 		F0FDDBB025EE91F300B12287 /* libStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* libStorage.a */; };
 		F35B8D2B1D6380EA008E3D61 /* SessionRestore.html in Resources */ = {isa = PBXBuildFile; fileRef = F35B8D2A1D6380EA008E3D61 /* SessionRestore.html */; };
 		F35B8D2D1D6383E9008E3D61 /* SessionRestoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F35B8D2C1D6383E9008E3D61 /* SessionRestoreHelper.swift */; };
+		F8418EDE282B2EBA004F1305 /* SpacesLoginRequiredView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8418EDD282B2EBA004F1305 /* SpacesLoginRequiredView.swift */; };
+		F8418EE3282B6D6A004F1305 /* SpacesLoginRequiredView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8418EDD282B2EBA004F1305 /* SpacesLoginRequiredView.swift */; };
 		F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21D91A090F8100AAB793 /* ClientTests.swift */; };
 		F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21E51A0910F600AAB793 /* AppDelegate.swift */; };
 		F84B220B1A0910F600AAB793 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B21EF1A0910F600AAB793 /* Images.xcassets */; };
@@ -2829,6 +2831,7 @@
 		F0ACC19E25E8C2380024991B /* Neeva.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Neeva.entitlements; sourceTree = "<group>"; };
 		F35B8D2A1D6380EA008E3D61 /* SessionRestore.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = SessionRestore.html; sourceTree = "<group>"; };
 		F35B8D2C1D6383E9008E3D61 /* SessionRestoreHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionRestoreHelper.swift; sourceTree = "<group>"; };
+		F8418EDD282B2EBA004F1305 /* SpacesLoginRequiredView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacesLoginRequiredView.swift; sourceTree = "<group>"; };
 		F84B21BE1A090F8100AAB793 /* Client.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Client.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F84B21D31A090F8100AAB793 /* ClientTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClientTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F84B21D81A090F8100AAB793 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -3914,6 +3917,7 @@
 				3FE1BC2C27DFFACE004122F8 /* SpaceEntityThumbnailView.swift */,
 				3FE1BC2E27DFFB59004122F8 /* SpaceEntityDescriptionView.swift */,
 				E6F64022281B2EB0008B7644 /* SpacesProfileView.swift */,
+				F8418EDD282B2EBA004F1305 /* SpacesLoginRequiredView.swift */,
 			);
 			path = Spaces;
 			sourceTree = "<group>";
@@ -6967,6 +6971,7 @@
 				8AB284B6280DE533008027D2 /* ArchivedTabsView.swift in Sources */,
 				4A42C52627E58487003B9826 /* CardGridOverflowMenuView.swift in Sources */,
 				4A42C52727E58487003B9826 /* SpaceComments.swift in Sources */,
+				F8418EE3282B6D6A004F1305 /* SpacesLoginRequiredView.swift in Sources */,
 				4A42C52827E58487003B9826 /* Roobert.swift in Sources */,
 				E6EA734E27F610B600845FFB /* URLExtensions.swift in Sources */,
 				4A42C52927E58487003B9826 /* NotificationSettingsView.swift in Sources */,
@@ -7455,6 +7460,7 @@
 				67AA22F226C476F300F33D09 /* BrowserViewController+OverflowMenu.swift in Sources */,
 				67292D3326AD2CF200DB1BFA /* AnnotationType.swift in Sources */,
 				C8B109A5275E9CE60010EBE4 /* BrowserView.swift in Sources */,
+				F8418EDE282B2EBA004F1305 /* SpacesLoginRequiredView.swift in Sources */,
 				BC6239E027476BC8004A036F /* SignUpTwoButtonsPromptView.swift in Sources */,
 				4AD771B827387B1F00B6769D /* SpaceGeneratorView.swift in Sources */,
 				2026EC1F27F3E51400817053 /* CookieCutterModel.swift in Sources */,
