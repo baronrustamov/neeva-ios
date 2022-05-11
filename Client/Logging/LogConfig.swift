@@ -262,6 +262,7 @@ public struct LogConfig {
         case SpacesDetailEntityClicked
         case SpacesDetailEditButtonClicked
         case SpacesDetailShareButtonClicked
+        case SpacesLoginRequired
         case OwnerSharedSpace
         case FollowerSharedSpace
         case SocialShare
@@ -437,12 +438,17 @@ public struct LogConfig {
         for path: LogConfig.Interaction
     ) -> Bool {
         let category = LogConfig.category(for: path)
-        return category == .FirstRun
+        let validCategory =
+            category == .FirstRun
             || category == .Stability
             || category == .PromoCard
             || category == .Web3
             || category == .Notification
             || category == .Cheatsheet
+
+        let validInteraction = path == .SpacesLoginRequired
+
+        return validCategory || validInteraction
     }
 
     // MARK: - Category
@@ -596,6 +602,7 @@ public struct LogConfig {
         case .SpacesDetailEntityClicked: return .Spaces
         case .SpacesDetailEditButtonClicked: return .Spaces
         case .SpacesDetailShareButtonClicked: return .Spaces
+        case .SpacesLoginRequired: return .Spaces
         case .OwnerSharedSpace: return .Spaces
         case .FollowerSharedSpace: return .Spaces
         case .SocialShare: return .Spaces

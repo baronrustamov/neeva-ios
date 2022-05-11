@@ -1945,6 +1945,19 @@ extension BrowserViewController {
             }
         }
     }
+
+    func showSpacesLoginRequiredSheet() {
+        self.showModal(style: .withTitle) {
+            SpacesLoginRequiredView()
+                .environment(\.onSigninOrJoinNeeva) {
+                    ClientLogger.shared.logCounter(.SpacesLoginRequired)
+
+                    self.overlayManager.hideCurrentOverlay()
+
+                    self.presentIntroViewController(true)
+                }
+        }
+    }
 }
 
 // MARK: - Cheatsheet Sheet/Popover
