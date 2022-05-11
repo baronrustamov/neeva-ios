@@ -203,6 +203,8 @@ public struct LogConfig {
         case FirstNavigation
         /// Log interstitial logging error
         case LogErrorForInterstitialEvents
+        /// Log attribution token request error
+        case NeevaAttributionRequestError
         /// Default browser interstitial restore imp
         case DefaultBrowserInterstitialRestoreImp
 
@@ -549,6 +551,7 @@ public struct LogConfig {
         case .ResolvedAttributionTokenRetryError: return .FirstRun
         case .FirstNavigation: return .FirstRun
         case .LogErrorForInterstitialEvents: return .FirstRun
+        case .NeevaAttributionRequestError: return .FirstRun
         case .DefaultBrowserInterstitialRestoreImp: return .FirstRun
 
         // MARK: - PromoCard
