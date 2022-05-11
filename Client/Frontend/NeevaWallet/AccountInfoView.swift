@@ -27,17 +27,11 @@ struct AccountInfoView: View {
     @ObservedObject var assetStore: AssetStore = AssetStore.shared
 
     var body: some View {
-        VStack(spacing: 0) {
-            WalletProfilePicture(size: CGSize(width: 48, height: 48))
-                .padding(8)
-            HStack(spacing: 0) {
-                Text(model.walletDisplayName)
-                    .withFont(.headingXLarge)
-                    .gradientForeground()
-                    .lineLimit(1)
-                overflowMenu
-            }
+        overflowMenu
+            .padding(.top, 24)
+            .modifier(WalletListSeparatorModifier())
 
+        VStack(spacing: 0) {
             HStack(spacing: 12) {
                 Button(action: {
                     UIPasteboard.general.setObjects(
@@ -65,20 +59,26 @@ struct AccountInfoView: View {
                         showQRScanner: $showQRScanner, returnAddress: $qrCodeStr,
                         onComplete: onScanComplete)
                 }.buttonStyle(DashboardButtonStyle())
-                Button(action: { showSendForm = true }) {
-                    HStack(spacing: 4) {
-                        Symbol(decorative: .paperplane, style: .bodyMedium)
-                        Text("Send")
+                ZStack {
+                    NavigationLink(isActive: $showSendForm) {
+                        VStack {
+                            sheetHeader("Send")
+                            SendForm(wallet: model.wallet, showSendForm: $showSendForm)
+                            Spacer()
+                        }
+                        .navigationBarHidden(true)
+                        .padding(.horizontal, 16)
+                        .padding(.top, 16)
+                    } label: {
+                        EmptyView()
+                    }.opacity(0)
+                    Button(action: { showSendForm = true }) {
+                        HStack(spacing: 4) {
+                            Symbol(decorative: .paperplane, style: .bodyMedium)
+                            Text("Send")
+                        }
                     }
-                }
-                .buttonStyle(DashboardButtonStyle())
-                .sheet(isPresented: $showSendForm, onDismiss: {}) {
-                    VStack {
-                        sheetHeader("Send")
-                        SendForm(wallet: model.wallet, showSendForm: $showSendForm)
-                        Spacer()
-                    }
-                    .padding(.horizontal, 16)
+                    .buttonStyle(DashboardButtonStyle())
                 }
             }
             .frame(maxWidth: .infinity)
@@ -99,9 +99,7 @@ struct AccountInfoView: View {
                 .padding(.bottom, 12)
             }
         }
-        .padding(.top, 24)
         .modifier(WalletListSeparatorModifier())
-
     }
 
     @ViewBuilder
@@ -124,7 +122,7 @@ struct AccountInfoView: View {
         HStack(spacing: 10) {
             ZStack {
                 WalletProfilePicture(size: CGSize(width: 34, height: 34))
-                if !assetStore.assets.isEmpty {
+                if !assetStore.assets.isEmpty && showOverflowSheet {
                     Symbol(decorative: .pencilCircleFill, weight: .regular)
                         .foregroundColor(Color.label)
                         .background(Color.DefaultBackground)
@@ -154,15 +152,10 @@ struct AccountInfoView: View {
 
     @ViewBuilder
     var overflowMenu: some View {
-        Button(
-            action: { showOverflowSheet = true },
-            label: {
-                Symbol(decorative: .chevronDown, style: .headingXLarge)
-                    .foregroundColor(.wallet.gradientEnd)
-            }
-        ).sheet(
-            isPresented: $showOverflowSheet, onDismiss: {},
-            content: {
+        ZStack {
+            NavigationLink(
+                isActive: $showOverflowSheet
+            ) {
                 VStack {
                     sheetHeader("Wallets")
                     if showProfilePicturePicker, !assetStore.assets.isEmpty {
@@ -190,10 +183,33 @@ struct AccountInfoView: View {
                     Spacer()
                 }
                 .padding(.horizontal, 16)
+                .navigationBarHidden(true)
                 .actionSheet(isPresented: $showConfirmRemoveWalletAlert) {
                     confirmRemoveWalletSheet
                 }
-            })
+            } label: {
+                EmptyView()
+            }.opacity(0)
+            Button(
+                action: { showOverflowSheet = true },
+                label: {
+                    VStack(spacing: 0) {
+                        WalletProfilePicture(size: CGSize(width: 48, height: 48))
+                            .padding(8)
+                        HStack(spacing: 0) {
+                            Text(model.walletDisplayName)
+                                .withFont(.headingXLarge)
+                                .gradientForeground()
+                                .lineLimit(1)
+                            Symbol(decorative: .chevronRight, style: .headingXLarge)
+                                .foregroundColor(.wallet.gradientEnd)
+                        }
+                    }
+
+                }
+            )
+        }
+
     }
 
     var confirmRemoveWalletSheet: ActionSheet {

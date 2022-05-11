@@ -21,9 +21,6 @@ public struct SendForm: View {
 
     public var body: some View {
         VStack(alignment: .leading) {
-            Text("Send")
-                .withFont(.headingMedium)
-                .foregroundColor(.label)
             HStack {
                 TextField("Recipient Address", text: $sendToAccountAddress)
                 Spacer()
