@@ -19,7 +19,8 @@ public struct ArchivedTabsData {
 
 class ArchivedTabsPanelModel: ObservableObject {
     let tabManager: TabManager
-    var representativeTabs: [Tab] = []
+    var representativeTabsInAMonth: [Tab] = []
+    var representativeTabsOverAMonth: [Tab] = []
     var tabsWithExclusionList: [Tab] = []
     var allTabsFiltered: [Tab] = []
     var groupedSites = ArchivedTabsData()
@@ -38,16 +39,12 @@ class ArchivedTabsPanelModel: ObservableObject {
     init(tabManager: TabManager) {
         self.tabManager = tabManager
         
-        representativeTabs = self.tabManager.getAllTabGroup()
+        representativeTabsInAMonth = self.tabManager.getAllTabGroup()
             .reduce(into: [Tab]()) { $0.append($1.children.first!) }
         tabsWithExclusionList = self.tabManager.getAll().filter {
             !self.tabManager.childTabs.contains($0)
         }
 
-        allTabsFiltered = tabManager.tabs.filter { tab in
-            return (representativeTabs.contains(tab)
-                    || tabsWithExclusionList.contains{$0.id == tab.id}) && !tab.isIncognito
-        }
-
+        allTabsFiltered = tabManager.normalTabs
     }
 }

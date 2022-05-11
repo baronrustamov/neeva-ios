@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import Defaults
 import Shared
 import SwiftUI
 
@@ -36,7 +37,7 @@ struct ButtonView: View {
             }
             .padding(.trailing, -6)
             .padding(.horizontal, GroupedCellUX.padding)
-            .padding(.vertical, 10)
+            .padding(.vertical, 6)
             .frame(minHeight: GroupedCellUX.minCellHeight)
         }
     }
@@ -52,19 +53,30 @@ struct TabListView: View {
     let tabs: [Tab]
     
     var body: some View {
-        LazyVStack(spacing: 0) {
+        LazyVStack(spacing: 8) {
             ForEach(tabs, id: \.self) { tab in
                 if let url = tab.url { // should get rid of this unwrapping
                     if model.representativeTabs.contains(tab) {
                         if let tabGroup = model.tabManager.getTabGroup(for: tab.rootUUID)?.children {
-                            LazyVStack {
+                            LazyVStack(spacing: 0) {
+                                HStack {
+                                    Text(getTabGroupTitle(id: tab.rootUUID))
+                                        .withFont(.labelMedium)
+                                        .foregroundColor(.label)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                        .padding(.vertical, 8)
+                                        .padding(.leading, 16)
+                                    Spacer()
+                                }
                                 ForEach(tabGroup.filter {
                                     return $0.wasLastExecuted(.lastMonth)
                                 }, id: \.self) { filteredTab in
                                     ButtonView(tab: filteredTab, tabManager: tabManager)
                                 }
                             }
-                            .background(Color.blue)
+                            .background(Color.secondarySystemFill
+                                .cornerRadius(16)
+                            )
                         }
                     } else {
                         ButtonView(tab: tab, tabManager: tabManager)
@@ -72,5 +84,9 @@ struct TabListView: View {
                 }
             }
         }
+    }
+    
+    func getTabGroupTitle(id: String) -> String {
+        return Defaults[.tabGroupNames][id] ?? tabManager.getTabForUUID(uuid: id)?.displayTitle ?? ""
     }
 }

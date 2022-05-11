@@ -483,6 +483,10 @@ class TabManager: NSObject {
             lhs.lastExecutedTime ?? 0 < rhs.lastExecutedTime ?? 0
         })
     }
+    
+    func getChildLastUsedInAMonth(_ item: TabGroup) -> Tab? {
+        return item.children.first
+    }
 
     func cleanUpTabGroupNames() {
         // Write tab group name into dictionary
