@@ -61,6 +61,8 @@ public struct NeevaConstants {
     public static let cookieCutterHelpURL: URL =
         "https://help.neeva.com/hc/en-us/articles/4486326606355"
 
+    public static var neevaTokenApiURL: URL { buildAppURL("app-lifecycle/aaa-token") }
+
     public static var xyzURL: URL {
         URL(string: "https://neeva.xyz/\(Defaults[.cryptoPublicKey])") ?? "https://neeva.xyz/"
     }
