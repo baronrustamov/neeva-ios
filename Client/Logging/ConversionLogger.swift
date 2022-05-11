@@ -89,6 +89,27 @@ class ConversionLogger {
                         retryAttributionRequest()
                     }
                 }.resume()
+
+                // TODO: remove the client side attribution resolving logic in next release
+                // after verifying the pipeline is working
+                var neevaTokenRequest = URLRequest(url: NeevaConstants.neevaTokenApiURL)
+                neevaTokenRequest.httpMethod = "POST"
+                let neevaTokenData = "sessionUUID=\(Defaults[.sessionUUIDv2])&aaaToken=\(token)"
+                neevaTokenRequest.httpBody = Data(neevaTokenData.utf8)
+                neevaTokenRequest.setValue(
+                    "application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+
+                URLSession.shared.dataTask(with: neevaTokenRequest) { data, response, error in
+                    guard error == nil else {
+                        logNeevaRequestError(token: token)
+                        return
+                    }
+                    if let response = response, let httpResponse = response as? HTTPURLResponse {
+                        if httpResponse.statusCode != 200 {
+                            logNeevaRequestError(token: token)
+                        }
+                    }
+                }.resume()
             } else {
                 logAttributionDataError(
                     errorType: AttributionTokenErrorType.emptyToken,
@@ -165,6 +186,23 @@ class ConversionLogger {
                 shouldRetryRequestAfterFailure
                     ? .ResolvedAttributionTokenError : .ResolvedAttributionTokenRetryError,
                 attributes: attributes
+            )
+        }
+    }
+
+    // This logger function is called from a background thread
+    private static func logNeevaRequestError(
+        token: String
+    ) {
+        DispatchQueue.main.async {
+            ClientLogger.shared.logCounter(
+                .NeevaAttributionRequestError,
+                attributes: [
+                    ClientLogCounterAttribute(
+                        key: LogConfig.Attribute.AttributionTokenErrorToken,
+                        value: token
+                    )
+                ]
             )
         }
     }

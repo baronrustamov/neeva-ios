@@ -239,7 +239,7 @@ struct SuggestedSitesView: View {
                 if withHome {
                     SuggestedHomeView()
                 }
-                ForEach(viewModel.sites, id: \.self) { suggestedSite in
+                ForEach(viewModel.sites.prefix(withHome ? 7 : 8), id: \.self) { suggestedSite in
                     SuggestedSiteView(
                         site: suggestedSite, isPinnedSite: suggestedSite is PinnedSite
                     )

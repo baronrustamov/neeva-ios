@@ -40,3 +40,6 @@ If you find a bug in the source code or a mistake in the documentation, you can 
 * It is everyone's responsibility to write tests, and as a code reviewer, you should expect PRs to include tests.
 * Prefer smaller unit tests (see ClientTests) over larger integration tests (see XCUITests).
 * Prefer XCUITests over UITests.
+
+### Privileged links
+At times core contributors and Neeva employees will link to external resources that are privileged and not publicly accessible. We do our best to prefix these links with a lock emoji (🔒).

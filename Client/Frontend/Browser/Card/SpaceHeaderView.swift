@@ -9,6 +9,7 @@ import SwiftUI
 struct SpaceHeaderView: View {
     @EnvironmentObject var spaceModel: SpaceCardModel
     let space: Space
+    @Binding var isVerifiedProfile: Bool
     // This fixes iPad auto pop problem
     var onShowProfileUI: () -> Void
 
@@ -76,7 +77,7 @@ struct SpaceHeaderView: View {
     }
 
     private var aclView: some View {
-        ZStack(alignment: .leading) {
+        HStack {
             Button(
                 action: {
                     self.onShowProfileUI()
@@ -84,6 +85,8 @@ struct SpaceHeaderView: View {
                 label: {
                     SpaceACLView(isPublic: space.isPublic, acls: space.acls, owner: space.owner)
                 })
+            Spacer()
+            Symbol(decorative: .chevronRight).opacity(isVerifiedProfile ? 1 : 0)
         }
     }
 
