@@ -18,6 +18,7 @@ struct SpaceDetailList: View {
     @Environment(\.shareURL) var shareURL
     @ObservedObject var primitive: SpaceCardDetails
     @Binding var headerVisible: Bool
+    @Binding var isVerifiedProfile: Bool
     var onShowProfileUI: () -> Void
     @State var addingComment = false
     @StateObject var spaceCommentsModel = SpaceCommentsModel()
@@ -40,10 +41,6 @@ struct SpaceDetailList: View {
 
     var canEdit: Bool {
         primitive.ACL >= .edit && !(space?.isDigest ?? false)
-    }
-
-    var ownerName: String? {
-        space?.acls.first(where: { $0.acl == .owner })?.profile.displayName
     }
 
     func descriptionForNote(_ details: SpaceEntityThumbnail) -> String? {
@@ -81,16 +78,20 @@ struct SpaceDetailList: View {
                             .modifier(ListSeparatorModifier())
                     }
 
-                    if let space = space {
-                        SpaceHeaderView(space: space, onShowProfileUI: onShowProfileUI)
-                            .modifier(ListSeparatorModifier())
-                            .iPadOnlyID()
-                            .onAppear {
-                                headerVisible = UIDevice.current.userInterfaceIdiom != .pad
-                            }
-                            .onDisappear {
-                                headerVisible = false
-                            }
+                    if let space = primitive.item {
+                        SpaceHeaderView(
+                            space: space,
+                            isVerifiedProfile: $isVerifiedProfile,
+                            onShowProfileUI: onShowProfileUI
+                        )
+                        .modifier(ListSeparatorModifier())
+                        .iPadOnlyID()
+                        .onAppear {
+                            headerVisible = UIDevice.current.userInterfaceIdiom != .pad
+                        }
+                        .onDisappear {
+                            headerVisible = false
+                        }
                     }
 
                     if spacesModel.detailedSpace != nil && primitive.allDetails.isEmpty

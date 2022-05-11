@@ -48,7 +48,6 @@ struct SpaceContainerView: View {
             } label: {
                 EmptyView()
             }
-            .frame(width: 0, height: 0)
 
             if !(space?.isDigest ?? false) && primitive.allDetails.isEmpty && primitive.isFollowing
             {
@@ -57,6 +56,7 @@ struct SpaceContainerView: View {
                 SpaceDetailList(
                     primitive: primitive,
                     headerVisible: $headerVisible,
+                    isVerifiedProfile: $isVerifiedProfile,
                     onShowProfileUI: {
                         if isVerifiedProfile {
                             self.showingProfileUI = true
