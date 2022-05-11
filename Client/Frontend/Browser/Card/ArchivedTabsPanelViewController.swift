@@ -16,13 +16,14 @@ class ArchivedTabsPanelViewController: UIHostingController<AnyView> {
                 }
             }.environment(
                 \.onOpenURL,
-                { bvc.tabManager.createOrSwitchToTab(for: $0)
+                {
+                    bvc.tabManager.createOrSwitchToTab(for: $0)
                     bvc.browserModel.hideGridWithNoAnimation()
                 }
             )
             .environment(
-                \.selectionCompletion
-                 , {bvc.browserModel.hideGridWithNoAnimation()})
+                \.selectionCompletion, { bvc.browserModel.hideGridWithNoAnimation() }
+            )
             .environmentObject(bvc.browserModel)
             .environmentObject(bvc.browserModel.scrollingControlModel)
             .environmentObject(bvc.chromeModel)

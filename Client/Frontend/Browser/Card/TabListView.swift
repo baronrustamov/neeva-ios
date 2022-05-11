@@ -9,11 +9,11 @@ import SwiftUI
 struct ButtonView: View {
     let tab: Tab
     let tabManager: TabManager
-    
+
     private let padding: CGFloat = 4
-    
+
     @Environment(\.selectionCompletion) private var selectionCompletion: () -> Void
-    
+
     var body: some View {
         Button {
             tabManager.select(tab)
@@ -23,7 +23,7 @@ struct ButtonView: View {
                 FaviconView(forSiteUrl: tab.url ?? "")
                     .frame(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize)
                     .padding(.trailing, padding)
-                
+
                 VStack(alignment: .leading, spacing: padding) {
                     Text(tab.title ?? "")
                         .foregroundColor(.label)
@@ -47,17 +47,19 @@ struct TabListView: View {
     @Environment(\.onOpenURL) var openURL
     @Environment(\.selectionCompletion) private var selectionCompletion: () -> Void
     @EnvironmentObject var model: ArchivedTabsPanelModel
-    
-    let tabManager: TabManager
+
     private let padding: CGFloat = 4
+    let tabManager: TabManager
     let tabs: [Tab]
-    
+    let section: ArchivedTabTimeSection
+
     var body: some View {
         LazyVStack(spacing: 8) {
             ForEach(tabs, id: \.self) { tab in
-                if let url = tab.url { // should get rid of this unwrapping
-                    if model.representativeTabs.contains(tab) {
-                        if let tabGroup = model.tabManager.getTabGroup(for: tab.rootUUID)?.children {
+                if let url = tab.url {  // should get rid of this unwrapping
+                    if model.getRepresentativeTabs(section: section).contains(tab) {
+                        if let tabGroup = model.tabManager.getTabGroup(for: tab.rootUUID)?.children
+                        {
                             LazyVStack(spacing: 0) {
                                 HStack {
                                     Text(getTabGroupTitle(id: tab.rootUUID))
@@ -68,14 +70,17 @@ struct TabListView: View {
                                         .padding(.leading, 16)
                                     Spacer()
                                 }
-                                ForEach(tabGroup.filter {
-                                    return $0.wasLastExecuted(.lastMonth)
-                                }, id: \.self) { filteredTab in
+                                ForEach(
+                                    tabGroup.filter {
+                                        return $0.wasLastExecuted(.lastMonth)
+                                    }, id: \.self
+                                ) { filteredTab in
                                     ButtonView(tab: filteredTab, tabManager: tabManager)
                                 }
                             }
-                            .background(Color.secondarySystemFill
-                                .cornerRadius(16)
+                            .background(
+                                Color.secondarySystemFill
+                                    .cornerRadius(16)
                             )
                         }
                     } else {
@@ -85,8 +90,9 @@ struct TabListView: View {
             }
         }
     }
-    
+
     func getTabGroupTitle(id: String) -> String {
-        return Defaults[.tabGroupNames][id] ?? tabManager.getTabForUUID(uuid: id)?.displayTitle ?? ""
+        return Defaults[.tabGroupNames][id] ?? tabManager.getTabForUUID(uuid: id)?.displayTitle
+            ?? ""
     }
 }

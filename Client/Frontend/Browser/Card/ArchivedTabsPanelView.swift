@@ -77,8 +77,10 @@ struct ArchivedTabsPanelView: View {
 
                     if itemsInSection.count > 0 {
                         Section(header: ArchivedTabsSectionHeader(section: section)) {
-                            TabListView(tabManager: model.tabManager, tabs: itemsInSection)
-                                .environmentObject(model)
+                            TabListView(
+                                tabManager: model.tabManager, tabs: itemsInSection, section: section
+                            )
+                            .environmentObject(model)
                         }
                     }
                 }

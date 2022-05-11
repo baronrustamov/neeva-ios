@@ -25,26 +25,44 @@ class ArchivedTabsPanelModel: ObservableObject {
     var allTabsFiltered: [Tab] = []
     var groupedSites = ArchivedTabsData()
 
-    func loadData() {
-        
-        groupedSites.sites[.lastMonth] = allTabsFiltered.filter {
-            $0.wasLastExecuted(.lastMonth)
-        }                
+    func getRepresentativeTabs(section: ArchivedTabTimeSection) -> [Tab] {
+        switch section {
+        case .lastMonth:
+            return representativeTabsInAMonth
+        case .overAMonth:
+            return representativeTabsOverAMonth
+        }
+    }
 
-        groupedSites.sites[.overAMonth] = allTabsFiltered.filter {
-            $0.wasLastExecuted(.overAMonth)
+    func loadData() {
+        groupedSites.sites[.lastMonth] = tabManager.tabs.filter {
+            return (representativeTabsInAMonth.contains($0) || tabsWithExclusionList.contains($0))
+                && !$0.isIncognito && $0.wasLastExecuted(.lastMonth)
+        }
+
+        groupedSites.sites[.overAMonth] = tabManager.tabs.filter {
+            return (representativeTabsOverAMonth.contains($0) || tabsWithExclusionList.contains($0))
+                && !$0.isIncognito && $0.wasLastExecuted(.overAMonth)
         }
     }
 
     init(tabManager: TabManager) {
         self.tabManager = tabManager
-        
+
         representativeTabsInAMonth = self.tabManager.getAllTabGroup()
-            .reduce(into: [Tab]()) { $0.append($1.children.first!) }
+            .reduce(into: [Tab]()) {
+                if let tab = tabManager.getChildLastUsedInAMonth($1) {
+                    $0.append(tab)
+                }
+            }
+        representativeTabsOverAMonth = self.tabManager.getAllTabGroup()
+            .reduce(into: [Tab]()) {
+                if let tab = tabManager.getChildLastUsedOverAMonth($1) {
+                    $0.append(tab)
+                }
+            }
         tabsWithExclusionList = self.tabManager.getAll().filter {
             !self.tabManager.childTabs.contains($0)
         }
-
-        allTabsFiltered = tabManager.normalTabs
     }
 }
