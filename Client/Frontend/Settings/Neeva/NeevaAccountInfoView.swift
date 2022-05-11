@@ -39,7 +39,12 @@ struct NeevaAccountInfoView: View {
 
             switch userInfo.subscriptionType {
             case .basic:
-                Section(header: Text("Membership Status")) {
+                Section(
+                    header: Text("Membership Status"),
+                    footer: Text(
+                        "To upgrade your membership, please sign in to Neeva from your computer."
+                    )
+                ) {
                     VStack(alignment: .leading) {
                         Text(SubscriptionType.basic.displayName)
                             .withFont(.headingMedium)
@@ -58,20 +63,10 @@ struct NeevaAccountInfoView: View {
                     .padding(.vertical, 5)
                     .accessibilityElement(children: .combine)
 
-                    VStack(alignment: .leading, spacing: 7) {
-                        Text("Upgrade to Premium: Power the Future of Search!")
-                            .withFont(.headingMedium)
-                            .fixedSize(horizontal: false, vertical: true)
-                        Button(action: {
-                            openURL(NeevaConstants.appMembershipURL)
-                        }) {
-                            Text("See the Benefits \(Image(systemSymbol: .arrowForward))")
-                                .withFont(.bodyLarge)
-                        }
+                    NavigationLinkButton("Learn more about Premium membership") {
+                        openURL(NeevaConstants.appMembershipURL)
                     }
                     .padding(.vertical, 5)
-                    .accessibilityElement(children: .combine)
-                    .accessibilityAddTraits(.isButton)
                 }
             case .premium, .lifetime:
                 Section(
