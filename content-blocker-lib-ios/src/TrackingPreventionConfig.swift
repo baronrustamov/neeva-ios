@@ -28,8 +28,8 @@ struct TrackingPreventionConfig {
         Defaults[.unblockedDomains].contains(domain)
     }
     
-    static func trackersPreventedFor(_ domain: String) -> Bool {
-        !Defaults[.unblockedDomains].contains(domain)
+    static func trackersPreventedFor(_ domain: String, checkCookieCutterState: Bool) -> Bool {
+        !Defaults[.unblockedDomains].contains(domain) && (checkCookieCutterState ? Defaults[.cookieCutterEnabled] : true)
     }
     
     static func updateAllowList(with domain: String, allowed: Bool, completion: (() -> ())? = nil) {

@@ -14,19 +14,6 @@ extension TabManager: TabEventHandler {
     }
 
     func tabDidChangeContentBlocking(_ tab: Tab) {
-        tab.removeContentScript(name: CookieCutterHelper.name())
-
-        if FeatureFlag[.cookieCutter],
-            let domain = tab.currentURL()?.host,
-            TrackingPreventionConfig.trackersPreventedFor(domain),
-            let cookieCutterModel = cookieCutterModel
-        {
-            let cookieCutterHelper = CookieCutterHelper(cookieCutterModel: cookieCutterModel)
-            cookieCutterHelper.currentWebView = tab.webView
-
-            tab.addContentScript(cookieCutterHelper, name: CookieCutterHelper.name())
-        }
-
         tab.reload()
     }
 }

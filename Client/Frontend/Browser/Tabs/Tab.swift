@@ -8,7 +8,6 @@ import Shared
 import Storage
 import SwiftyJSON
 import WebKit
-import XCGLogger
 
 private var debugTabCount = 0
 private let log = Logger.browser
@@ -92,6 +91,7 @@ class Tab: NSObject, ObservableObject {
     fileprivate var lastRequest: URLRequest?
     var restoring: Bool = false
     var pendingScreenshot = false
+    var needsReloadUponSelect = false
 
     // MARK: Properties mirrored from webView
     @Published private(set) var isLoading = false
@@ -273,7 +273,7 @@ class Tab: NSObject, ObservableObject {
         }
     }
 
-    func createWebview() {
+    @discardableResult func createWebview() -> Bool {
         if webView == nil {
             configuration.userContentController = WKUserContentController()
             configuration.allowsInlineMediaPlayback = true
@@ -313,7 +313,11 @@ class Tab: NSObject, ObservableObject {
 
             UserScriptManager.shared.injectUserScriptsIntoTab(self)
             tabDelegate?.tab?(self, didCreateWebView: webView)
+
+            return true
         }
+
+        return false
     }
 
     func addRefreshControl() {
@@ -525,6 +529,8 @@ class Tab: NSObject, ObservableObject {
             print("restoring webView from scratch")
             restore(webView)
         }
+
+        needsReloadUponSelect = false
     }
 
     func getMostRecentQuery(restrictToCurrentNavigation: Bool = false) -> QueryForNavigation.Query?
@@ -712,6 +718,15 @@ extension Tab: ContentBlockerTab {
 
     func currentWebView() -> WKWebView? {
         return webView
+    }
+
+    func injectCookieCutterScript(cookieCutterModel: CookieCutterModel) {
+        if FeatureFlag[.cookieCutter] {
+            let cookieCutterHelper = CookieCutterHelper(cookieCutterModel: cookieCutterModel)
+            cookieCutterHelper.currentWebView = webView
+
+            addContentScript(cookieCutterHelper, name: CookieCutterHelper.name())
+        }
     }
 }
 

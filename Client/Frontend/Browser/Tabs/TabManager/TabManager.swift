@@ -227,15 +227,19 @@ class TabManager: NSObject {
 
         assert(tab === selectedTab, "Expected tab is selected")
 
-        selectedTab?.createWebview()
-        selectedTab?.lastExecutedTime = Date.nowMilliseconds()
+        guard let selectedTab = selectedTab else {
+            return
+        }
+
+        if !selectedTab.createWebview() && selectedTab.needsReloadUponSelect {
+            selectedTab.reload()
+        }
+
+        selectedTab.lastExecutedTime = Date.nowMilliseconds()
+        selectedTab.applyTheme()
 
         if notify {
             sendSelectTabNotifications(previous: previous)
-        }
-
-        if let tab = selectedTab {
-            tab.applyTheme()
         }
 
         if let tab = tab, tab.isIncognito, let url = tab.url, NeevaConstants.isAppHost(url.host),
@@ -273,6 +277,16 @@ class TabManager: NSObject {
 
         if Defaults[.closeIncognitoTabs] && leavingPBM {
             removeAllIncognitoTabs()
+        }
+    }
+
+    func flagAllTabsToReload() {
+        for tab in tabs {
+            if tab == selectedTab {
+                tab.reload()
+            } else if tab.webView != nil {
+                tab.needsReloadUponSelect = true
+            }
         }
     }
 

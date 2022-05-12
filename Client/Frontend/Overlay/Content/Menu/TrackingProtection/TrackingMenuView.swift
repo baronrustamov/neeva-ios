@@ -35,7 +35,7 @@ class TrackingStatsViewModel: ObservableObject {
                 ]
             )
 
-            guard let domain = selectedTabURL?.host else {
+            guard let domain = selectedTabURL?.host, Defaults[.cookieCutterEnabled] else {
                 return
             }
 
@@ -70,7 +70,7 @@ class TrackingStatsViewModel: ObservableObject {
 
             if let domain = selectedTabURL.host {
                 self.preventTrackersForCurrentPage = TrackingPreventionConfig.trackersPreventedFor(
-                    domain)
+                    domain, checkCookieCutterState: true)
             }
         }
     }
@@ -130,16 +130,19 @@ class TrackingStatsViewModel: ObservableObject {
     // MARK: - init
     init(tabManager: TabManager) {
         self.selectedTab = tabManager.selectedTab
-        self.preventTrackersForCurrentPage =
-            !Defaults[.unblockedDomains].contains(selectedTab?.currentURL()?.host ?? "")
+        self.preventTrackersForCurrentPage = TrackingPreventionConfig.trackersPreventedFor(
+            selectedTab?.currentURL()?.host ?? "", checkCookieCutterState: true)
+
         let trackingData = TrackingEntity.getTrackingDataForCurrentTab(
             stats: selectedTab?.contentBlocker?.stats)
         self.numDomains = trackingData.numDomains
         self.trackers = trackingData.trackingEntities
+
         tabManager.selectedTabPublisher.assign(to: \.selectedTab, on: self).store(
             in: &subscriptions)
         tabManager.selectedTabURLPublisher.assign(to: \.selectedTabURL, on: self).store(
             in: &subscriptions)
+
         onDataUpdated()
     }
 

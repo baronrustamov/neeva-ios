@@ -3,6 +3,9 @@
 // found in the LICENSE file.
 
 import Foundation
+import Shared
+
+private let log = Logger.browser
 
 /// Corresponds with messages sent from CookieCutterHelper.js
 private enum CookieScriptMessage: String {
@@ -39,17 +42,19 @@ class CookieCutterHelper: TabContentScript {
             switch scriptMessage {
             case .getPreferences:
                 do {
-                    guard
+                    if let domain = currentWebView?.url?.host,
                         let escapedEncoded = String(
                             data: try JSONEncoder().encode([
+                                "cookieCutterEnabled":
+                                    TrackingPreventionConfig.trackersPreventedFor(
+                                        domain, checkCookieCutterState: true),
                                 "marketing": !cookieCutterModel.marketingCookiesAllowed,
                                 "analytic": !cookieCutterModel.analyticCookiesAllowed,
                                 "social": !cookieCutterModel.socialCookiesAllowed,
                             ]), encoding: .utf8)
-                    else { return }
+                    {
 
-                    if let currentWebView = currentWebView {
-                        currentWebView.evaluateJavascriptInDefaultContentWorld(
+                        currentWebView?.evaluateJavascriptInDefaultContentWorld(
                             "__firefox__.setPreference(\(escapedEncoded))")
                     }
                 } catch {
@@ -63,9 +68,9 @@ class CookieCutterHelper: TabContentScript {
             case .started:
                 cookieCutterModel.cookiesBlocked = 0
             }
-        } else {
-            print("CookieCutterHandler recieved message (not handled): ", update)
         }
+
+        log.info("Cookie Cutter script updated: \(update)")
     }
 
     // MARK: - init

@@ -138,6 +138,7 @@ class SettingsViewController: UIHostingController<AnyView> {
                 }
             }
             .environmentObject(bvc.browserModel)
+            .environmentObject(bvc.browserModel.cookieCutterModel)
             .environmentObject(bvc.browserModel.scrollingControlModel)
             .environmentObject(bvc.chromeModel)
             .environmentObject(bvc.overlayManager)

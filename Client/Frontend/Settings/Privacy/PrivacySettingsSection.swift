@@ -13,7 +13,7 @@ struct PrivacySettingsSection: View {
     @Default(.contentBlockingEnabled) private var contentBlockingEnabled
 
     @Environment(\.onOpenURL) var openURL
-    @EnvironmentObject var browserModel: BrowserModel
+    @EnvironmentObject var cookieCutterModel: CookieCutterModel
 
     var body: some View {
         NavigationLink(
@@ -44,8 +44,7 @@ struct PrivacySettingsSection: View {
 
         if FeatureFlag[.cookieCutter] {
             NavigationLink(isActive: $openCookieCutterPage) {
-                CookieCutterSettings()
-                    .environmentObject(browserModel.cookieCutterModel)
+                CookieCutterSettings(cookieCutterEnabled: cookieCutterModel.cookieCutterEnabled)
             } label: {
                 Text("Cookie Cutter")
             }

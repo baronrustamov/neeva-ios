@@ -1373,6 +1373,7 @@ extension BrowserViewController: TabDelegate {
         tab.addContentScript(blocker, name: NeevaTabContentBlocker.name())
 
         tab.addContentScript(FocusHelper(tab: tab), name: FocusHelper.name())
+        tab.injectCookieCutterScript(cookieCutterModel: browserModel.cookieCutterModel)
 
         let webuiMessageHelper = WebUIMessageHelper(
             tab: tab,

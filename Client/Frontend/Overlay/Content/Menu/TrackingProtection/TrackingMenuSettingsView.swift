@@ -68,7 +68,13 @@ struct TrackingSettingsBlock: View {
     // @Default(.blockThirdPartyTrackingRequests) var blockTrackingRequests: Bool
     // @Default(.upgradeAllToHttps) var upgradeToHTTPS: Bool
 
-    @Default(.contentBlockingEnabled) private var contentBlockingEnabled
+    @Default(.contentBlockingEnabled) private var contentBlockingEnabled {
+        didSet {
+            for tabManager in SceneDelegate.getAllTabManagers() {
+                tabManager.flagAllTabsToReload()
+            }
+        }
+    }
     @Default(.contentBlockingStrength) private var contentBlockingStrength
 
     var body: some View {

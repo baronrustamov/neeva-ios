@@ -44,7 +44,7 @@ class NeevaTabContentBlocker: TabContentBlocker, TabContentScript {
     var pageStatsCache: [URL: TPPageStats] = [:]
 
     override var isEnabled: Bool {
-        Defaults[.contentBlockingEnabled]
+        Defaults[.contentBlockingEnabled] && Defaults[.cookieCutterEnabled]
     }
 
     override init(tab: ContentBlockerTab) {

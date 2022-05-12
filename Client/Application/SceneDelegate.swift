@@ -383,13 +383,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         fatalError("Window for current scene is nil")
     }
 
+    // MARK: - BVC
     static func getBVC(for view: UIView?) -> BrowserViewController {
         return getCurrentSceneDelegate(for: view).bvc
-    }
-
-    @available(*, deprecated, message: "should use getBVC with a non-nil view or scene")
-    static func getBVCOrNil() -> BrowserViewController? {
-        return getCurrentSceneDelegateOrNil()?.bvc
     }
 
     static func getBVC(with scene: UIScene?) -> BrowserViewController {
@@ -404,8 +400,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         return getAllSceneDelegates().map { $0.bvc }
     }
 
+    @available(*, deprecated, message: "should use getBVC with a non-nil view or scene")
+    static func getBVCOrNil() -> BrowserViewController? {
+        return getCurrentSceneDelegateOrNil()?.bvc
+    }
+
+    // MARK: - Tab Manager
     static func getTabManager(for view: UIView) -> TabManager {
         return getCurrentSceneDelegate(for: view).bvc.tabManager
+    }
+
+    static func getAllTabManagers() -> [TabManager] {
+        return getAllSceneDelegates().map { $0.bvc.tabManager }
     }
 
     @available(*, deprecated, message: "should use getTabManager with a non-nil view")
