@@ -262,6 +262,7 @@ public struct LogConfig {
         case SpacesDetailEntityClicked
         case SpacesDetailEditButtonClicked
         case SpacesDetailShareButtonClicked
+        case SpacesRecommendedDetailUIVisited
         case SpacesLoginRequired
         case OwnerSharedSpace
         case FollowerSharedSpace
@@ -446,7 +447,8 @@ public struct LogConfig {
             || category == .Notification
             || category == .Cheatsheet
 
-        let validInteraction = path == .SpacesLoginRequired
+        let validInteraction =
+            path == .SpacesLoginRequired || path == .SpacesRecommendedDetailUIVisited
 
         return validCategory || validInteraction
     }
@@ -602,6 +604,7 @@ public struct LogConfig {
         case .SpacesDetailEntityClicked: return .Spaces
         case .SpacesDetailEditButtonClicked: return .Spaces
         case .SpacesDetailShareButtonClicked: return .Spaces
+        case .SpacesRecommendedDetailUIVisited: return .Spaces
         case .SpacesLoginRequired: return .Spaces
         case .OwnerSharedSpace: return .Spaces
         case .FollowerSharedSpace: return .Spaces
