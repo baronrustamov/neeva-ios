@@ -70,6 +70,8 @@ struct ZeroQueryView: View {
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
+    @ObservedObject var spaceStoreSuggested = SpaceStore.suggested
+
     @Default(.expandSuggestedSites) private var expandSuggestedSites
     @Default(.expandSearches) private var expandSearches
     @Default(.expandSpaces) private var expandSpaces
@@ -115,7 +117,7 @@ struct ZeroQueryView: View {
 
     var suggestedSpace: some View {
         RecommendedSpacesView(
-            store: SpaceStore.suggested,
+            store: spaceStoreSuggested,
             viewModel: viewModel,
             expandSuggestedSpace: $expandSuggestedSpace
         )
@@ -272,7 +274,7 @@ struct ZeroQueryView: View {
             }
         } else {
             // show suggested spaces
-            if !SpaceStore.suggested.allSpaces.isEmpty {
+            if !spaceStoreSuggested.allSpaces.isEmpty {
                 suggestedSpace
             }
         }
