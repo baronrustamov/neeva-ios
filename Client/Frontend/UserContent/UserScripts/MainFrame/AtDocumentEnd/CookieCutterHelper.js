@@ -59,7 +59,9 @@ function runEngine() {
 
     //
     // TODO: Logging
-    CookieEngine.logProviderUsage(async (provider) => {});
+    CookieEngine.logProviderUsage(async (provider) => {
+        webkit.messageHandlers.cookieCutterHandler.postMessage({ update: "log-provider-usage", provider: provider });
+    });
 
     // Run!
     CookieEngine.runCookieCutter();

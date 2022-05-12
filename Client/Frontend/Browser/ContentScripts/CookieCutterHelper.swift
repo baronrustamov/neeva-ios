@@ -11,6 +11,7 @@ private let log = Logger.browser
 private enum CookieScriptMessage: String {
     case getPreferences = "get-preferences"
     case increaseCounter = "increase-cookie-stats"
+    case logProvider = "log-provider-usage"
     case noticeHandled = "cookie-notice-handled"
     case started = "started-running"
 }
@@ -62,6 +63,17 @@ class CookieCutterHelper: TabContentScript {
                 }
             case .increaseCounter:
                 cookieCutterModel.cookiesBlocked += 1
+            case .logProvider:
+                if let provider = data["provider"] as? String {
+                    let attributes = [
+                        ClientLogCounterAttribute(
+                            key: LogConfig.Attribute.CookieCutterProviderUsed,
+                            value: provider
+                        )
+                    ]
+
+                    ClientLogger.shared.logCounter(.CookieNoticeHandled, attributes: attributes)
+                }
             case .noticeHandled:
                 let bvc = SceneDelegate.getBVC(for: currentWebView)
                 cookieCutterModel.cookieWasHandled(bvc: bvc)

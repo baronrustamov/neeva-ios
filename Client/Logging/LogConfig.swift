@@ -366,6 +366,9 @@ public struct LogConfig {
         case PersonalSign
         case TransactionSuccessful
         case TransactionAttempted
+
+        // MARK: Cookie Cutter
+        case CookieNoticeHandled
     }
 
     /// Specify a comma separated string with these values to
@@ -391,6 +394,7 @@ public struct LogConfig {
         case Feedback = "Feedback"
         case DebugMode = "DebugMode"
         case Web3 = "Web3"
+        case CookieCutter = "CookieCutter"
     }
 
     public static var enabledLoggingCategories: Set<InteractionCategory>?
@@ -405,6 +409,7 @@ public struct LogConfig {
             || category == .DebugMode
             || category == .PromoCard
             || category == .Web3
+            || category == .CookieCutter
         {
             return true
         }
@@ -445,6 +450,7 @@ public struct LogConfig {
             || category == .Web3
             || category == .Notification
             || category == .Cheatsheet
+            || category == .CookieCutter
 
         let validInteraction = path == .SpacesLoginRequired
 
@@ -697,6 +703,9 @@ public struct LogConfig {
         case .PersonalSign: return .Web3
         case .TransactionSuccessful: return .Web3
         case .TransactionAttempted: return .Web3
+
+        // MARK: Cookie Cutter
+        case .CookieNoticeHandled: return .CookieCutter
         }
     }
 
@@ -744,6 +753,10 @@ public struct LogConfig {
         public static let AttributionTokenErrorToken = "AttributionTokenErrorToken"
         public static let AttributionTokenErrorDataStr = "AttributionTokenErrorDataStr"
         public static let AttributionTokenErrorResponseCode = "AttributionTokenErrorResponseCode"
+
+        /// The name of the Cookie Cutter provider that was used.
+        public static let CookieCutterProviderUsed = "CookieCutterProviderUsed"
+
         /// First Run Logging Error
         public static let FirstRunLogErrorMessage = "FirstRunLogErrorMessage"
     }
