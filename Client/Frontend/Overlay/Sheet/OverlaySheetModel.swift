@@ -21,7 +21,15 @@ public class OverlaySheetModel: ObservableObject {
         self.backdropOpacity = OverlaySheetUX.backdropMaxOpacity
     }
 
-    func hide() {
-        self.deltaHeight = 0
+    func hide(animate: Bool = false) {
+        if animate {
+            withAnimation(.easeOut(duration: OverlaySheetUX.animationDuration)) {
+                self.deltaHeight = 0
+                self.position = .dismissed
+                self.backdropOpacity = 0.0
+            }
+        } else {
+            self.deltaHeight = 0
+        }
     }
 }

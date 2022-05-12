@@ -229,8 +229,7 @@ struct OverlaySheetView<Content: View, HeaderContent: View>: View, KeyboardReada
                                 .environment(
                                     \.overlayMinHeightToFillScrollView, minHeightToFillScrollView)
                         }
-                    }
-                    .onHeightOfViewChanged {
+                    }.onHeightOfViewChanged {
                         minHeightToFillScrollView = $0
                     }
                 }
@@ -356,7 +355,9 @@ struct OverlaySheetView<Content: View, HeaderContent: View>: View, KeyboardReada
             {
                 newPosition = .middle
             } else {
-                self.model.hide()
+                self.model.hide(animate: true)
+                self.onDismiss()
+
                 return
             }
         } else if self.model.deltaHeight < -OverlaySheetUX.slideThreshold {
