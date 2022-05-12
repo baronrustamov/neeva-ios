@@ -50,6 +50,8 @@ struct RecommendedSpacesView: View {
                                 for: url)
                             viewModel.bvc.hideZeroQuery()
                         }
+
+                        ClientLogger.shared.logCounter(.SpacesRecommendedDetailUIVisited)
                     }
                 )
                 .environmentObject(viewModel.bvc.gridModel)
