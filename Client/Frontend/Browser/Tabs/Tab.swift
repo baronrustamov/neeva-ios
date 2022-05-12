@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Combine
+import Defaults
 import Foundation
 import Shared
 import Storage
@@ -104,6 +105,7 @@ class Tab: NSObject, ObservableObject {
     @Published var title: String?
     /// For security reasons, the URL may differ from the web view’s URL.
     @Published var url: URL?
+    @Default(.archivedTabsDuration) var archivedTabsDuration
 
     private var observer: AnyCancellable?
     var pageZoom: CGFloat = 1.0 {
@@ -711,6 +713,17 @@ class Tab: NSObject, ObservableObject {
                 && lastExecutedTime > Int64(startOfLastMonth.timeIntervalSince1970 * 1000)
         case .overAMonth:
             return lastExecutedTime < Int64(startOfLastMonth.timeIntervalSince1970 * 1000)
+        }
+    }
+    
+    func isArchived() -> Bool {
+        switch archivedTabsDuration {
+            case .week:
+            return !(wasLastExecuted(.today) || wasLastExecuted(.lastWeek))
+        case .month:
+            return !wasLastExecuted(.overAMonth)
+        case .forever:
+            return false
         }
     }
 }
