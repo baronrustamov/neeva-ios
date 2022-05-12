@@ -19,8 +19,8 @@ struct CreateSpaceOverlayContent: View {
         } else if NeevaUserInfo.shared.isUserLoggedIn {
             CreateSpaceView { spaceName in
                 if !spaceName.isEmpty {
-                    let request = CreateSpaceRequest(name: spaceName)
-                    subscription = request.$state.sink { state in
+                    let request = SpaceServiceProvider.shared.createSpace(name: spaceName)
+                    subscription = request?.$state.sink { state in
                         switch state {
                         case .success:
                             SpaceStore.shared.refresh()

@@ -114,7 +114,6 @@ public class ReorderSpaceRequest: MutationRequest<SetSpaceDetailPageSortOrderMut
     }
 }
 
-// TODO(jon): Convert to use SpaceService
 public class AddToSpaceWithURLRequest: MutationRequest<AddToSpaceMutation> {
     public init(spaceID: String, url: String, title: String, description: String?) {
         super.init(

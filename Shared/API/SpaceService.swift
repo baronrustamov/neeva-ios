@@ -5,6 +5,7 @@
 import Combine
 
 public protocol SpaceService {
+    @discardableResult
     func addToSpaceMutation(
         spaceId: String, url: String, title: String,
         thumbnail: String?, data: String?, mediaType: String?, isBase64: Bool?,
@@ -33,6 +34,58 @@ public protocol SpaceService {
         spaceID: String,
         completion: @escaping (Result<Int, Error>) -> Void
     ) -> Cancellable?
+
+    @discardableResult
+    func createSpace(name: String) -> CreateSpaceRequest?
+
+    @discardableResult
+    func deleteSpace(spaceID: String) -> DeleteSpaceRequest?
+
+    @discardableResult
+    func deleteGenerator(spaceID: String, generatorID: String) -> DeleteGeneratorRequest?
+
+    @discardableResult
+    func unfollowSpace(spaceID: String) -> UnfollowSpaceRequest?
+
+    @discardableResult
+    func updateSpace(
+        spaceID: String, title: String,
+        description: String?, thumbnail: String?
+    ) -> UpdateSpaceRequest?
+
+    @discardableResult
+    func claimGeneratedItem(spaceID: String, entityID: String) -> ClaimGeneratedItem?
+
+    @discardableResult
+    func addSpaceComment(spaceID: String, comment: String) -> AddSpaceCommentRequest?
+
+    @discardableResult
+    func addPublicACL(spaceID: String) -> AddPublicACLRequest?
+
+    @discardableResult
+    func deletePublicACL(spaceID: String) -> DeletePublicACLRequest?
+
+    @discardableResult
+    func addSoloACLs(spaceID: String, emails: [String], acl: SpaceACLLevel, note: String)
+        -> AddSoloACLsRequest?
+
+    @discardableResult
+    func deleteSpaceItems(spaceID: String, ids: [String]) -> DeleteSpaceItemsRequest?
+
+    @discardableResult
+    func updateSpaceEntity(
+        spaceID: String, entityID: String, title: String, snippet: String?, thumbnail: String?
+    ) -> UpdateSpaceEntityRequest?
+
+    @discardableResult
+    func reorderSpace(spaceID: String, ids: [String]) -> ReorderSpaceRequest?
+
+    @discardableResult
+    func addToSpaceWithURL(spaceID: String, url: String, title: String, description: String?)
+        -> AddToSpaceWithURLRequest?
+
+    @discardableResult
+    func updateProfile(firstName: String, lastName: String) -> UpdateProfileRequest?
 }
 
 extension SpaceService {
@@ -44,5 +97,13 @@ extension SpaceService {
         return addToSpaceMutation(
             spaceId: spaceId, url: url, title: title, thumbnail: thumbnail, data: data,
             mediaType: mediaType, isBase64: isBase64, completion: completion)
+    }
+
+    public func updateSpace(
+        spaceID: String, title: String,
+        description: String? = nil, thumbnail: String? = nil
+    ) -> UpdateSpaceRequest? {
+        return updateSpace(
+            spaceID: spaceID, title: title, description: description, thumbnail: thumbnail)
     }
 }
