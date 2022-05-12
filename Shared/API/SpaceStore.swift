@@ -251,7 +251,7 @@ public class SpaceStore: ObservableObject {
 
         state = .refreshing
 
-        SpaceListController.getSpaces { result in
+        SpaceServiceProvider.shared.getSpaces { result in
             switch result {
             case .success(let spaces):
                 self.onUpdateSpaces(spaces, force: force)
@@ -306,7 +306,7 @@ public class SpaceStore: ObservableObject {
 
     public static func onRecommendedSpaceSelected(space: Space) {
         shared.allSpaces.append(space)
-        SpacesDataQueryController.getSpacesData(spaceIds: [space.id.id]) { result in
+        SpaceServiceProvider.shared.getSpacesData(spaceIds: [space.id.id]) { result in
             switch result {
             case .success:
                 Logger.browser.info("Space followed")
@@ -325,7 +325,7 @@ public class SpaceStore: ObservableObject {
                 completion(nil)
             }
         } else {
-            SpacesDataQueryController.getSpacesData(spaceIds: [spaceId]) { result in
+            SpaceServiceProvider.shared.getSpacesData(spaceIds: [spaceId]) { result in
                 switch result {
                 case .success(let data):
                     if let model = data.first {
@@ -345,7 +345,7 @@ public class SpaceStore: ObservableObject {
     ) {
         GraphQLAPI.shared.isAnonymous = true
         state = .refreshing
-        SpacesDataQueryController.getSpacesData(spaceIds: [spaceId]) { result in
+        SpaceServiceProvider.shared.getSpacesData(spaceIds: [spaceId]) { result in
             switch result {
             case .success(let data):
                 if let model = data.first {
@@ -363,7 +363,7 @@ public class SpaceStore: ObservableObject {
     }
 
     public static func followSpace(spaceId: String, completion: @escaping () -> Void) {
-        SpacesDataQueryController.getSpacesData(spaceIds: [spaceId]) { result in
+        SpaceServiceProvider.shared.getSpacesData(spaceIds: [spaceId]) { result in
             switch result {
             case .success:
                 Logger.browser.info("Space followed")
@@ -479,7 +479,7 @@ public class SpaceStore: ObservableObject {
     }
 
     private func fetch(spaces spacesToFetch: [Space], beforeReady: (() -> Void)? = nil) {
-        SpacesDataQueryController.getSpacesData(spaceIds: spacesToFetch.map(\.id.value)) {
+        SpaceServiceProvider.shared.getSpacesData(spaceIds: spacesToFetch.map(\.id.value)) {
             result in
             switch result {
             case .success(let spaces):
@@ -670,7 +670,7 @@ public class SpaceStore: ObservableObject {
             return
         }
 
-        RelatedSpacesQueryController.getSpacesData(spaceID: spaceID) { result in
+        SpaceServiceProvider.shared.getRelatedSpacesData(spaceID: spaceID) { result in
             switch result {
             case .success(let response):
                 let spaces = response.map({ Space(from: $0) })
@@ -691,7 +691,7 @@ public class SpaceStore: ObservableObject {
             return
         }
 
-        RelatedSpacesCountQueryController.getSpacesData(spaceID: spaceID) { result in
+        SpaceServiceProvider.shared.getRelatedSpacesCountData(spaceID: spaceID) { result in
             switch result {
             case .success(let count):
                 completion(.success(count))

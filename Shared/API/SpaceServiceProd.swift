@@ -23,4 +23,32 @@ public class SpaceServiceProd: SpaceService {
             )
         ).perform(resultHandler: completion)
     }
+
+    public func getSpacesData(
+        spaceIds: [String],
+        completion: @escaping (Result<[SpacesDataQueryController.Space], Error>) -> Void
+    ) -> Cancellable? {
+        return SpacesDataQueryController.getSpacesData(spaceIds: spaceIds, completion: completion)
+    }
+
+    public func getSpaces(
+        completion: @escaping (Result<[SpaceListController.Space], Error>) -> Void
+    ) -> Cancellable? {
+        return SpaceListController.getSpaces(completion: completion)
+    }
+
+    public func getRelatedSpacesData(
+        spaceID: String,
+        completion: @escaping (Result<[SpacesDataQueryController.Space], Error>) -> Void
+    ) -> Cancellable? {
+        return RelatedSpacesQueryController.getSpacesData(spaceID: spaceID, completion: completion)
+    }
+
+    public func getRelatedSpacesCountData(
+        spaceID: String,
+        completion: @escaping (Result<Int, Error>) -> Void
+    ) -> Cancellable? {
+        return RelatedSpacesCountQueryController.getSpacesData(
+            spaceID: spaceID, completion: completion)
+    }
 }

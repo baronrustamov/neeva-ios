@@ -5,10 +5,11 @@
 import Combine
 import Foundation
 
+// TODO(jon): Implement this class once SpaceService is sandwiched
+// between Apollo and higher layers
 public class SpaceServiceMock: SpaceService {
     public init() {}
 
-    // TODO(jon): Implement this! :-)
     public func addToSpaceMutation(
         spaceId: String, url: String, title: String,
         thumbnail: String?, data: String?, mediaType: String?, isBase64: Bool?,
@@ -17,4 +18,30 @@ public class SpaceServiceMock: SpaceService {
         return nil
     }
 
+    public func getSpacesData(
+        spaceIds: [String],
+        completion: @escaping (Result<[SpacesDataQueryController.Space], Error>) -> Void
+    ) -> Cancellable? {
+        return nil
+    }
+
+    public func getSpaces(
+        completion: @escaping (Result<[SpaceListController.Space], Error>) -> Void
+    ) -> Cancellable? {
+        return nil
+    }
+
+    public func getRelatedSpacesData(
+        spaceID: String,
+        completion: @escaping (Result<[SpacesDataQueryController.Space], Error>) -> Void
+    ) -> Cancellable? {
+        return nil
+    }
+
+    public func getRelatedSpacesCountData(
+        spaceID: String,
+        completion: @escaping (Result<Int, Error>) -> Void
+    ) -> Cancellable? {
+        return nil
+    }
 }

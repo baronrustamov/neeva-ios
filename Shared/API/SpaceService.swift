@@ -10,6 +10,29 @@ public protocol SpaceService {
         thumbnail: String?, data: String?, mediaType: String?, isBase64: Bool?,
         completion: @escaping (Result<AddToSpaceMutation.Data, Error>) -> Void
     ) -> Cancellable?
+
+    @discardableResult
+    func getSpacesData(
+        spaceIds: [String],
+        completion: @escaping (Result<[SpacesDataQueryController.Space], Error>) -> Void
+    ) -> Cancellable?
+
+    @discardableResult
+    func getSpaces(
+        completion: @escaping (Result<[SpaceListController.Space], Error>) -> Void
+    ) -> Cancellable?
+
+    @discardableResult
+    func getRelatedSpacesData(
+        spaceID: String,
+        completion: @escaping (Result<[SpacesDataQueryController.Space], Error>) -> Void
+    ) -> Cancellable?
+
+    @discardableResult
+    func getRelatedSpacesCountData(
+        spaceID: String,
+        completion: @escaping (Result<Int, Error>) -> Void
+    ) -> Cancellable?
 }
 
 extension SpaceService {
