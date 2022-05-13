@@ -13,12 +13,25 @@ struct YourCollectionDetailView: View {
     @EnvironmentObject var web3Model: Web3Model
     @ObservedObject var assetStore: AssetStore
     var onOpenUrl: () -> Void
+    var onBackButtonTap: () -> Void
 
     var body: some View {
+        ZStack(alignment: .topLeading) {
+            contentView
+            backButton
+        }
+        .navigationBarHidden(true)
+        .onAppear {
+            assetStore.fetch(collection: matchingCollection.openSeaSlug, onFetch: { _ in })
+        }
+    }
+
+    private var contentView: some View {
         VStack(spacing: 36) {
             CollectionView(collection: matchingCollection)
                 .background(WalletTheme.gradient.opacity(0.08))
                 .cornerRadius(16)
+                .frame(height: 300)
             HStack(spacing: 12) {
                 Button(action: {
                     openUrl(matchingCollection.twitterURL)
@@ -43,7 +56,7 @@ struct YourCollectionDetailView: View {
                     }
                 }.buttonStyle(DashboardButtonStyle())
                 Button(action: {
-                    openUrl(matchingCollection.openSeaURL)
+                    openUrl(matchingCollection.externalURL)
                 }) {
                     HStack(spacing: 2) {
                         Symbol(decorative: .arrowUpRight, style: .bodyMedium)
@@ -53,6 +66,23 @@ struct YourCollectionDetailView: View {
             }
             Spacer()
         }
+    }
+
+    private var backButton: some View {
+        Button(
+            action: {
+                onBackButtonTap()
+            },
+            label: {
+                Symbol(.arrowBackward, label: "Return to all Spaces view")
+                    .foregroundColor(Color.label)
+            }
+        )
+        .tapTargetFrame()
+        .background(WalletTheme.gradient)
+        .clipShape(Circle())
+        .padding(.leading, 12)
+        .padding(.top, 12)
     }
 
     private func openUrl(_ url: URL?) {

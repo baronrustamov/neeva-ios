@@ -11,7 +11,7 @@ struct YourCollectionsView: View {
     private let blockSpacing: CGFloat = 4
     private let blockSize: CGFloat = 64
     @ObservedObject var assetStore: AssetStore = AssetStore.shared
-
+    @State private var selectedCollection: String?
     var dataSource: [Collection] {
         Array(assetStore.collections).sorted(by: {
             $0.stats?.marketCap ?? 0 > $1.stats?.marketCap ?? 0
@@ -28,11 +28,27 @@ struct YourCollectionsView: View {
     private var horizontalScrollContentView: some View {
         HStack {
             HStack(spacing: blockSpacing) {
-                ForEach(dataSource, id: \.self) { collection in
-                    YourCollectionItemView(collection: collection, blockSize: blockSize)
-                        .onTapGesture {
-                            showCollection(with: collection)
+                ForEach(dataSource, id: \.openSeaSlug) { collection in
+                    NavigationLink(
+                        tag: collection.openSeaSlug,
+                        selection: $selectedCollection,
+                        destination: {
+                            YourCollectionDetailView(
+                                matchingCollection: collection,
+                                assetStore: assetStore,
+                                onOpenUrl: {
+                                    self.bvc.dismissCurrentOverlay()
+                                    self.bvc.hideZeroQuery()
+                                },
+                                onBackButtonTap: {
+                                    self.selectedCollection = nil
+                                }
+                            )
+                        },
+                        label: {
+                            YourCollectionItemView(collection: collection, blockSize: blockSize)
                         }
+                    )
                 }
             }
             .frame(height: blockSize)
@@ -41,23 +57,6 @@ struct YourCollectionsView: View {
         }
     }
 
-    private func showCollection(with collection: Collection) {
-        assetStore.fetch(collection: collection.openSeaSlug, onFetch: { _ in })
-        bvc.showModal(
-            style: .spaces,
-            headerButton: nil,
-            content: {
-                YourCollectionDetailView(
-                    matchingCollection: collection,
-                    assetStore: assetStore,
-                    onOpenUrl: {
-                        self.bvc.dismissCurrentOverlay()
-                        self.bvc.hideZeroQuery()
-                    }
-                )
-                .overlayIsFixedHeight(isFixedHeight: true)
-            }, onDismiss: {})
-    }
 }
 
 struct YourCollectionItemView: View {

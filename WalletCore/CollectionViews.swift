@@ -190,59 +190,83 @@ public struct CollectionView: View {
     public var body: some View {
         VStack(spacing: 0) {
             ZStack(alignment: .topTrailing) {
-                WebImage(
-                    url: collection.bannerImageURL,
-                    context: [
-                        .imageThumbnailPixelSize: CGSize(
-                            width: 512,
-                            height: 512),
-                        .imagePreserveAspectRatio: true,
-                    ]
-                )
-                .placeholder {
-                    Color.TrayBackground
-                }
-                .resizable()
-                .scaledToFill()
-                .frame(maxHeight: 128)
-                .clipped()
-                Image("opensea-badge")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 18)
-                    .padding(8)
+                collectionBannerView
+                openSeaBadgeView
             }
             VStack(spacing: 8) {
-                WebImage(url: collection.imageURL)
-                    .placeholder {
-                        Color.TrayBackground
-                    }
-                    .resizable()
-                    .scaledToFit()
-                    .background(Color.background)
-                    .frame(width: 48, height: 48)
-                    .clipShape(Circle())
-                    .roundedOuterBorder(cornerRadius: 24, color: .white, lineWidth: 2)
-                HStack(spacing: 4) {
-                    if collection.safelistRequestStatus >= .approved {
-                        Image("twitter-verified-large")
-                            .renderingMode(.template)
-                            .resizable()
-                            .scaledToFit()
-                            .foregroundColor(.ui.adaptive.blue)
-                            .frame(width: 16, height: 16)
-                    }
-                    Text(collection.name ?? "")
-                        .withFont(.labelLarge)
-                        .foregroundColor(
-                            collection.safelistRequestStatus >= .approved
-                                ? .ui.adaptive.blue : .label)
-                }
-                if let stats = collection.stats {
-                    CollectionStatsView(stats: stats)
-                }
+                collectionImageView
+                collectionNameView
+                collectionStatsView
             }
             .offset(y: -28)
+        }
+    }
+
+    private var collectionBannerView: some View {
+        WebImage(
+            url: collection.bannerImageURL,
+            context: [
+                .imageThumbnailPixelSize: CGSize(
+                    width: 512,
+                    height: 512),
+                .imagePreserveAspectRatio: true,
+            ]
+        )
+        .placeholder {
+            Color.TrayBackground
+        }
+        .resizable()
+        .scaledToFill()
+        .if(UIDevice.current.userInterfaceIdiom == .phone) {
+            $0.frame(width: UIScreen.main.bounds.width)
+        }
+        .frame(maxHeight: 128)
+        .clipped()
+    }
+
+    private var openSeaBadgeView: some View {
+        Image("opensea-badge")
+            .resizable()
+            .scaledToFit()
+            .frame(height: 18)
+            .padding(8)
+    }
+
+    private var collectionImageView: some View {
+        WebImage(url: collection.imageURL)
+            .placeholder {
+                Color.TrayBackground
+            }
+            .resizable()
+            .scaledToFit()
+            .background(Color.background)
+            .frame(width: 48, height: 48)
+            .clipShape(Circle())
+            .roundedOuterBorder(cornerRadius: 24, color: .white, lineWidth: 2)
+    }
+
+    private var collectionNameView: some View {
+        HStack(spacing: 4) {
+            if collection.safelistRequestStatus >= .approved {
+                Image("twitter-verified-large")
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(.ui.adaptive.blue)
+                    .frame(width: 16, height: 16)
+            }
+            Text(collection.name ?? "")
+                .withFont(.labelLarge)
+                .foregroundColor(
+                    collection.safelistRequestStatus >= .approved
+                        ? .ui.adaptive.blue : .label)
+        }
+    }
+
+    @ViewBuilder
+    private var collectionStatsView: some View {
+        if let stats = collection.stats {
+            CollectionStatsView(stats: stats)
         }
     }
 }
