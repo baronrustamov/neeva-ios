@@ -270,10 +270,6 @@ public struct LogConfig {
         /// This is for aggregate stats collection
         case space_app_view
         case SaveToSpace
-        case BlackFridayPromo
-        case CloseBlackFridayPromo
-        case BlackFridayNotifyPromo
-        case CloseBlackFridayNotifyPromo
         case ViewSpacesFromSheet
         case SpaceFilterClicked
         case OpenSuggestedSpace
@@ -617,10 +613,6 @@ public struct LogConfig {
         case .SocialShare: return .Spaces
         case .space_app_view: return .Spaces
         case .SaveToSpace: return .Spaces
-        case .BlackFridayPromo: return .Spaces
-        case .CloseBlackFridayPromo: return .Spaces
-        case .BlackFridayNotifyPromo: return .Spaces
-        case .CloseBlackFridayNotifyPromo: return .Spaces
         case .ViewSpacesFromSheet: return .Spaces
         case .SpaceFilterClicked: return .Spaces
         case .OpenSuggestedSpace: return .Spaces

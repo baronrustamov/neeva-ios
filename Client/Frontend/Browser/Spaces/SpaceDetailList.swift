@@ -9,7 +9,6 @@ import SwiftUI
 
 struct SpaceDetailList: View {
     @Default(.showDescriptions) var showDescriptions
-    @Default(.seenBlackFridayNotifyPromo) var seenBlackFridayNotifyPromo
     @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var gridModel: GridModel
     @EnvironmentObject var tabModel: TabCardModel
@@ -25,18 +24,6 @@ struct SpaceDetailList: View {
 
     var space: Space? {
         primitive.space
-    }
-
-    var promoCardType: PromoCardType? {
-        guard
-            primitive.id == SpaceStore.promotionalSpaceId
-                && !seenBlackFridayNotifyPromo
-                && NotificationPermissionHelper.shared.permissionStatus == .undecided
-        else {
-            return nil
-        }
-
-        return spacesModel.promoCard()
     }
 
     var canEdit: Bool {
@@ -72,12 +59,6 @@ struct SpaceDetailList: View {
 
             ScrollViewReader { scrollReader in
                 List {
-                    if let promoCardType = promoCardType {
-                        PromoCard(type: promoCardType, viewWidth: 390)
-                            .buttonStyle(.plain)
-                            .modifier(ListSeparatorModifier())
-                    }
-
                     if let space = primitive.item {
                         SpaceHeaderView(
                             space: space,

@@ -764,24 +764,6 @@ class SpaceCardModel: CardModel {
         }
     }
 
-    func promoCard() -> PromoCardType {
-        return .blackFridayNotifyPromo(
-            action: {
-                ClientLogger.shared.logCounter(
-                    .BlackFridayNotifyPromo)
-                NotificationPermissionHelper.shared.requestPermissionIfNeeded(
-                    callSite: .blackFriday
-                ) { _ in
-                    Defaults[.seenBlackFridayNotifyPromo] = true
-                }
-            },
-            onClose: {
-                ClientLogger.shared.logCounter(
-                    .CloseBlackFridayNotifyPromo)
-                Defaults[.seenBlackFridayNotifyPromo] = true
-            })
-    }
-
     func updateSpaceWithNoFollow(id: String, manager: SpaceStore) {
         manager.openSpaceWithNoFollow(spaceId: id) { [weak self] space in
             guard let self = self else { return }

@@ -153,9 +153,6 @@ extension Defaults.Keys {
     public static let tabGroupNames = Defaults.Key<[String: String]>("tabGroupNames", default: [:])
     public static let tabGroupExpanded = Defaults.Key<Set<String>>("tabGroupExpanded", default: [])
 
-    public static let seenBlackFridayFollowPromo = Defaults.BoolKey("seenBlackFridayFollowPromo")
-    public static let seenBlackFridayNotifyPromo = Defaults.BoolKey("seenBlackFridayNotifyPromo")
-
     // MARK: - Feedback
     public static let feedbackBeingSent = Defaults.BoolKey("feedbackBeingSent")
 

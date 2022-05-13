@@ -38,8 +38,6 @@ struct InternalSettingsView: View {
     @Default(.seenNotificationPermissionPromo) var seenNotificationPermissionPromo
     @Default(.fastTapPromoTimeInterval) var fastTapPromoTimeInterval
     @Default(.defaultBrowserPromoTimeInterval) var defaultBrowserPromoTimeInterval
-    @Default(.seenBlackFridayFollowPromo) var seenBlackFridayFollowPromo
-    @Default(.seenBlackFridayNotifyPromo) var seenBlackFridayNotifyPromo
     @Default(.previewModeQueries) var previewModeQueries
     @Default(.signupPromptInterval) var signupPromptInterval
     @Default(.maxQueryLimit) var maxQueryLimit
@@ -113,8 +111,6 @@ struct InternalSettingsView: View {
                     Toggle(
                         String("seenNotificationPermissionPromo"),
                         isOn: $seenNotificationPermissionPromo)
-                    Toggle(String("seenBlackFridayFollowPromo"), isOn: $seenBlackFridayFollowPromo)
-                    Toggle(String("seenBlackFridayNotifyPromo"), isOn: $seenBlackFridayNotifyPromo)
                     Toggle(
                         String("didTriggerSystemReviewDialog"), isOn: $didTriggerSystemReviewDialog)
                     NumberField(String("numberOfAppForeground"), number: $numberOfAppForeground)

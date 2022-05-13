@@ -172,31 +172,6 @@ class ZeroQueryModel: ObservableObject {
                     .PromoSignin, attributes: EnvironmentHelper.shared.getFirstRunAttributes())
                 self.signIn()
             }
-        } else if !Defaults[.seenBlackFridayFollowPromo]
-            && NeevaFeatureFlags.latestValue(.enableBlackFridayPromoCard)
-            && !SpaceStore.shared.allSpaces.contains(where: {
-                $0.id.id == SpaceStore.promotionalSpaceId
-            })
-        {
-            promoCard = .blackFridayFollowPromo(
-                action: {
-                    ClientLogger.shared.logCounter(
-                        .BlackFridayPromo)
-                    let spaceId = SpaceStore.promotionalSpaceId
-                    self.bvc.browserModel.openSpace(
-                        spaceId: spaceId, bvc: self.bvc,
-                        completion: {
-                            self.bvc.hideZeroQuery()
-                            self.promoCard = nil
-                        }
-                    )
-                },
-                onClose: {
-                    ClientLogger.shared.logCounter(
-                        .CloseBlackFridayPromo)
-                    Defaults[.seenBlackFridayFollowPromo] = true
-                    self.promoCard = nil
-                })
         } else if promoCardTypeArm == .previewSignUp && shouldShowDefaultBrowserPromoCard() {
             promoCard = defaultPromoCard()
         } else {
