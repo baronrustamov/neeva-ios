@@ -6,7 +6,7 @@ import Defaults
 import Shared
 import SwiftUI
 
-struct ButtonView: View {
+struct ArchivedTabsRowView: View {
     let tab: Tab
     let tabManager: TabManager
 
@@ -43,7 +43,7 @@ struct ButtonView: View {
     }
 }
 
-struct TabListView: View {
+struct ArchivedTabsListView: View {
     @Environment(\.onOpenURL) var openURL
     @Environment(\.selectionCompletion) private var selectionCompletion: () -> Void
     @EnvironmentObject var model: ArchivedTabsPanelModel
@@ -82,7 +82,7 @@ struct TabListView: View {
                                 ForEach(
                                     tabGroup, id: \.self
                                 ) { filteredTab in
-                                    ButtonView(tab: filteredTab, tabManager: tabManager)
+                                    ArchivedTabsRowView(tab: filteredTab, tabManager: tabManager)
                                 }
                             }
                             .background(
@@ -93,7 +93,7 @@ struct TabListView: View {
                         let _ = processed[tab.rootUUID] = true
                     }
                 } else {
-                    ButtonView(tab: tab, tabManager: tabManager)
+                    ArchivedTabsRowView(tab: tab, tabManager: tabManager)
                 }
             }
         }

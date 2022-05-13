@@ -20,13 +20,6 @@ class ArchivedTabsPanelViewController: UIHostingController<AnyView> {
                     bvc.browserModel.hideGridWithNoAnimation()
                 }
             )
-            .environment(
-                \.selectionCompletion, { bvc.browserModel.hideGridWithNoAnimation() }
-            )
-            .environmentObject(bvc.browserModel)
-            .environmentObject(bvc.browserModel.scrollingControlModel)
-            .environmentObject(bvc.chromeModel)
-            .environmentObject(bvc.overlayManager)
         )
     }
 

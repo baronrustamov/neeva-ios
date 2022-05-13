@@ -10,6 +10,7 @@ struct ArchivedTabsView: View {
     var containerGeometry: CGSize
     @EnvironmentObject var tabModel: TabCardModel
     @Environment(\.openSettings) private var openSettings
+    @Environment(\.openArchivedTabsPanelView) private var openArchivedTabsPanelView
 
     @Default(.archivedTabsDuration) var archivedTabsDuration
 
@@ -40,7 +41,7 @@ struct ArchivedTabsView: View {
 
             Button(
                 action: {
-                    bvc.present(ArchivedTabsPanelViewController(bvc: bvc), animated: true)
+                    openArchivedTabsPanelView()
                 },
                 label: {
                     HStack {
