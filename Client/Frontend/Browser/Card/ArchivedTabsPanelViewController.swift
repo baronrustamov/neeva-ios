@@ -4,7 +4,6 @@
 
 import SwiftUI
 
-// UIKit wrapper for `HistoryPanelView`.
 class ArchivedTabsPanelViewController: UIHostingController<AnyView> {
     init(bvc: BrowserViewController) {
         super.init(rootView: AnyView(EmptyView()))
