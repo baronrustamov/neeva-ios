@@ -6,7 +6,7 @@ import Shared
 
 enum ArchivedTabTimeSection: String, CaseIterable {
     case lastMonth = "Last Month"
-    case overAMonth = "More"
+    case overAMonth = "Older"
 }
 
 public struct ArchivedTabsData {
@@ -29,6 +29,12 @@ class ArchivedTabsPanelModel: ObservableObject {
         groupedSites.sites[.overAMonth] = tabManager.archivedTabs.filter {
             return $0.wasLastExecuted(.overAMonth)
         }
+    }
+
+    func clearArchivedTabs() {
+        tabManager.clearArchivedTabs()
+        loadData()
+        self.objectWillChange.send()
     }
 
     init(tabManager: TabManager) {

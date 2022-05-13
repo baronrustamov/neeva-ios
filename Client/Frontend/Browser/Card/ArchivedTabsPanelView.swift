@@ -42,7 +42,9 @@ struct ArchivedTabsPanelView: View {
 
                 Color.groupedBackground.frame(height: 1)
 
-                Button(action: {}) {
+                Button(action: {
+                    model.clearArchivedTabs()
+                }) {
                     HStack(spacing: 0) {
                         Text("Clear All Archived Tabs")
                             .withFont(.bodyLarge)
