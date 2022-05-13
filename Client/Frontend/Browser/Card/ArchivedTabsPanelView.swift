@@ -52,7 +52,6 @@ struct ArchivedTabsPanelView: View {
                             .foregroundColor(.red)
                             .fixedSize(horizontal: false, vertical: true)
                             .padding(.vertical, 10)
-                            .border(Color.red, width: 1)
                         Spacer()
                         Group {
 
@@ -60,7 +59,6 @@ struct ArchivedTabsPanelView: View {
                     }
                     .padding(.horizontal, 16)
                     .frame(height: 52)
-                    .border(Color.blue, width: 1)
                 }
 
                 Color.secondarySystemFill
