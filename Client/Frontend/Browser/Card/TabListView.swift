@@ -64,7 +64,7 @@ struct TabListView: View {
         LazyVStack(spacing: 8) {
             var processed = getProcessedFromTabGroupDict()
             ForEach(tabs, id: \.self) { tab in
-                if let url = tab.url {  // should be able to get rid of this unwrapping
+                if let _ = tab.url {  // should be able to get rid of this unwrapping
                     if processed[tab.rootUUID] != nil {
                         if processed[tab.rootUUID] == false {
                             if let tabGroup = model.tabManager.archivedTabGroups[tab.rootUUID]?
