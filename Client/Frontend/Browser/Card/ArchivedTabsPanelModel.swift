@@ -35,34 +35,16 @@ class ArchivedTabsPanelModel: ObservableObject {
     }
 
     func loadData() {
-        groupedSites.sites[.lastMonth] = tabManager.tabs.filter {
-            return (representativeTabsInAMonth.contains($0) || tabsWithExclusionList.contains($0))
-                && !$0.isIncognito && $0.wasLastExecuted(.lastMonth)
+        groupedSites.sites[.lastMonth] = tabManager.archivedTabs.filter {
+            return $0.wasLastExecuted(.lastMonth)
         }
 
-        groupedSites.sites[.overAMonth] = tabManager.tabs.filter {
-            return (representativeTabsOverAMonth.contains($0) || tabsWithExclusionList.contains($0))
-                && !$0.isIncognito && $0.wasLastExecuted(.overAMonth)
+        groupedSites.sites[.overAMonth] = tabManager.archivedTabs.filter {
+            return $0.wasLastExecuted(.overAMonth)
         }
     }
 
     init(tabManager: TabManager) {
         self.tabManager = tabManager
-
-        representativeTabsInAMonth = self.tabManager.getAllTabGroup()
-            .reduce(into: [Tab]()) {
-                if let tab = tabManager.getChildLastUsedInAMonth($1) {
-                    $0.append(tab)
-                }
-            }
-        representativeTabsOverAMonth = self.tabManager.getAllTabGroup()
-            .reduce(into: [Tab]()) {
-                if let tab = tabManager.getChildLastUsedOverAMonth($1) {
-                    $0.append(tab)
-                }
-            }
-        tabsWithExclusionList = self.tabManager.getAll().filter {
-            !self.tabManager.childTabs.contains($0)
-        }
     }
 }

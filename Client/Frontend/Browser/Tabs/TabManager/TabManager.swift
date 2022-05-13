@@ -82,18 +82,41 @@ class TabManager: NSObject {
         assert(Thread.isMainThread)
         return tabs.filter { $0.isIncognito }
     }
-    
+
     var activeTabs: [Tab] {
-        return incognitoTabs + normalTabs.filter {
-            return !$0.isArchived()
+        return incognitoTabs
+            + normalTabs.filter {
+                return !$0.isArchived()
+            }
+    }
+
+    var activeTabGroups: [String: TabGroup] {
+        return getAll()
+            .reduce(into: [String: [Tab]]()) { dict, tab in
+                if !tab.isArchived() {
+                    dict[tab.rootUUID, default: []].append(tab)
+                }
+            }.filter { $0.value.count > 1 }.reduce(into: [String: TabGroup]()) { dict, element in
+                dict[element.key] = TabGroup(children: element.value, id: element.key)
+            }
+    }
+
+    var archivedTabs: [Tab] {
+        return normalTabs.filter {
+            return $0.isArchived()
         }
     }
-    
-//    var activeTabGroups: [Tab] {
-//        return getAllTabGroup().filter {
-//            return !$0.isArchived()
-//        }
-//    }
+
+    var archivedTabGroups: [String: TabGroup] {
+        return getAll()
+            .reduce(into: [String: [Tab]]()) { dict, tab in
+                if tabGroupDict[tab.rootUUID] != nil && tab.isArchived() {
+                    dict[tab.rootUUID, default: []].append(tab)
+                }
+            }.reduce(into: [String: TabGroup]()) { dict, element in
+                dict[element.key] = TabGroup(children: element.value, id: element.key)
+            }
+    }
 
     var count: Int {
         assert(Thread.isMainThread)
@@ -450,7 +473,6 @@ class TabManager: NSObject {
 
     // Tab Group related functions
     internal func updateTabGroupsAndSendNotifications(notify: Bool) {
-        // TODO: get rid of tabgroups
         tabGroups = getAll()
             .reduce(into: [String: [Tab]]()) { dict, tab in
                 dict[tab.rootUUID, default: []].append(tab)

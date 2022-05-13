@@ -337,7 +337,7 @@ class TabCardModel: CardModel {
     }
 
     func onDataUpdated() {
-        allDetails = manager.getAll()
+        allDetails = manager.activeTabs
             .map { TabCardDetails(tab: $0, manager: manager) }
 
         if FeatureFlag[.reverseChronologicalOrdering] {
@@ -351,7 +351,7 @@ class TabCardModel: CardModel {
 
         // Tab Group related updates
         updateRepresentativeTabs()
-        allTabGroupDetails = manager.getAllTabGroup().map {
+        allTabGroupDetails = manager.activeTabGroups.values.map {
             TabGroupCardDetails(tabGroup: $0, tabManager: manager)
         }
 

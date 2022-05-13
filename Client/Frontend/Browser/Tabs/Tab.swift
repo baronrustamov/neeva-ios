@@ -715,10 +715,10 @@ class Tab: NSObject, ObservableObject {
             return lastExecutedTime < Int64(startOfLastMonth.timeIntervalSince1970 * 1000)
         }
     }
-    
+
     func isArchived() -> Bool {
         switch archivedTabsDuration {
-            case .week:
+        case .week:
             return !(wasLastExecuted(.today) || wasLastExecuted(.lastWeek))
         case .month:
             return !wasLastExecuted(.overAMonth)

@@ -47,18 +47,26 @@ struct TabListView: View {
     @Environment(\.onOpenURL) var openURL
     @Environment(\.selectionCompletion) private var selectionCompletion: () -> Void
     @EnvironmentObject var model: ArchivedTabsPanelModel
+    @Default(.tabGroupNames) private var tabGroupDict: [String: String]
 
     private let padding: CGFloat = 4
     let tabManager: TabManager
     let tabs: [Tab]
     let section: ArchivedTabTimeSection
 
+    func getProcessedFromTabGroupDict() -> [String: Bool] {
+        return tabGroupDict.reduce(into: [String: Bool]()) { dict, groupName in
+            dict[groupName.key] = false
+        }
+    }
+
     var body: some View {
         LazyVStack(spacing: 8) {
+            var processed = getProcessedFromTabGroupDict()
             ForEach(tabs, id: \.self) { tab in
                 if let url = tab.url {  // should get rid of this unwrapping
-                    if model.getRepresentativeTabs(section: section).contains(tab) {
-                        if let tabGroup = model.tabManager.getTabGroup(for: tab.rootUUID)?.children
+                    if processed[tab.rootUUID] != nil && processed[tab.rootUUID] == false {
+                        if let tabGroup = model.tabManager.archivedTabGroups[tab.rootUUID]?.children
                         {
                             LazyVStack(spacing: 0) {
                                 HStack {
@@ -71,9 +79,7 @@ struct TabListView: View {
                                     Spacer()
                                 }
                                 ForEach(
-                                    tabGroup.filter {
-                                        return $0.wasLastExecuted(.lastMonth)
-                                    }, id: \.self
+                                    tabGroup, id: \.self
                                 ) { filteredTab in
                                     ButtonView(tab: filteredTab, tabManager: tabManager)
                                 }
@@ -83,6 +89,7 @@ struct TabListView: View {
                                     .cornerRadius(16)
                             )
                         }
+                        let _ = processed[tab.rootUUID] = true
                     } else {
                         ButtonView(tab: tab, tabManager: tabManager)
                     }
