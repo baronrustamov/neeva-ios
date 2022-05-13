@@ -82,6 +82,8 @@ class TabCardModel: CardModel {
     func updateRowsIfNeeded(force: Bool = false) {
         if needsUpdateRows || force {
             needsUpdateRows = false
+            // TODO: this is just a proof of concept - when a tab is brought back from
+            // archived tabs there's chance we need to rebuild tab groups.
             onDataUpdated()
             //updateRows()
         }

@@ -25,8 +25,6 @@ struct ArchivedTabsPanelView: View {
     let onDismiss: () -> Void
 
     var content: some View {
-        // TODO: what to show when there's no archived tab?
-
         ScrollView {
             VStack(spacing: 0) {
                 Button(action: {}) {
@@ -70,7 +68,6 @@ struct ArchivedTabsPanelView: View {
             }
 
             // Archived tabs
-
             LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
                 ForEach(ArchivedTabTimeSection.allCases, id: \.self) { section in
                     let itemsInSection = model.groupedSites.itemsForSection(section: section)

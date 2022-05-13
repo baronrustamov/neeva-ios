@@ -42,7 +42,6 @@ struct HistorySectionHeader: View {
 
     var body: some View {
         title.background(Color.groupedBackground)
-            .border(Color.red, width: 1)
     }
 }
 
@@ -87,14 +86,12 @@ struct HistoryPanelView: View {
                     ) {
                         showRecentlyClosedTabs = true
                     }
-                    .border(Color.red, width: 1)
 
                     NavigationLink(isActive: $showRecentlyClosedTabs) {
                         RecentlyClosedTabsPanelView(model: model, onDismiss: onDismiss)
                     } label: {
                         EmptyView()
                     }
-                    .border(Color.blue, width: 1)
                 }.accentColor(.label)
             }
 
