@@ -6,11 +6,12 @@ import Shared
 import Storage
 import SwiftUI
 
-enum TimeSection: Int, CaseIterable {
+enum TimeSection: Int, CaseIterable, Decodable, Encodable {
     case today
     case yesterday
     case lastWeek
     case lastMonth
+    case overAMonth
 
     var title: String? {
         switch self {
@@ -22,6 +23,8 @@ enum TimeSection: Int, CaseIterable {
             return Strings.TableDateSectionTitleLastWeek
         case .lastMonth:
             return Strings.TableDateSectionTitleLastMonth
+        case .overAMonth:
+            return Strings.TableDateSectionTitleOverAMonth
         }
     }
 }

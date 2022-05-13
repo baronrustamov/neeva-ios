@@ -718,11 +718,15 @@ class Tab: NSObject, ObservableObject {
 
     func isArchived() -> Bool {
         switch archivedTabsDuration {
-        case .week:
+        case .today:  // should not reach here
+            return false
+        case .yesterday:  // should not reach here
+            return false
+        case .lastWeek:
             return !(wasLastExecuted(.today) || wasLastExecuted(.lastWeek))
-        case .month:
+        case .lastMonth:
             return !wasLastExecuted(.overAMonth)
-        case .forever:
+        case .overAMonth:
             return false
         }
     }
