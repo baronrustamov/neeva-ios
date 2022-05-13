@@ -215,8 +215,10 @@ struct CardsContainer: View {
 
                 // Normal Tabs
                 ZStack {
-                    EmptyCardGrid(isIncognito: false, isTopBar: chromeModel.inlineToolbar)
-                        .opacity(tabModel.normalDetails.isEmpty ? 1 : 0)
+                    if !tabModel.isSearchingForTabs {
+                        EmptyCardGrid(isIncognito: false, isTopBar: chromeModel.inlineToolbar)
+                            .opacity(tabModel.normalDetails.isEmpty ? 1 : 0)
+                    }
 
                     CardScrollContainer(columns: columns) { scrollProxy in
                         TabGridContainer(isIncognito: false, geom: geom, scrollProxy: scrollProxy)
@@ -247,8 +249,10 @@ struct CardsContainer: View {
 
                 // Incognito Tabs
                 ZStack {
-                    EmptyCardGrid(isIncognito: true, isTopBar: chromeModel.inlineToolbar)
-                        .opacity(tabModel.incognitoDetails.isEmpty ? 1 : 0)
+                    if !tabModel.isSearchingForTabs {
+                        EmptyCardGrid(isIncognito: true, isTopBar: chromeModel.inlineToolbar)
+                            .opacity(tabModel.incognitoDetails.isEmpty ? 1 : 0)
+                    }
 
                     CardScrollContainer(columns: columns) { scrollProxy in
                         TabGridContainer(isIncognito: true, geom: geom, scrollProxy: scrollProxy)

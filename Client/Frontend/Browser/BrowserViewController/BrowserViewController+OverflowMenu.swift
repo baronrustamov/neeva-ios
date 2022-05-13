@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import Combine
 import Shared
 
 public enum OverflowMenuAction {
@@ -20,6 +21,7 @@ public enum OverflowMenuAction {
     case goToDownloads
     case closeAllTabs
     case support(screenshot: UIImage? = nil)
+    case findTab
 }
 
 extension BrowserViewController {
@@ -152,6 +154,16 @@ extension BrowserViewController {
                 attributes: EnvironmentHelper.shared.getAttributes() + [overflowMenuAttribute]
             )
             showFeedbackPanel(bvc: self, screenshot: image ?? self.feedbackImage)
+        case .findTab:
+            overlayManager.show(
+                overlay: .find(
+                    FindView(content: .cardGrid(tabCardModel)) { [self] in
+                        if let currentOverlay = overlayManager.currentOverlay,
+                            case OverlayType.find = currentOverlay
+                        {
+                            overlayManager.hideCurrentOverlay(ofPriority: .modal, animate: false)
+                        }
+                    }))
         }
     }
 }

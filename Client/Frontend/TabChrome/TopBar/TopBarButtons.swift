@@ -118,8 +118,8 @@ struct TopBarOverflowMenuButton: View {
                 .environmentObject(chromeModel)
                 .environmentObject(incognitoModel)
                 .environmentObject(locationModel)
-                .topBarPopoverPadding()
-                .frame(minWidth: 340, minHeight: 285)
+                .topBarPopoverPadding(removeBottomPadding: false)
+                .frame(minWidth: 340, minHeight: 350)
         }
     }
 }

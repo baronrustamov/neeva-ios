@@ -12,19 +12,18 @@ extension BrowserViewController {
 
             overlayManager.show(
                 overlay:
-                    .findInPage(
-                        FindInPageView(
-                            model: findInPageModel!,
+                    .find(
+                        FindView(
+                            content: .inPage(findInPageModel!),
                             onDismiss: {
                                 self.updateFindInPageVisibility(visible: false, tab: tab)
-                            }
-                        )
+                            })
                     ))
 
             findInPageModel!.searchValue = query ?? ""
         } else {
             if let currentOverlay = overlayManager.currentOverlay,
-                case OverlayType.findInPage = currentOverlay
+                case OverlayType.find = currentOverlay
             {
                 overlayManager.hideCurrentOverlay(ofPriority: .modal, animate: false)
             }

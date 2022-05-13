@@ -43,10 +43,10 @@ struct OverlayView: View {
             switch overlayManager.currentOverlay {
             case .backForwardList(let backForwardList):
                 backForwardList
-            case .findInPage(let findInPage):
+            case .find(let findView):
                 VStack {
                     Spacer()
-                    findInPage
+                    findView
                         .padding(.bottom, keyboardHidden ? 0 : -14)
                 }.ignoresSafeArea(.container)
             case .fullScreenModal(let fullScreenModal):

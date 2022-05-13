@@ -49,6 +49,18 @@ class TabCardModel: CardModel {
     static let todayRowHeaderID: String = "today-header"
     static let lastweekRowHeaderID: String = "lastWeek-header"
 
+    // Find Tab
+    @Published var tabSearchFilter = "" {
+        didSet {
+            updateRowsIfNeeded(force: true)
+        }
+    }
+
+    // Searching
+    var isSearchingForTabs: Bool {
+        !tabSearchFilter.isEmpty
+    }
+
     private(set) var tabsDidChange = false
 
     private func updateRows() {
@@ -71,8 +83,8 @@ class TabCardModel: CardModel {
         self.objectWillChange.send()
     }
 
-    func updateRowsIfNeeded() {
-        if needsUpdateRows {
+    func updateRowsIfNeeded(force: Bool = false) {
+        if needsUpdateRows || force {
             needsUpdateRows = false
             updateRows()
         }
@@ -101,44 +113,25 @@ class TabCardModel: CardModel {
         return returnValue
     }
 
+    // Details
     var normalDetails: [TabCardDetails] {
         allDetails.filter {
-            $0.tab.isIncognito == false
+            !$0.tab.isIncognito
         }
     }
 
     var incognitoDetails: [TabCardDetails] {
         allDetails.filter {
-            $0.tab.isIncognito == true
+            $0.tab.isIncognito
         }
     }
 
-    init(manager: TabManager) {
-        self.manager = manager
-
-        manager.tabsUpdatedPublisher.sink { [weak self] in
-            self?.tabsDidChange = true
-            self?.onDataUpdated()
-            // 'tabsDidChange' is used by CardScrollContainer to set its animation
-            // to .default. This is needed to handle a bug which the scroll view
-            // doesn't get pushed down when the bottom tab is closed.
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self?.tabsDidChange = false
-            }
-        }.store(in: &subscription)
-
-        if FeatureFlag[.enableTimeBasedSwitcher] {
-            manager.selectedTabPublisher.sink { [weak self] tab in
-                guard let self = self, let _ = tab else {
-                    return
-                }
-                self.needsUpdateRows = true
-            }.store(in: &subscription)
-        }
-
-        _tabGroupExpanded.publisher.sink { [weak self] _ in
-            self?.updateRows()
-        }.store(in: &subscription)
+    func tabIncludedInSearch(_ details: TabCardDetails) -> Bool {
+        let tabSeachFilter = tabSearchFilter.lowercased()
+        return
+            (details.title.lowercased().contains(tabSeachFilter)
+            || (details.url?.absoluteString.lowercased().contains(tabSeachFilter) ?? false)
+            || tabSeachFilter.isEmpty)
     }
 
     struct Row: Identifiable {
@@ -214,6 +207,7 @@ class TabCardModel: CardModel {
                 && tab.isIncognito == incognito
                 && (FeatureFlag[.enableTimeBasedSwitcher]
                     ? tab.wasLastExecuted(byTime!) : true)
+                && tabIncludedInSearch(tabCard)
         }
 
         modifyAllDetailsFilteredPromotingPinnedTabs(&allDetailsFiltered)
@@ -430,6 +424,28 @@ class TabCardModel: CardModel {
 
     func buildRowsForTesting() -> [Row] {
         buildRows(incognito: false)
+    }
+
+    // MARK: init
+    init(manager: TabManager) {
+        self.manager = manager
+
+        manager.tabsUpdatedPublisher.sink { [weak self] in
+            self?.onDataUpdated()
+        }.store(in: &subscription)
+
+        if FeatureFlag[.enableTimeBasedSwitcher] {
+            manager.selectedTabPublisher.sink { [weak self] tab in
+                guard let self = self, let _ = tab else {
+                    return
+                }
+                self.needsUpdateRows = true
+            }.store(in: &subscription)
+        }
+
+        _tabGroupExpanded.publisher.sink { [weak self] _ in
+            self?.updateRows()
+        }.store(in: &subscription)
     }
 }
 

@@ -15,7 +15,7 @@ enum OverlayPriority {
 /// Specific Overlay view type.
 enum OverlayType: Equatable {
     case backForwardList(BackForwardListView?)
-    case findInPage(FindInPageView?)
+    case find(FindView?)
     case fullScreenModal(AnyView)
     case notification(NotificationRow?)
     case popover(PopoverRootView?)
@@ -26,7 +26,7 @@ enum OverlayType: Equatable {
         switch self {
         case .fullScreenModal:
             return .fullScreen
-        case .backForwardList, .findInPage, .popover, .sheet:
+        case .backForwardList, .find, .popover, .sheet:
             return .modal
         case .notification, .toast:
             return .transient
@@ -37,7 +37,7 @@ enum OverlayType: Equatable {
         switch (lhs, rhs) {
         case (.backForwardList, .backForwardList):
             return true
-        case (.findInPage, .findInPage):
+        case (.find, .find):
             return true
         case (.fullScreenModal, .fullScreenModal):
             return true
@@ -125,7 +125,7 @@ class OverlayManager: ObservableObject {
         }
 
         switch overlay {
-        case .findInPage:
+        case .find:
             hideBottomBar = true
         default:
             hideBottomBar = false
