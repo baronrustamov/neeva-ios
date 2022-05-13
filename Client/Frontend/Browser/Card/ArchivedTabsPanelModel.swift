@@ -19,20 +19,7 @@ public struct ArchivedTabsData {
 
 class ArchivedTabsPanelModel: ObservableObject {
     let tabManager: TabManager
-    var representativeTabsInAMonth: [Tab] = []
-    var representativeTabsOverAMonth: [Tab] = []
-    var tabsWithExclusionList: [Tab] = []
-    var allTabsFiltered: [Tab] = []
     var groupedSites = ArchivedTabsData()
-
-    func getRepresentativeTabs(section: ArchivedTabTimeSection) -> [Tab] {
-        switch section {
-        case .lastMonth:
-            return representativeTabsInAMonth
-        case .overAMonth:
-            return representativeTabsOverAMonth
-        }
-    }
 
     func loadData() {
         groupedSites.sites[.lastMonth] = tabManager.archivedTabs.filter {
