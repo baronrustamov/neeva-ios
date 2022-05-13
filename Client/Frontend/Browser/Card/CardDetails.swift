@@ -740,7 +740,7 @@ class TabGroupCardDetails: ObservableObject {
         }
 
         allDetails =
-            manager.getTabGroup(for: id)?.children
+            tabGroup.children
             .sorted(by: { lhs, rhs in
                 if lhs.isPinned && rhs.isPinned {
                     // Note: We should make it impossible for `pinnedTime` to be nil when
@@ -759,7 +759,7 @@ class TabGroupCardDetails: ObservableObject {
                     tab: $0,
                     manager: manager,
                     isChild: true)
-            }) ?? []
+            })
     }
 
     func onSelect() {

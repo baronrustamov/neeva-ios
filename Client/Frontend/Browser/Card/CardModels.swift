@@ -82,7 +82,8 @@ class TabCardModel: CardModel {
     func updateRowsIfNeeded(force: Bool = false) {
         if needsUpdateRows || force {
             needsUpdateRows = false
-            updateRows()
+            onDataUpdated()
+            //updateRows()
         }
     }
 

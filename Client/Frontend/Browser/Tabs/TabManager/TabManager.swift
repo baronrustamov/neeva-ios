@@ -110,7 +110,7 @@ class TabManager: NSObject {
     var archivedTabGroups: [String: TabGroup] {
         // in archivedTabsPanelView, there's special treatment for a child tab
         // even if it's the only arcvhied tab in a group. Those tabs are not filtered
-        // out below (see activeTabGroups for comparison). 
+        // out below (see activeTabGroups for comparison).
         return getAll()
             .reduce(into: [String: [Tab]]()) { dict, tab in
                 if tabGroupDict[tab.rootUUID] != nil && tab.isArchived() {
