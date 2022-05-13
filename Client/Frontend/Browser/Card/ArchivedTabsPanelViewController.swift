@@ -19,6 +19,8 @@ class ArchivedTabsPanelViewController: UIHostingController<AnyView> {
                     bvc.tabManager.createOrSwitchToTab(for: $0)
                     bvc.browserModel.hideGridWithNoAnimation()
                 }
+            ).environment(
+                \.selectionCompletion, { bvc.browserModel.hideGridWithNoAnimation() }
             )
         )
     }

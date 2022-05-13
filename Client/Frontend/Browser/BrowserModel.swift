@@ -41,17 +41,14 @@ class BrowserModel: ObservableObject {
         if gridModel.switcherState != .tabs {
             gridModel.switcherState = .tabs
         }
-
+        if FeatureFlag[.enableTimeBasedSwitcher] {
+            gridModel.tabCardModel.updateRowsIfNeeded()
+        }
         if !gridModel.tabCardModel.getAllDetails(matchingIncognitoState: incognitoModel.isIncognito)
             .contains(where: \.isSelected)
         {
             showGridWithNoAnimation()
         } else {
-            if FeatureFlag[.enableTimeBasedSwitcher] {
-                gridModel.tabCardModel.updateRowsIfNeeded()
-            }
-
-            overlayManager.hideCurrentOverlay(ofPriority: .modal)
             gridModel.scrollToSelectedTab { [self] in
                 cardTransitionModel.update(to: .visibleForTrayShow)
                 contentVisibilityModel.update(showContent: false)
@@ -61,10 +58,6 @@ class BrowserModel: ObservableObject {
     }
 
     func showGridWithNoAnimation() {
-        if FeatureFlag[.enableTimeBasedSwitcher] {
-            gridModel.tabCardModel.updateRowsIfNeeded()
-        }
-
         gridModel.scrollToSelectedTab()
         cardTransitionModel.update(to: .hidden)
         contentVisibilityModel.update(showContent: false)
