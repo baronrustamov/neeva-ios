@@ -64,38 +64,36 @@ struct TabListView: View {
         LazyVStack(spacing: 8) {
             var processed = getProcessedFromTabGroupDict()
             ForEach(tabs, id: \.self) { tab in
-                if let _ = tab.url {  // should be able to get rid of this unwrapping
-                    if processed[tab.rootUUID] != nil {
-                        if processed[tab.rootUUID] == false {
-                            if let tabGroup = model.tabManager.archivedTabGroups[tab.rootUUID]?
-                                .children
-                            {
-                                LazyVStack(spacing: 0) {
-                                    HStack {
-                                        Text(getTabGroupTitle(id: tab.rootUUID))
-                                            .withFont(.labelMedium)
-                                            .foregroundColor(.label)
-                                            .fixedSize(horizontal: false, vertical: true)
-                                            .padding(.vertical, 8)
-                                            .padding(.leading, 16)
-                                        Spacer()
-                                    }
-                                    ForEach(
-                                        tabGroup, id: \.self
-                                    ) { filteredTab in
-                                        ButtonView(tab: filteredTab, tabManager: tabManager)
-                                    }
+                if processed[tab.rootUUID] != nil {
+                    if processed[tab.rootUUID] == false {
+                        if let tabGroup = model.tabManager.archivedTabGroups[tab.rootUUID]?
+                            .children
+                        {
+                            LazyVStack(spacing: 0) {
+                                HStack {
+                                    Text(getTabGroupTitle(id: tab.rootUUID))
+                                        .withFont(.labelMedium)
+                                        .foregroundColor(.label)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                        .padding(.vertical, 8)
+                                        .padding(.leading, 16)
+                                    Spacer()
                                 }
-                                .background(
-                                    Color.secondarySystemFill
-                                        .cornerRadius(16)
-                                )
+                                ForEach(
+                                    tabGroup, id: \.self
+                                ) { filteredTab in
+                                    ButtonView(tab: filteredTab, tabManager: tabManager)
+                                }
                             }
-                            let _ = processed[tab.rootUUID] = true
+                            .background(
+                                Color.secondarySystemFill
+                                    .cornerRadius(16)
+                            )
                         }
-                    } else {
-                        ButtonView(tab: tab, tabManager: tabManager)
+                        let _ = processed[tab.rootUUID] = true
                     }
+                } else {
+                    ButtonView(tab: tab, tabManager: tabManager)
                 }
             }
         }
