@@ -128,4 +128,30 @@ class NeevaSignInTests: BaseTestCase {
 
         waitForExistence(app.staticTexts["Welcome To Neeva"])
     }
+
+    func testOtherSignUpOptions() throws {
+        testSignInUIAppearsFromSettings()
+
+        waitForExistence(app.buttons["Other sign up options"])
+        app.buttons["Other sign up options"].tap()
+
+        waitForExistence(app.staticTexts["Join Neeva"])
+        waitForExistence(app.buttons["Create Neeva account"])
+        waitForExistence(app.buttons["Sign up with Apple"])
+        waitForExistence(app.buttons["Sign up with Google"])
+        waitForExistence(app.buttons["Sign up with Microsoft"])
+    }
+
+    func testSignInButton() throws {
+        testSignInUIAppearsFromSettings()
+
+        waitForExistence(app.buttons["Already have an account? Sign In"])
+        app.buttons["Already have an account? Sign In"].tap()
+
+        waitForExistence(app.staticTexts["Sign In"])
+        waitForExistence(app.buttons["Continue"])
+        waitForExistence(app.buttons["Sign in with Apple"])
+        waitForExistence(app.buttons["Sign in with Google"])
+        waitForExistence(app.buttons["Sign in with Microsoft"])
+    }
 }
