@@ -20,7 +20,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private var geigerCounter: KMCGeigerCounter?
 
     private static var activeSceneCount: Int = 0
-
+    private var isInBackground = false
+    
     // MARK: - Scene state
     func scene(
         _ scene: UIScene, willConnectTo session: UISceneSession,
@@ -68,6 +69,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func sceneDidBecomeActive(_ scene: UIScene) {
         self.scene = scene
+        
+        isInBackground = false
 
         Self.activeSceneCount += 1
         if Self.activeSceneCount == 1 {
@@ -116,6 +119,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func sceneDidEnterBackground(_ scene: UIScene) {
         bvc.tabManager.preserveTabs()
+        
+        isInBackground = true
 
         Self.activeSceneCount -= 1
         if Self.activeSceneCount == 0 {
@@ -130,6 +135,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         getAppDelegate().updateTopSitesWidget()
         bvc.downloadQueue.pauseAll()
+    }
+    
+    func sceneDidDisconnect(_ scene: UIScene) {
+        // If true, the app was force killed.
+        if !isInBackground && Self.activeSceneCount == 1 {
+            if bvc.incognitoModel.isIncognito {
+                // Consider the force quit an action to close all incognito tabs.
+                bvc.tabManager.removeAllIncognitoTabs()
+            }
+        }
     }
 
     // MARK: - URL managment
