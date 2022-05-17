@@ -704,7 +704,7 @@ class Tab: NSObject, ObservableObject {
         // which is stored in milliseconds.
         switch byTime {
         case .today:
-            return lastExecutedTime > Int64(startOfOneDayAgo.timeIntervalSince1970 * 1000)
+            return Date.fromTimestamp(lastExecutedTime).isToday()
         case .lastWeek:
             return lastExecutedTime < Int64(startOfOneDayAgo.timeIntervalSince1970 * 1000)
                 && lastExecutedTime > Int64(startOfLastWeek.timeIntervalSince1970 * 1000)
