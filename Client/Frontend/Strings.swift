@@ -47,8 +47,6 @@ extension Strings {
         "Last week", comment: "History tableview section header")
     public static let TableDateSectionTitleLastMonth = MZLocalizedString(
         "Last month", comment: "History tableview section header")
-    public static let TableDateSectionTitleOverAMonth = MZLocalizedString(
-        "Forever", comment: "History tableview section header")
 }
 
 // Top Sites.

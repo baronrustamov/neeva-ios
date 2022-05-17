@@ -16,15 +16,11 @@ struct ArchivedTabsView: View {
 
     var tabsDurationText: String {
         switch archivedTabsDuration {
-        case .today:
-            return ""
-        case .yesterday:
-            return ""
-        case .lastWeek:
+        case .week:
             return "for 7 days"
-        case .lastMonth:
+        case .month:
             return "for 30 days"
-        case .overAMonth:
+        case .forever:
             return "forever"
         }
     }

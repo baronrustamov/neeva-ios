@@ -5,9 +5,15 @@
 import Defaults
 import SwiftUI
 
+enum ArchivedTabsDuration: CaseIterable, Encodable, Decodable {
+    case week
+    case month
+    case forever
+}
+
 extension Defaults.Keys {
-    static let archivedTabsDuration = Defaults.Key<TimeSection>(
-        "profile.prefkey.archivedTabs.archivedTabsDuration", default: .lastWeek)
+    static let archivedTabsDuration = Defaults.Key<ArchivedTabsDuration>(
+        "profile.prefkey.archivedTabs.archivedTabsDuration", default: .week)
 }
 
 struct ArchivedTabSettings: View {
@@ -17,9 +23,9 @@ struct ArchivedTabSettings: View {
         List {
             Section {
                 Picker("", selection: $archivedTabsDuration) {
-                    Text("7 Days").tag(TimeSection.lastWeek)
-                    Text("30 Days").tag(TimeSection.lastMonth)
-                    Text("Forever").tag(TimeSection.overAMonth)
+                    Text("7 Days").tag(ArchivedTabsDuration.week)
+                    Text("30 Days").tag(ArchivedTabsDuration.month)
+                    Text("Forever").tag(ArchivedTabsDuration.forever)
                 }.labelsHidden()
             }
         }
