@@ -41,7 +41,7 @@ struct ArchivedTabsPanelView: View {
     var content: some View {
         ScrollView {
             VStack(spacing: 0) {
-                Button(action: {                    
+                Button(action: {
                     showArchivedTabsSettings = true
                 }) {
                     HStack(spacing: 0) {
