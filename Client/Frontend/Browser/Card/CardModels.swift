@@ -45,9 +45,12 @@ class TabCardModel: CardModel {
     private(set) var allTabGroupDetails: [TabGroupCardDetails] = []
 
     @Default(.tabGroupExpanded) private var tabGroupExpanded: Set<String>
+    @Default(.archivedTabsDuration) var archivedTabsDuration
     var needsUpdateRows: Bool = false
     static let todayRowHeaderID: String = "today-header"
     static let lastweekRowHeaderID: String = "lastWeek-header"
+    static let lastMonthRowHeaderID: String = "lastMonth-header"
+    static let olderRowHeaderID: String = "older-header"
 
     // Find Tab
     @Published var isSearchingForTabs: Bool = false
@@ -69,6 +72,12 @@ class TabCardModel: CardModel {
                 incognito: true, byTime: .lastWeek)
             timeBasedNormalRows[.lastWeek] = buildRows(
                 incognito: false, byTime: .lastWeek)
+            if archivedTabsDuration == .month {
+                timeBasedNormalRows[.lastMonth] = buildRows(incognito: false, byTime: .lastMonth)
+            } else if archivedTabsDuration == .forever {
+                timeBasedNormalRows[.lastMonth] = buildRows(incognito: false, byTime: .lastMonth)
+                timeBasedNormalRows[.overAMonth] = buildRows(incognito: false, byTime: .overAMonth)
+            }
         } else {
             incognitoRows = buildRows(incognito: true)
             normalRows = buildRows(incognito: false)
@@ -92,6 +101,16 @@ class TabCardModel: CardModel {
     func getRows(incognito: Bool) -> [Row] {
         var returnValue: [Row] = []
 
+        func getOlderRows() -> [Row] {
+            if archivedTabsDuration == .month {
+                return (timeBasedNormalRows[.lastMonth] ?? [])
+            } else if archivedTabsDuration == .forever {
+                return (timeBasedNormalRows[.lastMonth] ?? [])
+                    + (timeBasedNormalRows[.overAMonth] ?? [])
+            }
+            return []
+        }
+
         if FeatureFlag[.enableTimeBasedSwitcher] {
             if incognito {
                 returnValue =
@@ -100,6 +119,7 @@ class TabCardModel: CardModel {
             } else {
                 returnValue =
                     (timeBasedNormalRows[.today] ?? []) + (timeBasedNormalRows[.lastWeek] ?? [])
+                    + getOlderRows()
             }
         } else {
             returnValue = incognito ? incognitoRows : normalRows
@@ -158,9 +178,16 @@ class TabCardModel: CardModel {
                 case .tabGroupGridRow(let details, let range):
                     return details.allDetails[range].reduce("") { $0 + $1.id + ":" }
                 case .sectionHeader(let timeFilter):
-                    return timeFilter.rawValue == "Last Week"
-                        ? TabCardModel.lastweekRowHeaderID
-                        : TabCardModel.todayRowHeaderID
+                    switch timeFilter {
+                    case .today:
+                        return TabCardModel.todayRowHeaderID
+                    case .lastWeek:
+                        return lastweekRowHeaderID
+                    case .lastMonth:
+                        return lastMonthRowHeaderID
+                    case .overAMonth:
+                        return olderRowHeaderID
+                    }
                 }
             }
 

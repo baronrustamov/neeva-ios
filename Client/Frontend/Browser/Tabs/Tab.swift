@@ -42,9 +42,9 @@ protocol TabDelegate {
 
 enum TimeFilter: String {
     case today = "Today"
-    case lastWeek = "Last Week"
-    case lastMonth = "Last Month"
-    case overAMonth = "Over A Month"
+    case lastWeek = "Past 7 Days"
+    case lastMonth = "Past 30 Days"
+    case overAMonth = "Older"
 }
 
 class Tab: NSObject, ObservableObject {
@@ -691,8 +691,12 @@ class Tab: NSObject, ObservableObject {
                 byAdding: .second, value: -30, to: Date())
             : Calendar.current.date(
                 byAdding: .day, value: -7, to: Date())
-        let minusOneMonthToCurrentDate = Calendar.current.date(
-            byAdding: .month, value: -1, to: Date())
+        let minusOneMonthToCurrentDate =
+            FeatureFlag[.aWeekTo30SecondsInTimeBasedSwitcher]
+            ? Calendar.current.date(
+                byAdding: .minute, value: -1, to: Date())
+            : Calendar.current.date(
+                byAdding: .month, value: -1, to: Date())
         guard let startOfOneDayAgo = minusOneDayToCurrentDate,
             let startOfLastWeek = minusOneWeekToCurrentDate,
             let startOfLastMonth = minusOneMonthToCurrentDate
@@ -704,7 +708,9 @@ class Tab: NSObject, ObservableObject {
         // which is stored in milliseconds.
         switch byTime {
         case .today:
-            return Date.fromTimestamp(lastExecutedTime).isToday()
+            return FeatureFlag[.demoteAfter15secondsTimeBasedSwitcher]
+                ? lastExecutedTime > Int64(startOfOneDayAgo.timeIntervalSince1970 * 1000)
+                : Date.fromTimestamp(lastExecutedTime).isToday()
         case .lastWeek:
             return lastExecutedTime < Int64(startOfOneDayAgo.timeIntervalSince1970 * 1000)
                 && lastExecutedTime > Int64(startOfLastWeek.timeIntervalSince1970 * 1000)
@@ -721,7 +727,9 @@ class Tab: NSObject, ObservableObject {
         case .week:
             return !(wasLastExecuted(.today) || wasLastExecuted(.lastWeek))
         case .month:
-            return !wasLastExecuted(.overAMonth)
+            return
+                !(wasLastExecuted(.today) || wasLastExecuted(.lastWeek)
+                || wasLastExecuted(.lastMonth))
         case .forever:
             return false
         }
