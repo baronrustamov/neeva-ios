@@ -22,12 +22,8 @@ struct SpaceDetailList: View {
     @State var addingComment = false
     @StateObject var spaceCommentsModel = SpaceCommentsModel()
 
-    var space: Space? {
-        primitive.space
-    }
-
     var canEdit: Bool {
-        primitive.ACL >= .edit && !(space?.isDigest ?? false)
+        primitive.ACL >= .edit && !(primitive.item?.isDigest ?? false)
     }
 
     func descriptionForNote(_ details: SpaceEntityThumbnail) -> String? {
@@ -46,15 +42,8 @@ struct SpaceDetailList: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            if gridModel.refreshDetailedSpaceSubscription != nil {
-                HStack {
-                    Spacer()
-
-                    ProgressView()
-                        .padding(12)
-
-                    Spacer()
-                }.background(Color.secondaryBackground)
+            if primitive.refreshSpaceSubscription != nil {
+                progressView
             }
 
             ScrollViewReader { scrollReader in
@@ -76,14 +65,14 @@ struct SpaceDetailList: View {
                     }
 
                     if spacesModel.detailedSpace != nil && primitive.allDetails.isEmpty
-                        && !(space?.isDigest ?? false) && primitive.isFollowing
+                        && !(primitive.item?.isDigest ?? false) && primitive.isFollowing
                     {
                         EmptySpaceView()
                     }
 
                     ForEach(primitive.allDetails, id: \.id) { details in
                         let editSpaceItem = {
-                            guard let space = space else {
+                            guard let space = primitive.item else {
                                 return
                             }
 
@@ -143,7 +132,7 @@ struct SpaceDetailList: View {
                     .onDelete(perform: canEdit ? onDelete : nil)
                     .onMove(perform: canEdit ? onMove : nil)
 
-                    if let generators = space?.generators, !generators.isEmpty {
+                    if let generators = primitive.item?.generators, !generators.isEmpty {
                         SpaceGeneratorHeader(generators: generators)
                             .modifier(ListSeparatorModifier())
                         ForEach(generators, id: \.id) { generator in
@@ -151,13 +140,13 @@ struct SpaceDetailList: View {
                                 .modifier(ListSeparatorModifier())
                         }
                     }
-                    if let space = space, !space.isDigest {
+                    if let space = primitive.item, !space.isDigest {
                         SpaceCommentsView(space: space, model: spaceCommentsModel)
                             .modifier(ListSeparatorModifier())
                             .id("CommentSection")
                     }
                 }
-                .modifier(ListStyleModifier(isDigest: space?.isDigest ?? false))
+                .modifier(ListStyleModifier(isDigest: primitive.item?.isDigest ?? false))
                 .edgesIgnoringSafeArea([.top, .bottom])
                 .keyboardListener { height in
                     guard height > 0 && addingComment else { return }
@@ -174,6 +163,15 @@ struct SpaceDetailList: View {
             }
             .ignoresSafeArea(.container)
         }
+    }
+
+    private var progressView: some View {
+        HStack {
+            Spacer()
+            ProgressView()
+                .padding(12)
+            Spacer()
+        }.background(Color.secondaryBackground)
     }
 
     private func onDelete(offsets: IndexSet) {
@@ -303,7 +301,9 @@ struct ListStyleModifier: ViewModifier {
                 )
                 .if(!isDigest) {
                     $0.refreshable {
-                        gridModel.refreshDetailedSpace()
+                        if let detailedSpace = self.spaceModel.detailedSpace {
+                            detailedSpace.refresh()
+                        }
                     }
                 }
         } else {

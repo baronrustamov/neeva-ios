@@ -489,37 +489,35 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
     @Published var showingDetails = false
 
     var id: String
-    var item: Space? { manager.get(for: id) }
+    var item: Space?
     var closeButtonImage: UIImage? = nil
+    @Published var allDetails: [SpaceEntityThumbnail] = []
+    @Published var allDetailsWithExclusionList: [SpaceEntityThumbnail] = []
+    @Published private(set) var refreshSpaceSubscription: AnyCancellable? = nil
+
     var isFollowing: Bool {
         manager.allSpaces.contains { $0.id.id == id }
     }
-    @Published var allDetails: [SpaceEntityThumbnail] = []
-    @Published var allDetailsWithExclusionList: [SpaceEntityThumbnail] = []
 
     var accessibilityLabel: String {
         "\(title), Space"
     }
 
-    var space: Space? {
-        spaceRef ?? manager.get(for: id)
-    }
-
     var title: String {
-        space?.displayTitle ?? ""
-    }
-
-    private var spaceRef: Space? = nil
-
-    init(space: Space, manager: SpaceStore) {
-        self.id = space.id.id
-        self.manager = manager
-        updateDetails()
+        item?.displayTitle ?? ""
     }
 
     init(id: String, manager: SpaceStore) {
         self.id = id
         self.manager = manager
+        updateSpace()
+    }
+
+    init(space: Space, manager: SpaceStore) {
+        self.item = space
+        self.id = space.id.id
+        self.manager = manager
+        updateDetails()
     }
 
     var thumbnail: some View {
@@ -532,7 +530,7 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
                     .lineLimit(1)
                     .foregroundColor(Color.label)
                     .frame(height: CardUX.HeaderSize)
-                if let space = space, !space.isPublic {
+                if let space = item, !space.isPublic {
                     Symbol(decorative: .lock, style: .labelMedium)
                         .foregroundColor(.secondaryLabel)
                 }
@@ -541,16 +539,42 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
         }.shadow(radius: 0)
     }
 
-    func setSpace(_ space: Space) {
-        guard id == space.id.id else { return }
-        self.spaceRef = space
-        updateDetails()
+    func refresh() {
+        guard !(self.item?.isDigest ?? false) else { return }
+
+        if isFollowing {
+            manager.refreshSpace(spaceID: self.id)
+        }
+
+        refreshSpaceSubscription = manager.$state.sink { state in
+            if case .ready = state {
+                if self.manager.updatedSpacesFromLastRefresh.first?.id.id ?? ""
+                    == self.id || !self.isFollowing
+                {
+                    self.updateSpace()
+                }
+
+                withAnimation(.easeOut) {
+                    self.refreshSpaceSubscription = nil
+                }
+            }
+        }
+
+    }
+
+    func updateSpace() {
+        manager.getSpaceDetails(spaceId: id) { [weak self] space in
+            guard let self = self else { return }
+            self.item = space
+            self.updateDetails()
+        }
     }
 
     func updateDetails() {
         allDetails =
-            space?.contentData?
-            .map { SpaceEntityThumbnail(data: $0, spaceID: id, space: spaceRef) } ?? []
+            item?.contentData?.map {
+                SpaceEntityThumbnail(data: $0, spaceID: id, space: self.item)
+            } ?? []
         allDetailsWithExclusionList = allDetails.filter({
             $0.data.url?.absoluteString.hasPrefix(NeevaConstants.appSpacesURL.absoluteString)
                 ?? false

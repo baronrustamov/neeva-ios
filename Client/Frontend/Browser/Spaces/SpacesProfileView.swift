@@ -19,8 +19,7 @@ class SpacesProfileViewModel: ObservableObject {
             case .success(let arr):
                 self.spaceCards = arr.map({
                     let spaceCardDetails = SpaceCardDetails(
-                        id: $0.id.id, manager: SpaceStore.shared)
-                    spaceCardDetails.setSpace($0)
+                        space: $0, manager: SpaceStore.shared)
                     return spaceCardDetails
                 })
                 self.owner = arr.first?.owner

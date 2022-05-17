@@ -25,7 +25,7 @@ struct SpaceContainerView: View {
     @State private var isVerifiedProfile = false
 
     var space: Space? {
-        primitive.space
+        primitive.item
     }
 
     var body: some View {

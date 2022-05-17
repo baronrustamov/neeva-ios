@@ -137,7 +137,7 @@ class BrowserModel: ObservableObject {
 
             if let existingSpace = existingSpace {
                 openSpace(spaceID: existingSpace.id)
-                gridModel.refreshDetailedSpace()
+                existingSpace.refresh()
                 return
             }
 

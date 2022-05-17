@@ -203,7 +203,7 @@ public class SpaceStore: ObservableObject {
         allSpaces.filter { $0.userACL >= .edit }
     }
 
-    private var allProfiles: [Set<String>: [Space]] = [:]
+    @Published public var allProfiles: [Set<String>: [Space]] = [:]
 
     private var disableRefresh = false
 
@@ -340,7 +340,21 @@ public class SpaceStore: ObservableObject {
         }
     }
 
-    public func openSpaceWithNoFollow(
+    public func getSpaceDetails(
+        spaceId: String, completion: @escaping (Space) -> Void
+    ) {
+        if let space = allSpaces.first(where: { $0.id.id == spaceId }) {
+            completion(space)
+        } else if let space = allProfiles.first(where: {
+            $0.key.contains(where: { $0 == spaceId })
+        })?.value.first(where: { $0.id.id == spaceId }) {
+            completion(space)
+        } else {
+            openSpaceWithNoFollow(spaceId: spaceId, completion: completion)
+        }
+    }
+
+    private func openSpaceWithNoFollow(
         spaceId: String, completion: @escaping (Space) -> Void
     ) {
         GraphQLAPI.shared.isAnonymous = true

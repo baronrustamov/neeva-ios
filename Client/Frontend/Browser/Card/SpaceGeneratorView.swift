@@ -26,7 +26,7 @@ struct SpaceGeneratorView: View {
     let generator: SpaceGeneratorData
 
     var canEdit: Bool {
-        guard let space = spaceCardModel.detailedSpace?.space else {
+        guard let space = spaceCardModel.detailedSpace?.item else {
             return false
         }
 
@@ -48,7 +48,7 @@ struct SpaceGeneratorView: View {
                 if canEdit {
                     Button(action: {
                         guard
-                            let space = spaceCardModel.detailedSpace?.space,
+                            let space = spaceCardModel.detailedSpace?.item,
                             let index = space.generators?.firstIndex(where: {
                                 $0.id == generator.id
                             })

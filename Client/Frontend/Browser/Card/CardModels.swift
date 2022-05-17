@@ -501,6 +501,7 @@ class SpaceCardModel: CardModel {
             if let id = spaceNeedsRefresh {
                 manager.refreshSpace(spaceID: id)
                 spaceNeedsRefresh = nil
+
             }
         }
     }
@@ -516,7 +517,7 @@ class SpaceCardModel: CardModel {
         case .allSpaces:
             return spaces
         case .ownedByMe:
-            return spaces.filter { $0.space?.userACL == .owner }
+            return spaces.filter { $0.item?.userACL == .owner }
         }
     }
 
@@ -557,7 +558,7 @@ class SpaceCardModel: CardModel {
             {
                 // If only one space is updated and it exists inside the current details, then just
                 // update its contents and move it to the right place, instead of resetting all.
-                self.allDetails.first(where: { $0.id == id })?.updateDetails()
+                self.allDetails.first(where: { $0.id == id })?.updateSpace()
                 if indexInStore != indexInDetails {
                     let indices: IndexSet = [indexInDetails]
                     self.allDetails.move(fromOffsets: indices, toOffset: indexInStore)
@@ -764,12 +765,6 @@ class SpaceCardModel: CardModel {
         }
     }
 
-    func updateSpaceWithNoFollow(id: String, manager: SpaceStore) {
-        manager.openSpaceWithNoFollow(spaceId: id) { [weak self] space in
-            guard let self = self else { return }
-            self.detailedSpace?.setSpace(space)
-        }
-    }
 }
 
 class SiteCardModel: CardModel {

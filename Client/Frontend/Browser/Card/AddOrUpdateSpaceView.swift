@@ -240,22 +240,26 @@ struct AddOrUpdateSpaceView: View {
                     switch config {
                     case .addSpaceItem:
                         let data = SpaceEntityData(
-                            id: space.id.id,
+                            id: UUID().uuidString,
                             url: URL(string: urlText),
                             title: titleText,
                             snippet: descriptionText,
                             thumbnail: nil,
                             previewEntity: .webPage)
-
                         // modify target spaceCardDetail's Data and signal changes
-                        spaceModel.detailedSpace?.space?.contentData?.insert(data, at: 0)
-                        spaceModel.detailedSpace?.updateDetails()
+                        space.contentData?.insert(data, at: 0)
                         spaceModel.add(
                             spaceID: space.id.id, url: urlText,
                             title: titleText, description: descriptionText)
+                        spaceModel.detailedSpace?.updateDetails()
                     case .updateSpaceItem(let entityID):
-                        let oldData = (space.contentData?.first(where: { $0.id == entityID }))!
-                        let index = (space.contentData?.firstIndex(where: { $0.id == entityID }))!
+                        guard
+                            let oldData = (space.contentData?.first(where: { $0.id == entityID })),
+                            let index =
+                                (space.contentData?.firstIndex(where: { $0.id == entityID }))
+                        else {
+                            return
+                        }
                         let newData = SpaceEntityData(
                             id: oldData.id,
                             url: oldData.url,
@@ -263,7 +267,7 @@ struct AddOrUpdateSpaceView: View {
                             snippet: descriptionText,
                             thumbnail: thumbnailModel.selectedData ?? oldData.thumbnail,
                             previewEntity: oldData.previewEntity)
-                        spaceModel.detailedSpace?.space?.contentData?.replaceSubrange(
+                        space.contentData?.replaceSubrange(
                             index..<(index + 1), with: [newData])
                         spaceModel.detailedSpace?.allDetails.replaceSubrange(
                             index..<(index + 1),
@@ -274,6 +278,7 @@ struct AddOrUpdateSpaceView: View {
                             thumbnail: thumbnailModel.selectedData)
                         thumbnailModel.selectedData = nil
                         thumbnailModel.thumbnailData = [URL: String]()
+                        spaceModel.detailedSpace?.updateDetails()
                     case .updateSpace:
                         var thumbnail: String? = nil
                         if let id = thumbnailModel.selectedSpaceThumbnailEntityID {

@@ -48,7 +48,6 @@ class GridModel: ObservableObject {
 
     // Spaces
     @Published var isLoading = false
-    @Published private(set) var refreshDetailedSpaceSubscription: AnyCancellable? = nil
 
     private var subscriptions: Set<AnyCancellable> = []
     private let tabMenu: TabMenu
@@ -67,30 +66,6 @@ class GridModel: ObservableObject {
     func scrollToSelectedTab(completion: (() -> Void)? = nil) {
         scrollToCompletion = completion
         needsScrollToSelectedTab += 1
-    }
-
-    func refreshDetailedSpace() {
-        guard let detailedSpace = spaceCardModel.detailedSpace,
-            !(detailedSpace.space?.isDigest ?? false)
-        else {
-            return
-        }
-
-        refreshDetailedSpaceSubscription = detailedSpace.manager.$state.sink { state in
-            if case .ready = state {
-                if detailedSpace.manager.updatedSpacesFromLastRefresh.first?.id.id ?? ""
-                    == detailedSpace.id
-                {
-                    detailedSpace.updateDetails()
-                }
-
-                withAnimation(.easeOut) {
-                    self.refreshDetailedSpaceSubscription = nil
-                }
-            }
-        }
-
-        detailedSpace.manager.refreshSpace(spaceID: detailedSpace.id)
     }
 
     func switchToTabs(incognito: Bool) {
@@ -127,8 +102,7 @@ class GridModel: ObservableObject {
         guard let id = id else { return }
         DispatchQueue.main.async { [self] in
             spaceCardModel.detailedSpace = SpaceCardDetails(id: id, manager: SpaceStore.shared)
-            refreshDetailedSpace()
-            spaceCardModel.updateSpaceWithNoFollow(id: id, manager: SpaceStore.shared)
+            spaceCardModel.detailedSpace?.refresh()
             showingDetailView = true
         }
     }
