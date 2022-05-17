@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import Combine
+import Defaults
 import Shared
 
 enum ArchivedTabTimeSection: String, CaseIterable {
@@ -20,6 +22,8 @@ public struct ArchivedTabsData {
 class ArchivedTabsPanelModel: ObservableObject {
     let tabManager: TabManager
     var groupedSites = ArchivedTabsData()
+    @Default(.archivedTabsDuration) var archivedTabsDuration
+    private var archivedTabsDurationSubscription: AnyCancellable?
 
     func loadData() {
         groupedSites.sites[.lastMonth] = tabManager.archivedTabs.filter {
@@ -39,5 +43,11 @@ class ArchivedTabsPanelModel: ObservableObject {
 
     init(tabManager: TabManager) {
         self.tabManager = tabManager
+
+        archivedTabsDurationSubscription = _archivedTabsDuration.publisher.sink {
+            [weak self] _ in
+            self?.loadData()
+            self?.objectWillChange.send()
+        }
     }
 }

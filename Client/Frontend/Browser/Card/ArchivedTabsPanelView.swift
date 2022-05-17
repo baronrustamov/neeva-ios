@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import Defaults
 import Shared
 import SwiftUI
 
@@ -22,12 +23,27 @@ struct ArchivedTabsSectionHeader: View {
 
 struct ArchivedTabsPanelView: View {
     @ObservedObject var model: ArchivedTabsPanelModel
+    @Default(.archivedTabsDuration) var archivedTabsDuration
+    @State var showArchivedTabsSettings = false
     let onDismiss: () -> Void
+
+    var archivedTabsLabel: String {
+        switch archivedTabsDuration {
+        case .week:
+            return "After 7 Days"
+        case .month:
+            return "After 30 Days"
+        case .forever:
+            return "Never"
+        }
+    }
 
     var content: some View {
         ScrollView {
             VStack(spacing: 0) {
-                Button(action: {}) {
+                Button(action: {                    
+                    showArchivedTabsSettings = true
+                }) {
                     HStack(spacing: 0) {
                         Text("Archive tabs")
                             .withFont(.bodyLarge)
@@ -35,6 +51,10 @@ struct ArchivedTabsPanelView: View {
                             .fixedSize(horizontal: false, vertical: true)
                             .padding(.vertical, 10)
                         Spacer()
+                        Group {
+                            Symbol(decorative: .chevronRight, size: 18)
+                                .foregroundColor(.label)
+                        }.frame(width: 24, height: 24)
                     }
                     .padding(.horizontal, 16)
                     .frame(height: 52)
@@ -58,6 +78,12 @@ struct ArchivedTabsPanelView: View {
                     }
                     .padding(.horizontal, 16)
                     .frame(height: 52)
+                }
+
+                NavigationLink(isActive: $showArchivedTabsSettings) {
+                    ArchivedTabSettings()
+                } label: {
+                    EmptyView()
                 }
 
                 Color.secondarySystemFill

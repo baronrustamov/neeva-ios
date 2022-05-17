@@ -25,14 +25,14 @@ struct ArchivedTabSettings: View {
                 Picker("", selection: $archivedTabsDuration) {
                     Text("7 Days").tag(ArchivedTabsDuration.week)
                     Text("30 Days").tag(ArchivedTabsDuration.month)
-                    Text("Forever").tag(ArchivedTabsDuration.forever)
+                    Text("Never").tag(ArchivedTabsDuration.forever)
                 }.labelsHidden()
             }
         }
         .listStyle(.insetGrouped)
         .pickerStyle(.inline)
         .applyToggleStyle()
-        .navigationTitle(Text("Keep Tabs"))
+        .navigationTitle(Text("Archive Tabs"))
     }
 }
 
