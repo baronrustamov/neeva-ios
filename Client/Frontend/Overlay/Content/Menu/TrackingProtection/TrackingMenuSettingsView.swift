@@ -6,34 +6,6 @@ import Defaults
 import Shared
 import SwiftUI
 
-struct TrackingMenuSettingsView: View {
-    @EnvironmentObject var viewModel: TrackingStatsViewModel
-
-    let domain: String
-    var body: some View {
-        NavigationView {
-            List {
-                Section(header: Text("On \(domain)").padding(.top, 21)) {
-                    Toggle("Tracking Prevention", isOn: $viewModel.preventTrackersForCurrentPage)
-                }
-                Section(header: Text("Global Privacy Settings")) {
-                    TrackingSettingsBlock()
-                }
-                TrackingAttribution()
-            }
-            .navigationTitle("Advanced Privacy Settings")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {}
-                }
-            }
-            .listStyle(.insetGrouped)
-            .applyToggleStyle()
-        }.navigationViewStyle(.stack)
-    }
-}
-
 struct TrackingAttribution: View {
     @Environment(\.onOpenURL) var openURL
 
@@ -62,12 +34,7 @@ struct TrackingAttribution: View {
     }
 }
 
-struct TrackingSettingsBlock: View {
-    // TODO: revisit these params when we have the final UX
-    // @Default(.blockThirdPartyTrackingCookies) var blockTrackingCookies: Bool
-    // @Default(.blockThirdPartyTrackingRequests) var blockTrackingRequests: Bool
-    // @Default(.upgradeAllToHttps) var upgradeToHTTPS: Bool
-
+struct TrackingSettingsSectionBlock: View {
     @Default(.contentBlockingEnabled) private var contentBlockingEnabled {
         didSet {
             for tabManager in SceneDelegate.getAllTabManagers() {
@@ -78,22 +45,31 @@ struct TrackingSettingsBlock: View {
     @Default(.contentBlockingStrength) private var contentBlockingStrength
 
     var body: some View {
-        // Toggle("Block tracking cookies", isOn: $blockTrackingCookies)
-        // Toggle("Block tracking requests", isOn: $blockTrackingRequests)
-        // Toggle("Update requests to HTTPS", isOn: $upgradeToHTTPS)
-        Toggle("Enable Protection", isOn: $contentBlockingEnabled)
-
-        Picker("Protection Mode", selection: $contentBlockingStrength) {
-            ForEach(BlockingStrength.allCases) { strength in
-                Text(strength.name.capitalized)
-                    .tag(strength.rawValue)
-            }
+        Section(
+            header: Text("TRACKERS")
+        ) {
+            Toggle("Enable Protection", isOn: $contentBlockingEnabled)
         }
-    }
-}
 
-struct TrackingMenuSettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        TrackingMenuSettingsView(domain: "cnn.com")
+        Section(
+            footer: Text(
+                "If a site doesn't work as expected, you can deactivate Cookie Cutter for the site at any time."
+            )
+        ) {
+            Picker("Protection Mode", selection: $contentBlockingStrength) {
+                ForEach(BlockingStrength.allCases) { strength in
+                    // TODO: enable ad blocker at a later release
+                    if strength != .easyListAdBlock {
+                        VStack(alignment: .leading) {
+                            Text(strength.name.capitalized)
+                        }
+                        .tag(strength.rawValue)
+                    }
+                }
+            }
+            .labelsHidden()
+            .pickerStyle(.inline)
+            .disabled(!contentBlockingEnabled)
+        }
     }
 }

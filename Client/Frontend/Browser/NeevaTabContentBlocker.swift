@@ -22,11 +22,22 @@ enum BlockingStrength: String, Codable, CaseIterable, Identifiable {
     var name: String {
         switch self {
         case .easyPrivacy:
-            return "Block cookies"
+            return "Standard"
         case .easyPrivacyStrict:
-            return "Block cookies (strict)"
+            return "Strict"
         case .easyListAdBlock:
-            return "Ad blocker"
+            return "Ad Blocker"
+        }
+    }
+
+    var description: String {
+        switch self {
+        case .easyPrivacy:
+            return "Blocks many trackers. Minimizes disruption to ads and other funtionality."
+        case .easyPrivacyStrict:
+            return "Blocks more trackers. May break ads and other functionlity on some sites."
+        case .easyListAdBlock:
+            return "Blocks ads and trackers"
         }
     }
 }

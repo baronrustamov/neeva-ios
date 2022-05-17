@@ -30,7 +30,7 @@ struct CookieCutterSettings: View {
 
             if cookieCutterEnabled {
                 Section(
-                    header: Text("COOKIE NOTICES"),
+                    header: Text("COOKIE POPUPS"),
                     footer:
                         VStack(alignment: .leading) {
                             Text(
@@ -67,13 +67,7 @@ struct CookieCutterSettings: View {
                     }.labelsHidden().pickerStyle(.inline)
                 }
 
-                Section(
-                    header: Text("TRACKING PROTECTION"),
-                    footer:
-                        TrackingAttribution()
-                ) {
-                    TrackingSettingsBlock()
-                }
+                TrackingSettingsSectionBlock()
             }
         }
         .listStyle(.insetGrouped)
