@@ -42,8 +42,7 @@ extension TabManager {
     func restoreTabs(_ forced: Bool = false) -> Bool {
         log.info("Restoring tabs")
 
-        guard forced || count == 0, !AppConstants.IsRunningTest,
-            !DebugSettingsBundleOptions.skipSessionRestore, hasTabsToRestoreAtStartup()
+        guard forced || count == 0, !AppConstants.IsRunningTest, hasTabsToRestoreAtStartup()
         else {
             log.info("Skipping tab restore")
             tabsUpdatedPublisher.send()

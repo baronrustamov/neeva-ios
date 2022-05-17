@@ -1,6 +1,7 @@
 # This script is meant to be source included.
 
 CONFIG_FILE="Client/AppConfig.xcconfig"
+ROOT_PLIST_FILE="Client/Application/Settings.bundle/Root.plist"
 
 # Extract version field specified by $1 from $CONFIG_FILE. Expect version
 # field to be of the form: (whitespace)$1 = (version);(whitespace)
