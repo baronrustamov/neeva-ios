@@ -32,22 +32,9 @@ struct ShareToView: View {
                                 icon: Symbol(decorative: .bookmark, size: 18))
                         }
                         Divider()
-                        Button(action: {
-                            Defaults[.appExtensionTelemetryOpenUrl] = true
-                            item.url.addingPercentEncoding(
-                                withAllowedCharacters: NSCharacterSet.alphanumerics
-                            )
-                            .flatMap { URL(string: "neeva://open-url?url=\($0)") }
-                            .map { openURL($0) }
-                        }) {
-                            ShareToAction(
-                                name: "Open in Neeva",
-                                icon: Image("open-in-neeva")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 20)
-                            )
-                        }
+                        OpenInNeevaView(item: item, incognito: false)
+                        Divider()
+                        OpenInNeevaView(item: item, incognito: true)
                         Divider()
                         Button(action: {
                             let profile = BrowserProfile(localName: "profile")
@@ -117,6 +104,36 @@ struct ItemDetailView: View {
                     .font(.caption)
             }
         }.padding(ShareToUX.padding)
+    }
+}
+
+struct OpenInNeevaView: View {
+    @Environment(\.openURL) var openURL
+
+    let item: ShareItem
+    let incognito: Bool
+
+    var body: some View {
+        Button(action: {
+            Defaults[.appExtensionTelemetryOpenUrl] = true
+            item.url.addingPercentEncoding(
+                withAllowedCharacters: NSCharacterSet.alphanumerics
+            )
+            .flatMap {
+                URL(
+                    string: "neeva://open-url?\(incognito ? "private=true&" : "")url=\($0)"
+                )
+            }
+            .map { openURL($0) }
+        }) {
+            ShareToAction(
+                name: incognito ? "Open in Neeva Incognito" : "Open in Neeva",
+                icon: Image("open-in-neeva\(incognito ? "-incognito" : "")")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 20)
+            )
+        }
     }
 }
 
