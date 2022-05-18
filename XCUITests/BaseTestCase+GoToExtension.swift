@@ -120,4 +120,12 @@ extension BaseTestCase {
         waitForExistence(app.buttons["Share"])
         app.buttons["Share"].tap()
     }
+
+    /// Launches from Tab
+    func goToTrackingProtectionMenu() {
+        waitForExistence(app.buttons["Tracking Protection"])
+        app.buttons["Tracking Protection"].tap()
+
+        waitForExistence(app.buttons["Cookie Cutter Settings"])
+    }
 }

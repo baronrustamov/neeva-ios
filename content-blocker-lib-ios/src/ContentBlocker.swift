@@ -229,9 +229,7 @@ extension ContentBlocker {
         var blocklists = [String]()
         blocklists = NeevaConstants.currentTarget == .xyz
             ? [BlocklistFileName.easyPrivacyStrict.filename]
-            : FeatureFlag[.cookieCutter]
-                ? BlocklistFileName.allCases.map { $0.filename }
-                : [BlocklistFileName.easyPrivacy.filename]
+            : BlocklistFileName.allCases.map { $0.filename }
         let deferreds: [Deferred<Void>] = blocklists.map { filename in
             let result = Deferred<Void>()
             ruleStore.lookUpContentRuleList(forIdentifier: filename) { contentRuleList, error in

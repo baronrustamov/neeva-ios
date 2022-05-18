@@ -15,16 +15,12 @@ public struct TrackingMenuProtectionRowButton: View {
             VStack(spacing: 0) {
                 Toggle(isOn: $preventTrackers) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(FeatureFlag[.cookieCutter] ? "Cookie Cutter" : "Tracking Prevention")
+                        Text("Cookie Cutter")
                             .withFont(.bodyLarge)
 
-                        Text(
-                            FeatureFlag[.cookieCutter]
-                                ? "Site appears broken? Try disabling."
-                                : "Website not working? Try disabling."
-                        )
-                        .foregroundColor(.secondaryLabel)
-                        .font(.footnote)
+                        Text("Site appears broken? Try deactivating.")
+                            .foregroundColor(.secondaryLabel)
+                            .font(.footnote)
                     }
                     .padding(.vertical, 12)
                     .padding(.trailing, 18)
@@ -35,23 +31,21 @@ public struct TrackingMenuProtectionRowButton: View {
 
                 Color.groupedBackground.frame(height: 1)
 
-                if FeatureFlag[.cookieCutter] {
-                    Button {
-                        openSettings(.cookieCutter)
-                    } label: {
-                        HStack {
-                            Text("Cookie Cutter Settings")
-                                .foregroundColor(.label)
+                Button {
+                    openSettings(.cookieCutter)
+                } label: {
+                    HStack {
+                        Text("Cookie Cutter Settings")
+                            .foregroundColor(.label)
 
-                            Spacer()
+                        Spacer()
 
-                            Symbol(decorative: .chevronRight)
-                                .foregroundColor(.secondaryLabel)
-                        }
-                        .padding(.horizontal, GroupedCellUX.padding)
-                        .frame(minHeight: GroupedCellUX.minCellHeight)
+                        Symbol(decorative: .chevronRight)
+                            .foregroundColor(.secondaryLabel)
                     }
-                }
+                    .padding(.horizontal, GroupedCellUX.padding)
+                    .frame(minHeight: GroupedCellUX.minCellHeight)
+                }.accessibilityLabel(Text("Cookie Cutter Settings"))
             }
         }
     }

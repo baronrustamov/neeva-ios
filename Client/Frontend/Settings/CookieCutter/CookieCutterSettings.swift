@@ -25,7 +25,7 @@ struct CookieCutterSettings: View {
                 Toggle("Cookie Cutter", isOn: $cookieCutterEnabled)
                     .onChange(of: cookieCutterEnabled) { newValue in
                         cookieCutterModel.cookieCutterEnabled = newValue
-                    }
+                    }.accessibilityLabel(Text("Cookie Cutter"))
             }
 
             if cookieCutterEnabled {
@@ -64,14 +64,15 @@ struct CookieCutterSettings: View {
                                 cookieCutterModel.cookieNotices = .userSelected
                             }
                         )
-                    }.labelsHidden().pickerStyle(.inline)
+                    }.labelsHidden().pickerStyle(.inline).accessibilityLabel("Cookie Popups")
                 }
 
                 TrackingSettingsSectionBlock()
             }
         }
-        .listStyle(.insetGrouped)
         .applyToggleStyle()
+        .accessibilityIdentifier("cookieCutterSettingsPage")
+        .listStyle(.insetGrouped)
         .navigationTitle(Text("Cookie Cutter"))
     }
 }

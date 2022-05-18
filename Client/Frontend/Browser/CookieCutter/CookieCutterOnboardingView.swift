@@ -50,17 +50,19 @@ struct CookieCutterOnboardingView: View {
                             .frame(maxWidth: .infinity)
                     }.buttonStyle(.neeva(.primary))
 
-                    Button(action: onRemindMeLater) {
-                        Text("Remind Me Later")
-                            .withFont(.labelLarge)
-                            .foregroundColor(.ui.adaptive.blue)
+                    if FeatureFlag[.cookieCutterRemindMeLater] {
+                        Button(action: onRemindMeLater) {
+                            Text("Remind Me Later")
+                                .withFont(.labelLarge)
+                                .foregroundColor(.ui.adaptive.blue)
 
+                        }
                     }
                 }.padding(.top, 26)
             }
             .foregroundColor(.secondary)
             .padding([.horizontal, .bottom], 32)
-        }.frame(minHeight: 600)
+        }.frame(minHeight: FeatureFlag[.cookieCutterRemindMeLater] ? 600 : 560)
     }
 }
 

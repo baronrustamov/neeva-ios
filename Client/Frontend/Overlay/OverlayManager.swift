@@ -63,6 +63,7 @@ class OverlayManager: ObservableObject {
     @Published var animationCompleted: (() -> Void)? = nil
     @Published var offsetForBottomBar = false
     @Published var hideBottomBar = false
+    @Published var isPresentedViewControllerVisible = false
 
     /// Used to control full screen/popover sheets
     @Published var showFullScreenPopoverSheet = false

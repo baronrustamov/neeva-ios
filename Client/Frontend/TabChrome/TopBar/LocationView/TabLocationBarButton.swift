@@ -24,8 +24,17 @@ struct LocationViewTrackingButton: View {
     @EnvironmentObject private var incognitoModel: IncognitoModel
     @EnvironmentObject private var trackingStatsModel: TrackingStatsViewModel
     @EnvironmentObject private var cookieCutterModel: CookieCutterModel
+    @EnvironmentObject private var chromeModel: TabChromeModel
 
     let currentDomain: String
+
+    var content: some View {
+        TrackingMenuView()
+            .environmentObject(trackingStatsModel)
+            .environmentObject(cookieCutterModel)
+            .environment(\.openSettings, openSettings)
+            .topBarPopoverPadding(removeBottomPadding: false)
+    }
 
     var body: some View {
         let label =
@@ -42,10 +51,16 @@ struct LocationViewTrackingButton: View {
             backgroundColor: .systemGroupedBackground,
             arrowDirections: [.up, .down]
         ) {
-            TrackingMenuView()
-                .environmentObject(trackingStatsModel)
-                .environmentObject(cookieCutterModel)
-                .environment(\.openSettings, openSettings)
+            if chromeModel.inlineToolbar {
+                ScrollView {
+                    content
+                        .topBarPopoverPadding(removeHorizontalPadding: false)
+                        .padding(.bottom, 4)
+                }
+            } else {
+                content
+                    .padding(.vertical, 4)
+            }
         }
     }
 }

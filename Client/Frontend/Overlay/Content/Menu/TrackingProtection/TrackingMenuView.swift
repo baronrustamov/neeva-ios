@@ -224,13 +224,8 @@ struct TrackingMenuView: View {
                 HStack(spacing: 8) {
                     TrackingMenuFirstRowElement(label: "Trackers", num: viewModel.numTrackers)
 
-                    if FeatureFlag[.cookieCutter] {
-                        // TODO: Make this actually track a number
-                        TrackingMenuFirstRowElement(
-                            label: "Cookie Notices", num: cookieCutterModel.cookiesBlocked)
-                    } else {
-                        TrackingMenuFirstRowElement(label: "Domains", num: viewModel.numDomains)
-                    }
+                    TrackingMenuFirstRowElement(
+                        label: "Cookie Popups", num: cookieCutterModel.cookiesBlocked)
                 }
 
                 if !viewModel.whosTrackingYouDomains.isEmpty {
@@ -240,29 +235,12 @@ struct TrackingMenuView: View {
 
             TrackingMenuProtectionRowButton(
                 preventTrackers: $viewModel.preventTrackersForCurrentPage)
-
-            // TODO: reenable if we want to enable advanced privacy settings
-            // if FeatureFlag[.newTrackingProtectionSettings] {
-            //    GroupedCellButton(action: { isShowingPopup = true }) {
-            //        HStack {
-            //            Text("Advanced Privacy Settings").withFont(.bodyLarge)
-            //            Spacer()
-            //            Symbol(decorative: .shieldLefthalfFill)
-            //        }.foregroundColor(.label)
-            //    }
-            //    .sheet(isPresented: $isShowingPopup) {
-            //        TrackingMenuSettingsView(domain: "example.com")
-            //    }
-            //}
         }
-        .fixedSize(horizontal: true, vertical: true)
         .onAppear {
             viewModel.viewVisible = true
             self.viewModel.refreshStats()
-        }
-        .onDisappear {
+        }.onDisappear {
             viewModel.viewVisible = false
         }
-        .padding(.top, 6)
     }
 }

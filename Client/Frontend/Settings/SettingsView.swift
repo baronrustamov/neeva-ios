@@ -76,7 +76,7 @@ struct SettingsView: View {
                 }
             }.navigationViewStyle(.stack)
 
-            OverlayView(limitToOverlayType: [.toast(nil)])
+            OverlayView(limitToOverlayType: [.toast(nil)], isFromBaseView: false)
         }
     }
 }
@@ -100,7 +100,12 @@ struct SettingPreviewWrapper<Content: View>: View {
 }
 
 class SettingsViewController: UIHostingController<AnyView> {
-    init(bvc: BrowserViewController, openPage: SettingsPage? = nil) {
+    private let onDisappear: () -> Void
+
+    init(
+        bvc: BrowserViewController, openPage: SettingsPage? = nil, onDisappear: @escaping () -> Void
+    ) {
+        self.onDisappear = onDisappear
         super.init(rootView: AnyView(EmptyView()))
 
         self.rootView = AnyView(
@@ -143,6 +148,10 @@ class SettingsViewController: UIHostingController<AnyView> {
             .environmentObject(bvc.chromeModel)
             .environmentObject(bvc.overlayManager)
         )
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        onDisappear()
     }
 
     @objc required dynamic init?(coder: NSCoder) {

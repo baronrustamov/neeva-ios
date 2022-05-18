@@ -186,9 +186,11 @@ struct TopBarShareButton_Previews: PreviewProvider {
 }
 
 extension View {
-    fileprivate func topBarPopoverPadding(removeBottomPadding: Bool = true) -> some View {
+    func topBarPopoverPadding(
+        removeBottomPadding: Bool = true, removeHorizontalPadding: Bool = true
+    ) -> some View {
         self
-            .padding(.horizontal, -4)
+            .padding(.horizontal, removeHorizontalPadding ? -4 : 4)
             .padding(.top, 8)
             .padding(.bottom, removeBottomPadding ? -8 : 0)
     }

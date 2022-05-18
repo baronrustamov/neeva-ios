@@ -2040,7 +2040,10 @@ extension BrowserViewController {
 extension BrowserViewController {
     func openSettings(openPage: SettingsPage? = nil) {
         let action = {
-            let controller = SettingsViewController(bvc: self, openPage: openPage)
+            let controller = SettingsViewController(bvc: self, openPage: openPage) {
+                self.overlayManager.isPresentedViewControllerVisible = false
+            }
+
             self.present(controller, animated: true)
         }
 
@@ -2052,5 +2055,7 @@ extension BrowserViewController {
         } else {
             action()
         }
+
+        overlayManager.isPresentedViewControllerVisible = true
     }
 }

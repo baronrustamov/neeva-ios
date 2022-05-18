@@ -32,22 +32,10 @@ struct PrivacySettingsSection: View {
             )
         }
 
-        if !FeatureFlag[.cookieCutter] {
-            Toggle("Tracking Protection", isOn: $contentBlockingEnabled)
-                .onChange(of: contentBlockingEnabled) { enabled in
-                    ClientLogger.shared.logCounter(
-                        enabled ? .TurnOnGlobalBlockTracking : .TurnOffGlobalBlockTracking,
-                        attributes: EnvironmentHelper.shared.getAttributes()
-                    )
-                }
-        }
-
-        if FeatureFlag[.cookieCutter] {
-            NavigationLink(isActive: $openCookieCutterPage) {
-                CookieCutterSettings(cookieCutterEnabled: cookieCutterModel.cookieCutterEnabled)
-            } label: {
-                Text("Cookie Cutter")
-            }
+        NavigationLink(isActive: $openCookieCutterPage) {
+            CookieCutterSettings(cookieCutterEnabled: cookieCutterModel.cookieCutterEnabled)
+        } label: {
+            Text("Cookie Cutter")
         }
 
         NavigationLinkButton("Privacy Policy") {

@@ -69,9 +69,7 @@ class NeevaTabContentBlocker: TabContentBlocker, TabContentScript {
         if NeevaConstants.currentTarget == .xyz {
             strength = .easyPrivacyStrict
         } else {
-            if FeatureFlag[.cookieCutter],
-                let strEnum = BlockingStrength(rawValue: Defaults[.contentBlockingStrength])
-            {
+            if let strEnum = BlockingStrength(rawValue: Defaults[.contentBlockingStrength]) {
                 strength = strEnum
             }
         }

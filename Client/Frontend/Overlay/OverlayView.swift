@@ -8,6 +8,7 @@ struct OverlayView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
 
+    @EnvironmentObject private var browserModel: BrowserModel
     @EnvironmentObject private var chromeModel: TabChromeModel
     @EnvironmentObject private var overlayManager: OverlayManager
     @EnvironmentObject private var scrollingControlModel: ScrollingControlModel
@@ -17,7 +18,14 @@ struct OverlayView: View {
     @State var presentSheet = false
 
     var limitToOverlayType: [OverlayType]?
+
+    /// Tells the `OverlayView` that it is apart of the main view and that `presentedViewControllers` could cover the view.
+    var isFromBaseView = true
     var canDisplay: Bool {
+        guard !overlayManager.isPresentedViewControllerVisible || !isFromBaseView else {
+            return false
+        }
+
         if let limitToOverlayType = limitToOverlayType,
             let currentOverlay = overlayManager.currentOverlay
         {
