@@ -115,7 +115,6 @@ struct OpenInNeevaView: View {
 
     var body: some View {
         Button(action: {
-            Defaults[.appExtensionTelemetryOpenUrl] = true
             item.url.addingPercentEncoding(
                 withAllowedCharacters: NSCharacterSet.alphanumerics
             )

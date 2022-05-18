@@ -25,7 +25,6 @@ struct InternalSettingsView: View {
     @Default(.saveLogins) var saveLogins
     @Default(.topSitesCacheIsValid) var topSitesCacheIsValid
     @Default(.topSitesCacheSize) var topSitesCacheSize
-    @Default(.appExtensionTelemetryOpenUrl) var appExtensionTelemetryOpenUrl
     @Default(.widgetKitSimpleTabKey) var widgetKitSimpleTabKey
     @Default(.widgetKitSimpleTopTab) var widgetKitSimpleTopTab
     @Default(.applicationCleanlyBackgrounded) var applicationCleanlyBackgrounded
@@ -194,9 +193,6 @@ struct InternalSettingsView: View {
                 Toggle(String("saveLogins"), isOn: $saveLogins)
                     // comment this line out if you’re working on logins and need access
                     .disabled(!saveLogins)
-
-                OptionalBooleanField(
-                    "appExtensionTelemetryOpenUrl", value: $appExtensionTelemetryOpenUrl)
 
                 OptionalStringField("lastVersionNumber", text: $lastVersionNumber)
             }

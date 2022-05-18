@@ -79,6 +79,7 @@ extension Defaults.Keys {
     public static let neevaUserInfo = Defaults.Key<[String: String]>("UserInfo", default: [:])
 
     // MARK: - telemetry
+    @available(*, deprecated)  // 2022-05-18
     public static let appExtensionTelemetryOpenUrl = Defaults.Key<Bool?>(
         "profile.AppExtensionTelemetryOpenUrl",
         suite: UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!)

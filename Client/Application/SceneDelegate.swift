@@ -165,10 +165,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             Defaults[.didSetDefaultBrowser] = true
         }
 
-        if let _ = Defaults[.appExtensionTelemetryOpenUrl] {
-            Defaults[.appExtensionTelemetryOpenUrl] = nil
-        }
-
         DispatchQueue.main.async {
             if !self.checkForSignInToken(in: url) {
                 log.info("Passing URL to router path: \(routerpath)")
@@ -527,6 +523,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     @discardableResult func onAppUpdate(previousVersion: String, currentVersion: String) -> Bool {
         if currentVersion.compare(previousVersion, options: .numeric) == .orderedDescending {
             // currentVersion is newer than the previousVersion
+
+            // clear deprecated `Default` values
+            Defaults.reset(.appExtensionTelemetryOpenUrl)  // deprecated 2022-05-18
 
             return true
         }
