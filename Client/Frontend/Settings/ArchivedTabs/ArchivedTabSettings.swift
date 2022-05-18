@@ -13,7 +13,7 @@ enum ArchivedTabsDuration: CaseIterable, Encodable, Decodable {
 
 extension Defaults.Keys {
     static let archivedTabsDuration = Defaults.Key<ArchivedTabsDuration>(
-        "profile.prefkey.archivedTabs.archivedTabsDuration", default: .week)
+        "profile_prefkey_archivedTabs_archivedTabsDuration", default: .week)
 }
 
 struct ArchivedTabSettings: View {

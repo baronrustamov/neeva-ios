@@ -496,6 +496,10 @@ class TabCardModel: CardModel {
         _tabGroupExpanded.publisher.sink { [weak self] _ in
             self?.updateRows()
         }.store(in: &subscription)
+
+        _archivedTabsDuration.publisher.sink { [weak self] _ in
+            self?.onDataUpdated()
+        }.store(in: &subscription)
     }
 }
 
