@@ -5281,8 +5281,8 @@
 		F8708D241A0970990051AB07 /* ShareTo */ = {
 			isa = PBXGroup;
 			children = (
-				C9DF5697266A84A4009A2E6C /* Preview Support */,
 				F8708D251A0970990051AB07 /* Images.xcassets */,
+				C9DF5697266A84A4009A2E6C /* Preview Support */,
 				F8708D261A0970990051AB07 /* Info.plist */,
 				E41A7D4A1A1BE04500245963 /* InitialViewController.swift */,
 				C9DF5690266A83F4009A2E6C /* ShareToView.swift */,
