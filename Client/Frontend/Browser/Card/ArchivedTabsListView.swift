@@ -16,7 +16,7 @@ struct ArchivedTabsRowView: View {
 
     var body: some View {
         Button {
-            tabManager.select(tab)
+            tabManager.selectTabFromArchive(tab)
             selectionCompletion()
         } label: {
             HStack {

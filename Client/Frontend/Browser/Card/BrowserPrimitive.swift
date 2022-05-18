@@ -129,6 +129,10 @@ extension TabManager: ClosingManager, SelectingManager, AccessingManager {
         selectTab(tab, notify: true)
     }
 
+    func selectTabFromArchive(_ tab: Tab) {
+        selectTab(tab, notify: true, updateGroup: true)
+    }
+
     func getAll() -> [Tab] {
         return tabs
     }

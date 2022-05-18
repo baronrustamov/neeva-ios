@@ -47,6 +47,7 @@ class TabCardModel: CardModel {
     @Default(.tabGroupExpanded) private var tabGroupExpanded: Set<String>
     @Default(.archivedTabsDuration) var archivedTabsDuration
     var needsUpdateRows: Bool = false
+    var needsUpdateGroup: Bool = false
     static let todayRowHeaderID: String = "today-header"
     static let lastweekRowHeaderID: String = "lastWeek-header"
     static let lastMonthRowHeaderID: String = "lastMonth-header"
@@ -56,7 +57,7 @@ class TabCardModel: CardModel {
     @Published var isSearchingForTabs: Bool = false
     @Published var tabSearchFilter = "" {
         didSet {
-            updateRowsIfNeeded(force: true)
+            updateIfNeeded(force: true)
         }
     }
 
@@ -88,13 +89,13 @@ class TabCardModel: CardModel {
         self.objectWillChange.send()
     }
 
-    func updateRowsIfNeeded(force: Bool = false) {
-        if needsUpdateRows || force {
-            needsUpdateRows = false
-            // TODO: this is just a proof of concept - when a tab is brought back from
-            // archived tabs there's chance we need to rebuild tab groups.
+    func updateIfNeeded(force: Bool = false) {
+        if needsUpdateGroup {
+            needsUpdateGroup = false
             onDataUpdated()
-            //updateRows()
+        } else if needsUpdateRows || force {
+            needsUpdateRows = false
+            updateRows()
         }
     }
 
@@ -475,6 +476,12 @@ class TabCardModel: CardModel {
                     return
                 }
                 self.needsUpdateRows = true
+            }.store(in: &subscription)
+        }
+
+        if FeatureFlag[.enableArchivedTabsView] {
+            manager.updateGroupPublisher.sink { [weak self] in
+                self?.needsUpdateGroup = true
             }.store(in: &subscription)
         }
 

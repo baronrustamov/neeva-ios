@@ -42,7 +42,7 @@ class BrowserModel: ObservableObject {
             gridModel.switcherState = .tabs
         }
         if FeatureFlag[.enableTimeBasedSwitcher] {
-            gridModel.tabCardModel.updateRowsIfNeeded()
+            gridModel.tabCardModel.updateIfNeeded()
         }
         if !gridModel.tabCardModel.getAllDetails(matchingIncognitoState: incognitoModel.isIncognito)
             .contains(where: \.isSelected)

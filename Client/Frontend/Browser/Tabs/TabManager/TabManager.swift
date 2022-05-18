@@ -46,6 +46,7 @@ class TabManager: NSObject {
     /// Publisher used to observe changes to the `selectedTab.webView`.
     /// Will also update if the `WebView` is set to nil.
     private(set) var selectedTabWebViewPublisher = CurrentValueSubject<WKWebView?, Never>(nil)
+    private(set) var updateGroupPublisher = PassthroughSubject<Void, Never>()
     private var selectedTabSubscription: AnyCancellable?
     private var selectedTabURLSubscription: AnyCancellable?
 
@@ -249,7 +250,7 @@ class TabManager: NSObject {
     // MARK: - Select Tab
     // This function updates the _selectedIndex.
     // Note: it is safe to call this with `tab` and `previous` as the same tab, for use in the case where the index of the tab has changed (such as after deletion).
-    func selectTab(_ tab: Tab?, previous: Tab? = nil, notify: Bool) {
+    func selectTab(_ tab: Tab?, previous: Tab? = nil, notify: Bool, updateGroup: Bool = false) {
         assert(Thread.isMainThread)
         let previous = previous ?? selectedTab
 
@@ -280,6 +281,10 @@ class TabManager: NSObject {
 
         selectedTab.lastExecutedTime = Date.nowMilliseconds()
         selectedTab.applyTheme()
+
+        if updateGroup {
+            updateGroupPublisher.send()
+        }
 
         if notify {
             sendSelectTabNotifications(previous: previous)
