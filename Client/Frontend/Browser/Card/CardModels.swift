@@ -368,8 +368,11 @@ class TabCardModel: CardModel {
     }
 
     func onDataUpdated() {
-        allDetails = manager.activeTabs
-            .map { TabCardDetails(tab: $0, manager: manager) }
+        allDetails =
+            FeatureFlag[.enableArchivedTabsView]
+            ? manager.activeTabs
+                .map { TabCardDetails(tab: $0, manager: manager) }
+            : manager.getAll().map { TabCardDetails(tab: $0, manager: manager) }
 
         if FeatureFlag[.reverseChronologicalOrdering] {
             allDetails = allDetails.reversed()
@@ -382,9 +385,14 @@ class TabCardModel: CardModel {
 
         // Tab Group related updates
         updateRepresentativeTabs()
-        allTabGroupDetails = manager.activeTabGroups.values.map {
-            TabGroupCardDetails(tabGroup: $0, tabManager: manager)
-        }
+        allTabGroupDetails =
+            FeatureFlag[.enableArchivedTabsView]
+            ? manager.activeTabGroups.values.map {
+                TabGroupCardDetails(tabGroup: $0, tabManager: manager)
+            }
+            : manager.getAllTabGroup().map {
+                TabGroupCardDetails(tabGroup: $0, tabManager: manager)
+            }
 
         // When the number of tabs in a tab group decreases and makes the group
         // unable to expand, we remove the group from the expanded list. A side-effect
