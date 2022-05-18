@@ -18,6 +18,7 @@ extension Defaults.Keys {
 
 struct ArchivedTabSettings: View {
     @Default(.archivedTabsDuration) var archivedTabsDuration
+    @Environment(\.presentationMode) var presentation
 
     var body: some View {
         List {
@@ -33,6 +34,19 @@ struct ArchivedTabSettings: View {
         .pickerStyle(.inline)
         .applyToggleStyle()
         .navigationTitle(Text("Archive Tabs"))
+        .navigationBarBackButtonHidden(true)
+        .toolbar(content: {
+            ToolbarItem(placement: .navigation) {
+                Button(action: { self.presentation.wrappedValue.dismiss() }) {
+                    HStack {
+                        Image(systemName: "chevron.left")
+                            .frame(width: 12, height: 20)
+                        Text("Back")
+                    }
+                }
+
+            }
+        })
     }
 }
 

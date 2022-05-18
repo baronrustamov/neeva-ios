@@ -122,6 +122,9 @@ struct ArchivedTabsPanelView: View {
                         Text("Done")
                     }
                 }
+                .introspectNavigationController { target in
+                    target.navigationBar.backgroundColor = UIColor.systemBackground
+                }
         }
         .navigationViewStyle(.stack)
         .onAppear {
