@@ -680,19 +680,19 @@ class Tab: NSObject, ObservableObject {
         // guaranteed to be non-nil in configureTab()
         let lastExecutedTime = lastExecutedTime ?? Date.nowMilliseconds()
         let minusOneDayToCurrentDate =
-            FeatureFlag[.demoteAfter15secondsTimeBasedSwitcher]
+            FeatureFlag[.shortenTimeThresholdForArchivingTabs]
             ? Calendar.current.date(
                 byAdding: .second, value: -15, to: Date())
             : Calendar.current.date(
                 byAdding: .day, value: -1, to: Date())
         let minusOneWeekToCurrentDate =
-            FeatureFlag[.aWeekTo30SecondsInTimeBasedSwitcher]
+            FeatureFlag[.shortenTimeThresholdForArchivingTabs]
             ? Calendar.current.date(
                 byAdding: .second, value: -30, to: Date())
             : Calendar.current.date(
                 byAdding: .day, value: -7, to: Date())
         let minusOneMonthToCurrentDate =
-            FeatureFlag[.aWeekTo30SecondsInTimeBasedSwitcher]
+            FeatureFlag[.shortenTimeThresholdForArchivingTabs]
             ? Calendar.current.date(
                 byAdding: .minute, value: -1, to: Date())
             : Calendar.current.date(
@@ -708,7 +708,7 @@ class Tab: NSObject, ObservableObject {
         // which is stored in milliseconds.
         switch byTime {
         case .today:
-            return FeatureFlag[.demoteAfter15secondsTimeBasedSwitcher]
+            return FeatureFlag[.shortenTimeThresholdForArchivingTabs]
                 ? lastExecutedTime > Int64(startOfOneDayAgo.timeIntervalSince1970 * 1000)
                 : Date.fromTimestamp(lastExecutedTime).isToday()
         case .lastWeek:
