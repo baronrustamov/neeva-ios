@@ -165,11 +165,16 @@ enum TabToolbarButtons {
         let action: () -> Void
 
         @EnvironmentObject private var incognitoModel: IncognitoModel
+        @Environment(\.isEnabled) private var isEnabled
+
+        var renderAsTemplate: Bool {
+            incognitoModel.isIncognito || !isEnabled
+        }
 
         var body: some View {
             TabToolbarButton(
                 label: Image("neevaMenuIcon")
-                    .renderingMode(incognitoModel.isIncognito ? .template : .original)
+                    .renderingMode(renderAsTemplate ? .template : .original)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: iconWidth)
