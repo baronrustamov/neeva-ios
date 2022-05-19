@@ -11,15 +11,15 @@ Simply removing the definition and code for a value can leave any existing value
 The current convention to remove a preference is as follows:
 - Remove relevant calling code.
 - If the setting isn't already optional, redefine to be optional. (i.e. `Bool` becomes `Bool?`)
-- Add a availability macro to the preference. Example:
+- Add an availability macro to the preference. Example:
   ```swift
   @available(*, deprecated)  // 2022-05-18
   public static let somePreferenceKey = Defaults.Key<Bool?>("profile.SomePreferenceKey")
   ```
-- Add a line inside the `onAppUpdate` method in `Client/Application/SceneDelegate.swift` that resets the value and adds the date of dprecation as a comment. Example:
+- Add a line inside the `onAppUpdate` method in `Client/Application/SceneDelegate.swift` that resets the value and adds the date of deprecation as a comment. Example:
   ```
   Defaults.reset(.somePreferenceKey)  // deprecated 2022-05-18
   ```
-- Sometime in the future when we see most/all users are beyond a certain version, we can fully delete the settin definition and the addition we made to `onAppUpdate`.
+- Sometime in the future when we see most/all users are beyond a certain version, we can fully delete the setting definition and the addition we made to `onAppUpdate`.
 
 See an example PR of this here: https://github.com/neevaco/neeva-ios/pull/3619
