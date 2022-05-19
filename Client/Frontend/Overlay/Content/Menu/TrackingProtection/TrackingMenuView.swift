@@ -235,8 +235,7 @@ struct TrackingMenuView: View {
 
             TrackingMenuProtectionRowButton(
                 preventTrackers: $viewModel.preventTrackersForCurrentPage)
-        }
-        .onAppear {
+        }.onAppear {
             viewModel.viewVisible = true
             self.viewModel.refreshStats()
         }.onDisappear {

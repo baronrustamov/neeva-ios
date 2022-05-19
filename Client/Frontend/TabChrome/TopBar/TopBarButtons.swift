@@ -67,8 +67,8 @@ struct TopBarOverflowMenuButton: View {
 
     @ViewBuilder
     var content: some View {
-        if location == .tab {
-            ScrollView {
+        ScrollView {
+            if location == .tab {
                 OverflowMenuView(
                     changedUserAgent: changedUserAgent ?? false,
                     menuAction: {
@@ -76,16 +76,16 @@ struct TopBarOverflowMenuButton: View {
                         presenting = false
                     }
                 )
+            } else {
+                CardGridOverflowMenuView(
+                    changedUserAgent: changedUserAgent ?? false,
+                    menuAction: {
+                        action = $0
+                        presenting = false
+                    }
+                )
             }
-        } else {
-            CardGridOverflowMenuView(
-                changedUserAgent: changedUserAgent ?? false,
-                menuAction: {
-                    action = $0
-                    presenting = false
-                }
-            )
-        }
+        }.padding(.vertical, 24)
     }
 
     var body: some View {
