@@ -235,8 +235,7 @@ class TabCardModel: CardModel {
                 && (FeatureFlag[.enableTimeBasedSwitcher]
                     ? tab.wasLastExecuted(byTime!) : true)
                 && tabIncludedInSearch(tabCard)
-                && (FeatureFlag[.enableArchivedTabsView] ?
-                    !tab.isArchived(): true)
+                && (FeatureFlag[.enableArchivedTabsView] ? !tab.isArchived() : true)
         }
 
         modifyAllDetailsFilteredPromotingPinnedTabs(&allDetailsFiltered)
