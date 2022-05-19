@@ -378,6 +378,7 @@ extension URL {
         case normalizeHost
         case ignoreFragment
         case ignoreLastSlash
+        case ignoreScheme
     }
 
     /// Checks if URLs are exactly the same
@@ -388,7 +389,7 @@ extension URL {
         }
 
         // Scheme
-        if scheme != url.scheme {
+        if !options.contains(.ignoreScheme) && scheme != url.scheme {
             return false
         }
 

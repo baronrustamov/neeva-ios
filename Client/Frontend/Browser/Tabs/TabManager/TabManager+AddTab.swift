@@ -189,7 +189,9 @@ extension TabManager {
             return false
         }
 
-        let options: [URL.EqualsOption] = [.normalizeHost, .ignoreFragment, .ignoreLastSlash]
+        let options: [URL.EqualsOption] = [
+            .normalizeHost, .ignoreFragment, .ignoreLastSlash, .ignoreScheme,
+        ]
         let shouldCreateTabGroup = childTabInitialURL.equals(newTabURL, with: options)
 
         /// TODO: To make this more effecient, we should refactor `TabGroupManager`

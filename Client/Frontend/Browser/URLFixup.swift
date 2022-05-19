@@ -26,7 +26,7 @@ class URLFixup {
             return url
         }
 
-        // If there's no scheme, we're going to prepend "https://". First,
+        // If there's no scheme, we're going to prepend "http://". First,
         // make sure there's at least one "." in the host. This means
         // we'll allow single-word searches (e.g., "foo") at the expense
         // of breaking single-word hosts without a scheme (e.g., "localhost").
@@ -38,9 +38,9 @@ class URLFixup {
             return nil
         }
 
-        // If there is a ".", prepend "https://" and try again. Since this
-        // is strictly an "https://" URL, we also require a host.
-        if let url = punycodedURL("https://\(escaped)"), let host = url.host {
+        // If there is a ".", prepend "http://" and try again. Since this
+        // is strictly an "http://" URL, we also require a host.
+        if let url = punycodedURL("http://\(escaped)"), let host = url.host {
             #if XYZ
                 if host.hasSuffix(".eth") {
                     return nil

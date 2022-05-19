@@ -235,7 +235,7 @@ public class CheatsheetMenuViewModel: ObservableObject {
 
     private func removeCurrentPageURLs(from richResults: [RichResult]) -> [RichResult] {
         let urlCompareOptions: [URL.EqualsOption] = [
-            .ignoreFragment, .ignoreLastSlash, .normalizeHost,
+            .ignoreFragment, .ignoreLastSlash, .normalizeHost, .ignoreScheme,
         ]
         return richResults.compactMap { richResult -> RichResult? in
             switch richResult.result {

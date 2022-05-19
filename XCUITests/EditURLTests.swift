@@ -16,7 +16,7 @@ class EditURLTests: BaseTestCase {
         goToAddressBar()
         app.buttons["Edit current address"].tap()
         XCTAssertEqual(
-            app.textFields["address"].value as! String, "https://example.com/")
+            app.textFields["address"].value as! String, "http://example.com/")
     }
 
     func testTapEditURLShowsCorrectURLInAddressBar() {
@@ -25,6 +25,6 @@ class EditURLTests: BaseTestCase {
         goToAddressBar()
         app.buttons["Edit current address"].tap()
         sleep(1)
-        XCTAssertEqual(app.textFields["address"].value as! String, "https://fakeurl.madeup/")
+        XCTAssertEqual(app.textFields["address"].value as! String, "http://fakeurl.madeup/")
     }
 }

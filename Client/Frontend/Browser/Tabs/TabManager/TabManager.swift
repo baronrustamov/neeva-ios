@@ -156,7 +156,9 @@ class TabManager: NSObject {
     func getTabFor(_ url: URL) -> Tab? {
         assert(Thread.isMainThread)
 
-        let options: [URL.EqualsOption] = [.normalizeHost, .ignoreFragment, .ignoreLastSlash]
+        let options: [URL.EqualsOption] = [
+            .normalizeHost, .ignoreFragment, .ignoreLastSlash, .ignoreScheme,
+        ]
 
         log.info("Looking for matching tab, url: \(url)")
 
