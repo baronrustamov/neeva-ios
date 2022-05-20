@@ -530,30 +530,26 @@ class SpaceCardModel: CardModel {
 
     init(manager: SpaceStore = SpaceStore.shared) {
         self.manager = manager
-
-        manager.spotlightEventDelegate = SpotlightLogger.shared
+        self.manager.spotlightEventDelegate = SpotlightLogger.shared
 
         NeevaUserInfo.shared.$isUserLoggedIn.sink { isLoggedIn in
+            self.manager = isLoggedIn ? .shared : .suggested
+            self.onDataUpdated()
             DispatchQueue.main.async {
-                // Refresh to get spaces for logged in users and to clear cache for logged out users
-                SpaceStore.shared.refresh()
-            }
-
-            if !isLoggedIn {
-                self.allDetails = []
+                self.manager.refresh()
             }
         }.store(in: &detailsSubscriptions)
 
         self.anyCancellable = manager.$state.sink { [weak self] state in
             guard let self = self, self.detailedSpace == nil, case .ready = state,
-                manager.updatedSpacesFromLastRefresh.count > 0
+                self.manager.updatedSpacesFromLastRefresh.count > 0
             else {
                 return
             }
 
-            if manager.updatedSpacesFromLastRefresh.count == 1,
-                let id = manager.updatedSpacesFromLastRefresh.first?.id.id,
-                let indexInStore = manager.allSpaces.firstIndex(where: { $0.id.id == id }),
+            if self.manager.updatedSpacesFromLastRefresh.count == 1,
+                let id = self.manager.updatedSpacesFromLastRefresh.first?.id.id,
+                let indexInStore = self.manager.allSpaces.firstIndex(where: { $0.id.id == id }),
                 let indexInDetails = self.allDetails.firstIndex(where: { $0.id == id })
             {
                 // If only one space is updated and it exists inside the current details, then just
@@ -567,8 +563,8 @@ class SpaceCardModel: CardModel {
             }
 
             DispatchQueue.main.async {
-                self.allDetails = manager.getAll().map {
-                    SpaceCardDetails(space: $0, manager: manager)
+                self.allDetails = self.manager.getAll().map {
+                    SpaceCardDetails(space: $0, manager: self.manager)
                 }
 
                 self.listenForShowingDetails()

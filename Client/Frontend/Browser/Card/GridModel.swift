@@ -54,7 +54,8 @@ class GridModel: ObservableObject {
 
     init(tabManager: TabManager, tabCardModel: TabCardModel) {
         self.tabCardModel = tabCardModel
-        self.spaceCardModel = SpaceCardModel()
+        self.spaceCardModel = SpaceCardModel(
+            manager: NeevaUserInfo.shared.isUserLoggedIn ? .shared : .suggested)
 
         self.tabMenu = TabMenu(tabManager: tabManager)
     }
