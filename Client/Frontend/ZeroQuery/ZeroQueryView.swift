@@ -136,6 +136,7 @@ struct ZeroQueryView: View {
                     }
                     Spacer()
                 }
+                .frame(minHeight: geom.size.height)
             }
             .environment(\.zeroQueryWidth, geom.size.width)
             .animation(nil)
@@ -160,7 +161,33 @@ struct ZeroQueryView: View {
             suggestedSitesView(parentGeom)
             searchesView
             spacesView
+            firstRunBranding
         #endif
+    }
+
+    @ViewBuilder private var firstRunBranding: some View {
+        if !Defaults[.didFirstNavigation] {
+            Spacer()
+            Spacer()
+            VStack(spacing: 8) {
+                HStack(spacing: 10) {
+                    Spacer()
+                    Image("splash")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxHeight: 22)
+                    Image("neeva-letter-only")
+                        .renderingMode(.template)
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(Color.secondary)
+                        .frame(maxHeight: 18)
+                    Spacer()
+                }
+                Text("The first ad-free, private search engine")
+                    .foregroundColor(Color.secondary)
+            }
+        }
     }
 
     @ViewBuilder
