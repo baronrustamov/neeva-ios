@@ -8,12 +8,12 @@ struct TPPageStats {
     var domains: [String]
 
     init() {
-        domains = [String]();
+        domains = [String]()
     }
 
     private init(domains: [String], host: String) {
         self.domains = domains
-        self.domains.append(host);
+        self.domains.append(host)
     }
 
     func create(host: String) -> TPPageStats {

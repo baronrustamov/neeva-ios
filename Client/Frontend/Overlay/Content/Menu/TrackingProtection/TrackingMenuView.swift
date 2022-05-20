@@ -23,6 +23,7 @@ struct WhosTrackingYouDomain {
 class TrackingStatsViewModel: ObservableObject {
     // MARK: - Properties
     @Published private(set) var numDomains = 0
+    @Published private(set) var numTrackers = 0
     @Published private(set) var whosTrackingYouDomains = [WhosTrackingYouDomain]()
     @Published var preventTrackersForCurrentPage: Bool {
         didSet {
@@ -48,17 +49,14 @@ class TrackingStatsViewModel: ObservableObject {
 
                 self.selectedTab?.contentBlocker?.notifiedTabSetupRequired()
                 self.selectedTab?.reload()
-                self.refreshStats()
             }
         }
     }
     @Published var showTrackingStatsViewPopover = false
 
-    var viewVisible: Bool = false
-
     private var selectedTab: Tab? = nil {
         didSet {
-            statsSubscription = nil
+            listenForStatUpdates()
         }
     }
 
@@ -75,19 +73,10 @@ class TrackingStatsViewModel: ObservableObject {
         }
     }
 
-    var numTrackers: Int {
-        if let numTrackersTesting = numTrackersTesting {
-            return numTrackersTesting
-        } else {
-            return selectedTab?.contentBlocker?.stats.domains.count ?? 0
-        }
-    }
-
     private var subscriptions: Set<AnyCancellable> = []
     private var statsSubscription: AnyCancellable? = nil
 
     /// FOR TESTING ONLY
-    private(set) var numTrackersTesting: Int?
     private(set) var trackers: [TrackingEntity] {
         didSet {
             onDataUpdated()
@@ -95,7 +84,9 @@ class TrackingStatsViewModel: ObservableObject {
     }
 
     // MARK: - Data Updates
-    func refreshStats() {
+    func listenForStatUpdates() {
+        statsSubscription = nil
+
         guard let tab = selectedTab else {
             return
         }
@@ -103,15 +94,16 @@ class TrackingStatsViewModel: ObservableObject {
         let trackingData = TrackingEntity.getTrackingDataForCurrentTab(
             stats: tab.contentBlocker?.stats)
         self.numDomains = trackingData.numDomains
+        self.numTrackers = trackingData.numTrackers
         self.trackers = trackingData.trackingEntities
-
         onDataUpdated()
+
         statsSubscription = selectedTab?.contentBlocker?.$stats
-            .filter { [weak self] _ in self?.viewVisible ?? false }
             .map { TrackingEntity.getTrackingDataForCurrentTab(stats: $0) }
             .sink { [weak self] data in
                 guard let self = self else { return }
                 self.numDomains = data.numDomains
+                self.numTrackers = data.numTrackers
                 self.trackers = data.trackingEntities
                 self.onDataUpdated()
             }
@@ -135,7 +127,6 @@ class TrackingStatsViewModel: ObservableObject {
 
         let trackingData = TrackingEntity.getTrackingDataForCurrentTab(
             stats: selectedTab?.contentBlocker?.stats)
-        self.numDomains = trackingData.numDomains
         self.trackers = trackingData.trackingEntities
 
         tabManager.selectedTabPublisher.assign(to: \.selectedTab, on: self).store(
@@ -150,8 +141,9 @@ class TrackingStatsViewModel: ObservableObject {
     init(testingData: TrackingData) {
         self.preventTrackersForCurrentPage = true
         self.numDomains = testingData.numDomains
+        self.numTrackers = testingData.numTrackers
         self.trackers = testingData.trackingEntities
-        self.numTrackersTesting = testingData.numTrackers
+
         onDataUpdated()
     }
 }
@@ -235,11 +227,6 @@ struct TrackingMenuView: View {
 
             TrackingMenuProtectionRowButton(
                 preventTrackers: $viewModel.preventTrackersForCurrentPage)
-        }.onAppear {
-            viewModel.viewVisible = true
-            self.viewModel.refreshStats()
-        }.onDisappear {
-            viewModel.viewVisible = false
         }
     }
 }
