@@ -15,7 +15,6 @@ extension Defaults.Keys {
 enum BlockingStrength: String, Codable, CaseIterable, Identifiable {
     case easyPrivacy
     case easyPrivacyStrict
-    case easyListAdBlock
 
     var id: String { self.rawValue }
 
@@ -25,8 +24,6 @@ enum BlockingStrength: String, Codable, CaseIterable, Identifiable {
             return "Standard"
         case .easyPrivacyStrict:
             return "Strict"
-        case .easyListAdBlock:
-            return "Ad Blocker"
         }
     }
 
@@ -36,8 +33,6 @@ enum BlockingStrength: String, Codable, CaseIterable, Identifiable {
             return "Blocks many trackers. Minimizes disruption to ads and other funtionality."
         case .easyPrivacyStrict:
             return "Blocks more trackers. May break ads and other functionlity on some sites."
-        case .easyListAdBlock:
-            return "Blocks ads and trackers"
         }
     }
 }

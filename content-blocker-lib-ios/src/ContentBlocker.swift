@@ -34,14 +34,17 @@ enum BlocklistFileName: String, CaseIterable {
     static var easyPrivacyStrength: [BlocklistFileName] { return [.easyPrivacy] }
 
     static func listsForMode(strength: BlockingStrength) -> [BlocklistFileName] {
+        var fileList = [BlocklistFileName]()
         switch strength {
         case .easyPrivacy:
-            return BlocklistFileName.easyPrivacyStrength
+            fileList.append(.easyPrivacy)
         case .easyPrivacyStrict:
-            return [.easyPrivacyStrict]
-        case .easyListAdBlock:
-            return [.easyListAdBlock]
+            fileList.append(.easyPrivacyStrict)
         }
+        if Defaults[.adBlockEnabled] {
+            fileList.append(.easyListAdBlock)
+        }
+        return fileList
     }
 }
 
@@ -62,7 +65,7 @@ class ContentBlocker {
                 }
             }
         }
-        Defaults.observe(keys: .contentBlockingEnabled, .contentBlockingStrength, options: []) { [weak self] in
+        Defaults.observe(keys: .contentBlockingEnabled, .contentBlockingStrength, .adBlockEnabled, options: []) { [weak self] in
             guard let self = self else { return }
             self.prefsChanged()
         }.tieToLifetime(of: self)
