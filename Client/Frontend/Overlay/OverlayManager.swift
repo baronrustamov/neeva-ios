@@ -7,9 +7,10 @@ import SwiftUI
 /// Vague categories of Overlay types.
 /// For specific views, use `OverlayType`.
 enum OverlayPriority {
-    case transient
-    case modal
     case fullScreen
+    case modal
+    case sheet
+    case transient
 }
 
 /// Specific Overlay view type.
@@ -22,14 +23,25 @@ enum OverlayType: Equatable {
     case sheet(OverlaySheetRootView?)
     case toast(ToastView?)
 
-    var priority: OverlayPriority {
+    func isPriority(_ priority: OverlayPriority) -> Bool {
         switch self {
-        case .fullScreenModal:
-            return .fullScreen
-        case .backForwardList, .find, .popover, .sheet:
-            return .modal
+        case .backForwardList, .find, .fullScreenModal:
+            return priority == .modal
+        case .popover, .sheet:
+            return priority == .modal || priority == .sheet
         case .notification, .toast:
-            return .transient
+            return priority == .transient
+        }
+    }
+
+    func isPriority(_ priorities: [OverlayPriority]) -> Bool {
+        switch self {
+        case .backForwardList, .find, .fullScreenModal:
+            return priorities.contains(.modal)
+        case .popover, .sheet:
+            return priorities.contains(.modal) || priorities.contains(.sheet)
+        case .notification, .toast:
+            return priorities.contains(.transient)
         }
     }
 
@@ -90,7 +102,7 @@ class OverlayManager: ObservableObject {
             return
         }
 
-        if overlay.priority == .transient {
+        if overlay.isPriority(.transient) {
             guard currentOverlay == nil else {
                 queuedOverlays.append((overlay, animate, completion))
                 return
@@ -219,7 +231,7 @@ class OverlayManager: ObservableObject {
             return
         }
 
-        if let ofPriorities = ofPriorities, !ofPriorities.contains(overlay.priority) {
+        if let ofPriorities = ofPriorities, !overlay.isPriority(ofPriorities) {
             completion?()
             return
         }

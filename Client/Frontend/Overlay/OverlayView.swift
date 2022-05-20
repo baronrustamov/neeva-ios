@@ -45,6 +45,16 @@ struct OverlayView: View {
         return false
     }
 
+    var addDismissableBackground: Bool {
+        switch overlayManager.currentOverlay {
+        case .sheet, .popover:
+            return true
+        default:
+            return false
+        }
+
+    }
+
     @ViewBuilder
     var content: some View {
         if canDisplay {
@@ -99,25 +109,34 @@ struct OverlayView: View {
 
     var body: some View {
         GeometryReader { geom in
-            content
-                .offset(y: overlayManager.offset)
-                .opacity(overlayManager.opacity)
-                .onAnimationCompleted(for: overlayManager.displaying) {
-                    if let animationCompleted = overlayManager.animationCompleted {
-                        animationCompleted()
+            ZStack {
+                if addDismissableBackground {
+                    DismissBackgroundView(opacity: overlayManager.opacity / 5) {
+                        overlayManager.hideCurrentOverlay(ofPriority: .sheet)
                     }
                 }
-                .onChange(of: geom.safeAreaInsets.bottom) { newValue in
-                    safeArea = geom.safeAreaInsets.bottom
-                    keyboardHidden = safeArea < 100
-                }
-                .padding(
-                    .bottom,
-                    overlayManager.offsetForBottomBar && !chromeModel.inlineToolbar
-                        && !chromeModel.keyboardShowing
-                        ? chromeModel.bottomBarHeight - scrollingControlModel.footerBottomOffset
-                        : 0
-                )
+
+                content
+                    .offset(y: overlayManager.offset)
+                    .opacity(overlayManager.opacity)
+                    .onAnimationCompleted(for: overlayManager.displaying) {
+                        if let animationCompleted = overlayManager.animationCompleted {
+                            animationCompleted()
+                        }
+                    }
+                    .onChange(of: geom.safeAreaInsets.bottom) { newValue in
+                        safeArea = geom.safeAreaInsets.bottom
+                        keyboardHidden = safeArea < 100
+                    }
+                    .padding(
+                        .bottom,
+                        overlayManager.offsetForBottomBar && !chromeModel.inlineToolbar
+                            && !chromeModel.keyboardShowing
+                            ? chromeModel.bottomBarHeight - scrollingControlModel.footerBottomOffset
+                            : 0
+                    )
+            }
+
         }
     }
 }

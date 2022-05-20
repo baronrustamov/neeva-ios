@@ -251,13 +251,6 @@ struct OverlaySheetView<Content: View, HeaderContent: View>: View, KeyboardReada
 
     var body: some View {
         GeometryReader { outerGeometry in
-            DismissBackgroundView(
-                opacity: model.backdropOpacity, position: model.position,
-                onDismiss: style.nonDismissible ? {} : onDismiss
-            )
-            .animation(nil)
-            .transition(.fade)
-
             VStack(spacing: 0) {
                 // The height of this spacer is what controls the apparent height of
                 // the sheet. By sizing this spacer instead of the sheet directly

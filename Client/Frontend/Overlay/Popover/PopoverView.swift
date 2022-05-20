@@ -26,53 +26,38 @@ struct PopoverView<Content: View>: View {
 
     var body: some View {
         GeometryReader { geo in
-            ZStack {
-                // The semi-transparent backdrop used to shade the content that lies below
-                // the sheet.
-                Button(action: style.nonDismissible ? {} : onDismiss) {
-                    Color.black
-                        .opacity(0.2)
-                        .ignoresSafeArea()
-                }
-                .buttonStyle(.highlightless)
-                .accessibilityHint("Dismiss pop-up window")
-                // make this the last option. This will bring the user’s focus first to the
-                // useful content inside of the overlay sheet rather than the close button.
-                .accessibilitySortPriority(-1)
+            VStack {
+                SheetHeaderButtonView(headerButton: headerButton, onDismiss: onDismiss)
 
                 VStack {
-                    SheetHeaderButtonView(headerButton: headerButton, onDismiss: onDismiss)
-
-                    VStack {
-                        if style.showTitle, let title = title {
-                            SheetHeaderView(title: title, onDismiss: onDismiss)
-                        }
-
-                        ScrollView(.vertical, showsIndicators: false) {
-                            content()
-                                .onPreferenceChange(OverlayTitlePreferenceKey.self) {
-                                    self.title = $0
-                                }
-                        }
+                    if style.showTitle, let title = title {
+                        SheetHeaderView(title: title, onDismiss: onDismiss)
                     }
-                    .padding(14)
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                    .background(
-                        Color(style.backgroundColor)
-                            .cornerRadius(16)
-                    )
-                    // 60 is button height + VStack padding
-                    .frame(
-                        minWidth: 400,
-                        maxWidth: geo.size.width - (horizontalPadding * 2),
-                        maxHeight: geo.size.height - verticalPadding - 60,
-                        alignment: .center
-                    )
-                    .fixedSize(horizontal: !style.expandPopoverWidth, vertical: true)
+
+                    ScrollView(.vertical, showsIndicators: false) {
+                        content()
+                            .onPreferenceChange(OverlayTitlePreferenceKey.self) {
+                                self.title = $0
+                            }
+                    }
                 }
-                .padding(.horizontal, horizontalPadding)
-                .padding(.vertical, verticalPadding)
+                .padding(14)
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .background(
+                    Color(style.backgroundColor)
+                        .cornerRadius(16)
+                )
+                // 60 is button height + VStack padding
+                .frame(
+                    minWidth: 400,
+                    maxWidth: geo.size.width - (horizontalPadding * 2),
+                    maxHeight: geo.size.height - verticalPadding - 60,
+                    alignment: .center
+                )
+                .fixedSize(horizontal: !style.expandPopoverWidth, vertical: true)
             }
+            .padding(.horizontal, horizontalPadding)
+            .padding(.vertical, verticalPadding)
             .accessibilityAction(.escape, onDismiss)
         }
     }
