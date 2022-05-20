@@ -8,14 +8,16 @@ import UIKit
 // A small structure to encapsulate all the possible data that we can get
 // from an application sharing a web page or a URL.
 public struct ShareItem {
-    public let url: String
-    public let title: String?
-    public let favicon: Favicon?
+    public var url: String
+    public var title: String?
+    public var description: String?
+    public var favicon: Favicon?
 
-    public init(url: String, title: String?, favicon: Favicon?) {
+    public init(url: String, title: String?, description: String? = nil, favicon: Favicon?) {
         self.url = url
         self.title = title
         self.favicon = favicon
+        self.description = description
     }
 
     // We only support sharing HTTP and HTTPS URLs, as well as data URIs.

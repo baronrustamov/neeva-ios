@@ -6,7 +6,7 @@ import Combine
 import Foundation
 import SDWebImageSwiftUI
 
-public enum SocialInfoType: String {
+public enum SocialInfoType: String, CaseIterable {
     case twitter = "twitter.com"
     case instagram = "instagram.com"
 }
