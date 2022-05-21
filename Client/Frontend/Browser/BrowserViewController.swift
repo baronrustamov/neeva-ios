@@ -2021,7 +2021,9 @@ extension BrowserViewController {
     }
 
     func showBackForwardList() {
-        guard let backForwardList = tabManager.selectedTab?.webView?.backForwardList else {
+        guard let backForwardList = tabManager.selectedTab?.webView?.backForwardList,
+            backForwardList.all.count > 1
+        else {
             return
         }
 

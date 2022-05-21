@@ -43,7 +43,7 @@ class BackForwardListModel: ObservableObject {
         }
     }
 
-    func homeAndNormalPagesOnly(_ bfList: WKBackForwardList) {
+    func populateListItems(_ bfList: WKBackForwardList) {
         let items =
             bfList.forwardList.reversed() + [bfList.currentItem].compactMap({ $0 })
             + bfList.backList.reversed()
@@ -51,25 +51,19 @@ class BackForwardListModel: ObservableObject {
         // error url's are OK as they are used to populate history on session restore.
         listItems = items.filter {
             guard let internalUrl = InternalURL($0.url) else { return true }
-
             if let url = internalUrl.originalURLFromErrorPage, InternalURL.isValid(url: url) {
                 return false
             }
-
             return true
         }
-    }
-
-    func loadSites(_ bfList: WKBackForwardList) {
-        currentItem = bfList.currentItem
-        homeAndNormalPagesOnly(bfList)
     }
 
     init(profile: Profile, backForwardList: WKBackForwardList) {
         self.profile = profile
         self.backForwardList = backForwardList
+        self.currentItem = backForwardList.currentItem
 
-        loadSites(backForwardList)
+        populateListItems(backForwardList)
         loadSitesFromProfile()
     }
 }
@@ -125,9 +119,9 @@ struct BackForwardListView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            DismissBackgroundView(opacity: 0.1) {
+            DismissBackgroundView(opacity: 0.2) {
                 overlayManager.hideCurrentOverlay()
-            }.animation(nil)
+            }.animation(nil).transition(.fade)
 
             if #available(iOS 15.0, *) {
                 ScrollView {

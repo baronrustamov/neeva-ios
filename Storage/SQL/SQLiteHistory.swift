@@ -140,14 +140,20 @@ open class SQLiteHistory {
     public func getSites(forURLs urls: [String]) -> Deferred<Maybe<Cursor<Site?>>> {
         let inExpression = urls.joined(separator: "\",\"")
         let sql = """
-            SELECT history.id AS historyID, history.url AS url, title, guid, iconID, iconURL, iconDate, iconType, iconWidth
-            FROM view_favicons_widest, history
-            WHERE history.id = siteID AND history.url IN (\"\(inExpression)\")
+            \(Self.selectSiteSharedSQL())
+
+            FROM history
+                INNER JOIN (
+                    \(Self.innerJoinStartSharedSQL())
+                ) AS latestVisits ON
+                    latestVisits.siteID = history.id
+                \(Self.innerJoinEndSharedSQL())
+            WHERE history.url IN (\"\(inExpression)\")
+            \(Self.groupSharedSQL())
             """
 
-        let args: Args = []
         return db.runQueryConcurrently(
-            sql, args: args, factory: SQLiteHistory.iconHistoryColumnFactory)
+            sql, args: nil, factory: SQLiteHistory.iconHistoryColumnFactory)
     }
 }
 
@@ -667,12 +673,27 @@ extension SQLiteHistory: BrowserHistory {
             """
     }
 
-    private static func innerJoinSharedSQL() -> String {
+    private static func innerJoinStartSharedSQL() -> String {
         return """
             SELECT siteID, max(date) AS latestVisitDate
             FROM visits
             GROUP BY siteID
             ORDER BY latestVisitDate DESC
+            """
+    }
+
+    private static func innerJoinEndSharedSQL() -> String {
+        return """
+            INNER JOIN domains ON domains.id = history.domain_id
+            INNER JOIN visits ON visits.siteID = history.id
+            LEFT OUTER JOIN view_favicons_widest ON view_favicons_widest.siteID = history.id
+            """
+    }
+
+    private static func groupSharedSQL() -> String {
+        return """
+            GROUP BY history.id
+            ORDER BY latestVisits.latestVisitDate DESC
             """
     }
 
@@ -682,17 +703,14 @@ extension SQLiteHistory: BrowserHistory {
 
             FROM history
                 INNER JOIN (
-                    \(Self.innerJoinSharedSQL())
+                    \(Self.innerJoinStartSharedSQL())
                     LIMIT \(limit)
                     OFFSET \(offset)
                 ) AS latestVisits ON
                     latestVisits.siteID = history.id
-                INNER JOIN domains ON domains.id = history.domain_id
-                INNER JOIN visits ON visits.siteID = history.id
-                LEFT OUTER JOIN view_favicons_widest ON view_favicons_widest.siteID = history.id
+                \(Self.innerJoinEndSharedSQL())
             WHERE (history.is_deleted = 0)
-            GROUP BY history.id
-            ORDER BY latestVisits.latestVisitDate DESC
+            \(Self.groupSharedSQL())
             """
 
         return db.runQueryConcurrently(
@@ -705,15 +723,12 @@ extension SQLiteHistory: BrowserHistory {
 
             FROM history
                 INNER JOIN (
-                    \(Self.innerJoinSharedSQL())
+                    \(Self.innerJoinStartSharedSQL())
                 ) AS latestVisits ON
                     latestVisits.siteID = history.id
-                INNER JOIN domains ON domains.id = history.domain_id
-                INNER JOIN visits ON visits.siteID = history.id
-                LEFT OUTER JOIN view_favicons_widest ON view_favicons_widest.siteID = history.id
+                \(Self.innerJoinEndSharedSQL())
             WHERE (history.is_deleted = 0) AND (lower(title) LIKE '%\(query.lowercased())%' OR lower(history.url) LIKE '%\(query.lowercased())%')
-            GROUP BY history.id
-            ORDER BY latestVisits.latestVisitDate DESC
+            \(Self.groupSharedSQL())
             """
 
         return db.runQueryConcurrently(
