@@ -84,7 +84,7 @@ struct TopBarOverflowMenuButton: View {
                     }
                 )
             }
-        }.padding(.vertical, 24)
+        }.padding(.top, 2)
     }
 
     var body: some View {
@@ -117,8 +117,8 @@ struct TopBarOverflowMenuButton: View {
                 .environmentObject(chromeModel)
                 .environmentObject(incognitoModel)
                 .environmentObject(locationModel)
-                .topBarPopoverPadding(removeBottomPadding: false)
-                .frame(minWidth: 340, minHeight: 350)
+                .topBarPopoverPadding(removeBottomPadding: UIDevice.current.useTabletInterface)
+                .frame(minWidth: 340)
         }
     }
 }
