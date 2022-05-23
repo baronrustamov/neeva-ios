@@ -130,19 +130,24 @@ extension BrowserViewController {
 // MARK: - Default Browser
 extension BrowserViewController {
     func presentDefaultBrowserFirstRun() {
-        // TODO: refactor the logic into view model
+        let changeButtonArm = NeevaExperiment.startExperiment(for: .defaultBrowserChangeButton)
+        NeevaExperiment.logStartExperiment(for: .defaultBrowserChangeButton)
+        let interstitialModel = InterstitialViewModel(
+            inButtonTextExperiment: changeButtonArm == .changeButton,
+            onCloseAction: {
+                self.overlayManager.hideCurrentOverlay()
+            }
+        )
         overlayManager.presentFullScreenModal(
             content: AnyView(
-                DefaultBrowserInterstitialWelcomeScreen {
-                    self.overlayManager.hideCurrentOverlay()
-                } buttonAction: {
-                }
-                .onAppear {
-                    AppDelegate.setRotationLock(to: .portrait)
-                }
-                .onDisappear {
-                    AppDelegate.setRotationLock(to: .all)
-                }
+                DefaultBrowserInterstitialWelcomeView()
+                    .onAppear {
+                        AppDelegate.setRotationLock(to: .portrait)
+                    }
+                    .onDisappear {
+                        AppDelegate.setRotationLock(to: .all)
+                    }
+                    .environmentObject(interstitialModel)
             )
         ) {
             Defaults[.didShowDefaultBrowserInterstitialFromSkipToBrowser] = true
@@ -153,29 +158,28 @@ extension BrowserViewController {
             ClientLogger.shared.logCounter(
                 .DefaultBrowserInterstitialImp
             )
-
-            _ = NeevaExperiment.startExperiment(for: .defaultBrowserChangeButton)
-            NeevaExperiment.logStartExperiment(for: .defaultBrowserChangeButton)
         }
     }
 
     func restoreDefaultBrowserFirstRun() {
+        let interstitialModel = InterstitialViewModel(
+            inButtonTextExperiment: NeevaExperiment.arm(for: .defaultBrowserChangeButton)
+                == .changeButton,
+            restoreFromBackground: true,
+            onCloseAction: {
+                self.overlayManager.hideCurrentOverlay()
+            }
+        )
         overlayManager.presentFullScreenModal(
             content: AnyView(
-                DefaultBrowserInterstitialOnboardingView(
-                    restoreFromBackground: true,
-                    closeAction: {
-                        self.overlayManager.hideCurrentOverlay()
-                    },
-                    buttonAction: {
+                DefaultBrowserInterstitialOnboardingView()
+                    .onAppear {
+                        AppDelegate.setRotationLock(to: .portrait)
                     }
-                )
-                .onAppear {
-                    AppDelegate.setRotationLock(to: .portrait)
-                }
-                .onDisappear {
-                    AppDelegate.setRotationLock(to: .all)
-                }
+                    .onDisappear {
+                        AppDelegate.setRotationLock(to: .all)
+                    }
+                    .environmentObject(interstitialModel)
             ),
             animate: false
         ) {
