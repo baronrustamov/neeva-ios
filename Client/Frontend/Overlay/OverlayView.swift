@@ -52,7 +52,6 @@ struct OverlayView: View {
         default:
             return false
         }
-
     }
 
     @ViewBuilder
