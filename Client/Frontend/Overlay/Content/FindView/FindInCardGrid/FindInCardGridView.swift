@@ -25,8 +25,6 @@ struct FindInCardGridView: View {
             }.accessibilityIdentifier("FindInCardGrid_Done")
         }.onChange(of: searchQuery) { newValue in
             tabCardModel.tabSearchFilter = newValue
-        }.onDisappear {
-            tabCardModel.tabSearchFilter = ""
         }.padding(.top, 4)
     }
 }

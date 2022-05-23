@@ -50,15 +50,11 @@ class TabCardModel: CardModel {
     static let lastweekRowHeaderID: String = "lastWeek-header"
 
     // Find Tab
+    @Published var isSearchingForTabs: Bool = false
     @Published var tabSearchFilter = "" {
         didSet {
             updateRowsIfNeeded(force: true)
         }
-    }
-
-    // Searching
-    var isSearchingForTabs: Bool {
-        !tabSearchFilter.isEmpty
     }
 
     private(set) var tabsDidChange = false

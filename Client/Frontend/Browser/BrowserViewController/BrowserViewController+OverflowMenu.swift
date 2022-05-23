@@ -155,9 +155,14 @@ extension BrowserViewController {
             )
             showFeedbackPanel(bvc: self, screenshot: image ?? self.feedbackImage)
         case .findTab:
+            tabCardModel.isSearchingForTabs = true
+
             overlayManager.show(
                 overlay: .find(
                     FindView(content: .cardGrid(tabCardModel)) { [self] in
+                        tabCardModel.isSearchingForTabs = false
+                        tabCardModel.tabSearchFilter = ""
+
                         if let currentOverlay = overlayManager.currentOverlay,
                             case OverlayType.find = currentOverlay
                         {

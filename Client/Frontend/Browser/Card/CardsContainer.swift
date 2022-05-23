@@ -33,6 +33,7 @@ struct TabGridContainer: View {
     @EnvironmentObject private var gridModel: GridModel
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) private var verticalSizeClass
+    @Environment(\.safeArea) private var safeArea
 
     var landscapeMode: Bool {
         verticalSizeClass == .compact || horizontalSizeClass == .regular
@@ -100,8 +101,7 @@ struct TabGridContainer: View {
                         ArchivedTabsView(containerGeometry: geom.size)
                     }
                 }
-            }
-            .background(
+            }.background(
                 GeometryReader { proxy in
                     Color.clear
                         .useEffect(deps: proxy.size) { newValue in
@@ -119,8 +119,9 @@ struct TabGridContainer: View {
                 }
                 DispatchQueue.main.async { gridModel.didVerticalScroll += 1 }
             }
-        }
-        .animation(nil)
+        }.if(tabModel.isSearchingForTabs) {
+            $0.padding(.bottom, safeArea.bottom + FindInPageViewUX.height)
+        }.animation(nil)
     }
 }
 
