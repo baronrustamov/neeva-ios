@@ -7,25 +7,32 @@ import Shared
 import SwiftUI
 
 struct SpacesIntroOverlayContent: View {
+    @EnvironmentObject private var tabModel: TabCardModel
     @Environment(\.hideOverlay) private var hideOverlaySheet
     let learnMoreURL = URL(
         string: "https://help.neeva.com/hc/en-us/articles/1500005917202-What-are-Spaces")!
     @Environment(\.onOpenURL) private var onOpenURL
     var body: some View {
         SpacesIntroView(
-            dismiss: hideOverlaySheet,
+            dismiss: {},
             imageName: "spaces-intro",
             imageAccessibilityLabel:
                 "Stay organized by adding images, websites, documents to a Space today",
             headlineText: "Kill the clutter",
             detailText:
                 "Save and share instantly. Stay organized by adding images, websites, documents to a Space today",
-            firstButtonText: "Continue",
+            firstButtonText: "Sign Up To Get Started",
             secondButtonText: "Learn More About Spaces",
-            firstButtonPressed: hideOverlaySheet,
+            firstButtonPressed: {
+                let bvc = SceneDelegate.getBVC(with: tabModel.manager.scene)
+                bvc.presentIntroViewController(true)
+            },
             secondButtonPressed: {
                 onOpenURL(learnMoreURL)
-            }
+            },
+            isCloseButtonVisible: false,
+            imageSize: CGSize(width: 107, height: 100),
+            isSecondButtonVisible: false
         )
         .overlayIsFixedHeight(isFixedHeight: true)
     }
@@ -91,18 +98,23 @@ struct SpacesIntroView: View {
     let secondButtonText: LocalizedStringKey
     let firstButtonPressed: () -> Void
     let secondButtonPressed: () -> Void
+    var isCloseButtonVisible = true
+    var imageSize = CGSize(width: 214, height: 200)
+    var isSecondButtonVisible = true
 
     var body: some View {
         VStack(spacing: 0) {
-            HStack {
-                Spacer()
-                Button {
-                    dismiss()
-                } label: {
-                    Symbol(.xmark, style: .headingMedium, label: "Close")
-                        .foregroundColor(.tertiaryLabel)
-                        .tapTargetFrame()
-                        .padding(.trailing, 4.5)
+            if isCloseButtonVisible {
+                HStack {
+                    Spacer()
+                    Button {
+                        dismiss()
+                    } label: {
+                        Symbol(.xmark, style: .headingMedium, label: "Close")
+                            .foregroundColor(.tertiaryLabel)
+                            .tapTargetFrame()
+                            .padding(.trailing, 4.5)
+                    }
                 }
             }
             OrientationDependentStack(
@@ -112,8 +124,8 @@ struct SpacesIntroView: View {
                 Image(imageName, bundle: .main)
                     .resizable()
                     .frame(
-                        width: 214 * (landscapeMode ? 0.9 : 1),
-                        height: 200 * (landscapeMode ? 0.9 : 1)
+                        width: imageSize.width * (landscapeMode ? 0.9 : 1),
+                        height: imageSize.height * (landscapeMode ? 0.9 : 1)
                     )
                     .padding(.horizontal, landscapeMode ? 16 : 32)
                     .padding(.vertical, landscapeMode ? 0 : 32)
@@ -140,17 +152,19 @@ struct SpacesIntroView: View {
                     .buttonStyle(.neeva(.primary))
                     .padding(.top, landscapeMode ? 4 : 36)
                     .padding(.horizontal, 16)
-                    Button(
-                        action: secondButtonPressed,
-                        label: {
-                            Text(secondButtonText)
-                                .withFont(.labelLarge)
-                                .foregroundColor(.ui.adaptive.blue)
-                                .padding(landscapeMode ? 10 : 12)
-                                .frame(maxWidth: .infinity)
-                                .padding(.horizontal, 16)
-                        }
-                    ).padding(.top, landscapeMode ? 0 : 10)
+                    if isSecondButtonVisible {
+                        Button(
+                            action: secondButtonPressed,
+                            label: {
+                                Text(secondButtonText)
+                                    .withFont(.labelLarge)
+                                    .foregroundColor(.ui.adaptive.blue)
+                                    .padding(landscapeMode ? 10 : 12)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.horizontal, 16)
+                            }
+                        ).padding(.top, landscapeMode ? 0 : 10)
+                    }
                 }
             }
         }.padding(.bottom, 20)

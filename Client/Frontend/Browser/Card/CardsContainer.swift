@@ -200,6 +200,9 @@ struct CardsContainer: View {
                             SpaceCardsView()
                                 .environment(\.columns, columns)
                         }.animation(nil)
+                        if !NeevaUserInfo.shared.isUserLoggedIn {
+                            SpacesIntroOverlayContent()
+                        }
                     }
                     .padding(.vertical, CardGridUX.GridSpacing)
                     .useEffect(deps: browserModel.showGrid) { _ in
@@ -280,21 +283,6 @@ struct CardsContainer: View {
         .animation(
             .interactiveSpring(), value: "\(gridModel.switcherState) \(incognitoModel.isIncognito)"
         )
-        .onChange(of: gridModel.switcherState) { value in
-            guard case .spaces = value, !seenSpacesIntro, !gridModel.isLoading else {
-                return
-            }
-
-            SceneDelegate.getBVC(with: tabModel.manager.scene).showModal(
-                style: .withTitle,
-                content: {
-                    SpacesIntroOverlayContent()
-                },
-                onDismiss: {
-                    browserModel.showSpaces()
-                })
-            seenSpacesIntro = true
-        }
         .onReceive(
             NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)
         ) { _ in

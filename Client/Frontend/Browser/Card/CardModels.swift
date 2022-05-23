@@ -534,12 +534,15 @@ class SpaceCardModel: CardModel {
 
         NeevaUserInfo.shared.$isUserLoggedIn.sink { isLoggedIn in
             self.manager = isLoggedIn ? .shared : .suggested
-            self.onDataUpdated()
+            self.listenManagerState()
             DispatchQueue.main.async {
                 self.manager.refresh()
             }
         }.store(in: &detailsSubscriptions)
+        listenManagerState()
+    }
 
+    private func listenManagerState() {
         self.anyCancellable = manager.$state.sink { [weak self] state in
             guard let self = self, self.detailedSpace == nil, case .ready = state,
                 self.manager.updatedSpacesFromLastRefresh.count > 0
