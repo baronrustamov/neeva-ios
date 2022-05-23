@@ -192,10 +192,10 @@ struct Card<Details>: View where Details: CardDetails {
     var body: some View {
         GeometryReader { geom in
             VStack(alignment: .center, spacing: 0) {
-                let button = Button(action: {
-                    details.onSelect()
+                let button = Button {
                     selectionCompletion()
-                }) {
+                    details.onSelect()
+                } label: {
                     details.thumbnail
                         .frame(
                             width: max(0, geom.size.width),

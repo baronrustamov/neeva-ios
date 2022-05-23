@@ -79,14 +79,17 @@ class BrowserModel: ObservableObject {
         }
     }
 
-    func hideGridWithAnimation() {
+    func hideGridWithAnimation(tabToBeSelected: Tab? = nil) {
         assert(!gridModel.tabCardModel.allDetails.isEmpty)
-        if let selectedTab = tabManager.selectedTab,
-            incognitoModel.isIncognito != selectedTab.isIncognito
-        {
+
+        let tabToBeSelected = tabToBeSelected ?? tabManager.selectedTab
+        tabToBeSelected?.shouldCreateWebViewUponSelect = false
+
+        if let tabToBeSelected = tabToBeSelected {
             gridModel.switchModeWithoutAnimation = true
-            incognitoModel.toggle()
+            incognitoModel.update(isIncognito: tabToBeSelected.isIncognito)
         }
+
         gridModel.scrollToSelectedTab { [self] in
             cardTransitionModel.update(to: .visibleForTrayHidden)
             gridModel.closeDetailView()
@@ -105,10 +108,14 @@ class BrowserModel: ObservableObject {
 
         gridModel.switcherState = .tabs
         gridModel.closeDetailView()
+
+        tabManager.updateWebViewForSelectedTab(notify: true)
     }
 
     func onCompletedCardTransition() {
-        if showGrid {
+        // Prevents a bug where a tab wouldn't open upon select,
+        // since the previous animation wasn't finished yet.
+        if showGrid, cardTransitionModel.state == .visibleForTrayShow {
             cardTransitionModel.update(to: .hidden)
         } else {
             hideGridWithNoAnimation()

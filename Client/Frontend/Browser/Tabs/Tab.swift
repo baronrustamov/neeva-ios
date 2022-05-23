@@ -92,6 +92,7 @@ class Tab: NSObject, ObservableObject {
     var restoring: Bool = false
     var pendingScreenshot = false
     var needsReloadUponSelect = false
+    var shouldCreateWebViewUponSelect = true
 
     // MARK: Properties mirrored from webView
     @Published private(set) var isLoading = false
@@ -271,6 +272,15 @@ class Tab: NSObject, ObservableObject {
                 webView.navigationDelegate = navigationDelegate
             }
         }
+    }
+
+    /// Creates a `WebView` or checks if the `Tab` should be reloaded.
+    func createWebViewOrReloadIfNeeded() {
+        if !createWebview() && needsReloadUponSelect {
+            reload()
+        }
+
+        shouldCreateWebViewUponSelect = true
     }
 
     @discardableResult func createWebview() -> Bool {

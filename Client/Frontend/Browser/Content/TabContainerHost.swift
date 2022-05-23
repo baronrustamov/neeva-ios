@@ -56,9 +56,9 @@ class TabContainerModel: ObservableObject {
         self.tabCardModel = bvc.tabCardModel
         self.overlayManager = bvc.overlayManager
 
-        self.subscription = tabManager.selectedTabPublisher.sink { [weak self] tab in
+        self.subscription = tabManager.selectedTabWebViewPublisher.sink { [weak self] webView in
             guard let self = self else { return }
-            guard let webView = tab?.webView else {
+            guard let webView = webView else {
                 self.webContainerType = .blank
                 return
             }

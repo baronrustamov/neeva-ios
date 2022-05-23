@@ -43,6 +43,9 @@ class TabManager: NSObject {
     private(set) var selectedTabPublisher = CurrentValueSubject<Tab?, Never>(nil)
     /// A publisher that forwards the url from the current selectedTab
     private(set) var selectedTabURLPublisher = CurrentValueSubject<URL?, Never>(nil)
+    /// Publisher used to observe changes to the `selectedTab.webView`.
+    /// Will also update if the `WebView` is set to nil.
+    private(set) var selectedTabWebViewPublisher = CurrentValueSubject<WKWebView?, Never>(nil)
     private var selectedTabSubscription: AnyCancellable?
     private var selectedTabURLSubscription: AnyCancellable?
 
@@ -233,8 +236,8 @@ class TabManager: NSObject {
             return
         }
 
-        if !selectedTab.createWebview() && selectedTab.needsReloadUponSelect {
-            selectedTab.reload()
+        if selectedTab.shouldCreateWebViewUponSelect {
+            updateWebViewForSelectedTab(notify: false)
         }
 
         selectedTab.lastExecutedTime = Date.nowMilliseconds()
@@ -242,6 +245,7 @@ class TabManager: NSObject {
 
         if notify {
             sendSelectTabNotifications(previous: previous)
+            selectedTabWebViewPublisher.send(selectedTab.webView)
         }
 
         if let tab = tab, tab.isIncognito, let url = tab.url, NeevaConstants.isAppHost(url.host),
@@ -270,9 +274,17 @@ class TabManager: NSObject {
         }
     }
 
-    //Called by other classes to signal that they are entering/exiting private mode
-    //This is called by TabTrayVC when the private mode button is pressed and BEFORE we've switched to the new mode
-    //we only want to remove all private tabs when leaving PBM and not when entering.
+    func updateWebViewForSelectedTab(notify: Bool) {
+        selectedTab?.createWebViewOrReloadIfNeeded()
+
+        if notify {
+            selectedTabWebViewPublisher.send(selectedTab?.webView)
+        }
+    }
+
+    // Called by other classes to signal that they are entering/exiting private mode
+    // This is called by TabTrayVC when the private mode button is pressed and BEFORE we've switched to the new mode
+    // we only want to remove all private tabs when leaving PBM and not when entering.
     func willSwitchTabMode(leavingPBM: Bool) {
         // Clear every time entering/exiting this mode.
         Tab.ChangeUserAgent.privateModeHostList = Set<String>()
@@ -423,6 +435,7 @@ class TabManager: NSObject {
 
         preserveTabs()
     }
+
     // Tab Group related functions
     internal func updateTabGroupsAndSendNotifications(notify: Bool) {
         tabGroups = getAll()
