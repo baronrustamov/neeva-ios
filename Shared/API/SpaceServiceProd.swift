@@ -116,4 +116,12 @@ public class SpaceServiceProd: SpaceService {
         return RelatedSpacesCountQueryController.getSpacesData(
             spaceID: spaceID, completion: completion)
     }
+
+    public func updateSpace(
+        spaceID: String, title: String,
+        description: String? = nil, thumbnail: String? = nil
+    ) -> UpdateSpaceRequest? {
+        return UpdateSpaceRequest(
+            spaceID: spaceID, title: title, description: description, thumbnail: thumbnail)
+    }
 }

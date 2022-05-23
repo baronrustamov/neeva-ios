@@ -88,6 +88,10 @@ public protocol SpaceService {
     func updateProfile(firstName: String, lastName: String) -> UpdateProfileRequest?
 }
 
+// !! WARNING !!
+// Be very careful with extension hacks that allow default parameters in a protocol.
+// The compiler does not enforce SpaceService implementers to implement these functions.
+// That means at runtime, this could lead to an infinite loop.
 extension SpaceService {
     func addToSpaceMutation(
         spaceId: String, url: String, title: String,
