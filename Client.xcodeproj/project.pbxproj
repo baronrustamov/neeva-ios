@@ -1854,6 +1854,7 @@
 		206954A327FF4257000360D6 /* SiteListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteListView.swift; sourceTree = "<group>"; };
 		206954A527FF425B000360D6 /* SiteRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteRowView.swift; sourceTree = "<group>"; };
 		206954A727FF449E000360D6 /* RecentlyClosedTabsPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyClosedTabsPanelView.swift; sourceTree = "<group>"; };
+		20783BDC283C41C000B6E43A /* Neeva for Safari */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Neeva for Safari"; sourceTree = "<group>"; };
 		209CD9A227DBF9F20069675C /* TabGroupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupTests.swift; sourceTree = "<group>"; };
 		20A5D15227F6A43E00DB88FE /* HistoryPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPanelView.swift; sourceTree = "<group>"; };
 		20BB666B2821E0F0001FA7E9 /* ChangeNotificationPreferenceDialogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeNotificationPreferenceDialogView.swift; sourceTree = "<group>"; };
@@ -4833,6 +4834,7 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				20783BDC283C41C000B6E43A /* Neeva for Safari */,
 				9B570A59283808E600695949 /* Client.xctestplan */,
 				669ACD54269CED060038C89C /* AppClip */,
 				F84B21C01A090F8100AAB793 /* Client */,

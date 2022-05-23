@@ -1,0 +1,10 @@
+{
+    "extension_name": {
+        "message": "Neeva for Safari",
+        "description": "Name of the extension."
+    },
+    "extension_description": {
+        "message": "With the Neeva extension, you can set Neeva as your default search engine while using Safari.",
+        "description": "Description of what the extension does."
+    }
+}

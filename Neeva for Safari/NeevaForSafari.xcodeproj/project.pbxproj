@@ -1,0 +1,849 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		20783B82283C334800B6E43A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20783B81283C334800B6E43A /* AppDelegate.swift */; };
+		20783B86283C334800B6E43A /* Main.html in Resources */ = {isa = PBXBuildFile; fileRef = 20783B84283C334800B6E43A /* Main.html */; };
+		20783B8A283C334800B6E43A /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = 20783B89283C334800B6E43A /* Style.css */; };
+		20783B8C283C334800B6E43A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20783B8B283C334800B6E43A /* SceneDelegate.swift */; };
+		20783B8E283C334800B6E43A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20783B8D283C334800B6E43A /* ViewController.swift */; };
+		20783B91283C334800B6E43A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 20783B8F283C334800B6E43A /* LaunchScreen.storyboard */; };
+		20783B94283C334800B6E43A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 20783B92283C334800B6E43A /* Main.storyboard */; };
+		20783BA0283C334900B6E43A /* Neeva_for_SafariTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20783B9F283C334900B6E43A /* Neeva_for_SafariTests.swift */; };
+		20783BAA283C334900B6E43A /* Neeva_for_SafariUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20783BA9283C334900B6E43A /* Neeva_for_SafariUITests.swift */; };
+		20783BAC283C334900B6E43A /* Neeva_for_SafariUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20783BAB283C334900B6E43A /* Neeva_for_SafariUITestsLaunchTests.swift */; };
+		20783BB2283C334900B6E43A /* NeevaForSafari Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 20783BB1283C334900B6E43A /* NeevaForSafari Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		20783BB7283C334900B6E43A /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20783BB6283C334900B6E43A /* SafariWebExtensionHandler.swift */; };
+		20783BBA283C334900B6E43A /* _locales in Resources */ = {isa = PBXBuildFile; fileRef = 20783BB9283C334900B6E43A /* _locales */; };
+		20783BBC283C334900B6E43A /* images in Resources */ = {isa = PBXBuildFile; fileRef = 20783BBB283C334900B6E43A /* images */; };
+		20783BBE283C334900B6E43A /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 20783BBD283C334900B6E43A /* manifest.json */; };
+		20783BC0283C334900B6E43A /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 20783BBF283C334900B6E43A /* background.js */; };
+		20783BC2283C334900B6E43A /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = 20783BC1283C334900B6E43A /* content.js */; };
+		20783BC4283C334900B6E43A /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = 20783BC3283C334900B6E43A /* popup.html */; };
+		20783BC6283C334900B6E43A /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = 20783BC5283C334900B6E43A /* popup.css */; };
+		20783BC8283C334900B6E43A /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = 20783BC7283C334900B6E43A /* popup.js */; };
+		20783BCA283C334900B6E43A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 20783B95283C334900B6E43A /* Assets.xcassets */; };
+		20783BDB283C3DB100B6E43A /* NeevaIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 20783BDA283C3DB100B6E43A /* NeevaIcon.png */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		20783B9C283C334900B6E43A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 20783B76283C334800B6E43A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 20783B7D283C334800B6E43A;
+			remoteInfo = "Neeva for Safari";
+		};
+		20783BA6283C334900B6E43A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 20783B76283C334800B6E43A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 20783B7D283C334800B6E43A;
+			remoteInfo = "Neeva for Safari";
+		};
+		20783BB3283C334900B6E43A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 20783B76283C334800B6E43A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 20783BB0283C334900B6E43A;
+			remoteInfo = "Neeva for Safari Extension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		20783BD0283C334900B6E43A /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				20783BB2283C334900B6E43A /* NeevaForSafari Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		20783B7E283C334800B6E43A /* NeevaForSafari.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NeevaForSafari.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		20783B81283C334800B6E43A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		20783B85283C334800B6E43A /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = ../Base.lproj/Main.html; sourceTree = "<group>"; };
+		20783B89283C334800B6E43A /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
+		20783B8B283C334800B6E43A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		20783B8D283C334800B6E43A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		20783B90283C334800B6E43A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		20783B93283C334800B6E43A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		20783B95283C334900B6E43A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		20783B96283C334900B6E43A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		20783B9B283C334900B6E43A /* NeevaForSafariTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NeevaForSafariTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		20783B9F283C334900B6E43A /* Neeva_for_SafariTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Neeva_for_SafariTests.swift; sourceTree = "<group>"; };
+		20783BA5283C334900B6E43A /* NeevaForSafariUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NeevaForSafariUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		20783BA9283C334900B6E43A /* Neeva_for_SafariUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Neeva_for_SafariUITests.swift; sourceTree = "<group>"; };
+		20783BAB283C334900B6E43A /* Neeva_for_SafariUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Neeva_for_SafariUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		20783BB1283C334900B6E43A /* NeevaForSafari Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "NeevaForSafari Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		20783BB6283C334900B6E43A /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
+		20783BB9283C334900B6E43A /* _locales */ = {isa = PBXFileReference; lastKnownFileType = folder; path = _locales; sourceTree = "<group>"; };
+		20783BBB283C334900B6E43A /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
+		20783BBD283C334900B6E43A /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = manifest.json; sourceTree = "<group>"; };
+		20783BBF283C334900B6E43A /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = background.js; sourceTree = "<group>"; };
+		20783BC1283C334900B6E43A /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = content.js; sourceTree = "<group>"; };
+		20783BC3283C334900B6E43A /* popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = popup.html; sourceTree = "<group>"; };
+		20783BC5283C334900B6E43A /* popup.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = popup.css; sourceTree = "<group>"; };
+		20783BC7283C334900B6E43A /* popup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = popup.js; sourceTree = "<group>"; };
+		20783BC9283C334900B6E43A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		20783BDA283C3DB100B6E43A /* NeevaIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = NeevaIcon.png; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		20783B7B283C334800B6E43A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20783B98283C334900B6E43A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20783BA2283C334900B6E43A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20783BAE283C334900B6E43A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		20783B75283C334800B6E43A = {
+			isa = PBXGroup;
+			children = (
+				20783B80283C334800B6E43A /* NeevaForSafari */,
+				20783B9E283C334900B6E43A /* NeevaForSafariTests */,
+				20783BA8283C334900B6E43A /* NeevaForSafariUITests */,
+				20783BB5283C334900B6E43A /* NeevaForSafari Extension */,
+				20783B7F283C334800B6E43A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		20783B7F283C334800B6E43A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				20783B7E283C334800B6E43A /* NeevaForSafari.app */,
+				20783B9B283C334900B6E43A /* NeevaForSafariTests.xctest */,
+				20783BA5283C334900B6E43A /* NeevaForSafariUITests.xctest */,
+				20783BB1283C334900B6E43A /* NeevaForSafari Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		20783B80283C334800B6E43A /* NeevaForSafari */ = {
+			isa = PBXGroup;
+			children = (
+				20783B81283C334800B6E43A /* AppDelegate.swift */,
+				20783B8B283C334800B6E43A /* SceneDelegate.swift */,
+				20783B8D283C334800B6E43A /* ViewController.swift */,
+				20783B8F283C334800B6E43A /* LaunchScreen.storyboard */,
+				20783B92283C334800B6E43A /* Main.storyboard */,
+				20783B95283C334900B6E43A /* Assets.xcassets */,
+				20783B96283C334900B6E43A /* Info.plist */,
+				20783B83283C334800B6E43A /* Resources */,
+			);
+			path = NeevaForSafari;
+			sourceTree = "<group>";
+		};
+		20783B83283C334800B6E43A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				20783B84283C334800B6E43A /* Main.html */,
+				20783B89283C334800B6E43A /* Style.css */,
+				20783BDA283C3DB100B6E43A /* NeevaIcon.png */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		20783B9E283C334900B6E43A /* NeevaForSafariTests */ = {
+			isa = PBXGroup;
+			children = (
+				20783B9F283C334900B6E43A /* Neeva_for_SafariTests.swift */,
+			);
+			path = NeevaForSafariTests;
+			sourceTree = "<group>";
+		};
+		20783BA8283C334900B6E43A /* NeevaForSafariUITests */ = {
+			isa = PBXGroup;
+			children = (
+				20783BA9283C334900B6E43A /* Neeva_for_SafariUITests.swift */,
+				20783BAB283C334900B6E43A /* Neeva_for_SafariUITestsLaunchTests.swift */,
+			);
+			path = NeevaForSafariUITests;
+			sourceTree = "<group>";
+		};
+		20783BB5283C334900B6E43A /* NeevaForSafari Extension */ = {
+			isa = PBXGroup;
+			children = (
+				20783BB6283C334900B6E43A /* SafariWebExtensionHandler.swift */,
+				20783BC9283C334900B6E43A /* Info.plist */,
+				20783BB8283C334900B6E43A /* Resources */,
+			);
+			path = "NeevaForSafari Extension";
+			sourceTree = "<group>";
+		};
+		20783BB8283C334900B6E43A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				20783BB9283C334900B6E43A /* _locales */,
+				20783BBB283C334900B6E43A /* images */,
+				20783BBD283C334900B6E43A /* manifest.json */,
+				20783BBF283C334900B6E43A /* background.js */,
+				20783BC1283C334900B6E43A /* content.js */,
+				20783BC3283C334900B6E43A /* popup.html */,
+				20783BC5283C334900B6E43A /* popup.css */,
+				20783BC7283C334900B6E43A /* popup.js */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		20783B7D283C334800B6E43A /* NeevaForSafari */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 20783BD1283C334900B6E43A /* Build configuration list for PBXNativeTarget "NeevaForSafari" */;
+			buildPhases = (
+				20783B7A283C334800B6E43A /* Sources */,
+				20783B7B283C334800B6E43A /* Frameworks */,
+				20783B7C283C334800B6E43A /* Resources */,
+				20783BD0283C334900B6E43A /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				20783BB4283C334900B6E43A /* PBXTargetDependency */,
+			);
+			name = NeevaForSafari;
+			productName = "Neeva for Safari";
+			productReference = 20783B7E283C334800B6E43A /* NeevaForSafari.app */;
+			productType = "com.apple.product-type.application";
+		};
+		20783B9A283C334900B6E43A /* NeevaForSafariTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 20783BD4283C334900B6E43A /* Build configuration list for PBXNativeTarget "NeevaForSafariTests" */;
+			buildPhases = (
+				20783B97283C334900B6E43A /* Sources */,
+				20783B98283C334900B6E43A /* Frameworks */,
+				20783B99283C334900B6E43A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				20783B9D283C334900B6E43A /* PBXTargetDependency */,
+			);
+			name = NeevaForSafariTests;
+			productName = "Neeva for SafariTests";
+			productReference = 20783B9B283C334900B6E43A /* NeevaForSafariTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		20783BA4283C334900B6E43A /* NeevaForSafariUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 20783BD7283C334900B6E43A /* Build configuration list for PBXNativeTarget "NeevaForSafariUITests" */;
+			buildPhases = (
+				20783BA1283C334900B6E43A /* Sources */,
+				20783BA2283C334900B6E43A /* Frameworks */,
+				20783BA3283C334900B6E43A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				20783BA7283C334900B6E43A /* PBXTargetDependency */,
+			);
+			name = NeevaForSafariUITests;
+			productName = "Neeva for SafariUITests";
+			productReference = 20783BA5283C334900B6E43A /* NeevaForSafariUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		20783BB0283C334900B6E43A /* NeevaForSafari Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 20783BCD283C334900B6E43A /* Build configuration list for PBXNativeTarget "NeevaForSafari Extension" */;
+			buildPhases = (
+				20783BAD283C334900B6E43A /* Sources */,
+				20783BAE283C334900B6E43A /* Frameworks */,
+				20783BAF283C334900B6E43A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "NeevaForSafari Extension";
+			productName = "Neeva for Safari Extension";
+			productReference = 20783BB1283C334900B6E43A /* NeevaForSafari Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		20783B76283C334800B6E43A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1340;
+				LastUpgradeCheck = 1340;
+				TargetAttributes = {
+					20783B7D283C334800B6E43A = {
+						CreatedOnToolsVersion = 13.4;
+					};
+					20783B9A283C334900B6E43A = {
+						CreatedOnToolsVersion = 13.4;
+						TestTargetID = 20783B7D283C334800B6E43A;
+					};
+					20783BA4283C334900B6E43A = {
+						CreatedOnToolsVersion = 13.4;
+						TestTargetID = 20783B7D283C334800B6E43A;
+					};
+					20783BB0283C334900B6E43A = {
+						CreatedOnToolsVersion = 13.4;
+					};
+				};
+			};
+			buildConfigurationList = 20783B79283C334800B6E43A /* Build configuration list for PBXProject "NeevaForSafari" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 20783B75283C334800B6E43A;
+			productRefGroup = 20783B7F283C334800B6E43A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				20783B7D283C334800B6E43A /* NeevaForSafari */,
+				20783B9A283C334900B6E43A /* NeevaForSafariTests */,
+				20783BA4283C334900B6E43A /* NeevaForSafariUITests */,
+				20783BB0283C334900B6E43A /* NeevaForSafari Extension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		20783B7C283C334800B6E43A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20783B94283C334800B6E43A /* Main.storyboard in Resources */,
+				20783B91283C334800B6E43A /* LaunchScreen.storyboard in Resources */,
+				20783B86283C334800B6E43A /* Main.html in Resources */,
+				20783BCA283C334900B6E43A /* Assets.xcassets in Resources */,
+				20783BDB283C3DB100B6E43A /* NeevaIcon.png in Resources */,
+				20783B8A283C334800B6E43A /* Style.css in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20783B99283C334900B6E43A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20783BA3283C334900B6E43A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20783BAF283C334900B6E43A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20783BC0283C334900B6E43A /* background.js in Resources */,
+				20783BC6283C334900B6E43A /* popup.css in Resources */,
+				20783BC4283C334900B6E43A /* popup.html in Resources */,
+				20783BBC283C334900B6E43A /* images in Resources */,
+				20783BBE283C334900B6E43A /* manifest.json in Resources */,
+				20783BBA283C334900B6E43A /* _locales in Resources */,
+				20783BC2283C334900B6E43A /* content.js in Resources */,
+				20783BC8283C334900B6E43A /* popup.js in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		20783B7A283C334800B6E43A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20783B8E283C334800B6E43A /* ViewController.swift in Sources */,
+				20783B82283C334800B6E43A /* AppDelegate.swift in Sources */,
+				20783B8C283C334800B6E43A /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20783B97283C334900B6E43A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20783BA0283C334900B6E43A /* Neeva_for_SafariTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20783BA1283C334900B6E43A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20783BAC283C334900B6E43A /* Neeva_for_SafariUITestsLaunchTests.swift in Sources */,
+				20783BAA283C334900B6E43A /* Neeva_for_SafariUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		20783BAD283C334900B6E43A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20783BB7283C334900B6E43A /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		20783B9D283C334900B6E43A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 20783B7D283C334800B6E43A /* NeevaForSafari */;
+			targetProxy = 20783B9C283C334900B6E43A /* PBXContainerItemProxy */;
+		};
+		20783BA7283C334900B6E43A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 20783B7D283C334800B6E43A /* NeevaForSafari */;
+			targetProxy = 20783BA6283C334900B6E43A /* PBXContainerItemProxy */;
+		};
+		20783BB4283C334900B6E43A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 20783BB0283C334900B6E43A /* NeevaForSafari Extension */;
+			targetProxy = 20783BB3283C334900B6E43A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		20783B84283C334800B6E43A /* Main.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				20783B85283C334800B6E43A /* Base */,
+			);
+			name = Main.html;
+			sourceTree = "<group>";
+		};
+		20783B8F283C334800B6E43A /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				20783B90283C334800B6E43A /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		20783B92283C334800B6E43A /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				20783B93283C334800B6E43A /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		20783BCB283C334900B6E43A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		20783BCC283C334900B6E43A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		20783BCE283C334900B6E43A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A9735M6NPH;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "NeevaForSafari Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Neeva for Safari Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.neeva.app.neeva-for-safari.extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		20783BCF283C334900B6E43A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A9735M6NPH;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "NeevaForSafari Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Neeva for Safari Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.neeva.app.neeva-for-safari.extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		20783BD2283C334900B6E43A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A9735M6NPH;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NeevaForSafari/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Neeva for Safari";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.neeva.app.neeva-for-safari";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		20783BD3283C334900B6E43A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A9735M6NPH;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NeevaForSafari/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Neeva for Safari";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.neeva.app.neeva-for-safari";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		20783BD5283C334900B6E43A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A9735M6NPH;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.neeva.app.Neeva-for-SafariTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NeevaForSafari.app/NeevaForSafari";
+			};
+			name = Debug;
+		};
+		20783BD6283C334900B6E43A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A9735M6NPH;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.neeva.app.Neeva-for-SafariTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NeevaForSafari.app/NeevaForSafari";
+			};
+			name = Release;
+		};
+		20783BD8283C334900B6E43A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A9735M6NPH;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.neeva.app.Neeva-for-SafariUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Neeva for Safari";
+			};
+			name = Debug;
+		};
+		20783BD9283C334900B6E43A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A9735M6NPH;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.neeva.app.Neeva-for-SafariUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Neeva for Safari";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		20783B79283C334800B6E43A /* Build configuration list for PBXProject "NeevaForSafari" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				20783BCB283C334900B6E43A /* Debug */,
+				20783BCC283C334900B6E43A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		20783BCD283C334900B6E43A /* Build configuration list for PBXNativeTarget "NeevaForSafari Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				20783BCE283C334900B6E43A /* Debug */,
+				20783BCF283C334900B6E43A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		20783BD1283C334900B6E43A /* Build configuration list for PBXNativeTarget "NeevaForSafari" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				20783BD2283C334900B6E43A /* Debug */,
+				20783BD3283C334900B6E43A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		20783BD4283C334900B6E43A /* Build configuration list for PBXNativeTarget "NeevaForSafariTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				20783BD5283C334900B6E43A /* Debug */,
+				20783BD6283C334900B6E43A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		20783BD7283C334900B6E43A /* Build configuration list for PBXNativeTarget "NeevaForSafariUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				20783BD8283C334900B6E43A /* Debug */,
+				20783BD9283C334900B6E43A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 20783B76283C334800B6E43A /* Project object */;
+}

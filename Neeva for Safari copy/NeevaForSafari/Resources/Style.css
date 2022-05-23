@@ -1,0 +1,45 @@
+* {
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    cursor: default;
+}
+
+:root {
+    color-scheme: light dark;
+
+    --spacing: 20px;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    gap: var(--spacing);
+    margin: 0 calc(var(--spacing) * 2);
+    height: 100%;
+
+    font-family: system-ui;
+    text-align: left;
+}
+
+.title {
+    font-size: 42px;
+    font-weight: 600;
+    color: #4078FB;
+}
+
+.instruction {
+    margin-top: 0px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.instruction a {
+    font-size: 12px;
+}
