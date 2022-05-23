@@ -87,22 +87,9 @@ struct ShareToView: View {
                         icon: Symbol(decorative: .bookmark, size: 18))
                 }
                 Divider()
-                Button(action: {
-                    Defaults[.appExtensionTelemetryOpenUrl] = true
-                    viewModel.shareItem.url.addingPercentEncoding(
-                        withAllowedCharacters: NSCharacterSet.alphanumerics
-                    )
-                    .flatMap { URL(string: "neeva://open-url?url=\($0)") }
-                    .map { openURL($0) }
-                }) {
-                    ShareToAction(
-                        name: "Open in Neeva",
-                        icon: Image("open-in-neeva")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 20)
-                    )
-                }
+                OpenInNeevaView(item: viewModel.shareItem, incognito: false)
+                Divider()
+                OpenInNeevaView(item: viewModel.shareItem, incognito: true)
                 Divider()
                 Button(action: {
                     let profile = BrowserProfile(localName: "profile")

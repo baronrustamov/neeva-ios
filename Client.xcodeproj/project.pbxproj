@@ -1455,6 +1455,8 @@
 		E693F0D91E9D64BD0086DC17 /* OptionalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E693F0D81E9D64BD0086DC17 /* OptionalExtensions.swift */; };
 		E69922171B94E3EF007C480D /* Licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = E69922121B94E3EF007C480D /* Licenses.html */; };
 		E6A92ADB1C52A8DA00743291 /* LoginInputTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A92ADA1C52A8DA00743291 /* LoginInputTests.swift */; };
+		E6AB632A283C0B7400B0169C /* OpenInNeevaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6AB6324283C0A2200B0169C /* OpenInNeevaView.swift */; };
+		E6AB632B283C0B7800B0169C /* OpenInNeevaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6AB6324283C0A2200B0169C /* OpenInNeevaView.swift */; };
 		E6B4C3D81C68F55C001F97E8 /* JSPrompt.html in Resources */ = {isa = PBXBuildFile; fileRef = E6B4C3D71C68F55C001F97E8 /* JSPrompt.html */; };
 		E6DDE2502818957600D58197 /* WalletProfilePicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6DDE24E281893F800D58197 /* WalletProfilePicture.swift */; };
 		E6EA734727F60E0F00845FFB /* NeevaConstantsExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6EA734627F60E0F00845FFB /* NeevaConstantsExtensions.swift */; };
@@ -2805,6 +2807,7 @@
 		E693F0D81E9D64BD0086DC17 /* OptionalExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionalExtensions.swift; sourceTree = "<group>"; };
 		E69922121B94E3EF007C480D /* Licenses.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Licenses.html; sourceTree = "<group>"; };
 		E6A92ADA1C52A8DA00743291 /* LoginInputTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginInputTests.swift; sourceTree = "<group>"; };
+		E6AB6324283C0A2200B0169C /* OpenInNeevaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenInNeevaView.swift; sourceTree = "<group>"; };
 		E6B4C3D71C68F55C001F97E8 /* JSPrompt.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = JSPrompt.html; sourceTree = "<group>"; };
 		E6C191D41E38F7B7000A213B /* Cartfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		E6C191D51E38F7B7000A213B /* Cartfile.resolved */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile.resolved; sourceTree = "<group>"; };
@@ -5316,6 +5319,7 @@
 				E61A44B128340289004AAC3F /* AddToSpaceView.swift */,
 				E61A44AA2834016C004AAC3F /* ItemDetailView.swift */,
 				E61A44AE28340243004AAC3F /* ShareToViewModel.swift */,
+				E6AB6324283C0A2200B0169C /* OpenInNeevaView.swift */,
 			);
 			path = ShareTo;
 			sourceTree = "<group>";
@@ -7247,6 +7251,7 @@
 				C9DF56A5266A84BD009A2E6C /* ShareToView.swift in Sources */,
 				C9DF5699266A84A4009A2E6C /* ShareTo_Preview_SupportApp.swift in Sources */,
 				E61A44B028340243004AAC3F /* ShareToViewModel.swift in Sources */,
+				E6AB632B283C0B7800B0169C /* OpenInNeevaView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7751,6 +7756,7 @@
 				E61A44B228340289004AAC3F /* AddToSpaceView.swift in Sources */,
 				C9DF5691266A83F4009A2E6C /* ShareToView.swift in Sources */,
 				E41A7D4B1A1BE04500245963 /* InitialViewController.swift in Sources */,
+				E6AB632A283C0B7400B0169C /* OpenInNeevaView.swift in Sources */,
 				E61A44AF28340243004AAC3F /* ShareToViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
