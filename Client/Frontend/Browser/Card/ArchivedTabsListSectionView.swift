@@ -68,41 +68,35 @@ struct ArchivedTabsListSectionVIew: View {
             ForEach(tabs, id: \.self) { tab in
                 if processed[tab.rootUUID] != nil {
                     if processed[tab.rootUUID] == false {
-                        buildTabGroupSection(rootUUID: tab.rootUUID)
+                        if let tabGroup = model.tabManager.archivedTabGroups[tab.rootUUID]?
+                            .children
+                        {
+                            LazyVStack(spacing: 0) {
+                                HStack {
+                                    Text(getTabGroupTitle(id: tab.rootUUID))
+                                        .withFont(.labelMedium)
+                                        .foregroundColor(.label)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                        .padding(.vertical, 8)
+                                        .padding(.leading, 16)
+                                    Spacer()
+                                }
+                                ForEach(
+                                    tabGroup, id: \.self
+                                ) { filteredTab in
+                                    ArchivedTabsRowView(tab: filteredTab, tabManager: tabManager)
+                                }
+                            }
+                            .background(
+                                Color.secondarySystemFill
+                                    .cornerRadius(16)
+                            )
+                        }
                         let _ = processed[tab.rootUUID] = true
                     }
                 } else {
                     ArchivedTabsRowView(tab: tab, tabManager: tabManager)
                 }
-            }
-        }
-    }
-
-    func buildTabGroupSection(rootUUID: String) -> some View {
-        return AnyView {
-            if let tabGroup = model.tabManager.archivedTabGroups[rootUUID]?
-                .children
-            {
-                LazyVStack(spacing: 0) {
-                    HStack {
-                        Text(getTabGroupTitle(id: rootUUID))
-                            .withFont(.labelMedium)
-                            .foregroundColor(.label)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .padding(.vertical, 8)
-                            .padding(.leading, 16)
-                        Spacer()
-                    }
-                    ForEach(
-                        tabGroup, id: \.self
-                    ) { filteredTab in
-                        ArchivedTabsRowView(tab: filteredTab, tabManager: tabManager)
-                    }
-                }
-                .background(
-                    Color.secondarySystemFill
-                        .cornerRadius(16)
-                )
             }
         }
     }

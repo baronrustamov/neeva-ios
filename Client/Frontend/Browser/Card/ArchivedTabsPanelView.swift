@@ -91,7 +91,7 @@ struct ArchivedTabsPanelView: View {
             }
 
             // Archived tabs
-            LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
+            VStack(spacing: 0) {
                 ForEach(ArchivedTabTimeSection.allCases, id: \.self) { section in
                     let itemsInSection = model.groupedSites.itemsForSection(section: section)
 
