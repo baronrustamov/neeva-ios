@@ -4834,7 +4834,6 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
-				20783BDC283C41C000B6E43A /* Neeva for Safari */,
 				9B570A59283808E600695949 /* Client.xctestplan */,
 				669ACD54269CED060038C89C /* AppClip */,
 				F84B21C01A090F8100AAB793 /* Client */,
@@ -4860,6 +4859,7 @@
 				4A8CE5CA27CCA07800735C75 /* WalletCoreTests */,
 				047F9B2A24E1FE1C00CD7DF7 /* WidgetKit */,
 				3BFE4B081D342FB900DDF53F /* XCUITests */,
+				20783BDC283C41C000B6E43A /* Neeva for Safari */,
 			);
 			sourceTree = "<group>";
 			wrapsLines = 0;
