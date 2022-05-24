@@ -61,8 +61,6 @@ extension Defaults.Keys {
         "profile.confirmCloseAllTabs", default: true)
     public static let contentBlockingStrength =
         Defaults.Key<String>("contentBlockingStrength", default: "easyPrivacy")
-    public static let adBlockEnabled =
-        Defaults.Key("adBlockEnabled", default: false)
 
     // MARK: - debug settings
     public static let enableAuthLogging = Defaults.BoolKey("profile_enableAuthLogging")

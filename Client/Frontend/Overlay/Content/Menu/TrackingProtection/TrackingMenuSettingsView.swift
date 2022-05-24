@@ -35,8 +35,6 @@ struct TrackingAttribution: View {
 }
 
 struct TrackingSettingsSectionBlock: View {
-    @Default(.adBlockEnabled) private var adBlockEnabled
-
     @Default(.contentBlockingStrength) private var contentBlockingStrength
 
     var body: some View {
@@ -48,18 +46,17 @@ struct TrackingSettingsSectionBlock: View {
         ) {
             Picker("Protection Mode", selection: $contentBlockingStrength) {
                 ForEach(BlockingStrength.allCases) { strength in
-                    VStack(alignment: .leading) {
-                        Text(strength.name.capitalized)
+                    // TODO: enable ad blocker at a later release
+                    if strength != .easyListAdBlock {
+                        VStack(alignment: .leading) {
+                            Text(strength.name.capitalized)
+                        }
+                        .tag(strength.rawValue)
                     }
-                    .tag(strength.rawValue)
                 }
             }
             .labelsHidden()
             .pickerStyle(.inline)
-        }
-
-        Section {
-            Toggle("Ad Block", isOn: $adBlockEnabled)
         }
     }
 }
