@@ -10,7 +10,6 @@ struct CookieCutterSettings: View {
     @Environment(\.onOpenURL) var openURL
     @EnvironmentObject var cookieCutterModel: CookieCutterModel
 
-    @Default(.contentBlockingEnabled) private var contentBlockingEnabled
     @State var showNonEssentialCookieSettings = false
     @State var cookieCutterEnabled: Bool
 

@@ -54,7 +54,7 @@ class TPStatsBlocklistChecker {
 
     func startup() {
         self.loadStatsParser()
-        Defaults.observe(keys: .contentBlockingEnabled, .contentBlockingStrength, options: []) { [weak self] in
+        Defaults.observe(keys: .cookieCutterEnabled, .contentBlockingStrength, options: []) { [weak self] in
             guard let self = self else { return }
             self.loadStatsParser()
         }.tieToLifetime(of: self)

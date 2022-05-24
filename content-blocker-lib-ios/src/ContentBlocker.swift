@@ -65,7 +65,7 @@ class ContentBlocker {
                 }
             }
         }
-        Defaults.observe(keys: .contentBlockingEnabled, .contentBlockingStrength, .adBlockEnabled, options: []) { [weak self] in
+        Defaults.observe(keys: .cookieCutterEnabled, .contentBlockingStrength, .adBlockEnabled, options: []) { [weak self] in
             guard let self = self else { return }
             self.prefsChanged()
         }.tieToLifetime(of: self)

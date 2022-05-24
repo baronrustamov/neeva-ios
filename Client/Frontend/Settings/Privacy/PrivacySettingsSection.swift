@@ -10,7 +10,6 @@ struct PrivacySettingsSection: View {
     @State var openCookieCutterPage = false
 
     @Default(.closeIncognitoTabs) var closeIncognitoTabs
-    @Default(.contentBlockingEnabled) private var contentBlockingEnabled
 
     @Environment(\.onOpenURL) var openURL
     @EnvironmentObject var cookieCutterModel: CookieCutterModel

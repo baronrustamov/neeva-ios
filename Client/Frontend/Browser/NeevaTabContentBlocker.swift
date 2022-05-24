@@ -50,7 +50,7 @@ class NeevaTabContentBlocker: TabContentBlocker, TabContentScript {
     var pageStatsCache: [URL: TPPageStats] = [:]
 
     override var isEnabled: Bool {
-        Defaults[.contentBlockingEnabled] && Defaults[.cookieCutterEnabled]
+        Defaults[.cookieCutterEnabled]
     }
 
     override init(tab: ContentBlockerTab) {
@@ -91,6 +91,6 @@ class NeevaTabContentBlocker: TabContentBlocker, TabContentScript {
 // Static methods to access user prefs for tracking protection
 extension NeevaTabContentBlocker {
     static func isTrackingProtectionEnabled() -> Bool {
-        Defaults[.contentBlockingEnabled]
+        Defaults[.cookieCutterEnabled]
     }
 }

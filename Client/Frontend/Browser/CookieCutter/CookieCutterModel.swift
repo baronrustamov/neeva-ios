@@ -13,18 +13,18 @@ enum CookieNotices: CaseIterable, Encodable, Decodable {
 
 extension Defaults.Keys {
     static let cookieCutterOnboardingShowed = Defaults.Key<Bool>(
-        "profile.prefkey.cookieCutter.onboardingShowed", default: false)
+        "profile_prefkey_cookieCutter_onboardingShowed", default: false)
     static let cookieCutterEnabled = Defaults.Key<Bool>(
-        "profile.prefkey.cookieCutter.isEnabled", default: true)
+        "profile_prefkey_cookieCutter_isEnabled", default: true)
 
     fileprivate static let cookieNotices = Defaults.Key<CookieNotices>(
-        "profile.prefkey.cookieCutter.cookieNotices", default: .declineNonEssential)
+        "profile_prefkey_cookieCutter_cookieNotices", default: .declineNonEssential)
     fileprivate static let marketingCookies = Defaults.Key<Bool>(
-        "profile.prefkey.cookieCutter.allowMarketingCookies", default: false)
+        "profile_prefkey_cookieCutter_allowMarketingCookies", default: false)
     fileprivate static let analyticCookies = Defaults.Key<Bool>(
-        "profile.prefkey.cookieCutter.allowAnalyticCookies", default: false)
+        "profile_prefkey_cookieCutter_allowAnalyticCookies", default: false)
     fileprivate static let socialCookies = Defaults.Key<Bool>(
-        "profile.prefkey.cookieCutter.allowSocialCookies", default: false)
+        "profile_prefkey_cookieCutter_allowSocialCookies", default: false)
 }
 
 class CookieCutterModel: ObservableObject {

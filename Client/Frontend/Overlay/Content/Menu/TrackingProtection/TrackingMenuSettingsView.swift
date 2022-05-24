@@ -35,26 +35,13 @@ struct TrackingAttribution: View {
 }
 
 struct TrackingSettingsSectionBlock: View {
-    @Default(.contentBlockingEnabled) private var contentBlockingEnabled {
-        didSet {
-            for tabManager in SceneDelegate.getAllTabManagers() {
-                tabManager.flagAllTabsToReload()
-            }
-        }
-    }
-
     @Default(.adBlockEnabled) private var adBlockEnabled
 
     @Default(.contentBlockingStrength) private var contentBlockingStrength
 
     var body: some View {
         Section(
-            header: Text("TRACKERS")
-        ) {
-            Toggle("Enable Protection", isOn: $contentBlockingEnabled)
-        }
-
-        Section(
+            header: Text("TRACKERS"),
             footer: Text(
                 "If a site doesn't work as expected, you can deactivate Cookie Cutter for the site at any time."
             )
@@ -69,7 +56,6 @@ struct TrackingSettingsSectionBlock: View {
             }
             .labelsHidden()
             .pickerStyle(.inline)
-            .disabled(!contentBlockingEnabled)
         }
 
         Section {
