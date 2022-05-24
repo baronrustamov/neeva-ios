@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import AuthenticationServices
+import CodeScanner
 import Combine
 import CryptoKit
 import Defaults
@@ -15,6 +16,7 @@ private let browserLog = Logger.browser
 
 enum FirstRunButtonActions {
     case signin
+    case signinWithQRCode
     case signupWithApple(Bool?, String?, String?)
     case signupWithOther
     case skipToBrowser
@@ -29,10 +31,12 @@ class IntroViewModel: NSObject, ObservableObject {
     @Published var onOtherOptionsPage: Bool = false
     @Published var onSignInMode: Bool = false
     @Published var showSignInError = false
+    @Published var showQRScanner = false
 
     public var signInErrorMessage: String = ""
     public var presentationController: UIViewController
     public var overlayManager: OverlayManager
+    public var toastViewManager: ToastViewManager
 
     private var onDismiss: ((FirstRunButtonActions) -> Void)?
 
@@ -70,6 +74,8 @@ class IntroViewModel: NSObject, ObservableObject {
                 let provider, let marketingEmailOptOut, _, let email):
                 self.marketingEmailOptOut = marketingEmailOptOut
                 self.oauthWithProvider(provider: provider, email: email)
+            case FirstRunButtonActions.signinWithQRCode:
+                self.signInwithQRCode()
             default:
                 break
             }
@@ -200,9 +206,14 @@ class IntroViewModel: NSObject, ObservableObject {
     }
 
     // MARK: - Init
-    public init(presentationController: UIViewController, overlayManager: OverlayManager) {
+    public init(
+        presentationController: UIViewController,
+        overlayManager: OverlayManager,
+        toastViewManager: ToastViewManager
+    ) {
         self.presentationController = presentationController
         self.overlayManager = overlayManager
+        self.toastViewManager = toastViewManager
     }
 }
 
@@ -394,5 +405,44 @@ extension IntroViewModel {
         let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         let salt = String((0..<12).map { _ in letters.randomElement()! })
         return salt
+    }
+}
+
+// MARK: - QR CODE
+extension IntroViewModel {
+    public func signInwithQRCode() {
+        overlayManager.presentFullScreenModal(
+            content: AnyView(
+                ZStack(alignment: .topTrailing) {
+                    CodeScannerView(codeTypes: [.qr]) { result in
+                        self.showQRScanner = false
+                        self.overlayManager.hideCurrentOverlay()
+                        switch result {
+                        case .success(let result):
+                            guard let url = URL(string: result.string),
+                                let delegate = SceneDelegate.getCurrentSceneDelegateOrNil()
+                            else { return }
+                            if !delegate.checkForSignInToken(in: url) {
+                                DispatchQueue.main.async {
+                                    self.toastViewManager.makeToast(text: "Invalid QR Code")
+                                }
+                            }
+                        case .failure(let error):
+                            DispatchQueue.main.async {
+                                self.toastViewManager.makeToast(
+                                    text: "QR Code: \(error.localizedDescription)"
+                                )
+                            }
+                        }
+                    }
+                    CloseButton(action: {
+                        self.overlayManager.hideCurrentOverlay()
+                    })
+                    .padding(.trailing, 20)
+                    .padding(.top, 40)
+                    .background(Color.clear)
+                }
+            )
+        )
     }
 }

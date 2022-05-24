@@ -150,7 +150,10 @@ class BrowserViewController: UIViewController, ModalPresenter {
     var overlayWindowManager: WindowManager?
 
     lazy var introViewModel: IntroViewModel = {
-        IntroViewModel(presentationController: self, overlayManager: overlayManager)
+        IntroViewModel(
+            presentationController: self,
+            overlayManager: overlayManager,
+            toastViewManager: toastViewManager)
     }()
 
     private(set) var readerModeCache: ReaderModeCache

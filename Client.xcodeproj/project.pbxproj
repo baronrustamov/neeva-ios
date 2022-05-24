@@ -55,6 +55,7 @@
 		1AC43C8B278F1FED000BF750 /* SubscriptionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC43C8A278F1FED000BF750 /* SubscriptionType.swift */; };
 		1AC43CC32790BAD2000BF750 /* BrowserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC43CC22790BAD2000BF750 /* BrowserModel.swift */; };
 		1ADFEEF8278C884800A0E82E /* CollapsableCardGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADFEEF7278C884800A0E82E /* CollapsableCardGroupView.swift */; };
+		1C45B368283C4F36008A1401 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 1C45B367283C4F36008A1401 /* CodeScanner */; };
 		1D06AE6624FEE4D5000B092B /* TopSitesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06AE6524FEE4D5000B092B /* TopSitesProvider.swift */; };
 		1D0BA05C24F46A0400D731B5 /* TopSitesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0BA05B24F46A0400D731B5 /* TopSitesManager.swift */; };
 		1D9E1FE524FEF56C006E561D /* TopSites in Resources */ = {isa = PBXBuildFile; fileRef = 3BC659481E5BA4AE006D560F /* TopSites */; };
@@ -2919,6 +2920,7 @@
 				E942D43A2819BA8100B4A3EC /* HTMLEntities in Frameworks */,
 				E4B3348A1BBF23F9004E2BFF /* AdSupport.framework in Frameworks */,
 				85EFC01F27C5158D009460DE /* GCDWebServers.xcframework in Frameworks */,
+				1C45B368283C4F36008A1401 /* CodeScanner in Frameworks */,
 				0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */,
 				66A7639227C7505D0047F999 /* SDWebImage.xcframework in Frameworks */,
 				85EFC02527C515EE009460DE /* OnePasswordExtension.xcframework in Frameworks */,
@@ -5756,6 +5758,7 @@
 			packageProductDependencies = (
 				6786EA762759545A00B53127 /* CrashReporter */,
 				E942D4392819BA8100B4A3EC /* HTMLEntities */,
+				1C45B367283C4F36008A1401 /* CodeScanner */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -5962,6 +5965,7 @@
 				BC532EED278C00550027CA11 /* XCRemoteSwiftPackageReference "CodeScanner" */,
 				E942D4382819BA8100B4A3EC /* XCRemoteSwiftPackageReference "swift-html-entities" */,
 				E61A44A22832C942004AAC3F /* XCRemoteSwiftPackageReference "Kanna" */,
+				1C45B366283C4F36008A1401 /* XCRemoteSwiftPackageReference "CodeScanner" */,
 			);
 			productRefGroup = F84B21BF1A090F8100AAB793 /* Products */;
 			projectDirPath = "";
@@ -9897,6 +9901,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		1C45B366283C4F36008A1401 /* XCRemoteSwiftPackageReference "CodeScanner" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/twostraws/CodeScanner";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		4A3D2996268993FE0082F293 /* XCRemoteSwiftPackageReference "ViewInspector" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nalexn/ViewInspector";
@@ -10020,6 +10032,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1C45B367283C4F36008A1401 /* CodeScanner */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BC532EED278C00550027CA11 /* XCRemoteSwiftPackageReference "CodeScanner" */;
+			productName = CodeScanner;
+		};
 		4A3D2997268993FE0082F293 /* ViewInspector */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4A3D2996268993FE0082F293 /* XCRemoteSwiftPackageReference "ViewInspector" */;

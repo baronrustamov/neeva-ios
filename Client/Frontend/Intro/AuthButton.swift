@@ -131,6 +131,32 @@ struct FirstRunCloseButton: View {
     }
 }
 
+public struct QRCodeScanButton: View {
+    var action: () -> Void
+
+    public var body: some View {
+        Button(action: action) {
+            let label = Text("Sign in with QR Code")
+            HStack {
+                Symbol(decorative: .qrcodeViewfinder, style: .labelMedium)
+                    .foregroundColor(.black)
+                    .padding(.leading, 28)
+                Spacer()
+                label
+                Spacer()
+            }
+            .foregroundColor(.ui.gray20)
+            .padding(EdgeInsets(top: 23, leading: 0, bottom: 23, trailing: 0))
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(label)
+        }
+        .backgroundColorOrGradient(.white)
+        .clipShape(Capsule())
+        .shadow(color: Color.ui.gray70, radius: 1, x: 0, y: 1)
+        .font(.roobert(.semibold, size: 18))
+    }
+}
+
 struct AuthButton_Previews: PreviewProvider {
     static var previews: some View {
         SignUpWithAppleButton(action: {}, onSignInMode: .constant(false))
