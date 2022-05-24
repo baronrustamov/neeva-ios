@@ -40,6 +40,8 @@ struct DefaultBrowserInterstitialView<Detail: View, Header: View>: View {
                 }
             )
             .buttonStyle(.neeva(.primary))
+            .padding(.top, secondaryButton != nil ? 0 : 10)
+
             if let secondaryButton = secondaryButton {
                 Button(
                     action: {
@@ -56,6 +58,7 @@ struct DefaultBrowserInterstitialView<Detail: View, Header: View>: View {
                             .padding(.horizontal, 16)
                     }
                 )
+                .padding(.top, 10)
             }
             Spacer()
         }
