@@ -25,5 +25,5 @@ This reduces the total possible number of User Scripts down to four. The compile
 To simplify the build process, these compiled files are checked-in to this repository. When adding or editing User Scripts, these files can be re-compiled with `webpack` manually. This requires Node.js to be installed and all required `npm` packages can be installed by running `npm install` in the root directory of the project. User Scripts can be compiled by running the following `npm` command in the root directory of the project:
 
 ```
-npm run build
+yarn build
 ```
