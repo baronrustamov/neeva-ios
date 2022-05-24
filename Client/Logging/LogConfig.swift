@@ -216,7 +216,7 @@ public struct LogConfig {
         /// Close default browser promo card
         case CloseDefaultBrowserPromo
         /// Close preview sign up card
-        case ClosePreviewSignUprPromo
+        case ClosePreviewSignUpPromo
         case DefaultBrowserOnboardingInterstitialSkip
         case DefaultBrowserOnboardingInterstitialRemind
         case DefaultBrowserOnboardingInterstitialOpen
@@ -568,7 +568,7 @@ public struct LogConfig {
         case .PromoCardAppear: return .PromoCard
         case .PromoDefaultBrowser: return .PromoCard
         case .CloseDefaultBrowserPromo: return .PromoCard
-        case .ClosePreviewSignUprPromo: return .PromoCard
+        case .ClosePreviewSignUpPromo: return .PromoCard
         case .GoToSysAppSettings: return .PromoCard
         case .DefaultBrowserPromoCardImp: return .PromoCard
         case .DismissDefaultBrowserOnboardingScreen: return .PromoCard
