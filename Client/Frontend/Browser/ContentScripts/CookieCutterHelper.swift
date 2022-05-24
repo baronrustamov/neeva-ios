@@ -54,7 +54,6 @@ class CookieCutterHelper: TabContentScript {
                                 "social": !cookieCutterModel.socialCookiesAllowed,
                             ]), encoding: .utf8)
                     {
-
                         currentWebView?.evaluateJavascriptInDefaultContentWorld(
                             "__firefox__.setPreference(\(escapedEncoded))")
                     }
