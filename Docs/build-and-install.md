@@ -31,7 +31,7 @@ We use Carthage to manage some of the projects that we depend on. (Others are fe
 ```
 brew update
 brew upgrade
-brew install carthage node
+brew install carthage node yarn
 pip3 install virtualenv
 ```
 
