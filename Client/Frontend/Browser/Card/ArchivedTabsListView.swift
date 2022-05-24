@@ -20,9 +20,11 @@ struct ArchivedTabsRowView: View {
             selectionCompletion()
         } label: {
             HStack {
-                FaviconView(forSiteUrl: tab.url ?? "")
-                    .frame(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize)
-                    .padding(.trailing, padding)
+                if let url = tab.url {
+                    FaviconView(forSiteUrl: url)
+                        .frame(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize)
+                        .padding(.trailing, padding)
+                }
 
                 VStack(alignment: .leading, spacing: padding) {
                     Text(tab.title ?? "")
