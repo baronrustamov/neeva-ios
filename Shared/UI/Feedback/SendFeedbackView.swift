@@ -51,6 +51,8 @@ public struct SendFeedbackView: View {
     @State var screenshotSheet = ModalState()
     @State var editedScreenshot: UIImage
     @State var shareQuery = true
+    @State var emailFieldIsFocused = false
+    @State var descriptionFieldIsFocused = true
 
     public var body: some View {
         NavigationView {
@@ -75,36 +77,77 @@ public struct SendFeedbackView: View {
                         Spacer()
                     }
 
-                    if !NeevaUserInfo.shared.isUserLoggedIn {
-                        GroupedCell {
-                            SingleLineTextField(
-                                useCapsuleBackground: false,
-                                "Please share your email so we can assist you.",
-                                text: $email,
-                                focusTextField: true
-                            ).padding(.vertical, 7)
+                    VStack(spacing: 8) {
+                        GroupedCell(alignment: .leading) {
+                            ZStack(alignment: .topLeading) {
+                                let descriptionInputMode =
+                                    descriptionFieldIsFocused || !feedbackText.isEmpty
+                                Text("Description")
+                                    .withFont(
+                                        descriptionInputMode ? .headingXSmall : .bodyLarge
+                                    )
+                                    .foregroundColor(
+                                        descriptionInputMode
+                                            ? .secondaryLabel
+                                            : Color(UIColor.placeholderText)
+                                    )
+                                    .padding(.vertical, descriptionInputMode ? 12 : 19.5)
+                                    .onTapGesture {
+                                        descriptionFieldIsFocused = true
+                                    }
+                                if descriptionInputMode {
+                                    MultilineTextField(
+                                        "Please share your questions, issues, or feature requests. Your feedback helps us improve Neeva!",
+                                        text: $feedbackText,
+                                        focusTextField: true
+                                    )
+                                    .withFont(unkerned: .bodyLarge)
+                                    .padding(.top, 18)
+                                    .padding(.leading, -4)
+                                    .onTapGesture {
+                                        descriptionFieldIsFocused = true
+                                    }
+                                }
+                            }
+                            .animation(.default)
                         }
                         .overlay(
                             RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.brand.blue, lineWidth: 4)
-                                .padding(.horizontal, -10)
-                                .opacity(shouldHighlightTextInput ? 1 : 0)
+                                .stroke(Color.brand.blue, lineWidth: 1)
+                                .opacity(descriptionFieldIsFocused ? 1 : 0)
                         )
-                    }
 
-                    GroupedCell {
-                        MultilineTextField(
-                            "Please share your questions, issues, or feature requests. Your feedback helps us improve Neeva!",
-                            text: $feedbackText,
-                            focusTextField: false
-                        ).padding(.vertical, 7)
+                        if !NeevaUserInfo.shared.isUserLoggedIn {
+                            GroupedCell {
+                                ZStack(alignment: .topLeading) {
+                                    let emailInputMode = emailFieldIsFocused || !email.isEmpty
+                                    if emailInputMode {
+                                        Text("Email")
+                                            .withFont(.headingXSmall)
+                                            .foregroundColor(.secondaryLabel)
+                                            .padding(.top, 12)
+                                    }
+                                    TextField(
+                                        emailFieldIsFocused ? "example@neeva.com" : "Email",
+                                        text: $email,
+                                        onEditingChanged: { editingChanged in
+                                            emailFieldIsFocused = editingChanged
+                                            descriptionFieldIsFocused = !emailFieldIsFocused
+                                        }
+                                    )
+                                    .withFont(unkerned: .bodyLarge)
+                                    .padding(.top, emailInputMode ? 26 : 19.5)
+                                    .padding(.bottom, emailInputMode ? 12 : 19.5)
+                                }
+                                .animation(.default)
+                            }
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.brand.blue, lineWidth: 1)
+                                    .opacity(emailFieldIsFocused ? 1 : 0)
+                            )
+                        }
                     }
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.brand.blue, lineWidth: 4)
-                            .padding(.horizontal, -10)
-                            .opacity(shouldHighlightTextInput ? 1 : 0)
-                    )
                     .padding(.vertical, 12)
 
                     VStack(spacing: 8) {
