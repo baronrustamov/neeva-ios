@@ -72,9 +72,6 @@ struct ArchivedTabsPanelView: View {
                             .fixedSize(horizontal: false, vertical: true)
                             .padding(.vertical, 10)
                         Spacer()
-                        Group {
-
-                        }.frame(width: 24, height: 24)
                     }
                     .padding(.horizontal, 16)
                     .frame(height: 52)
