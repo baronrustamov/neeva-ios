@@ -50,21 +50,6 @@ struct ArchivedTabsView: View {
             )
             .buttonStyle(.neeva(.secondary))
             .padding(16)
-
-            Text("Neeva is set to keep tabs \(tabsDurationText)")
-                .withFont(.bodyLarge)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 16)
-
-            Button(
-                action: {
-                    openSettings(.archivedTabs)
-                },
-                label: {
-                    Text("Change in settings")
-                        .underline()
-                })
         }
-        .padding(.bottom, 27)
     }
 }

@@ -51,10 +51,14 @@ struct ArchivedTabsPanelView: View {
                             .fixedSize(horizontal: false, vertical: true)
                             .padding(.vertical, 10)
                         Spacer()
-                        Group {
-                            Symbol(decorative: .chevronRight, size: 18)
-                                .foregroundColor(.label)
-                        }.frame(width: 24, height: 24)
+                        Text(archivedTabsLabel)
+                            .withFont(.bodyLarge)
+                            .foregroundColor(.secondaryLabel)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 12)
+                        Symbol(decorative: .chevronRight, size: 16)
+                            .foregroundColor(.secondaryLabel)
                     }
                     .padding(.horizontal, 16)
                     .frame(height: 52)
