@@ -19,6 +19,7 @@ class DefaultBrowserInterstitialOnboardingViewController: UIHostingController<
     struct Content: View {
         let openSettings: () -> Void
         let onCancel: () -> Void
+        let onDismiss: () -> Void
         let triggerFrom: OpenDefaultBrowserOnboardingTrigger
 
         var body: some View {
@@ -43,6 +44,9 @@ class DefaultBrowserInterstitialOnboardingViewController: UIHostingController<
                             showCloseButton: false,
                             onOpenSettingsAction: {
                                 openSettings()
+                            },
+                            onCloseAction: {
+                                onDismiss()
                             }
                         )
                     )
@@ -51,7 +55,9 @@ class DefaultBrowserInterstitialOnboardingViewController: UIHostingController<
     }
 
     init(didOpenSettings: @escaping () -> Void, triggerFrom: OpenDefaultBrowserOnboardingTrigger) {
-        super.init(rootView: Content(openSettings: {}, onCancel: {}, triggerFrom: triggerFrom))
+        super.init(
+            rootView: Content(
+                openSettings: {}, onCancel: {}, onDismiss: {}, triggerFrom: triggerFrom))
         self.rootView = Content(
             openSettings: { [weak self] in
                 if NeevaExperiment.arm(for: .defaultBrowserChangeButton) == .changeButton {
@@ -78,6 +84,11 @@ class DefaultBrowserInterstitialOnboardingViewController: UIHostingController<
                 }
 
             },
+            onDismiss: { [weak self] in
+                self?.dismiss(animated: true) {
+
+                }
+            },
             triggerFrom: triggerFrom
         )
     }
@@ -100,6 +111,8 @@ public enum OpenDefaultBrowserOnboardingTrigger: String {
 
 struct DefaultBrowserInterstitialOnboardingView: View {
     @EnvironmentObject var interstitialModel: InterstitialViewModel
+
+    @Default(.notificationPermissionState) var notificationPermissionState
 
     @ViewBuilder
     var header: some View {
@@ -192,11 +205,15 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                 header: header,
                 primaryButton: interstitialModel.openButtonText,
                 secondaryButton: interstitialModel.showRemindButton
+                    && notificationPermissionState
+                        == NotificationPermissionStatus.undecided.rawValue
                     ? interstitialModel.remindButtonText : nil,
                 primaryAction: {
                     interstitialModel.openSettingsButtonClickAction()
                 },
                 secondaryAction: interstitialModel.showRemindButton
+                    && notificationPermissionState
+                        == NotificationPermissionStatus.undecided.rawValue
                     ? {
                         interstitialModel.defaultBrowserSecondaryButtonAction()
                     } : nil
