@@ -252,17 +252,24 @@ class ZeroQueryModel: ObservableObject {
     }
 
     func shouldShowDefaultBrowserPromoCard() -> Bool {
+        let currentTargetIsClient = NeevaConstants.currentTarget == .client
+        let didNotDismissDefaultBrowserCard = !Defaults[.didDismissDefaultBrowserCard]
+        let didNotSetDefaultBrowser = !Defaults[.didSetDefaultBrowser]
+        let didFirstNavigation = Defaults[.didFirstNavigation]
+
         let notSeenInterstitial =
             !Defaults[.didShowDefaultBrowserInterstitial]
             && !Defaults[.didShowDefaultBrowserInterstitialFromSkipToBrowser]
+        let satisfiesFreqRule = satisfyDefaultBrowserPromoFreqRule()
+        //let lastDefaultBrowserInterstitialSkipped = DefaultBrowserInterstitialChoice(
+        //    rawValue: Defaults[.lastDefaultBrowserInterstitialChoice]) == .skipForNow
 
-        return NeevaConstants.currentTarget == .client && !Defaults[.didDismissDefaultBrowserCard]
-            && !Defaults[.didSetDefaultBrowser]
-            && Defaults[.didFirstNavigation]
+        return currentTargetIsClient
+            && didNotDismissDefaultBrowserCard
+            && didNotSetDefaultBrowser
+            && didFirstNavigation
             && (notSeenInterstitial
-                || satisfyDefaultBrowserPromoFreqRule()
-                || DefaultBrowserInterstitialChoice(
-                    rawValue: Defaults[.lastDefaultBrowserInterstitialChoice]) == .skipForNow)
+                || satisfiesFreqRule /* || lastDefaultBrowserInterstitialSkipped*/)
     }
 
     func updateSuggestedSites() {
