@@ -1512,6 +1512,12 @@
 		F0FDDBB025EE91F300B12287 /* libStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* libStorage.a */; };
 		F35B8D2B1D6380EA008E3D61 /* SessionRestore.html in Resources */ = {isa = PBXBuildFile; fileRef = F35B8D2A1D6380EA008E3D61 /* SessionRestore.html */; };
 		F35B8D2D1D6383E9008E3D61 /* SessionRestoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F35B8D2C1D6383E9008E3D61 /* SessionRestoreHelper.swift */; };
+		F80983B9283848450039FCBD /* AppearanceSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80983B8283848450039FCBD /* AppearanceSettingsSection.swift */; };
+		F80983BC283849E00039FCBD /* Black@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F80983BA283849DF0039FCBD /* Black@3x.png */; };
+		F80983BD283849E00039FCBD /* Black@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F80983BB283849E00039FCBD /* Black@2x.png */; };
+		F80983C428387B6D0039FCBD /* System@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F80983C228387B6D0039FCBD /* System@3x.png */; };
+		F80983C528387B6D0039FCBD /* System@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F80983C328387B6D0039FCBD /* System@2x.png */; };
+		F80983C62838A0630039FCBD /* AppearanceSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80983B8283848450039FCBD /* AppearanceSettingsSection.swift */; };
 		F82EF4DB283360FA0030F185 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E6639F171BF11E17002D0853 /* Settings.bundle */; };
 		F82EF4DC283361270030F185 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E6639F171BF11E17002D0853 /* Settings.bundle */; };
 		F8418EDE282B2EBA004F1305 /* SpacesLoginRequiredView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8418EDD282B2EBA004F1305 /* SpacesLoginRequiredView.swift */; };
@@ -2865,6 +2871,11 @@
 		F0ACC19E25E8C2380024991B /* Neeva.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Neeva.entitlements; sourceTree = "<group>"; };
 		F35B8D2A1D6380EA008E3D61 /* SessionRestore.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = SessionRestore.html; sourceTree = "<group>"; };
 		F35B8D2C1D6383E9008E3D61 /* SessionRestoreHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionRestoreHelper.swift; sourceTree = "<group>"; };
+		F80983B8283848450039FCBD /* AppearanceSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsSection.swift; sourceTree = "<group>"; };
+		F80983BA283849DF0039FCBD /* Black@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Black@3x.png"; sourceTree = "<group>"; };
+		F80983BB283849E00039FCBD /* Black@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Black@2x.png"; sourceTree = "<group>"; };
+		F80983C228387B6D0039FCBD /* System@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "System@3x.png"; sourceTree = "<group>"; };
+		F80983C328387B6D0039FCBD /* System@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "System@2x.png"; sourceTree = "<group>"; };
 		F8418EDD282B2EBA004F1305 /* SpacesLoginRequiredView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacesLoginRequiredView.swift; sourceTree = "<group>"; };
 		F84B21BE1A090F8100AAB793 /* Client.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Client.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F84B21D31A090F8100AAB793 /* ClientTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClientTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3319,19 +3330,20 @@
 		2F44FC551A9E83E200FD20CC /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				8AA6A4BC2808EC7400AA4E76 /* ArchivedTabs */,
 				C98E406026585C43003AC0E2 /* AboutSettingsSection.swift */,
+				8AA6A4BC2808EC7400AA4E76 /* ArchivedTabs */,
 				0B62EFD11AD63CD100ACB9CD /* Clearables.swift */,
 				2026EC1A27F3D2C600817053 /* CookieCutter */,
+				F80983B8283848450039FCBD /* AppearanceSettingsSection.swift */,
 				C965BDD0268E71B400F02224 /* Debug */,
 				C98E405A2658547A003AC0E2 /* GeneralSettingsSection.swift */,
 				C8A50B8D268E7F7000E1392A /* NavigationLinkButton.swift */,
 				C9E448BF265D553F00651DCB /* Neeva */,
 				C9F49CBE266FEF4600F3408A /* Privacy */,
+				1A840EC027889E8C005F6003 /* SearchEngineSettings.swift */,
 				7B4980A71CE363ED0017547C /* Settings.xcassets */,
 				C9AFE6E626583F5A000C5A03 /* SettingsView.swift */,
 				C98E405E26585AB3003AC0E2 /* SupportSettingsSection.swift */,
-				1A840EC027889E8C005F6003 /* SearchEngineSettings.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -5030,6 +5042,17 @@
 			path = InternalSchemeHandler;
 			sourceTree = "<group>";
 		};
+		F80983C1283879890039FCBD /* AltAppIcons */ = {
+			isa = PBXGroup;
+			children = (
+				F80983C328387B6D0039FCBD /* System@2x.png */,
+				F80983C228387B6D0039FCBD /* System@3x.png */,
+				F80983BB283849E00039FCBD /* Black@2x.png */,
+				F80983BA283849DF0039FCBD /* Black@3x.png */,
+			);
+			path = AltAppIcons;
+			sourceTree = "<group>";
+		};
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
@@ -5096,6 +5119,7 @@
 		F84B21C01A090F8100AAB793 /* Client */ = {
 			isa = PBXGroup;
 			children = (
+				F80983C1283879890039FCBD /* AltAppIcons */,
 				F84B21E41A0910F600AAB793 /* Application */,
 				F84B21EB1A0910F600AAB793 /* Assets */,
 				E689C6FF1E0C716F008BAADB /* Entitlements */,
@@ -6297,9 +6321,11 @@
 				C9C18E1626559118004710CD /* Neeva.xcassets in Resources */,
 				E4B7B77D1A793CF20022C5E0 /* FiraSans-Regular.ttf in Resources */,
 				E4B7B7791A793CF20022C5E0 /* FiraSans-Light.ttf in Resources */,
+				F80983C428387B6D0039FCBD /* System@3x.png in Resources */,
 				BCC1388F2656CBDB0018D87D /* nicons-400.ttf in Resources */,
 				D0FCF8081FE4772D004A7995 /* MainFrameAtDocumentStart.js in Resources */,
 				6758FBD727F3A403000709AC /* AppConfig.xcconfig in Resources */,
+				F80983BC283849E00039FCBD /* Black@3x.png in Resources */,
 				4A22DD0826575FD6009BE9FC /* TrackingEntity.xcassets in Resources */,
 				D30684F11C84F12A002D8D82 /* SearchPlugins in Resources */,
 				D308EE561CBF0BF5006843F2 /* CertError.css in Resources */,
@@ -6315,6 +6341,7 @@
 				BC93EE862654E31300D1AA07 /* Color.xcassets in Resources */,
 				E4A961381AC06FA50069AD6F /* ReaderViewLoading.html in Resources */,
 				672D1C58280A0A3B0043F4E6 /* easy_list.json in Resources */,
+				F80983C528387B6D0039FCBD /* System@2x.png in Resources */,
 				E4ECCDAE1AB131770005E717 /* FiraSans-Medium.ttf in Resources */,
 				E4424B3C1AC71FB400F44C38 /* FiraSans-Book.ttf in Resources */,
 				39A35AED1C0662A3006B9E87 /* SpotlightHelper.js in Resources */,
@@ -6323,6 +6350,7 @@
 				C9098F7726B0539000D2B5F4 /* webpack.config.js in Resources */,
 				679BB17C2714D069002F60FE /* easy_privacy.json in Resources */,
 				E4D6BEB91A0930EC00F538BD /* LaunchScreen.xib in Resources */,
+				F80983BD283849E00039FCBD /* Black@2x.png in Resources */,
 				2F44FB2D1A9D5D8500FD20CC /* FiraSans-BoldItalic.ttf in Resources */,
 				C9AFE6E326582BCB000C5A03 /* OfflineError.html in Resources */,
 				23BEA769251A99ED00A014BF /* NewYorkMedium-Regular.otf in Resources */,
@@ -7002,6 +7030,7 @@
 				4A42C51727E58487003B9826 /* FaviconHandler.swift in Sources */,
 				4A42C51827E58487003B9826 /* InternalSchemeHandler.swift in Sources */,
 				4A42C51927E58487003B9826 /* TrackingMenuProtectionRowButton.swift in Sources */,
+				F80983C62838A0630039FCBD /* AppearanceSettingsSection.swift in Sources */,
 				4A42C51A27E58487003B9826 /* GeneralSettingsSection.swift in Sources */,
 				4A42C51B27E58487003B9826 /* ToastProgressView.swift in Sources */,
 				4A42C51C27E58487003B9826 /* SpotlightSettingsView.swift in Sources */,
@@ -7432,6 +7461,7 @@
 				C9ACC46A267A8A1E009AE182 /* TrackingMenuSettingsView.swift in Sources */,
 				C8A4D2C4262886B900192B4D /* OverlaySheetView.swift in Sources */,
 				8AC7A593280D2B5F00176E7E /* ArchivedTabsView.swift in Sources */,
+				F80983B9283848450039FCBD /* AppearanceSettingsSection.swift in Sources */,
 				C9B2D28226612EF7005EF5AD /* NeevaAccountRow.swift in Sources */,
 				BC8EE06B271CEA6A00D6BE2A /* DomainAllowList.swift in Sources */,
 				D0C95E36200FDC5500E4E51C /* MetadataParserHelper.swift in Sources */,

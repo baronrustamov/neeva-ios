@@ -48,6 +48,12 @@ struct SettingsView: View {
                         GeneralSettingsSection(showArchivedTabsSettings: openPage == .archivedTabs)
                     }
 
+                    if NeevaConstants.currentTarget != .xyz {
+                        Section(header: Text("Appearance")) {
+                            AppearanceSettingsSection()
+                        }
+                    }
+
                     Section(header: Text("Privacy")) {
                         PrivacySettingsSection(openCookieCutterPage: openPage == .cookieCutter)
                     }
