@@ -167,6 +167,7 @@ class TestAppDelegate: AppDelegate {
 
         if launchArguments.contains(LaunchArguments.ReactivateIntro) {
             Defaults[.introSeen] = false
+            Defaults[.notificationPermissionState] = NotificationPermissionStatus.undecided.rawValue
         }
 
         if launchArguments.contains(LaunchArguments.ForceExperimentControlArm) {

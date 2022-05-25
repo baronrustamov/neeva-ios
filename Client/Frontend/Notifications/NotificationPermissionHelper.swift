@@ -205,6 +205,10 @@ class NotificationPermissionHelper {
     }
 
     func updatePermissionState() {
+        guard !AppConstants.IsRunningTest else {
+            return
+        }
+
         UNUserNotificationCenter.current().getNotificationSettings { settings in
             switch settings.authorizationStatus {
             case .authorized:
