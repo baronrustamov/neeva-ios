@@ -21,16 +21,19 @@ public struct ArchivedTabsData {
 
 class ArchivedTabsPanelModel: ObservableObject {
     let tabManager: TabManager
+    var archivedTabs: [Tab]
     var groupedSites = ArchivedTabsData()
     @Default(.archivedTabsDuration) var archivedTabsDuration
     private var archivedTabsDurationSubscription: AnyCancellable?
 
     func loadData() {
-        groupedSites.sites[.lastMonth] = tabManager.archivedTabs.filter {
+        archivedTabs = tabManager.archivedTabs
+
+        groupedSites.sites[.lastMonth] = archivedTabs.filter {
             return $0.wasLastExecuted(.lastMonth)
         }
 
-        groupedSites.sites[.overAMonth] = tabManager.archivedTabs.filter {
+        groupedSites.sites[.overAMonth] = archivedTabs.filter {
             return $0.wasLastExecuted(.overAMonth)
         }
     }
@@ -43,6 +46,7 @@ class ArchivedTabsPanelModel: ObservableObject {
 
     init(tabManager: TabManager) {
         self.tabManager = tabManager
+        self.archivedTabs = tabManager.archivedTabs
 
         archivedTabsDurationSubscription = _archivedTabsDuration.publisher.sink {
             [weak self] _ in
