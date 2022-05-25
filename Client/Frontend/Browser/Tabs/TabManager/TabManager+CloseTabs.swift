@@ -34,13 +34,15 @@ extension TabManager {
 
     func removeTabs(
         _ tabsToBeRemoved: [Tab], showToast: Bool = true,
-        updateSelectedTab: Bool = true
+        updateSelectedTab: Bool = true, fromArchive: Bool = false
     ) {
         guard tabsToBeRemoved.count > 0 else {
             return
         }
 
-        addTabsToRecentlyClosed(tabsToBeRemoved, showToast: showToast)
+        if !fromArchive {
+            addTabsToRecentlyClosed(tabsToBeRemoved, showToast: showToast)
+        }
 
         let previous = selectedTab
 
@@ -57,9 +59,10 @@ extension TabManager {
             TabEvent.post(.didClose, for: tab)
         }
 
-        updateTabGroupsAndSendNotifications(notify: true)
-
-        sendSelectTabNotifications(previous: previous)
+        if !fromArchive {
+            updateTabGroupsAndSendNotifications(notify: true)
+            sendSelectTabNotifications(previous: previous)
+        }
 
         storeChanges()
     }

@@ -544,18 +544,6 @@ class TabManager: NSObject {
         }
         tabGroupDict = temp
     }
-
-    func clearArchivedTabs() {
-        let tabsToKeep = self.tabs.filter { !archivedTabs.contains($0) }
-        self.tabs = tabsToKeep
-
-        archivedTabs.forEach { tab in
-            tab.close()
-            TabEvent.post(.didClose, for: tab)
-        }
-
-        storeChanges()
-    }
 }
 
 extension TabManager {
