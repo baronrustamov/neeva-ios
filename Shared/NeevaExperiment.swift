@@ -64,6 +64,8 @@ public enum NeevaExperiment {
     }
 }
 
+// Make sure to update LaunchArguments.ForceExperimentControlArm logic
+// in TestAppDelegate when adding a new experiment
 extension NeevaExperiment {
 
     /* Experiment Example */
