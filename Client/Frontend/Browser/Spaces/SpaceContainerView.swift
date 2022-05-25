@@ -17,12 +17,14 @@ enum SpaceViewUX {
 }
 
 struct SpaceContainerView: View {
+    @EnvironmentObject var tabModel: TabCardModel
+    @EnvironmentObject var spacesModel: SpaceCardModel
     @State private var headerVisible = true
     @ObservedObject var primitive: SpaceCardDetails
-    var onProfileUIDismissed: (() -> Void)? = nil
-    var isShowingProfileUI = false
-    @State private var showingProfileUI = false
     @State private var isVerifiedProfile = false
+    @State private var showingProfileUI = false
+    @State private var showingAnotherSpace = false
+    @State private var selectedSpaceId: String?
 
     var space: Space? {
         primitive.item
@@ -30,24 +32,15 @@ struct SpaceContainerView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            SpaceTopView(
-                primitive: primitive, headerVisible: $headerVisible,
-                isShowingProfileUI: isShowingProfileUI,
-                onProfileUIDismissed: onProfileUIDismissed)
-            NavigationLink(isActive: $showingProfileUI) {
-                if let space = space {
-                    SpacesProfileView(
-                        spaceId: space.id.id,
-                        onBackTap: {
-                            self.showingProfileUI = false
-                        },
-                        owner: space.owner
-                    )
-                }
 
-            } label: {
-                EmptyView()
-            }
+            SpaceTopView(
+                primitive: primitive,
+                headerVisible: $headerVisible,
+                addToAnotherSpace: addToAnotherSpace
+            )
+
+            profileUINavigationLink
+            anotherSpaceNavigationLink
 
             if !(space?.isDigest ?? false) && primitive.allDetails.isEmpty && primitive.isFollowing
             {
@@ -61,7 +54,12 @@ struct SpaceContainerView: View {
                         if isVerifiedProfile {
                             self.showingProfileUI = true
                         }
-                    })
+                    },
+                    onShowAnotherSpace: { id in
+                        selectedSpaceId = id
+                        self.showingAnotherSpace = true
+                    },
+                    addToAnotherSpace: addToAnotherSpace)
             }
         }
         .navigationBarHidden(true)
@@ -79,6 +77,41 @@ struct SpaceContainerView: View {
             case .failure:
                 return
             }
+        }
+    }
+
+    private func addToAnotherSpace(url: URL, title: String?, description: String?) {
+        spacesModel.detailedSpace = nil
+        SceneDelegate.getBVC(with: tabModel.manager.scene)
+            .showAddToSpacesSheet(
+                url: url, title: title, description: description)
+    }
+
+    private var profileUINavigationLink: some View {
+        NavigationLink(isActive: $showingProfileUI) {
+            if let space = space {
+                SpacesProfileView(
+                    spaceId: space.id.id,
+                    onBackTap: {
+                        self.showingProfileUI = false
+                    },
+                    owner: space.owner
+                )
+            }
+        } label: {
+            EmptyView()
+        }
+    }
+
+    @ViewBuilder
+    private var anotherSpaceNavigationLink: some View {
+        NavigationLink(isActive: $showingAnotherSpace) {
+            if let selectedId = selectedSpaceId {
+                let primitive = SpaceCardDetails(id: selectedId, manager: SpaceStore.shared)
+                SpaceContainerView(primitive: primitive)
+            }
+        } label: {
+            EmptyView()
         }
     }
 

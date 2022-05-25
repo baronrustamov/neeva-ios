@@ -19,6 +19,8 @@ struct SpaceDetailList: View {
     @Binding var headerVisible: Bool
     @Binding var isVerifiedProfile: Bool
     var onShowProfileUI: () -> Void
+    let onShowAnotherSpace: (String) -> Void
+    let addToAnotherSpace: (URL, String?, String?) -> Void
     @State var addingComment = false
     @StateObject var spaceCommentsModel = SpaceCommentsModel()
 
@@ -95,9 +97,19 @@ struct SpaceDetailList: View {
                             details: details,
                             onSelected: {
                                 guard let url = details.data.url else { return }
+
+                                if url.absoluteString.hasPrefix(
+                                    NeevaConstants.appSpacesURL.absoluteString)
+                                {
+                                    let id = String(
+                                        url.absoluteString.dropFirst(
+                                            NeevaConstants.appSpacesURL.absoluteString.count + 1))
+                                    onShowAnotherSpace(id)
+                                    return
+                                }
+
                                 gridModel.closeDetailView()
                                 browserModel.hideGridWithNoAnimation()
-
                                 let bvc = SceneDelegate.getBVC(with: tabModel.manager.scene)
                                 if let navPath = NavigationPath.navigationPath(
                                     from: url, with: bvc)
@@ -111,12 +123,7 @@ struct SpaceDetailList: View {
                             onDelete: { index in
                                 onDelete(offsets: IndexSet([index]))
                             },
-                            addToAnotherSpace: { url, title, description in
-                                spacesModel.detailedSpace = nil
-                                SceneDelegate.getBVC(with: tabModel.manager.scene)
-                                    .showAddToSpacesSheet(
-                                        url: url, title: title, description: description)
-                            },
+                            addToAnotherSpace: addToAnotherSpace,
                             editSpaceItem: editSpaceItem,
                             index: primitive.allDetails.firstIndex { $0.id == details.id }
                                 ?? 0,

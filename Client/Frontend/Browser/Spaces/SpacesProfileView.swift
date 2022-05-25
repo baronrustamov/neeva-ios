@@ -105,12 +105,7 @@ struct SpacesProfileView: View {
                 tag: spaceCard.id,
                 selection: $selectedSpace,
                 destination: {
-                    SpaceContainerView(
-                        primitive: spaceCard,
-                        onProfileUIDismissed: {
-                            self.selectedSpace = nil
-                        },
-                        isShowingProfileUI: true)
+                    SpaceContainerView(primitive: spaceCard)
                 },
                 label: {}
             )
