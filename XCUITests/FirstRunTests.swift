@@ -75,6 +75,7 @@ class FirstRunTests: BaseTestCase {
     }
 
     func testTriggerSignInModalAndClose() throws {
+        try skipTest(issue: 3696, "Disabled as this test is flaky")
         waitForExistence(app.buttons["Get Started"])
         app.buttons["Get Started"].tap()
 
