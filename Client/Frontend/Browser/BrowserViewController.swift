@@ -1901,12 +1901,17 @@ extension BrowserViewController {
             }
 
             model?.thumbnailURLCandidates[url] = thumbnailUrls
-
-            self.showAddToSpacesSheet(
-                url: url, title: updater?.title ?? title,
-                description: description ?? updater?.description ?? output?.first?.first,
-                thumbnail: thumbnail,
-                importData: importData, updater: updater)
+            let thumbnailUrl = thumbnailUrls.first(where: {
+                $0.absoluteString.hasSuffix("jpeg") || $0.absoluteString.hasSuffix("jpg")
+                    || $0.absoluteString.hasSuffix("png")
+            })
+            SDWebImageDownloader.shared.downloadImage(with: thumbnailUrl) { image, _, _, _ in
+                self.showAddToSpacesSheet(
+                    url: url, title: updater?.title ?? title,
+                    description: description ?? updater?.description ?? output?.first?.first,
+                    thumbnail: image,
+                    importData: importData, updater: updater)
+            }
         }
     }
 
