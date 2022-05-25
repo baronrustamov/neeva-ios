@@ -47,8 +47,7 @@ enum ZeroQueryTarget {
 
 enum PromoCardTrigger {
     case shouldTriggerArmDefaultPromo
-    case shouldTriggerWalletPromo
-    case shouldTriggerSignUpPromo
+    case shouldTriggerWalletOrSignupPromo
     case shouldTriggerReferralPromo
     case shouldTriggerSignInPromo
     case shouldTriggerDefaultPromo
@@ -89,8 +88,7 @@ class ZeroQueryModel: ObservableObject {
 
     let promoCardPriority: [PromoCardTrigger] = [
         .shouldTriggerArmDefaultPromo,
-        .shouldTriggerWalletPromo,
-        .shouldTriggerSignUpPromo,
+        .shouldTriggerWalletOrSignupPromo,
         .shouldTriggerReferralPromo,
         .shouldTriggerSignInPromo,
         .shouldTriggerDefaultPromo,
@@ -130,16 +128,8 @@ class ZeroQueryModel: ObservableObject {
         case .shouldTriggerArmDefaultPromo:
             return (promoCardTypeArm == .control || promoCardTypeArm == nil)
                 && shouldShowDefaultBrowserPromoCard()
-        case .shouldTriggerWalletPromo:
-            #if XYZ
-                return !Defaults[.signedInOnce] && !Defaults[.didDismissPreviewSignUpCard]
-                    && Defaults[.cryptoPublicKey].isEmpty
-            #else
-                return false
-            #endif
-        case .shouldTriggerSignUpPromo:
+        case .shouldTriggerWalletOrSignupPromo:
             return !Defaults[.signedInOnce] && !Defaults[.didDismissPreviewSignUpCard]
-                && Defaults[.didFirstNavigation] && NeevaConstants.currentTarget != .xyz
         case .shouldTriggerReferralPromo:
             return NeevaFeatureFlags[.referralPromo] && !Defaults[.didDismissReferralPromoCard]
         case .shouldTriggerSignInPromo:
@@ -161,23 +151,29 @@ class ZeroQueryModel: ObservableObject {
                 self.promoCard = nil
                 Defaults[.didDismissDefaultBrowserCard] = true
             }
-        case .shouldTriggerWalletPromo:
+        case .shouldTriggerWalletOrSignupPromo:
             #if XYZ
-                promoCard = .walletPromo {
-                    self.bvc.web3Model.showWalletPanel()
+                if Defaults[.cryptoPublicKey].isEmpty {
+                    promoCard = .walletPromo {
+                        self.bvc.web3Model.showWalletPanel()
+                    }
+                } else {
+                    promoCard = nil
                 }
             #else
-                break
+                if Defaults[.didFirstNavigation] && NeevaConstants.currentTarget != .xyz {
+                    promoCard = .previewModeSignUp {
+                        self.handlePromoCard(interaction: .PreviewModePromoSignup)
+                        self.signIn()
+                    } onClose: {
+                        self.handlePromoCard(interaction: .ClosePreviewSignUpPromo)
+                        self.promoCard = nil
+                        Defaults[.didDismissPreviewSignUpCard] = true
+                    }
+                } else {
+                    promoCard = nil
+                }
             #endif
-        case .shouldTriggerSignUpPromo:
-            promoCard = .previewModeSignUp {
-                self.handlePromoCard(interaction: .PreviewModePromoSignup)
-                self.signIn()
-            } onClose: {
-                self.handlePromoCard(interaction: .ClosePreviewSignUpPromo)
-                self.promoCard = nil
-                Defaults[.didDismissPreviewSignUpCard] = true
-            }
         case .shouldTriggerReferralPromo:
             promoCard = .referralPromo {
                 self.handlePromoCard(interaction: .OpenReferralPromo)
