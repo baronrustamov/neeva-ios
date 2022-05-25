@@ -35,7 +35,9 @@ struct TopBarView: View {
             }
 
             HStack(spacing: chrome.inlineToolbar ? 12 : 0) {
-                if chrome.inlineToolbar && !chrome.isEditingLocation {
+                if Defaults[.didFirstNavigation] && chrome.inlineToolbar
+                    && !chrome.isEditingLocation
+                {
                     Group {
                         TabToolbarButtons.BackButton(
                             weight: .regular,
@@ -74,7 +76,9 @@ struct TopBarView: View {
                 .zIndex(1)
                 .layoutPriority(1)
 
-                if chrome.inlineToolbar && !chrome.isEditingLocation {
+                if Defaults[.didFirstNavigation] && chrome.inlineToolbar
+                    && !chrome.isEditingLocation
+                {
                     Group {
                         TopBarNeevaButton(onMenuAction: onMenuAction)
 
