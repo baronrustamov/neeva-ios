@@ -87,6 +87,10 @@ public struct LogConfig {
         case SettingAccountSettings
         /// Click default browser in setting
         case SettingDefaultBrowser
+        /// Click theme in setting
+        case SettingTheme
+        /// Click app icon in setting
+        case SettingAppIcon
         /// Click sign out in setting
         case SettingSignout
         /// Click Data Management in setting
@@ -501,6 +505,8 @@ public struct LogConfig {
         // MARK: - Settings
         case .SettingAccountSettings: return .Settings
         case .SettingDefaultBrowser: return .Settings
+        case .SettingTheme: return .Settings
+        case .SettingAppIcon: return .Settings
         case .SettingSignout: return .Settings
         case .ViewDataManagement: return .Settings
         case .ViewTrackingProtection: return .Settings

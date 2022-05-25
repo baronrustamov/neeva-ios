@@ -32,6 +32,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = .init(windowScene: scene)
         window!.makeKeyAndVisible()
 
+        Self.handleThemePreference(for: Defaults[.customizeTheme] ?? .system)
+
         setupRootViewController(scene)
 
         if Defaults[.enableGeigerCounter] {
@@ -130,6 +132,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         getAppDelegate().updateTopSitesWidget()
         bvc.downloadQueue.pauseAll()
+    }
+
+    static func handleThemePreference(for option: AppearanceThemeOption) {
+        getAllSceneDelegates().forEach { scene in
+            switch option {
+            case .system:
+                scene.window?.overrideUserInterfaceStyle = .unspecified
+            case .dark:
+                scene.window?.overrideUserInterfaceStyle = .dark
+            case .light:
+                scene.window?.overrideUserInterfaceStyle = .light
+            }
+        }
     }
 
     // MARK: - URL managment

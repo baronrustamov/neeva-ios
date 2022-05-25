@@ -3,6 +3,23 @@
 // found in the LICENSE file.
 
 import Defaults
+import SwiftUI
+
+public enum AppearanceThemeOption: String, Equatable, Encodable, Decodable, CaseIterable {
+    case system = "System"
+    case light = "Light"
+    case dark = "Dark"
+
+    public var localizedName: LocalizedStringKey { LocalizedStringKey(rawValue) }
+}
+
+public enum AppearanceIconOption: String, Equatable, Encodable, Decodable, CaseIterable {
+    // these strings map directly to definitions in `/Client/Info.plist`
+    case system = "System"
+    case black = "Black"
+
+    public var localizedName: LocalizedStringKey { LocalizedStringKey(rawValue) }
+}
 
 // If you add a setting here, make sure it’s either exposed through
 // user-visible settings or in InternalSettingsView
@@ -61,6 +78,12 @@ extension Defaults.Keys {
         "profile.confirmCloseAllTabs", default: true)
     public static let contentBlockingStrength =
         Defaults.Key<String>("contentBlockingStrength", default: "easyPrivacy")
+
+    // MARK: - appearance app settings
+    public static let customizeTheme = Defaults.Key<AppearanceThemeOption?>(
+        "appearance_theme", default: .system)
+    public static let customizeIcon = Defaults.Key<AppearanceIconOption?>(
+        "appearance_icon", default: .system)
 
     // MARK: - debug settings
     public static let enableAuthLogging = Defaults.BoolKey("profile_enableAuthLogging")
