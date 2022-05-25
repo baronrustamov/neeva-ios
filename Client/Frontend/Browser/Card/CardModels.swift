@@ -57,7 +57,7 @@ class TabCardModel: CardModel {
     @Published var isSearchingForTabs: Bool = false
     @Published var tabSearchFilter = "" {
         didSet {
-            updateIfNeeded(force: true)
+            updateIfNeeded(forceUpdateRows: true)
         }
     }
 
@@ -89,11 +89,11 @@ class TabCardModel: CardModel {
         self.objectWillChange.send()
     }
 
-    func updateIfNeeded(force: Bool = false) {
+    func updateIfNeeded(forceUpdateRows: Bool = false) {
         if needsUpdateGroup {
             needsUpdateGroup = false
             onDataUpdated()
-        } else if needsUpdateRows || force {
+        } else if needsUpdateRows || forceUpdateRows {
             needsUpdateRows = false
             updateRows()
         }
