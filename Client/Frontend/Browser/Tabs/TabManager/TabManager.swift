@@ -282,11 +282,10 @@ class TabManager: NSObject {
         selectedTab.lastExecutedTime = Date.nowMilliseconds()
         selectedTab.applyTheme()
 
-        if updateGroup {
-            updateGroupPublisher.send()
-        }
-
         if notify {
+            if updateGroup {
+                updateGroupPublisher.send()
+            }
             sendSelectTabNotifications(previous: previous)
             selectedTabWebViewPublisher.send(selectedTab.webView)
         }
