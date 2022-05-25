@@ -126,6 +126,10 @@ class ZeroQueryModel: ObservableObject {
     func shouldDisplayPromoCard(_ promocard: PromoCardTrigger) -> Bool {
         let promoCardTypeArm = NeevaExperiment.arm(for: .promoCardTypeAfterFirstRun)
 
+        if !Defaults[.didFirstNavigation] {
+            return false
+        }
+
         switch promocard {
         case .shouldTriggerArmDefaultPromo:
             return (promoCardTypeArm == .control || promoCardTypeArm == nil)
