@@ -135,7 +135,8 @@ struct BrowserView: View {
         .environment(
             \.openArchivedTabsPanelView,
             {
-                bvc.present(ArchivedTabsPanelViewController(bvc: bvc), animated: true)
+                bvc.present(
+                    ArchivedTabsPanelViewController(browserModel: browserModel), animated: true)
             }
         )
         .environmentObject(browserModel)

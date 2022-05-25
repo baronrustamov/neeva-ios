@@ -5,22 +5,24 @@
 import SwiftUI
 
 class ArchivedTabsPanelViewController: UIHostingController<AnyView> {
-    init(bvc: BrowserViewController) {
+    init(browserModel: BrowserModel) {
         super.init(rootView: AnyView(EmptyView()))
 
         self.rootView = AnyView(
-            ArchivedTabsPanelView(model: ArchivedTabsPanelModel(tabManager: bvc.tabManager)) {
+            ArchivedTabsPanelView(
+                model: ArchivedTabsPanelModel(tabManager: browserModel.tabManager)
+            ) {
                 DispatchQueue.main.async {
                     self.dismiss(animated: true)
                 }
             }.environment(
                 \.onOpenURL,
                 {
-                    bvc.tabManager.createOrSwitchToTab(for: $0)
-                    bvc.browserModel.hideGridWithNoAnimation()
+                    browserModel.tabManager.createOrSwitchToTab(for: $0)
+                    browserModel.hideGridWithNoAnimation()
                 }
             ).environment(
-                \.selectionCompletion, { bvc.browserModel.hideGridWithNoAnimation() }
+                \.selectionCompletion, { browserModel.hideGridWithNoAnimation() }
             )
         )
     }
