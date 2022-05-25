@@ -136,7 +136,10 @@ struct ZeroQueryView: View {
                     }
                     Spacer()
                 }
-                .frame(minHeight: geom.size.height)
+                // only set for zero query first run
+                .if(!Defaults[.didFirstNavigation]) { view in
+                    view.frame(minHeight: geom.size.height)
+                }
             }
             .environment(\.zeroQueryWidth, geom.size.width)
             .animation(nil)
