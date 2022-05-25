@@ -69,7 +69,14 @@ struct ArchivedTabsListSectionVIew: View {
                 if processed[tab.rootUUID] != nil {
                     if processed[tab.rootUUID] == false {
                         if let tabGroup = model.tabManager.archivedTabGroups[tab.rootUUID]?
-                            .children
+                            .children.filter { child in
+                                switch section {
+                                case .lastMonth:
+                                    return child.wasLastExecuted(.lastMonth)
+                                case .overAMonth:
+                                    return child.wasLastExecuted(.overAMonth)
+                                }
+                            }
                         {
                             LazyVStack(spacing: 0) {
                                 HStack {
