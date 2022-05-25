@@ -102,6 +102,13 @@ class NeevaSignInTests: BaseTestCase {
     //        doSignOut()
     //    }
 
+    fileprivate func tapCloseButton() {
+        waitForExistence(app.buttons["Close"])
+        app.buttons["Close"].tap()
+
+        waitForExistence(app.buttons["Show Tabs"])
+    }
+
     func testSignInWithStaleLoginCookie() throws {
         try skipTest(issue: 2832, "this test is flaky")
         // See the setUp() function where the stale login cookie is specified
@@ -129,6 +136,11 @@ class NeevaSignInTests: BaseTestCase {
         waitForExistence(app.staticTexts["Welcome To Neeva"])
     }
 
+    func testIntroPageCancelButton() throws {
+        testSignInUIAppearsFromSettings()
+        tapCloseButton()
+    }
+
     func testOtherSignUpOptions() throws {
         testSignInUIAppearsFromSettings()
 
@@ -140,9 +152,11 @@ class NeevaSignInTests: BaseTestCase {
         waitForExistence(app.buttons["Sign up with Apple"])
         waitForExistence(app.buttons["Sign up with Google"])
         waitForExistence(app.buttons["Sign up with Microsoft"])
+
+        tapCloseButton()
     }
 
-    func testSignInButton() throws {
+    func testSignInPageButtons() throws {
         testSignInUIAppearsFromSettings()
 
         waitForExistence(app.buttons["Already have an account? Sign In"])
@@ -153,5 +167,7 @@ class NeevaSignInTests: BaseTestCase {
         waitForExistence(app.buttons["Sign in with Apple"])
         waitForExistence(app.buttons["Sign in with Google"])
         waitForExistence(app.buttons["Sign in with Microsoft"])
+
+        tapCloseButton()
     }
 }
