@@ -22,6 +22,7 @@ public struct ArchivedTabsData {
 class ArchivedTabsPanelModel: ObservableObject {
     let tabManager: TabManager
     var archivedTabs: [Tab]
+    var archivedTabGroups: [String: TabGroup]
     var groupedSites = ArchivedTabsData()
     @Default(.archivedTabsDuration) var archivedTabsDuration
     private var archivedTabsDurationSubscription: AnyCancellable?
@@ -49,6 +50,7 @@ class ArchivedTabsPanelModel: ObservableObject {
     init(tabManager: TabManager) {
         self.tabManager = tabManager
         self.archivedTabs = tabManager.archivedTabs
+        self.archivedTabGroups = tabManager.archivedTabGroups
 
         archivedTabsDurationSubscription = _archivedTabsDuration.publisher.sink {
             [weak self] _ in

@@ -68,7 +68,10 @@ struct ArchivedTabsListSectionVIew: View {
             ForEach(tabs, id: \.self) { tab in
                 if processed[tab.rootUUID] != nil {
                     if processed[tab.rootUUID] == false {
-                        if let tabGroup = model.tabManager.archivedTabGroups[tab.rootUUID]?
+                        // A tab group can have child tabs spread across different archived sections.
+                        // Therefore, we need to filter to children by last executed time to prevent
+                        // child tabs from showing up twice in different sections.
+                        if let tabGroup = model.archivedTabGroups[tab.rootUUID]?
                             .children.filter { child in
                                 switch section {
                                 case .lastMonth:
