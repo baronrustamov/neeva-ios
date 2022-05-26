@@ -523,7 +523,12 @@ class BrowserViewController: UIViewController, ModalPresenter {
                     if !Defaults[.didFirstNavigation] {
                         self.showZeroQuery()
                     } else {
+                        self.gridModel.switchModeWithoutAnimation = true
                         self.showTabTray()
+
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            self.gridModel.switchModeWithoutAnimation = false
+                        }
                     }
                 #endif
             }
@@ -1243,11 +1248,10 @@ extension BrowserViewController: TabDelegate {
             }
         }
 
-        let tabManager = tabManager
+        let tabManager = self.tabManager
 
         // Observers that live as long as the tab. They are all cancelled in Tab/close(),
         // so it is safe to use a strong reference to self.
-
         let estimatedProgressPub = webView.publisher(for: \.estimatedProgress, options: .new)
         let isLoadingPub = webView.publisher(for: \.isLoading, options: .new)
         estimatedProgressPub.combineLatest(isLoadingPub)

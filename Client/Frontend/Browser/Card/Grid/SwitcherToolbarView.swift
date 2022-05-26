@@ -181,7 +181,6 @@ struct SwitcherToolbarView: View {
             }
         }
         .defaultBackgroundOrTheme(currentTheme)
-        .animation(.easeOut)
         .accessibilityElement(children: .contain)
         .accessibilityLabel("Toolbar")
         .accessibilityHidden(gridModel.showingDetailView)

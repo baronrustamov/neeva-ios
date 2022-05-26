@@ -17,7 +17,6 @@ class BrowserModel: ObservableObject {
                 // Ensure that the switcher is reset in case a previous drag was not
                 // properly completed.
                 switcherToolbarModel.dragOffset = nil
-                gridModel.switchModeWithoutAnimation = false
             }
         }
     }
@@ -36,9 +35,12 @@ class BrowserModel: ObservableObject {
     var notificationViewManager: NotificationViewManager
 
     func showGridWithAnimation() {
+        gridModel.switchModeWithoutAnimation = true
+
         if gridModel.switcherState != .tabs {
             gridModel.switcherState = .tabs
         }
+
         if !gridModel.tabCardModel.getAllDetails(matchingIncognitoState: incognitoModel.isIncognito)
             .contains(where: \.isSelected)
         {
@@ -47,6 +49,7 @@ class BrowserModel: ObservableObject {
             if FeatureFlag[.enableTimeBasedSwitcher] {
                 gridModel.tabCardModel.updateRowsIfNeeded()
             }
+
             gridModel.scrollToSelectedTab { [self] in
                 cardTransitionModel.update(to: .visibleForTrayShow)
                 contentVisibilityModel.update(showContent: false)
@@ -59,12 +62,15 @@ class BrowserModel: ObservableObject {
         if FeatureFlag[.enableTimeBasedSwitcher] {
             gridModel.tabCardModel.updateRowsIfNeeded()
         }
+
         gridModel.scrollToSelectedTab()
         cardTransitionModel.update(to: .hidden)
         contentVisibilityModel.update(showContent: false)
+
         if !showGrid {
             showGrid = true
         }
+
         updateSpaces()
     }
 
@@ -110,6 +116,7 @@ class BrowserModel: ObservableObject {
         gridModel.closeDetailView()
 
         tabManager.updateWebViewForSelectedTab(notify: true)
+        gridModel.switchModeWithoutAnimation = false
     }
 
     func onCompletedCardTransition() {
@@ -117,6 +124,7 @@ class BrowserModel: ObservableObject {
         // since the previous animation wasn't finished yet.
         if showGrid, cardTransitionModel.state == .visibleForTrayShow {
             cardTransitionModel.update(to: .hidden)
+            gridModel.switchModeWithoutAnimation = false
         } else {
             hideGridWithNoAnimation()
         }

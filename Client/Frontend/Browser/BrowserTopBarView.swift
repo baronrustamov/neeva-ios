@@ -62,11 +62,9 @@ struct BrowserTopBarView: View {
     }
 
     var topBar: some View {
-        GeometryReader { geom in
-            content
-                .transition(.opacity)
-                .frame(height: chromeModel.topBarHeight)
-        }
+        content
+            .transition(.opacity)
+            .frame(height: chromeModel.topBarHeight)
     }
 
     var body: some View {

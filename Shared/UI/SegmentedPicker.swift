@@ -44,6 +44,7 @@ public struct SegmentedPicker: View {
     private let segmentHeight: CGFloat = 36
     let segments: [Segment]
     var dragOffset: CGFloat? = nil
+    var canAnimate: Bool = true
 
     @Binding var selectedSegmentIndex: Int
     @GestureState var pressed = false
@@ -91,7 +92,7 @@ public struct SegmentedPicker: View {
             .scaleEffect(pressed ? 0.9 : 1)
             .offset(x: offset.clamp(min: -minMaxOffset, max: minMaxOffset))
             .animation(.interactiveSpring(), value: pressed)
-            .animation(dragOffset == nil ? .interactiveSpring() : nil, value: offset)
+            .animation(dragOffset == nil && canAnimate ? .interactiveSpring() : nil, value: offset)
             .frame(width: width, height: segmentHeight)
             .offset(x: Double(signOf: offset, magnitudeOf: 0.5) * (segmentWidth - width))
             .padding(.horizontal, 3)
@@ -194,11 +195,14 @@ public struct SegmentedPicker: View {
         }
     }
 
-    public init(segments: [Segment], selectedSegmentIndex: Binding<Int>, dragOffset: CGFloat? = nil)
-    {
+    public init(
+        segments: [Segment], selectedSegmentIndex: Binding<Int>, dragOffset: CGFloat? = nil,
+        canAnimate: Bool = true
+    ) {
         self.segments = segments
         self._selectedSegmentIndex = selectedSegmentIndex
         self.dragOffset = dragOffset
+        self.canAnimate = canAnimate
     }
 }
 

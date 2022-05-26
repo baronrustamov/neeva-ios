@@ -281,9 +281,6 @@ struct CardsContainer: View {
             }
         }
         .id(generationId)
-        .animation(
-            .interactiveSpring(), value: "\(gridModel.switcherState) \(incognitoModel.isIncognito)"
-        )
         .onReceive(
             NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)
         ) { _ in
