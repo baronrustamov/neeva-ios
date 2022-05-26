@@ -14,10 +14,6 @@ struct InternalSettingsView: View {
     @Default(.didFirstNavigation) var didFirstNavigation
     @Default(.seenSpacesIntro) var seenSpacesIntro
     @Default(.seenSpacesShareIntro) var seenSpacesShareIntro
-    @Default(.seenCheatsheetIntro) var seenCheatsheetIntro
-    @Default(.showTryCheatsheetPopover) var showTryCheatsheetPopover
-    @Default(.seenTryCheatsheetPopoverOnRecipe) var seenTryCheatsheetPopoverOnRecipe
-    @Default(.cheatsheetDebugQuery) var cheatsheetDebugQuery
     @Default(.lastVersionNumber) var lastVersionNumber
     @Default(.didDismissReferralPromoCard) var didDismissReferralPromoCard
     @Default(.deletedSuggestedSites) var deletedSuggestedSites
@@ -90,14 +86,7 @@ struct InternalSettingsView: View {
                     Toggle(String("spacesIntroSeen"), isOn: $seenSpacesIntro)
                     Toggle(String("spacesShareIntroSeen"), isOn: $seenSpacesShareIntro)
                 }
-                Section(header: Text(verbatim: "Cheatsheet")) {
-                    Toggle(String("cheatsheetIntroSeen"), isOn: $seenCheatsheetIntro)
-                    Toggle(String("showTryCheatsheetPopover"), isOn: $showTryCheatsheetPopover)
-                    Toggle(
-                        String("seenTryCheatsheetPopoverOnRecipe"),
-                        isOn: $seenTryCheatsheetPopoverOnRecipe)
-                    Toggle(String("cheatsheetDebugQuery"), isOn: $cheatsheetDebugQuery)
-                }
+                CheatsheetSettingsView()
                 Section(header: Text(verbatim: "Promo Cards")) {
                     Toggle(
                         String("didDismissDefaultBrowserCard"), isOn: $didDismissDefaultBrowserCard)

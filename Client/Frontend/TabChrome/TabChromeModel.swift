@@ -33,11 +33,6 @@ class TabChromeModel: ObservableObject {
     @Published private(set) var urlInSpace: Bool = false
     private var spaceRefreshSubscription: AnyCancellable?
 
-    /// True when user has clicked education on SRP and is now not on an SRP
-    @Published var showTryCheatsheetPopover: Bool = false
-    private var publishedTabObserver: AnyCancellable?
-    private var tryCheatsheetPopoverObserver: AnyCancellable?
-
     var showTopCardStrip: Bool {
         FeatureFlag[.cardStrip] && FeatureFlag[.topCardStrip] && inlineToolbar
             && !isEditingLocation
@@ -140,7 +135,6 @@ class TabChromeModel: ObservableObject {
     private func setupURLObserver() {
         urlSubscription?.cancel()
         spaceRefreshSubscription?.cancel()
-        tryCheatsheetPopoverObserver?.cancel()
 
         guard let tabManager = topBarDelegate?.tabManager else {
             return
@@ -178,46 +172,8 @@ class TabChromeModel: ObservableObject {
             }
         }
 
-        tryCheatsheetPopoverObserver = Publishers.CombineLatest(
-            Defaults.publisher(.showTryCheatsheetPopover),
-            tabManager.selectedTabURLPublisher
+        CheatsheetMenuViewModel.promoModel.subscribe(
+            to: tabManager.selectedTabURLPublisher.eraseToAnyPublisher()
         )
-        .map { showPopover, url -> Bool in
-            guard let url = url else {
-                return false
-            }
-
-            if !Defaults[.seenTryCheatsheetPopoverOnRecipe],
-                DomainAllowList.isRecipeAllowed(url: url)
-            {
-                return true
-            }
-
-            // else show popover if seen SRP intro screen
-            if showPopover.newValue,
-                // cheatsheet is not used on NeevaDomain
-                !NeevaConstants.isInNeevaDomain(url),
-                // avoid flashing the popover when app launches
-                !(url.scheme == InternalURL.scheme)
-            {
-                return true
-            }
-            return false
-        }
-        .receive(on: DispatchQueue.main)
-        .sink { [weak self] in
-            self?.showTryCheatsheetPopover = $0
-            // switching tab right after setting the bool sometimes does not trigger a UI change
-            self?.objectWillChange.send()
-        }
-    }
-
-    func clearCheatsheetPopoverFlags() {
-        Defaults[.showTryCheatsheetPopover] = false
-        if let currentURL = topBarDelegate?.tabManager.selectedTabURLPublisher.value,
-            DomainAllowList.isRecipeAllowed(url: currentURL)
-        {
-            Defaults[.seenTryCheatsheetPopoverOnRecipe] = true
-        }
     }
 }

@@ -31,20 +31,15 @@ struct TopBarNeevaButton: View {
                 .OpenCheatsheet,
                 attributes: EnvironmentHelper.shared.getAttributes()
             )
-            chromeModel.clearCheatsheetPopoverFlags()
+            CheatsheetMenuViewModel.promoModel.openSheet(
+                on: chromeModel.topBarDelegate?.tabManager.selectedTab?.url
+            )
             if let bvc = chromeModel.topBarDelegate as? BrowserViewController {
                 bvc.showCheatSheetOverlay()
             }
         }
         .tapTargetFrame()
-        .presentAsPopover(
-            isPresented: $chromeModel.showTryCheatsheetPopover,
-            backgroundColor: CheatsheetTooltipPopoverView.backgroundColor,
-            dismissOnTransition: true
-        ) {
-            CheatsheetTooltipPopoverView()
-                .frame(maxWidth: 270)
-        }
+        .environmentObject(CheatsheetMenuViewModel.promoModel)
         .disabled(!chromeModel.isPage || chromeModel.isErrorPage)
     }
 }

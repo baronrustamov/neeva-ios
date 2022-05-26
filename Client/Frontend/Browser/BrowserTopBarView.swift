@@ -15,6 +15,7 @@ struct BrowserTopBarView: View {
     @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var chromeModel: TabChromeModel
     @EnvironmentObject var gridModel: GridModel
+    @EnvironmentObject var tabContainerModel: TabContainerModel
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) private var verticalSizeClass

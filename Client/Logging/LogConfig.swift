@@ -324,6 +324,7 @@ public struct LogConfig {
 
         // MARK: Cheatsheet(NeevaScope)
         case CheatsheetPopoverImpression
+        case CheatsheetUGCIndicatorImpression
         case OpenCheatsheet
         case CheatsheetEducationImpressionOnSRP
         case CheatsheetEducationImpressionOnPage
@@ -661,6 +662,7 @@ public struct LogConfig {
         case .RecipeCheatsheetShowMoreRecipe: return .RecipeCheatsheet
 
         case .CheatsheetPopoverImpression: return .Cheatsheet
+        case .CheatsheetUGCIndicatorImpression: return .Cheatsheet
         case .OpenCheatsheet: return .Cheatsheet
         case .CheatsheetEducationImpressionOnSRP: return .Cheatsheet
         case .CheatsheetEducationImpressionOnPage: return .Cheatsheet

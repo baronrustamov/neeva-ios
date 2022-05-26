@@ -82,14 +82,7 @@ struct TabToolbarView: View {
         TabToolbarButtons.Neeva(iconWidth: 22) {
             onNeevaButtonPressed()
         }
-        .presentAsPopover(
-            isPresented: $chromeModel.showTryCheatsheetPopover,
-            backgroundColor: CheatsheetTooltipPopoverView.backgroundColor,
-            dismissOnTransition: true
-        ) {
-            CheatsheetTooltipPopoverView()
-                .frame(maxWidth: 270)
-        }
+        .environmentObject(CheatsheetMenuViewModel.promoModel)
         .disabled(!chromeModel.isPage || chromeModel.isErrorPage)
     }
 }
