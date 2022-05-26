@@ -1533,6 +1533,10 @@
 		F0FDDBB025EE91F300B12287 /* libStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* libStorage.a */; };
 		F35B8D2B1D6380EA008E3D61 /* SessionRestore.html in Resources */ = {isa = PBXBuildFile; fileRef = F35B8D2A1D6380EA008E3D61 /* SessionRestore.html */; };
 		F35B8D2D1D6383E9008E3D61 /* SessionRestoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F35B8D2C1D6383E9008E3D61 /* SessionRestoreHelper.swift */; };
+		F805A79F2840187D00372451 /* Black@3x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = F805A79B2840187D00372451 /* Black@3x~ipad.png */; };
+		F805A7A02840187D00372451 /* System@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = F805A79C2840187D00372451 /* System@2x~ipad.png */; };
+		F805A7A12840187D00372451 /* Black@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = F805A79D2840187D00372451 /* Black@2x~ipad.png */; };
+		F805A7A22840187D00372451 /* System@3x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = F805A79E2840187D00372451 /* System@3x~ipad.png */; };
 		F80983B9283848450039FCBD /* AppearanceSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80983B8283848450039FCBD /* AppearanceSettingsSection.swift */; };
 		F80983BC283849E00039FCBD /* Black@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F80983BA283849DF0039FCBD /* Black@3x.png */; };
 		F80983BD283849E00039FCBD /* Black@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F80983BB283849E00039FCBD /* Black@2x.png */; };
@@ -2908,6 +2912,10 @@
 		F0ACC19E25E8C2380024991B /* Neeva.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Neeva.entitlements; sourceTree = "<group>"; };
 		F35B8D2A1D6380EA008E3D61 /* SessionRestore.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = SessionRestore.html; sourceTree = "<group>"; };
 		F35B8D2C1D6383E9008E3D61 /* SessionRestoreHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionRestoreHelper.swift; sourceTree = "<group>"; };
+		F805A79B2840187D00372451 /* Black@3x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Black@3x~ipad.png"; sourceTree = "<group>"; };
+		F805A79C2840187D00372451 /* System@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "System@2x~ipad.png"; sourceTree = "<group>"; };
+		F805A79D2840187D00372451 /* Black@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Black@2x~ipad.png"; sourceTree = "<group>"; };
+		F805A79E2840187D00372451 /* System@3x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "System@3x~ipad.png"; sourceTree = "<group>"; };
 		F80983B8283848450039FCBD /* AppearanceSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsSection.swift; sourceTree = "<group>"; };
 		F80983BA283849DF0039FCBD /* Black@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Black@3x.png"; sourceTree = "<group>"; };
 		F80983BB283849E00039FCBD /* Black@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Black@2x.png"; sourceTree = "<group>"; };
@@ -5138,10 +5146,14 @@
 		F80983C1283879890039FCBD /* AltAppIcons */ = {
 			isa = PBXGroup;
 			children = (
-				F80983C328387B6D0039FCBD /* System@2x.png */,
-				F80983C228387B6D0039FCBD /* System@3x.png */,
 				F80983BB283849E00039FCBD /* Black@2x.png */,
+				F805A79D2840187D00372451 /* Black@2x~ipad.png */,
 				F80983BA283849DF0039FCBD /* Black@3x.png */,
+				F805A79B2840187D00372451 /* Black@3x~ipad.png */,
+				F80983C328387B6D0039FCBD /* System@2x.png */,
+				F805A79C2840187D00372451 /* System@2x~ipad.png */,
+				F80983C228387B6D0039FCBD /* System@3x.png */,
+				F805A79E2840187D00372451 /* System@3x~ipad.png */,
 			);
 			path = AltAppIcons;
 			sourceTree = "<group>";
@@ -6419,9 +6431,11 @@
 				E69922171B94E3EF007C480D /* Licenses.html in Resources */,
 				E4CD9F5B1A71506C00318571 /* Reader.css in Resources */,
 				D0FCF8061FE4772D004A7995 /* AllFramesAtDocumentEnd.js in Resources */,
+				F805A7A12840187D00372451 /* Black@2x~ipad.png in Resources */,
 				7B4980A81CE363ED0017547C /* Settings.xcassets in Resources */,
 				E4B7B7861A793CF20022C5E0 /* FiraSans-UltraLight.ttf in Resources */,
 				C9C18E1626559118004710CD /* Neeva.xcassets in Resources */,
+				F805A79F2840187D00372451 /* Black@3x~ipad.png in Resources */,
 				E4B7B77D1A793CF20022C5E0 /* FiraSans-Regular.ttf in Resources */,
 				E4B7B7791A793CF20022C5E0 /* FiraSans-Light.ttf in Resources */,
 				F80983C428387B6D0039FCBD /* System@3x.png in Resources */,
@@ -6432,6 +6446,7 @@
 				4A22DD0826575FD6009BE9FC /* TrackingEntity.xcassets in Resources */,
 				D30684F11C84F12A002D8D82 /* SearchPlugins in Resources */,
 				D308EE561CBF0BF5006843F2 /* CertError.css in Resources */,
+				F805A7A22840187D00372451 /* System@3x~ipad.png in Resources */,
 				BC6D34882622D4DE0050DEC4 /* Roobert-SemiBold.otf in Resources */,
 				BC6D34862622D4DE0050DEC4 /* Roobert-Light.otf in Resources */,
 				E4B7B7681A793CF20022C5E0 /* FiraSans-Bold.ttf in Resources */,
@@ -6448,6 +6463,7 @@
 				F80983C528387B6D0039FCBD /* System@2x.png in Resources */,
 				E4ECCDAE1AB131770005E717 /* FiraSans-Medium.ttf in Resources */,
 				E4424B3C1AC71FB400F44C38 /* FiraSans-Book.ttf in Resources */,
+				F805A7A02840187D00372451 /* System@2x~ipad.png in Resources */,
 				39A35AED1C0662A3006B9E87 /* SpotlightHelper.js in Resources */,
 				D0FCF8071FE4772D004A7995 /* MainFrameAtDocumentEnd.js in Resources */,
 				BC6D34892622D4DE0050DEC4 /* Roobert-Medium.otf in Resources */,
