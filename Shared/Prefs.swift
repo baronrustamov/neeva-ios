@@ -77,7 +77,9 @@ extension Defaults.Keys {
     public static let confirmCloseAllTabs = Defaults.Key(
         "profile.confirmCloseAllTabs", default: true)
     public static let contentBlockingStrength =
-        Defaults.Key<String>("contentBlockingStrength", default: "easyPrivacy")
+        Defaults.Key<String>("contentBlockingStrength", default: "easyPrivacyStrict")
+    public static let adBlockEnabled =
+        Defaults.Key("adBlockEnabled", default: false)
 
     // MARK: - appearance app settings
     public static let customizeTheme = Defaults.Key<AppearanceThemeOption?>(

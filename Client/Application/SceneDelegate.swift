@@ -548,6 +548,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 Defaults[.cookieCutterEnabled] = Defaults[.contentBlockingEnabled]
             }
 
+            if previousVersion.compare("1.43.0", options: .numeric) == .orderedAscending {
+                Defaults[.contentBlockingStrength] = BlockingStrength.easyPrivacyStrict.rawValue
+            }
+
             return true
         }
 

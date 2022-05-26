@@ -35,28 +35,42 @@ struct TrackingAttribution: View {
 }
 
 struct TrackingSettingsSectionBlock: View {
+    @Default(.adBlockEnabled) private var adBlockEnabled
     @Default(.contentBlockingStrength) private var contentBlockingStrength
 
     var body: some View {
         Section(
             header: Text("TRACKERS"),
-            footer: Text(
-                "If a site doesn't work as expected, you can deactivate Cookie Cutter for the site at any time."
-            )
+            footer: contentBlockingStrength == BlockingStrength.easyPrivacy.rawValue
+                ? Text(
+                    "Blocks many ads and trackers. Minimizes disruption to ads and other functionality."
+                )
+                : Text(
+                    "Blocks more ads and trackers. May break ads and other functionality on some sites."
+                )
         ) {
             Picker("Protection Mode", selection: $contentBlockingStrength) {
                 ForEach(BlockingStrength.allCases) { strength in
-                    // TODO: enable ad blocker at a later release
-                    if strength != .easyListAdBlock {
-                        VStack(alignment: .leading) {
-                            Text(strength.name.capitalized)
-                        }
-                        .tag(strength.rawValue)
+                    VStack(alignment: .leading) {
+                        Text(strength.name.capitalized)
                     }
+                    .tag(strength.rawValue)
+                }
+            }
+            .onChange(of: contentBlockingStrength) { tag in
+                if tag == BlockingStrength.easyPrivacy.rawValue {
+                    adBlockEnabled = false
                 }
             }
             .labelsHidden()
-            .pickerStyle(.inline)
+            .pickerStyle(.segmented)
+            .listRowBackground(Color.clear)
+            .padding(.horizontal, -10)
+        }
+
+        Section {
+            Toggle("Ad Blocking", isOn: $adBlockEnabled)
+                .disabled(contentBlockingStrength != BlockingStrength.easyPrivacyStrict.rawValue)
         }
     }
 }
