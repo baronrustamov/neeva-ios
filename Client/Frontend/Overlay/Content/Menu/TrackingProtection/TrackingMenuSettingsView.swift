@@ -6,34 +6,6 @@ import Defaults
 import Shared
 import SwiftUI
 
-struct TrackingMenuSettingsView: View {
-    @EnvironmentObject var viewModel: TrackingStatsViewModel
-
-    let domain: String
-    var body: some View {
-        NavigationView {
-            List {
-                Section(header: Text("On \(domain)").padding(.top, 21)) {
-                    Toggle("Tracking Prevention", isOn: $viewModel.preventTrackersForCurrentPage)
-                }
-                Section(header: Text("Global Privacy Settings")) {
-                    TrackingSettingsBlock()
-                }
-                TrackingAttribution()
-            }
-            .navigationTitle("Advanced Privacy Settings")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {}
-                }
-            }
-            .listStyle(.insetGrouped)
-            .applyToggleStyle()
-        }.navigationViewStyle(.stack)
-    }
-}
-
 struct TrackingAttribution: View {
     @Environment(\.onOpenURL) var openURL
 
@@ -62,32 +34,43 @@ struct TrackingAttribution: View {
     }
 }
 
-struct TrackingSettingsBlock: View {
-    // TODO: revisit these params when we have the final UX
-    // @Default(.blockThirdPartyTrackingCookies) var blockTrackingCookies: Bool
-    // @Default(.blockThirdPartyTrackingRequests) var blockTrackingRequests: Bool
-    // @Default(.upgradeAllToHttps) var upgradeToHTTPS: Bool
-
-    @Default(.contentBlockingEnabled) private var contentBlockingEnabled
+struct TrackingSettingsSectionBlock: View {
+    @Default(.adBlockEnabled) private var adBlockEnabled
     @Default(.contentBlockingStrength) private var contentBlockingStrength
 
     var body: some View {
-        // Toggle("Block tracking cookies", isOn: $blockTrackingCookies)
-        // Toggle("Block tracking requests", isOn: $blockTrackingRequests)
-        // Toggle("Update requests to HTTPS", isOn: $upgradeToHTTPS)
-        Toggle("Enable Protection", isOn: $contentBlockingEnabled)
-
-        Picker("Protection Mode", selection: $contentBlockingStrength) {
-            ForEach(BlockingStrength.allCases) { strength in
-                Text(strength.name.capitalized)
+        Section(
+            header: Text("TRACKERS"),
+            footer: contentBlockingStrength == BlockingStrength.easyPrivacy.rawValue
+                ? Text(
+                    "Blocks many ads and trackers. Minimizes disruption to ads and other functionality."
+                )
+                : Text(
+                    "Blocks more ads and trackers. May break ads and other functionality on some sites."
+                )
+        ) {
+            Picker("Protection Mode", selection: $contentBlockingStrength) {
+                ForEach(BlockingStrength.allCases) { strength in
+                    VStack(alignment: .leading) {
+                        Text(strength.name.capitalized)
+                    }
                     .tag(strength.rawValue)
+                }
             }
+            .onChange(of: contentBlockingStrength) { tag in
+                if tag == BlockingStrength.easyPrivacy.rawValue {
+                    adBlockEnabled = false
+                }
+            }
+            .labelsHidden()
+            .pickerStyle(.segmented)
+            .listRowBackground(Color.clear)
+            .padding(.horizontal, -10)
         }
-    }
-}
 
-struct TrackingMenuSettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        TrackingMenuSettingsView(domain: "cnn.com")
+        Section {
+            Toggle("Ad Blocking", isOn: $adBlockEnabled)
+                .disabled(contentBlockingStrength != BlockingStrength.easyPrivacyStrict.rawValue)
+        }
     }
 }

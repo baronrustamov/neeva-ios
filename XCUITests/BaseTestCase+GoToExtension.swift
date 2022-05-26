@@ -26,9 +26,9 @@ extension BaseTestCase {
             app.buttons["TabOverflowButton"].tap(force: true)
             // scroll up the view
             if !app.buttons[button].isHittable {
-                let start = app.buttons["Download Page"].coordinate(
+                let start = app.buttons["Text Size"].coordinate(
                     withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-                let finish = app.buttons["Find on Page"].coordinate(
+                let finish = app.buttons["Reload"].coordinate(
                     withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
                 start.press(forDuration: 1, thenDragTo: finish)
             }
@@ -119,5 +119,13 @@ extension BaseTestCase {
     func goToShareSheet() {
         waitForExistence(app.buttons["Share"])
         app.buttons["Share"].tap()
+    }
+
+    /// Launches from Tab
+    func goToTrackingProtectionMenu() {
+        waitForExistence(app.buttons["Tracking Protection"])
+        app.buttons["Tracking Protection"].tap()
+
+        waitForExistence(app.buttons["Cookie Cutter Settings"])
     }
 }

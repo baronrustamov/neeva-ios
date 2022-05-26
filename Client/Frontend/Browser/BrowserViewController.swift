@@ -150,7 +150,10 @@ class BrowserViewController: UIViewController, ModalPresenter {
     var overlayWindowManager: WindowManager?
 
     lazy var introViewModel: IntroViewModel = {
-        IntroViewModel(presentationController: self, overlayManager: overlayManager)
+        IntroViewModel(
+            presentationController: self,
+            overlayManager: overlayManager,
+            toastViewManager: toastViewManager)
     }()
 
     private(set) var readerModeCache: ReaderModeCache
@@ -520,7 +523,12 @@ class BrowserViewController: UIViewController, ModalPresenter {
                     if !Defaults[.didFirstNavigation] {
                         self.showZeroQuery()
                     } else {
+                        self.gridModel.switchModeWithoutAnimation = true
                         self.showTabTray()
+
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            self.gridModel.switchModeWithoutAnimation = false
+                        }
                     }
                 #endif
             }
@@ -1240,11 +1248,10 @@ extension BrowserViewController: TabDelegate {
             }
         }
 
-        let tabManager = tabManager
+        let tabManager = self.tabManager
 
         // Observers that live as long as the tab. They are all cancelled in Tab/close(),
         // so it is safe to use a strong reference to self.
-
         let estimatedProgressPub = webView.publisher(for: \.estimatedProgress, options: .new)
         let isLoadingPub = webView.publisher(for: \.isLoading, options: .new)
         estimatedProgressPub.combineLatest(isLoadingPub)
@@ -1373,6 +1380,7 @@ extension BrowserViewController: TabDelegate {
         tab.addContentScript(blocker, name: NeevaTabContentBlocker.name())
 
         tab.addContentScript(FocusHelper(tab: tab), name: FocusHelper.name())
+        tab.injectCookieCutterScript(cookieCutterModel: browserModel.cookieCutterModel)
 
         let webuiMessageHelper = WebUIMessageHelper(
             tab: tab,
@@ -1897,12 +1905,17 @@ extension BrowserViewController {
             }
 
             model?.thumbnailURLCandidates[url] = thumbnailUrls
-
-            self.showAddToSpacesSheet(
-                url: url, title: updater?.title ?? title,
-                description: description ?? updater?.description ?? output?.first?.first,
-                thumbnail: thumbnail,
-                importData: importData, updater: updater)
+            let thumbnailUrl = thumbnailUrls.first(where: {
+                $0.absoluteString.hasSuffix("jpeg") || $0.absoluteString.hasSuffix("jpg")
+                    || $0.absoluteString.hasSuffix("png")
+            })
+            SDWebImageDownloader.shared.downloadImage(with: thumbnailUrl) { image, _, _, _ in
+                self.showAddToSpacesSheet(
+                    url: url, title: updater?.title ?? title,
+                    description: description ?? updater?.description ?? output?.first?.first,
+                    thumbnail: image,
+                    importData: importData, updater: updater)
+            }
         }
     }
 
@@ -2020,7 +2033,9 @@ extension BrowserViewController {
     }
 
     func showBackForwardList() {
-        guard let backForwardList = tabManager.selectedTab?.webView?.backForwardList else {
+        guard let backForwardList = tabManager.selectedTab?.webView?.backForwardList,
+            backForwardList.all.count > 1
+        else {
             return
         }
 
@@ -2039,7 +2054,10 @@ extension BrowserViewController {
 extension BrowserViewController {
     func openSettings(openPage: SettingsPage? = nil) {
         let action = {
-            let controller = SettingsViewController(bvc: self, openPage: openPage)
+            let controller = SettingsViewController(bvc: self, openPage: openPage) {
+                self.overlayManager.isPresentedViewControllerVisible = false
+            }
+
             self.present(controller, animated: true)
         }
 
@@ -2051,5 +2069,7 @@ extension BrowserViewController {
         } else {
             action()
         }
+
+        overlayManager.isPresentedViewControllerVisible = true
     }
 }

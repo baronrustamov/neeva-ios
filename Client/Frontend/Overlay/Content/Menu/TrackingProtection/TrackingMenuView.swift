@@ -23,6 +23,7 @@ struct WhosTrackingYouDomain {
 class TrackingStatsViewModel: ObservableObject {
     // MARK: - Properties
     @Published private(set) var numDomains = 0
+    @Published private(set) var numTrackers = 0
     @Published private(set) var whosTrackingYouDomains = [WhosTrackingYouDomain]()
     @Published var preventTrackersForCurrentPage: Bool {
         didSet {
@@ -35,7 +36,7 @@ class TrackingStatsViewModel: ObservableObject {
                 ]
             )
 
-            guard let domain = selectedTabURL?.host else {
+            guard let domain = selectedTabURL?.host, Defaults[.cookieCutterEnabled] else {
                 return
             }
 
@@ -48,17 +49,14 @@ class TrackingStatsViewModel: ObservableObject {
 
                 self.selectedTab?.contentBlocker?.notifiedTabSetupRequired()
                 self.selectedTab?.reload()
-                self.refreshStats()
             }
         }
     }
     @Published var showTrackingStatsViewPopover = false
 
-    var viewVisible: Bool = false
-
     private var selectedTab: Tab? = nil {
         didSet {
-            statsSubscription = nil
+            listenForStatUpdates()
         }
     }
 
@@ -70,16 +68,8 @@ class TrackingStatsViewModel: ObservableObject {
 
             if let domain = selectedTabURL.host {
                 self.preventTrackersForCurrentPage = TrackingPreventionConfig.trackersPreventedFor(
-                    domain)
+                    domain, checkCookieCutterState: true)
             }
-        }
-    }
-
-    var numTrackers: Int {
-        if let numTrackersTesting = numTrackersTesting {
-            return numTrackersTesting
-        } else {
-            return selectedTab?.contentBlocker?.stats.domains.count ?? 0
         }
     }
 
@@ -87,7 +77,6 @@ class TrackingStatsViewModel: ObservableObject {
     private var statsSubscription: AnyCancellable? = nil
 
     /// FOR TESTING ONLY
-    private(set) var numTrackersTesting: Int?
     private(set) var trackers: [TrackingEntity] {
         didSet {
             onDataUpdated()
@@ -95,7 +84,9 @@ class TrackingStatsViewModel: ObservableObject {
     }
 
     // MARK: - Data Updates
-    func refreshStats() {
+    func listenForStatUpdates() {
+        statsSubscription = nil
+
         guard let tab = selectedTab else {
             return
         }
@@ -103,15 +94,16 @@ class TrackingStatsViewModel: ObservableObject {
         let trackingData = TrackingEntity.getTrackingDataForCurrentTab(
             stats: tab.contentBlocker?.stats)
         self.numDomains = trackingData.numDomains
+        self.numTrackers = trackingData.numTrackers
         self.trackers = trackingData.trackingEntities
-
         onDataUpdated()
+
         statsSubscription = selectedTab?.contentBlocker?.$stats
-            .filter { [weak self] _ in self?.viewVisible ?? false }
             .map { TrackingEntity.getTrackingDataForCurrentTab(stats: $0) }
             .sink { [weak self] data in
                 guard let self = self else { return }
                 self.numDomains = data.numDomains
+                self.numTrackers = data.numTrackers
                 self.trackers = data.trackingEntities
                 self.onDataUpdated()
             }
@@ -130,16 +122,18 @@ class TrackingStatsViewModel: ObservableObject {
     // MARK: - init
     init(tabManager: TabManager) {
         self.selectedTab = tabManager.selectedTab
-        self.preventTrackersForCurrentPage =
-            !Defaults[.unblockedDomains].contains(selectedTab?.currentURL()?.host ?? "")
+        self.preventTrackersForCurrentPage = TrackingPreventionConfig.trackersPreventedFor(
+            selectedTab?.currentURL()?.host ?? "", checkCookieCutterState: true)
+
         let trackingData = TrackingEntity.getTrackingDataForCurrentTab(
             stats: selectedTab?.contentBlocker?.stats)
-        self.numDomains = trackingData.numDomains
         self.trackers = trackingData.trackingEntities
+
         tabManager.selectedTabPublisher.assign(to: \.selectedTab, on: self).store(
             in: &subscriptions)
         tabManager.selectedTabURLPublisher.assign(to: \.selectedTabURL, on: self).store(
             in: &subscriptions)
+
         onDataUpdated()
     }
 
@@ -147,8 +141,9 @@ class TrackingStatsViewModel: ObservableObject {
     init(testingData: TrackingData) {
         self.preventTrackersForCurrentPage = true
         self.numDomains = testingData.numDomains
+        self.numTrackers = testingData.numTrackers
         self.trackers = testingData.trackingEntities
-        self.numTrackersTesting = testingData.numTrackers
+
         onDataUpdated()
     }
 }
@@ -221,13 +216,8 @@ struct TrackingMenuView: View {
                 HStack(spacing: 8) {
                     TrackingMenuFirstRowElement(label: "Trackers", num: viewModel.numTrackers)
 
-                    if FeatureFlag[.cookieCutter] {
-                        // TODO: Make this actually track a number
-                        TrackingMenuFirstRowElement(
-                            label: "Cookie Notices", num: cookieCutterModel.cookiesBlocked)
-                    } else {
-                        TrackingMenuFirstRowElement(label: "Domains", num: viewModel.numDomains)
-                    }
+                    TrackingMenuFirstRowElement(
+                        label: "Cookie Popups", num: cookieCutterModel.cookiesBlocked)
                 }
 
                 if !viewModel.whosTrackingYouDomains.isEmpty {
@@ -237,29 +227,6 @@ struct TrackingMenuView: View {
 
             TrackingMenuProtectionRowButton(
                 preventTrackers: $viewModel.preventTrackersForCurrentPage)
-
-            // TODO: reenable if we want to enable advanced privacy settings
-            // if FeatureFlag[.newTrackingProtectionSettings] {
-            //    GroupedCellButton(action: { isShowingPopup = true }) {
-            //        HStack {
-            //            Text("Advanced Privacy Settings").withFont(.bodyLarge)
-            //            Spacer()
-            //            Symbol(decorative: .shieldLefthalfFill)
-            //        }.foregroundColor(.label)
-            //    }
-            //    .sheet(isPresented: $isShowingPopup) {
-            //        TrackingMenuSettingsView(domain: "example.com")
-            //    }
-            //}
         }
-        .fixedSize(horizontal: true, vertical: true)
-        .onAppear {
-            viewModel.viewVisible = true
-            self.viewModel.refreshStats()
-        }
-        .onDisappear {
-            viewModel.viewVisible = false
-        }
-        .padding(.top, 6)
     }
 }

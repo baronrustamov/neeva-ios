@@ -20,7 +20,6 @@ public enum NotificationAuthorizationCallSite: String {
     case tourFlow
     case promoCard
     case settings
-    case blackFriday
     case defaultBrowserInterstitial
     case appLaunch
     case cookieCutterOnboarding
@@ -206,6 +205,10 @@ class NotificationPermissionHelper {
     }
 
     func updatePermissionState() {
+        guard !AppConstants.IsRunningTest else {
+            return
+        }
+
         UNUserNotificationCenter.current().getNotificationSettings { settings in
             switch settings.authorizationStatus {
             case .authorized:

@@ -4,13 +4,25 @@
 
 import SwiftUI
 
-struct SpaceMarkdownSnippet: View {
-    let showDescriptions: Bool
-    let snippet: String
-    var foregroundColor: Color = .secondaryLabel
+public struct SpaceMarkdownSnippet: View {
+
+    public init(
+        showDescriptions: Bool, snippet: String, foregroundColor: Color = .secondaryLabel,
+        lineLimit: Int = 3
+    ) {
+        self.showDescriptions = showDescriptions
+        self.snippet = snippet
+        self.foregroundColor = foregroundColor
+        self.lineLimit = lineLimit
+    }
+
+    public let showDescriptions: Bool
+    public let snippet: String
+    public let foregroundColor: Color
+    private let lineLimit: Int
 
     @ViewBuilder
-    var content: some View {
+    private var content: some View {
         if #available(iOS 15.0, *),
             let attributedSnippet = try? AttributedString(
                 markdown: snippet)
@@ -23,9 +35,9 @@ struct SpaceMarkdownSnippet: View {
         }
     }
 
-    var body: some View {
+    public var body: some View {
         content
-            .lineLimit(showDescriptions ? nil : 3)
+            .lineLimit(showDescriptions ? nil : lineLimit)
             .foregroundColor(foregroundColor)
             .fixedSize(horizontal: false, vertical: showDescriptions)
             .frame(maxWidth: .infinity, alignment: .leading)

@@ -14,10 +14,6 @@ struct InternalSettingsView: View {
     @Default(.didFirstNavigation) var didFirstNavigation
     @Default(.seenSpacesIntro) var seenSpacesIntro
     @Default(.seenSpacesShareIntro) var seenSpacesShareIntro
-    @Default(.seenCheatsheetIntro) var seenCheatsheetIntro
-    @Default(.showTryCheatsheetPopover) var showTryCheatsheetPopover
-    @Default(.seenTryCheatsheetPopoverOnRecipe) var seenTryCheatsheetPopoverOnRecipe
-    @Default(.cheatsheetDebugQuery) var cheatsheetDebugQuery
     @Default(.lastVersionNumber) var lastVersionNumber
     @Default(.didDismissReferralPromoCard) var didDismissReferralPromoCard
     @Default(.deletedSuggestedSites) var deletedSuggestedSites
@@ -25,7 +21,6 @@ struct InternalSettingsView: View {
     @Default(.saveLogins) var saveLogins
     @Default(.topSitesCacheIsValid) var topSitesCacheIsValid
     @Default(.topSitesCacheSize) var topSitesCacheSize
-    @Default(.appExtensionTelemetryOpenUrl) var appExtensionTelemetryOpenUrl
     @Default(.widgetKitSimpleTabKey) var widgetKitSimpleTabKey
     @Default(.widgetKitSimpleTopTab) var widgetKitSimpleTopTab
     @Default(.applicationCleanlyBackgrounded) var applicationCleanlyBackgrounded
@@ -38,8 +33,6 @@ struct InternalSettingsView: View {
     @Default(.seenNotificationPermissionPromo) var seenNotificationPermissionPromo
     @Default(.fastTapPromoTimeInterval) var fastTapPromoTimeInterval
     @Default(.defaultBrowserPromoTimeInterval) var defaultBrowserPromoTimeInterval
-    @Default(.seenBlackFridayFollowPromo) var seenBlackFridayFollowPromo
-    @Default(.seenBlackFridayNotifyPromo) var seenBlackFridayNotifyPromo
     @Default(.previewModeQueries) var previewModeQueries
     @Default(.signupPromptInterval) var signupPromptInterval
     @Default(.maxQueryLimit) var maxQueryLimit
@@ -93,14 +86,7 @@ struct InternalSettingsView: View {
                     Toggle(String("spacesIntroSeen"), isOn: $seenSpacesIntro)
                     Toggle(String("spacesShareIntroSeen"), isOn: $seenSpacesShareIntro)
                 }
-                Section(header: Text(verbatim: "Cheatsheet")) {
-                    Toggle(String("cheatsheetIntroSeen"), isOn: $seenCheatsheetIntro)
-                    Toggle(String("showTryCheatsheetPopover"), isOn: $showTryCheatsheetPopover)
-                    Toggle(
-                        String("seenTryCheatsheetPopoverOnRecipe"),
-                        isOn: $seenTryCheatsheetPopoverOnRecipe)
-                    Toggle(String("cheatsheetDebugQuery"), isOn: $cheatsheetDebugQuery)
-                }
+                CheatsheetSettingsView()
                 Section(header: Text(verbatim: "Promo Cards")) {
                     Toggle(
                         String("didDismissDefaultBrowserCard"), isOn: $didDismissDefaultBrowserCard)
@@ -113,8 +99,6 @@ struct InternalSettingsView: View {
                     Toggle(
                         String("seenNotificationPermissionPromo"),
                         isOn: $seenNotificationPermissionPromo)
-                    Toggle(String("seenBlackFridayFollowPromo"), isOn: $seenBlackFridayFollowPromo)
-                    Toggle(String("seenBlackFridayNotifyPromo"), isOn: $seenBlackFridayNotifyPromo)
                     Toggle(
                         String("didTriggerSystemReviewDialog"), isOn: $didTriggerSystemReviewDialog)
                     NumberField(String("numberOfAppForeground"), number: $numberOfAppForeground)
@@ -198,9 +182,6 @@ struct InternalSettingsView: View {
                 Toggle(String("saveLogins"), isOn: $saveLogins)
                     // comment this line out if you’re working on logins and need access
                     .disabled(!saveLogins)
-
-                OptionalBooleanField(
-                    "appExtensionTelemetryOpenUrl", value: $appExtensionTelemetryOpenUrl)
 
                 OptionalStringField("lastVersionNumber", text: $lastVersionNumber)
             }

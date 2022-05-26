@@ -1,4 +1,6 @@
-# Updating the generated `API.swift` file
+# Updating the GraphQL API
+
+## Updating the generated `API.swift` file
 
 (This must be done by a Neeva employee who has access to the internal `neeva` repo.)
 

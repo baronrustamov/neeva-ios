@@ -5,23 +5,16 @@ import { CookieCategoryType, CookieEngine } from 'cookie-cutter';
 var cookiePreferences = { marketing: false, analytic: false, social: false }; 
 
 function setPreference(preferences) {
-    cookiePreferences["marketing"] = preferences["marketing"];
-    cookiePreferences["analytic"] = preferences["analytic"];
-    cookiePreferences["social"] = preferences["social"];
+    if (preferences["cookieCutterEnabled"]) {
+        cookiePreferences["marketing"] = preferences["marketing"];
+        cookiePreferences["analytic"] = preferences["analytic"];
+        cookiePreferences["social"] = preferences["social"];
+    
+        runEngine();
+    }
 }
 
-Object.defineProperty(window.__firefox__, "setPreference", {
-    enumerable: false,
-    configurable: false,
-    writable: false,
-    value: setPreference
-});
-
-// Checks if the Cookie Cutter handler has been injected by iOS.
-// Without it, could cause other scripts to fail.
-if (webkit.messageHandlers.cookieCutterHandler != undefined) {
-    webkit.messageHandlers.cookieCutterHandler.postMessage({ update: "get-preferences"});
-
+function runEngine() {
     // Not used by iOS.
     CookieEngine.flagSite(async () => {});
 
@@ -66,11 +59,25 @@ if (webkit.messageHandlers.cookieCutterHandler != undefined) {
 
     //
     // TODO: Logging
-    CookieEngine.logProviderUsage(async (provider) => {});
+    CookieEngine.logProviderUsage(async (provider) => {
+        webkit.messageHandlers.cookieCutterHandler.postMessage({ update: "log-provider-usage", provider: provider });
+    });
 
     // Run!
     CookieEngine.runCookieCutter();
 
     webkit.messageHandlers.cookieCutterHandler.postMessage({ update: "started-running"});
 }
-  
+
+Object.defineProperty(window.__firefox__, "setPreference", {
+    enumerable: false,
+    configurable: false,
+    writable: false,
+    value: setPreference
+});
+
+// Checks if the Cookie Cutter handler has been injected by iOS.
+// Without it, could cause other scripts to fail.
+if (webkit.messageHandlers.cookieCutterHandler != undefined) {
+    webkit.messageHandlers.cookieCutterHandler.postMessage({ update: "get-preferences"});
+}

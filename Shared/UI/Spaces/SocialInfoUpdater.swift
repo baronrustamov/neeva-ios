@@ -6,7 +6,7 @@ import Combine
 import Foundation
 import SDWebImageSwiftUI
 
-public enum SocialInfoType: String {
+public enum SocialInfoType: String, CaseIterable {
     case twitter = "twitter.com"
     case instagram = "instagram.com"
 }
@@ -119,10 +119,10 @@ public class SocialInfoUpdater: ObservableObject {
         space.contentData?.replaceSubrange(
             index..<(index + 1), with: [newData])
         updateReady(index..<(index + 1), newData, space.id)
-        let request = UpdateSpaceEntityRequest(
+        let request = SpaceServiceProvider.shared.updateSpaceEntity(
             spaceID: spaceID, entityID: entity,
             title: title, snippet: description, thumbnail: thumbnail)
-        subscription = request.$state.sink { state in
+        subscription = request?.$state.sink { state in
             self.state = state
             if case .success = state {
                 SpaceStore.shared.refresh()

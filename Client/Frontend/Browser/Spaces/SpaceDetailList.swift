@@ -9,7 +9,6 @@ import SwiftUI
 
 struct SpaceDetailList: View {
     @Default(.showDescriptions) var showDescriptions
-    @Default(.seenBlackFridayNotifyPromo) var seenBlackFridayNotifyPromo
     @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var gridModel: GridModel
     @EnvironmentObject var tabModel: TabCardModel
@@ -20,27 +19,13 @@ struct SpaceDetailList: View {
     @Binding var headerVisible: Bool
     @Binding var isVerifiedProfile: Bool
     var onShowProfileUI: () -> Void
+    let onShowAnotherSpace: (String) -> Void
+    let addToAnotherSpace: (URL, String?, String?) -> Void
     @State var addingComment = false
     @StateObject var spaceCommentsModel = SpaceCommentsModel()
 
-    var space: Space? {
-        primitive.space
-    }
-
-    var promoCardType: PromoCardType? {
-        guard
-            primitive.id == SpaceStore.promotionalSpaceId
-                && !seenBlackFridayNotifyPromo
-                && NotificationPermissionHelper.shared.permissionStatus == .undecided
-        else {
-            return nil
-        }
-
-        return spacesModel.promoCard()
-    }
-
     var canEdit: Bool {
-        primitive.ACL >= .edit && !(space?.isDigest ?? false)
+        primitive.ACL >= .edit && !(primitive.item?.isDigest ?? false)
     }
 
     func descriptionForNote(_ details: SpaceEntityThumbnail) -> String? {
@@ -59,25 +44,12 @@ struct SpaceDetailList: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            if gridModel.refreshDetailedSpaceSubscription != nil {
-                HStack {
-                    Spacer()
-
-                    ProgressView()
-                        .padding(12)
-
-                    Spacer()
-                }.background(Color.secondaryBackground)
+            if primitive.refreshSpaceSubscription != nil {
+                progressView
             }
 
             ScrollViewReader { scrollReader in
                 List {
-                    if let promoCardType = promoCardType {
-                        PromoCard(type: promoCardType, viewWidth: 390)
-                            .buttonStyle(.plain)
-                            .modifier(ListSeparatorModifier())
-                    }
-
                     if let space = primitive.item {
                         SpaceHeaderView(
                             space: space,
@@ -95,14 +67,14 @@ struct SpaceDetailList: View {
                     }
 
                     if spacesModel.detailedSpace != nil && primitive.allDetails.isEmpty
-                        && !(space?.isDigest ?? false) && primitive.isFollowing
+                        && !(primitive.item?.isDigest ?? false) && primitive.isFollowing
                     {
                         EmptySpaceView()
                     }
 
                     ForEach(primitive.allDetails, id: \.id) { details in
                         let editSpaceItem = {
-                            guard let space = space else {
+                            guard let space = primitive.item else {
                                 return
                             }
 
@@ -125,9 +97,19 @@ struct SpaceDetailList: View {
                             details: details,
                             onSelected: {
                                 guard let url = details.data.url else { return }
+
+                                if url.absoluteString.hasPrefix(
+                                    NeevaConstants.appSpacesURL.absoluteString)
+                                {
+                                    let id = String(
+                                        url.absoluteString.dropFirst(
+                                            NeevaConstants.appSpacesURL.absoluteString.count + 1))
+                                    onShowAnotherSpace(id)
+                                    return
+                                }
+
                                 gridModel.closeDetailView()
                                 browserModel.hideGridWithNoAnimation()
-
                                 let bvc = SceneDelegate.getBVC(with: tabModel.manager.scene)
                                 if let navPath = NavigationPath.navigationPath(
                                     from: url, with: bvc)
@@ -141,12 +123,7 @@ struct SpaceDetailList: View {
                             onDelete: { index in
                                 onDelete(offsets: IndexSet([index]))
                             },
-                            addToAnotherSpace: { url, title, description in
-                                spacesModel.detailedSpace = nil
-                                SceneDelegate.getBVC(with: tabModel.manager.scene)
-                                    .showAddToSpacesSheet(
-                                        url: url, title: title, description: description)
-                            },
+                            addToAnotherSpace: addToAnotherSpace,
                             editSpaceItem: editSpaceItem,
                             index: primitive.allDetails.firstIndex { $0.id == details.id }
                                 ?? 0,
@@ -162,7 +139,7 @@ struct SpaceDetailList: View {
                     .onDelete(perform: canEdit ? onDelete : nil)
                     .onMove(perform: canEdit ? onMove : nil)
 
-                    if let generators = space?.generators, !generators.isEmpty {
+                    if let generators = primitive.item?.generators, !generators.isEmpty {
                         SpaceGeneratorHeader(generators: generators)
                             .modifier(ListSeparatorModifier())
                         ForEach(generators, id: \.id) { generator in
@@ -170,13 +147,13 @@ struct SpaceDetailList: View {
                                 .modifier(ListSeparatorModifier())
                         }
                     }
-                    if let space = space, !space.isDigest {
+                    if let space = primitive.item, !space.isDigest {
                         SpaceCommentsView(space: space, model: spaceCommentsModel)
                             .modifier(ListSeparatorModifier())
                             .id("CommentSection")
                     }
                 }
-                .modifier(ListStyleModifier(isDigest: space?.isDigest ?? false))
+                .modifier(ListStyleModifier(isDigest: primitive.item?.isDigest ?? false))
                 .edgesIgnoringSafeArea([.top, .bottom])
                 .keyboardListener { height in
                     guard height > 0 && addingComment else { return }
@@ -193,6 +170,15 @@ struct SpaceDetailList: View {
             }
             .ignoresSafeArea(.container)
         }
+    }
+
+    private var progressView: some View {
+        HStack {
+            Spacer()
+            ProgressView()
+                .padding(12)
+            Spacer()
+        }.background(Color.secondaryBackground)
     }
 
     private func onDelete(offsets: IndexSet) {
@@ -322,7 +308,9 @@ struct ListStyleModifier: ViewModifier {
                 )
                 .if(!isDigest) {
                     $0.refreshable {
-                        gridModel.refreshDetailedSpace()
+                        if let detailedSpace = self.spaceModel.detailedSpace {
+                            detailedSpace.refresh()
+                        }
                     }
                 }
         } else {

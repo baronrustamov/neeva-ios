@@ -89,6 +89,7 @@ __pycache__
 
 # Node.js
 node_modules
+package-lock.json
 Client/Assets/AllFramesAtDocumentStart.js
 Client/Assets/AllFramesAtDocumentEnd.js
 Client/Assets/MainFrameAtDocumentStart.js

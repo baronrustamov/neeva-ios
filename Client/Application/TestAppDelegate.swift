@@ -167,6 +167,7 @@ class TestAppDelegate: AppDelegate {
 
         if launchArguments.contains(LaunchArguments.ReactivateIntro) {
             Defaults[.introSeen] = false
+            Defaults[.notificationPermissionState] = NotificationPermissionStatus.undecided.rawValue
         }
 
         if launchArguments.contains(LaunchArguments.ForceExperimentControlArm) {
@@ -174,6 +175,10 @@ class TestAppDelegate: AppDelegate {
             NeevaExperiment.forceExperimentArm(
                 experiment: .defaultBrowserChangeButton,
                 experimentArm: NeevaExperiment.DefaultBrowserChangeButton.control.rawValue)
+
+            NeevaExperiment.forceExperimentArm(
+                experiment: .promoCardTypeAfterFirstRun,
+                experimentArm: NeevaExperiment.PromoCardTypeAfterFirstRun.control.rawValue)
         }
 
         // Set signInOnce

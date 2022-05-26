@@ -6,14 +6,14 @@ import Apollo
 import Combine
 
 /// Retrieves all spaces the user can view.
-class SpaceListController: QueryController<ListSpacesQuery, [SpaceListController.Space]> {
-    typealias Space = ListSpacesQuery.Data.ListSpace.Space
+public class SpaceListController: QueryController<ListSpacesQuery, [SpaceListController.Space]> {
+    public typealias Space = ListSpacesQuery.Data.ListSpace.Space
 
-    override func reload() {
+    public override func reload() {
         self.perform(query: ListSpacesQuery(kind: .all))
     }
 
-    override class func processData(_ data: ListSpacesQuery.Data) -> [Space] {
+    public override class func processData(_ data: ListSpacesQuery.Data) -> [Space] {
         data.listSpaces?.space ?? []
     }
 
@@ -31,11 +31,11 @@ extension SpaceListController.Space: Identifiable {
 }
 
 /// Retrieves all URLs for a space
-class SpacesDataQueryController: QueryController<
+public class SpacesDataQueryController: QueryController<
     GetSpacesDataQuery, [SpacesDataQueryController.Space]
 >
 {
-    struct Space {
+    public struct Space {
         var id: String
         var name: String
         var description: String?
@@ -54,11 +54,12 @@ class SpacesDataQueryController: QueryController<
         super.init()
     }
 
-    override func reload() {
+    public override func reload() {
         self.perform(query: GetSpacesDataQuery(ids: spaceIds))
     }
 
-    override class func processData(_ data: GetSpacesDataQuery.Data) -> [SpacesDataQueryController
+    public override class func processData(_ data: GetSpacesDataQuery.Data)
+        -> [SpacesDataQueryController
         .Space]
     {
         var result: [Space] = []

@@ -164,18 +164,56 @@ enum TabToolbarButtons {
         let iconWidth: CGFloat
         let action: () -> Void
 
+        @EnvironmentObject private var promoModel: CheatsheetPromoModel
         @EnvironmentObject private var incognitoModel: IncognitoModel
+        @Environment(\.isEnabled) private var isEnabled
+
+        var renderAsTemplate: Bool {
+            incognitoModel.isIncognito || !isEnabled
+        }
 
         var body: some View {
             TabToolbarButton(
-                label: Image("neevaMenuIcon")
-                    .renderingMode(incognitoModel.isIncognito ? .template : .original)
+                label: icon,
+                action: action
+            )
+            .presentAsPopover(
+                isPresented: $promoModel.showPromo,
+                backgroundColor: promoModel.getPopoverBackgroundColor(),
+                dismissOnTransition: true
+            ) {
+                promoModel.getPopoverContent()
+                    .frame(maxWidth: 270)
+            }
+        }
+
+        @ViewBuilder
+        var icon: some View {
+            ZStack(alignment: .center) {
+                Image("neevaMenuIcon")
+                    .renderingMode(renderAsTemplate ? .template : .original)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: iconWidth)
-                    .accessibilityLabel("Neeva"),
-                action: action
-            )
+                    .accessibilityLabel("Neeva")
+                HStack {
+                    Spacer()
+                    VStack {
+                        bubble
+                        Spacer()
+                    }
+                }
+                .padding(7)
+            }
+        }
+
+        @ViewBuilder
+        var bubble: some View {
+            if promoModel.showBubble {
+                Circle()
+                    .fill(Color.ui.adaptive.blue)
+                    .frame(width: 6, height: 6)
+            }
         }
     }
 

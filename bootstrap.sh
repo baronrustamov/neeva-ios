@@ -13,20 +13,19 @@
 #
 
 if [ "$1" == "--force" ]; then
-    rm -rf Carthage/*
+    rm -rf ./Carthage/*
     rm -rf ~/Library/Caches/org.carthage.CarthageKit
 fi
 
 # Build API Config
-Scripts/build-api-config.sh
+./Scripts/build-api-config.sh
 
 # Run carthage
 ./carthage_command.sh
 
 # Install Node.js dependencies and build user scripts
-
-npm install
-npm run build
+yarn install
+yarn build
 
 # swift-format
 git submodule update --init --recursive

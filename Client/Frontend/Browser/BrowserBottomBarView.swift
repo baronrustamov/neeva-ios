@@ -24,7 +24,9 @@ struct BrowserBottomBarView: View {
                         .OpenCheatsheet,
                         attributes: EnvironmentHelper.shared.getAttributes()
                     )
-                    chromeModel.clearCheatsheetPopoverFlags()
+                    CheatsheetMenuViewModel.promoModel.openSheet(
+                        on: chromeModel.topBarDelegate?.tabManager.selectedTab?.url
+                    )
                     bvc.showCheatSheetOverlay()
                 }
             )

@@ -11,7 +11,6 @@ enum ClearableDataType: String, Identifiable, Codable, CaseIterable {
     case history = "Browsing History"
     case cache = "Cache"
     case cookies = "Cookies"
-    case trackingProtection = "Tracking Protection"
     case cookieCutterExclusions = "Cookie Cutter Exclusions"
 
     #if XYZ
@@ -26,7 +25,6 @@ enum ClearableDataType: String, Identifiable, Codable, CaseIterable {
         case .history: return "Browsing History"
         case .cache: return "Cache"
         case .cookies: return "Cookies"
-        case .trackingProtection: return "Tracking Protection"
         case .cookieCutterExclusions: return "Cookie Cutter Exclusions"
         #if XYZ
             case .dapps: return "Connected dApps"
@@ -53,8 +51,6 @@ enum ClearableDataType: String, Identifiable, Codable, CaseIterable {
             return CacheClearable()
         case .cookies:
             return CookiesClearable()
-        case .trackingProtection:
-            return TrackingProtectionClearable()
         case .cookieCutterExclusions:
             return CookieCutterExclusionsClearable()
         #if XYZ
@@ -97,14 +93,10 @@ struct DataManagementView: View {
                 ForEach(
                     ClearableDataType.allCases.filter {
                         switch $0 {
-                        case .trackingProtection:
-                            return !FeatureFlag[.cookieCutter]
                         #if XYZ
                             case .dapps:
                                 return NeevaConstants.currentTarget == .xyz
                         #endif
-                        case .cookieCutterExclusions:
-                            return FeatureFlag[.cookieCutter]
                         default:
                             return true
                         }

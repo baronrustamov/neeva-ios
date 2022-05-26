@@ -73,4 +73,32 @@ class FirstRunTests: BaseTestCase {
         openURL(websiteExample["url"]!)
         waitUntilPageLoad()
     }
+
+    func testTriggerSignInModalAndClose() throws {
+        try skipTest(issue: 3696, "Disabled as this test is flaky")
+        waitForExistence(app.buttons["Get Started"])
+        app.buttons["Get Started"].tap()
+
+        waitForExistence(app.buttons["close"])
+        app.buttons["close"].tap()
+
+        // We are on the new tab page, kind of. The sign-in button isn't visible yet
+        XCTAssertTrue(app.staticTexts["Search or enter address"].isHittable)
+        waitForExistence(app.buttons["Address Bar"])
+        app.buttons["Address Bar"].tap()
+
+        // Trigger the modal
+        waitForExistence(app.buttons["Sign in or Join Neeva"])
+        app.buttons["Sign in or Join Neeva"].tap()
+
+        // Verify that the address bar isn't "hittable," i.e., the modal is on the screen
+        XCTAssertFalse(app.staticTexts["Search or enter address"].isHittable)
+
+        // Close the modal
+        waitForExistence(app.buttons["Close"])
+        app.buttons["Close"].tap()
+
+        // Verify that the modal closed correctly
+        XCTAssertTrue(app.staticTexts["Search or enter address"].isHittable)
+    }
 }

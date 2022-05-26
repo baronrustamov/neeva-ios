@@ -7,6 +7,11 @@ import Foundation
 import SDWebImage
 import UIKit
 
+// Indexed spaces items appear to have low utilization
+// The current resource overhead is too significant due to the current spaces refresh logic
+// Disabling indexing items for now.
+private let disableIndexing = true
+
 public protocol SpaceStoreSpotlightEventDelegate: AnyObject {
     func willIndex(_ spaces: [Space])
     func willIndexEntities(for space: Space, count: Int)
@@ -63,6 +68,10 @@ extension SpaceStore {
         _ spaces: [Space],
         completionHandler: ((Error?) -> Void)? = nil
     ) {
+        if disableIndexing {
+            completionHandler?(nil)
+            return
+        }
         Self.CSIndexQueue.async {
             // add spaces to CS
             DispatchQueue.main.async {
@@ -111,6 +120,10 @@ extension SpaceStore {
         from space: Space,
         completionHandler: ((Error?) -> Void)? = nil
     ) {
+        if disableIndexing {
+            completionHandler?(nil)
+            return
+        }
         Self.CSIndexQueue.async {
             // the data might have changed between when the func is called and when this executes
             // but it should always be correct to use the most recent data in the Space instance

@@ -8,12 +8,12 @@ struct TPPageStats {
     var domains: [String]
 
     init() {
-        domains = [String]();
+        domains = [String]()
     }
 
     private init(domains: [String], host: String) {
         self.domains = domains
-        self.domains.append(host);
+        self.domains.append(host)
     }
 
     func create(host: String) -> TPPageStats {
@@ -54,7 +54,7 @@ class TPStatsBlocklistChecker {
 
     func startup() {
         self.loadStatsParser()
-        Defaults.observe(keys: .contentBlockingEnabled, .contentBlockingStrength, options: []) { [weak self] in
+        Defaults.observe(keys: .cookieCutterEnabled, .contentBlockingStrength, options: []) { [weak self] in
             guard let self = self else { return }
             self.loadStatsParser()
         }.tieToLifetime(of: self)

@@ -49,7 +49,7 @@ struct SpaceCommentsView: View {
     }
 
     func addCommentRequest(commentAdded: String) {
-        _ = AddSpaceCommentRequest(
+        _ = SpaceServiceProvider.shared.addSpaceComment(
             spaceID: space.id.id, comment: commentAdded)
     }
 

@@ -112,13 +112,19 @@ commands:
     steps:
       - run:
           name: XCUITests
-          command: xcodebuild test-without-building -scheme Client -workspace Neeva.xcworkspace -destination 'platform=iOS Simulator,name=iPhone 12' -only-testing XCUITests -resultBundlePath xcuitests-$CIRCLE_BUILD_NUM.xcresult
+          command: >
+            xcodebuild test-without-building -scheme Client -workspace Neeva.xcworkspace
+            -destination 'platform=iOS Simulator,name=iPhone 12' -resultBundlePath xcuitests-$CIRCLE_BUILD_NUM.xcresult
+            $(find -E XCUITests -regex '.*Tests?\.swift' | sed -e 's/^/-only-testing:/' -e 's/\.swift$//' | circleci tests split)
       - store-xcuitest-artifact
   xcui-tests-ipad:
     steps:
       - run:
           name: XCUITests - iPad
-          command: xcodebuild test-without-building -scheme Client -workspace Neeva.xcworkspace -destination 'platform=iOS Simulator,name=iPad Pro (11-inch) (3rd generation)' -only-testing XCUITests -resultBundlePath xcuitests-$CIRCLE_BUILD_NUM.xcresult
+          command: >
+            xcodebuild test-without-building -scheme Client -workspace Neeva.xcworkspace
+            -destination 'platform=iOS Simulator,name=iPad Pro (11-inch) (3rd generation)' -resultBundlePath xcuitests-$CIRCLE_BUILD_NUM.xcresult
+            $(find -E XCUITests -regex '.*Tests?\.swift' | sed -e 's/^/-only-testing:/' -e 's/\.swift$//' | circleci tests split)
       - store-xcuitest-artifact
   store-xcuitest-artifact:
     steps:
@@ -205,6 +211,7 @@ jobs:
   xcui-tests:
     macos:
       xcode: "13.3.0"
+    parallelism: 3
     resource_class: macos.x86.medium.gen2
     steps:
       - restore-build-cache
@@ -212,6 +219,7 @@ jobs:
   xcui-tests-ipad:
     macos:
       xcode: "13.3.0"
+    parallelism: 3
     resource_class: macos.x86.medium.gen2
     steps:
       - restore-build-cache

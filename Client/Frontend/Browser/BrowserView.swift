@@ -73,6 +73,7 @@ struct BrowserView: View {
 
     @State var safeArea = EdgeInsets()
     @State var topBarHeight: CGFloat = .zero
+    @State var isSettingsVisible = false
 
     // MARK: - Views
     var mainContent: some View {

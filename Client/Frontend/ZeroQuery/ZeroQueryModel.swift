@@ -45,6 +45,14 @@ enum ZeroQueryTarget {
     static var defaultValue: ZeroQueryTarget = .existingOrNewTab
 }
 
+enum PromoCardTrigger {
+    case shouldTriggerArmDefaultPromo
+    case shouldTriggerWalletOrSignupPromo
+    case shouldTriggerReferralPromo
+    case shouldTriggerSignInPromo
+    case shouldTriggerDefaultPromo
+}
+
 class ZeroQueryModel: ObservableObject {
     @Published var isIncognito = false
     @Published private(set) var promoCard: PromoCardType?
@@ -78,6 +86,14 @@ class ZeroQueryModel: ObservableObject {
     var isLazyTab = false
     var targetTab: ZeroQueryTarget = .defaultValue
 
+    let promoCardPriority: [PromoCardTrigger] = [
+        .shouldTriggerArmDefaultPromo,
+        .shouldTriggerWalletOrSignupPromo,
+        .shouldTriggerReferralPromo,
+        .shouldTriggerSignInPromo,
+        .shouldTriggerDefaultPromo,
+    ]
+
     init(
         bvc: BrowserViewController, profile: Profile,
         shareURLHandler: @escaping (URL, UIView) -> Void
@@ -97,34 +113,45 @@ class ZeroQueryModel: ObservableObject {
             })
     }
 
-    func handleReferralPromo() {
-        // log click referral promo from zero query page
+    func handlePromoCard(interaction: LogConfig.Interaction) {
         var attributes = EnvironmentHelper.shared.getAttributes()
-        attributes.append(ClientLogCounterAttribute(key: "source", value: "zero query"))
-        ClientLogger.shared.logCounter(
-            .OpenReferralPromo, attributes: attributes)
-        self.delegate?.zeroQueryPanel(
-            didSelectURL: NeevaConstants.appReferralsURL,
-            visitType: .bookmark)
+        if interaction == .OpenReferralPromo || interaction == .CloseReferralPromo {
+            attributes.append(ClientLogCounterAttribute(key: "source", value: "zero query"))
+        }
+        ClientLogger.shared.logCounter(interaction, attributes: attributes)
     }
 
-    func updateState() {
-        isIncognito = bvc.incognitoModel.isIncognito
-
-        // TODO: remove once all users have upgraded
-        if UserDefaults.standard.bool(forKey: "DidDismissDefaultBrowserCard") {
-            UserDefaults.standard.removeObject(forKey: "DidDismissDefaultBrowserCard")
-            Defaults[.didDismissDefaultBrowserCard] = true
-        }
-
-        // TODO: refactor the promo card triggering logic to make it easier to customize
+    func shouldDisplayPromoCard(_ promocard: PromoCardTrigger) -> Bool {
         let promoCardTypeArm = NeevaExperiment.arm(for: .promoCardTypeAfterFirstRun)
 
-        if (promoCardTypeArm == .control || promoCardTypeArm == nil)
-            && shouldShowDefaultBrowserPromoCard()
-        {
-            promoCard = defaultPromoCard()
-        } else if !Defaults[.signedInOnce] && !Defaults[.didDismissPreviewSignUpCard] {
+        switch promocard {
+        case .shouldTriggerArmDefaultPromo:
+            return (promoCardTypeArm == .control || promoCardTypeArm == nil)
+                && shouldShowDefaultBrowserPromoCard()
+        case .shouldTriggerWalletOrSignupPromo:
+            return !Defaults[.signedInOnce] && !Defaults[.didDismissPreviewSignUpCard]
+        case .shouldTriggerReferralPromo:
+            return NeevaFeatureFlags[.referralPromo] && !Defaults[.didDismissReferralPromoCard]
+        case .shouldTriggerSignInPromo:
+            return !NeevaUserInfo.shared.hasLoginCookie()
+                && (Defaults[.signedInOnce] || !Defaults[.didDismissPreviewSignUpCard])
+        case .shouldTriggerDefaultPromo:
+            return promoCardTypeArm == .previewSignUp && shouldShowDefaultBrowserPromoCard()
+        }
+    }
+
+    func setDisplayPromoCard(_ promocard: PromoCardTrigger) {
+        switch promocard {
+        case .shouldTriggerArmDefaultPromo, .shouldTriggerDefaultPromo:
+            promoCard = .defaultBrowser {
+                self.handlePromoCard(interaction: .PromoDefaultBrowser)
+                self.bvc.presentDBOnboardingViewController(triggerFrom: .defaultBrowserPromoCard)
+            } onClose: {
+                self.handlePromoCard(interaction: .CloseDefaultBrowserPromo)
+                self.promoCard = nil
+                Defaults[.didDismissDefaultBrowserCard] = true
+            }
+        case .shouldTriggerWalletOrSignupPromo:
             #if XYZ
                 if Defaults[.cryptoPublicKey].isEmpty {
                     promoCard = .walletPromo {
@@ -136,15 +163,10 @@ class ZeroQueryModel: ObservableObject {
             #else
                 if Defaults[.didFirstNavigation] && NeevaConstants.currentTarget != .xyz {
                     promoCard = .previewModeSignUp {
-                        ClientLogger.shared.logCounter(
-                            .PreviewModePromoSignup,
-                            attributes: EnvironmentHelper.shared.getFirstRunAttributes())
+                        self.handlePromoCard(interaction: .PreviewModePromoSignup)
                         self.signIn()
                     } onClose: {
-                        ClientLogger.shared.logCounter(
-                            .ClosePreviewSignUprPromo,
-                            attributes: EnvironmentHelper.shared.getAttributes()
-                        )
+                        self.handlePromoCard(interaction: .ClosePreviewSignUpPromo)
                         self.promoCard = nil
                         Defaults[.didDismissPreviewSignUpCard] = true
                     }
@@ -152,53 +174,37 @@ class ZeroQueryModel: ObservableObject {
                     promoCard = nil
                 }
             #endif
-        } else if NeevaFeatureFlags[.referralPromo] && !Defaults[.didDismissReferralPromoCard] {
+        case .shouldTriggerReferralPromo:
             promoCard = .referralPromo {
-                self.handleReferralPromo()
+                self.handlePromoCard(interaction: .OpenReferralPromo)
+                self.delegate?.zeroQueryPanel(
+                    didSelectURL: NeevaConstants.appReferralsURL,
+                    visitType: .bookmark)
             } onClose: {
                 // log closing referral promo from zero query
-                var attributes = EnvironmentHelper.shared.getAttributes()
-                attributes.append(ClientLogCounterAttribute(key: "source", value: "zero query"))
-                ClientLogger.shared.logCounter(
-                    .CloseReferralPromo, attributes: attributes)
+                self.handlePromoCard(interaction: .CloseReferralPromo)
                 self.promoCard = nil
                 Defaults[.didDismissReferralPromoCard] = true
             }
-        } else if !NeevaUserInfo.shared.hasLoginCookie()
-            && (Defaults[.signedInOnce] || !Defaults[.didDismissPreviewSignUpCard])
-        {
+        case .shouldTriggerSignInPromo:
             promoCard = .neevaSignIn {
-                ClientLogger.shared.logCounter(
-                    .PromoSignin, attributes: EnvironmentHelper.shared.getFirstRunAttributes())
+                self.handlePromoCard(interaction: .PromoSignin)
                 self.signIn()
             }
-        } else if !Defaults[.seenBlackFridayFollowPromo]
-            && NeevaFeatureFlags.latestValue(.enableBlackFridayPromoCard)
-            && !SpaceStore.shared.allSpaces.contains(where: {
-                $0.id.id == SpaceStore.promotionalSpaceId
-            })
-        {
-            promoCard = .blackFridayFollowPromo(
-                action: {
-                    ClientLogger.shared.logCounter(
-                        .BlackFridayPromo)
-                    let spaceId = SpaceStore.promotionalSpaceId
-                    self.bvc.browserModel.openSpace(
-                        spaceId: spaceId, bvc: self.bvc,
-                        completion: {
-                            self.bvc.hideZeroQuery()
-                            self.promoCard = nil
-                        }
-                    )
-                },
-                onClose: {
-                    ClientLogger.shared.logCounter(
-                        .CloseBlackFridayPromo)
-                    Defaults[.seenBlackFridayFollowPromo] = true
-                    self.promoCard = nil
-                })
-        } else if promoCardTypeArm == .previewSignUp && shouldShowDefaultBrowserPromoCard() {
-            promoCard = defaultPromoCard()
+        }
+    }
+
+    func updateState() {
+        isIncognito = bvc.incognitoModel.isIncognito
+
+        // TODO: remove once all users have upgraded
+        if UserDefaults.standard.bool(forKey: "DidDismissDefaultBrowserCard") {
+            UserDefaults.standard.removeObject(forKey: "DidDismissDefaultBrowserCard")
+            Defaults[.didDismissDefaultBrowserCard] = true
+        }
+
+        if let card = promoCardPriority.first(where: { shouldDisplayPromoCard($0) }) {
+            setDisplayPromoCard(card)
         } else {
             promoCard = nil
         }
@@ -222,23 +228,6 @@ class ZeroQueryModel: ObservableObject {
 
         if showRatingsCard {
             ClientLogger.shared.logCounter(.RatingsRateExperience)
-        }
-    }
-
-    func defaultPromoCard() -> PromoCardType? {
-        return .defaultBrowser {
-            ClientLogger.shared.logCounter(
-                .PromoDefaultBrowser,
-                attributes: EnvironmentHelper.shared.getAttributes()
-            )
-            self.bvc.presentDBOnboardingViewController(triggerFrom: .defaultBrowserPromoCard)
-        } onClose: {
-            ClientLogger.shared.logCounter(
-                .CloseDefaultBrowserPromo,
-                attributes: EnvironmentHelper.shared.getAttributes()
-            )
-            self.promoCard = nil
-            Defaults[.didDismissDefaultBrowserCard] = true
         }
     }
 

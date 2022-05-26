@@ -3,11 +3,15 @@
 // found in the LICENSE file.
 
 import Foundation
+import Shared
+
+private let log = Logger.browser
 
 /// Corresponds with messages sent from CookieCutterHelper.js
 private enum CookieScriptMessage: String {
     case getPreferences = "get-preferences"
     case increaseCounter = "increase-cookie-stats"
+    case logProvider = "log-provider-usage"
     case noticeHandled = "cookie-notice-handled"
     case started = "started-running"
 }
@@ -39,17 +43,18 @@ class CookieCutterHelper: TabContentScript {
             switch scriptMessage {
             case .getPreferences:
                 do {
-                    guard
+                    if let domain = currentWebView?.url?.host,
                         let escapedEncoded = String(
                             data: try JSONEncoder().encode([
+                                "cookieCutterEnabled":
+                                    TrackingPreventionConfig.trackersPreventedFor(
+                                        domain, checkCookieCutterState: true),
                                 "marketing": !cookieCutterModel.marketingCookiesAllowed,
                                 "analytic": !cookieCutterModel.analyticCookiesAllowed,
                                 "social": !cookieCutterModel.socialCookiesAllowed,
                             ]), encoding: .utf8)
-                    else { return }
-
-                    if let currentWebView = currentWebView {
-                        currentWebView.evaluateJavascriptInDefaultContentWorld(
+                    {
+                        currentWebView?.evaluateJavascriptInDefaultContentWorld(
                             "__firefox__.setPreference(\(escapedEncoded))")
                     }
                 } catch {
@@ -57,15 +62,26 @@ class CookieCutterHelper: TabContentScript {
                 }
             case .increaseCounter:
                 cookieCutterModel.cookiesBlocked += 1
+            case .logProvider:
+                if let provider = data["provider"] as? String {
+                    let attributes = [
+                        ClientLogCounterAttribute(
+                            key: LogConfig.Attribute.CookieCutterProviderUsed,
+                            value: provider
+                        )
+                    ]
+
+                    ClientLogger.shared.logCounter(.CookieNoticeHandled, attributes: attributes)
+                }
             case .noticeHandled:
                 let bvc = SceneDelegate.getBVC(for: currentWebView)
                 cookieCutterModel.cookieWasHandled(bvc: bvc)
             case .started:
                 cookieCutterModel.cookiesBlocked = 0
             }
-        } else {
-            print("CookieCutterHandler recieved message (not handled): ", update)
         }
+
+        log.info("Cookie Cutter script updated: \(update)")
     }
 
     // MARK: - init

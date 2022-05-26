@@ -3,83 +3,17 @@
 // found in the LICENSE file.
 
 import Defaults
+import Kanna
 import SDWebImageSwiftUI
 import Shared
 import Storage
 import SwiftUI
 
-private enum ShareToUX {
+enum ShareToUX {
     static let padding: CGFloat = 12
-}
-
-struct ShareToView: View {
-    let item: ExtensionUtils.ExtractedShareItem?
-    let onDismiss: (_ didComplete: Bool) -> Void
-
-    @Environment(\.openURL) var openURL
-
-    var body: some View {
-        if case let .shareItem(item) = item {
-            NavigationView {
-                VStack(alignment: .leading, spacing: ShareToUX.padding) {
-                    ItemDetailView(item: item)
-                    VStack(spacing: 0) {
-                        NavigationLink(
-                            destination: AddToSpaceView(item: item, onDismiss: onDismiss)
-                        ) {
-                            ShareToAction(
-                                name: "Save to Spaces",
-                                icon: Symbol(decorative: .bookmark, size: 18))
-                        }
-                        Divider()
-                        Button(action: {
-                            Defaults[.appExtensionTelemetryOpenUrl] = true
-                            item.url.addingPercentEncoding(
-                                withAllowedCharacters: NSCharacterSet.alphanumerics
-                            )
-                            .flatMap { URL(string: "neeva://open-url?url=\($0)") }
-                            .map { openURL($0) }
-                        }) {
-                            ShareToAction(
-                                name: "Open in Neeva",
-                                icon: Image("open-in-neeva")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 20)
-                            )
-                        }
-                        Divider()
-                        Button(action: {
-                            let profile = BrowserProfile(localName: "profile")
-                            profile.queue.addToQueue(item).uponQueue(.main) { result in
-                                profile._shutdown()
-                                onDismiss(result.isSuccess)
-                            }
-                        }) {
-                            ShareToAction(
-                                name: "Load in Background",
-                                icon: Symbol(
-                                    decorative: .squareAndArrowDownOnSquare, size: 18,
-                                    weight: .regular))
-                        }
-                    }
-                    Spacer()
-                }
-                .padding()
-                .navigationTitle("Back")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Cancel") { onDismiss(false) }
-                    }
-                    // hack to get the title to be Neeva while the back button says Back
-                    ToolbarItem(placement: .principal) {
-                        Text("Neeva").font(.headline)
-                    }
-                }
-            }.navigationViewStyle(.stack)
-        }
-    }
+    static let thumbnailSize: CGFloat = 72
+    static let thumbnailCornerRadius: CGFloat = 6
+    static let spacing: CGFloat = 4
 }
 
 struct ShareToAction<Icon: View>: View {
@@ -99,89 +33,95 @@ struct ShareToAction<Icon: View>: View {
     }
 }
 
-struct ItemDetailView: View {
-    let item: ShareItem
-
-    var body: some View {
-        HStack(spacing: ShareToUX.padding) {
-            WebImage(url: item.favicon?.url)
-                .resizable()
-                .background(Color.tertiarySystemFill)
-                .tapTargetFrame()
-                .cornerRadius(8)
-            VStack(alignment: .leading, spacing: 2) {
-                Text(item.title ?? "")
-                    .lineLimit(1)
-                Text(URL(string: item.url)?.host ?? "")
-                    .foregroundColor(.secondary)
-                    .font(.caption)
-            }
-        }.padding(ShareToUX.padding)
-    }
-}
-
-struct AddToSpaceView: View {
+struct ShareToView: View {
+    let item: ExtensionUtils.ExtractedShareItem?
     let onDismiss: (_ didComplete: Bool) -> Void
-
-    @StateObject private var request: AddToSpaceRequest
-
-    init(item: ShareItem, onDismiss: @escaping (Bool) -> Void) {
-        _request = .init(
-            wrappedValue: AddToSpaceRequest(
-                title: item.title ?? item.url,
-                description: nil,
-                url: item.url.asURL!
-            ))
-        self.onDismiss = onDismiss
-    }
+    @ObservedObject var viewModel = ShareToViewModel()
+    @Environment(\.openURL) var openURL
 
     var body: some View {
-        let isCreating = request.mode == .saveToNewSpace
-        VStack {
-            switch request.state {
-            case .initial:
-                ScrollView(showsIndicators: false) {
-                    Shared.AddToSpaceView(request: request)
-                }
-
-                if isCreating {
-                    Spacer()
-                }
-            case .creatingSpace, .savingToSpace:
-                LoadingView("Saving...")
-            case .deletingFromSpace:
-                LoadingView("Deleting...")
-            case .savedToSpace, .deletedFromSpace:
-                Color.clear.onAppear { onDismiss(true) }
-            case .failed:
-                ErrorView(request.error!, viewName: "ShareTo.AddToSpaceView")
-            }
-        }
-        .navigationTitle(request.mode.title)
-        .navigationBarBackButtonHidden(isCreating)
-        .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                if isCreating {
-                    Button("Cancel") {
-                        request.mode = .saveToExistingSpace
+        if case let .shareItem(item) = item {
+            NavigationView {
+                contentView
+                    .padding()
+                    .navigationTitle("Back")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel") { onDismiss(false) }
+                        }
+                        // hack to get the title to be Neeva while the back button says Back
+                        ToolbarItem(placement: .principal) {
+                            Text("Neeva").font(.headline)
+                        }
                     }
+            }
+            .navigationViewStyle(.stack)
+            .onAppear(perform: {
+                viewModel.shareItem = item
+                viewModel.getMetadata(with: item.url)
+            })
+        }
+    }
+
+    @ViewBuilder
+    private var contentView: some View {
+        if viewModel.loading {
+            ProgressView()
+                .padding(12)
+        } else {
+            shareView
+            Spacer()
+        }
+    }
+
+    private var shareView: some View {
+        VStack(alignment: .leading, spacing: ShareToUX.padding) {
+            ItemDetailView(item: $viewModel.shareItem)
+            VStack(spacing: 0) {
+                NavigationLink(
+                    destination: AddToSpaceView(item: viewModel.shareItem, onDismiss: onDismiss)
+                ) {
+                    ShareToAction(
+                        name: "Save to Spaces",
+                        icon: Symbol(decorative: .bookmark, size: 18))
+                }
+                Divider()
+                OpenInNeevaView(item: viewModel.shareItem, incognito: false)
+                Divider()
+                OpenInNeevaView(item: viewModel.shareItem, incognito: true)
+                Divider()
+                Button(action: {
+                    let profile = BrowserProfile(localName: "profile")
+                    profile.queue.addToQueue(viewModel.shareItem).uponQueue(.main) { result in
+                        profile._shutdown()
+                        onDismiss(result.isSuccess)
+                    }
+                }) {
+                    ShareToAction(
+                        name: "Load in Background",
+                        icon: Symbol(
+                            decorative: .squareAndArrowDownOnSquare, size: 18,
+                            weight: .regular))
                 }
             }
+            Spacer()
         }
     }
 }
 
 // Select the ShareTo Preview Support target to use previews
 struct ShareToView_Previews: PreviewProvider {
-    static let item = ShareItem(
+    @State static var item = ShareItem(
         url:
             "https://www.bestbuy.com/site/electronics/mobile-cell-phones/abcat0800000.c?id=abcat0800000",
         title: "Cell Phones: New Mobile Phones & Plans - Best Buy",
+        description: "description",
         favicon: .init(
             url: "https://pisces.bbystatic.com/image2/BestBuy_US/Gallery/favicon-32-72227.png")
     )
     static var previews: some View {
-        ItemDetailView(item: item)
+        ItemDetailView(item: $item)
             .previewLayout(.sizeThatFits)
         ShareToView(item: .shareItem(item), onDismiss: { _ in })
     }

@@ -32,6 +32,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = .init(windowScene: scene)
         window!.makeKeyAndVisible()
 
+        Self.handleThemePreference(for: Defaults[.customizeTheme] ?? .system)
+
         setupRootViewController(scene)
 
         if Defaults[.enableGeigerCounter] {
@@ -132,6 +134,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         bvc.downloadQueue.pauseAll()
     }
 
+    static func handleThemePreference(for option: AppearanceThemeOption) {
+        getAllSceneDelegates().forEach { scene in
+            switch option {
+            case .system:
+                scene.window?.overrideUserInterfaceStyle = .unspecified
+            case .dark:
+                scene.window?.overrideUserInterfaceStyle = .dark
+            case .light:
+                scene.window?.overrideUserInterfaceStyle = .light
+            }
+        }
+    }
+
     // MARK: - URL managment
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         // almost always one URL
@@ -163,10 +178,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             ConversionLogger.log(event: .handledNavigationAsDefaultBrowser)
 
             Defaults[.didSetDefaultBrowser] = true
-        }
-
-        if let _ = Defaults[.appExtensionTelemetryOpenUrl] {
-            Defaults[.appExtensionTelemetryOpenUrl] = nil
         }
 
         DispatchQueue.main.async {
@@ -383,13 +394,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         fatalError("Window for current scene is nil")
     }
 
+    // MARK: - BVC
     static func getBVC(for view: UIView?) -> BrowserViewController {
         return getCurrentSceneDelegate(for: view).bvc
-    }
-
-    @available(*, deprecated, message: "should use getBVC with a non-nil view or scene")
-    static func getBVCOrNil() -> BrowserViewController? {
-        return getCurrentSceneDelegateOrNil()?.bvc
     }
 
     static func getBVC(with scene: UIScene?) -> BrowserViewController {
@@ -404,8 +411,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         return getAllSceneDelegates().map { $0.bvc }
     }
 
+    @available(*, deprecated, message: "should use getBVC with a non-nil view or scene")
+    static func getBVCOrNil() -> BrowserViewController? {
+        return getCurrentSceneDelegateOrNil()?.bvc
+    }
+
+    // MARK: - Tab Manager
     static func getTabManager(for view: UIView) -> TabManager {
         return getCurrentSceneDelegate(for: view).bvc.tabManager
+    }
+
+    static func getAllTabManagers() -> [TabManager] {
+        return getAllSceneDelegates().map { $0.bvc.tabManager }
     }
 
     @available(*, deprecated, message: "should use getTabManager with a non-nil view")
@@ -521,6 +538,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     @discardableResult func onAppUpdate(previousVersion: String, currentVersion: String) -> Bool {
         if currentVersion.compare(previousVersion, options: .numeric) == .orderedDescending {
             // currentVersion is newer than the previousVersion
+
+            // clear deprecated `Default` values
+            Defaults.reset(.appExtensionTelemetryOpenUrl)  // deprecated 2022-05-18
+
+            // migrate the content blocking enabled flag for users upgrading prior to 1.42.0 which is our cookie cutter release
+            // TODO: remove this after a couple releases as most of our users should be upgraded
+            if previousVersion.compare("1.42.0", options: .numeric) == .orderedAscending {
+                Defaults[.cookieCutterEnabled] = Defaults[.contentBlockingEnabled]
+            }
+
+            if previousVersion.compare("1.43.0", options: .numeric) == .orderedAscending {
+                Defaults[.contentBlockingStrength] = BlockingStrength.easyPrivacyStrict.rawValue
+            }
 
             return true
         }

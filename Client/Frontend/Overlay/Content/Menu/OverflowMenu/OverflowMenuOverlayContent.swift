@@ -30,7 +30,6 @@ struct OverflowMenuOverlayContent: View {
                 hideOverlay()
                 menuAction(action)
             }
-            .overlayIsFixedHeight(isFixedHeight: true)
         }
     }
 

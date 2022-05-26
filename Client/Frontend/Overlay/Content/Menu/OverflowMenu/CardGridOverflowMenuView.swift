@@ -24,46 +24,52 @@ public struct CardGridOverflowMenuView: View {
     public var body: some View {
         GroupedStack {
             GroupedCell.Decoration {
-                GroupedRowButtonView(label: "Close All Tabs", symbol: .trash) {
-                    menuAction(.closeAllTabs)
+                VStack(spacing: 0) {
+                    GroupedRowButtonView(label: "Close All Tabs", symbol: .trash) {
+                        menuAction(.closeAllTabs)
+                    }
+                    .accentColor(.red)
+                    .disabled(
+                        chromeModel.topBarDelegate?.tabManager.getTabCountForCurrentType() == 0
+                    )
+                    .accessibilityIdentifier("CardGridOverflowMenu.CloseAllTabs")
+
+                    Color.groupedBackground.frame(height: 1)
+
+                    GroupedRowButtonView(label: "Search Tabs", symbol: .magnifyingglass) {
+                        menuAction(.findTab)
+                    }
+                    .accentColor(.label)
+                    .accessibilityIdentifier("CardGridOverflowMenu.FindTab")
                 }
-                .accessibilityIdentifier("CardGridOverflowMenu.CloseAllTabs")
-                .accentColor(.red)
-                .disabled(chromeModel.topBarDelegate?.tabManager.getTabCountForCurrentType() == 0)
             }
 
             GroupedCell.Decoration {
                 VStack(spacing: 0) {
                     GroupedRowButtonView(label: "Support", symbol: .bubbleLeft) {
                         menuAction(.support())
-                    }
-                    .accessibilityIdentifier("CardGridOverflowMenu.Feedback")
+                    }.accessibilityIdentifier("CardGridOverflowMenu.Feedback")
 
                     Color.groupedBackground.frame(height: 1)
 
                     GroupedRowButtonView(label: "Settings", symbol: .gear) {
                         menuAction(.goToSettings)
-                    }
-                    .accessibilityIdentifier("CardGridOverflowMenu.Settings")
+                    }.accessibilityIdentifier("CardGridOverflowMenu.Settings")
 
                     Color.groupedBackground.frame(height: 1)
 
                     GroupedRowButtonView(label: "History", symbol: .clock) {
                         menuAction(.goToHistory)
-                    }
-                    .disabled(
+                    }.disabled(
                         chromeModel.topBarDelegate?.tabManager.incognitoModel.isIncognito ?? false
-                    )
-                    .accessibilityIdentifier("CardGridOverflowMenu.History")
+                    ).accessibilityIdentifier("CardGridOverflowMenu.History")
 
                     Color.groupedBackground.frame(height: 1)
 
                     GroupedRowButtonView(label: "Downloads", symbol: .squareAndArrowDown) {
                         menuAction(.goToDownloads)
-                    }
-                    .accessibilityIdentifier("CardGridOverflowMenu.Downloads")
-                }
-                .accentColor(.label)
+                    }.accessibilityIdentifier("CardGridOverflowMenu.Downloads")
+                }.accentColor(.label)
             }
         }
     }

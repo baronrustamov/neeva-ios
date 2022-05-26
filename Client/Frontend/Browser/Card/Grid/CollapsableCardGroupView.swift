@@ -109,6 +109,9 @@ struct CollapsedCardGroupView: View {
                 )
                 // fix a bug where the shadow at the top of cards getting clipped
                 .padding(.top, CardUX.ShadowRadius)
+                // prevent ScrollViewReader from filling up the whole parent view when minHeight
+                // in TabGridContainer is set to pin ArchivedTabsView at the bottom.
+                .fixedSize()
             }
             .useEffect(deps: gridModel.needsScrollToSelectedTab) { _ in
                 if groupDetails.allDetails.contains(where: \.isSelected) {

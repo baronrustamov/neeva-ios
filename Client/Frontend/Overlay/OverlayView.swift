@@ -8,6 +8,7 @@ struct OverlayView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
 
+    @EnvironmentObject private var browserModel: BrowserModel
     @EnvironmentObject private var chromeModel: TabChromeModel
     @EnvironmentObject private var overlayManager: OverlayManager
     @EnvironmentObject private var scrollingControlModel: ScrollingControlModel
@@ -17,7 +18,14 @@ struct OverlayView: View {
     @State var presentSheet = false
 
     var limitToOverlayType: [OverlayType]?
+
+    /// Tells the `OverlayView` that it is apart of the main view and that `presentedViewControllers` could cover the view.
+    var isFromBaseView = true
     var canDisplay: Bool {
+        guard !overlayManager.isPresentedViewControllerVisible || !isFromBaseView else {
+            return false
+        }
+
         if let limitToOverlayType = limitToOverlayType,
             let currentOverlay = overlayManager.currentOverlay
         {
@@ -37,16 +45,25 @@ struct OverlayView: View {
         return false
     }
 
+    var addDismissableBackground: Bool {
+        switch overlayManager.currentOverlay {
+        case .sheet, .popover:
+            return true
+        default:
+            return false
+        }
+    }
+
     @ViewBuilder
     var content: some View {
         if canDisplay {
             switch overlayManager.currentOverlay {
             case .backForwardList(let backForwardList):
                 backForwardList
-            case .findInPage(let findInPage):
+            case .find(let findView):
                 VStack {
                     Spacer()
-                    findInPage
+                    findView
                         .padding(.bottom, keyboardHidden ? 0 : -14)
                 }.ignoresSafeArea(.container)
             case .fullScreenModal(let fullScreenModal):
@@ -91,25 +108,34 @@ struct OverlayView: View {
 
     var body: some View {
         GeometryReader { geom in
-            content
-                .offset(y: overlayManager.offset)
-                .opacity(overlayManager.opacity)
-                .onAnimationCompleted(for: overlayManager.displaying) {
-                    if let animationCompleted = overlayManager.animationCompleted {
-                        animationCompleted()
+            ZStack {
+                if addDismissableBackground {
+                    DismissBackgroundView(opacity: overlayManager.opacity / 5) {
+                        overlayManager.hideCurrentOverlay(ofPriority: .sheet)
                     }
                 }
-                .onChange(of: geom.safeAreaInsets.bottom) { newValue in
-                    safeArea = geom.safeAreaInsets.bottom
-                    keyboardHidden = safeArea < 100
-                }
-                .padding(
-                    .bottom,
-                    overlayManager.offsetForBottomBar && !chromeModel.inlineToolbar
-                        && !chromeModel.keyboardShowing
-                        ? chromeModel.bottomBarHeight - scrollingControlModel.footerBottomOffset
-                        : 0
-                )
+
+                content
+                    .offset(y: overlayManager.offset)
+                    .opacity(overlayManager.opacity)
+                    .onAnimationCompleted(for: overlayManager.displaying) {
+                        if let animationCompleted = overlayManager.animationCompleted {
+                            animationCompleted()
+                        }
+                    }
+                    .onChange(of: geom.safeAreaInsets.bottom) { newValue in
+                        safeArea = geom.safeAreaInsets.bottom
+                        keyboardHidden = safeArea < 100
+                    }
+                    .padding(
+                        .bottom,
+                        overlayManager.offsetForBottomBar && !chromeModel.inlineToolbar
+                            && !chromeModel.keyboardShowing
+                            ? chromeModel.bottomBarHeight - scrollingControlModel.footerBottomOffset
+                            : 0
+                    )
+            }
+
         }
     }
 }

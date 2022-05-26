@@ -31,21 +31,15 @@ struct TopBarNeevaButton: View {
                 .OpenCheatsheet,
                 attributes: EnvironmentHelper.shared.getAttributes()
             )
-            chromeModel.clearCheatsheetPopoverFlags()
+            CheatsheetMenuViewModel.promoModel.openSheet(
+                on: chromeModel.topBarDelegate?.tabManager.selectedTab?.url
+            )
             if let bvc = chromeModel.topBarDelegate as? BrowserViewController {
                 bvc.showCheatSheetOverlay()
             }
         }
         .tapTargetFrame()
-        .presentAsPopover(
-            isPresented: $chromeModel.showTryCheatsheetPopover,
-            backgroundColor: CheatsheetTooltipPopoverView.backgroundColor,
-            dismissOnTransition: true
-        ) {
-            CheatsheetTooltipPopoverView()
-                .frame(maxWidth: 270)
-        }
-        .grayscale((!chromeModel.isPage || chromeModel.isErrorPage) ? 1 : 0)
+        .environmentObject(CheatsheetMenuViewModel.promoModel)
         .disabled(!chromeModel.isPage || chromeModel.isErrorPage)
     }
 }
@@ -67,8 +61,8 @@ struct TopBarOverflowMenuButton: View {
 
     @ViewBuilder
     var content: some View {
-        if location == .tab {
-            ScrollView {
+        ScrollView {
+            if location == .tab {
                 OverflowMenuView(
                     changedUserAgent: changedUserAgent ?? false,
                     menuAction: {
@@ -76,16 +70,16 @@ struct TopBarOverflowMenuButton: View {
                         presenting = false
                     }
                 )
+            } else {
+                CardGridOverflowMenuView(
+                    changedUserAgent: changedUserAgent ?? false,
+                    menuAction: {
+                        action = $0
+                        presenting = false
+                    }
+                )
             }
-        } else {
-            CardGridOverflowMenuView(
-                changedUserAgent: changedUserAgent ?? false,
-                menuAction: {
-                    action = $0
-                    presenting = false
-                }
-            )
-        }
+        }.padding(.top, 2)
     }
 
     var body: some View {
@@ -118,8 +112,8 @@ struct TopBarOverflowMenuButton: View {
                 .environmentObject(chromeModel)
                 .environmentObject(incognitoModel)
                 .environmentObject(locationModel)
-                .topBarPopoverPadding()
-                .frame(minWidth: 340, minHeight: 285)
+                .topBarPopoverPadding(removeBottomPadding: UIDevice.current.useTabletInterface)
+                .frame(minWidth: 340)
         }
     }
 }
@@ -186,9 +180,11 @@ struct TopBarShareButton_Previews: PreviewProvider {
 }
 
 extension View {
-    fileprivate func topBarPopoverPadding(removeBottomPadding: Bool = true) -> some View {
+    func topBarPopoverPadding(
+        removeBottomPadding: Bool = true, removeHorizontalPadding: Bool = true
+    ) -> some View {
         self
-            .padding(.horizontal, -4)
+            .padding(.horizontal, removeHorizontalPadding ? -4 : 4)
             .padding(.top, 8)
             .padding(.bottom, removeBottomPadding ? -8 : 0)
     }

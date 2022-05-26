@@ -31,13 +31,17 @@ struct GeneralSettingsSection: View {
         NavigationLink(
             "Default Browser",
             destination:
-                DefaultBrowserInterstitialOnboardingView(
-                    trigger: .defaultBrowserSettings,
-                    showRemindButton: NeevaExperiment.arm(for: .defaultBrowserChangeButton)
-                        == .changeButton
-                ) {
-                } buttonAction: {
-                }
+                DefaultBrowserInterstitialOnboardingView()
+                .environmentObject(
+                    InterstitialViewModel(
+                        trigger: .defaultBrowserSettings,
+                        showRemindButton:
+                            NeevaExperiment.arm(for: .defaultBrowserChangeButton) == .changeButton,
+                        inButtonTextExperiment:
+                            NeevaExperiment.arm(for: .defaultBrowserChangeButton) == .changeButton,
+                        showCloseButton: false
+                    )
+                )
                 .onAppear {
                     ClientLogger.shared.logCounter(
                         .SettingDefaultBrowser, attributes: EnvironmentHelper.shared.getAttributes()

@@ -129,6 +129,26 @@ struct CheatsheetLoadingView: View {
     }
 }
 
+extension NeevaScopeSearch.RichSearchResult {
+    fileprivate var isSearchResult: Bool {
+        switch self {
+        case .WebGroup, .RelatedSearches:
+            return true
+        default:
+            return false
+        }
+    }
+
+    fileprivate var isEntityResult: Bool {
+        switch self {
+        case .ProductCluster, .RecipeBlock, .NewsGroup, .Place, .PlaceList, .RichEntity:
+            return true
+        default:
+            return false
+        }
+    }
+}
+
 public struct CheatsheetMenuView: View {
     @Default(.seenCheatsheetIntro) var seenCheatsheetIntro: Bool
     @Default(.showTryCheatsheetPopover) var defaultShowTryCheatsheetPopover: Bool
@@ -140,6 +160,13 @@ public struct CheatsheetMenuView: View {
 
     @State var height: CGFloat = 0
     @State var openSupport: Bool = false
+    private var entityResults: [NeevaScopeSearch.SearchController.RichResult]? {
+        model.searchRichResults?.filter { $0.result.isEntityResult }
+    }
+
+    private var searchResults: [NeevaScopeSearch.SearchController.RichResult]? {
+        model.searchRichResults?.filter { $0.result.isSearchResult }
+    }
 
     private let support: (UIImage?) -> Void
 
@@ -260,18 +287,29 @@ public struct CheatsheetMenuView: View {
                 recipeView
             }
 
-            if let richResults = model.searchRichResults {
+            if let entityResults = entityResults {
                 VStack(alignment: .leading) {
-                    ForEach(richResults) { richResult in
+                    ForEach(entityResults) { richResult in
                         renderRichResult(for: richResult)
                     }
                 }
             }
+
             if NeevaFeatureFlags[.enableBacklink] {
                 redditBacklinkSession
             }
+
             priceHistorySection
             reviewURLSection
+
+            if let searchResults = searchResults {
+                VStack(alignment: .leading) {
+                    ForEach(searchResults) { richResult in
+                        renderRichResult(for: richResult)
+                    }
+                }
+            }
+
             memorizedQuerySection
 
             Divider()

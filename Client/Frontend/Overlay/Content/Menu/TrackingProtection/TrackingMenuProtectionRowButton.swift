@@ -13,45 +13,52 @@ public struct TrackingMenuProtectionRowButton: View {
     public var body: some View {
         GroupedCell.Decoration {
             VStack(spacing: 0) {
-                Toggle(isOn: $preventTrackers) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(FeatureFlag[.cookieCutter] ? "Cookie Cutter" : "Tracking Prevention")
-                            .withFont(.bodyLarge)
-
-                        Text(
-                            FeatureFlag[.cookieCutter]
-                                ? "Site appears broken? Try disabling."
-                                : "Website not working? Try disabling."
+                if Defaults[.cookieCutterEnabled] {
+                    Toggle(isOn: $preventTrackers) {
+                        DetailedSettingsLabel(
+                            title: "Cookie Cutter",
+                            description: "Site appears broken? Try deactivating."
                         )
-                        .foregroundColor(.secondaryLabel)
-                        .font(.footnote)
+                        .padding(.vertical, 12)
+                        .padding(.trailing, 18)
                     }
-                    .padding(.vertical, 12)
-                    .padding(.trailing, 18)
+                    .applyToggleStyle()
+                    .padding(.horizontal, GroupedCellUX.padding)
+                    .accessibilityIdentifier("TrackingMenu.TrackingMenuProtectionRow")
+                } else {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Cookie Cutter")
+                                .withFont(.bodyLarge)
+
+                            Text("Deactivated. Activate in Settings.")
+                                .foregroundColor(.secondaryLabel)
+                                .font(.footnote)
+                        }.padding(.horizontal, GroupedCellUX.padding)
+
+                        Spacer()
+                    }.padding(.vertical, 12)
                 }
-                .applyToggleStyle()
-                .padding(.horizontal, GroupedCellUX.padding)
-                .accessibilityIdentifier("TrackingMenu.TrackingMenuProtectionRow")
 
                 Color.groupedBackground.frame(height: 1)
 
-                if FeatureFlag[.cookieCutter] {
-                    Button {
-                        openSettings(.cookieCutter)
-                    } label: {
-                        HStack {
-                            Text("Cookie Cutter Settings")
-                                .foregroundColor(.label)
+                Button {
+                    openSettings(.cookieCutter)
+                } label: {
+                    HStack {
+                        Text("Cookie Cutter Settings")
+                            .foregroundColor(.label)
 
-                            Spacer()
+                        Spacer()
 
-                            Symbol(decorative: .chevronRight)
-                                .foregroundColor(.secondaryLabel)
-                        }
-                        .padding(.horizontal, GroupedCellUX.padding)
-                        .frame(minHeight: GroupedCellUX.minCellHeight)
+                        Symbol(decorative: .chevronRight)
+                            .foregroundColor(.secondaryLabel)
                     }
+                    .padding(.horizontal, GroupedCellUX.padding)
+                    .frame(minHeight: GroupedCellUX.minCellHeight)
                 }
+                .accessibilityLabel(Text("Cookie Cutter Settings"))
+                .frame(minWidth: 275)
             }
         }
     }

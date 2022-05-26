@@ -15,18 +15,24 @@ extension Defaults.Keys {
 enum BlockingStrength: String, Codable, CaseIterable, Identifiable {
     case easyPrivacy
     case easyPrivacyStrict
-    case easyListAdBlock
 
     var id: String { self.rawValue }
 
     var name: String {
         switch self {
         case .easyPrivacy:
-            return "Block cookies"
+            return "Standard"
         case .easyPrivacyStrict:
-            return "Block cookies (strict)"
-        case .easyListAdBlock:
-            return "Ad blocker"
+            return "Strict"
+        }
+    }
+
+    var description: String {
+        switch self {
+        case .easyPrivacy:
+            return "Blocks many trackers. Minimizes disruption to ads and other funtionality."
+        case .easyPrivacyStrict:
+            return "Blocks more trackers. May break ads and other functionlity on some sites."
         }
     }
 }
@@ -44,7 +50,7 @@ class NeevaTabContentBlocker: TabContentBlocker, TabContentScript {
     var pageStatsCache: [URL: TPPageStats] = [:]
 
     override var isEnabled: Bool {
-        Defaults[.contentBlockingEnabled]
+        Defaults[.cookieCutterEnabled]
     }
 
     override init(tab: ContentBlockerTab) {
@@ -58,9 +64,7 @@ class NeevaTabContentBlocker: TabContentBlocker, TabContentScript {
         if NeevaConstants.currentTarget == .xyz {
             strength = .easyPrivacyStrict
         } else {
-            if FeatureFlag[.cookieCutter],
-                let strEnum = BlockingStrength(rawValue: Defaults[.contentBlockingStrength])
-            {
+            if let strEnum = BlockingStrength(rawValue: Defaults[.contentBlockingStrength]) {
                 strength = strEnum
             }
         }
@@ -87,6 +91,6 @@ class NeevaTabContentBlocker: TabContentBlocker, TabContentScript {
 // Static methods to access user prefs for tracking protection
 extension NeevaTabContentBlocker {
     static func isTrackingProtectionEnabled() -> Bool {
-        Defaults[.contentBlockingEnabled]
+        Defaults[.cookieCutterEnabled]
     }
 }

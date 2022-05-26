@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import CodeScanner
 import Defaults
 import Shared
 import SwiftUI
@@ -279,6 +280,14 @@ struct OtherOptionsPage: View {
                         },
                         onSignInMode: $model.onSignInMode
                     ).padding(.top, 10)
+
+                    if FeatureFlag[.qrCodeSignIn] && model.onSignInMode {
+                        QRCodeScanButton(action: {
+                            model.showQRScanner = true
+                            model.buttonAction(.signinWithQRCode)
+                        })
+                        .padding(.top, 10)
+                    }
                 }
                 Spacer()
 

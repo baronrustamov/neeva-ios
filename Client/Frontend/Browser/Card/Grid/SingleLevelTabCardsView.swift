@@ -66,7 +66,7 @@ struct SingleLevelTabCardsView: View {
                                     .SelectTab,
                                     attributes: getLogCounterAttributesForTabs(
                                         selectedTabRow: row.index))
-                                browserModel.hideGridWithAnimation()
+                                browserModel.hideGridWithAnimation(tabToBeSelected: tabDetails.tab)
                             }
                     case .sectionHeader(let byTime):
                         VStack {

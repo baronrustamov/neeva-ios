@@ -3,6 +3,23 @@
 // found in the LICENSE file.
 
 import Defaults
+import SwiftUI
+
+public enum AppearanceThemeOption: String, Equatable, Encodable, Decodable, CaseIterable {
+    case system = "System"
+    case light = "Light"
+    case dark = "Dark"
+
+    public var localizedName: LocalizedStringKey { LocalizedStringKey(rawValue) }
+}
+
+public enum AppearanceIconOption: String, Equatable, Encodable, Decodable, CaseIterable {
+    // these strings map directly to definitions in `/Client/Info.plist`
+    case system = "System"
+    case black = "Black"
+
+    public var localizedName: LocalizedStringKey { LocalizedStringKey(rawValue) }
+}
 
 // If you add a setting here, make sure it’s either exposed through
 // user-visible settings or in InternalSettingsView
@@ -60,7 +77,15 @@ extension Defaults.Keys {
     public static let confirmCloseAllTabs = Defaults.Key(
         "profile.confirmCloseAllTabs", default: true)
     public static let contentBlockingStrength =
-        Defaults.Key<String>("contentBlockingStrength", default: "easyPrivacy")
+        Defaults.Key<String>("contentBlockingStrength", default: "easyPrivacyStrict")
+    public static let adBlockEnabled =
+        Defaults.Key("adBlockEnabled", default: false)
+
+    // MARK: - appearance app settings
+    public static let customizeTheme = Defaults.Key<AppearanceThemeOption?>(
+        "appearance_theme", default: .system)
+    public static let customizeIcon = Defaults.Key<AppearanceIconOption?>(
+        "appearance_icon", default: .system)
 
     // MARK: - debug settings
     public static let enableAuthLogging = Defaults.BoolKey("profile_enableAuthLogging")
@@ -79,6 +104,7 @@ extension Defaults.Keys {
     public static let neevaUserInfo = Defaults.Key<[String: String]>("UserInfo", default: [:])
 
     // MARK: - telemetry
+    @available(*, deprecated)  // 2022-05-18
     public static let appExtensionTelemetryOpenUrl = Defaults.Key<Bool?>(
         "profile.AppExtensionTelemetryOpenUrl",
         suite: UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!)
@@ -119,6 +145,9 @@ extension Defaults.Keys {
     public static let cheatsheetDebugQuery = Defaults.BoolKey("cheatsheetDebugQuery")
     public static let showNeevaMenuWillMove = Defaults.BoolKey(
         "showNeevaMenuWillMove", default: true)
+    public static let useCheatsheetBloomFilters = Defaults.BoolKey(
+        "useCheatsheetBloomFilters", default: false
+    )
 
     // MARK: - notification
     public static let lastScheduledNeevaPromoID = Defaults.Key<String?>("lastScheduledNeevaPromoID")
@@ -152,9 +181,6 @@ extension Defaults.Keys {
     // MARK: - tab groups
     public static let tabGroupNames = Defaults.Key<[String: String]>("tabGroupNames", default: [:])
     public static let tabGroupExpanded = Defaults.Key<Set<String>>("tabGroupExpanded", default: [])
-
-    public static let seenBlackFridayFollowPromo = Defaults.BoolKey("seenBlackFridayFollowPromo")
-    public static let seenBlackFridayNotifyPromo = Defaults.BoolKey("seenBlackFridayNotifyPromo")
 
     // MARK: - Feedback
     public static let feedbackBeingSent = Defaults.BoolKey("feedbackBeingSent")

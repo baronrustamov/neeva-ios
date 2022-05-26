@@ -69,10 +69,10 @@ struct CompactCard<Details>: View where Details: TabCardDetails {
     }
 
     var card: some View {
-        Button(action: {
-            details.onSelect()
+        Button {
             selectionCompletion()
-        }) {
+            details.onSelect()
+        } label: {
             if details.isPinned {
                 buttonContent
                     .frame(width: CardUX.FaviconSize + 12)

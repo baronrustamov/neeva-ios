@@ -5,7 +5,7 @@
 import Shared
 import SwiftUI
 
-private let cheatsheetTolltipPopoverImpressionTimerInterval: TimeInterval = 1
+private let cheatsheetTooltipPopoverImpressionTimerInterval: TimeInterval = 1
 
 struct CheatsheetTooltipPopoverView: View {
     @Environment(\.colorScheme) var colorScheme
@@ -34,7 +34,7 @@ struct CheatsheetTooltipPopoverView: View {
         .onAppear {
             impressionTimer?.invalidate()
             impressionTimer = Timer.scheduledTimer(
-                withTimeInterval: cheatsheetTolltipPopoverImpressionTimerInterval,
+                withTimeInterval: cheatsheetTooltipPopoverImpressionTimerInterval,
                 repeats: false
             ) { _ in
                 ClientLogger.shared.logCounter(

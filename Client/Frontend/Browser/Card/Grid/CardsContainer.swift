@@ -33,6 +33,7 @@ struct TabGridContainer: View {
     @EnvironmentObject private var gridModel: GridModel
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) private var verticalSizeClass
+    @Environment(\.safeArea) private var safeArea
 
     var landscapeMode: Bool {
         verticalSizeClass == .compact || horizontalSizeClass == .regular
@@ -100,8 +101,7 @@ struct TabGridContainer: View {
                         ArchivedTabsView(containerGeometry: geom.size)
                     }
                 }
-            }
-            .background(
+            }.background(
                 GeometryReader { proxy in
                     Color.clear
                         .useEffect(deps: proxy.size) { newValue in
@@ -119,8 +119,9 @@ struct TabGridContainer: View {
                 }
                 DispatchQueue.main.async { gridModel.didVerticalScroll += 1 }
             }
-        }
-        .animation(nil)
+        }.if(tabModel.isSearchingForTabs) {
+            $0.padding(.bottom, safeArea.bottom + FindInPageViewUX.height)
+        }.animation(nil)
     }
 }
 
@@ -200,6 +201,9 @@ struct CardsContainer: View {
                             SpaceCardsView()
                                 .environment(\.columns, columns)
                         }.animation(nil)
+                        if !NeevaUserInfo.shared.isUserLoggedIn {
+                            SpacesIntroOverlayContent()
+                        }
                     }
                     .padding(.vertical, CardGridUX.GridSpacing)
                     .useEffect(deps: browserModel.showGrid) { _ in
@@ -215,8 +219,10 @@ struct CardsContainer: View {
 
                 // Normal Tabs
                 ZStack {
-                    EmptyCardGrid(isIncognito: false, isTopBar: chromeModel.inlineToolbar)
-                        .opacity(tabModel.normalDetails.isEmpty ? 1 : 0)
+                    if !tabModel.isSearchingForTabs {
+                        EmptyCardGrid(isIncognito: false, isTopBar: chromeModel.inlineToolbar)
+                            .opacity(tabModel.normalDetails.isEmpty ? 1 : 0)
+                    }
 
                     CardScrollContainer(columns: columns) { scrollProxy in
                         TabGridContainer(isIncognito: false, geom: geom, scrollProxy: scrollProxy)
@@ -247,8 +253,10 @@ struct CardsContainer: View {
 
                 // Incognito Tabs
                 ZStack {
-                    EmptyCardGrid(isIncognito: true, isTopBar: chromeModel.inlineToolbar)
-                        .opacity(tabModel.incognitoDetails.isEmpty ? 1 : 0)
+                    if !tabModel.isSearchingForTabs {
+                        EmptyCardGrid(isIncognito: true, isTopBar: chromeModel.inlineToolbar)
+                            .opacity(tabModel.incognitoDetails.isEmpty ? 1 : 0)
+                    }
 
                     CardScrollContainer(columns: columns) { scrollProxy in
                         TabGridContainer(isIncognito: true, geom: geom, scrollProxy: scrollProxy)
@@ -273,24 +281,6 @@ struct CardsContainer: View {
             }
         }
         .id(generationId)
-        .animation(
-            .interactiveSpring(), value: "\(gridModel.switcherState) \(incognitoModel.isIncognito)"
-        )
-        .onChange(of: gridModel.switcherState) { value in
-            guard case .spaces = value, !seenSpacesIntro, !gridModel.isLoading else {
-                return
-            }
-
-            SceneDelegate.getBVC(with: tabModel.manager.scene).showModal(
-                style: .withTitle,
-                content: {
-                    SpacesIntroOverlayContent()
-                },
-                onDismiss: {
-                    browserModel.showSpaces()
-                })
-            seenSpacesIntro = true
-        }
         .onReceive(
             NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)
         ) { _ in

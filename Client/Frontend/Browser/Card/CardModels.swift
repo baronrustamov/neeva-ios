@@ -49,6 +49,14 @@ class TabCardModel: CardModel {
     static let todayRowHeaderID: String = "today-header"
     static let lastweekRowHeaderID: String = "lastWeek-header"
 
+    // Find Tab
+    @Published var isSearchingForTabs: Bool = false
+    @Published var tabSearchFilter = "" {
+        didSet {
+            updateRowsIfNeeded(force: true)
+        }
+    }
+
     private(set) var tabsDidChange = false
 
     private func updateRows() {
@@ -71,8 +79,8 @@ class TabCardModel: CardModel {
         self.objectWillChange.send()
     }
 
-    func updateRowsIfNeeded() {
-        if needsUpdateRows {
+    func updateRowsIfNeeded(force: Bool = false) {
+        if needsUpdateRows || force {
             needsUpdateRows = false
             updateRows()
         }
@@ -101,44 +109,25 @@ class TabCardModel: CardModel {
         return returnValue
     }
 
+    // Details
     var normalDetails: [TabCardDetails] {
         allDetails.filter {
-            $0.tab.isIncognito == false
+            !$0.tab.isIncognito
         }
     }
 
     var incognitoDetails: [TabCardDetails] {
         allDetails.filter {
-            $0.tab.isIncognito == true
+            $0.tab.isIncognito
         }
     }
 
-    init(manager: TabManager) {
-        self.manager = manager
-
-        manager.tabsUpdatedPublisher.sink { [weak self] in
-            self?.tabsDidChange = true
-            self?.onDataUpdated()
-            // 'tabsDidChange' is used by CardScrollContainer to set its animation
-            // to .default. This is needed to handle a bug which the scroll view
-            // doesn't get pushed down when the bottom tab is closed.
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self?.tabsDidChange = false
-            }
-        }.store(in: &subscription)
-
-        if FeatureFlag[.enableTimeBasedSwitcher] {
-            manager.selectedTabPublisher.sink { [weak self] tab in
-                guard let self = self, let _ = tab else {
-                    return
-                }
-                self.needsUpdateRows = true
-            }.store(in: &subscription)
-        }
-
-        _tabGroupExpanded.publisher.sink { [weak self] _ in
-            self?.updateRows()
-        }.store(in: &subscription)
+    func tabIncludedInSearch(_ details: TabCardDetails) -> Bool {
+        let tabSeachFilter = tabSearchFilter.lowercased()
+        return
+            (details.title.lowercased().contains(tabSeachFilter)
+            || (details.url?.absoluteString.lowercased().contains(tabSeachFilter) ?? false)
+            || tabSeachFilter.isEmpty)
     }
 
     struct Row: Identifiable {
@@ -214,6 +203,7 @@ class TabCardModel: CardModel {
                 && tab.isIncognito == incognito
                 && (FeatureFlag[.enableTimeBasedSwitcher]
                     ? tab.wasLastExecuted(byTime!) : true)
+                && tabIncludedInSearch(tabCard)
         }
 
         modifyAllDetailsFilteredPromotingPinnedTabs(&allDetailsFiltered)
@@ -431,6 +421,35 @@ class TabCardModel: CardModel {
     func buildRowsForTesting() -> [Row] {
         buildRows(incognito: false)
     }
+
+    // MARK: init
+    init(manager: TabManager) {
+        self.manager = manager
+
+        manager.tabsUpdatedPublisher.sink { [weak self] in
+            self?.tabsDidChange = true
+            self?.onDataUpdated()
+            // 'tabsDidChange' is used by CardScrollContainer to set its animation
+            // to .default. This is needed to handle a bug which the scroll view
+            // doesn't get pushed down when the bottom tab is closed.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self?.tabsDidChange = false
+            }
+        }.store(in: &subscription)
+
+        if FeatureFlag[.enableTimeBasedSwitcher] {
+            manager.selectedTabPublisher.sink { [weak self] tab in
+                guard let self = self, let _ = tab else {
+                    return
+                }
+                self.needsUpdateRows = true
+            }.store(in: &subscription)
+        }
+
+        _tabGroupExpanded.publisher.sink { [weak self] _ in
+            self?.updateRows()
+        }.store(in: &subscription)
+    }
 }
 
 func getLogCounterAttributesForSpaces(details: SpaceCardDetails?) -> [ClientLogCounterAttribute] {
@@ -485,6 +504,7 @@ class SpaceCardModel: CardModel {
             if let id = spaceNeedsRefresh {
                 manager.refreshSpace(spaceID: id)
                 spaceNeedsRefresh = nil
+
             }
         }
     }
@@ -500,7 +520,7 @@ class SpaceCardModel: CardModel {
         case .allSpaces:
             return spaces
         case .ownedByMe:
-            return spaces.filter { $0.space?.userACL == .owner }
+            return spaces.filter { $0.item?.userACL == .owner }
         }
     }
 
@@ -513,35 +533,34 @@ class SpaceCardModel: CardModel {
 
     init(manager: SpaceStore = SpaceStore.shared) {
         self.manager = manager
-
-        manager.spotlightEventDelegate = SpotlightLogger.shared
+        self.manager.spotlightEventDelegate = SpotlightLogger.shared
 
         NeevaUserInfo.shared.$isUserLoggedIn.sink { isLoggedIn in
+            self.manager = isLoggedIn ? .shared : .suggested
+            self.listenManagerState()
             DispatchQueue.main.async {
-                // Refresh to get spaces for logged in users and to clear cache for logged out users
-                SpaceStore.shared.refresh()
-            }
-
-            if !isLoggedIn {
-                self.allDetails = []
+                self.manager.refresh()
             }
         }.store(in: &detailsSubscriptions)
+        listenManagerState()
+    }
 
+    private func listenManagerState() {
         self.anyCancellable = manager.$state.sink { [weak self] state in
             guard let self = self, self.detailedSpace == nil, case .ready = state,
-                manager.updatedSpacesFromLastRefresh.count > 0
+                self.manager.updatedSpacesFromLastRefresh.count > 0
             else {
                 return
             }
 
-            if manager.updatedSpacesFromLastRefresh.count == 1,
-                let id = manager.updatedSpacesFromLastRefresh.first?.id.id,
-                let indexInStore = manager.allSpaces.firstIndex(where: { $0.id.id == id }),
+            if self.manager.updatedSpacesFromLastRefresh.count == 1,
+                let id = self.manager.updatedSpacesFromLastRefresh.first?.id.id,
+                let indexInStore = self.manager.allSpaces.firstIndex(where: { $0.id.id == id }),
                 let indexInDetails = self.allDetails.firstIndex(where: { $0.id == id })
             {
                 // If only one space is updated and it exists inside the current details, then just
                 // update its contents and move it to the right place, instead of resetting all.
-                self.allDetails.first(where: { $0.id == id })?.updateDetails()
+                self.allDetails.first(where: { $0.id == id })?.updateSpace()
                 if indexInStore != indexInDetails {
                     let indices: IndexSet = [indexInDetails]
                     self.allDetails.move(fromOffsets: indices, toOffset: indexInStore)
@@ -550,8 +569,8 @@ class SpaceCardModel: CardModel {
             }
 
             DispatchQueue.main.async {
-                self.allDetails = manager.getAll().map {
-                    SpaceCardDetails(space: $0, manager: manager)
+                self.allDetails = self.manager.getAll().map {
+                    SpaceCardDetails(space: $0, manager: self.manager)
                 }
 
                 self.listenForShowingDetails()
@@ -586,12 +605,11 @@ class SpaceCardModel: CardModel {
         }
     }
 
-    // TODO(jon): Convert to use SpaceService
     func add(spaceID: String, url: String, title: String, description: String? = nil) {
         DispatchQueue.main.async {
-            let request = AddToSpaceWithURLRequest(
+            let request = SpaceServiceProvider.shared.addToSpaceWithURL(
                 spaceID: spaceID, url: url, title: title, description: description)
-            request.$state.sink { state in
+            request?.$state.sink { state in
                 self.spaceNeedsRefresh = spaceID
             }.cancel()
         }
@@ -601,10 +619,10 @@ class SpaceCardModel: CardModel {
         spaceID: String, entityID: String, title: String, snippet: String, thumbnail: String? = nil
     ) {
         DispatchQueue.main.async {
-            let request = UpdateSpaceEntityRequest(
+            let request = SpaceServiceProvider.shared.updateSpaceEntity(
                 spaceID: spaceID, entityID: entityID, title: title, snippet: snippet,
                 thumbnail: thumbnail)
-            request.$state.sink { state in
+            request?.$state.sink { state in
                 self.spaceNeedsRefresh = spaceID
             }.cancel()
         }
@@ -612,8 +630,9 @@ class SpaceCardModel: CardModel {
 
     func claimGeneratedItem(spaceID: String, entityID: String) {
         DispatchQueue.main.async {
-            let request = ClaimGeneratedItem(spaceID: spaceID, entityID: entityID)
-            request.$state.sink { state in
+            let request = SpaceServiceProvider.shared.claimGeneratedItem(
+                spaceID: spaceID, entityID: entityID)
+            request?.$state.sink { state in
                 self.spaceNeedsRefresh = spaceID
             }.cancel()
         }
@@ -624,13 +643,14 @@ class SpaceCardModel: CardModel {
         undoDeletion: @escaping () -> Void
     ) {
         DispatchQueue.main.async {
-            let request = DeleteSpaceItemsRequest(spaceID: spaceID, ids: entities.map { $0.id })
-            request.$state.sink { state in
+            let request = SpaceServiceProvider.shared.deleteSpaceItems(
+                spaceID: spaceID, ids: entities.map { $0.id })
+            request?.$state.sink { state in
                 self.spaceNeedsRefresh = spaceID
             }.cancel()
 
             ToastDefaults().showToastForRemoveFromSpace(
-                bvc: SceneDelegate.getBVC(with: scene), request: request
+                bvc: SceneDelegate.getBVC(with: scene), request: request!
             ) {
                 undoDeletion()
 
@@ -650,8 +670,8 @@ class SpaceCardModel: CardModel {
 
     func reorder(space spaceID: String, entities: [String]) {
         DispatchQueue.main.async {
-            let request = ReorderSpaceRequest(spaceID: spaceID, ids: entities)
-            request.$state.sink { state in
+            let request = SpaceServiceProvider.shared.reorderSpace(spaceID: spaceID, ids: entities)
+            request?.$state.sink { state in
                 self.spaceNeedsRefresh = spaceID
             }.cancel()
         }
@@ -660,15 +680,15 @@ class SpaceCardModel: CardModel {
     func changePublicACL(space: Space, add: Bool) {
         DispatchQueue.main.async {
             if add {
-                let request = AddPublicACLRequest(spaceID: space.id.id)
-                request.$state.sink { state in
+                let request = SpaceServiceProvider.shared.addPublicACL(spaceID: space.id.id)
+                request?.$state.sink { state in
                     self.spaceNeedsRefresh = space.id.id
                     space.isPublic = true
                     self.objectWillChange.send()
                 }.cancel()
             } else {
-                let request = DeletePublicACLRequest(spaceID: space.id.id)
-                request.$state.sink { state in
+                let request = SpaceServiceProvider.shared.deletePublicACL(spaceID: space.id.id)
+                request?.$state.sink { state in
                     self.spaceNeedsRefresh = space.id.id
                     space.isPublic = false
                     self.objectWillChange.send()
@@ -679,9 +699,9 @@ class SpaceCardModel: CardModel {
 
     func addSoloACLs(space: Space, emails: [String], acl: SpaceACLLevel, note: String) {
         DispatchQueue.main.async {
-            let request = AddSoloACLsRequest(
+            let request = SpaceServiceProvider.shared.addSoloACLs(
                 spaceID: space.id.id, emails: emails, acl: acl, note: note)
-            request.$state.sink { state in
+            request?.$state.sink { state in
                 self.spaceNeedsRefresh = space.id.id
                 space.isShared = true
                 self.objectWillChange.send()
@@ -694,10 +714,10 @@ class SpaceCardModel: CardModel {
         description: String? = nil, thumbnail: String? = nil
     ) {
         DispatchQueue.main.async {
-            let request = UpdateSpaceRequest(
+            let request = SpaceServiceProvider.shared.updateSpace(
                 spaceID: space.id.id, title: title,
                 description: description, thumbnail: thumbnail)
-            request.$state.sink { state in
+            request?.$state.sink { state in
                 self.spaceNeedsRefresh = space.id.id
                 space.name = title
                 space.description = description
@@ -709,8 +729,9 @@ class SpaceCardModel: CardModel {
 
     func deleteGeneratorFromSpace(spaceID: String, generatorID: String) {
         DispatchQueue.main.async {
-            let request = DeleteGeneratorRequest(spaceID: spaceID, generatorID: generatorID)
-            request.$state.sink { state in
+            let request = SpaceServiceProvider.shared.deleteGenerator(
+                spaceID: spaceID, generatorID: generatorID)
+            request?.$state.sink { state in
                 self.spaceNeedsRefresh = spaceID
             }.cancel()
         }
@@ -718,8 +739,8 @@ class SpaceCardModel: CardModel {
 
     func removeSpace(spaceID: String, isOwner: Bool) {
         if isOwner {
-            let request = DeleteSpaceRequest(spaceID: spaceID)
-            editingSubscription = request.$state.sink { state in
+            let request = SpaceServiceProvider.shared.deleteSpace(spaceID: spaceID)
+            editingSubscription = request?.$state.sink { state in
                 switch state {
                 case .success:
                     self.editingSubscription?.cancel()
@@ -731,8 +752,8 @@ class SpaceCardModel: CardModel {
                 }
             }
         } else {
-            let request = UnfollowSpaceRequest(spaceID: spaceID)
-            editingSubscription = request.$state.sink { state in
+            let request = SpaceServiceProvider.shared.unfollowSpace(spaceID: spaceID)
+            editingSubscription = request?.$state.sink { state in
                 switch state {
                 case .success:
                     self.editingSubscription?.cancel()
@@ -746,30 +767,6 @@ class SpaceCardModel: CardModel {
         }
     }
 
-    func promoCard() -> PromoCardType {
-        return .blackFridayNotifyPromo(
-            action: {
-                ClientLogger.shared.logCounter(
-                    .BlackFridayNotifyPromo)
-                NotificationPermissionHelper.shared.requestPermissionIfNeeded(
-                    callSite: .blackFriday
-                ) { _ in
-                    Defaults[.seenBlackFridayNotifyPromo] = true
-                }
-            },
-            onClose: {
-                ClientLogger.shared.logCounter(
-                    .CloseBlackFridayNotifyPromo)
-                Defaults[.seenBlackFridayNotifyPromo] = true
-            })
-    }
-
-    func updateSpaceWithNoFollow(id: String, manager: SpaceStore) {
-        manager.openSpaceWithNoFollow(spaceId: id) { [weak self] space in
-            guard let self = self else { return }
-            self.detailedSpace?.setSpace(space)
-        }
-    }
 }
 
 class SiteCardModel: CardModel {

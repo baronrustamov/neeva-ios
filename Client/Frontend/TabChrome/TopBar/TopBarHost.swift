@@ -91,6 +91,7 @@ struct TopBarContent: View {
         .environmentObject(readerModeModel)
         .environmentObject(web3Model)
     }
+
     @ViewBuilder func topBarView(
         performTabToolbarAction: @escaping (ToolbarAction) -> Void,
         buildTabsMenu: @escaping (_ sourceView: UIView) -> UIMenu?,
