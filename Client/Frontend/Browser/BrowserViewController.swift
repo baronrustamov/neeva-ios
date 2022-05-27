@@ -1678,23 +1678,18 @@ extension BrowserViewController: ContextMenuHelperDelegate {
         gestureRecognizer: UIGestureRecognizer
     ) {
         BrowserViewController.contextMenuElements = elements
-        let touchPoint = gestureRecognizer.location(in: view)
-        let touchSize = CGSize(width: 0, height: 16)
-
-        let saveImage = UIMenuItem(title: "Save Image", action: #selector(saveImage))
-        let copyImage = UIMenuItem(title: "Copy Image", action: #selector(copyImage))
-        let copyImageLink = UIMenuItem(title: "Copy Image Link", action: #selector(copyImageLink))
-        let addToSpace = UIMenuItem(title: "Add To Space", action: #selector(addImageToSpace))
-        let addToSpaceWithImage = UIMenuItem(
-            title: "Add Page To Space With Image", action: #selector(addToSpaceWithImage))
-
+        let imageContextMenu = ImageContextMenu(elements: elements) { [weak self] action in
+            guard let self = self else { return }
+            switch action {
+            case .saveImage: self.saveImage()
+            case .copyImage: self.copyImage()
+            case .copyImageLink: self.copyImageLink()
+            case .addToSpace: self.addImageToSpace()
+            case .addToSpaceWithImage: self.addToSpaceWithImage()
+            }
+        }
+        present(imageContextMenu, animated: true)
         tabManager.selectedTab?.webView?.stopLoading()
-
-        UIMenuController.shared.menuItems = [
-            saveImage, copyImage, copyImageLink, addToSpace, addToSpaceWithImage,
-        ]
-        UIMenuController.shared.showMenu(
-            from: self.view, rect: CGRect(origin: touchPoint, size: touchSize))
     }
 
     @objc func saveImage() {
@@ -2072,4 +2067,22 @@ extension BrowserViewController {
 
         overlayManager.isPresentedViewControllerVisible = true
     }
+}
+
+extension BrowserViewController: UIContextMenuInteractionDelegate {
+    func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        configurationForMenuAtLocation location: CGPoint
+    )
+        -> UIContextMenuConfiguration?
+    {
+        return UIContextMenuConfiguration(
+            identifier: nil,
+            previewProvider: nil,
+            actionProvider: { _ in
+                let children: [UIMenuElement] = []
+                return UIMenu(title: "", children: children)
+            })
+    }
+
 }

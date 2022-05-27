@@ -95,6 +95,70 @@ extension UIView {
         }
     }
 
+    func makeEdges(
+        _ edges: Edge.Set, greaterThanOrequalTo view: UIView?, withOffset offset: CGFloat = 0
+    ) {
+        guard let view = view else {
+            return
+        }
+
+        self.translatesAutoresizingMaskIntoConstraints = false
+
+        if edges.contains(.top) {
+            self.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: offset)
+                .isActive = true
+        }
+
+        if edges.contains(.bottom) {
+            self.bottomAnchor.constraint(greaterThanOrEqualTo: view.bottomAnchor, constant: offset)
+                .isActive = true
+        }
+
+        if edges.contains(.leading) {
+            self.leadingAnchor.constraint(
+                greaterThanOrEqualTo: view.leadingAnchor, constant: offset
+            )
+            .isActive = true
+        }
+
+        if edges.contains(.trailing) {
+            self.trailingAnchor.constraint(
+                greaterThanOrEqualTo: view.trailingAnchor, constant: offset
+            )
+            .isActive = true
+        }
+    }
+
+    func makeEdges(
+        _ edges: Edge.Set, lessThanOrEqualTo view: UIView?, withOffset offset: CGFloat = 0
+    ) {
+        guard let view = view else {
+            return
+        }
+
+        self.translatesAutoresizingMaskIntoConstraints = false
+
+        if edges.contains(.top) {
+            self.topAnchor.constraint(lessThanOrEqualTo: view.topAnchor, constant: offset)
+                .isActive = true
+        }
+
+        if edges.contains(.bottom) {
+            self.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor, constant: offset)
+                .isActive = true
+        }
+
+        if edges.contains(.leading) {
+            self.leadingAnchor.constraint(lessThanOrEqualTo: view.leadingAnchor, constant: offset)
+                .isActive = true
+        }
+
+        if edges.contains(.trailing) {
+            self.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: offset)
+                .isActive = true
+        }
+    }
+
     // Width
     func makeWidth(equalTo view: UIView?, withOffset offset: CGFloat = 0) {
         guard let view = view else {
@@ -126,13 +190,30 @@ extension UIView {
     }
 
     // Centering
-    func makeCenter(equalTo view: UIView?) {
+    func makeCenter(equalTo view: UIView?, withOffset offset: CGFloat = 0) {
+        guard let view = view else {
+            return
+        }
+
+        makeCenterX(equalTo: view, withOffset: offset)
+        makeCenterY(equalTo: view, withOffset: offset)
+    }
+
+    func makeCenterX(equalTo view: UIView?, withOffset offset: CGFloat = 0) {
         guard let view = view else {
             return
         }
 
         self.translatesAutoresizingMaskIntoConstraints = false
         self.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+    }
+
+    func makeCenterY(equalTo view: UIView?, withOffset offset: CGFloat = 0) {
+        guard let view = view else {
+            return
+        }
+
+        self.translatesAutoresizingMaskIntoConstraints = false
         self.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
 }
@@ -150,5 +231,11 @@ extension View {
         window.addSubview(hosting.view)
         window.makeKeyAndVisible()
         return hosting.view.screenshot
+    }
+}
+
+extension UIView {
+    func addSubviews(_ views: UIView...) {
+        views.forEach { addSubview($0) }
     }
 }
