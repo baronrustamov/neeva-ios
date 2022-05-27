@@ -333,7 +333,8 @@ public struct SendFeedbackView: View {
                         shareResults: shareResults,
                         requestId: (requestId?.isEmpty ?? true) ? nil : requestId,
                         geoLocationStatus: geoLocationStatus,
-                        source: .iosWeb3App,
+                        source: NeevaConstants.appGroup.starts(with: "group.xyz")
+                            ? .iosWeb3App : .iosApp,
                         screenshot: shareScreenshot && NeevaFeatureFlags[.feedbackScreenshot]
                             ? editedScreenshot.reduceAndConvertToBase64(maxSize: 800) : nil,
                         userProvidedEmail: email.isEmpty ? nil : email
