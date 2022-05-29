@@ -21,7 +21,7 @@ enum ImageContextAction: String, CaseIterable {
 
 enum ImageContextUX {
     static let itemHeight: CGFloat = 40
-    static let itemWidth: CGFloat = 200
+    static let itemWidth: CGFloat = 240
     static let tableCornerRadius: CGFloat = 12
     static let itemSpacing: CGFloat = 8
 }
@@ -120,7 +120,7 @@ class ImageContextMenu: UIViewController {
         configureViews()
         setActions()
         downloadAndSetImage(elements.image)
-        sendHapticFeedback()
+        Haptics.longPress()
     }
 
     override func viewDidLoad() {
@@ -128,10 +128,6 @@ class ImageContextMenu: UIViewController {
         configureViews()
     }
 
-    private func sendHapticFeedback() {
-        let generator = UIImpactFeedbackGenerator(style: .medium)
-        generator.impactOccurred()
-    }
 }
 
 extension ImageContextMenu {
@@ -151,7 +147,7 @@ extension ImageContextMenu {
             constant: ImageContextUX.itemHeight
         ).isActive = true
         imageContainerView.topAnchor.constraint(
-            equalTo: view.safeAreaLayoutGuide.topAnchor,
+            greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor,
             constant: ImageContextUX.itemSpacing
         ).isActive = true
         tableView.makeEdges(.trailing, equalTo: imageContainerView)
@@ -250,7 +246,6 @@ private class ImageContextMenuTableViewCell: UITableViewCell {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .label
-        label.font = FontStyle.labelMedium.uiFont(for: .small)
         label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
