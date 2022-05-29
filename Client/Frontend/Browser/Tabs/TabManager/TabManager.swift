@@ -34,6 +34,8 @@ class TabManager: NSObject {
     // Tab Group related variables
     @Default(.tabGroupNames) private var tabGroupDict: [String: String]
     var tabGroups: [String: TabGroup] = [:]
+    var archivedTabGroups: [String: TabGroup] = [:]
+    var activeTabGroups: [String: TabGroup] = [:]
     var childTabs: [Tab] {
         getAllTabGroup().flatMap(\.children)
     }
@@ -91,35 +93,10 @@ class TabManager: NSObject {
             }
     }
 
-    var activeTabGroups: [String: TabGroup] {
-        return getAll()
-            .reduce(into: [String: [Tab]]()) { dict, tab in
-                if !tab.isArchived() {
-                    dict[tab.rootUUID, default: []].append(tab)
-                }
-            }.filter { $0.value.count > 1 }.reduce(into: [String: TabGroup]()) { dict, element in
-                dict[element.key] = TabGroup(children: element.value, id: element.key)
-            }
-    }
-
     var archivedTabs: [Tab] {
         return normalTabs.filter {
             return $0.isArchived()
         }
-    }
-
-    var archivedTabGroups: [String: TabGroup] {
-        // In archivedTabsPanelView, there's special UI treatments for a child tab
-        // even if it's the only arcvhied tab in a group. Those tabs won't be filtered
-        // out below (see activeTabGroups for comparison).
-        return getAll()
-            .reduce(into: [String: [Tab]]()) { dict, tab in
-                if tabGroupDict[tab.rootUUID] != nil && tab.isArchived() {
-                    dict[tab.rootUUID, default: []].append(tab)
-                }
-            }.reduce(into: [String: TabGroup]()) { dict, element in
-                dict[element.key] = TabGroup(children: element.value, id: element.key)
-            }
     }
 
     var count: Int {
@@ -480,12 +457,24 @@ class TabManager: NSObject {
 
     // Tab Group related functions
     internal func updateTabGroupsAndSendNotifications(notify: Bool) {
-        tabGroups = getAll()
+        activeTabGroups = getAll()
             .reduce(into: [String: [Tab]]()) { dict, tab in
-                dict[tab.rootUUID, default: []].append(tab)
+                if !tab.isArchived() {
+                    dict[tab.rootUUID, default: []].append(tab)
+                }
             }.filter { $0.value.count > 1 }.reduce(into: [String: TabGroup]()) { dict, element in
                 dict[element.key] = TabGroup(children: element.value, id: element.key)
             }
+
+        archivedTabGroups = getAll()
+            .reduce(into: [String: [Tab]]()) { dict, tab in
+                if tabGroupDict[tab.rootUUID] != nil && tab.isArchived() {
+                    dict[tab.rootUUID, default: []].append(tab)
+                }
+            }.reduce(into: [String: TabGroup]()) { dict, element in
+                dict[element.key] = TabGroup(children: element.value, id: element.key)
+            }
+
         cleanUpTabGroupNames()
         if notify {
             tabsUpdatedPublisher.send()
@@ -505,11 +494,11 @@ class TabManager: NSObject {
     }
 
     func getTabGroup(for id: String) -> TabGroup? {
-        return tabGroups[id]
+        return activeTabGroups[id]
     }
 
     func getAllTabGroup() -> [TabGroup] {
-        Array(tabGroups.values)
+        Array(activeTabGroups.values)
     }
 
     func closeTabGroup(_ item: TabGroup) {
@@ -528,6 +517,13 @@ class TabManager: NSObject {
 
     func cleanUpTabGroupNames() {
         // Write tab group name into dictionary
+        let tabGroups = getAll()
+            .reduce(into: [String: [Tab]]()) { dict, tab in
+                dict[tab.rootUUID, default: []].append(tab)
+            }.filter { $0.value.count > 1 }.reduce(into: [String: TabGroup]()) { dict, element in
+                dict[element.key] = TabGroup(children: element.value, id: element.key)
+            }
+
         tabGroups.forEach { group in
             let id = group.key
             if tabGroupDict[id] == nil {

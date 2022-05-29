@@ -92,6 +92,7 @@ class TabCardModel: CardModel {
     func updateIfNeeded(forceUpdateRows: Bool = false) {
         if needsUpdateGroup {
             needsUpdateGroup = false
+            manager.updateTabGroupsAndSendNotifications(notify: false)
             onDataUpdated()
         } else if needsUpdateRows || forceUpdateRows {
             needsUpdateRows = false

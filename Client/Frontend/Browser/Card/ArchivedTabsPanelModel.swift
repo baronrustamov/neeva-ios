@@ -29,6 +29,7 @@ class ArchivedTabsPanelModel: ObservableObject {
 
     func loadData() {
         archivedTabs = tabManager.archivedTabs
+        archivedTabGroups = tabManager.archivedTabGroups
 
         groupedSites.sites[.lastMonth] = archivedTabs.filter {
             return $0.wasLastExecuted(.lastMonth)
@@ -54,6 +55,7 @@ class ArchivedTabsPanelModel: ObservableObject {
 
         archivedTabsDurationSubscription = _archivedTabsDuration.publisher.sink {
             [weak self] _ in
+            self?.tabManager.updateTabGroupsAndSendNotifications(notify: false)
             self?.loadData()
             self?.objectWillChange.send()
         }
