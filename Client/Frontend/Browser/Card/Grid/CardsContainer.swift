@@ -96,13 +96,17 @@ struct TabGridContainer: View {
                 } else {
                     VStack(alignment: .leading, spacing: 0) {
                         SingleLevelTabCardsView(containerGeometry: geom, incognito: isIncognito)
-                        Spacer()
                         if FeatureFlag[.enableArchivedTabsView] && !isIncognito
                             && tabModel.getRows(incognito: isIncognito).count > 0
                         {
+                            Spacer()
                             ArchivedTabsView(containerGeometry: geom.size)
                         }
-                    }.frame(minWidth: geom.size.width, minHeight: geom.size.height)
+                    }.frame(
+                        minWidth: geom.size.width,
+                        minHeight: geom.size.height,
+                        alignment: .topLeading
+                    )
                 }
             }.background(
                 GeometryReader { proxy in
