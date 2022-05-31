@@ -62,7 +62,8 @@ class CardTests: XCTestCase {
             gridModel: gridModel, tabManager: manager, chromeModel: .init(),
             incognitoModel: incognitoModel, switcherToolbarModel: switcherToolbarModel,
             toastViewManager: ToastViewManager(window: UIWindow()),
-            notificationViewManager: NotificationViewManager(window: UIWindow()))
+            notificationViewManager: NotificationViewManager(window: UIWindow()),
+            overlayManager: OverlayManager())
         chromeModel = TabChromeModel()
 
         SpaceStore.shared = .createMock([.stackOverflow, .savedForLater, .shared, .public])

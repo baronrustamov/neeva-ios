@@ -31,6 +31,7 @@ class BrowserModel: ObservableObject {
     let switcherToolbarModel: SwitcherToolbarModel
     let cookieCutterModel = CookieCutterModel()
 
+    let overlayManager: OverlayManager
     var toastViewManager: ToastViewManager
     var notificationViewManager: NotificationViewManager
 
@@ -50,6 +51,7 @@ class BrowserModel: ObservableObject {
                 gridModel.tabCardModel.updateRowsIfNeeded()
             }
 
+            overlayManager.hideCurrentOverlay(ofPriority: .modal)
             gridModel.scrollToSelectedTab { [self] in
                 cardTransitionModel.update(to: .visibleForTrayShow)
                 contentVisibilityModel.update(showContent: false)
@@ -66,6 +68,7 @@ class BrowserModel: ObservableObject {
         gridModel.scrollToSelectedTab()
         cardTransitionModel.update(to: .hidden)
         contentVisibilityModel.update(showContent: false)
+        overlayManager.hideCurrentOverlay(ofPriority: .modal)
 
         if !showGrid {
             showGrid = true
@@ -96,6 +99,7 @@ class BrowserModel: ObservableObject {
             incognitoModel.update(isIncognito: tabToBeSelected.isIncognito)
         }
 
+        overlayManager.hideCurrentOverlay(ofPriority: .modal)
         gridModel.scrollToSelectedTab { [self] in
             cardTransitionModel.update(to: .visibleForTrayHidden)
             gridModel.closeDetailView()
@@ -110,6 +114,7 @@ class BrowserModel: ObservableObject {
             showGrid = false
         }
 
+        overlayManager.hideCurrentOverlay(ofPriority: .modal)
         contentVisibilityModel.update(showContent: true)
 
         gridModel.switcherState = .tabs
@@ -184,7 +189,8 @@ class BrowserModel: ObservableObject {
     init(
         gridModel: GridModel, tabManager: TabManager, chromeModel: TabChromeModel,
         incognitoModel: IncognitoModel, switcherToolbarModel: SwitcherToolbarModel,
-        toastViewManager: ToastViewManager, notificationViewManager: NotificationViewManager
+        toastViewManager: ToastViewManager, notificationViewManager: NotificationViewManager,
+        overlayManager: OverlayManager
     ) {
         self.gridModel = gridModel
         self.tabManager = tabManager
@@ -197,5 +203,6 @@ class BrowserModel: ObservableObject {
 
         self.toastViewManager = toastViewManager
         self.notificationViewManager = notificationViewManager
+        self.overlayManager = overlayManager
     }
 }

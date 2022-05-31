@@ -97,11 +97,13 @@ class BrowserViewController: UIViewController, ModalPresenter {
     lazy var gridModel: GridModel = {
         GridModel(tabManager: tabManager, tabCardModel: tabCardModel)
     }()
+
     lazy var browserModel: BrowserModel = {
         BrowserModel(
             gridModel: gridModel, tabManager: tabManager, chromeModel: chromeModel,
             incognitoModel: incognitoModel, switcherToolbarModel: switcherToolbarModel,
-            toastViewManager: toastViewManager, notificationViewManager: notificationViewManager)
+            toastViewManager: toastViewManager, notificationViewManager: notificationViewManager,
+            overlayManager: overlayManager)
     }()
 
     private lazy var switcherToolbarModel: SwitcherToolbarModel = {
