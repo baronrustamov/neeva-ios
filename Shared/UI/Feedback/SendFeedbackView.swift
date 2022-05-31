@@ -136,6 +136,7 @@ public struct SendFeedbackView: View {
                                         }
                                     )
                                     .withFont(unkerned: .bodyLarge)
+                                    .autocapitalization(.none)
                                     .padding(.top, emailInputMode ? 26 : 19.5)
                                     .padding(.bottom, emailInputMode ? 12 : 19.5)
                                 }
