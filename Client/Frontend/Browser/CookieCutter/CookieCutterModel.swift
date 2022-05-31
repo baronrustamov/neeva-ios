@@ -76,7 +76,7 @@ class CookieCutterModel: ObservableObject {
         if !Defaults[.cookieCutterOnboardingShowed] {
             Defaults[.cookieCutterOnboardingShowed] = true
 
-            bvc.showModal(style: OverlayStyle(showTitle: false)) {
+            bvc.showModal(style: OverlayStyle(showTitle: false, expandPopoverWidth: true)) {
                 CookieCutterOnboardingView {
                     bvc.overlayManager.hideCurrentOverlay(ofPriority: .modal) {
                         bvc.trackingStatsViewModel.showTrackingStatsViewPopover = true

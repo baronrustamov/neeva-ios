@@ -7,10 +7,16 @@ import SwiftUI
 
 struct CookieCutterOnboardingView: View {
     @EnvironmentObject var trackingStatsViewModel: TrackingStatsViewModel
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
 
     let onOpenMyCookieCutter: () -> Void
     let onRemindMeLater: () -> Void
     let onDismiss: () -> Void
+
+    var landscapeMode: Bool {
+        verticalSizeClass == .compact || horizontalSizeClass == .regular
+    }
 
     var body: some View {
         VStack(spacing: 14) {
@@ -18,28 +24,36 @@ struct CookieCutterOnboardingView: View {
                 .padding(.leading, 32)
                 .padding(.trailing, 24)
 
-            VStack(alignment: .leading, spacing: 16) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Your Cookie Cutter just declined a ")
-                        + Text("cookie popup ")
-                        .bold()
-                        + Text("and blocked ")
-                        + Text("\(trackingStatsViewModel.numTrackers) trackers.")
-                        .bold()
+            VStack {
+                OrientationDependentStack(
+                    orientation: landscapeMode
+                        ? UIDeviceOrientation.landscapeLeft : UIDeviceOrientation.portrait,
+                    VStackAlignment: .leading,
+                    spacing: 16
+                ) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Your Cookie Cutter just declined a ")
+                            + Text("cookie popup ")
+                            .bold()
+                            + Text("and blocked ")
+                            + Text("\(trackingStatsViewModel.numTrackers) trackers.")
+                            .bold()
 
-                    Text(
-                        "Cookie Cutter by Neeva stops annoying cookie popups and blocks invasive trackers across the web."
-                    )
-                }
+                        Text(
+                            "Cookie Cutter by Neeva stops annoying cookie popups and blocks invasive trackers across the web."
+                        )
+                    }
 
-                HStack {
-                    Spacer()
+                    HStack {
+                        Spacer()
 
-                    Image("cookie-cutter-onboarding")
-                        .resizable()
-                        .scaledToFit()
+                        Image("cookie-cutter-onboarding")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxHeight: 300)
 
-                    Spacer()
+                        Spacer()
+                    }
                 }
 
                 VStack(spacing: 23) {
@@ -62,7 +76,9 @@ struct CookieCutterOnboardingView: View {
             }
             .foregroundColor(.secondary)
             .padding([.horizontal, .bottom], 32)
-        }.frame(minHeight: FeatureFlag[.cookieCutterRemindMeLater] ? 600 : 560)
+        }.if(!landscapeMode) {
+            $0.frame(minHeight: FeatureFlag[.cookieCutterRemindMeLater] ? 600 : 560)
+        }.padding(.top, landscapeMode ? 24 : 8)
     }
 }
 
