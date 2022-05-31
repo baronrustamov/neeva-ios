@@ -35,7 +35,7 @@ class TabManager: NSObject {
     @Default(.tabGroupNames) private var tabGroupDict: [String: String]
     var tabGroups: [String: TabGroup] = [:]
     var childTabs: [Tab] {
-        getAllTabGroup().flatMap(\.children)
+        tabGroups.values.flatMap(\.children)
     }
 
     // Use `selectedTabPublisher` to observe changes to `selectedTab`.
@@ -462,12 +462,12 @@ class TabManager: NSObject {
         updateTabGroupsAndSendNotifications(notify: true)
     }
 
-    func getTabGroup(for id: String) -> TabGroup? {
-        return tabGroups[id]
+    func getTabGroup(for rootUUID: String) -> TabGroup? {
+        return tabGroups[rootUUID]
     }
 
-    func getAllTabGroup() -> [TabGroup] {
-        Array(tabGroups.values)
+    func getTabGroup(for tab: Tab) -> TabGroup? {
+        return tabGroups[tab.rootUUID]
     }
 
     func closeTabGroup(_ item: TabGroup) {
