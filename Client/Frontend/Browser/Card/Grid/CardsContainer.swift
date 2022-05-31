@@ -94,12 +94,15 @@ struct TabGridContainer: View {
                         }
                     }.frame(minWidth: geom.size.width, minHeight: geom.size.height)
                 } else {
-                    SingleLevelTabCardsView(containerGeometry: geom, incognito: isIncognito)
-                    if FeatureFlag[.enableArchivedTabsView] && !isIncognito
-                        && tabModel.getRows(incognito: isIncognito).count > 0
-                    {
-                        ArchivedTabsView(containerGeometry: geom.size)
-                    }
+                    VStack(alignment: .leading, spacing: 0) {
+                        SingleLevelTabCardsView(containerGeometry: geom, incognito: isIncognito)
+                        Spacer()
+                        if FeatureFlag[.enableArchivedTabsView] && !isIncognito
+                            && tabModel.getRows(incognito: isIncognito).count > 0
+                        {
+                            ArchivedTabsView(containerGeometry: geom.size)
+                        }
+                    }.frame(minWidth: geom.size.width, minHeight: geom.size.height)
                 }
             }.background(
                 GeometryReader { proxy in
