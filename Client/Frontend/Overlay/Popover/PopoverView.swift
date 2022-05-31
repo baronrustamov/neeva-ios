@@ -42,7 +42,10 @@ struct PopoverView<Content: View>: View {
     var body: some View {
         GeometryReader { geo in
             VStack {
+                Spacer()
+
                 SheetHeaderButtonView(headerButton: headerButton, onDismiss: onDismiss)
+                    .padding(.vertical, 12)
 
                 VStack {
                     if style.showTitle, let title = title {
@@ -69,8 +72,9 @@ struct PopoverView<Content: View>: View {
                     maxWidth: geo.size.width - (horizontalPadding * 2),
                     maxHeight: geo.size.height - verticalPadding - 60,
                     alignment: .center
-                )
-                .fixedSize(horizontal: !style.expandPopoverWidth, vertical: true)
+                ).fixedSize(horizontal: !style.expandPopoverWidth, vertical: true)
+
+                Spacer()
             }
             .padding(.horizontal, horizontalPadding)
             .padding(.vertical, verticalPadding)

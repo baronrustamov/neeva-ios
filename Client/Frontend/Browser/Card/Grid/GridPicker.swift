@@ -15,6 +15,10 @@ struct GridPicker: View {
 
     @State var selectedIndex: Int = 1
 
+    var isSearchingForTabs: Bool {
+        gridModel.tabCardModel.isSearchingForTabs
+    }
+
     var segments: [Segment] {
         var segments = [
             Segment(
@@ -82,7 +86,8 @@ struct GridPicker: View {
                     ? Color.background : Color.clear)
                     .ignoresSafeArea()
             )
-            .opacity(browserModel.showGrid ? 1 : 0)
+            .opacity(browserModel.showGrid ? (isSearchingForTabs ? 0.5 : 1) : 0)
+            .disabled(isSearchingForTabs)
     }
 }
 
@@ -90,17 +95,17 @@ struct SwipeToSwitchToSpacesGesture: ViewModifier {
     var fromPicker: Bool = false
 
     @EnvironmentObject var switcherToolbarModel: SwitcherToolbarModel
+    @EnvironmentObject var tabCardModel: TabCardModel
 
     private var gesture: some Gesture {
         DragGesture()
-            .onChanged({ value in
+            .onChanged { value in
                 let horizontalAmount = value.translation.width as CGFloat
 
                 // Divide by 2.5 to follow drag more accurately
                 horizontalOffsetChanged(
                     fromPicker ? horizontalAmount : (-horizontalAmount / 2.5))
-            })
-            .onEnded { value in
+            }.onEnded { value in
                 horizontalOffsetChanged(nil)
             }
     }
@@ -110,10 +115,14 @@ struct SwipeToSwitchToSpacesGesture: ViewModifier {
     }
 
     func body(content: Content) -> some View {
-        if fromPicker {
-            content.simultaneousGesture(gesture)
+        if !tabCardModel.isSearchingForTabs {
+            if fromPicker {
+                content.simultaneousGesture(gesture)
+            } else {
+                content.gesture(gesture)
+            }
         } else {
-            content.gesture(gesture)
+            content
         }
     }
 }

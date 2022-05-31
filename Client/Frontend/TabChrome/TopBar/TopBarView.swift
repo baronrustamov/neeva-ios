@@ -107,18 +107,20 @@ struct TopBarView: View {
                 }
             }
 
-            ZStack {
-                if let progress = chrome.estimatedProgress {
-                    ProgressView(value: progress)
-                        .progressViewStyle(.pageProgressBar)
-                        .padding(.bottom, -1)
-                        .ignoresSafeArea(edges: .horizontal)
-                        .accessibilityLabel("Page Loading")
+            if !chrome.isEditingLocation {
+                ZStack {
+                    if let progress = chrome.estimatedProgress {
+                        ProgressView(value: progress)
+                            .progressViewStyle(.pageProgressBar)
+                            .padding(.bottom, -1)
+                            .ignoresSafeArea(edges: .horizontal)
+                            .accessibilityLabel("Page Loading")
+                    }
                 }
+                .zIndex(1)
+                .transition(.opacity)
+                .animation(.spring(), value: chrome.estimatedProgress)
             }
-            .zIndex(1)
-            .transition(.opacity)
-            .animation(.spring(), value: chrome.estimatedProgress)
 
             if !UIConstants.enableBottomURLBar {
                 separator

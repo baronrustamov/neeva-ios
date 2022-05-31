@@ -25,4 +25,13 @@ struct TabGroup {
     var displayTitle: String {
         inferredTitle ?? "\(children.count) Tabs"
     }
+
+    func wasLastExecuted(_ byTime: TimeFilter) -> Bool {
+        for tab in children {
+            if tab.wasLastExecuted(byTime) {
+                return true
+            }
+        }
+        return false
+    }
 }

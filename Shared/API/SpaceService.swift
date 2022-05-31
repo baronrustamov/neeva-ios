@@ -6,6 +6,16 @@ import Combine
 
 public protocol SpaceService {
     @discardableResult
+    func addPublicACL(spaceID: String) -> AddPublicACLRequest?
+
+    @discardableResult
+    func addSoloACLs(spaceID: String, emails: [String], acl: SpaceACLLevel, note: String)
+        -> AddSoloACLsRequest?
+
+    @discardableResult
+    func addSpaceComment(spaceID: String, comment: String) -> AddSpaceCommentRequest?
+
+    @discardableResult
     func addToSpaceMutation(
         spaceId: String, url: String, title: String,
         thumbnail: String?, data: String?, mediaType: String?, isBase64: Bool?,
@@ -13,14 +23,31 @@ public protocol SpaceService {
     ) -> Cancellable?
 
     @discardableResult
-    func getSpacesData(
-        spaceIds: [String],
-        completion: @escaping (Result<[SpacesDataQueryController.Space], Error>) -> Void
-    ) -> Cancellable?
+    func addToSpaceWithURL(spaceID: String, url: String, title: String, description: String?)
+        -> AddToSpaceWithURLRequest?
 
     @discardableResult
-    func getSpaces(
-        completion: @escaping (Result<[SpaceListController.Space], Error>) -> Void
+    func claimGeneratedItem(spaceID: String, entityID: String) -> ClaimGeneratedItem?
+
+    @discardableResult
+    func createSpace(name: String) -> CreateSpaceRequest?
+
+    @discardableResult
+    func deleteGenerator(spaceID: String, generatorID: String) -> DeleteGeneratorRequest?
+
+    @discardableResult
+    func deletePublicACL(spaceID: String) -> DeletePublicACLRequest?
+
+    @discardableResult
+    func deleteSpace(spaceID: String) -> DeleteSpaceRequest?
+
+    @discardableResult
+    func deleteSpaceItems(spaceID: String, ids: [String]) -> DeleteSpaceItemsRequest?
+
+    @discardableResult
+    func getRelatedSpacesCountData(
+        spaceID: String,
+        completion: @escaping (Result<Int, Error>) -> Void
     ) -> Cancellable?
 
     @discardableResult
@@ -30,22 +57,24 @@ public protocol SpaceService {
     ) -> Cancellable?
 
     @discardableResult
-    func getRelatedSpacesCountData(
-        spaceID: String,
-        completion: @escaping (Result<Int, Error>) -> Void
+    func getSpaces(
+        completion: @escaping (Result<[SpaceListController.Space], Error>) -> Void
     ) -> Cancellable?
 
     @discardableResult
-    func createSpace(name: String) -> CreateSpaceRequest?
+    func getSpacesData(
+        spaceIds: [String],
+        completion: @escaping (Result<[SpacesDataQueryController.Space], Error>) -> Void
+    ) -> Cancellable?
 
     @discardableResult
-    func deleteSpace(spaceID: String) -> DeleteSpaceRequest?
-
-    @discardableResult
-    func deleteGenerator(spaceID: String, generatorID: String) -> DeleteGeneratorRequest?
+    func reorderSpace(spaceID: String, ids: [String]) -> ReorderSpaceRequest?
 
     @discardableResult
     func unfollowSpace(spaceID: String) -> UnfollowSpaceRequest?
+
+    @discardableResult
+    func updateProfile(firstName: String, lastName: String) -> UpdateProfileRequest?
 
     @discardableResult
     func updateSpace(
@@ -54,38 +83,9 @@ public protocol SpaceService {
     ) -> UpdateSpaceRequest?
 
     @discardableResult
-    func claimGeneratedItem(spaceID: String, entityID: String) -> ClaimGeneratedItem?
-
-    @discardableResult
-    func addSpaceComment(spaceID: String, comment: String) -> AddSpaceCommentRequest?
-
-    @discardableResult
-    func addPublicACL(spaceID: String) -> AddPublicACLRequest?
-
-    @discardableResult
-    func deletePublicACL(spaceID: String) -> DeletePublicACLRequest?
-
-    @discardableResult
-    func addSoloACLs(spaceID: String, emails: [String], acl: SpaceACLLevel, note: String)
-        -> AddSoloACLsRequest?
-
-    @discardableResult
-    func deleteSpaceItems(spaceID: String, ids: [String]) -> DeleteSpaceItemsRequest?
-
-    @discardableResult
     func updateSpaceEntity(
         spaceID: String, entityID: String, title: String, snippet: String?, thumbnail: String?
     ) -> UpdateSpaceEntityRequest?
-
-    @discardableResult
-    func reorderSpace(spaceID: String, ids: [String]) -> ReorderSpaceRequest?
-
-    @discardableResult
-    func addToSpaceWithURL(spaceID: String, url: String, title: String, description: String?)
-        -> AddToSpaceWithURLRequest?
-
-    @discardableResult
-    func updateProfile(firstName: String, lastName: String) -> UpdateProfileRequest?
 }
 
 // !! WARNING !!

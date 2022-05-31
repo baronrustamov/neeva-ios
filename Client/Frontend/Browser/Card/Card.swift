@@ -229,8 +229,8 @@ struct Card<Details>: View where Details: CardDetails {
                         .if(!animate) { view in
                             view
                                 .padding(1.5)
+                                .padding(tabDetails.isSelected ? 0 : -1.5)
                                 .contextMenu(menuItems: tabDetails.contextMenu)
-                                .padding(-1.5)
                         }
                 } else {
                     button

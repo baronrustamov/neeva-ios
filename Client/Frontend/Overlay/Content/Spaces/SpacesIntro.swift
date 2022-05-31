@@ -62,25 +62,6 @@ struct SpacesShareIntroOverlayContent: View {
     }
 }
 
-struct OrientationDependentStack<Content: View>: View {
-    let orientation: UIDeviceOrientation
-
-    @ViewBuilder var content: Content
-
-    @ViewBuilder
-    var body: some View {
-        if orientation.isLandscape {
-            HStack(spacing: 0) {
-                content
-            }
-        } else {
-            VStack(spacing: 0) {
-                content
-            }
-        }
-    }
-}
-
 struct SpacesIntroView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) private var verticalSizeClass
@@ -117,6 +98,7 @@ struct SpacesIntroView: View {
                     }
                 }
             }
+
             OrientationDependentStack(
                 orientation: landscapeMode
                     ? UIDeviceOrientation.landscapeLeft : UIDeviceOrientation.portrait
