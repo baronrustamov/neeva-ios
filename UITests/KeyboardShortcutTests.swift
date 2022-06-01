@@ -45,7 +45,7 @@ class KeyboardShortcutTests: UITestBase {
         tester().waitForWebViewElementWithAccessibilityLabel("Example Domain")
 
         bvc.findInPageKeyCommand()
-        tester().waitForView(withAccessibilityIdentifier: "FindInPage_Done")
+        tester().waitForView(withAccessibilityLabel: "Done")
 
         reset()
     }
@@ -131,6 +131,25 @@ class KeyboardShortcutTests: UITestBase {
         reset()
     }
 
+    // MARK: - Close Tabs
+    func testCloseTabCommand() throws {
+        if !isiPad() {
+            try skipTest(issue: 0, "Keyboard shorcuts are only supported on iPad")
+        }
+
+        openNewTab()
+        tester().waitForWebViewElementWithAccessibilityLabel("Example Domain")
+
+        // Doesn't matter what this URL is, we don't need the page to load.
+        openNewTab(to: "https://neeva.com")
+        tester().waitForAnimationsToFinish()
+
+        bvc.closeTabKeyCommand()
+
+        // Confirm the first tab opened is visible.
+        tester().waitForWebViewElementWithAccessibilityLabel("Example Domain")
+    }
+
     func testCloseAllTabsCommand() throws {
         if !isiPad() {
             try skipTest(issue: 0, "Keyboard shorcuts are only supported on iPad")
@@ -139,7 +158,7 @@ class KeyboardShortcutTests: UITestBase {
         openMultipleTabs(tester: tester())
         bvc.closeAllTabsCommand()
 
-        tester().waitForView(withAccessibilityIdentifier: "EmptyTabTray")
+        tester().waitForView(withAccessibilityLabel: "Empty Card Grid")
         reset()
     }
 

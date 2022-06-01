@@ -15,7 +15,7 @@ extension UITestBase {
 
     func openNewTab(to url: String = "example.com ") {
         tester().waitForView(withAccessibilityLabel: "Show Tabs")
-        tester().longPressView(withAccessibilityLabel: "Show Tabs", duration: 2)
+        tester().longPressView(withAccessibilityLabel: "Show Tabs", duration: 1)
 
         if tester().viewExistsWithLabel("New Tab") {
             tester().tapView(withAccessibilityLabel: "New Tab")
@@ -32,7 +32,8 @@ extension UITestBase {
             goToAddressBar()
         }
 
-        let textField = tester().waitForView(withAccessibilityIdentifier: "address") as! UITextField
+        let textField =
+            tester().waitForView(withAccessibilityLabel: "Address and Search") as! UITextField
         textField.text = url
         textField.resignFirstResponder()
         _ = textField.delegate?.textFieldShouldReturn!(textField)

@@ -58,7 +58,7 @@ extension BrowserViewController {
             return
         }
 
-        tabManager.removeTabs([currentTab])
+        tabManager.removeTab(currentTab, showToast: true)
     }
 
     @objc func nextTabKeyCommand() {

@@ -42,7 +42,9 @@ struct FindInPageView: View {
 
             Button(action: onDismiss) {
                 Text("Done")
-            }.accessibilityIdentifier("FindInPage_Done")
+            }
+            .accessibilityIdentifier("FindInPage_Done")
+            .accessibilityLabel(Text("Done"))
         }
     }
 }

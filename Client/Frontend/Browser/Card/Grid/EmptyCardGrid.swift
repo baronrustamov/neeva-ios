@@ -18,6 +18,7 @@ struct EmptyCardGrid: View {
         }
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier(isIncognito ? "EmptyTabTrayIncognito" : "EmptyTabTray")
+        .accessibilityLabel(Text(isIncognito ? "Empty Card Grid (Incognito)" : "Empty Card Grid"))
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
