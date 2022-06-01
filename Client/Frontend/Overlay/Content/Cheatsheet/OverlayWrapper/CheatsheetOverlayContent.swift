@@ -13,27 +13,44 @@ struct CheatsheetOverlayHostView: View {
 
     private var showAsPopover: Bool { tabChromeModel.inlineToolbar }
 
-    private let dismiss: () -> Void
+    private let onDismiss: () -> Void
     private let openSupport: (UIImage?) -> Void
     private let openURL: (URL) -> Void
+    private let onSignInOrJoinNeeva: () -> Void
 
-    init(openSupport: @escaping (UIImage?) -> Void, dismiss: @escaping ()-> Void, tabManager: TabManager) {
-        self.model = tabManager.selectedTab?.cheatsheetModel ?? CheatsheetMenuViewModel(tab: nil)
+    init(
+        model: CheatsheetMenuViewModel,
+        openSupport: @escaping (UIImage?) -> Void,
+        onDismiss: @escaping ()-> Void,
+        openURL: @escaping (URL)-> Void,
+        onSignInOrJoinNeeva: @escaping () -> Void
+    ) {
+        self.model = model
 
-        self.dismiss = dismiss
+        self.onDismiss = onDismiss
         self.openSupport = openSupport
-        self.openURL = { url in
-            tabManager.createOrSwitchToTab(for: url)
-        }
+        self.openURL = openURL
+        self.onSignInOrJoinNeeva = onSignInOrJoinNeeva
     }
 
     var body: some View {
-        EmptyView()
+        if showAsPopover {
+            makePopover(content: content)
+        } else {
+            makeSheet(content: content)
+        }
     }
 
     @ViewBuilder
     func makePopover<Content: View>(content: Content) -> some View {
-        PopoverView(style: .cheatsheet, onDismiss: dismiss, headerButton: nil, useScrollView: false) {
+        CheatsheetOverlayPopoverView(onDismiss: onDismiss) {
+            content
+        }
+    }
+
+    @ViewBuilder
+    func makeSheet<Content: View>(content: Content) -> some View {
+        CheatsheetOverlaySheetView(model: OverlaySheetModel(), onDismiss: onDismiss) {
             content
         }
     }

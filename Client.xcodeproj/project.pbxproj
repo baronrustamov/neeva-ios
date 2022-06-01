@@ -1492,6 +1492,8 @@
 		E94A234F2839CA0700293ACA /* FileHasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94A234E2839CA0700293ACA /* FileHasher.swift */; };
 		E94B7DEB27E4F96B003D8F13 /* QueryButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94B7DEA27E4F96B003D8F13 /* QueryButtonView.swift */; };
 		E9529C6527DC96C70009B434 /* NewsResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9529C6427DC96C70009B434 /* NewsResultsView.swift */; };
+		E954FD882846BE7A009B534A /* CheatsheetOverlayPopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E954FD872846BE7A009B534A /* CheatsheetOverlayPopoverView.swift */; };
+		E954FD8A2846C0F0009B534A /* CheatsheetOverlaySheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E954FD892846C0F0009B534A /* CheatsheetOverlaySheetView.swift */; };
 		E96D95682832F27700DD5BB3 /* BloomFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96D95672832F27700DD5BB3 /* BloomFilterTests.swift */; };
 		E96D956A2832F2FC00DD5BB3 /* CanonicalURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96D95692832F2FC00DD5BB3 /* CanonicalURL.swift */; };
 		E96D956C2832FAA800DD5BB3 /* canonical_url_v3.yaml in Resources */ = {isa = PBXBuildFile; fileRef = E96D956B2832FAA800DD5BB3 /* canonical_url_v3.yaml */; };
@@ -2873,6 +2875,8 @@
 		E94A234E2839CA0700293ACA /* FileHasher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileHasher.swift; sourceTree = "<group>"; };
 		E94B7DEA27E4F96B003D8F13 /* QueryButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryButtonView.swift; sourceTree = "<group>"; };
 		E9529C6427DC96C70009B434 /* NewsResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsResultsView.swift; sourceTree = "<group>"; };
+		E954FD872846BE7A009B534A /* CheatsheetOverlayPopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheatsheetOverlayPopoverView.swift; sourceTree = "<group>"; };
+		E954FD892846C0F0009B534A /* CheatsheetOverlaySheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheatsheetOverlaySheetView.swift; sourceTree = "<group>"; };
 		E96D95672832F27700DD5BB3 /* BloomFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloomFilterTests.swift; sourceTree = "<group>"; };
 		E96D95692832F2FC00DD5BB3 /* CanonicalURL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanonicalURL.swift; sourceTree = "<group>"; };
 		E96D956B2832FAA800DD5BB3 /* canonical_url_v3.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = canonical_url_v3.yaml; sourceTree = "<group>"; };
@@ -4150,13 +4154,13 @@
 		BC07524126C20C42008B607A /* Cheatsheet */ = {
 			isa = PBXGroup;
 			children = (
+				E954FD862846BC51009B534A /* OverlayWrapper */,
 				E97D7E822834A8FF00944EF5 /* BloomFilter */,
 				32FAB3DA27B62A5E00FEBDFE /* NeevaScopeLoading */,
 				BCF864CC276C5FDC00E94B3A /* BuyingGuideView.swift */,
 				3234500827EBAF9600F16237 /* CheatsheetInfoView.swift */,
 				BC07524B26C3B98F008B607A /* CheatsheetMenuView.swift */,
 				32D7F0EA2797025C000203C7 /* CheatsheetMenuViewModel.swift */,
-				C832BF8026E1566E00B9A1F8 /* CheatsheetOverlayContent.swift */,
 				32D95B0327A37C8100447507 /* CheatsheetTooltipPopoverView.swift */,
 				E9EC25FE283C337F00B9A79B /* CheatsheetUGCIndicatorView.swift */,
 				BC8EE06A271CEA6A00D6BE2A /* DomainAllowList.swift */,
@@ -5056,6 +5060,16 @@
 				E90075062835AEEC00AE60DE /* reddit_test.txt */,
 			);
 			name = BloomFilterTestFiles;
+			sourceTree = "<group>";
+		};
+		E954FD862846BC51009B534A /* OverlayWrapper */ = {
+			isa = PBXGroup;
+			children = (
+				C832BF8026E1566E00B9A1F8 /* CheatsheetOverlayContent.swift */,
+				E954FD872846BE7A009B534A /* CheatsheetOverlayPopoverView.swift */,
+				E954FD892846C0F0009B534A /* CheatsheetOverlaySheetView.swift */,
+			);
+			path = OverlayWrapper;
 			sourceTree = "<group>";
 		};
 		E96D95662830A0CB00DD5BB3 /* BloomFilter */ = {
@@ -7472,6 +7486,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E954FD8A2846C0F0009B534A /* CheatsheetOverlaySheetView.swift in Sources */,
 				C9C18DEA26558FF3004710CD /* FrontViewController.swift in Sources */,
 				BCC7737B27443E7F008E7538 /* SignUpOneButtonPromptView.swift in Sources */,
 				C9F8EB352680DA8A0042CFE7 /* TabToolbarHost.swift in Sources */,
@@ -7529,6 +7544,7 @@
 				C91FA35E26B1959B00E82841 /* TopBarView.swift in Sources */,
 				E64024E027F241CA00D65B63 /* ZeroQueryHeader.swift in Sources */,
 				C9F8EB372680E33B0042CFE7 /* TabToolbarButtons.swift in Sources */,
+				E954FD882846BE7A009B534A /* CheatsheetOverlayPopoverView.swift in Sources */,
 				C9098F5E26AF48BC00D2B5F4 /* TabChromeModel.swift in Sources */,
 				1D0BA05C24F46A0400D731B5 /* TopSitesManager.swift in Sources */,
 				66BB89DB26A64FB0000C4BDF /* OpenInAppOverlayView.swift in Sources */,

@@ -1982,12 +1982,15 @@ extension BrowserViewController {
 
         // if on iphone and portrait, present as sheet
         // otherwise, present as popover
-        showModal(style: .cheatsheet) {
-            CheatsheetOverlayContent(
-                menuAction: { self.perform(overflowMenuAction: $0, targetButtonView: nil) },
-                tabManager: self.tabManager
-            )
-            .environment(\.onSigninOrJoinNeeva) {
+        let cheatsheetView = CheatsheetOverlayHostView(
+            model: tabManager.selectedTab?.cheatsheetModel ?? CheatsheetMenuViewModel(tab: nil),
+            openSupport: { self.perform(menuAction: .support(screenshot: $0)) },
+            onDismiss: { self.overlayManager.hide(overlay: .cheatsheet(nil)) },
+            openURL: { url in
+                self.overlayManager.hide(overlay: .cheatsheet(nil))
+                self.openURLInNewTabPreservingIncognitoState(url)
+            },
+            onSignInOrJoinNeeva: {
                 ClientLogger.shared.logCounter(
                     .CheatsheetErrorSigninOrJoinNeeva,
                     attributes: EnvironmentHelper.shared.getFirstRunAttributes()
@@ -2003,7 +2006,8 @@ extension BrowserViewController {
                     }
                 )
             }
-        }
+        )
+        overlayManager.show(overlay: .cheatsheet(cheatsheetView))
 
         self.dismissVC()
     }

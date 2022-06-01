@@ -22,12 +22,13 @@ enum OverlayType: Equatable {
     case popover(PopoverRootView?)
     case sheet(OverlaySheetRootView?)
     case toast(ToastView?)
+    case cheatsheet(CheatsheetOverlayHostView?)
 
     func isPriority(_ priority: OverlayPriority) -> Bool {
         switch self {
         case .backForwardList, .find, .fullScreenModal:
             return priority == .modal
-        case .popover, .sheet:
+        case .popover, .sheet, .cheatsheet:
             return priority == .modal || priority == .sheet
         case .notification, .toast:
             return priority == .transient
@@ -38,7 +39,7 @@ enum OverlayType: Equatable {
         switch self {
         case .backForwardList, .find, .fullScreenModal:
             return priorities.contains(.modal)
-        case .popover, .sheet:
+        case .popover, .sheet, .cheatsheet:
             return priorities.contains(.modal) || priorities.contains(.sheet)
         case .notification, .toast:
             return priorities.contains(.transient)
@@ -60,6 +61,8 @@ enum OverlayType: Equatable {
         case (.sheet, .sheet):
             return true
         case (.toast, .toast):
+            return true
+        case (.cheatsheet, .cheatsheet):
             return true
         default:
             return false
@@ -162,7 +165,7 @@ class OverlayManager: ObservableObject {
                 }
             case .notification:
                 slideAndFadeIn(offset: -ToastViewUX.height)
-            case .sheet:
+            case .sheet, .cheatsheet:
                 slideAndFadeIn(offset: OverlaySheetUX.animationOffset)
             case .toast:
                 slideAndFadeIn(offset: ToastViewUX.height)
@@ -284,7 +287,7 @@ class OverlayManager: ObservableObject {
                 }
             case .notification:
                 slideAndFadeOut(offset: -ToastViewUX.height)
-            case .sheet:
+            case .sheet, .cheatsheet:
                 slideAndFadeOut(offset: OverlaySheetUX.animationOffset)
             case .toast:
                 slideAndFadeOut(offset: ToastViewUX.height)

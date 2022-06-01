@@ -100,6 +100,8 @@ struct OverlayView: View {
                     toast
                         .padding(.bottom, 18)
                 }
+            case .cheatsheet(let cheatsheet):
+                cheatsheet
             default:
                 EmptyView()
             }
