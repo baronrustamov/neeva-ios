@@ -17,6 +17,11 @@ extension BrowserViewController {
         completion: (() -> Void)? = nil,
         onDismiss: (() -> Void)? = nil
     ) {
+        // Confirm a introView isn't already visible.
+        guard !introViewModel.isDisplaying else {
+            return
+        }
+
         if alwaysShow || !Defaults[.introSeen] {
             showProperIntroVC(
                 signInMode: signInMode,
@@ -109,21 +114,6 @@ extension BrowserViewController {
                 self.openURLFromAuth(url)
             }
         }
-    }
-
-    private func introVCPresentHelper(
-        introViewController: UIViewController, completion: (() -> Void)?
-    ) {
-        // On iPad we present it modally in a controller
-        if traitCollection.horizontalSizeClass == .regular
-            && traitCollection.verticalSizeClass == .regular
-        {
-            introViewController.preferredContentSize = CGSize(width: 375, height: 667)
-            introViewController.modalPresentationStyle = .formSheet
-        } else {
-            introViewController.modalPresentationStyle = .fullScreen
-        }
-        present(introViewController, animated: true, completion: completion)
     }
 }
 

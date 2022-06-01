@@ -38,6 +38,7 @@ class IntroViewModel: NSObject, ObservableObject {
     public var overlayManager: OverlayManager
     public var toastViewManager: ToastViewManager
 
+    private(set) var isDisplaying = false
     private var onDismiss: ((FirstRunButtonActions) -> Void)?
 
     public func buttonAction(_ option: FirstRunButtonActions) {
@@ -94,9 +95,10 @@ class IntroViewModel: NSObject, ObservableObject {
                     .environmentObject(self)
                     .onAppear {
                         AppDelegate.setRotationLock(to: .portrait)
-                    }
-                    .onDisappear {
+                        self.isDisplaying = true
+                    }.onDisappear {
                         AppDelegate.setRotationLock(to: .all)
+                        self.isDisplaying = false
                     }
             )
         ) {
