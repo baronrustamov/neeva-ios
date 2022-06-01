@@ -109,8 +109,6 @@ struct TabContainerContent: View {
     let bvc: BrowserViewController
     let zeroQueryModel: ZeroQueryModel
     let suggestionModel: SuggestionModel
-    @StateObject var suggestedSearchesModel: SuggestedSearchesModel =
-        SuggestedSearchesModel(suggestedQueries: [])
     let spaceContentSheetModel: SpaceContentSheetModel?
 
     @EnvironmentObject private var chromeModel: TabChromeModel
@@ -201,7 +199,6 @@ struct TabContainerContent: View {
                 }
             case .blank:
                 ZeroQueryContent(model: zeroQueryModel)
-                    .environmentObject(suggestedSearchesModel)
             default:
                 Color.clear
             }
@@ -213,7 +210,6 @@ struct TabContainerContent: View {
                     case .zeroQuery:
                         ZeroQueryContent(model: zeroQueryModel)
                             .transition(.identity)
-                            .environmentObject(suggestedSearchesModel)
                     case .suggestions:
                         SuggestionsContent(suggestionModel: suggestionModel)
                             .transition(.identity)
@@ -247,7 +243,6 @@ struct TabContainerContent: View {
             zeroQueryModel.profile.panelDataObservers.activityStream.refreshIfNeeded(
                 forceTopSites: true)
             self.zeroQueryModel.updateSuggestedSites()
-            self.suggestedSearchesModel.reload(from: zeroQueryModel.profile)
         }.animation(.spring(), value: model.currentContentUI)
     }
 }
