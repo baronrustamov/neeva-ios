@@ -45,47 +45,6 @@ struct ReviewURLButton: View {
     }
 }
 
-struct RedditBacklinkButton: View {
-    let url: URL
-    let title: String?
-    let snippet: String?
-
-    @Environment(\.onOpenURLForCheatsheet) var onOpenURLForCheatsheet
-
-    var body: some View {
-        Button(action: {
-            onOpenURLForCheatsheet(url, String(describing: Self.self))
-        }) {
-            VStack(alignment: .leading, spacing: 8) {
-                getHostName(title: title)
-                if let snippet = snippet {
-                    Text(snippet)
-                        .withFont(unkerned: .bodyMedium)
-                        .multilineTextAlignment(.leading)
-
-                }
-            }
-        }
-        .foregroundColor(.label)
-    }
-
-    @ViewBuilder
-    func getHostName(title: String?) -> some View {
-        let lastPath = url.lastPathComponent
-            .replacingOccurrences(of: "/", with: "")
-            .replacingOccurrences(of: "_", with: " ")
-
-        let label = title ?? ""
-
-        HStack {
-            Text(label == "" ? lastPath : label)
-        }
-        .withFont(unkerned: .headingSmall)
-        .lineLimit(1)
-    }
-
-}
-
 struct CheatsheetNoResultView: View {
     var body: some View {
         VStack(alignment: .center) {
@@ -167,6 +126,10 @@ public struct CheatsheetMenuView: View {
 
     private var searchResults: [NeevaScopeSearch.SearchController.RichResult]? {
         model.searchRichResults?.filter { $0.result.isSearchResult }
+    }
+
+    private var ugcDiscussion: UGCDiscussion {
+        UGCDiscussion(backlinks: model.cheatsheetInfo?.backlinkURL)
     }
 
     private let menuAction: (OverflowMenuAction) -> Void
@@ -296,8 +259,10 @@ public struct CheatsheetMenuView: View {
                 }
             }
 
-            if NeevaFeatureFlags[.enableBacklink] {
-                redditBacklinkSession
+            if NeevaFeatureFlags[.enableBacklink],
+                !ugcDiscussion.isEmpty
+            {
+                UGCDiscussionView(ugcDiscussion)
             }
 
             priceHistorySection
@@ -425,33 +390,6 @@ public struct CheatsheetMenuView: View {
             }
         case .RichEntity(result: let richEntityResult):
             KnowledgeCardView(richEntity: richEntityResult)
-        }
-    }
-
-    @ViewBuilder
-    var redditBacklinkSession: some View {
-        if let backlinks = model.cheatsheetInfo?.backlinkURL, backlinks.count > 0 {
-            VStack(alignment: .leading, spacing: 20) {
-                HStack(alignment: .center) {
-                    Text("From Reddit").withFont(.headingXLarge)
-                    Spacer()
-                    Image("reddit-logo")
-                }
-                // only show reddit content until we figure out how to display content from other domain
-                ForEach(0..<backlinks.count) { index in
-                    if let urlContent = backlinks[index].url,
-                        let url = URL(string: urlContent),
-                        let domain = backlinks[index].domain,
-                        domain == "www.reddit.com"
-                    {
-                        // construct reddit link
-                        RedditBacklinkButton(
-                            url: url, title: backlinks[index].title,
-                            snippet: backlinks[index].snippet)
-                    }
-                }
-            }
-            .padding(.vertical, 12)
         }
     }
 
