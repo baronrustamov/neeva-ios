@@ -26,37 +26,43 @@ struct PopoverView<Content: View>: View {
 
     var body: some View {
         GeometryReader { geo in
-            VStack {
+            HStack {
                 Spacer()
 
-                SheetHeaderButtonView(headerButton: headerButton, onDismiss: onDismiss)
-                    .padding(.vertical, 12)
-
                 VStack {
-                    if style.showTitle, let title = title {
-                        SheetHeaderView(title: title, onDismiss: onDismiss)
-                    }
+                    Spacer()
 
-                    ScrollView(.vertical, showsIndicators: false) {
-                        content()
-                            .onPreferenceChange(OverlayTitlePreferenceKey.self) {
-                                self.title = $0
-                            }
+                    SheetHeaderButtonView(headerButton: headerButton, onDismiss: onDismiss)
+                        .padding(.vertical, 12)
+
+                    VStack {
+                        if style.showTitle, let title = title {
+                            SheetHeaderView(title: title, onDismiss: onDismiss)
+                        }
+
+                        ScrollView(.vertical, showsIndicators: false) {
+                            content()
+                                .onPreferenceChange(OverlayTitlePreferenceKey.self) {
+                                    self.title = $0
+                                }
+                        }
                     }
+                    .padding(14)
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .background(
+                        Color(style.backgroundColor)
+                            .cornerRadius(16)
+                    )
+                    // 88 is button height + VStack padding + outer padding
+                    .frame(
+                        minWidth: 400,
+                        maxWidth: geo.size.width - (horizontalPadding * 2),
+                        maxHeight: geo.size.height - (verticalPadding * 2) - 88,
+                        alignment: .center
+                    ).fixedSize(horizontal: !style.expandPopoverWidth, vertical: true)
+
+                    Spacer()
                 }
-                .padding(14)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-                .background(
-                    Color(style.backgroundColor)
-                        .cornerRadius(16)
-                )
-                // 60 is button height + VStack padding
-                .frame(
-                    minWidth: 400,
-                    maxWidth: geo.size.width - (horizontalPadding * 2),
-                    maxHeight: geo.size.height - verticalPadding - 60,
-                    alignment: .center
-                ).fixedSize(horizontal: !style.expandPopoverWidth, vertical: true)
 
                 Spacer()
             }
