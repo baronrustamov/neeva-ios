@@ -391,14 +391,6 @@ class TabCardModel: CardModel {
         }
     }
 
-    func getAllDetails(matchingIncognitoState: Bool?) -> [TabCardDetails] {
-        if let matchingIncognitoState = matchingIncognitoState {
-            return matchingIncognitoState ? incognitoDetails : normalDetails
-        } else {
-            return allDetails
-        }
-    }
-
     func rearrangeAllDetails(fromIndex: Int, toIndex: Int) {
         allDetails.rearrange(from: fromIndex, to: toIndex)
         updateRows()

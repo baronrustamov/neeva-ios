@@ -42,9 +42,7 @@ class BrowserModel: ObservableObject {
             gridModel.switcherState = .tabs
         }
 
-        if !gridModel.tabCardModel.getAllDetails(matchingIncognitoState: incognitoModel.isIncognito)
-            .contains(where: \.isSelected)
-        {
+        if tabManager.selectedTab?.isIncognito != incognitoModel.isIncognito {
             showGridWithNoAnimation()
         } else {
             if FeatureFlag[.enableTimeBasedSwitcher] {
