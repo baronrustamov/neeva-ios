@@ -38,6 +38,7 @@ class IntroViewModel: NSObject, ObservableObject {
     public var overlayManager: OverlayManager
     public var toastViewManager: ToastViewManager
 
+    private var instruction: String = "Scan QR Code"
     private(set) var isDisplaying = false
     private var onDismiss: ((FirstRunButtonActions) -> Void)?
 
@@ -416,7 +417,12 @@ extension IntroViewModel {
         overlayManager.presentFullScreenModal(
             content: AnyView(
                 ZStack(alignment: .topTrailing) {
-                    CodeScannerView(codeTypes: [.qr]) { result in
+                    CodeScannerView(
+                        codeTypes: [.qr],
+                        scanMode: .oncePerCode,
+                        showViewfinder: true,
+                        shouldVibrateOnSuccess: true
+                    ) { result in
                         self.showQRScanner = false
                         self.overlayManager.hideCurrentOverlay()
                         switch result {
@@ -431,19 +437,29 @@ extension IntroViewModel {
                             }
                         case .failure(let error):
                             DispatchQueue.main.async {
+                                self.instruction = "Please try again!"
                                 self.toastViewManager.makeToast(
                                     text: "QR Code: \(error.localizedDescription)"
                                 )
                             }
                         }
                     }
-                    CloseButton(action: {
-                        self.overlayManager.hideCurrentOverlay()
-                    })
-                    .padding(.trailing, 20)
-                    .padding(.top, 40)
-                    .background(Color.clear)
-                }
+                    VStack(alignment: .trailing) {
+                        CloseButton(action: {
+                            self.overlayManager.hideCurrentOverlay()
+                        })
+                        .padding(.trailing, 20)
+                        .padding(.top, 40)
+                        .background(Color.clear)
+                    }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                    VStack(alignment: .center) {
+                        Text("\(instruction)")
+                            .withFont(.displayMedium)
+                            .background(Color.clear)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+                    .padding(.bottom, 40)
+                }.frame(maxWidth: .infinity, maxHeight: .infinity)
             )
         )
     }
