@@ -14,22 +14,7 @@ struct PopoverView<Content: View>: View {
     let style: OverlayStyle
     let onDismiss: () -> Void
     let headerButton: OverlayHeaderButton?
-    let useScrollView: Bool
     let content: () -> Content
-
-    init(
-        style: OverlayStyle,
-        onDismiss: @escaping () -> Void,
-        headerButton: OverlayHeaderButton? = nil,
-        useScrollView: Bool = true,
-        @ViewBuilder content: @escaping () -> Content
-    ) {
-        self.style = style
-        self.onDismiss = onDismiss
-        self.headerButton = headerButton
-        self.useScrollView = useScrollView
-        self.content = content
-    }
 
     var horizontalPadding: CGFloat {
         paddingForSizeClass(horizontalSizeClass)
@@ -41,53 +26,55 @@ struct PopoverView<Content: View>: View {
 
     var body: some View {
         GeometryReader { geo in
-            VStack {
-                Spacer()
-
-                SheetHeaderButtonView(headerButton: headerButton, onDismiss: onDismiss)
-                    .padding(.vertical, 12)
+            ZStack {
+                // The semi-transparent backdrop used to shade the content that lies below
+                // the sheet.
+                Button(action: style.nonDismissible ? {} : onDismiss) {
+                    Color.black
+                        .opacity(0.2)
+                        .ignoresSafeArea()
+                }
+                .buttonStyle(.highlightless)
+                .accessibilityHint("Dismiss pop-up window")
+                // make this the last option. This will bring the user’s focus first to the
+                // useful content inside of the overlay sheet rather than the close button.
+                .accessibilitySortPriority(-1)
 
                 VStack {
-                    if style.showTitle, let title = title {
-                        SheetHeaderView(title: title, onDismiss: onDismiss)
-                    }
+                    SheetHeaderButtonView(headerButton: headerButton, onDismiss: onDismiss)
 
-                    if useScrollView {
-                        ScrollView(.vertical, showsIndicators: false) {
-                            presentedContent
+                    VStack {
+                        if style.showTitle, let title = title {
+                            SheetHeaderView(title: title, onDismiss: onDismiss)
                         }
-                    } else {
-                        presentedContent
-                    }
-                }
-                .padding(14)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-                .background(
-                    Color(style.backgroundColor)
-                        .cornerRadius(16)
-                )
-                // 60 is button height + VStack padding
-                .frame(
-                    minWidth: 400,
-                    maxWidth: geo.size.width - (horizontalPadding * 2),
-                    maxHeight: geo.size.height - verticalPadding - 60,
-                    alignment: .center
-                ).fixedSize(horizontal: !style.expandPopoverWidth, vertical: true)
 
-                Spacer()
+                        ScrollView(.vertical, showsIndicators: false) {
+                            content()
+                                .onPreferenceChange(OverlayTitlePreferenceKey.self) {
+                                    self.title = $0
+                                }
+                        }
+                    }
+                    .padding(14)
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .background(
+                        Color(style.backgroundColor)
+                            .cornerRadius(16)
+                    )
+                    // 60 is button height + VStack padding
+                    .frame(
+                        minWidth: 400,
+                        maxWidth: geo.size.width - (horizontalPadding * 2),
+                        maxHeight: geo.size.height - verticalPadding - 60,
+                        alignment: .center
+                    )
+                    .fixedSize(horizontal: !style.expandPopoverWidth, vertical: true)
+                }
+                .padding(.horizontal, horizontalPadding)
+                .padding(.vertical, verticalPadding)
             }
-            .padding(.horizontal, horizontalPadding)
-            .padding(.vertical, verticalPadding)
             .accessibilityAction(.escape, onDismiss)
         }
-    }
-
-    @ViewBuilder
-    var presentedContent: some View {
-        content()
-            .onPreferenceChange(OverlayTitlePreferenceKey.self) {
-                self.title = $0
-            }
     }
 
     func paddingForSizeClass(_ sizeClass: UserInterfaceSizeClass?) -> CGFloat {
