@@ -416,6 +416,7 @@ class TabManager: NSObject {
 
     func sendSelectTabNotifications(previous: Tab? = nil) {
         selectedTabPublisher.send(selectedTab)
+        updateWebViewForSelectedTab(notify: true)
 
         if let tab = previous {
             TabEvent.post(.didLoseFocus, for: tab)

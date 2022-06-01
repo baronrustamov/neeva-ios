@@ -13,32 +13,24 @@ class HistoryTests: UITestBase {
         webRoot = SimplePageServer.start()
     }
 
-    func addHistoryItemPage(_ pageNo: Int) -> String {
-        // Load a page
-        let url = "\(webRoot!)/numberedPage.html?page=\(pageNo)"
-        openURL(url)
-
-        tester().waitForWebViewElementWithAccessibilityLabel("Page \(pageNo)")
-
-        return url
-    }
-
-    func addHistoryItems(_ noOfItemsToAdd: Int) -> [String] {
-        var urls = [String]()
-        for index in 1...noOfItemsToAdd {
-            urls.append(addHistoryItemPage(index))
+    func addHistoryItems(_ noOfItemsToAdd: Int) {
+        for pageNo in 1...noOfItemsToAdd {
+            addHistoryEntry(
+                "Page \(pageNo)", url: URL(string: "\(webRoot!)/numberedPage.html?page=\(pageNo)")!)
         }
-        return urls
+
+        tester().wait(forTimeInterval: 2)
+        tester().waitForAnimationsToFinish()
     }
 
     /// Tests for listed history visits
     func testAddHistoryUI() {
-        _ = addHistoryItems(2)
+        addHistoryItems(2)
 
         // Check that both appear in the history home panel
         goToHistory()
-        tester().waitForView(withAccessibilityIdentifier: "\(webRoot!)/numberedPage.html?page=2")
-        tester().waitForView(withAccessibilityIdentifier: "\(webRoot!)/numberedPage.html?page=1")
+        tester().waitForView(withAccessibilityLabel: "Page 2")
+        tester().waitForView(withAccessibilityLabel: "Page 1")
 
         // Close History panel
         closeHistory()
@@ -80,28 +72,21 @@ class HistoryTests: UITestBase {
     }*/
 
     func testDeleteHistoryItemFromListWithMoreThan100Items() {
-        for pageNo in 1...102 {
-            addHistoryEntry(
-                "Page \(pageNo)", url: URL(string: "\(webRoot!)/numberedPage.html?page=\(pageNo)")!)
-        }
-
-        tester().wait(forTimeInterval: 2)
-        tester().waitForAnimationsToFinish()
-
+        addHistoryItems(102)
         goToHistory()
 
         // Delete first item
-        tester().waitForView(withAccessibilityIdentifier: "\(webRoot!)/numberedPage.html?page=102")
+        tester().waitForView(withAccessibilityLabel: "Page 102")
         tester().longPressView(
-            withAccessibilityIdentifier: "\(webRoot!)/numberedPage.html?page=102", duration: 1)
+            withAccessibilityLabel: "Page 102", duration: 1)
         tester().waitForView(withAccessibilityLabel: "Delete").tap()
 
         // Check that the deleted page does not exist
         tester().waitForAbsenceOfView(withAccessibilityLabel: "Page 102")
 
         // Make sure other list items exists
-        tester().waitForView(withAccessibilityIdentifier: "\(webRoot!)/numberedPage.html?page=101")
-        tester().waitForView(withAccessibilityIdentifier: "\(webRoot!)/numberedPage.html?page=100")
+        tester().waitForView(withAccessibilityLabel: "Page 101")
+        tester().waitForView(withAccessibilityLabel: "Page 100")
 
         // Close History (and so Library) panel
         closeHistory()

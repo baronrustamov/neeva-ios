@@ -54,7 +54,7 @@ struct SiteRowView: View {
                 .padding(.vertical, 10)
                 .frame(minHeight: GroupedCellUX.minCellHeight)
             }
-            .accessibilityLabel(Text(title))
+            .accessibilityLabel(Text(title.isEmpty ? site.url.absoluteString : title))
             .accessibilityIdentifier(site.url.absoluteString)
             .buttonStyle(.tableCell)
             .contextMenu {

@@ -4,14 +4,11 @@
 
 import Foundation
 
+@testable import Client
+
 extension UITestBase {
     func goToAddressBar() {
-        if !tester().viewExistsWithLabel("Cancel") {
-            tester().waitForView(withAccessibilityLabel: "Address Bar")
-            tester().tapView(withAccessibilityLabel: "Address Bar")
-        }
-
-        tester().waitForView(withAccessibilityIdentifier: "address")
+        SceneDelegate.getBVC(for: nil).chromeModel.setEditingLocation(to: true)
     }
 
     func goToOverflowMenu() {

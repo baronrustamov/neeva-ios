@@ -58,7 +58,6 @@ extension TabManager {
         }
 
         updateTabGroupsAndSendNotifications(notify: true)
-
         sendSelectTabNotifications(previous: previous)
 
         storeChanges()
