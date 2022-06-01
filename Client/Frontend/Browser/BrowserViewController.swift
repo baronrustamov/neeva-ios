@@ -437,7 +437,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
         view.backgroundColor = .DefaultBackground
 
         webViewContainerBackdrop = UIView()
-        webViewContainerBackdrop.backgroundColor = UIColor.Photon.Ink90
+        webViewContainerBackdrop.backgroundColor = .brand.charcoal
         webViewContainerBackdrop.alpha = 0
         view.addSubview(webViewContainerBackdrop)
 
