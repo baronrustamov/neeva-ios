@@ -90,7 +90,8 @@ struct SpaceTopView: View {
                 action: {
                     DispatchQueue.main.async {
                         SceneDelegate.getBVC(with: tabModel.manager.scene).showModal(
-                            style: .spaces
+                            style: .spaces,
+                            toPosition: .top
                         ) {
                             AddOrUpdateSpaceContent(space: space, config: .addSpaceItem) {
                                 helpURL in
@@ -170,7 +171,8 @@ struct SpaceTopView: View {
                 action: {
                     SceneDelegate.getBVC(with: tabModel.manager.scene)
                         .showModal(
-                            style: .spaces
+                            style: .spaces,
+                            toPosition: .top
                         ) {
                             AddOrUpdateSpaceContent(space: space, config: .updateSpace)
                                 .environmentObject(spacesModel)

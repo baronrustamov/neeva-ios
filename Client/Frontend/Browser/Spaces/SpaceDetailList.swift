@@ -80,7 +80,8 @@ struct SpaceDetailList: View {
 
                             SceneDelegate.getBVC(with: tabModel.manager.scene)
                                 .showModal(
-                                    style: .withTitle
+                                    style: .withTitle,
+                                    toPosition: .top
                                 ) {
                                     AddOrUpdateSpaceContent(
                                         space: space,

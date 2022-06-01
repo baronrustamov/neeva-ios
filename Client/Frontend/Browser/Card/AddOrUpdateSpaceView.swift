@@ -42,7 +42,6 @@ struct AddOrUpdateSpaceContent: View {
             space: space, config: config, dismiss: hideOverlay,
             openMarkdownArticle: openMarkdownArticle
         )
-        .overlayIsFixedHeight(isFixedHeight: true)
         .overlayTitle(title: title)
     }
 }
@@ -194,118 +193,123 @@ struct AddOrUpdateSpaceView: View {
     }
 
     var body: some View {
-        GroupedStack {
-            inputField(
-                title: .titleField, bodyText: "Please provide a title", inputText: $titleText
-            ).modifier(TextFieldBackgroundModifier())
-
-            ZStack(alignment: .topTrailing) {
+        ScrollView {
+            GroupedStack {
                 inputField(
-                    title: .descriptionField,
-                    bodyText: "Please provide a description",
-                    inputText: $descriptionText
-                )
-                .onAppear {
-                    UITextView.appearance().backgroundColor = .systemBackground.elevated
-                }
-                .modifier(TextFieldBackgroundModifier())
-
-                Button {
-                    openMarkdownArticle()
-                } label: {
-                    Symbol(decorative: .rectangleAndPencilAndEllipsis)
-                        .padding(.horizontal, 5)
-                        .padding(.top, 8)
-                        .foregroundColor(Color.secondary)
-                        .scaleEffect(0.8)
-                }
-            }
-
-            if let url = URL(string: urlText),
-                let thumbnails = spaceModel.thumbnailURLCandidates[url],
-                thumbnailModel.showing
-            {
-                CustomThumbnailPicker(thumbnails: thumbnails, model: thumbnailModel)
-            } else if case .updateSpace = config, let details = spaceModel.detailedSpace {
-                SpaceThumbnailPicker(spaceDetails: details, model: thumbnailModel)
-            }
-            if shouldShowURL {
-                inputField(
-                    title: .urlField, bodyText: "Add a URL to your new item (optional)",
-                    inputText: $urlText
+                    title: .titleField, bodyText: "Please provide a title", inputText: $titleText
                 ).modifier(TextFieldBackgroundModifier())
-            }
-            Button(
-                action: {
-                    switch config {
-                    case .addSpaceItem:
-                        let data = SpaceEntityData(
-                            id: UUID().uuidString,
-                            url: URL(string: urlText),
-                            title: titleText,
-                            snippet: descriptionText,
-                            thumbnail: nil,
-                            previewEntity: .webPage)
-                        // modify target spaceCardDetail's Data and signal changes
-                        space.contentData?.insert(data, at: 0)
-                        spaceModel.add(
-                            spaceID: space.id.id, url: urlText,
-                            title: titleText, description: descriptionText)
-                        spaceModel.detailedSpace?.updateDetails()
-                    case .updateSpaceItem(let entityID):
-                        guard
-                            let oldData = (space.contentData?.first(where: { $0.id == entityID })),
-                            let index =
-                                (space.contentData?.firstIndex(where: { $0.id == entityID }))
-                        else {
-                            return
-                        }
-                        let newData = SpaceEntityData(
-                            id: oldData.id,
-                            url: oldData.url,
-                            title: titleText,
-                            snippet: descriptionText,
-                            thumbnail: thumbnailModel.selectedData ?? oldData.thumbnail,
-                            previewEntity: oldData.previewEntity)
-                        space.contentData?.replaceSubrange(
-                            index..<(index + 1), with: [newData])
-                        spaceModel.detailedSpace?.allDetails.replaceSubrange(
-                            index..<(index + 1),
-                            with: [SpaceEntityThumbnail(data: newData, spaceID: space.id.id)])
-                        spaceModel.updateSpaceEntity(
-                            spaceID: space.id.id, entityID: entityID,
-                            title: titleText, snippet: descriptionText,
-                            thumbnail: thumbnailModel.selectedData)
-                        thumbnailModel.selectedData = nil
-                        thumbnailModel.thumbnailData = [URL: String]()
-                        spaceModel.detailedSpace?.updateDetails()
-                    case .updateSpace:
-                        var thumbnail: String? = nil
-                        if let id = thumbnailModel.selectedSpaceThumbnailEntityID {
-                            thumbnail = space.contentData?.first(where: { $0.id == id })?.thumbnail
-                        } else if let thumbnailData = thumbnailModel.selectedData {
-                            thumbnail = thumbnailData
-                        }
-                        spaceModel.updateSpaceHeader(
-                            space: space, title: titleText,
-                            description: descriptionText, thumbnail: thumbnail)
+
+                ZStack(alignment: .topTrailing) {
+                    inputField(
+                        title: .descriptionField,
+                        bodyText: "Please provide a description",
+                        inputText: $descriptionText
+                    )
+                    .onAppear {
+                        UITextView.appearance().backgroundColor = .systemBackground.elevated
                     }
-                    dismiss()
-                },
-                label: {
-                    Text("Save")
-                        .withFont(.labelLarge)
-                        .frame(maxWidth: .infinity)
-                        .clipShape(Capsule())
+                    .modifier(TextFieldBackgroundModifier())
+
+                    Button {
+                        openMarkdownArticle()
+                    } label: {
+                        Symbol(decorative: .rectangleAndPencilAndEllipsis)
+                            .padding(.horizontal, 5)
+                            .padding(.top, 8)
+                            .foregroundColor(Color.secondary)
+                            .scaleEffect(0.8)
+                    }
                 }
-            )
-            .buttonStyle(.neeva(.primary))
-            .padding(.vertical, 16)
-        }.onAppear {
-            thumbnailModel.showing = true
-        }.onDisappear {
-            thumbnailModel.showing = false
+
+                if let url = URL(string: urlText),
+                    let thumbnails = spaceModel.thumbnailURLCandidates[url],
+                    thumbnailModel.showing
+                {
+                    CustomThumbnailPicker(thumbnails: thumbnails, model: thumbnailModel)
+                } else if case .updateSpace = config, let details = spaceModel.detailedSpace {
+                    SpaceThumbnailPicker(spaceDetails: details, model: thumbnailModel)
+                }
+                if shouldShowURL {
+                    inputField(
+                        title: .urlField, bodyText: "Add a URL to your new item (optional)",
+                        inputText: $urlText
+                    ).modifier(TextFieldBackgroundModifier())
+                }
+                Button(
+                    action: {
+                        switch config {
+                        case .addSpaceItem:
+                            let data = SpaceEntityData(
+                                id: UUID().uuidString,
+                                url: URL(string: urlText),
+                                title: titleText,
+                                snippet: descriptionText,
+                                thumbnail: nil,
+                                previewEntity: .webPage)
+                            // modify target spaceCardDetail's Data and signal changes
+                            space.contentData?.insert(data, at: 0)
+                            spaceModel.add(
+                                spaceID: space.id.id, url: urlText,
+                                title: titleText, description: descriptionText)
+                            spaceModel.detailedSpace?.updateDetails()
+                        case .updateSpaceItem(let entityID):
+                            guard
+                                let oldData =
+                                    (space.contentData?.first(where: { $0.id == entityID })),
+                                let index =
+                                    (space.contentData?.firstIndex(where: { $0.id == entityID }))
+                            else {
+                                return
+                            }
+                            let newData = SpaceEntityData(
+                                id: oldData.id,
+                                url: oldData.url,
+                                title: titleText,
+                                snippet: descriptionText,
+                                thumbnail: thumbnailModel.selectedData ?? oldData.thumbnail,
+                                previewEntity: oldData.previewEntity)
+                            space.contentData?.replaceSubrange(
+                                index..<(index + 1), with: [newData])
+                            spaceModel.detailedSpace?.allDetails.replaceSubrange(
+                                index..<(index + 1),
+                                with: [SpaceEntityThumbnail(data: newData, spaceID: space.id.id)])
+                            spaceModel.updateSpaceEntity(
+                                spaceID: space.id.id, entityID: entityID,
+                                title: titleText, snippet: descriptionText,
+                                thumbnail: thumbnailModel.selectedData)
+                            thumbnailModel.selectedData = nil
+                            thumbnailModel.thumbnailData = [URL: String]()
+                            spaceModel.detailedSpace?.updateDetails()
+                        case .updateSpace:
+                            var thumbnail: String? = nil
+                            if let id = thumbnailModel.selectedSpaceThumbnailEntityID {
+                                thumbnail =
+                                    space.contentData?.first(where: { $0.id == id })?.thumbnail
+                            } else if let thumbnailData = thumbnailModel.selectedData {
+                                thumbnail = thumbnailData
+                            }
+                            spaceModel.updateSpaceHeader(
+                                space: space, title: titleText,
+                                description: descriptionText, thumbnail: thumbnail)
+                        }
+                        dismiss()
+                    },
+                    label: {
+                        Text("Save")
+                            .withFont(.labelLarge)
+                            .frame(maxWidth: .infinity)
+                            .clipShape(Capsule())
+                    }
+                )
+                .buttonStyle(.neeva(.primary))
+                .padding(.vertical, 16)
+            }.onAppear {
+                thumbnailModel.showing = true
+            }.onDisappear {
+                thumbnailModel.showing = false
+            }
         }
+
     }
 }
 
