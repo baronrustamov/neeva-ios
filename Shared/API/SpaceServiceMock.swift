@@ -64,7 +64,32 @@ public class SpaceServiceMock: SpaceService {
         thumbnail: String?, data: String?, mediaType: String?, isBase64: Bool?,
         completion: @escaping (Result<AddToSpaceMutation.Data, Error>) -> Void
     ) -> Combine.Cancellable? {
-        return nil
+        // The choice of this value has no significance. We just need something unique
+        let entityId = "\(Date.timeIntervalSinceReferenceDate)"
+
+        spacesData[spaceId]?.entities.append(
+            SpaceEntityData(
+                id: entityId,
+                url: URL(string: url),
+                title: title,
+                snippet: nil,
+                thumbnail: nil,
+                previewEntity: .webPage
+            )
+        )
+
+        // Simulate a network request
+        DispatchQueue.main.async {
+            completion(
+                Result<AddToSpaceMutation.Data, Error>(catching: {
+                    return AddToSpaceMutation.Data(entityId: entityId)
+                })
+            )
+        }
+
+        return AnyCancellable {
+            // do nothing
+        }
     }
 
     public func addToSpaceWithURL(spaceID: String, url: String, title: String, description: String?)

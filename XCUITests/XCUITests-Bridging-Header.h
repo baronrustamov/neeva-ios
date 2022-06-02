@@ -5,6 +5,7 @@
 #ifndef XCUITests_Bridging_Header_h
 #define XCUITests_Bridging_Header_h
 
+#import "Shared-Bridging-Header.h"
 #import "XCTest/XCUIApplication.h"
 #import "XCTest/XCUIElement.h"
 @interface XCUIApplication (Private)
