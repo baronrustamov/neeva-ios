@@ -229,9 +229,13 @@ struct Card<Details>: View where Details: CardDetails {
                     button
                         .if(!animate) { view in
                             view
+                                // add padding to all tab grids
                                 .padding(1.5)
+                                // remove padding of unselected tab grid to eliminate edge when open contextMenu
                                 .padding(tabDetails.isSelected ? 0 : -1.5)
                                 .contextMenu(menuItems: tabDetails.contextMenu)
+                                // remove padding of selected tab
+                                .padding(tabDetails.isSelected ? -1.5 : 0)
                         }
                 } else if let spaceDetails = details as? SpaceCardDetails {
                     button
