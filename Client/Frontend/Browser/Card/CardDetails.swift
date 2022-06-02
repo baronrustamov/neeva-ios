@@ -275,20 +275,13 @@ public class TabCardDetails: CardDetails, AccessingManagerProvider,
     @ViewBuilder func contextMenu() -> some View {
         if !tab.isIncognito {
             Button { [self] in
-                guard let url = url else { return }
-                let newTab = manager.addTab(
-                    URLRequest(url: url), afterTab: tab, isIncognito: tab.isIncognito)
-                newTab.rootUUID = UUID().uuidString
-                manager.selectTab(newTab, previous: tab, notify: true)
+                manager.duplicateTab(tab, incognito: tab.isIncognito)
             } label: {
                 Label("Duplicate Tab", systemSymbol: .plusSquareOnSquare)
             }.disabled(url == nil)
 
             Button { [self] in
-                guard let url = url else { return }
-                let newTab = manager.addTab(URLRequest(url: url), afterTab: tab, isIncognito: true)
-                newTab.rootUUID = UUID().uuidString
-                manager.selectTab(newTab, previous: tab, notify: true)
+                manager.duplicateTab(tab, incognito: true)
             } label: {
                 Label("Open in Incognito", image: "incognito")
             }.disabled(url == nil)

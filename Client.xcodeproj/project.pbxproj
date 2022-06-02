@@ -70,6 +70,7 @@
 		20167FCC28245C8100223B9E /* FindInCardGridTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20167FCB28245C8100223B9E /* FindInCardGridTests.swift */; };
 		20167FCD2824601700223B9E /* FindInCardGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20167FC62824484800223B9E /* FindInCardGridView.swift */; };
 		20167FCE2824601900223B9E /* FindView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20167FC9282448DB00223B9E /* FindView.swift */; };
+		201B4BFE28452E8900F9594E /* DuplicateTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 201B4BFD28452E8900F9594E /* DuplicateTabTests.swift */; };
 		2026EC1C27F3D2F900817053 /* CookieCutterSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2026EC1B27F3D2F900817053 /* CookieCutterSettings.swift */; };
 		2026EC1F27F3E51400817053 /* CookieCutterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2026EC1E27F3E51400817053 /* CookieCutterModel.swift */; };
 		2026EC2127F4070900817053 /* NonEssentialCookieSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2026EC2027F4070900817053 /* NonEssentialCookieSettings.swift */; };
@@ -1948,6 +1949,7 @@
 		20167FC62824484800223B9E /* FindInCardGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindInCardGridView.swift; sourceTree = "<group>"; };
 		20167FC9282448DB00223B9E /* FindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindView.swift; sourceTree = "<group>"; };
 		20167FCB28245C8100223B9E /* FindInCardGridTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindInCardGridTests.swift; sourceTree = "<group>"; };
+		201B4BFD28452E8900F9594E /* DuplicateTabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuplicateTabTests.swift; sourceTree = "<group>"; };
 		2026EC1B27F3D2F900817053 /* CookieCutterSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCutterSettings.swift; sourceTree = "<group>"; };
 		2026EC1E27F3E51400817053 /* CookieCutterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCutterModel.swift; sourceTree = "<group>"; };
 		2026EC2027F4070900817053 /* NonEssentialCookieSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonEssentialCookieSettings.swift; sourceTree = "<group>"; };
@@ -3599,6 +3601,7 @@
 				EB63CA4F228F0538005FD0EF /* DesktopModeTests.swift */,
 				2CC1B3EF1E9B861400814EEC /* DomainAutocompleteTest.swift */,
 				2C4A07DB20246EAD0083E320 /* DragAndDropTests.swift */,
+				201B4BFD28452E8900F9594E /* DuplicateTabTests.swift */,
 				66E26DB026E2F80200EB23D6 /* EditURLTests.swift */,
 				6664890626D9829200A4C493 /* EmptyTabTrayTests.swift */,
 				20167FCB28245C8100223B9E /* FindInCardGridTests.swift */,
@@ -6831,6 +6834,7 @@
 				580B0C4221748CFE00448DF8 /* DataManagementTests.swift in Sources */,
 				3BF4B8E91D38497A00493393 /* BaseTestCase.swift in Sources */,
 				C832BF6B26E0B31500B9A1F8 /* CopiedLinksTests.swift in Sources */,
+				201B4BFE28452E8900F9594E /* DuplicateTabTests.swift in Sources */,
 				20167FCC28245C8100223B9E /* FindInCardGridTests.swift in Sources */,
 				C832BF6C26E0B31500B9A1F8 /* DragAndDropTests.swift in Sources */,
 				C8BD2A79278814DB001B3355 /* CreateOrSwitchToTabTests.swift in Sources */,

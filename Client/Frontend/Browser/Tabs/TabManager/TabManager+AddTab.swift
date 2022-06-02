@@ -176,6 +176,13 @@ extension TabManager {
         }
     }
 
+    func duplicateTab(_ tab: Tab, incognito: Bool) {
+        guard let url = tab.url else { return }
+        let newTab = addTab(
+            URLRequest(url: url), afterTab: tab, isIncognito: incognito)
+        selectTab(newTab, notify: true)
+    }
+
     // MARK: - Tab Groups
     /// Checks if the new tab URL matches the origin URL for the tab and if so,
     /// then the two tabs should be in a Tab Group together.
