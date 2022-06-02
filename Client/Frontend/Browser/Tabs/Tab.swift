@@ -732,7 +732,6 @@ extension Tab: ContentBlockerTab {
 
     func injectCookieCutterScript(cookieCutterModel: CookieCutterModel) {
         let cookieCutterHelper = CookieCutterHelper(cookieCutterModel: cookieCutterModel)
-        cookieCutterHelper.currentWebView = webView
         addContentScript(cookieCutterHelper, name: CookieCutterHelper.name())
     }
 }
