@@ -7,12 +7,16 @@ import SwiftUI
 import UIKit
 
 class NotificationViewManager: QueuedViewManager<NotificationRow> {
-    override func present(_ view: NotificationRow, height: CGFloat = 80) {
+    override func present(_ view: NotificationRow) {
         currentView = view
         currentView?.viewDelegate = self
 
         overlayManager.show(overlay: .notification(currentView!)) {
             self.startViewDismissTimer(for: view)
         }
+    }
+
+    override func hideOverlay(animate: Bool) {
+        overlayManager.hide(overlay: .notification(currentView), animate: animate)
     }
 }

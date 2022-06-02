@@ -61,8 +61,8 @@ class CardTests: XCTestCase {
         browserModel = BrowserModel(
             gridModel: gridModel, tabManager: manager, chromeModel: .init(),
             incognitoModel: incognitoModel, switcherToolbarModel: switcherToolbarModel,
-            toastViewManager: ToastViewManager(window: UIWindow()),
-            notificationViewManager: NotificationViewManager(window: UIWindow()),
+            toastViewManager: ToastViewManager(overlayManager: OverlayManager()),
+            notificationViewManager: NotificationViewManager(overlayManager: OverlayManager()),
             overlayManager: OverlayManager())
         chromeModel = TabChromeModel()
 

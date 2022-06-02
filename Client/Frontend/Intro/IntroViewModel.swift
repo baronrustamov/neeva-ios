@@ -109,7 +109,7 @@ class IntroViewModel: NSObject, ObservableObject {
     public func dismiss(_ firstRunButtonAction: FirstRunButtonActions?) {
         Defaults[.introSeen] = true
 
-        overlayManager.hideCurrentOverlay(ofPriorities: [.modal, .fullScreen]) {
+        overlayManager.hideCurrentOverlay(ofPriority: .fullScreen) {
             browserLog.info("Dismissed introVC")
 
             guard let firstRunButtonAction = firstRunButtonAction else {
