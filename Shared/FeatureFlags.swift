@@ -32,6 +32,7 @@ public enum FeatureFlag: String, CaseIterable, RawRepresentable {
     case newWeb3Features = "New Web3 Features"
     case lowMemoryZombieTabs = "Low Memory Zombie Tabs"
     case qrCodeSignIn = "Sign in with QR Code"
+    case interactiveScrollView = "Interactive Scroll View"
 
     public init?(caseName: String) {
         for value in FeatureFlag.allCases where "\(value)" == caseName {
