@@ -19,12 +19,6 @@ class SpaceTests: BaseTestCase {
         super.setUp()
     }
 
-    func testSpacesVisibleFromAddToSpaceSheet() {
-        openURL("example.com")
-        app.buttons["Add To Space"].tap()
-        XCTAssertTrue(app.staticTexts["My Space"].exists)
-    }
-
     func testAddSpaceViaSheet() {
         openURL("example.com")
         app.buttons["Add To Space"].tap()
@@ -39,5 +33,29 @@ class SpaceTests: BaseTestCase {
         // Confirmation view
         waitForExistence(app.staticTexts["Saved to \"My Space\""])
         XCTAssertTrue(app.staticTexts["Saved to \"My Space\""].exists)
+    }
+
+    func testCreateSpace() {
+        app.buttons["Show Tabs"].tap()
+        app.buttons["Spaces"].tap()
+
+        // We're not really adding a tab, we're adding a Space
+        app.buttons["Add Tab"].tap()
+        app.textFields["Space name"].typeText("Test Space")
+        app.buttons["Save"].forceTapElement()
+
+        // Confirm we are on the Space detail page
+        XCTAssertTrue(app.buttons["Start Searching"].exists)
+
+        app.buttons["Return to all Spaces view"].tap()
+
+        // Confirm the Space is visible on the Space grid page
+        XCTAssertTrue(app.buttons["Test Space"].exists)
+    }
+
+    func testSpacesVisibleFromAddToSpaceSheet() {
+        openURL("example.com")
+        app.buttons["Add To Space"].tap()
+        XCTAssertTrue(app.staticTexts["My Space"].exists)
     }
 }
