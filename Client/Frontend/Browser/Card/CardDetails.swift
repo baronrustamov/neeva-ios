@@ -608,6 +608,40 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
 
         return true
     }
+
+    private var deleteSubscription: AnyCancellable?
+
+    func deleteSpace() {
+        let request = manager.deleteSpace(spaceId: id)
+        deleteSubscription = request?.$state.sink { [self] state in
+            switch state {
+            case .success:
+                manager.refresh(force: true)
+                deleteSubscription?.cancel()
+            case .failure:
+                deleteSubscription?.cancel()
+            case .initial:
+                Logger.browser.info("Waiting for result from deleting space")
+            }
+        }
+    }
+
+    private var unfollowSubscription: AnyCancellable?
+
+    func unfollowSpace() {
+        let request = manager.unfollowSpace(spaceId: id)
+        unfollowSubscription = request?.$state.sink { [self] state in
+            switch state {
+            case .success:
+                manager.refresh(force: true)
+                unfollowSubscription?.cancel()
+            case .failure:
+                unfollowSubscription?.cancel()
+            case .initial:
+                Logger.browser.info("Waiting for result from unfollowing space")
+            }
+        }
+    }
 }
 
 class SiteCardDetails: CardDetails, AccessingManagerProvider {

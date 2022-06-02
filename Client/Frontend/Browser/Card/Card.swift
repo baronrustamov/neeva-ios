@@ -188,6 +188,7 @@ struct Card<Details>: View where Details: CardDetails {
     @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var cardTransitionModel: CardTransitionModel
     @State private var isPressed = false
+    @State private var showingRemoveSpaceWarning = false
 
     var body: some View {
         GeometryReader { geom in
@@ -231,6 +232,44 @@ struct Card<Details>: View where Details: CardDetails {
                                 .padding(1.5)
                                 .padding(tabDetails.isSelected ? 0 : -1.5)
                                 .contextMenu(menuItems: tabDetails.contextMenu)
+                        }
+                } else if let spaceDetails = details as? SpaceCardDetails {
+                    button
+                        .if(!animate) { view in
+                            view
+                                .padding(1.5)
+                                .contextMenu {
+                                    Button {
+                                        showingRemoveSpaceWarning = true
+                                    } label: {
+                                        Label(
+                                            spaceDetails.item?.ACL == .owner
+                                                ? "Delete Space" : "Unfollow", systemSymbol: .trash)
+                                    }
+                                }
+                                .actionSheet(isPresented: $showingRemoveSpaceWarning) {
+                                    ActionSheet(
+                                        // Compilation fails if we don't concat separate Text views for title
+                                        title: Text("Are you sure you want to ")
+                                            + Text(
+                                                spaceDetails.item?.ACL == .owner
+                                                    ? "delete" : "unfollow")
+                                            + Text(" this space?"),
+                                        buttons: [
+                                            .destructive(
+                                                Text(
+                                                    spaceDetails.item?.ACL == .owner
+                                                        ? "Delete Space" : "Unfollow Space"),
+                                                action: {
+                                                    spaceDetails.item?.ACL == .owner
+                                                        ? spaceDetails.deleteSpace()
+                                                        : spaceDetails.unfollowSpace()
+                                                }),
+                                            .cancel(),
+                                        ]
+                                    )
+                                }
+                                .padding(-1.5)
                         }
                 } else {
                     button
