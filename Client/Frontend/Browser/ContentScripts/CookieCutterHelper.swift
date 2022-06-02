@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import Defaults
 import Foundation
 import Shared
 
@@ -9,8 +10,10 @@ private let log = Logger.browser
 
 /// Corresponds with messages sent from CookieCutterHelper.js
 private enum CookieScriptMessage: String {
+    case flagSite = "flag-site"
     case getPreferences = "get-preferences"
     case increaseCounter = "increase-cookie-stats"
+    case isSiteFlagged = "is-site-flagged"
     case logProvider = "log-provider-usage"
     case noticeHandled = "cookie-notice-handled"
     case started = "started-running"
@@ -18,7 +21,6 @@ private enum CookieScriptMessage: String {
 
 class CookieCutterHelper: TabContentScript {
     let cookieCutterModel: CookieCutterModel
-    var currentWebView: WKWebView?
 
     // MARK: - Script Methods
     static func name() -> String {
@@ -39,11 +41,18 @@ class CookieCutterHelper: TabContentScript {
             return
         }
 
+        let currentWebView = message.webView
+        let domain = currentWebView?.url?.host
+
         if let scriptMessage = CookieScriptMessage(rawValue: update) {
             switch scriptMessage {
+            case .flagSite:
+                if let domain = domain {
+                    cookieCutterModel.flagSite(domain: domain)
+                }
             case .getPreferences:
                 do {
-                    if let domain = currentWebView?.url?.host,
+                    if let domain = domain,
                         let escapedEncoded = String(
                             data: try JSONEncoder().encode([
                                 "cookieCutterEnabled":
@@ -62,6 +71,20 @@ class CookieCutterHelper: TabContentScript {
                 }
             case .increaseCounter:
                 cookieCutterModel.cookiesBlocked += 1
+            case .isSiteFlagged:
+                do {
+                    if let domain = domain,
+                        let escapedEncoded = String(
+                            data: try JSONEncoder().encode([
+                                "isFlagged": cookieCutterModel.isSiteFlagged(domain: domain)
+                            ]), encoding: .utf8)
+                    {
+                        currentWebView?.evaluateJavascriptInDefaultContentWorld(
+                            "__firefox__.setIsSiteFlagged(\(escapedEncoded))")
+                    }
+                } catch {
+                    print("Error encoding escaped value: \(error)")
+                }
             case .logProvider:
                 if let provider = data["provider"] as? String {
                     let attributes = [
@@ -75,7 +98,7 @@ class CookieCutterHelper: TabContentScript {
                 }
             case .noticeHandled:
                 let bvc = SceneDelegate.getBVC(for: currentWebView)
-                cookieCutterModel.cookieWasHandled(bvc: bvc)
+                cookieCutterModel.cookieWasHandled(bvc: bvc, domain: domain)
             case .started:
                 cookieCutterModel.cookiesBlocked = 0
             }

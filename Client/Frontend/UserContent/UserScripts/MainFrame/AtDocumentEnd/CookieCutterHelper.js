@@ -3,6 +3,7 @@
 import { CookieCategoryType, CookieEngine } from 'cookie-cutter';
 
 var cookiePreferences = { marketing: false, analytic: false, social: false }; 
+var isSiteFlagged = false
 
 function setPreference(preferences) {
     if (preferences["cookieCutterEnabled"]) {
@@ -14,22 +15,29 @@ function setPreference(preferences) {
     }
 }
 
+function setIsSiteFlagged(flag) {
+    isSiteFlagged = flag["isFlagged"];
+}
+
 function runEngine() {
-    // Not used by iOS.
-    CookieEngine.flagSite(async () => {});
+    // Site is flagged after being handled so we don't need to reload.
+    CookieEngine.isFlaggedSite(async () => isSiteFlagged);
+
+    CookieEngine.flagSite(async () => {
+        webkit.messageHandlers.cookieCutterHandler.postMessage({ update: "flag-site" });
+    });
 
     // These are handled by the iOS app, can return default values.
     CookieEngine.isCookieConsentingEnabled(async () => true);
-    CookieEngine.isFlaggedSite(async () => false);
-
+   
     // Tell the iOS app to increase the count of cookies handled.
     CookieEngine.incrementCookieStats(async () => {
-        webkit.messageHandlers.cookieCutterHandler.postMessage({ update: "increase-cookie-stats"});
+        webkit.messageHandlers.cookieCutterHandler.postMessage({ update: "increase-cookie-stats" });
     });
 
     // Tell the iOS app that a cookie notice has been handled.
     CookieEngine.notifyNoticeHandledOnPage(async () => {
-        webkit.messageHandlers.cookieCutterHandler.postMessage({ update: "cookie-notice-handled"});
+        webkit.messageHandlers.cookieCutterHandler.postMessage({ update: "cookie-notice-handled" });
     });
 
     // Needed if the page is reloaded.
@@ -66,7 +74,7 @@ function runEngine() {
     // Run!
     CookieEngine.runCookieCutter();
 
-    webkit.messageHandlers.cookieCutterHandler.postMessage({ update: "started-running"});
+    webkit.messageHandlers.cookieCutterHandler.postMessage({ update: "started-running" });
 }
 
 Object.defineProperty(window.__firefox__, "setPreference", {
@@ -76,8 +84,16 @@ Object.defineProperty(window.__firefox__, "setPreference", {
     value: setPreference
 });
 
+Object.defineProperty(window.__firefox__, "setIsSiteFlagged", {
+    enumerable: false,
+    configurable: false,
+    writable: false,
+    value: setIsSiteFlagged
+});
+
 // Checks if the Cookie Cutter handler has been injected by iOS.
 // Without it, could cause other scripts to fail.
 if (webkit.messageHandlers.cookieCutterHandler != undefined) {
-    webkit.messageHandlers.cookieCutterHandler.postMessage({ update: "get-preferences"});
+    webkit.messageHandlers.cookieCutterHandler.postMessage({ update: "is-site-flagged" });
+    webkit.messageHandlers.cookieCutterHandler.postMessage({ update: "get-preferences" });
 }

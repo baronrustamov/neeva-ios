@@ -17,6 +17,9 @@ extension Defaults.Keys {
     static let cookieCutterEnabled = Defaults.Key<Bool>(
         "profile_prefkey_cookieCutter_isEnabled", default: true)
 
+    fileprivate static let sitesFlaggedCookieCutter = Defaults.Key<[String]>(
+        "profile_prefkey_cookieCutter_flaggedSites", default: [])
+
     fileprivate static let cookieNotices = Defaults.Key<CookieNotices>(
         "profile_prefkey_cookieCutter_cookieNotices", default: .declineNonEssential)
     fileprivate static let marketingCookies = Defaults.Key<Bool>(
@@ -72,7 +75,7 @@ class CookieCutterModel: ObservableObject {
     }
 
     // MARK: - Methods
-    func cookieWasHandled(bvc: BrowserViewController) {
+    func cookieWasHandled(bvc: BrowserViewController, domain: String?) {
         if !Defaults[.cookieCutterOnboardingShowed] {
             Defaults[.cookieCutterOnboardingShowed] = true
 
@@ -97,6 +100,11 @@ class CookieCutterModel: ObservableObject {
                 .environmentObject(bvc.trackingStatsViewModel)
             }
         }
+
+        if let domain = domain {
+            // Also flag site here in case flagSite wasn't called by the engine.
+            flagSite(domain: domain)
+        }
     }
 
     private func checkIfCookieNoticeStateShouldReset() {
@@ -107,6 +115,22 @@ class CookieCutterModel: ObservableObject {
         {
             cookieNoticeStateShouldReset = true
         }
+
+        // Flagged sites should be reset when preferences change.
+        resetSiteFlags()
+    }
+
+    // MARK: - Flag Site
+    func flagSite(domain: String) {
+        Defaults[.sitesFlaggedCookieCutter].append(domain)
+    }
+
+    func isSiteFlagged(domain: String) -> Bool {
+        Defaults[.sitesFlaggedCookieCutter].contains(domain)
+    }
+
+    func resetSiteFlags() {
+        Defaults[.sitesFlaggedCookieCutter] = []
     }
 
     // MARK: - init
