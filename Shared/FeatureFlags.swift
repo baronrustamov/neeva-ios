@@ -15,8 +15,8 @@ public enum FeatureFlag: String, CaseIterable, RawRepresentable {
     case topCardStrip = "Top Card Strip"
     case debugURLBar = "URL Bar Debug Mode"
     case enableTimeBasedSwitcher = "Enable time based tab switcher"
-    case demoteAfter15secondsTimeBasedSwitcher =
-        "demote tabs after 15 seconds in time based switcher"
+    case shortenTimeThresholdForArchivingTabs =
+        "shorten time threshold for archiving tabs (1 day -> 15 seconds, 7 days -> 30 seconds, 1 month -> 1 minute)"
     case enableArchivedTabsView = "Enable archivedTabsView in switcher"
     case inlineAccountSettings = "Inline Account Settings"
     case pinToTopSites = "Pin to Top Sites"

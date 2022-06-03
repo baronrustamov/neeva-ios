@@ -93,7 +93,7 @@ class CardTests: XCTestCase {
                 XCTAssertEqual(self.tabCardModel.allDetails.last?.id, tab2.tabUUID)
                 XCTAssertFalse(self.tabCardModel.allDetails.last?.isSelected ?? true)
 
-                XCTAssertTrue(self.manager.tabGroups.isEmpty)
+                XCTAssertTrue(self.manager.activeTabGroups.isEmpty)
                 XCTAssertTrue(self.tabCardModel.allTabGroupDetails.isEmpty)
             }
         }
@@ -116,7 +116,7 @@ class CardTests: XCTestCase {
 
                 XCTAssertTrue(self.tabCardModel.allDetailsWithExclusionList.isEmpty)
 
-                XCTAssertEqual(self.manager.tabGroups.count, 1)
+                XCTAssertEqual(self.manager.activeTabGroups.count, 1)
                 XCTAssertEqual(self.tabCardModel.allTabGroupDetails.count, 1)
                 XCTAssertEqual(self.tabCardModel.allTabGroupDetails.first?.id, tab1.rootUUID)
 
@@ -128,7 +128,7 @@ class CardTests: XCTestCase {
 
                 let tab3 = self.manager.addTab(afterTab: tab1)
                 let _ = MethodSpy(functionName: self.spyAddTab) { _ in
-                    XCTAssertEqual(self.manager.tabGroups.count, 1)
+                    XCTAssertEqual(self.manager.activeTabGroups.count, 1)
                     XCTAssertEqual(self.tabCardModel.allTabGroupDetails.count, 1)
 
                     XCTAssertEqual(self.tabCardModel.allTabGroupDetails.first?.allDetails.count, 3)

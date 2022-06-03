@@ -13,11 +13,12 @@ enum ArchivedTabsDuration: CaseIterable, Encodable, Decodable {
 
 extension Defaults.Keys {
     static let archivedTabsDuration = Defaults.Key<ArchivedTabsDuration>(
-        "profile.prefkey.archivedTabs.archivedTabsDuration", default: .week)
+        "profile_prefkey_archivedTabs_archivedTabsDuration", default: .week)
 }
 
 struct ArchivedTabSettings: View {
     @Default(.archivedTabsDuration) var archivedTabsDuration
+    @Environment(\.presentationMode) var presentation
 
     var body: some View {
         List {
@@ -25,14 +26,27 @@ struct ArchivedTabSettings: View {
                 Picker("", selection: $archivedTabsDuration) {
                     Text("7 Days").tag(ArchivedTabsDuration.week)
                     Text("30 Days").tag(ArchivedTabsDuration.month)
-                    Text("Forever").tag(ArchivedTabsDuration.forever)
+                    Text("Never").tag(ArchivedTabsDuration.forever)
                 }.labelsHidden()
             }
         }
         .listStyle(.insetGrouped)
         .pickerStyle(.inline)
         .applyToggleStyle()
-        .navigationTitle(Text("Keep Tabs"))
+        .navigationTitle(Text("Archive Tabs"))
+        .navigationBarBackButtonHidden(true)
+        .toolbar(content: {
+            ToolbarItem(placement: .navigation) {
+                Button(action: { self.presentation.wrappedValue.dismiss() }) {
+                    HStack {
+                        Image(systemName: "chevron.left")
+                            .frame(width: 12, height: 20)
+                        Text("Back")
+                    }
+                }
+
+            }
+        })
     }
 }
 

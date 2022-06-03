@@ -9,6 +9,10 @@ import Shared
 struct TabGroup {
     var children: [Tab]
     var id: String
+    var lastExecutedTime: Timestamp {
+        children.map { $0.lastExecutedTime ?? Date.nowMilliseconds() }.max()
+            ?? Date.nowMilliseconds()
+    }
 
     var inferredTitle: String? {
         if let spaceID = children.first?.parentSpaceID, spaceID == children.first?.rootUUID {
@@ -27,11 +31,6 @@ struct TabGroup {
     }
 
     func wasLastExecuted(_ byTime: TimeFilter) -> Bool {
-        for tab in children {
-            if tab.wasLastExecuted(byTime) {
-                return true
-            }
-        }
-        return false
+        return isLastExecutedTimeInTimeFilter(lastExecutedTime, byTime)
     }
 }
