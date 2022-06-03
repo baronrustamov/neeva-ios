@@ -888,7 +888,10 @@ public func isLastExecutedTimeInTimeFilter(_ lastExecutedTime: Timestamp, _ byTi
             ? lastExecutedTime > Int64(startOfOneDayAgo.timeIntervalSince1970 * 1000)
             : Date.fromTimestamp(lastExecutedTime).isToday()
     case .lastWeek:
-        return lastExecutedTime < Int64(startOfOneDayAgo.timeIntervalSince1970 * 1000)
+        return
+            (FeatureFlag[.shortenTimeThresholdForArchivingTabs]
+            ? lastExecutedTime < Int64(startOfOneDayAgo.timeIntervalSince1970 * 1000)
+            : !Date.fromTimestamp(lastExecutedTime).isToday())
             && lastExecutedTime > Int64(startOfLastWeek.timeIntervalSince1970 * 1000)
     case .lastMonth:
         return lastExecutedTime < Int64(startOfLastWeek.timeIntervalSince1970 * 1000)
