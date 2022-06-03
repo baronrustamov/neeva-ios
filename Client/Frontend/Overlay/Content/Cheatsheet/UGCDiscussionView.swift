@@ -148,7 +148,6 @@ private struct RedditDiscussionView: View {
 
             ReadMoreTextView(text: discussion.snippet, lineLimit: 3)
         }
-        .foregroundColor(.label)
         .onTapGesture {
             onOpenURLForCheatsheet(discussion.url, String(describing: Self.self))
         }
@@ -179,6 +178,9 @@ private struct ReadMoreTextView: View {
                 Button("Read More") {
                     expanded = true
                 }
+                .withFont(unkerned: font)
+                .padding(.leading)
+                .background(Color.background)
             }
         }
         .background(
