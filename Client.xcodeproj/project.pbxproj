@@ -83,6 +83,7 @@
 		203A9385283F221900FA4E73 /* GridPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203A9380283F1E0E00FA4E73 /* GridPicker.swift */; };
 		205132B128208DB0003AAE96 /* SheetHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205132B028208DB0003AAE96 /* SheetHeader.swift */; };
 		205132B3282093B0003AAE96 /* CookieCutterOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205132B2282093B0003AAE96 /* CookieCutterOnboardingView.swift */; };
+		205783CC28496DB20089AC9B /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205783CB28496DB20089AC9B /* PerformanceTests.swift */; };
 		206954A427FF4257000360D6 /* SiteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206954A327FF4257000360D6 /* SiteListView.swift */; };
 		206954A627FF425B000360D6 /* SiteRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206954A527FF425B000360D6 /* SiteRowView.swift */; };
 		206954A827FF449E000360D6 /* RecentlyClosedTabsPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206954A727FF449E000360D6 /* RecentlyClosedTabsPanelView.swift */; };
@@ -1959,6 +1960,7 @@
 		203A9382283F1E9C00FA4E73 /* CardGroupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardGroupView.swift; sourceTree = "<group>"; };
 		205132B028208DB0003AAE96 /* SheetHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetHeader.swift; sourceTree = "<group>"; };
 		205132B2282093B0003AAE96 /* CookieCutterOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCutterOnboardingView.swift; sourceTree = "<group>"; };
+		205783CB28496DB20089AC9B /* PerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceTests.swift; sourceTree = "<group>"; };
 		206954A327FF4257000360D6 /* SiteListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteListView.swift; sourceTree = "<group>"; };
 		206954A527FF425B000360D6 /* SiteRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteRowView.swift; sourceTree = "<group>"; };
 		206954A727FF449E000360D6 /* RecentlyClosedTabsPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyClosedTabsPanelView.swift; sourceTree = "<group>"; };
@@ -3612,6 +3614,7 @@
 				6666D8C626D40278001AD43F /* LazyTabTests.swift */,
 				2CF449A41E7BFE2C00FD7595 /* NavigationTest.swift */,
 				C80A3D4326A25A9C0001E8A1 /* NeevaSignInTests.swift */,
+				205783CB28496DB20089AC9B /* PerformanceTests.swift */,
 				66E34CDB2711118900F30A3D /* ReaderModeTests.swift */,
 				2C3406C71E719F00000FD889 /* SettingsTest.swift */,
 				66C5224827604533003C7F2D /* SuggestionBackButtonTests.swift */,
@@ -6823,6 +6826,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9BB796DD282EAD21001E577C /* SpaceTests.swift in Sources */,
+				205783CC28496DB20089AC9B /* PerformanceTests.swift in Sources */,
 				C832BF6E26E0B31500B9A1F8 /* FindInPageTest.swift in Sources */,
 				C832BF7326E0B31B00B9A1F8 /* NavigationTest.swift in Sources */,
 				C832BF7B26E0B31B00B9A1F8 /* LazyTabTests.swift in Sources */,

@@ -112,4 +112,9 @@ extension BaseTestCase {
 
         waitForExistence(app.buttons["Back"])
     }
+
+    func createFiveHundredTabs() {
+        goToSettings()
+        app.buttons["Create 500 tabs"].tap()
+    }
 }
