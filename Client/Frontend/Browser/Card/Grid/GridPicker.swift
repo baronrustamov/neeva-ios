@@ -72,7 +72,7 @@ struct GridPicker: View {
                 if gridModel.switcherState == .tabs && switcherToolbarModel.dragOffset == nil {
                     selectedIndex = isIncognito ? 0 : 1
                 }
-            }
+            }.opacity(isSearchingForTabs ? 0.5 : 1)
 
             Spacer()
         }
@@ -86,7 +86,7 @@ struct GridPicker: View {
                     ? Color.background : Color.clear)
                     .ignoresSafeArea()
             )
-            .opacity(browserModel.showGrid ? (isSearchingForTabs ? 0.5 : 1) : 0)
+            .opacity(browserModel.showGrid ? 1 : 0)
             .disabled(isSearchingForTabs)
     }
 }

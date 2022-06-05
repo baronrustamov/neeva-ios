@@ -5,7 +5,7 @@
 import XCTest
 
 class FindInCardGridTests: BaseTestCase {
-    func testSearchForTab() {
+    private func performSearch() {
         openURL()
         openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
@@ -19,10 +19,34 @@ class FindInCardGridTests: BaseTestCase {
         app.textFields["FindInCardGrid_TextField"].typeText("example.com")
         waitForNoExistence(app.buttons["The Book of Mozilla, Tab"])
         waitForExistence(app.buttons["Example Domain, Tab"])
+    }
+
+    /// Makes sure everything reset properly.
+    private func confirmResetWorked() {
+        XCTAssertFalse(app.buttons["FindInCardGrid_Done"].exists)
+        XCTAssertTrue(app.buttons["Example Domain, Tab"].exists)
+        XCTAssertTrue(app.buttons["The Book of Mozilla, Tab"].exists)
+
+        // Makes sure the `GridPicker` is enabled.
+        setIncognitoMode(enabled: true)
+    }
+
+    func testSearchForTab() {
+        performSearch()
 
         // Close the view and make sure everything resets properly.
         app.buttons["FindInCardGrid_Done"].tap()
-        waitForNoExistence(app.buttons["FindInCardGrid_Done"])
-        waitForExistence(app.buttons["The Book of Mozilla, Tab"])
+        confirmResetWorked()
+    }
+
+    func testSelectTabFromSearch() {
+        performSearch()
+
+        // Tap a tab and make sure everything resets properly.
+        app.buttons["Example Domain, Tab"].tap()
+        waitForExistence(app.links["More information..."])
+
+        goToTabTray()
+        confirmResetWorked()
     }
 }

@@ -114,6 +114,7 @@ class BrowserModel: ObservableObject {
 
         tabManager.updateWebViewForSelectedTab(notify: true)
         gridModel.switchModeWithoutAnimation = false
+        gridModel.tabCardModel.isSearchingForTabs = false
     }
 
     func onCompletedCardTransition() {

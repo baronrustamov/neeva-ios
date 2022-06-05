@@ -53,10 +53,17 @@ class TabCardModel: CardModel {
     static let olderRowHeaderID: String = "older-header"
 
     // Find Tab
-    @Published var isSearchingForTabs: Bool = false
+    @Published var isSearchingForTabs: Bool = false {
+        didSet {
+            // Reset the filter whenever the state changes.
+            tabSearchFilter = ""
+        }
+    }
     @Published var tabSearchFilter = "" {
         didSet {
-            updateIfNeeded(forceUpdateRows: true)
+            if oldValue != tabSearchFilter {
+                updateIfNeeded(forceUpdateRows: true)
+            }
         }
     }
 
