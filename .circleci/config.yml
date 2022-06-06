@@ -212,7 +212,7 @@ jobs:
     macos:
       xcode: "13.3.0"
     parallelism: 3
-    resource_class: medium
+    resource_class: macos.x86.medium.gen2
     steps:
       - restore-build-cache
       - xcui-tests
@@ -220,7 +220,7 @@ jobs:
     macos:
       xcode: "13.3.0"
     parallelism: 3
-    resource_class: medium
+    resource_class: macos.x86.medium.gen2
     steps:
       - restore-build-cache
       - xcui-tests-ipad
