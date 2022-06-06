@@ -88,6 +88,7 @@ class IntroViewModel: NSObject, ObservableObject {
         onDismiss: @escaping ((FirstRunButtonActions) -> Void), completion: @escaping (() -> Void)
     ) {
         self.onDismiss = onDismiss
+        self.isDisplaying = true
 
         overlayManager.presentFullScreenModal(
             content: AnyView(
@@ -95,7 +96,6 @@ class IntroViewModel: NSObject, ObservableObject {
                     .environmentObject(self)
                     .onAppear {
                         AppDelegate.setRotationLock(to: .portrait)
-                        self.isDisplaying = true
                     }.onDisappear {
                         AppDelegate.setRotationLock(to: .all)
                         self.isDisplaying = false
