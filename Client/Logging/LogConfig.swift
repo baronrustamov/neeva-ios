@@ -211,6 +211,8 @@ public struct LogConfig {
         case NeevaAttributionRequestError
         /// Default browser interstitial restore imp
         case DefaultBrowserInterstitialRestoreImp
+        /// Recommended space tap on preview zero query
+        case SpacesRecommendedDetailUIVisited
 
         // MARK: promo card
         /// Promo card is rendered on screen
@@ -266,7 +268,6 @@ public struct LogConfig {
         case SpacesDetailEntityClicked
         case SpacesDetailEditButtonClicked
         case SpacesDetailShareButtonClicked
-        case SpacesRecommendedDetailUIVisited
         case SpacesLoginRequired
         case OwnerSharedSpace
         case FollowerSharedSpace
