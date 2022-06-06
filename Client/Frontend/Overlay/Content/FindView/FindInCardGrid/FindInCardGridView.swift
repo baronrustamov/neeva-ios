@@ -20,13 +20,14 @@ struct FindInCardGridView: View {
                 focusTextField: true
             ).accessibilityIdentifier("FindInCardGrid_TextField")
 
-            Button(action: onDismiss) {
+            Button {
+                onDismiss()
+                tabCardModel.isSearchingForTabs = false
+            } label: {
                 Text("Done")
             }.accessibilityIdentifier("FindInCardGrid_Done")
         }.onChange(of: searchQuery) { newValue in
             tabCardModel.tabSearchFilter = newValue
-        }.onDisappear {
-            tabCardModel.isSearchingForTabs = false
         }.padding(.top, 4)
     }
 }

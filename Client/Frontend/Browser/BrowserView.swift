@@ -132,6 +132,13 @@ struct BrowserView: View {
                 bvc.openSettings(openPage: page)
             }
         )
+        .environment(
+            \.openArchivedTabsPanelView,
+            {
+                bvc.present(
+                    ArchivedTabsPanelViewController(browserModel: browserModel), animated: true)
+            }
+        )
         .environmentObject(browserModel)
         .environmentObject(browserModel.incognitoModel)
         .environmentObject(browserModel.cardTransitionModel)

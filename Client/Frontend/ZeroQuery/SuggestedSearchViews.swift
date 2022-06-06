@@ -7,14 +7,15 @@ import Storage
 import SwiftUI
 
 struct SuggestedSearchesView: View {
-    @EnvironmentObject var model: SuggestedSearchesModel
+    let profile: Profile
+    @StateObject var model = SuggestedSearchesModel()
 
     @Environment(\.onOpenURL) private var openURL
     @Environment(\.setSearchInput) private var setSearchInput
 
     var body: some View {
         VStack(spacing: 0) {
-            ForEach(model.suggestions().prefix(3), id: \.id) { suggestedSearch in
+            ForEach(model.suggestions.prefix(3), id: \.id) { suggestedSearch in
                 Button(
                     action: {
                         if suggestedSearch.isExample {
@@ -70,5 +71,8 @@ struct SuggestedSearchesView: View {
         }
         .accentColor(Color(light: .ui.gray70, dark: .secondaryLabel))
         .padding(.top, 7)
+        .onAppear {
+            model.reload(from: profile)
+        }
     }
 }

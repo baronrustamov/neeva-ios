@@ -283,7 +283,7 @@ struct ZeroQueryView: View {
                         viewModel.updateState()
                     }
             } else {
-                SuggestedSearchesView()
+                SuggestedSearchesView(profile: viewModel.profile)
             }
         }
     }

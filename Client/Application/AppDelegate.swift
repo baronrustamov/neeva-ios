@@ -137,6 +137,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         log.info("startApplication end")
 
+        if FeatureFlag[.interactiveScrollView] {
+            UIScrollView.appearance().keyboardDismissMode = .interactive
+        }
+
         return true
     }
 

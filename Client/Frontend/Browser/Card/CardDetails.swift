@@ -275,20 +275,13 @@ public class TabCardDetails: CardDetails, AccessingManagerProvider,
     @ViewBuilder func contextMenu() -> some View {
         if !tab.isIncognito {
             Button { [self] in
-                guard let url = url else { return }
-                let newTab = manager.addTab(
-                    URLRequest(url: url), afterTab: tab, isIncognito: tab.isIncognito)
-                newTab.rootUUID = UUID().uuidString
-                manager.selectTab(newTab, previous: tab, notify: true)
+                manager.duplicateTab(tab, incognito: tab.isIncognito)
             } label: {
                 Label("Duplicate Tab", systemSymbol: .plusSquareOnSquare)
             }.disabled(url == nil)
 
             Button { [self] in
-                guard let url = url else { return }
-                let newTab = manager.addTab(URLRequest(url: url), afterTab: tab, isIncognito: true)
-                newTab.rootUUID = UUID().uuidString
-                manager.selectTab(newTab, previous: tab, notify: true)
+                manager.duplicateTab(tab, incognito: true)
             } label: {
                 Label("Open in Incognito", image: "incognito")
             }.disabled(url == nil)
@@ -608,6 +601,40 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
 
         return true
     }
+
+    private var deleteSubscription: AnyCancellable?
+
+    func deleteSpace() {
+        let request = manager.deleteSpace(spaceId: id)
+        deleteSubscription = request?.$state.sink { [self] state in
+            switch state {
+            case .success:
+                manager.refresh(force: true)
+                deleteSubscription?.cancel()
+            case .failure:
+                deleteSubscription?.cancel()
+            case .initial:
+                Logger.browser.info("Waiting for result from deleting space")
+            }
+        }
+    }
+
+    private var unfollowSubscription: AnyCancellable?
+
+    func unfollowSpace() {
+        let request = manager.unfollowSpace(spaceId: id)
+        unfollowSubscription = request?.$state.sink { [self] state in
+            switch state {
+            case .success:
+                manager.refresh(force: true)
+                unfollowSubscription?.cancel()
+            case .failure:
+                unfollowSubscription?.cancel()
+            case .initial:
+                Logger.browser.info("Waiting for result from unfollowing space")
+            }
+        }
+    }
 }
 
 class SiteCardDetails: CardDetails, AccessingManagerProvider {
@@ -740,7 +767,7 @@ class TabGroupCardDetails: ObservableObject {
         }
 
         allDetails =
-            manager.getTabGroup(for: id)?.children
+            tabGroup.children
             .sorted(by: { lhs, rhs in
                 if lhs.isPinned && rhs.isPinned {
                     // Note: We should make it impossible for `pinnedTime` to be nil when
@@ -759,7 +786,7 @@ class TabGroupCardDetails: ObservableObject {
                     tab: $0,
                     manager: manager,
                     isChild: true)
-            }) ?? []
+            })
     }
 
     func onSelect() {

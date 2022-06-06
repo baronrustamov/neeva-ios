@@ -6,6 +6,8 @@ import Defaults
 import Shared
 import Storage
 
+private var log = Logger.browser
+
 class SuggestedSitesViewModel: ObservableObject {
     @Published var sites: [Site]
 
@@ -30,20 +32,7 @@ let exampleQueries: [SuggestedSearch] = ["best headphones", "lemon bar recipe", 
 }
 
 class SuggestedSearchesModel: ObservableObject {
-    @Published private(set) var suggestedQueries: [SuggestedSearch] = []
-
-    init(suggestedQueries: [SuggestedSearch]) {
-        self.suggestedQueries = suggestedQueries
-    }
-
-    func suggestions() -> [SuggestedSearch] {
-        self.suggestedQueries
-            + exampleQueries.filter { example in
-                !self.suggestedQueries.contains { history in
-                    example.query == history.query
-                }
-            }
-    }
+    @Published private(set) var suggestions: [SuggestedSearch] = []
 
     var searchUrlForQuery: String {
         SearchEngine.current.searchURLForQuery("blank")!.normalizedHostAndPath!
@@ -79,7 +68,8 @@ class SuggestedSearchesModel: ObservableObject {
                 topFrecentHistoryQuery = query
                 queries.insert(query)
             }
-            self.suggestedQueries = deferredHistorySites.compactMap { site in
+
+            var searches: [SuggestedSearch] = deferredHistorySites.compactMap { site in
                 if let query = SearchEngine.current.queryForSearchURL(site.url),
                     !queries.contains(query)
                 {
@@ -92,11 +82,22 @@ class SuggestedSearchesModel: ObservableObject {
             if let topFrecentHistorySite = topFrecentHistorySite,
                 let topFrecentHistoryQuery = topFrecentHistoryQuery
             {
-                self.suggestedQueries.insert(
+                searches.insert(
                     SuggestedSearch(
                         query: topFrecentHistoryQuery, site: topFrecentHistorySite, isExample: false
                     ), at: 0)
             }
+
+            // Append any example queries not already present in the set.
+            for example in exampleQueries {
+                if !searches.contains(where: { $0.query == example.query }) {
+                    searches.append(example)
+                }
+            }
+
+            self.suggestions = searches
+
+            log.info("updated suggestedQueries, count: \(self.suggestions.count)")
 
             completion?()
         }

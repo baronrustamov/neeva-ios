@@ -714,4 +714,12 @@ public class SpaceStore: ObservableObject {
             }
         }
     }
+
+    public func deleteSpace(spaceId: String) -> DeleteSpaceRequest? {
+        return SpaceServiceProvider.shared.deleteSpace(spaceID: spaceId)
+    }
+
+    public func unfollowSpace(spaceId: String) -> UnfollowSpaceRequest? {
+        return SpaceServiceProvider.shared.unfollowSpace(spaceID: spaceId)
+    }
 }

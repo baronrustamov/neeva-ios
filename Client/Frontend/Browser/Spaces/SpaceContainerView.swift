@@ -25,6 +25,8 @@ struct SpaceContainerView: View {
     @State private var showingProfileUI = false
     @State private var showingAnotherSpace = false
     @State private var selectedSpaceId: String?
+    @Environment(\.onOpenURLForSpace) var onOpenURLForSpace
+    @Environment(\.shareURL) var shareURL
 
     var space: Space? {
         primitive.item
@@ -109,6 +111,8 @@ struct SpaceContainerView: View {
             if let selectedId = selectedSpaceId {
                 let primitive = SpaceCardDetails(id: selectedId, manager: SpaceStore.shared)
                 SpaceContainerView(primitive: primitive)
+                    .environment(\.onOpenURLForSpace, onOpenURLForSpace)
+                    .environment(\.shareURL, shareURL)
             }
         } label: {
             EmptyView()

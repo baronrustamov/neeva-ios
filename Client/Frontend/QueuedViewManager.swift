@@ -12,11 +12,8 @@ public enum QueuedViewLocation {
 }
 
 open class QueuedViewManager<View: SwiftUI.View>: ObservableObject {
-    let windowManager: WindowManager
     /// For use with BrowserView only
-    lazy var overlayManager: OverlayManager = {
-        SceneDelegate.getBVC(with: windowManager.parentWindow.windowScene).overlayManager
-    }()
+    let overlayManager: OverlayManager
     var queuedViews = [View]()
 
     let animationTime = 0.5
@@ -53,20 +50,10 @@ open class QueuedViewManager<View: SwiftUI.View>: ObservableObject {
         }
     }
 
-    /// Opens new UIWindow and displays View inside, creates Timer to remove View
-    func present(_ view: View, height: CGFloat = 80) {
+    /// Sets the current view. This function should be overridden and `present` should
+    /// be implemented by the inheriting class or the view won't show.
+    func present(_ view: View) {
         currentView = view
-
-        let viewHostingController = UIHostingController(rootView: view)
-        viewHostingController.view.backgroundColor = .clear
-
-        // creates new window to display View in
-        windowManager.createWindow(
-            with: viewHostingController, placement: .bottomToolbarPadding, height: height
-        ) { [weak self] in
-            guard let self = self else { return }
-            self.startViewDismissTimer(for: view)
-        }
     }
 
     func startViewDismissTimer(for view: View) {
@@ -85,7 +72,7 @@ open class QueuedViewManager<View: SwiftUI.View>: ObservableObject {
         }
 
         currentViewTimer?.invalidate()
-        overlayManager.hideCurrentOverlay(ofPriority: .transient, animate: animate)
+        hideOverlay(animate: animate)
 
         self.currentView = nil
         self.currentViewTimer = nil
@@ -96,6 +83,10 @@ open class QueuedViewManager<View: SwiftUI.View>: ObservableObject {
                 self.nextView()
             }
         }
+    }
+
+    func hideOverlay(animate: Bool) {
+        overlayManager.hideCurrentOverlay(ofPriority: .transient, animate: animate)
     }
 
     /// Presents the next queued View if it exists
@@ -113,8 +104,8 @@ open class QueuedViewManager<View: SwiftUI.View>: ObservableObject {
         return ToastViewUX.defaultDisplayTime
     }
 
-    init(window: UIWindow) {
-        self.windowManager = WindowManager(parentWindow: window)
+    init(overlayManager: OverlayManager) {
+        self.overlayManager = overlayManager
     }
 }
 

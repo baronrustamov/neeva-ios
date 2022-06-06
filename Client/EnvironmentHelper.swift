@@ -64,7 +64,8 @@ public class EnvironmentHelper {
         var numOfChildTabs = 0
         var numOfTabGroups = 0
         TabManager.all.forEach { tabManager in
-            numOfTabGroups += tabManager.tabGroups.count
+            // In the future, we may also want to log archived tab groups.
+            numOfTabGroups += tabManager.activeTabGroups.count
             numOfChildTabs += tabManager.childTabs.count
         }
 

@@ -28,7 +28,6 @@ extension EnvironmentValues {
 
 struct ZeroQueryContent: View {
     @ObservedObject var model: ZeroQueryModel
-    @EnvironmentObject var suggestedSearchesModel: SuggestedSearchesModel
 
     var body: some View {
         ZeroQueryView()
@@ -62,7 +61,6 @@ struct ZeroQueryContent: View {
                 Defaults[.lastZeroQueryImpUpdatedTimestamp] = Date()
 
                 self.model.updateState()
-                self.suggestedSearchesModel.reload(from: self.model.profile)
             }
     }
 }

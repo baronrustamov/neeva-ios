@@ -69,7 +69,7 @@ struct UGCDiscussionView: View {
         static let chevronSize: CGFloat = 16
     }
 
-    @State var showAllReddit: Bool = false
+    @State var showAllReddit: Bool
 
     let discussions: UGCDiscussion
 
@@ -79,9 +79,8 @@ struct UGCDiscussionView: View {
 
     init(_ discussions: UGCDiscussion) {
         self.discussions = discussions
-        if discussions.redditDiscussions.count <= UX.numCollapsed {
-            showAllReddit = true
-        }
+        // if contains no more than number of elements in collapsed state, default to showing all
+        _showAllReddit = State(initialValue: discussions.redditDiscussions.count <= UX.numCollapsed)
     }
 
     var body: some View {
@@ -99,7 +98,7 @@ struct UGCDiscussionView: View {
 
     @ViewBuilder
     var redditDiscussions: some View {
-        ForEach(discussions.redditDiscussions.prefix(upTo: redditNumDisplayed)) { discussion in
+        ForEach(discussions.redditDiscussions.prefix(redditNumDisplayed)) { discussion in
             RedditDiscussionView(discussion: discussion)
         }
     }
@@ -149,7 +148,6 @@ private struct RedditDiscussionView: View {
 
             ReadMoreTextView(text: discussion.snippet, lineLimit: 3)
         }
-        .foregroundColor(.label)
         .onTapGesture {
             onOpenURLForCheatsheet(discussion.url, String(describing: Self.self))
         }
@@ -180,6 +178,9 @@ private struct ReadMoreTextView: View {
                 Button("Read More") {
                     expanded = true
                 }
+                .withFont(unkerned: font)
+                .padding(.leading)
+                .background(Color.background)
             }
         }
         .background(

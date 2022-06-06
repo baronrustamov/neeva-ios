@@ -18,7 +18,7 @@ extension ZeroQueryView: Inspectable {}
 class ZeroQueryTests: XCTestCase {
     var profile: MockProfile!
     var zQM: ZeroQueryModel!
-    var ssm = SuggestedSearchesModel(suggestedQueries: [])
+    var ssm = SuggestedSearchesModel()
     var sQM = SearchQueryModel()
     var suggestionsModel: SuggestionModel!
     var tabManager: TabManager!
@@ -222,18 +222,18 @@ class ZeroQueryTests: XCTestCase {
         let _ = XCTWaiter().wait(for: [expectation], timeout: 100)
 
         ssm.reload(from: profile) {
-            XCTAssertEqual(self.ssm.suggestedQueries.count, 4)
+            XCTAssertEqual(self.ssm.suggestions.count, 7)  // 3 at the end are example queries
             XCTAssertEqual(
-                self.ssm.suggestedQueries[0].site.url.absoluteURL,
+                self.ssm.suggestions[0].site.url.absoluteURL,
                 mostFrecentSite.url.absoluteURL)
             XCTAssertEqual(
-                self.ssm.suggestedQueries[1].site.url.absoluteURL,
+                self.ssm.suggestions[1].site.url.absoluteURL,
                 mostRecentSite.url.absoluteURL)
             XCTAssertEqual(
-                self.ssm.suggestedQueries[2].site.url.absoluteURL,
+                self.ssm.suggestions[2].site.url.absoluteURL,
                 secondMostRecentSite.url.absoluteURL)
             XCTAssertEqual(
-                self.ssm.suggestedQueries[3].site.url.absoluteURL,
+                self.ssm.suggestions[3].site.url.absoluteURL,
                 thirdMostRecentSite.url.absoluteURL)
             getSitesExpectation.fulfill()
         }

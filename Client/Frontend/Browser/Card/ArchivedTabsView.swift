@@ -8,7 +8,9 @@ import SwiftUI
 
 struct ArchivedTabsView: View {
     var containerGeometry: CGSize
+    @EnvironmentObject var tabModel: TabCardModel
     @Environment(\.openSettings) private var openSettings
+    @Environment(\.openArchivedTabsPanelView) private var openArchivedTabsPanelView
 
     @Default(.archivedTabsDuration) var archivedTabsDuration
 
@@ -30,7 +32,9 @@ struct ArchivedTabsView: View {
                 .padding(.horizontal, -CardGridUX.GridSpacing)
 
             Button(
-                action: {},
+                action: {
+                    openArchivedTabsPanelView()
+                },
                 label: {
                     HStack {
                         Spacer()
@@ -42,21 +46,6 @@ struct ArchivedTabsView: View {
             )
             .buttonStyle(.neeva(.secondary))
             .padding(16)
-
-            Text("Neeva is set to keep tabs \(tabsDurationText)")
-                .withFont(.bodyLarge)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 16)
-
-            Button(
-                action: {
-                    openSettings(.archivedTabs)
-                },
-                label: {
-                    Text("Change in settings")
-                        .underline()
-                })
         }
-        .padding(.bottom, 27)
     }
 }

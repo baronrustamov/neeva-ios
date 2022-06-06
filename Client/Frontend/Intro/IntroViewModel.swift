@@ -89,6 +89,7 @@ class IntroViewModel: NSObject, ObservableObject {
         onDismiss: @escaping ((FirstRunButtonActions) -> Void), completion: @escaping (() -> Void)
     ) {
         self.onDismiss = onDismiss
+        self.isDisplaying = true
 
         overlayManager.presentFullScreenModal(
             content: AnyView(
@@ -96,7 +97,6 @@ class IntroViewModel: NSObject, ObservableObject {
                     .environmentObject(self)
                     .onAppear {
                         AppDelegate.setRotationLock(to: .portrait)
-                        self.isDisplaying = true
                     }.onDisappear {
                         AppDelegate.setRotationLock(to: .all)
                         self.isDisplaying = false
@@ -110,7 +110,7 @@ class IntroViewModel: NSObject, ObservableObject {
     public func dismiss(_ firstRunButtonAction: FirstRunButtonActions?) {
         Defaults[.introSeen] = true
 
-        overlayManager.hideCurrentOverlay(ofPriorities: [.modal, .fullScreen]) {
+        overlayManager.hideCurrentOverlay(ofPriority: .fullScreen) {
             browserLog.info("Dismissed introVC")
 
             guard let firstRunButtonAction = firstRunButtonAction else {

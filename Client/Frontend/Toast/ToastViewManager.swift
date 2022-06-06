@@ -38,7 +38,7 @@ class ToastViewManager: QueuedViewManager<ToastView> {
         return toast
     }
 
-    override func present(_ view: ToastView, height: CGFloat = 80) {
+    override func present(_ view: ToastView) {
         currentView = view
         currentView?.viewDelegate = self
 
@@ -51,6 +51,10 @@ class ToastViewManager: QueuedViewManager<ToastView> {
                 self.startViewDismissTimer(for: view)
             }
         }
+    }
+
+    override func hideOverlay(animate: Bool) {
+        overlayManager.hide(overlay: .toast(currentView), animate: animate)
     }
 
     override func getDisplayTime(for view: ToastView) -> Double {

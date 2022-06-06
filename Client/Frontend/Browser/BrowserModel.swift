@@ -41,16 +41,12 @@ class BrowserModel: ObservableObject {
         if gridModel.switcherState != .tabs {
             gridModel.switcherState = .tabs
         }
-
-        if !gridModel.tabCardModel.getAllDetails(matchingIncognitoState: incognitoModel.isIncognito)
-            .contains(where: \.isSelected)
-        {
+        if FeatureFlag[.enableTimeBasedSwitcher] {
+            gridModel.tabCardModel.updateIfNeeded()
+        }
+        if tabManager.selectedTab?.isIncognito != incognitoModel.isIncognito {
             showGridWithNoAnimation()
         } else {
-            if FeatureFlag[.enableTimeBasedSwitcher] {
-                gridModel.tabCardModel.updateRowsIfNeeded()
-            }
-
             overlayManager.hideCurrentOverlay(ofPriority: .modal)
             gridModel.scrollToSelectedTab { [self] in
                 cardTransitionModel.update(to: .visibleForTrayShow)
@@ -61,10 +57,6 @@ class BrowserModel: ObservableObject {
     }
 
     func showGridWithNoAnimation() {
-        if FeatureFlag[.enableTimeBasedSwitcher] {
-            gridModel.tabCardModel.updateRowsIfNeeded()
-        }
-
         gridModel.scrollToSelectedTab()
         cardTransitionModel.update(to: .hidden)
         contentVisibilityModel.update(showContent: false)
@@ -122,6 +114,7 @@ class BrowserModel: ObservableObject {
 
         tabManager.updateWebViewForSelectedTab(notify: true)
         gridModel.switchModeWithoutAnimation = false
+        gridModel.tabCardModel.isSearchingForTabs = false
     }
 
     func onCompletedCardTransition() {
