@@ -810,13 +810,6 @@ class BrowserViewController: UIViewController, ModalPresenter {
         )
     }
 
-    func openBlankNewTab(isIncognito: Bool = false) {
-        popToBVC()
-
-        let newTab = tabManager.addTab(isIncognito: isIncognito)
-        tabManager.select(newTab)
-    }
-
     func openLazyTab(
         openedFrom: ZeroQueryOpenedLocation = .openTab(nil), switchToIncognitoMode: Bool? = nil
     ) {

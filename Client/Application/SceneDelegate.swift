@@ -105,6 +105,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             callSite: LocalNotifications.ScheduleCallSite.enterForeground
         )
 
+        bvc.tabManager.removeBlankTabs()
         bvc.downloadQueue.resumeAll()
 
         ClientLogger.shared.logCounter(
