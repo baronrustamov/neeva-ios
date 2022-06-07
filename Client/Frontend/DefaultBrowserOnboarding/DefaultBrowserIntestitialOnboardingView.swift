@@ -35,12 +35,6 @@ class DefaultBrowserInterstitialOnboardingViewController: UIHostingController<
                     .environmentObject(
                         InterstitialViewModel(
                             trigger: triggerFrom,
-                            showRemindButton:
-                                NeevaExperiment.arm(for: .defaultBrowserChangeButton)
-                                == .changeButton,
-                            inButtonTextExperiment:
-                                NeevaExperiment.arm(for: .defaultBrowserChangeButton)
-                                == .changeButton,
                             showCloseButton: false,
                             onOpenSettingsAction: {
                                 openSettings()
@@ -60,12 +54,8 @@ class DefaultBrowserInterstitialOnboardingViewController: UIHostingController<
                 openSettings: {}, onCancel: {}, onDismiss: {}, triggerFrom: triggerFrom))
         self.rootView = Content(
             openSettings: { [weak self] in
-                if NeevaExperiment.arm(for: .defaultBrowserChangeButton) == .changeButton {
+                self?.dismiss(animated: true) {
                     didOpenSettings()
-                } else {
-                    self?.dismiss(animated: true) {
-                        didOpenSettings()
-                    }
                 }
                 // Don't show default browser card if this button is tapped
                 Defaults[.didDismissDefaultBrowserCard] = true
@@ -116,13 +106,23 @@ struct DefaultBrowserInterstitialOnboardingView: View {
 
     @ViewBuilder
     var header: some View {
-        Text("Make Neeva your Default Browser")
-            .font(.system(size: 32, weight: .light))
-        Text(
-            "Block invasive trackers across the Web. Open links safely with blazing fast browsing and peace of mind."
-        )
-        .withFont(.bodyLarge)
-        .foregroundColor(.secondaryLabel)
+        if interstitialModel.isInWelcomeScreenExperimentArms() {
+            Text("Make Neeva your Default Browser")
+                .font(.system(size: 32, weight: .bold))
+            Text(
+                interstitialModel.bodyForSecondScreenWelcomeExperiment()
+            )
+            .withFont(.bodyXLarge)
+            .foregroundColor(.secondaryLabel)
+        } else {
+            Text("Make Neeva your Default Browser")
+                .font(.system(size: 32, weight: .light))
+            Text(
+                "Block invasive trackers across the Web. Open links safely with blazing fast browsing and peace of mind."
+            )
+            .withFont(.bodyLarge)
+            .foregroundColor(.secondaryLabel)
+        }
     }
 
     @ViewBuilder
@@ -186,7 +186,7 @@ struct DefaultBrowserInterstitialOnboardingView: View {
 
     var body: some View {
         ZStack {
-            if !interstitialModel.inButtonTextExperiment && interstitialModel.showCloseButton {
+            if interstitialModel.showCloseButton {
                 VStack {
                     HStack {
                         Spacer()

@@ -190,4 +190,10 @@ extension TabManager {
             }
         }
     }
+
+    // MARK: - Blank Tabs
+    /// Removes any tabs with the location `about:blank`. Seen when clicking web links that open native apps.
+    func removeBlankTabs() {
+        removeTabs(tabs.filter { $0.url == URL.aboutBlank }, showToast: false)
+    }
 }

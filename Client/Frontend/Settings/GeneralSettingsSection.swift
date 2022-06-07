@@ -35,10 +35,6 @@ struct GeneralSettingsSection: View {
                 .environmentObject(
                     InterstitialViewModel(
                         trigger: .defaultBrowserSettings,
-                        showRemindButton:
-                            NeevaExperiment.arm(for: .defaultBrowserChangeButton) == .changeButton,
-                        inButtonTextExperiment:
-                            NeevaExperiment.arm(for: .defaultBrowserChangeButton) == .changeButton,
                         showCloseButton: false
                     )
                 )

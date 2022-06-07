@@ -377,8 +377,6 @@ class SpaceEntityThumbnail: CardDetails, AccessingManagerProvider {
         manager.ACL
     }
 
-    private var imageThumbnailModel: ImageThumbnailModel?
-
     var isImage: Bool {
         guard let pathExtension = data.url?.pathExtension else {
             return false
@@ -424,9 +422,6 @@ class SpaceEntityThumbnail: CardDetails, AccessingManagerProvider {
         self.data = data
         self.id = data.id
         self.space = space
-        if let thumbnailData = data.thumbnail?.dataURIBody {
-            self.imageThumbnailModel = .init(imageData: thumbnailData)
-        }
     }
 
     func webImage(url: URL) -> some View {
@@ -457,8 +452,10 @@ class SpaceEntityThumbnail: CardDetails, AccessingManagerProvider {
             webImage(url: imageURL)
         } else if isImage, let imageURL = data.url {
             webImage(url: imageURL)
-        } else if let imageThumbnailModel = imageThumbnailModel {
-            ImageThumbnailView(model: imageThumbnailModel)
+        } else if let thumbnail = data.thumbnail,
+            let imageUrl = URL(string: thumbnail)
+        {
+            webImage(url: imageUrl)
         } else {
             GeometryReader { geom in
                 Symbol(decorative: .bookmarkOnBookmark, size: geom.size.width / 3)

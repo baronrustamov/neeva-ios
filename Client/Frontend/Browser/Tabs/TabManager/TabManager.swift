@@ -91,6 +91,10 @@ class TabManager: NSObject {
         return tabs.filter { $0.isIncognito }
     }
 
+    var activeNormalTabs: [Tab] {
+        return activeTabs.filter { !$0.isIncognito }
+    }
+
     var count: Int {
         assert(Thread.isMainThread)
 
@@ -212,7 +216,7 @@ class TabManager: NSObject {
         if isIncognito {
             return incognitoTabs.count
         } else {
-            return normalTabs.count
+            return FeatureFlag[.enableArchivedTabsView] ? activeNormalTabs.count : normalTabs.count
         }
     }
 

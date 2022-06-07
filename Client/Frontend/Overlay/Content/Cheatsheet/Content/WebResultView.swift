@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import Defaults
 import SDWebImageSwiftUI
 import Shared
 import SwiftUI
@@ -51,7 +52,7 @@ struct WebResultItem: View {
                     .accessibilityAddTraits(.isButton)
                     .accessibilityLabel(Text(item.title))
 
-                BuyingGuideList(buyingGuides: item.buyingGuides)
+                BuyingGuideListView(buyingGuides: item.buyingGuides)
             } else if item.inlineSearchProducts.count > 0 {
                 WebResultHeader(item: item)
                     .onTapGesture(perform: onClick)
@@ -88,10 +89,10 @@ struct WebResultItem: View {
 
 struct WebResultList: View {
     @Environment(\.onOpenURLForCheatsheet) var onOpenURLForCheatsheet
+    @Default(.cheatsheetDebugQuery) var cheatsheetDebugQuery: Bool
 
     let webResult: [NeevaScopeSearch.WebResult]
     let currentCheatsheetQueryAsURL: URL?
-    let showQueryString: Bool
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -106,7 +107,7 @@ struct WebResultList: View {
                             .frame(width: 18, height: 18, alignment: .center)
                     }
                 }
-                if showQueryString {
+                if cheatsheetDebugQuery {
                     Button(action: {
                         if let string = currentCheatsheetQueryAsURL?.absoluteString {
                             UIPasteboard.general.string = string

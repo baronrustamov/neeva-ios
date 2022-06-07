@@ -15,9 +15,6 @@ class InterstitialViewModel: ObservableObject {
     var showRemindButton: Bool
     var showCloseButton: Bool
 
-    var inButtonTextExperiment: Bool
-    var restoreFromBackground: Bool
-
     var onOpenSettingsAction: (() -> Void)?
     var onCloseAction: (() -> Void)?
 
@@ -26,24 +23,18 @@ class InterstitialViewModel: ObservableObject {
     init(
         trigger: OpenDefaultBrowserOnboardingTrigger = .defaultBrowserFirstScreen,
         showRemindButton: Bool = true,
-        inButtonTextExperiment: Bool = false,
-        restoreFromBackground: Bool = false,
         showCloseButton: Bool = true,
         onOpenSettingsAction: (() -> Void)? = nil,
         onCloseAction: (() -> Void)? = nil
     ) {
         self.trigger = trigger
         self.showRemindButton = showRemindButton
-        self.inButtonTextExperiment = inButtonTextExperiment
-        self.restoreFromBackground = restoreFromBackground
         self.showCloseButton = showCloseButton
         self.onOpenSettingsAction = onOpenSettingsAction
         self.onCloseAction = onCloseAction
 
-        self.openButtonText = restoreFromBackground ? "Back to Settings" : "Open Neeva Settings"
-        self.remindButtonText =
-            inButtonTextExperiment
-            ? (restoreFromBackground ? "Continue to Neeva" : "Maybe Later") : "Remind Me Later"
+        self.openButtonText = "Open Neeva Settings"
+        self.remindButtonText = "Remind Me Later"
     }
 
     func openSettingsButtonClickAction() {
@@ -51,15 +42,6 @@ class InterstitialViewModel: ObservableObject {
             onOpenSettingsAction()
         }
         didTakeAction = true
-        if inButtonTextExperiment {
-            openButtonText = "Back to Settings"
-            if Defaults[.didDismissDefaultBrowserInterstitial] == false
-                && !Defaults[.didFirstNavigation]
-            {
-                remindButtonText = "Continue to Neeva"
-                restoreFromBackground = true
-            }
-        }
         Defaults[.lastDefaultBrowserInterstitialChoice] =
             DefaultBrowserInterstitialChoice.openSettings.rawValue
         ClientLogger.shared.logCounter(
@@ -79,11 +61,7 @@ class InterstitialViewModel: ObservableObject {
     }
 
     func defaultBrowserSecondaryButtonAction() {
-        if restoreFromBackground {
-            closeAction()
-        } else {
-            remindLaterAction()
-        }
+        remindLaterAction()
         didTakeAction = true
     }
 
@@ -129,5 +107,53 @@ class InterstitialViewModel: ObservableObject {
                 )
             ]
         )
+    }
+
+    func isInWelcomeScreenExperimentArms() -> Bool {
+        return
+            NeevaExperiment.arm(for: .defaultBrowserWelcomeScreen) == .privacyMsg
+            || NeevaExperiment.arm(for: .defaultBrowserWelcomeScreen) == .trackingMsg
+    }
+
+    func imageForWelcomeExperiment() -> String {
+        if NeevaExperiment.arm(for: .defaultBrowserWelcomeScreen) == .trackingMsg {
+            return "neeva_interstitial_welcome_page"
+        } else if NeevaExperiment.arm(for: .defaultBrowserWelcomeScreen) == .privacyMsg {
+            return "neeva_interstitial_welcome_page"
+        } else {
+            return ""
+        }
+    }
+
+    func titleForFirstScreenWelcomeExperiment() -> String {
+        if NeevaExperiment.arm(for: .defaultBrowserWelcomeScreen) == .trackingMsg {
+            return "No Ads. No Tracking"
+        } else if NeevaExperiment.arm(for: .defaultBrowserWelcomeScreen) == .privacyMsg {
+            return "Privacy Made Easy"
+        } else {
+            return ""
+        }
+    }
+
+    func bodyForFirstScreenWelcomeExperiment() -> String {
+        if NeevaExperiment.arm(for: .defaultBrowserWelcomeScreen) == .trackingMsg {
+            return "You’re just a step away from blocking ads, trackers and annoying pop-ups"
+        } else if NeevaExperiment.arm(for: .defaultBrowserWelcomeScreen) == .privacyMsg {
+            return
+                "You’re just a step away from ad-free search, and browsing without the ads, trackers or pop-ups"
+        } else {
+            return ""
+        }
+    }
+
+    func bodyForSecondScreenWelcomeExperiment() -> String {
+        if NeevaExperiment.arm(for: .defaultBrowserWelcomeScreen) == .trackingMsg {
+            return "With Neeva as your default, you can open links without ads, trackers or pop-ups"
+        } else if NeevaExperiment.arm(for: .defaultBrowserWelcomeScreen) == .privacyMsg {
+            return
+                "With Neeva as your default, you can search and browse ad-free. No annoying trackers or pop-ups."
+        } else {
+            return ""
+        }
     }
 }

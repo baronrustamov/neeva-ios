@@ -54,19 +54,6 @@ public enum NeevaScopeSearch {
         case Place(result: PlaceResult)
         case PlaceList(result: PlaceListResult)
         case RichEntity(result: RichEntityResult)
-
-        var order: Int {
-            switch self {
-            case .RecipeBlock, .Place, .PlaceList, .RichEntity:
-                return 0
-            case .ProductCluster, .NewsGroup:
-                return 1
-            case .WebGroup:
-                return 2
-            case .RelatedSearches:
-                return 3
-            }
-        }
     }
 
     fileprivate struct PartialResult<T> {
@@ -926,11 +913,6 @@ public enum NeevaScopeSearch {
                     dataComplete: webResultsDataComplete
                 )
                 richResults.append(webRichResult)
-            }
-
-            // order the results
-            richResults.sort {
-                $0.result.order < $1.result.order
             }
 
             return richResults

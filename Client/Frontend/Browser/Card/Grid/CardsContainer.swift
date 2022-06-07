@@ -88,7 +88,7 @@ struct TabGridContainer: View {
                         SingleLevelTabCardsView(containerGeometry: geom, incognito: isIncognito)
                         Spacer()
                         if FeatureFlag[.enableArchivedTabsView]
-                            && tabModel.getRows(incognito: isIncognito).count > 0
+                            && tabModel.getRows(incognito: isIncognito).count > 1
                         {
                             ArchivedTabsView(containerGeometry: geom.size)
                         }
@@ -96,7 +96,7 @@ struct TabGridContainer: View {
                 } else {
                     SingleLevelTabCardsView(containerGeometry: geom, incognito: isIncognito)
                     if FeatureFlag[.enableArchivedTabsView] && !isIncognito
-                        && tabModel.getRows(incognito: isIncognito).count > 0
+                        && tabModel.getRows(incognito: isIncognito).count > 1
                     {
                         ArchivedTabsView(containerGeometry: geom.size)
                     }
@@ -230,9 +230,9 @@ struct CardsContainer: View {
                         gridModel.scrollToSelectedTab()
                     }
 
-                    // isolate ArchivedTabsView when there is no tab to make it not scrollable
+                    // isolate ArchivedTabsView when there is no tab or one row of tabs to make it not scrollable
                     if FeatureFlag[.enableArchivedTabsView]
-                        && tabModel.getRows(incognito: false).count == 0
+                        && tabModel.getRows(incognito: false).count < 2
                     {
                         VStack {
                             Spacer()

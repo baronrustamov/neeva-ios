@@ -548,7 +548,6 @@ class BrowserViewController: UIViewController, ModalPresenter {
             } else if let didDismiss = Defaults[.didDismissDefaultBrowserInterstitial],
                 !didDismiss
                     && !Defaults[.didFirstNavigation]
-                    && NeevaExperiment.arm(for: .defaultBrowserChangeButton) == .changeButton
             {
                 restoreDefaultBrowserFirstRun()
             }
@@ -809,13 +808,6 @@ class BrowserViewController: UIViewController, ModalPresenter {
                 self.tabManager.selectTab(tab, notify: true)
             }
         )
-    }
-
-    func openBlankNewTab(isIncognito: Bool = false) {
-        popToBVC()
-
-        let newTab = tabManager.addTab(isIncognito: isIncognito)
-        tabManager.select(newTab)
     }
 
     func openLazyTab(
