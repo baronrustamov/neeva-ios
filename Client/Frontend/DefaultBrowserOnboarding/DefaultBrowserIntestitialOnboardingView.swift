@@ -35,12 +35,6 @@ class DefaultBrowserInterstitialOnboardingViewController: UIHostingController<
                     .environmentObject(
                         InterstitialViewModel(
                             trigger: triggerFrom,
-                            showRemindButton:
-                                NeevaExperiment.arm(for: .defaultBrowserChangeButton)
-                                == .changeButton,
-                            inButtonTextExperiment:
-                                NeevaExperiment.arm(for: .defaultBrowserChangeButton)
-                                == .changeButton,
                             showCloseButton: false,
                             onOpenSettingsAction: {
                                 openSettings()
@@ -60,12 +54,8 @@ class DefaultBrowserInterstitialOnboardingViewController: UIHostingController<
                 openSettings: {}, onCancel: {}, onDismiss: {}, triggerFrom: triggerFrom))
         self.rootView = Content(
             openSettings: { [weak self] in
-                if NeevaExperiment.arm(for: .defaultBrowserChangeButton) == .changeButton {
+                self?.dismiss(animated: true) {
                     didOpenSettings()
-                } else {
-                    self?.dismiss(animated: true) {
-                        didOpenSettings()
-                    }
                 }
                 // Don't show default browser card if this button is tapped
                 Defaults[.didDismissDefaultBrowserCard] = true
@@ -186,7 +176,7 @@ struct DefaultBrowserInterstitialOnboardingView: View {
 
     var body: some View {
         ZStack {
-            if !interstitialModel.inButtonTextExperiment && interstitialModel.showCloseButton {
+            if interstitialModel.showCloseButton {
                 VStack {
                     HStack {
                         Spacer()

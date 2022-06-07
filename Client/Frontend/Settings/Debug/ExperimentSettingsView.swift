@@ -35,12 +35,6 @@ struct ExperimentSettingsView: View {
                     value: $valueTextPromoCard,
                     experiment: .promoCardTypeAfterFirstRun
                 )
-
-                OptionalPrefilledStringField<NeevaExperiment.DefaultBrowserChangeButton>(
-                    "DefaultBrowserChangeButton",
-                    value: $valueTextPromoCard,
-                    experiment: .defaultBrowserChangeButton
-                )
             }
         }
         .listStyle(.insetGrouped)

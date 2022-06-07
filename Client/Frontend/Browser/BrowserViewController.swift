@@ -548,7 +548,6 @@ class BrowserViewController: UIViewController, ModalPresenter {
             } else if let didDismiss = Defaults[.didDismissDefaultBrowserInterstitial],
                 !didDismiss
                     && !Defaults[.didFirstNavigation]
-                    && NeevaExperiment.arm(for: .defaultBrowserChangeButton) == .changeButton
             {
                 restoreDefaultBrowserFirstRun()
             }

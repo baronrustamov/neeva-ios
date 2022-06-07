@@ -120,10 +120,7 @@ extension BrowserViewController {
 // MARK: - Default Browser
 extension BrowserViewController {
     func presentDefaultBrowserFirstRun() {
-        let changeButtonArm = NeevaExperiment.startExperiment(for: .defaultBrowserChangeButton)
-        NeevaExperiment.logStartExperiment(for: .defaultBrowserChangeButton)
         let interstitialModel = InterstitialViewModel(
-            inButtonTextExperiment: changeButtonArm == .changeButton,
             onCloseAction: {
                 self.overlayManager.hideCurrentOverlay()
             }
@@ -153,9 +150,6 @@ extension BrowserViewController {
 
     func restoreDefaultBrowserFirstRun() {
         let interstitialModel = InterstitialViewModel(
-            inButtonTextExperiment: NeevaExperiment.arm(for: .defaultBrowserChangeButton)
-                == .changeButton,
-            restoreFromBackground: true,
             onCloseAction: {
                 self.overlayManager.hideCurrentOverlay()
             }
