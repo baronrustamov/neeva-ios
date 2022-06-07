@@ -108,4 +108,52 @@ class InterstitialViewModel: ObservableObject {
             ]
         )
     }
+
+    func isInWelcomeScreenExperimentArms() -> Bool {
+        return
+            NeevaExperiment.arm(for: .defaultBrowserWelcomeScreen) == .privacyMsg
+            || NeevaExperiment.arm(for: .defaultBrowserWelcomeScreen) == .trackingMsg
+    }
+
+    func imageForWelcomeExperiment() -> String {
+        if NeevaExperiment.arm(for: .defaultBrowserWelcomeScreen) == .trackingMsg {
+            return "neeva_interstitial_welcome_page"
+        } else if NeevaExperiment.arm(for: .defaultBrowserWelcomeScreen) == .privacyMsg {
+            return "neeva_interstitial_welcome_page"
+        } else {
+            return ""
+        }
+    }
+
+    func titleForFirstScreenWelcomeExperiment() -> String {
+        if NeevaExperiment.arm(for: .defaultBrowserWelcomeScreen) == .trackingMsg {
+            return "No Ads. No Tracking"
+        } else if NeevaExperiment.arm(for: .defaultBrowserWelcomeScreen) == .privacyMsg {
+            return "Privacy Made Easy"
+        } else {
+            return ""
+        }
+    }
+
+    func bodyForFirstScreenWelcomeExperiment() -> String {
+        if NeevaExperiment.arm(for: .defaultBrowserWelcomeScreen) == .trackingMsg {
+            return "You’re just a step away from blocking ads, trackers and annoying pop-ups"
+        } else if NeevaExperiment.arm(for: .defaultBrowserWelcomeScreen) == .privacyMsg {
+            return
+                "You’re just a step away from ad-free search, and browsing without the ads, trackers or pop-ups"
+        } else {
+            return ""
+        }
+    }
+
+    func bodyForSecondScreenWelcomeExperiment() -> String {
+        if NeevaExperiment.arm(for: .defaultBrowserWelcomeScreen) == .trackingMsg {
+            return "With Neeva as your default, you can open links without ads, trackers or pop-ups"
+        } else if NeevaExperiment.arm(for: .defaultBrowserWelcomeScreen) == .privacyMsg {
+            return
+                "With Neeva as your default, you can search and browse ad-free. No annoying trackers or pop-ups."
+        } else {
+            return ""
+        }
+    }
 }

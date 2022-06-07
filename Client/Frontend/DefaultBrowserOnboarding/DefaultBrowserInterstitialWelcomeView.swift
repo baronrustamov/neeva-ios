@@ -4,6 +4,7 @@
 
 import Defaults
 import Foundation
+import Shared
 import SwiftUI
 
 struct DefaultBrowserInterstitialWelcomeView: View {
@@ -13,19 +14,37 @@ struct DefaultBrowserInterstitialWelcomeView: View {
 
     @ViewBuilder
     var header: some View {
-        Text("Welcome to Neeva")
-            .font(.system(size: 32, weight: .light))
-            .padding(.bottom, 5)
-        Text("The first ad-free, private search engine")
-            .withFont(.bodyLarge)
+        if interstitialModel.isInWelcomeScreenExperimentArms() {
+            Image(interstitialModel.imageForWelcomeExperiment(), bundle: .main).resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(maxWidth: 475)
+                .border(Color.tertiaryLabel, width: 1).padding(.horizontal, -32)
+        } else {
+            Text("Welcome to Neeva")
+                .font(.system(size: 32, weight: .light))
+                .padding(.bottom, 5)
+            Text("The first ad-free, private search engine")
+                .withFont(.bodyLarge)
+        }
     }
 
     @ViewBuilder
     var detail: some View {
-        Image("default-browser-prompt", bundle: .main)
-            .resizable()
-            .frame(width: 300, height: 205)
-            .padding(.bottom, 32)
+        if interstitialModel.isInWelcomeScreenExperimentArms() {
+            VStack(alignment: .leading) {
+                Text(interstitialModel.titleForFirstScreenWelcomeExperiment())
+                    .font(.system(size: 32, weight: .bold))
+                    .padding(.bottom, 5)
+                Text(interstitialModel.bodyForFirstScreenWelcomeExperiment())
+                    .foregroundColor(Color.secondaryLabel)
+                    .withFont(.bodyXLarge)
+            }
+        } else {
+            Image("default-browser-prompt", bundle: .main)
+                .resizable()
+                .frame(width: 300, height: 205)
+                .padding(.bottom, 32)
+        }
     }
 
     var body: some View {
@@ -35,7 +54,8 @@ struct DefaultBrowserInterstitialWelcomeView: View {
             DefaultBrowserInterstitialView(
                 detail: detail,
                 header: header,
-                primaryButton: "Get Started",
+                primaryButton: interstitialModel.isInWelcomeScreenExperimentArms()
+                    ? "Let's go" : "Get Started",
                 primaryAction: {
                     switchToDefaultBrowserScreen = true
                     ClientLogger.shared.logCounter(.GetStartedInWelcome)
