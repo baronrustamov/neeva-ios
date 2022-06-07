@@ -33,7 +33,7 @@ class IntroViewModel: NSObject, ObservableObject {
     @Published var onSignInMode: Bool = false
     @Published var showSignInError = false
     @Published var showQRScanner = false
-    @Published var codeInstruction = "Scan QR Code"
+    @Published var qrcodeInstruction = ""
 
     public var signInErrorMessage: String = ""
     public var presentationController: UIViewController
@@ -437,71 +437,21 @@ extension IntroViewModel {
             presentCodeScannerView()
         @unknown default:
             self.overlayManager.hideCurrentOverlay()
-            self.toastViewManager.makeToast(text: "Unable to use QR Code Scanner")
+            self.toastViewManager.makeToast(text: "Unable to use the camera.")
         }
     }
 
     func presentCodeScannerView() {
+        self.qrcodeInstruction = "Please scan QR Code."
         overlayManager.presentFullScreenModal(
             content: AnyView(
-                ZStack(alignment: .topTrailing) {
-                    CodeScannerView(
-                        codeTypes: [.qr],
-                        scanMode: .continuous,
-                        scanInterval: 3.0,
-                        showViewfinder: true,
-                        shouldVibrateOnSuccess: true,
-                        completion: handleScan
-                    )
-                    VStack(alignment: .trailing) {
-                        CloseButton(action: {
-                            self.overlayManager.hideCurrentOverlay()
-                        })
-                        .padding(.trailing, 20)
-                        .padding(.top, 40)
-                        .background(Color.clear)
-                    }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
-                    VStack(alignment: .center) {
-                        Text(codeInstruction)
-                            .withFont(.displayMedium)
-                            .background(Color.clear)
+                ScannerCodeView()
+                    .environmentObject(self)
+                    .onAppear {
+                        AppDelegate.setRotationLock(to: .portrait)
+                    }.onDisappear {
+                        AppDelegate.setRotationLock(to: .all)
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-                    .padding(.bottom, 40)
-                }.frame(maxWidth: .infinity, maxHeight: .infinity)
-            )
-        )
-    }
-
-    func handleScan(result: Result<ScanResult, ScanError>) {
-        switch result {
-        case .success(let result):
-            guard let url = URL(string: result.string),
-                let delegate = SceneDelegate.getCurrentSceneDelegateOrNil()
-            else { return }
-            if !delegate.checkForSignInToken(in: url) {
-                self.codeInstruction = "Invalid QR Code. Please try again!"
-            } else {
-                self.showQRScanner = false
-                self.toastViewManager.makeToast(
-                    text: "Sign in successfully! Please close the QR Code"
-                )
-            }
-        case .failure(let error):
-            switch error {
-            case .badInput:
-                DispatchQueue.main.async {
-                    self.codeInstruction = "Please allow us to use the camera."
-                }
-            case .badOutput:
-                DispatchQueue.main.async {
-                    self.codeInstruction = "Cannot detect QR Code. Please try again!"
-                }
-            case .initError:
-                DispatchQueue.main.async {
-                    self.codeInstruction = "\(error.localizedDescription)"
-                }
-            }
-        }
+            ))
     }
 }
