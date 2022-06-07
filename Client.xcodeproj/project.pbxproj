@@ -354,7 +354,6 @@
 		4A42C48E27E58487003B9826 /* TransitionExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC3F332278CDE7E000CCE09 /* TransitionExtensions.swift */; };
 		4A42C48F27E58487003B9826 /* OverlayGenerics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B7A0E826EAF5B000AB751A /* OverlayGenerics.swift */; };
 		4A42C49027E58487003B9826 /* GroupedRowButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0405D0C25FFCA5100A0A3B2 /* GroupedRowButtonView.swift */; };
-		4A42C49127E58487003B9826 /* ImageThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C832BF8426E2DA2B00B9A1F8 /* ImageThumbnailView.swift */; };
 		4A42C49327E58487003B9826 /* TrackingPreventionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A255AAF265C48EB00422839 /* TrackingPreventionUtils.swift */; };
 		4A42C49427E58487003B9826 /* NavSuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6751BABA26AA173D007FC7EA /* NavSuggestionView.swift */; };
 		4A42C49527E58487003B9826 /* ZeroQueryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA14F1F264C7954003B815A /* ZeroQueryView.swift */; };
@@ -1066,7 +1065,6 @@
 		C832BF7B26E0B31B00B9A1F8 /* LazyTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6666D8C626D40278001AD43F /* LazyTabTests.swift */; };
 		C832BF8126E1566E00B9A1F8 /* CheatsheetOverlayContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C832BF8026E1566E00B9A1F8 /* CheatsheetOverlayContent.swift */; };
 		C832BF8326E15B5B00B9A1F8 /* OverflowMenuOverlayContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C832BF8226E15B5B00B9A1F8 /* OverflowMenuOverlayContent.swift */; };
-		C832BF8526E2DA2B00B9A1F8 /* ImageThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C832BF8426E2DA2B00B9A1F8 /* ImageThumbnailView.swift */; };
 		C832BF8726E3CA0900B9A1F8 /* SendFeedbackPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C832BF8626E3CA0900B9A1F8 /* SendFeedbackPanel.swift */; };
 		C8611C8E1F71904C00C3DE7D /* DiskImageStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BF8CBC1B7472FA0007AFE6 /* DiskImageStoreTests.swift */; };
 		C868193B27AF9C1A002ECEEF /* IncognitoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C868193A27AF9C1A002ECEEF /* IncognitoModel.swift */; };
@@ -2493,7 +2491,6 @@
 		C832BF5E26E0A9E400B9A1F8 /* HTTPAuthPromptOverlayContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPAuthPromptOverlayContent.swift; sourceTree = "<group>"; };
 		C832BF8026E1566E00B9A1F8 /* CheatsheetOverlayContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheatsheetOverlayContent.swift; sourceTree = "<group>"; };
 		C832BF8226E15B5B00B9A1F8 /* OverflowMenuOverlayContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverflowMenuOverlayContent.swift; sourceTree = "<group>"; };
-		C832BF8426E2DA2B00B9A1F8 /* ImageThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageThumbnailView.swift; sourceTree = "<group>"; };
 		C832BF8626E3CA0900B9A1F8 /* SendFeedbackPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendFeedbackPanel.swift; sourceTree = "<group>"; };
 		C850CD57269A00C40096F122 /* TabMenuTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabMenuTests.swift; sourceTree = "<group>"; };
 		C868193A27AF9C1A002ECEEF /* IncognitoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncognitoModel.swift; sourceTree = "<group>"; };
@@ -4746,7 +4743,6 @@
 			children = (
 				C9299E35268F9CF300758795 /* CloseButton.swift */,
 				C9BED4C8266824D7001D9C77 /* FadingHorizontalScrollView.swift */,
-				C832BF8426E2DA2B00B9A1F8 /* ImageThumbnailView.swift */,
 				E663D5771BB341C4001EF30E /* IncognitoButton.swift */,
 				C9E5F2CA2678F05E00025A7F /* Popover.swift */,
 				C9655DE826A08FA600925912 /* PressReportingButtonStyle.swift */,
@@ -7080,7 +7076,6 @@
 				4A42C49027E58487003B9826 /* GroupedRowButtonView.swift in Sources */,
 				E67B0B412809BC8C008D1CCD /* WalletListSeparatorModifier.swift in Sources */,
 				E67B0B432809BCA9008D1CCD /* SessionActionsModifier.swift in Sources */,
-				4A42C49127E58487003B9826 /* ImageThumbnailView.swift in Sources */,
 				E67CD27427F33BCA007BFE58 /* ZeroQueryPlaceholder.swift in Sources */,
 				E67B0B3D2809BBDC008D1CCD /* YourNFTsView.swift in Sources */,
 				4A42C49327E58487003B9826 /* TrackingPreventionUtils.swift in Sources */,
@@ -7702,7 +7697,6 @@
 				1AC3F333278CDE7E000CCE09 /* TransitionExtensions.swift in Sources */,
 				66B7A0E926EAF5B000AB751A /* OverlayGenerics.swift in Sources */,
 				66A187C627A1C4DC006B3295 /* GroupedRowButtonView.swift in Sources */,
-				C832BF8526E2DA2B00B9A1F8 /* ImageThumbnailView.swift in Sources */,
 				4A255AB2265C48EC00422839 /* TrackingPreventionUtils.swift in Sources */,
 				6751BABB26AA173D007FC7EA /* NavSuggestionView.swift in Sources */,
 				4AA14F20264C7954003B815A /* ZeroQueryView.swift in Sources */,
