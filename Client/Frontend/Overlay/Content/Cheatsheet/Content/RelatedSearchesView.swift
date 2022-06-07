@@ -5,16 +5,17 @@
 import Shared
 import SwiftUI
 
-struct RelatedSearchesView: View {
-    let relatedSearches: [String]
+// RandomAccessCollection is to satisfy the requirements of `ForEach`
+struct RelatedSearchesView<T: RandomAccessCollection>: View where T.Element == String {
+    let title: String
+    let searches: T
 
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("People Also Search")
+        VStack(alignment: .leading, spacing: 10) {
+            Text(title)
                 .withFont(.headingXLarge)
-                .padding(.bottom, 6)
 
-            ForEach(relatedSearches, id: \.self) { search in
+            ForEach(searches, id: \.self) { search in
                 QueryButtonView(query: search)
             }
         }
