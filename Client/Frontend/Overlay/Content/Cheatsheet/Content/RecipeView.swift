@@ -18,9 +18,18 @@ struct RecipeView: View {
     let yield: String?
     let recipeRating: RecipeRating?
     let reviews: [Review]?
-    let faviconURL: URL?
-    let currentURL: URL?
-    let tabUUID: String?
+
+    init(recipe: Recipe) {
+        self.title = recipe.title
+        self.imageURL = recipe.imageURL
+        self.totalTime = recipe.totalTime
+        self.prepTime = recipe.prepTime
+        self.ingredients = recipe.ingredients
+        self.instructions = recipe.instructions
+        self.yield = recipe.yield
+        self.recipeRating = recipe.recipeRating
+        self.reviews = recipe.reviews
+    }
 
     var body: some View {
         ScrollViewReader { scrollViewReader in
@@ -35,21 +44,6 @@ struct RecipeView: View {
                                 .id("Top")
                         }
                         ratingStarsComp
-                        HStack {
-                            if let faviconURL = faviconURL {
-                                WebImage(url: faviconURL)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 16, height: 16)
-                                    .clipShape(Circle())
-                                    .cornerRadius(6)
-                            }
-                            if let currentURL = currentURL {
-                                Text(currentURL.baseDomain ?? "")
-                                    .withFont(.bodySmall)
-                                    .foregroundColor(Color.label)
-                            }
-                        }
                     }
                     Spacer()
                     HStack {

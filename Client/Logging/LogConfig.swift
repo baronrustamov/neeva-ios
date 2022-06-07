@@ -339,6 +339,7 @@ public struct LogConfig {
         case CheatsheetQueryFallback
         case OpenCheatsheetSupport
         case CheatsheetBadURLString
+        case CheatsheetFetchError
 
         // MARK: tab group
         case tabGroupExpanded
@@ -677,6 +678,7 @@ public struct LogConfig {
         case .CheatsheetQueryFallback: return .Cheatsheet
         case .OpenCheatsheetSupport: return .Cheatsheet
         case .CheatsheetBadURLString: return .Cheatsheet
+        case .CheatsheetFetchError: return .Cheatsheet
 
         // MARK: - TabGroup
         case .tabGroupExpanded: return .TabGroup
@@ -827,12 +829,18 @@ public struct LogConfig {
         public static let currentPageURL = "currentCheatsheetPageURL"
         public static let cheatsheetQuerySource = "cheatsheetQuerySource"
         public static let openLinkSource = "openLinkSource"
+        public static let api = "api"
 
         public enum QuerySource: String {
             case uToQ
             case fastTapQuery
             case typedQuery
             case pageURL
+        }
+
+        public enum API: String {
+            case getInfo
+            case search
         }
     }
 
