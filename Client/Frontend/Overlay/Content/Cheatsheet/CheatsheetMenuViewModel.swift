@@ -95,15 +95,18 @@ public class CheatsheetMenuViewModel: ObservableObject {
             unwrappedURL = unwrapped
         }
 
-        guard let url = unwrappedURL,
-            ["https", "http"].contains(url.scheme),
+        guard let url = unwrappedURL else {
+            self.cheatsheetDataLoading = false
+            return
+        }
+        sourcePage = SourcePage(title: pageTitle, url: url)
+
+        guard ["https", "http"].contains(url.scheme),
             !NeevaConstants.isInNeevaDomain(url)
         else {
             self.cheatsheetDataLoading = false
             return
         }
-
-        sourcePage = SourcePage(title: pageTitle, url: url)
 
         CheatsheetQueryController.getCheatsheetInfo(
             url: url.absoluteString, title: pageTitle ?? ""
