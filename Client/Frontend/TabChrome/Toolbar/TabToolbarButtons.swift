@@ -248,6 +248,22 @@ enum TabToolbarButtons {
         }
     #endif
 
+    struct CloseTab: View {
+        let action: () -> Void
+
+        @EnvironmentObject private var model: TabChromeModel
+
+        var body: some View {
+            TabToolbarButton(
+                label: Symbol(
+                    .trash,
+                    size: 20, weight: .medium, label: "Close Tab Shortcut"),
+                action: action
+            )
+            .disabled(!model.isPage || model.isErrorPage)
+        }
+    }
+
     struct AddToSpace: View {
         let weight: NiconFont
         let action: () -> Void

@@ -43,6 +43,8 @@ public struct LogConfig {
         case ClickBack
         /// Click forward button to navigate to next page
         case ClickForward
+        /// Click close button to close current tab
+        case ClickClose
         /// Tap and Hold forward button to show navigation stack
         case LongPressForward
 
@@ -479,6 +481,7 @@ public struct LogConfig {
         case .TurnOffIncognitoMode: return .UI
         case .ClickBack: return .UI
         case .ClickForward: return .UI
+        case .ClickClose: return .UI
         case .LongPressForward: return .UI
         case .PreviewPreferredProviderSignIn: return .UI
         case .TurnOnBlockTracking: return .UI

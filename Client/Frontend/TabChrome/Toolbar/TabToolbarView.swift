@@ -14,6 +14,7 @@ import SwiftUI
 struct TabToolbarView: View {
     @EnvironmentObject var chromeModel: TabChromeModel
     @EnvironmentObject var scrollingControlModel: ScrollingControlModel
+    @EnvironmentObject private var incognitoModel: IncognitoModel
     @Default(.currentTheme) var currentTheme
 
     let performAction: (ToolbarAction) -> Void
@@ -62,8 +63,13 @@ struct TabToolbarView: View {
                 identifier: "TabOverflowButton"
             )
             neevaButton
-            TabToolbarButtons.AddToSpace(
-                weight: .medium, action: { performAction(.addToSpace) })
+            if incognitoModel.isIncognito && FeatureFlag[.incognitoQuickClose] {
+                TabToolbarButtons.CloseTab(
+                    action: { performAction(.closeTab) })
+            } else {
+                TabToolbarButtons.AddToSpace(
+                    weight: .medium, action: { performAction(.addToSpace) })
+            }
             TabToolbarButtons.ShowTabs(
                 weight: .medium,
                 action: { performAction(.showTabs) },
