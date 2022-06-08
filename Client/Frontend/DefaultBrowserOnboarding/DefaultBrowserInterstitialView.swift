@@ -6,6 +6,8 @@ import Foundation
 import SwiftUI
 
 struct DefaultBrowserInterstitialView<Detail: View, Header: View>: View {
+    @EnvironmentObject var interstitialModel: InterstitialViewModel
+
     var detail: Detail
     var header: Header
     var primaryButton: String
@@ -59,6 +61,9 @@ struct DefaultBrowserInterstitialView<Detail: View, Header: View>: View {
                     }
                 )
                 .padding(.top, 10)
+            }
+            if interstitialModel.isInWelcomeScreenExperimentArms() && secondaryButton == nil {
+                Spacer()
             }
             Spacer()
         }

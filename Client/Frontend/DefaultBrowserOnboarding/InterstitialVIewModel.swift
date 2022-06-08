@@ -117,9 +117,9 @@ class InterstitialViewModel: ObservableObject {
 
     func imageForWelcomeExperiment() -> String {
         if NeevaExperiment.arm(for: .defaultBrowserWelcomeScreen) == .trackingMsg {
-            return "neeva_interstitial_welcome_page"
+            return "neeva_interstitial_welcome_page_tracking"
         } else if NeevaExperiment.arm(for: .defaultBrowserWelcomeScreen) == .privacyMsg {
-            return "neeva_interstitial_welcome_page"
+            return "neeva_interstitial_welcome_page_privacy"
         } else {
             return ""
         }
@@ -140,7 +140,7 @@ class InterstitialViewModel: ObservableObject {
             return "You’re just a step away from blocking ads, trackers and annoying pop-ups"
         } else if NeevaExperiment.arm(for: .defaultBrowserWelcomeScreen) == .privacyMsg {
             return
-                "You’re just a step away from ad-free search, and browsing without the ads, trackers or pop-ups"
+                "You’re just a step away from ad-free search, and browsing without ads, trackers or pop-ups"
         } else {
             return ""
         }

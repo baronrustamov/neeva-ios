@@ -113,7 +113,7 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                 interstitialModel.bodyForSecondScreenWelcomeExperiment()
             )
             .withFont(.bodyXLarge)
-            .foregroundColor(.secondaryLabel)
+            .foregroundColor(Color.ui.gray30)
         } else {
             Text("Make Neeva your Default Browser")
                 .font(.system(size: 32, weight: .light))
