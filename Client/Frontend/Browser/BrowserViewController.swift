@@ -545,11 +545,6 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
                 _ = NeevaExperiment.startExperiment(for: .promoCardTypeAfterFirstRun)
                 NeevaExperiment.logStartExperiment(for: .promoCardTypeAfterFirstRun)
-            } else if let didDismiss = Defaults[.didDismissDefaultBrowserInterstitial],
-                !didDismiss
-                    && !Defaults[.didFirstNavigation]
-            {
-                restoreDefaultBrowserFirstRun()
             }
         }
 
