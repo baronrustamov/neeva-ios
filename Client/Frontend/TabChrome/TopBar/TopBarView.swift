@@ -23,6 +23,7 @@ struct TopBarView: View {
     @EnvironmentObject private var chrome: TabChromeModel
     @EnvironmentObject private var location: LocationViewModel
     @EnvironmentObject private var scrollingControlModel: ScrollingControlModel
+    @EnvironmentObject private var incognitoModel: IncognitoModel
 
     private var separator: some View {
         Color.ui.adaptive.separator.frame(height: 0.5).ignoresSafeArea()
@@ -82,10 +83,16 @@ struct TopBarView: View {
                     Group {
                         TopBarNeevaButton(onMenuAction: onMenuAction)
 
-                        TabToolbarButtons.AddToSpace(
-                            weight: .regular, action: { performTabToolbarAction(.addToSpace) }
-                        )
-                        .tapTargetFrame()
+                        if incognitoModel.isIncognito && FeatureFlag[.incognitoQuickClose] {
+                            TabToolbarButtons.CloseTab(
+                                action: { performTabToolbarAction(.closeTab) })
+                                .tapTargetFrame()
+                        } else {
+                            TabToolbarButtons.AddToSpace(
+                                weight: .regular, action: { performTabToolbarAction(.addToSpace) }
+                            )
+                            .tapTargetFrame()
+                        }
 
                         TabToolbarButtons.ShowTabs(
                             weight: .regular, action: { performTabToolbarAction(.showTabs) },
