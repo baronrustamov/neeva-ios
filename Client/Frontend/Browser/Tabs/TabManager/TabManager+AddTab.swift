@@ -30,7 +30,7 @@ extension TabManager {
                 tab.rootUUID = rootUUID
             }
 
-            self.updateTabGroupsAndSendNotifications(notify: false)
+            self.updateAllTabDataAndSendNotifications(notify: false)
         }
 
         // Select the most recent.
@@ -172,7 +172,7 @@ extension TabManager {
         }
 
         if notify {
-            updateTabGroupsAndSendNotifications(notify: notify)
+            updateAllTabDataAndSendNotifications(notify: notify)
         }
     }
 
@@ -259,7 +259,7 @@ extension TabManager {
             }
         }
 
-        updateTabGroupsAndSendNotifications(notify: true)
+        updateAllTabDataAndSendNotifications(notify: true)
 
         // Prevents a sticky tab tray
         SceneDelegate.getBVC(with: scene).browserModel.cardTransitionModel.update(to: .hidden)

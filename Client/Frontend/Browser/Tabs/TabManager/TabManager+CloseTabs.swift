@@ -60,10 +60,10 @@ extension TabManager {
         }
 
         if notify {
-            updateTabGroupsAndSendNotifications(notify: true)
+            updateAllTabDataAndSendNotifications(notify: true)
             sendSelectTabNotifications(previous: previous)
         } else {
-            updateTabGroupsAndSendNotifications(notify: false)
+            updateAllTabDataAndSendNotifications(notify: false)
         }
 
         storeChanges()
@@ -87,7 +87,7 @@ extension TabManager {
 
         if notify {
             TabEvent.post(.didClose, for: tab)
-            updateTabGroupsAndSendNotifications(notify: notify)
+            updateAllTabDataAndSendNotifications(notify: notify)
         }
 
         if flushToDisk {

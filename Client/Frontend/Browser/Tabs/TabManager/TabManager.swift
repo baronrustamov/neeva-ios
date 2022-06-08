@@ -51,7 +51,7 @@ class TabManager: NSObject {
     /// Will also update if the `WebView` is set to nil.
     private(set) var selectedTabWebViewPublisher = CurrentValueSubject<WKWebView?, Never>(nil)
     /// A publisher that refreshes data in ArchivedTabsPanelModel, which should happen after
-    ///  updateTabGroupsAndSendNotifications runs.
+    ///  updateAllTabDataAndSendNotifications runs.
     private(set) var updateArchivedTabsPublisher = PassthroughSubject<Void, Never>()
     private var selectedTabSubscription: AnyCancellable?
     private var selectedTabURLSubscription: AnyCancellable?
@@ -144,7 +144,7 @@ class TabManager: NSObject {
         archivedTabsDurationSubscription =
             _archivedTabsDuration.publisher.dropFirst().sink {
                 [weak self] _ in
-                self?.updateTabGroupsAndSendNotifications(notify: false)
+                self?.updateAllTabDataAndSendNotifications(notify: false)
                 // update CardGrid and ArchivedTabsPanelView with the latest data
                 self?.updateArchivedTabsPublisher.send()
             }
@@ -266,7 +266,7 @@ class TabManager: NSObject {
 
         if isArchived {
             // Tab data needs to be updated when a tab is brought back from archives.
-            updateTabGroupsAndSendNotifications(notify: true)
+            updateAllTabDataAndSendNotifications(notify: true)
         }
 
         if notify {
@@ -457,19 +457,26 @@ class TabManager: NSObject {
         tabs.rearrange(from: fromIndex, to: toIndex)
 
         if notify {
-            tabsUpdatedPublisher.send()
+            updateActiveTabsAndSendNotifications(notify: true)
         }
 
         preserveTabs()
     }
 
-    // Tab Group related functions
-    internal func updateTabGroupsAndSendNotifications(notify: Bool) {
+    func updateActiveTabsAndSendNotifications(notify: Bool) {
         activeTabs =
             incognitoTabs
             + normalTabs.filter {
                 return !$0.isArchived
             }
+
+        if notify {
+            tabsUpdatedPublisher.send()
+        }
+    }
+
+    internal func updateAllTabDataAndSendNotifications(notify: Bool) {
+        updateActiveTabsAndSendNotifications(notify: false)
 
         archivedTabs = normalTabs.filter {
             return $0.isArchived
@@ -514,9 +521,10 @@ class TabManager: NSObject {
         tabsUpdatedPublisher.send()
     }
 
+    // Tab Group related functions
     func removeTabFromTabGroup(_ tab: Tab) {
         tab.rootUUID = UUID().uuidString
-        updateTabGroupsAndSendNotifications(notify: true)
+        updateAllTabDataAndSendNotifications(notify: true)
     }
 
     func getTabGroup(for rootUUID: String) -> TabGroup? {
