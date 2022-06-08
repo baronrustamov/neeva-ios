@@ -36,7 +36,7 @@ struct DefaultBrowserInterstitialWelcomeView: View {
                     .font(.system(size: 32, weight: .bold))
                     .padding(.bottom, 5)
                 Text(interstitialModel.bodyForFirstScreenWelcomeExperiment())
-                    .foregroundColor(Color.secondaryLabel)
+                    .foregroundColor(Color.ui.gray30)
                     .withFont(.bodyXLarge)
             }
         } else {
