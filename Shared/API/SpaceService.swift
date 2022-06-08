@@ -45,6 +45,12 @@ public protocol SpaceService {
     func deleteSpaceItems(spaceID: String, ids: [String]) -> DeleteSpaceItemsRequest?
 
     @discardableResult
+    func deleteSpaceResultByUrlMutation(
+        spaceId: String, url: String,
+        completion: @escaping (Result<DeleteSpaceResultByUrlMutation.Data, Error>) -> Void
+    ) -> Cancellable?
+
+    @discardableResult
     func getRelatedSpacesCountData(
         spaceID: String,
         completion: @escaping (Result<Int, Error>) -> Void

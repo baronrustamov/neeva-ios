@@ -138,6 +138,37 @@ public class SpaceServiceMock: SpaceService {
         return nil
     }
 
+    public func deleteSpaceResultByUrlMutation(
+        spaceId: String, url: String,
+        completion: @escaping (Result<DeleteSpaceResultByUrlMutation.Data, Error>) -> Void
+    ) -> Combine.Cancellable? {
+        // If your test is triggering this guard, make sure to double-check that a Space
+        // exists with the id "spaceId"
+        guard var spaceMock = spaces[spaceId], var spaceDataMock = spacesData[spaceId] else {
+            return nil
+        }
+
+        spaceMock.space.space?.lastModifiedTs = ISO8601DateFormatter().string(from: Date())
+        spaceMock.space.space?.resultCount! -= 1
+
+        spaceDataMock.spaceData.entities = spaceDataMock.spaceData.entities.filter {
+            $0.url?.absoluteString != url
+        }
+
+        // Simulate a network request
+        DispatchQueue.main.async {
+            completion(
+                Result<DeleteSpaceResultByUrlMutation.Data, Error>(catching: {
+                    return DeleteSpaceResultByUrlMutation.Data(deleteSpaceResultByUrl: true)
+                })
+            )
+        }
+
+        return AnyCancellable {
+            // do nothing
+        }
+    }
+
     public func getRelatedSpacesCountData(
         spaceID: String,
         completion: @escaping (Result<Int, Error>) -> Void

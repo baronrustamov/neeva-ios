@@ -722,4 +722,12 @@ public class SpaceStore: ObservableObject {
     public func unfollowSpace(spaceId: String) -> UnfollowSpaceRequest? {
         return SpaceServiceProvider.shared.unfollowSpace(spaceID: spaceId)
     }
+
+    public func removeItemFromSpace(
+        spaceId: String, url: String,
+        completion: @escaping (Result<DeleteSpaceResultByUrlMutation.Data, Error>) -> Void
+    ) -> Combine.Cancellable? {
+        return SpaceServiceProvider.shared.deleteSpaceResultByUrlMutation(
+            spaceId: spaceId, url: url, completion: completion)
+    }
 }
