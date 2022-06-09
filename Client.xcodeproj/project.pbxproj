@@ -89,8 +89,8 @@
 		206954A427FF4257000360D6 /* SiteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206954A327FF4257000360D6 /* SiteListView.swift */; };
 		206954A627FF425B000360D6 /* SiteRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206954A527FF425B000360D6 /* SiteRowView.swift */; };
 		206954A827FF449E000360D6 /* RecentlyClosedTabsPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206954A727FF449E000360D6 /* RecentlyClosedTabsPanelView.swift */; };
-		2097EC152835B4EB00A41DD8 /* SceneUIState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2097EC142835B4EB00A41DD8 /* SceneUIState.swift */; };
 		206C58AA28448E2E00216F65 /* OrientationDependentStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2034988D2843307C00799544 /* OrientationDependentStack.swift */; };
+		2097EC152835B4EB00A41DD8 /* SceneUIState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2097EC142835B4EB00A41DD8 /* SceneUIState.swift */; };
 		209CD9A327DBF9F20069675C /* TabGroupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209CD9A227DBF9F20069675C /* TabGroupTests.swift */; };
 		20A5D15327F6A43E00DB88FE /* HistoryPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A5D15227F6A43E00DB88FE /* HistoryPanelView.swift */; };
 		20BB666C2821E0F0001FA7E9 /* ChangeNotificationPreferenceDialogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BB666B2821E0F0001FA7E9 /* ChangeNotificationPreferenceDialogView.swift */; };
@@ -1520,8 +1520,6 @@
 		E975C93827F23A3200945FD3 /* PlaceViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E975C93727F23A3200945FD3 /* PlaceViews.swift */; };
 		E975C93A27F3BABE00945FD3 /* PlaceViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E975C93927F3BABE00945FD3 /* PlaceViewModels.swift */; };
 		E97D7E842834A91100944EF5 /* BloomFilterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97D7E832834A91100944EF5 /* BloomFilterManager.swift */; };
-		E97D7E872834AF0E00944EF5 /* reddit.bin in Resources */ = {isa = PBXBuildFile; fileRef = E97D7E862834AF0D00944EF5 /* reddit.bin */; };
-		E97D7E892834B87B00944EF5 /* test_urls_out.bin in Resources */ = {isa = PBXBuildFile; fileRef = E97D7E882834B87B00944EF5 /* test_urls_out.bin */; };
 		E9D7BD7D282C7EF60033CBAD /* Hashes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D7BD7C282C7EF60033CBAD /* Hashes.swift */; };
 		E9D7BD7F282F4E6A0033CBAD /* BloomFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D7BD7E282F4E6A0033CBAD /* BloomFilter.swift */; };
 		E9EC25FF283C337F00B9A79B /* CheatsheetUGCIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EC25FE283C337F00B9A79B /* CheatsheetUGCIndicatorView.swift */; };
@@ -2911,8 +2909,6 @@
 		E975C93727F23A3200945FD3 /* PlaceViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceViews.swift; sourceTree = "<group>"; };
 		E975C93927F3BABE00945FD3 /* PlaceViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceViewModels.swift; sourceTree = "<group>"; };
 		E97D7E832834A91100944EF5 /* BloomFilterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloomFilterManager.swift; sourceTree = "<group>"; };
-		E97D7E862834AF0D00944EF5 /* reddit.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = reddit.bin; sourceTree = "<group>"; };
-		E97D7E882834B87B00944EF5 /* test_urls_out.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = test_urls_out.bin; sourceTree = "<group>"; };
 		E9D7BD7C282C7EF60033CBAD /* Hashes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hashes.swift; sourceTree = "<group>"; };
 		E9D7BD7E282F4E6A0033CBAD /* BloomFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BloomFilter.swift; sourceTree = "<group>"; };
 		E9EC25FE283C337F00B9A79B /* CheatsheetUGCIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheatsheetUGCIndicatorView.swift; sourceTree = "<group>"; };
@@ -5101,15 +5097,6 @@
 			path = BloomFilter;
 			sourceTree = "<group>";
 		};
-		E97D7E852834AEDA00944EF5 /* BloomFilter */ = {
-			isa = PBXGroup;
-			children = (
-				E97D7E862834AF0D00944EF5 /* reddit.bin */,
-				E97D7E882834B87B00944EF5 /* test_urls_out.bin */,
-			);
-			path = BloomFilter;
-			sourceTree = "<group>";
-		};
 		E9B510B2284839F1008250B4 /* Content */ = {
 			isa = PBXGroup;
 			children = (
@@ -5382,7 +5369,6 @@
 		F84B21EB1A0910F600AAB793 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				E97D7E852834AEDA00944EF5 /* BloomFilter */,
 				E699220D1B94E3EF007C480D /* About */,
 				D0FCF8031FE4772C004A7995 /* AllFramesAtDocumentEnd.js */,
 				D03F8F22200EAC1E003C2224 /* AllFramesAtDocumentStart.js */,
@@ -6495,7 +6481,6 @@
 				4A7AC46427F27471001EFB8F /* XYZLaunchScreen.xib in Resources */,
 				C9AFE6E126582ACE000C5A03 /* Error.css in Resources */,
 				3BC659591E5BA505006D560F /* top_sites.json in Resources */,
-				E97D7E872834AF0E00944EF5 /* reddit.bin in Resources */,
 				BC6D34842622D4DE0050DEC4 /* Roobert-Bold.otf in Resources */,
 				BC6D34852622D4DE0050DEC4 /* Roobert-Heavy.otf in Resources */,
 				BCC138B12656CBF20018D87D /* nicons-600.ttf in Resources */,
@@ -6533,7 +6518,6 @@
 				C9DACFEB269CEFE600456020 /* KMCGeigerCounterTick.aiff in Resources */,
 				BC93EE862654E31300D1AA07 /* Color.xcassets in Resources */,
 				E4A961381AC06FA50069AD6F /* ReaderViewLoading.html in Resources */,
-				E97D7E892834B87B00944EF5 /* test_urls_out.bin in Resources */,
 				672D1C58280A0A3B0043F4E6 /* easy_list.json in Resources */,
 				F80983C528387B6D0039FCBD /* System@2x.png in Resources */,
 				E4ECCDAE1AB131770005E717 /* FiraSans-Medium.ttf in Resources */,
