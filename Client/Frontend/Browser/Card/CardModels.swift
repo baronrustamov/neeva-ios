@@ -45,15 +45,25 @@ class TabCardModel: CardModel {
     private(set) var allTabGroupDetails: [TabGroupCardDetails] = []
 
     @Default(.tabGroupExpanded) private var tabGroupExpanded: Set<String>
+    @Default(.archivedTabsDuration) var archivedTabsDuration
     var needsUpdateRows: Bool = false
     static let todayRowHeaderID: String = "today-header"
     static let lastweekRowHeaderID: String = "lastWeek-header"
+    static let lastMonthRowHeaderID: String = "lastMonth-header"
+    static let olderRowHeaderID: String = "older-header"
 
     // Find Tab
-    @Published var isSearchingForTabs: Bool = false
+    @Published var isSearchingForTabs: Bool = false {
+        didSet {
+            // Reset the filter whenever the state changes.
+            tabSearchFilter = ""
+        }
+    }
     @Published var tabSearchFilter = "" {
         didSet {
-            updateRowsIfNeeded(force: true)
+            if oldValue != tabSearchFilter {
+                updateIfNeeded(forceUpdateRows: true)
+            }
         }
     }
 
@@ -61,12 +71,17 @@ class TabCardModel: CardModel {
 
     private func updateRows() {
         if FeatureFlag[.enableTimeBasedSwitcher] {
-            timeBasedIncognitoRows[.today] = buildRows(incognito: true, byTime: .today)
             timeBasedNormalRows[.today] = buildRows(incognito: false, byTime: .today)
-            timeBasedIncognitoRows[.lastWeek] = buildRows(
-                incognito: true, byTime: .lastWeek)
             timeBasedNormalRows[.lastWeek] = buildRows(
                 incognito: false, byTime: .lastWeek)
+            // TODO: in the future, we might apply time-based treatments to incognito mode.
+            incognitoRows = buildRows(incognito: true)
+            if archivedTabsDuration == .month {
+                timeBasedNormalRows[.lastMonth] = buildRows(incognito: false, byTime: .lastMonth)
+            } else if archivedTabsDuration == .forever {
+                timeBasedNormalRows[.lastMonth] = buildRows(incognito: false, byTime: .lastMonth)
+                timeBasedNormalRows[.overAMonth] = buildRows(incognito: false, byTime: .overAMonth)
+            }
         } else {
             incognitoRows = buildRows(incognito: true)
             normalRows = buildRows(incognito: false)
@@ -77,8 +92,8 @@ class TabCardModel: CardModel {
         self.objectWillChange.send()
     }
 
-    func updateRowsIfNeeded(force: Bool = false) {
-        if needsUpdateRows || force {
+    func updateIfNeeded(forceUpdateRows: Bool = false) {
+        if needsUpdateRows || forceUpdateRows {
             needsUpdateRows = false
             updateRows()
         }
@@ -87,14 +102,26 @@ class TabCardModel: CardModel {
     func getRows(incognito: Bool) -> [Row] {
         var returnValue: [Row] = []
 
+        func getOlderRows() -> [Row] {
+            if archivedTabsDuration == .month {
+                return (timeBasedNormalRows[.lastMonth] ?? [])
+            }
+            if archivedTabsDuration == .forever {
+                return (timeBasedNormalRows[.lastMonth] ?? [])
+                    + (timeBasedNormalRows[.overAMonth] ?? [])
+            }
+            return []
+        }
+
         if FeatureFlag[.enableTimeBasedSwitcher] {
             if incognito {
                 returnValue =
-                    (timeBasedIncognitoRows[.today] ?? [])
-                    + (timeBasedIncognitoRows[.lastWeek] ?? [])
+                    // TODO: in the future, we might apply time-based treatments to incognito mode.
+                    incognitoRows
             } else {
                 returnValue =
                     (timeBasedNormalRows[.today] ?? []) + (timeBasedNormalRows[.lastWeek] ?? [])
+                    + getOlderRows()
             }
         } else {
             returnValue = incognito ? incognitoRows : normalRows
@@ -153,9 +180,16 @@ class TabCardModel: CardModel {
                 case .tabGroupGridRow(let details, let range):
                     return details.allDetails[range].reduce("") { $0 + $1.id + ":" }
                 case .sectionHeader(let timeFilter):
-                    return timeFilter.rawValue == "Last Week"
-                        ? TabCardModel.lastweekRowHeaderID
-                        : TabCardModel.todayRowHeaderID
+                    switch timeFilter {
+                    case .today:
+                        return TabCardModel.todayRowHeaderID
+                    case .lastWeek:
+                        return lastweekRowHeaderID
+                    case .lastMonth:
+                        return lastMonthRowHeaderID
+                    case .overAMonth:
+                        return olderRowHeaderID
+                    }
                 }
             }
 
@@ -184,6 +218,15 @@ class TabCardModel: CardModel {
                     return 0
                 }
             }
+
+            var isTabGroup: Bool {
+                switch self {
+                case .tabGroupInline, .tabGroupGridRow:
+                    return true
+                default:
+                    return false
+                }
+            }
         }
         var cells: [Cell]
         var index: Int?
@@ -199,7 +242,7 @@ class TabCardModel: CardModel {
             let tabGroup = manager.getTabGroup(for: tab)
             return (tabGroup == nil || isRepresentativeTab(tab, in: tabGroup!))
                 && tab.isIncognito == incognito
-                && (FeatureFlag[.enableTimeBasedSwitcher]
+                && (FeatureFlag[.enableTimeBasedSwitcher] && !incognito
                     ? (tabGroup != nil
                         ? tabGroup!.wasLastExecuted(byTime!) : tab.wasLastExecuted(byTime!)) : true)
                 && tabIncludedInSearch(tabCard)
@@ -334,16 +377,20 @@ class TabCardModel: CardModel {
     }
 
     func onDataUpdated() {
-        allDetails = manager.getAll()
-            .map { TabCardDetails(tab: $0, manager: manager) }
+        allDetails =
+            FeatureFlag[.enableArchivedTabsView]
+            ? manager.activeTabs
+                .map { TabCardDetails(tab: $0, manager: manager) }
+            : manager.getAll().map { TabCardDetails(tab: $0, manager: manager) }
 
         if FeatureFlag[.reverseChronologicalOrdering] {
             allDetails = allDetails.reversed()
         }
 
-        allTabGroupDetails = manager.tabGroups.map { id, group in
-            TabGroupCardDetails(tabGroup: group, tabManager: manager)
-        }
+        allTabGroupDetails =
+            manager.activeTabGroups.map { id, group in
+                TabGroupCardDetails(tabGroup: group, tabManager: manager)
+            }
 
         // When the number of tabs in a tab group decreases and makes the group
         // unable to expand, we remove the group from the expanded list. A side-effect
@@ -426,6 +473,10 @@ class TabCardModel: CardModel {
 
         _tabGroupExpanded.publisher.sink { [weak self] _ in
             self?.updateRows()
+        }.store(in: &subscription)
+
+        manager.updateArchivedTabsPublisher.sink { [weak self] _ in
+            self?.onDataUpdated()
         }.store(in: &subscription)
     }
 }

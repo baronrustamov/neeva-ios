@@ -8,153 +8,9 @@ import Foundation
 import Shared
 import SwiftUI
 
-public class CheatsheetPromoModel: ObservableObject {
-    enum PromoType {
-        case tryCheatsheet
-        case UGC
-    }
-
-    // MARK: - Static Properties
-    static let bloomFilterManager = BloomFilterManager()
-    private static let queue = DispatchQueue(
-        label: "co.neeva.app.ios.browser.CheatsheetPromoModel",
-        qos: .userInteractive,
-        attributes: [],
-        autoreleaseFrequency: .inherit,
-        target: nil
-    )
-    static let ugcIndicatorDurationS: TimeInterval = 4
-
-    // MARK: - Published Properties
-    @Published var showPromo: Bool = false
-    @Published var showBubble: Bool = false
-
-    // MARK: - Private Properties
-    private var promoType: PromoType?
-    private var urlSubscription: AnyCancellable?
-    private var ugcIndicatorDismissTimer: Timer?
-
-    // MARK: - Public Functions
-    func subscribe(to urlPublisher: AnyPublisher<URL?, Never>) {
-        urlSubscription?.cancel()
-
-        urlSubscription = Publishers.CombineLatest(
-            Defaults.publisher(.showTryCheatsheetPopover),
-            urlPublisher
-        )
-        .receive(on: Self.queue)
-        .map { showPopover, url -> PromoType? in
-            guard let url = url else {
-                return nil
-            }
-
-            if !Defaults[.seenTryCheatsheetPopoverOnRecipe],
-                DomainAllowList.isRecipeAllowed(url: url)
-            {
-                return .tryCheatsheet
-            }
-
-            // else show popover if seen SRP intro screen
-            if showPopover.newValue,
-                // cheatsheet is not used on NeevaDomain
-                !NeevaConstants.isInNeevaDomain(url),
-                // avoid flashing the popover when app launches
-                !(url.scheme == InternalURL.scheme)
-            {
-                return .tryCheatsheet
-            }
-
-            // if not showing Try Cheatsheet Tooltip, check for UGC indicators
-            if Defaults[.useCheatsheetBloomFilters],
-                !(url.scheme == InternalURL.scheme),
-                let canonicalURL = CanonicalURL(from: url)?.asString,
-                Self.bloomFilterManager.contains(canonicalURL)
-            {
-                return .UGC
-            }
-            return nil
-        }
-        .receive(on: DispatchQueue.main)
-        .sink { [weak self] in
-            guard let self = self else {
-                return
-            }
-            self.promoType = $0
-            self.showPromo = $0 != nil
-            self.showBubble = false
-        }
-    }
-
-    func openSheet(on url: URL?) {
-        Defaults[.showTryCheatsheetPopover] = false
-        if let currentURL = url,
-            DomainAllowList.isRecipeAllowed(url: currentURL)
-        {
-            Defaults[.seenTryCheatsheetPopoverOnRecipe] = true
-        }
-        showBubble = false
-    }
-
-    // MARK: - Popover UI Functions
-    func getPopoverBackgroundColor() -> UIColor {
-        switch promoType {
-        case .none:
-            return .systemBackground
-        case .some(let promo):
-            switch promo {
-            case .tryCheatsheet:
-                return UIColor { (trait: UITraitCollection) -> UIColor in
-                    (trait.userInterfaceStyle == .dark) ? .brand.variant.polar : .brand.blue
-                }
-            case .UGC:
-                return .systemBackground
-            }
-        }
-    }
-
-    @ViewBuilder
-    func getPopoverContent() -> some View {
-        switch promoType {
-        case .none:
-            EmptyView()
-        case .some(let promo):
-            switch promo {
-            case .tryCheatsheet:
-                CheatsheetTooltipPopoverView()
-            case .UGC:
-                CheatsheetUGCIndicatorView()
-                    .onAppear(perform: setupUGCIndicatorDismissTimer)
-                    .onDisappear {
-                        self.cancelUGCIndicatorDismissTimer()
-                        self.showBubble = true
-                    }
-            }
-        }
-    }
-
-    // MARK: - Private Functions
-    private func setupUGCIndicatorDismissTimer() {
-        cancelUGCIndicatorDismissTimer()
-
-        ugcIndicatorDismissTimer = Timer.scheduledTimer(
-            withTimeInterval: Self.ugcIndicatorDurationS,
-            repeats: false
-        ) { [weak self] _ in
-            guard let self = self else {
-                return
-            }
-            if let promoType = self.promoType,
-                case .UGC = promoType
-            {
-                self.showPromo = false
-            }
-        }
-    }
-
-    private func cancelUGCIndicatorDismissTimer() {
-        ugcIndicatorDismissTimer?.invalidate()
-        ugcIndicatorDismissTimer = nil
-    }
+struct SourcePage {
+    let title: String?
+    let url: URL
 }
 
 public class CheatsheetMenuViewModel: ObservableObject {
@@ -164,64 +20,25 @@ public class CheatsheetMenuViewModel: ObservableObject {
 
     static let promoModel = CheatsheetPromoModel()
 
-    private(set) var currentPageTitle: String?
-    private(set) var currentPageURL: URL?
-    private(set) var currentCheatsheetQuery: String?
+    // Store the data used to initiate the request in case the values changes
+    private(set) var sourcePage: SourcePage?
 
     @Published private(set) var cheatsheetDataLoading: Bool
-    private(set) var cheatsheetInfo: CheatsheetQueryController.CheatsheetInfo?
-    private(set) var searchRichResults: [RichResult]?
+    private(set) var query: String?
+    private(set) var results: [CheatsheetResult] = []
     private(set) var cheatsheetDataError: Error?
     private(set) var searchRichResultsError: Error?
-
-    private(set) var placeViewModel: PlaceViewModel?
-    private(set) var placeListViewModel: PlaceListViewModel?
+    var cheatSheetIsEmpty: Bool { results.isEmpty }
 
     private var cheatsheetLoggerSubscription: AnyCancellable?
     // Workaround to indicate to SwiftUI view if it should log empty cheatsheet
     var hasFetchedOnce = false
 
-    var cheatSheetIsEmpty: Bool {
-        if let cheatsheetInfo = cheatsheetInfo {
-            if let recipe = cheatsheetInfo.recipe {
-                // recipeView
-                if let ingredients = recipe.ingredients,
-                    let instructions = recipe.instructions,
-                    ingredients.count > 0,
-                    instructions.count > 0
-                {
-                    return false
-                }
-            }
-            // priceHistorySection
-            if let priceHistory = cheatsheetInfo.priceHistory,
-                priceHistory.Max.Price.isEmpty || !priceHistory.Min.Price.isEmpty
-            {
-                return false
-            }
-            // reviewURLSection
-            if cheatsheetInfo.reviewURL?.count ?? 0 > 0 {
-                return false
-            }
-            // memorizedQuerySection
-            if cheatsheetInfo.memorizedQuery?.count ?? 0 > 0 {
-                return false
-            }
-        }
-        // renderRichResult views
-        if let searchRichResults = searchRichResults,
-            !searchRichResults.isEmpty
-        {
-            return false
-        }
-        return true
-    }
-
     /// Debug dispaly URL for Neeva Search URL from query
     /// this property is not used in the network request
-    var currentCheatsheetQueryAsURL: URL? {
-        guard let query = currentCheatsheetQuery,
-            let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlUserAllowed),
+    var currentQueryAsURL: URL? {
+        guard let query = query,
+            let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
             !encodedQuery.isEmpty
         else {
             return nil
@@ -233,11 +50,11 @@ public class CheatsheetMenuViewModel: ObservableObject {
         [
             ClientLogCounterAttribute(
                 key: LogConfig.CheatsheetAttribute.currentPageURL,
-                value: currentPageURL?.absoluteString
+                value: sourcePage?.url.absoluteString
             ),
             ClientLogCounterAttribute(
                 key: LogConfig.CheatsheetAttribute.currentCheatsheetQuery,
-                value: currentCheatsheetQuery
+                value: query
             ),
         ]
     }
@@ -257,33 +74,34 @@ public class CheatsheetMenuViewModel: ObservableObject {
     func fetchCheatsheetInfo() {
         guard !cheatsheetDataLoading else { return }
 
+        // TODO: - Check what happens when navigating to another page in this tab
         hasFetchedOnce = true
 
         clearCheatsheetData()
 
-        currentPageURL = tab?.url
-
-        if let title = tab?.title {
-            currentPageTitle = title
-        } else {
-            currentPageTitle = ""
-        }
+        var unwrappedURL = tab?.url
+        let pageTitle = tab?.title
 
         self.cheatsheetDataLoading = true
 
         // Unwrap reader mode URLs
-        if (currentPageURL?.isReaderModeURL ?? false)
-            || (currentPageURL?.isSyncedReaderModeURL ?? false)
+        if (unwrappedURL?.isReaderModeURL ?? false)
+            || (unwrappedURL?.isSyncedReaderModeURL ?? false)
         {
-            currentPageURL = currentPageURL?.decodeReaderModeURL
+            unwrappedURL = unwrappedURL?.decodeReaderModeURL
         }
         // unwrap session restore URL
-        if let unwrapped = InternalURL.unwrapSessionRestore(url: currentPageURL) {
-            currentPageURL = unwrapped
+        if let unwrapped = InternalURL.unwrapSessionRestore(url: unwrappedURL) {
+            unwrappedURL = unwrapped
         }
 
-        guard let url = currentPageURL,
-            ["https", "http"].contains(url.scheme),
+        guard let url = unwrappedURL else {
+            self.cheatsheetDataLoading = false
+            return
+        }
+        sourcePage = SourcePage(title: pageTitle, url: url)
+
+        guard ["https", "http"].contains(url.scheme),
             !NeevaConstants.isInNeevaDomain(url)
         else {
             self.cheatsheetDataLoading = false
@@ -291,108 +109,185 @@ public class CheatsheetMenuViewModel: ObservableObject {
         }
 
         CheatsheetQueryController.getCheatsheetInfo(
-            url: url.absoluteString, title: currentPageTitle!
+            url: url.absoluteString, title: pageTitle ?? ""
         ) { [self] result in
-            switch result {
-            case .success(let cheatsheetInfo):
-                self.cheatsheetInfo = cheatsheetInfo.first
+            // Apollo calls call back on main
+            DispatchQueue.global(qos: .userInitiated).async { [self] in
+                switch result {
+                case .success(let cheatsheetInfo):
+                    // when cheatsheet data fetched successfully
+                    // fetch other rich result
+                    let query: String
+                    let querySource: LogConfig.CheatsheetAttribute.QuerySource
 
-                // when cheatsheet data fetched successfully
-                // fetch other rich result
-                let query: String
-                let querySource: LogConfig.CheatsheetAttribute.QuerySource
-
-                if let queries = cheatsheetInfo.first?.memorizedQuery,
-                    let firstQuery = queries.first
-                {
-                    // U2Q
-                    querySource = .uToQ
-                    query = firstQuery
-                } else if let recentQuery = self.tab?.getMostRecentQuery(
-                    restrictToCurrentNavigation: true)
-                {
-                    // Fallback
-                    // if we don't have memorized query from the url
-                    // use last tab query
-                    if let suggested = recentQuery.suggested {
-                        querySource = .fastTapQuery
-                        query = suggested
+                    if let queries = cheatsheetInfo.first?.memorizedQuery,
+                        let firstQuery = queries.first
+                    {
+                        // U2Q
+                        querySource = .uToQ
+                        query = firstQuery
+                    } else if let recentQuery = self.tab?.getMostRecentQuery(
+                        restrictToCurrentNavigation: true)
+                    {
+                        // Fallback
+                        // if we don't have memorized query from the url
+                        // use last tab query
+                        if let suggested = recentQuery.suggested {
+                            querySource = .fastTapQuery
+                            query = suggested
+                        } else {
+                            querySource = .typedQuery
+                            query = recentQuery.typed
+                        }
                     } else {
-                        querySource = .typedQuery
-                        query = recentQuery.typed
+                        // Second Fallback
+                        // use current url as query for fallback
+                        querySource = .pageURL
+                        query = url.absoluteString
                     }
-                } else {
-                    // Second Fallback
-                    // use current url as query for fallback
-                    querySource = .pageURL
-                    query = url.absoluteString
-                }
 
-                // Log fallback level
-                ClientLogger.shared.logCounter(
-                    .CheatsheetQueryFallback,
-                    attributes: EnvironmentHelper.shared.getAttributes() + [
-                        ClientLogCounterAttribute(
-                            key: LogConfig.CheatsheetAttribute.cheatsheetQuerySource,
-                            value: querySource.rawValue
+                    // Log fallback level
+                    DispatchQueue.main.async {
+                        ClientLogger.shared.logCounter(
+                            .CheatsheetQueryFallback,
+                            attributes: EnvironmentHelper.shared.getAttributes() + [
+                                ClientLogCounterAttribute(
+                                    key: LogConfig.CheatsheetAttribute.cheatsheetQuerySource,
+                                    value: querySource.rawValue
+                                )
+                            ]
                         )
-                    ]
-                )
+                    }
 
-                self.currentCheatsheetQuery = query
-                self.getRichResultByQuery(query)
-            case .failure(let error):
-                Logger.browser.error("Error: \(error)")
-                self.cheatsheetDataError = error
-                self.cheatsheetDataLoading = false
+                    self.query = query
+                    if let data = cheatsheetInfo.first {
+                        self.results = self.parseResults(from: data).map {
+                            CheatsheetResult(data: $0)
+                        }
+                    }
+                    self.getRichResultByQuery(query)
+                case .failure(let error):
+                    self.cheatsheetDataError = error
+                    DispatchQueue.main.async { [self] in
+                        self.logFetchError(error, api: .getInfo)
+                        self.cheatsheetDataLoading = false
+                    }
+                }
             }
         }
     }
 
+    private func clearCheatsheetData() {
+        results = []
+        cheatsheetDataError = nil
+        searchRichResultsError = nil
+    }
+
+    // MARK: - Data Parsing Methods
     private func getRichResultByQuery(_ query: String) {
         NeevaScopeSearch.SearchController.getRichResult(query: query) { searchResult in
-            switch searchResult {
-            case .success(let richResults):
-                // log if a bad URL was received
-                if richResults.lazy.map({ $0.dataComplete }).contains(false) {
-                    ClientLogger.shared.logCounter(
-                        .CheatsheetBadURLString,
-                        attributes: EnvironmentHelper.shared.getAttributes()
-                    )
-                }
-                self.searchRichResults = self.removeCurrentPageURLs(from: richResults)
-
-                // Create Children ViewModels if corresponding results exist
-                self.searchRichResults?.forEach { result in
-                    switch result.result {
-                    case .Place(let result):
-                        if self.placeViewModel == nil {
-                            self.placeViewModel = PlaceViewModel(result)
+            // Apollo calls call back on main
+            DispatchQueue.global(qos: .userInitiated).async { [self] in
+                switch searchResult {
+                case .success(let richResults):
+                    // log if a bad URL was received
+                    if richResults.lazy.map({ $0.dataComplete }).contains(false) {
+                        DispatchQueue.main.async {
+                            ClientLogger.shared.logCounter(
+                                .CheatsheetBadURLString,
+                                attributes: EnvironmentHelper.shared.getAttributes()
+                            )
                         }
-                    case .PlaceList(let result):
-                        if self.placeListViewModel == nil {
-                            self.placeListViewModel = PlaceListViewModel(result)
-                        }
-                    default:
-                        return
                     }
+                    self.results += self.parseResults(from: richResults).map {
+                        CheatsheetResult(data: $0)
+                    }
+                case .failure(let error):
+                    DispatchQueue.main.async { [self] in
+                        self.logFetchError(error, api: .search)
+                    }
+                    self.searchRichResultsError = error
                 }
-            case .failure(let error):
-                Logger.browser.error("Error: \(error)")
-                self.searchRichResultsError = error
+
+                self.results.sort {
+                    $0.data.order < $1.data.order
+                }
+                DispatchQueue.main.async { [self] in
+                    self.cheatsheetDataLoading = false
+                }
             }
-            self.cheatsheetDataLoading = false
         }
     }
 
-    private func removeCurrentPageURLs(from richResults: [RichResult]) -> [RichResult] {
+    private func parseResults(from cheatsheetInfo: CheatsheetQueryController.CheatsheetInfo)
+        -> [CheatsheetResultData]
+    {
+        var results: [CheatsheetResultData] = []
+
+        if let recipe = cheatsheetInfo.recipe,
+            let pageURL = sourcePage?.url,
+            DomainAllowList.isRecipeAllowed(url: pageURL),
+            let ingredients = recipe.ingredients,
+            !ingredients.isEmpty,
+            let instructions = recipe.instructions,
+            !instructions.isEmpty
+        {
+            results.append(.recipe(recipe))
+        }
+
+        if let priceHistory = cheatsheetInfo.priceHistory,
+            !priceHistory.Max.Price.isEmpty || !priceHistory.Min.Price.isEmpty
+        {
+            results.append(.priceHistory(priceHistory))
+        }
+
+        if let reviewURLs = cheatsheetInfo.reviewURL?.compactMap({ URL(string: $0) }),
+            !reviewURLs.isEmpty
+        {
+            results.append(.reviewURL(reviewURLs))
+        }
+
+        if let memorizedQuery = cheatsheetInfo.memorizedQuery,
+            !memorizedQuery.isEmpty
+        {
+            results.append(.memorizedQuery(memorizedQuery))
+        }
+
+        if NeevaFeatureFlags[.enableBacklink] {
+            let ugcDiscussion = UGCDiscussion(backlinks: cheatsheetInfo.backlinkURL)
+            if !ugcDiscussion.isEmpty {
+                results.append(.discussions(ugcDiscussion))
+            }
+        }
+
+        return results
+    }
+
+    private func parseResults(from richResults: [NeevaScopeSearch.SearchController.RichResult])
+        -> [CheatsheetResultData]
+    {
+        let currentPageURL = tab?.url
         let urlCompareOptions: [URL.EqualsOption] = [
             .ignoreFragment, .ignoreLastSlash, .normalizeHost, .ignoreScheme,
         ]
-        return richResults.compactMap { richResult -> RichResult? in
+
+        return richResults.compactMap { richResult -> CheatsheetResultData? in
             switch richResult.result {
-            case .ProductCluster, .Place, .PlaceList, .RichEntity:
-                return richResult
+            case .ProductCluster(let result):
+                // for each product, we need an actionable URL outside of the current page
+                let filteredResults = result.filter { product in
+                    product.getTargetURL(excluding: currentPageURL, with: urlCompareOptions) != nil
+                }
+                guard !filteredResults.isEmpty else {
+                    return nil
+                }
+                return .productCluster(result: filteredResults)
+            case .Place(let result):
+                return .place(result: result)
+            case .PlaceList(let result):
+                return .placeList(result: result)
+            case .RichEntity(let result):
+                return .richEntity(result: result)
             case .RecipeBlock(let result):
                 let filteredRecipes = result.filter {
                     !$0.url.equals(currentPageURL, with: urlCompareOptions)
@@ -400,12 +295,9 @@ public class CheatsheetMenuViewModel: ObservableObject {
                 guard !filteredRecipes.isEmpty else {
                     return nil
                 }
-                return RichResult(
-                    id: richResult.id,
-                    result: .RecipeBlock(result: filteredRecipes)
-                )
-            case .RelatedSearches:
-                return richResult
+                return .recipeBlock(result: filteredRecipes)
+            case .RelatedSearches(let result):
+                return .relatedSearches(result: result)
             case .WebGroup(let result):
                 let filteredResults = result.filter {
                     !$0.actionURL.equals(currentPageURL, with: urlCompareOptions)
@@ -413,10 +305,7 @@ public class CheatsheetMenuViewModel: ObservableObject {
                 guard !filteredResults.isEmpty else {
                     return nil
                 }
-                return RichResult(
-                    id: richResult.id,
-                    result: .WebGroup(result: filteredResults)
-                )
+                return .webGroup(result: filteredResults)
             case .NewsGroup(let result):
                 let filteredNews = result.news.filter {
                     !$0.url.equals(currentPageURL, with: urlCompareOptions)
@@ -426,23 +315,39 @@ public class CheatsheetMenuViewModel: ObservableObject {
                 }
                 var newResult = result
                 newResult.news = filteredNews
-                return RichResult(
-                    id: richResult.id,
-                    result: .NewsGroup(result: newResult)
-                )
+                return .newsGroup(result: newResult)
             }
         }
     }
 
     // MARK: - Util Methods
-    private func clearCheatsheetData() {
-        cheatsheetInfo = nil
-        searchRichResults = nil
-        cheatsheetDataError = nil
-        searchRichResultsError = nil
+    func targetURLForProduct(_ product: NeevaScopeSearch.Product) -> URL? {
+        return product.getTargetURL(
+            excluding: tab?.url,
+            with: [
+                .ignoreFragment, .ignoreLastSlash, .normalizeHost, .ignoreScheme,
+            ]
+        )
+    }
 
-        placeViewModel = nil
-        placeListViewModel = nil
+    private func logFetchError(_ error: Error, api: LogConfig.CheatsheetAttribute.API) {
+        ClientLogger.shared.logCounter(
+            .CheatsheetFetchError,
+            attributes: EnvironmentHelper.shared.getAttributes() + [
+                ClientLogCounterAttribute(
+                    key: LogConfig.CheatsheetAttribute.currentPageURL,
+                    value: sourcePage?.url.absoluteString ?? "nil"
+                ),
+                ClientLogCounterAttribute(
+                    key: LogConfig.CheatsheetAttribute.currentCheatsheetQuery,
+                    value: query ?? "nil"
+                ),
+                ClientLogCounterAttribute(
+                    key: "error",
+                    value: "\(error)"
+                ),
+            ]
+        )
     }
 
     private func setupCheatsheetLoaderLogger() {
@@ -471,5 +376,60 @@ public class CheatsheetMenuViewModel: ObservableObject {
                     )
                 }
             }
+    }
+}
+
+extension NeevaScopeSearch.Product {
+    fileprivate func getTargetURL(
+        excluding url: URL?,
+        with urlCompareOptions: [URL.EqualsOption]
+    ) -> URL? {
+        return
+            (sellers?.lazy
+            .compactMap({ URL(string: $0.url) })
+            .first(where: { !$0.equals(url, with: urlCompareOptions) })
+            ?? buyingGuideReviews?.lazy
+            .compactMap({ URL(string: $0.reviewURL) })
+            .first(where: { !$0.equals(url, with: urlCompareOptions) }))
+    }
+}
+
+extension CheatsheetResultData {
+    fileprivate var order: Int {
+        // recipe
+        // entity search results
+        // Discussions
+        // price history
+        // review url
+        // other search results
+        // memorized query
+        switch self {
+        case .recipe:
+            return 0
+        case .recipeBlock:
+            return 1
+        case .richEntity:
+            return 2
+        case .newsGroup:
+            return 3
+        case .place:
+            return 4
+        case .placeList:
+            return 4
+        case .productCluster:
+            return 5
+        case .discussions:
+            return 6
+        case .priceHistory:
+            return 7
+        case .webGroup:
+            return 8
+        case .reviewURL:
+            return 9
+        case .relatedSearches:
+            return 10
+        case .memorizedQuery:
+            return 11
+        }
     }
 }

@@ -7,111 +7,9 @@ import Defaults
 import Shared
 import SwiftUI
 
-struct ReviewURLButton: View {
-    let url: URL
-    @Environment(\.onOpenURLForCheatsheet) var onOpenURLForCheatsheet
-
-    var body: some View {
-        Button(action: {
-            onOpenURLForCheatsheet(url, String(describing: Self.self))
-        }) {
-            getHostName()
-        }
-    }
-
-    @ViewBuilder
-    func getHostName() -> some View {
-        let host = url.baseDomain?.replacingOccurrences(of: ".com", with: "")
-        let lastPath = url.lastPathComponent
-            .replacingOccurrences(of: ".html", with: "")
-            .replacingOccurrences(of: "-", with: " ")
-        if host != nil {
-            HStack {
-                Text(host!).bold()
-                if !lastPath.isEmpty {
-                    Text("(")
-                        + Text(lastPath)
-                        + Text(")")
-                }
-            }
-            .withFont(unkerned: .bodyMedium)
-            .lineLimit(1)
-            .background(
-                RoundedRectangle(cornerRadius: 10).stroke(Color.gray, lineWidth: 1).padding(-6)
-            )
-            .padding(6)
-            .foregroundColor(.secondaryLabel)
-        }
-    }
-}
-
-struct CheatsheetNoResultView: View {
-    var body: some View {
-        VStack(alignment: .center) {
-            Text("Sorry, we couldn't find any results related to your search")
-                .withFont(.headingLarge)
-                .foregroundColor(.label)
-                .fixedSize(horizontal: false, vertical: true)
-                .layoutPriority(1)
-            Text("If this persists, let us know what happened, and we'll fix it soon.")
-                .withFont(.bodyLarge)
-                .foregroundColor(.secondaryLabel)
-            Image("question-mark", bundle: .main)
-                .resizable()
-                .scaledToFit()
-                .frame(minHeight: 50, maxHeight: 300)
-                .accessibilityHidden(true)
-                .padding(.bottom)
-            Spacer()
-        }
-        .multilineTextAlignment(.center)
-        .padding(.top, 10)
-        .padding(.horizontal, 27)
-    }
-}
-
-struct CheatsheetLoadingView: View {
-    public var body: some View {
-        VStack(alignment: .center, spacing: 36) {
-            Spacer()
-            NeevaScopeLoadingView()
-                .aspectRatio(1, contentMode: .fit)
-                .frame(height: 100)
-            Text("Your NeevaScope is coming into focus...")
-                .withFont(.headingLarge)
-                .foregroundColor(.label)
-                .fixedSize(horizontal: false, vertical: true)
-                .multilineTextAlignment(.leading)
-                .frame(maxWidth: 170)
-            Spacer()
-        }
-    }
-}
-
-extension NeevaScopeSearch.RichSearchResult {
-    fileprivate var isSearchResult: Bool {
-        switch self {
-        case .WebGroup, .RelatedSearches:
-            return true
-        default:
-            return false
-        }
-    }
-
-    fileprivate var isEntityResult: Bool {
-        switch self {
-        case .ProductCluster, .RecipeBlock, .NewsGroup, .Place, .PlaceList, .RichEntity:
-            return true
-        default:
-            return false
-        }
-    }
-}
-
 public struct CheatsheetMenuView: View {
     @Default(.seenCheatsheetIntro) var seenCheatsheetIntro: Bool
     @Default(.showTryCheatsheetPopover) var defaultShowTryCheatsheetPopover: Bool
-    @Default(.cheatsheetDebugQuery) var cheatsheetDebugQuery: Bool
 
     @Environment(\.hideOverlay) private var hideOverlay
     @Environment(\.onOpenURLForCheatsheet) var onOpenURLForCheatsheet
@@ -119,19 +17,6 @@ public struct CheatsheetMenuView: View {
 
     @State var height: CGFloat = 0
     @State var openSupport: Bool = false
-
-    private var entityResults: [NeevaScopeSearch.SearchController.RichResult]? {
-        model.searchRichResults?.filter { $0.result.isEntityResult }
-    }
-
-    private var searchResults: [NeevaScopeSearch.SearchController.RichResult]? {
-        model.searchRichResults?.filter { $0.result.isSearchResult }
-    }
-
-    private var ugcDiscussion: UGCDiscussion {
-        UGCDiscussion(backlinks: model.cheatsheetInfo?.backlinkURL)
-    }
-
     private let menuAction: (OverflowMenuAction) -> Void
 
     init(menuAction: @escaping (OverflowMenuAction) -> Void) {
@@ -141,7 +26,7 @@ public struct CheatsheetMenuView: View {
     public var body: some View {
         ZStack {
             // Show Cheatsheet Info if on Neeva domain page
-            if NeevaConstants.isInNeevaDomain(model.currentPageURL) {
+            if NeevaConstants.isInNeevaDomain(model.sourcePage?.url) {
                 CheatsheetInfoViewOnSRP {
                     hideOverlay()
                     defaultShowTryCheatsheetPopover = !seenCheatsheetIntro
@@ -155,81 +40,8 @@ public struct CheatsheetMenuView: View {
                 }
             } else if model.cheatsheetDataLoading {
                 CheatsheetLoadingView()
-            } else if let error = model.cheatsheetDataError {
-                ErrorView(error, in: self, tryAgain: { model.reload() })
-            } else if let error = model.searchRichResultsError {
-                ErrorView(error, in: self, tryAgain: { model.reload() })
-            } else if model.cheatSheetIsEmpty {
-                VStack(alignment: .center) {
-                    CheatsheetNoResultView()
-                        .onAppear {
-                            guard model.hasFetchedOnce else { return }
-                            ClientLogger.shared.logCounter(
-                                .CheatsheetEmpty,
-                                attributes: EnvironmentHelper.shared.getAttributes()
-                                    + model.loggerAttributes
-                            )
-                        }
-                    if cheatsheetDebugQuery {
-                        VStack(alignment: .leading) {
-                            Button(action: {
-                                if let url = model.currentCheatsheetQueryAsURL {
-                                    onOpenURLForCheatsheet(url, "debug")
-                                }
-                            }) {
-                                HStack {
-                                    Text("View Query")
-                                    Symbol(decorative: .arrowUpForward)
-                                        .scaledToFit()
-                                }
-                                .foregroundColor(.label)
-                            }
-
-                            Button(action: {
-                                if let string = model.currentCheatsheetQueryAsURL?.absoluteString {
-                                    UIPasteboard.general.string = string
-                                }
-                            }) {
-                                HStack(alignment: .top) {
-                                    Symbol(decorative: .docOnDoc)
-                                        .frame(width: 20, height: 20, alignment: .center)
-                                    Text(model.currentCheatsheetQueryAsURL?.absoluteString ?? "nil")
-                                        .withFont(.bodySmall)
-                                        .multilineTextAlignment(.leading)
-                                        .fixedSize(horizontal: false, vertical: true)
-                                }
-                                .foregroundColor(.secondaryLabel)
-                            }
-                        }
-                        .padding(.horizontal)
-                    }
-                }
-            } else {
-                cheatsheetContent
-                    .selectableIfAvailable(true)
-                    .background(
-                        GeometryReader { proxy in
-                            Color.clear
-                                .onChange(of: openSupport) { newValue in
-                                    if newValue {
-                                        let image =
-                                            self
-                                            .environmentObject(model)
-                                            .takeScreenshot(
-                                                origin: proxy.frame(in: .global).origin,
-                                                size: proxy.size
-                                            )
-                                        openSupport = false
-                                        ClientLogger.shared.logCounter(
-                                            .OpenCheatsheetSupport,
-                                            attributes: EnvironmentHelper.shared.getAttributes()
-                                                + model.loggerAttributes
-                                        )
-                                        menuAction(.support(screenshot: image))
-                                    }
-                                }
-                        }
-                    )
+            } else if !model.cheatSheetIsEmpty {
+                content
                     .onHeightOfViewChanged { height in
                         self.height = height
                     }
@@ -239,50 +51,61 @@ public struct CheatsheetMenuView: View {
                             attributes: EnvironmentHelper.shared.getAttributes()
                         )
                     }
+            } else if let error = model.cheatsheetDataError {
+                ErrorView(error, in: self, tryAgain: { model.reload() })
+            } else if let error = model.searchRichResultsError {
+                ErrorView(error, in: self, tryAgain: { model.reload() })
+            } else {
+                CheatsheetNoResultView(currentCheatsheetQueryAsURL: model.currentQueryAsURL)
+                    .onAppear {
+                        guard model.hasFetchedOnce else { return }
+                        ClientLogger.shared.logCounter(
+                            .CheatsheetEmpty,
+                            attributes: EnvironmentHelper.shared.getAttributes()
+                                + model.loggerAttributes
+                        )
+                    }
             }
         }
         .frame(maxWidth: .infinity, minHeight: height < 200 ? 200 : height)
     }
 
     @ViewBuilder
-    var cheatsheetContent: some View {
+    var content: some View {
         VStack(alignment: .leading) {
-            if isRecipeAllowed() {
-                recipeView
+            ForEach(model.results) { result in
+                CheatsheetResultView(viewModel: model, result: result)
             }
-
-            if let entityResults = entityResults {
-                VStack(alignment: .leading) {
-                    ForEach(entityResults) { richResult in
-                        renderRichResult(for: richResult)
-                    }
-                }
-            }
-
-            if NeevaFeatureFlags[.enableBacklink],
-                !ugcDiscussion.isEmpty
-            {
-                UGCDiscussionView(ugcDiscussion)
-            }
-
-            priceHistorySection
-            reviewURLSection
-
-            if let searchResults = searchResults {
-                VStack(alignment: .leading) {
-                    ForEach(searchResults) { richResult in
-                        renderRichResult(for: richResult)
-                    }
-                }
-            }
-
-            memorizedQuerySection
 
             Divider()
                 .padding(.horizontal)
             supportSection
         }
         .padding(.horizontal)
+        .selectableIfAvailable(true)
+        .background(
+            GeometryReader { proxy in
+                Color.clear
+                    .onChange(of: openSupport) { newValue in
+                        if newValue {
+                            let image =
+                                self
+                                .environmentObject(model)
+                                .takeScreenshot(
+                                    origin: proxy.frame(in: .global).origin,
+                                    size: proxy.size
+                                )
+                            openSupport = false
+                            ClientLogger.shared.logCounter(
+                                .OpenCheatsheetSupport,
+                                attributes: EnvironmentHelper.shared.getAttributes()
+                                    + model.loggerAttributes
+                            )
+                            menuAction(.support(screenshot: image))
+                        }
+                    }
+            }
+        )
     }
 
     @ViewBuilder
@@ -307,183 +130,6 @@ public struct CheatsheetMenuView: View {
                     }
                 })
         }
-    }
-
-    @ViewBuilder
-    var recipeView: some View {
-        if let recipe = model.cheatsheetInfo?.recipe {
-            if let ingredients = recipe.ingredients, let instructions = recipe.instructions {
-                if ingredients.count > 0 && instructions.count > 0 {
-                    RecipeView(
-                        title: recipe.title,
-                        imageURL: recipe.imageURL,
-                        totalTime: recipe.totalTime,
-                        prepTime: recipe.prepTime,
-                        ingredients: ingredients,
-                        instructions: instructions,
-                        yield: recipe.yield,
-                        recipeRating: RecipeRating(
-                            maxStars: recipe.recipeRating?.maxStars ?? 0,
-                            recipeStars: recipe.recipeRating?.recipeStars ?? 0,
-                            numReviews: recipe.recipeRating?.numReviews ?? 0),
-                        reviews: constructReviewList(recipe: recipe),
-                        faviconURL: nil,
-                        currentURL: nil,
-                        tabUUID: nil
-                    )
-                }
-            }
-        }
-    }
-
-    func constructReviewList(recipe: Recipe) -> [Review] {
-        guard let reviewList = recipe.reviews else { return [] }
-        return reviewList.map { item in
-            Review(
-                body: item.body,
-                reviewerName: item.reviewerName,
-                rating: Rating(
-                    maxStars: item.rating.maxStars,
-                    actualStarts: item.rating.actualStarts
-                )
-            )
-        }
-    }
-
-    @ViewBuilder
-    func renderRichResult(
-        for richResult: NeevaScopeSearch.SearchController.RichResult
-    ) -> some View {
-        switch richResult.result {
-        case .ProductCluster(let productCluster):
-            ProductClusterList(
-                products: productCluster, currentURL: model.currentPageURL?.absoluteString ?? ""
-            )
-        case .RecipeBlock(let recipes):
-            // filter out result already showing on the current page
-            RelatedRecipeList(recipes: recipes)
-                .padding(.bottom, 20)
-        case .RelatedSearches(let relatedSearches):
-            RelatedSearchesView(relatedSearches: relatedSearches)
-        case .WebGroup(let result):
-            // filter out result already showing on the current page
-            WebResultList(
-                webResult: result,
-                currentCheatsheetQueryAsURL: model.currentCheatsheetQueryAsURL,
-                showQueryString: cheatsheetDebugQuery
-            )
-        case .NewsGroup(let newsResults):
-            NewsResultsView(
-                newsResults: newsResults
-            )
-        case .Place(result: let placeResult):
-            if let viewModel = model.placeViewModel {
-                PlaceView(viewModel: viewModel)
-            } else {
-                PlaceView(viewModel: PlaceViewModel(placeResult))
-            }
-        case .PlaceList(result: let placeListResult):
-            if let viewModel = model.placeListViewModel {
-                PlaceListView(viewModel: viewModel)
-            } else {
-                PlaceListView(viewModel: PlaceListViewModel(placeListResult))
-            }
-        case .RichEntity(result: let richEntityResult):
-            KnowledgeCardView(richEntity: richEntityResult)
-        }
-    }
-
-    @ViewBuilder
-    var reviewURLSection: some View {
-        if model.cheatsheetInfo?.reviewURL?.count ?? 0 > 0 {
-            VStack(alignment: .leading, spacing: 20) {
-                Text("Buying Guide").withFont(.headingMedium)
-                ForEach(model.cheatsheetInfo?.reviewURL ?? [], id: \.self) { review in
-                    if let url = URL(string: review) {
-                        ReviewURLButton(url: url)
-                    }
-                }
-            }
-        }
-    }
-
-    @ViewBuilder
-    var memorizedQuerySection: some View {
-        if model.cheatsheetInfo?.memorizedQuery?.count ?? 0 > 0 {
-            VStack(alignment: .leading, spacing: 10) {
-                Text("Keep Looking").withFont(.headingXLarge)
-                ForEach(model.cheatsheetInfo?.memorizedQuery?.prefix(5) ?? [], id: \.self) {
-                    query in
-                    QueryButtonView(query: query)
-                }
-            }
-        }
-    }
-
-    @ViewBuilder
-    var priceHistorySection: some View {
-        if let priceHistory = model.cheatsheetInfo?.priceHistory,
-            !priceHistory.Max.Price.isEmpty || !priceHistory.Min.Price.isEmpty
-        {
-            VStack(alignment: .leading, spacing: 10) {
-                Text("Price History").withFont(.headingMedium)
-                if let max = priceHistory.Max,
-                    !max.Price.isEmpty
-                {
-                    HStack {
-                        Text("Highest: ").bold()
-                        Text("$")
-                            + Text(max.Price)
-
-                        if !max.Date.isEmpty {
-                            Text("(")
-                                + Text(max.Date)
-                                + Text(")")
-                        }
-                    }
-                    .foregroundColor(.hex(0xCC3300))
-                    .withFont(unkerned: .bodyMedium)
-                }
-
-                if let min = priceHistory.Min,
-                    !min.Price.isEmpty
-                {
-                    HStack {
-                        Text("Lowest: ").bold()
-                        Text("$")
-                            + Text(min.Price)
-
-                        if !min.Date.isEmpty {
-                            Text("(")
-                                + Text(min.Date)
-                                + Text(")")
-                        }
-                    }
-                    .foregroundColor(.hex(0x008800))
-                    .withFont(unkerned: .bodyMedium)
-                }
-
-                if let average = priceHistory.Average,
-                    !average.Price.isEmpty
-                {
-                    HStack {
-                        Text("Average: ").bold()
-                        Text("$")
-                            + Text(average.Price)
-                    }
-                    .foregroundColor(.hex(0x555555))
-                    .withFont(unkerned: .bodyMedium)
-                }
-            }
-        }
-    }
-
-    func isRecipeAllowed() -> Bool {
-        guard let host = model.currentPageURL?.host,
-            let baseDomain = model.currentPageURL?.baseDomain
-        else { return false }
-        return DomainAllowList.recipeDomains[host] ?? false
-            || DomainAllowList.recipeDomains[baseDomain] ?? false
     }
 }
 

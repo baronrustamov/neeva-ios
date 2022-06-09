@@ -9,38 +9,46 @@ import Foundation
 // TODO(jon): Implement this class once SpaceService is sandwiched
 // between Apollo and higher layers
 public class SpaceServiceMock: SpaceService {
-    private var spaces: [String: SpaceListController.Space] = [
-        "wqQAiI6dmZItMkri9FRIxj26vjdeKJ8SvQWH93gh": SpaceListController.Space(unsafeResultMap: [
-            "__typename": "Space",
-            "pageMetadata": [
-                "__typename": "PageMetadata",
-                "pageID": "wqQAiI6dmZItMkri9FRIxj26vjdeKJ8SvQWH93gh",
-            ],
-            "space": [
-                "isDefaultSpace": false,
-                "notifications": nil,
-                "__typename": "SpaceData",
-                "resultCount": 1,
-                "userACL": [
-                    "acl": SpaceACLLevel.owner
-                ],
-                "name": "My Space",
-                "lastModifiedTs": "2022-05-13T16:17:26Z",
-            ],
-        ])
+    public typealias SpaceApollo = SpaceListController.Space
+    public typealias SpaceDataApollo = SpacesDataQueryController.Space
+
+    private struct SpaceMock {
+        var space: SpaceApollo
+
+        init(name: String) {
+            space = SpaceApollo(
+                pageMetadata: SpaceApollo.PageMetadatum(
+                    pageId: name),
+                space: SpaceApollo.Space(
+                    name: name,
+                    lastModifiedTs: ISO8601DateFormatter().string(from: Date()),
+                    userAcl: SpaceApollo.Space.UserAcl(acl: SpaceACLLevel.owner),
+                    resultCount: 0,
+                    isDefaultSpace: false
+                )
+            )
+        }
+    }
+
+    private struct SpaceDataMock {
+        var spaceData: SpaceDataApollo
+
+        init(name: String) {
+            spaceData = SpaceDataApollo(
+                id: name,
+                name: name,
+                entities: [],
+                comments: [],
+                generators: []
+            )
+        }
+    }
+
+    private var spaces: [String: SpaceMock] = [
+        "My Space": SpaceMock(name: "My Space")
     ]
-    private var spacesData: [String: SpacesDataQueryController.Space] = [
-        "wqQAiI6dmZItMkri9FRIxj26vjdeKJ8SvQWH93gh": SpacesDataQueryController.Space(
-            id: "wqQAiI6dmZItMkri9FRIxj26vjdeKJ8SvQWH93gh",
-            name: "My Space",
-            entities: [
-                SpaceEntityData(
-                    id: "0x457d7904325b224d",
-                    url: URL(stringLiteral: "http://myspace.com"),
-                    title: "MySpace in My Space",
-                    snippet: "", thumbnail: "",
-                    previewEntity: .webPage)
-            ], comments: [], generators: [])
+    private var spacesData: [String: SpaceDataMock] = [
+        "My Space": SpaceDataMock(name: "My Space")
     ]
 
     public init() {}
@@ -64,12 +72,9 @@ public class SpaceServiceMock: SpaceService {
         thumbnail: String?, data: String?, mediaType: String?, isBase64: Bool?,
         completion: @escaping (Result<AddToSpaceMutation.Data, Error>) -> Void
     ) -> Combine.Cancellable? {
-        // The choice of this value has no significance. We just need something unique
-        let entityId = "\(Date.timeIntervalSinceReferenceDate)"
-
-        spacesData[spaceId]?.entities.append(
+        spacesData[spaceId]?.spaceData.entities.append(
             SpaceEntityData(
-                id: entityId,
+                id: url,
                 url: URL(string: url),
                 title: title,
                 snippet: nil,
@@ -77,12 +82,13 @@ public class SpaceServiceMock: SpaceService {
                 previewEntity: .webPage
             )
         )
+        spaces[spaceId]?.space.space?.resultCount! += 1
 
         // Simulate a network request
         DispatchQueue.main.async {
             completion(
                 Result<AddToSpaceMutation.Data, Error>(catching: {
-                    return AddToSpaceMutation.Data(entityId: entityId)
+                    return AddToSpaceMutation.Data(entityId: url)
                 })
             )
         }
@@ -103,7 +109,17 @@ public class SpaceServiceMock: SpaceService {
     }
 
     public func createSpace(name: String) -> CreateSpaceRequest? {
-        return nil
+        spaces[name] = SpaceMock(name: name)
+        spacesData[name] = SpaceDataMock(name: name)
+
+        let request = CreateSpaceRequest()
+
+        // Simulate a network request
+        DispatchQueue.main.async {
+            request.state = .success
+        }
+
+        return request
     }
 
     public func deleteGenerator(spaceID: String, generatorID: String) -> DeleteGeneratorRequest? {
@@ -122,6 +138,37 @@ public class SpaceServiceMock: SpaceService {
         return nil
     }
 
+    public func deleteSpaceResultByUrlMutation(
+        spaceId: String, url: String,
+        completion: @escaping (Result<DeleteSpaceResultByUrlMutation.Data, Error>) -> Void
+    ) -> Combine.Cancellable? {
+        // If your test is triggering this guard, make sure to double-check that a Space
+        // exists with the id "spaceId"
+        guard var spaceMock = spaces[spaceId], var spaceDataMock = spacesData[spaceId] else {
+            return nil
+        }
+
+        spaceMock.space.space?.lastModifiedTs = ISO8601DateFormatter().string(from: Date())
+        spaceMock.space.space?.resultCount! -= 1
+
+        spaceDataMock.spaceData.entities = spaceDataMock.spaceData.entities.filter {
+            $0.url?.absoluteString != url
+        }
+
+        // Simulate a network request
+        DispatchQueue.main.async {
+            completion(
+                Result<DeleteSpaceResultByUrlMutation.Data, Error>(catching: {
+                    return DeleteSpaceResultByUrlMutation.Data(deleteSpaceResultByUrl: true)
+                })
+            )
+        }
+
+        return AnyCancellable {
+            // do nothing
+        }
+    }
+
     public func getRelatedSpacesCountData(
         spaceID: String,
         completion: @escaping (Result<Int, Error>) -> Void
@@ -137,27 +184,27 @@ public class SpaceServiceMock: SpaceService {
     }
 
     public func getSpaces(
-        completion: @escaping (Result<[SpaceListController.Space], Error>) -> Void
+        completion: @escaping (Result<[SpaceApollo], Error>) -> Void
     ) -> Combine.Cancellable? {
         return AnyCancellable({ [self] in
             completion(
-                Result<[SpaceListController.Space], Error>(catching: {
-                    return spaces.map { $0.value }
+                Result<[SpaceApollo], Error>(catching: {
+                    return spaces.map { $0.value.space }
                 }))
         })
     }
 
     public func getSpacesData(
         spaceIds: [String],
-        completion: @escaping (Result<[SpacesDataQueryController.Space], Error>) -> Void
+        completion: @escaping (Result<[SpaceDataApollo], Error>) -> Void
     ) -> Combine.Cancellable? {
         return AnyCancellable({ [self] in
             completion(
-                Result<[SpacesDataQueryController.Space], Error>(catching: {
-                    var arr: [SpacesDataQueryController.Space] = []
+                Result<[SpaceDataApollo], Error>(catching: {
+                    var arr: [SpaceDataApollo] = []
                     spaceIds.forEach { id in
-                        if spacesData[id] != nil {
-                            arr.append(spacesData[id]!)
+                        if let match = spacesData[id] {
+                            arr.append(match.spaceData)
                         }
                     }
                     return arr

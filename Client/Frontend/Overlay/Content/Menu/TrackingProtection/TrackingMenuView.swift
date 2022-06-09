@@ -36,7 +36,15 @@ class TrackingStatsViewModel: ObservableObject {
                 ]
             )
 
-            guard let domain = selectedTabURL?.host, Defaults[.cookieCutterEnabled] else {
+            var url = selectedTabURL
+            // extract url query param for internal pages
+            if let internalUrl = InternalURL(url),
+                let extractedUrl = internalUrl.extractedUrlParam
+            {
+                url = extractedUrl
+            }
+
+            guard let domain = url?.host, Defaults[.cookieCutterEnabled] else {
                 return
             }
 

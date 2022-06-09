@@ -43,6 +43,8 @@ public struct LogConfig {
         case ClickBack
         /// Click forward button to navigate to next page
         case ClickForward
+        /// Click close button to close current tab
+        case ClickClose
         /// Tap and Hold forward button to show navigation stack
         case LongPressForward
 
@@ -211,6 +213,8 @@ public struct LogConfig {
         case NeevaAttributionRequestError
         /// Default browser interstitial restore imp
         case DefaultBrowserInterstitialRestoreImp
+        /// Recommended space tap on preview zero query
+        case SpacesRecommendedDetailUIVisited
 
         // MARK: promo card
         /// Promo card is rendered on screen
@@ -266,7 +270,6 @@ public struct LogConfig {
         case SpacesDetailEntityClicked
         case SpacesDetailEditButtonClicked
         case SpacesDetailShareButtonClicked
-        case SpacesRecommendedDetailUIVisited
         case SpacesLoginRequired
         case OwnerSharedSpace
         case FollowerSharedSpace
@@ -338,6 +341,7 @@ public struct LogConfig {
         case CheatsheetQueryFallback
         case OpenCheatsheetSupport
         case CheatsheetBadURLString
+        case CheatsheetFetchError
 
         // MARK: tab group
         case tabGroupExpanded
@@ -477,6 +481,7 @@ public struct LogConfig {
         case .TurnOffIncognitoMode: return .UI
         case .ClickBack: return .UI
         case .ClickForward: return .UI
+        case .ClickClose: return .UI
         case .LongPressForward: return .UI
         case .PreviewPreferredProviderSignIn: return .UI
         case .TurnOnBlockTracking: return .UI
@@ -676,6 +681,7 @@ public struct LogConfig {
         case .CheatsheetQueryFallback: return .Cheatsheet
         case .OpenCheatsheetSupport: return .Cheatsheet
         case .CheatsheetBadURLString: return .Cheatsheet
+        case .CheatsheetFetchError: return .Cheatsheet
 
         // MARK: - TabGroup
         case .tabGroupExpanded: return .TabGroup
@@ -826,12 +832,18 @@ public struct LogConfig {
         public static let currentPageURL = "currentCheatsheetPageURL"
         public static let cheatsheetQuerySource = "cheatsheetQuerySource"
         public static let openLinkSource = "openLinkSource"
+        public static let api = "api"
 
         public enum QuerySource: String {
             case uToQ
             case fastTapQuery
             case typedQuery
             case pageURL
+        }
+
+        public enum API: String {
+            case getInfo
+            case search
         }
     }
 

@@ -62,7 +62,7 @@ extension TabManager {
             newTab.parentSpaceID = spaceID
             newTab.rootUUID = spaceID
             selectTab(newTab, notify: true)
-            updateTabGroupsAndSendNotifications(notify: true)
+            updateAllTabDataAndSendNotifications(notify: true)
             return .createdNewTab
         }
     }

@@ -78,7 +78,7 @@ struct BackForwardListView: View {
                                 navigationClicked(model.listItems[index])
                             }
 
-                            overlayManager.hideCurrentOverlay()
+                            overlayManager.hide(overlay: .backForwardList(self))
                         } label: {
                             HStack {
                                 FaviconView(forSiteUrl: url)
@@ -130,10 +130,8 @@ struct BackForwardListView: View {
 
             VStack(spacing: 0) {
                 DismissBackgroundView(opacity: 0.2) {
-                    overlayManager.hideCurrentOverlay()
-                }
-                .animation(nil)
-                .transition(.fade)
+                    overlayManager.hide(overlay: .backForwardList(self))
+                }.animation(nil).transition(.fade)
 
                 Group {
                     if #available(iOS 15.0, *) {
@@ -146,7 +144,7 @@ struct BackForwardListView: View {
             .frame(maxWidth: .infinity)
             .accessibilityElement(children: .contain)
             .accessibilityAction(.escape) {
-                overlayManager.hideCurrentOverlay()
+                overlayManager.hide(overlay: .backForwardList(self))
             }
             .accessibilityAddTraits(.isModal)
             .accessibilityLabel(Text("Back/Forward List"))

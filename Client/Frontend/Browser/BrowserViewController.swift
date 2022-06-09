@@ -145,11 +145,15 @@ class BrowserViewController: UIViewController, ModalPresenter {
         return TrackingStatsViewModel(tabManager: tabManager)
     }()
 
-    var toastViewManager: ToastViewManager
-    var notificationViewManager: NotificationViewManager
+    private(set) lazy var toastViewManager: ToastViewManager = {
+        ToastViewManager(overlayManager: overlayManager)
+    }()
+
+    private(set) lazy var notificationViewManager: NotificationViewManager = {
+        NotificationViewManager(overlayManager: overlayManager)
+    }()
 
     var findInPageModel: FindInPageModel?
-    var overlayWindowManager: WindowManager?
 
     lazy var introViewModel: IntroViewModel = {
         IntroViewModel(
@@ -210,9 +214,6 @@ class BrowserViewController: UIViewController, ModalPresenter {
         self.profile = profile
         self.tabManager = TabManager(profile: profile, scene: scene, incognitoModel: incognitoModel)
         self.readerModeCache = DiskReaderModeCache.sharedInstance
-
-        self.toastViewManager = ToastViewManager(window: window)
-        self.notificationViewManager = NotificationViewManager(window: window)
 
         super.init(nibName: nil, bundle: nil)
 
@@ -547,7 +548,6 @@ class BrowserViewController: UIViewController, ModalPresenter {
             } else if let didDismiss = Defaults[.didDismissDefaultBrowserInterstitial],
                 !didDismiss
                     && !Defaults[.didFirstNavigation]
-                    && NeevaExperiment.arm(for: .defaultBrowserChangeButton) == .changeButton
             {
                 restoreDefaultBrowserFirstRun()
             }
@@ -555,7 +555,6 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
         screenshotHelper.viewIsVisible = true
         screenshotHelper.takePendingScreenshots(tabManager.tabs)
-        overlayWindowManager = WindowManager(parentWindow: view.window!)
 
         super.viewDidAppear(animated)
 
@@ -649,132 +648,6 @@ class BrowserViewController: UIViewController, ModalPresenter {
                 hideZeroQuery()
             }
         }
-    }
-
-    private func hideOverlaySheetViewController() {
-        if case .sheet = overlayManager.currentOverlay {
-            overlayManager.hideCurrentOverlay()
-        }
-    }
-
-    private func hideOverlayPopoverViewController() {
-        if case .popover = overlayManager.currentOverlay {
-            overlayManager.hideCurrentOverlay()
-        }
-    }
-
-    func presentFullScreenModal(content: AnyView, completion: (() -> Void)? = nil) {
-        overlayManager.presentFullScreenModal(content: content, completion: completion)
-    }
-
-    func dismissCurrentOverlay() {
-        overlayManager.hideCurrentOverlay()
-    }
-
-    /// Present Content as sheet if on iPhone and in Portrait; otherwise, present as popover
-    ///  - Tag: showModal
-    func showModal<Content: View>(
-        style: OverlayStyle,
-        headerButton: OverlayHeaderButton? = nil,
-        toPosition: OverlaySheetPosition = .middle,
-        @ViewBuilder content: @escaping () -> Content,
-        onDismiss: (() -> Void)? = nil
-    ) {
-        showModal(
-            style: style,
-            headerButton: headerButton,
-            toPosition: toPosition,
-            headerContent: { EmptyView() },
-            content: content,
-            onDismiss: onDismiss
-        )
-    }
-
-    func showModal<Content: View, HeaderContent: View>(
-        style: OverlayStyle,
-        headerButton: OverlayHeaderButton? = nil,
-        toPosition: OverlaySheetPosition = .middle,
-        @ViewBuilder headerContent: @escaping () -> HeaderContent,
-        @ViewBuilder content: @escaping () -> Content,
-        onDismiss: (() -> Void)? = nil
-    ) {
-        if !chromeModel.inlineToolbar {
-            showAsModalOverlaySheet(
-                style: style,
-                toPosition: toPosition,
-                content: content,
-                onDismiss: onDismiss,
-                headerButton: headerButton,
-                headerContent: headerContent
-            )
-        } else {
-            showAsModalOverlayPopover(
-                style: style, content: content, onDismiss: onDismiss, headerButton: headerButton)
-        }
-    }
-
-    func showAsModalOverlaySheet<Content: View>(
-        style: OverlayStyle,
-        toPosition: OverlaySheetPosition = .middle,
-        @ViewBuilder content: @escaping () -> Content,
-        onDismiss: (() -> Void)? = nil,
-        headerButton: OverlayHeaderButton? = nil
-    ) {
-        showAsModalOverlaySheet(
-            style: style,
-            toPosition: toPosition,
-            content: content,
-            onDismiss: onDismiss,
-            headerButton: nil,
-            headerContent: { EmptyView() }
-        )
-    }
-
-    func showAsModalOverlaySheet<Content: View, HeaderContent: View>(
-        style: OverlayStyle,
-        toPosition: OverlaySheetPosition = .middle,
-        @ViewBuilder content: @escaping () -> Content,
-        onDismiss: (() -> Void)? = nil,
-        headerButton: OverlayHeaderButton? = nil,
-        @ViewBuilder headerContent: @escaping () -> HeaderContent
-    ) {
-        let overlayView = OverlaySheetRootView(
-            overlayPosition: toPosition,
-            style: style,
-            content: { AnyView(erasing: content()) },
-            onDismiss: { rootView in
-                onDismiss?()
-                self.overlayManager.hide(overlay: .sheet(rootView))
-            },
-            onOpenURL: { url, rootView in
-                self.overlayManager.hide(overlay: .sheet(rootView))
-                self.openURLInNewTabPreservingIncognitoState(url)
-            },
-            headerButton: headerButton,
-            headerContent: { AnyView(erasing: headerContent()) }
-        )
-
-        overlayManager.show(overlay: .sheet(overlayView))
-    }
-
-    func showAsModalOverlayPopover<Content: View>(
-        style: OverlayStyle,
-        @ViewBuilder content: @escaping () -> Content,
-        onDismiss: (() -> Void)? = nil,
-        headerButton: OverlayHeaderButton? = nil
-    ) {
-        let popoverView = PopoverRootView(
-            style: style, content: { AnyView(erasing: content()) },
-            onDismiss: { rootView in
-                onDismiss?()
-                self.overlayManager.hide(overlay: .popover(rootView))
-            },
-            onOpenURL: { url, rootView in
-                self.overlayManager.hide(overlay: .popover(rootView))
-                self.openURLInNewTabPreservingIncognitoState(url)
-            }, headerButton: headerButton)
-
-        overlayManager.show(overlay: .popover(popoverView))
     }
 
     func finishEditingAndSubmit(
@@ -935,13 +808,6 @@ class BrowserViewController: UIViewController, ModalPresenter {
                 self.tabManager.selectTab(tab, notify: true)
             }
         )
-    }
-
-    func openBlankNewTab(isIncognito: Bool = false) {
-        popToBVC()
-
-        let newTab = tabManager.addTab(isIncognito: isIncognito)
-        tabManager.select(newTab)
     }
 
     func openLazyTab(

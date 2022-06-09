@@ -33,9 +33,13 @@ class TabManager: NSObject {
 
     // Tab Group related variables
     @Default(.tabGroupNames) private var tabGroupDict: [String: String]
-    var tabGroups: [String: TabGroup] = [:]
+    @Default(.archivedTabsDuration) var archivedTabsDuration
+    var activeTabs: [Tab] = []
+    var archivedTabs: [Tab] = []
+    var activeTabGroups: [String: TabGroup] = [:]
+    var archivedTabGroups: [String: TabGroup] = [:]
     var childTabs: [Tab] {
-        tabGroups.values.flatMap(\.children)
+        activeTabGroups.values.flatMap(\.children)
     }
 
     // Use `selectedTabPublisher` to observe changes to `selectedTab`.
@@ -46,8 +50,12 @@ class TabManager: NSObject {
     /// Publisher used to observe changes to the `selectedTab.webView`.
     /// Will also update if the `WebView` is set to nil.
     private(set) var selectedTabWebViewPublisher = CurrentValueSubject<WKWebView?, Never>(nil)
+    /// A publisher that refreshes data in ArchivedTabsPanelModel, which should happen after
+    ///  updateAllTabDataAndSendNotifications runs.
+    private(set) var updateArchivedTabsPublisher = PassthroughSubject<Void, Never>()
     private var selectedTabSubscription: AnyCancellable?
     private var selectedTabURLSubscription: AnyCancellable?
+    private var archivedTabsDurationSubscription: AnyCancellable?
 
     let navDelegate: TabManagerNavDelegate
 
@@ -81,6 +89,10 @@ class TabManager: NSObject {
     var incognitoTabs: [Tab] {
         assert(Thread.isMainThread)
         return tabs.filter { $0.isIncognito }
+    }
+
+    var activeNormalTabs: [Tab] {
+        return activeTabs.filter { !$0.isIncognito }
     }
 
     var count: Int {
@@ -127,6 +139,14 @@ class TabManager: NSObject {
                     .sink {
                         self?.selectedTabURLPublisher.send($0)
                     }
+            }
+
+        archivedTabsDurationSubscription =
+            _archivedTabsDuration.publisher.dropFirst().sink {
+                [weak self] _ in
+                self?.updateAllTabDataAndSendNotifications(notify: false)
+                // update CardGrid and ArchivedTabsPanelView with the latest data
+                self?.updateArchivedTabsPublisher.send()
             }
     }
 
@@ -196,7 +216,7 @@ class TabManager: NSObject {
         if isIncognito {
             return incognitoTabs.count
         } else {
-            return normalTabs.count
+            return FeatureFlag[.enableArchivedTabsView] ? activeNormalTabs.count : normalTabs.count
         }
     }
 
@@ -240,8 +260,14 @@ class TabManager: NSObject {
             updateWebViewForSelectedTab(notify: false)
         }
 
+        let isArchived = selectedTab.isArchived
         selectedTab.lastExecutedTime = Date.nowMilliseconds()
         selectedTab.applyTheme()
+
+        if isArchived {
+            // Tab data needs to be updated when a tab is brought back from archives.
+            updateAllTabDataAndSendNotifications(notify: true)
+        }
 
         if notify {
             sendSelectTabNotifications(previous: previous)
@@ -431,20 +457,57 @@ class TabManager: NSObject {
         tabs.rearrange(from: fromIndex, to: toIndex)
 
         if notify {
-            tabsUpdatedPublisher.send()
+            updateActiveTabsAndSendNotifications(notify: true)
         }
 
         preserveTabs()
     }
 
-    // Tab Group related functions
-    internal func updateTabGroupsAndSendNotifications(notify: Bool) {
-        tabGroups = getAll()
+    func updateActiveTabsAndSendNotifications(notify: Bool) {
+        activeTabs =
+            incognitoTabs
+            + normalTabs.filter {
+                return !$0.isArchived
+            }
+
+        if notify {
+            tabsUpdatedPublisher.send()
+        }
+    }
+
+    internal func updateAllTabDataAndSendNotifications(notify: Bool) {
+        updateActiveTabsAndSendNotifications(notify: false)
+
+        archivedTabs = normalTabs.filter {
+            return $0.isArchived
+        }
+
+        activeTabGroups = getAll()
             .reduce(into: [String: [Tab]]()) { dict, tab in
-                dict[tab.rootUUID, default: []].append(tab)
+                if FeatureFlag[.enableArchivedTabsView] {
+                    if !tab.isArchived {
+                        dict[tab.rootUUID, default: []].append(tab)
+                    }
+                } else {
+                    // If archivedTabsView is disabled, use the old tab group definition.
+                    dict[tab.rootUUID, default: []].append(tab)
+                }
             }.filter { $0.value.count > 1 }.reduce(into: [String: TabGroup]()) { dict, element in
                 dict[element.key] = TabGroup(children: element.value, id: element.key)
             }
+
+        // In archivedTabsPanelView, there are special UI treatments for a child tab,
+        // even if it's the only arcvhied tab in a group. Those tabs won't be filtered
+        // out (see activeTabGroups for comparison).
+        archivedTabGroups = getAll()
+            .reduce(into: [String: [Tab]]()) { dict, tab in
+                if tabGroupDict[tab.rootUUID] != nil && tab.isArchived {
+                    dict[tab.rootUUID, default: []].append(tab)
+                }
+            }.reduce(into: [String: TabGroup]()) { dict, element in
+                dict[element.key] = TabGroup(children: element.value, id: element.key)
+            }
+
         cleanUpTabGroupNames()
         if notify {
             tabsUpdatedPublisher.send()
@@ -458,17 +521,18 @@ class TabManager: NSObject {
         tabsUpdatedPublisher.send()
     }
 
+    // Tab Group related functions
     func removeTabFromTabGroup(_ tab: Tab) {
         tab.rootUUID = UUID().uuidString
-        updateTabGroupsAndSendNotifications(notify: true)
+        updateAllTabDataAndSendNotifications(notify: true)
     }
 
     func getTabGroup(for rootUUID: String) -> TabGroup? {
-        return tabGroups[rootUUID]
+        return activeTabGroups[rootUUID]
     }
 
     func getTabGroup(for tab: Tab) -> TabGroup? {
-        return tabGroups[tab.rootUUID]
+        return activeTabGroups[tab.rootUUID]
     }
 
     func closeTabGroup(_ item: TabGroup) {
@@ -486,7 +550,17 @@ class TabManager: NSObject {
     }
 
     func cleanUpTabGroupNames() {
-        // Write tab group name into dictionary
+        // The merged set of tab groups is still needed here to avoid displaying different
+        // titles for the same tab group. Either subset(active/archive) of a tab group will
+        // reference the same dictionary and show the same title.
+        let tabGroups = getAll()
+            .reduce(into: [String: [Tab]]()) { dict, tab in
+                dict[tab.rootUUID, default: []].append(tab)
+            }.filter { $0.value.count > 1 }.reduce(into: [String: TabGroup]()) { dict, element in
+                dict[element.key] = TabGroup(children: element.value, id: element.key)
+            }
+
+        // Write newly created tab group names into dictionary
         tabGroups.forEach { group in
             let id = group.key
             if tabGroupDict[id] == nil {
@@ -494,12 +568,10 @@ class TabManager: NSObject {
             }
         }
 
-        // Filter out deleted tab group names
+        // Garbage collect tab group names for tab groups that don't exist anymore
         var temp = [String: String]()
-        tabGroups.filter {
-            group in tabGroups[group.key] != nil
-        }.forEach { group in
-            temp[group.key] = tabGroupDict[group.key]
+        tabGroups.forEach { group in
+            temp[group.key] = group.value.displayTitle
         }
         tabGroupDict = temp
     }

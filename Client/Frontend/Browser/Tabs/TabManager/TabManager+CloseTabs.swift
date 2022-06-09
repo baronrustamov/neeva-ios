@@ -34,13 +34,15 @@ extension TabManager {
 
     func removeTabs(
         _ tabsToBeRemoved: [Tab], showToast: Bool = true,
-        updateSelectedTab: Bool = true
+        updateSelectedTab: Bool = true, dontAddToRecentlyClosed: Bool = false, notify: Bool = true
     ) {
         guard tabsToBeRemoved.count > 0 else {
             return
         }
 
-        addTabsToRecentlyClosed(tabsToBeRemoved, showToast: showToast)
+        if !dontAddToRecentlyClosed {
+            addTabsToRecentlyClosed(tabsToBeRemoved, showToast: showToast)
+        }
 
         let previous = selectedTab
 
@@ -57,8 +59,12 @@ extension TabManager {
             TabEvent.post(.didClose, for: tab)
         }
 
-        updateTabGroupsAndSendNotifications(notify: true)
-        sendSelectTabNotifications(previous: previous)
+        if notify {
+            updateAllTabDataAndSendNotifications(notify: true)
+            sendSelectTabNotifications(previous: previous)
+        } else {
+            updateAllTabDataAndSendNotifications(notify: false)
+        }
 
         storeChanges()
     }
@@ -81,7 +87,7 @@ extension TabManager {
 
         if notify {
             TabEvent.post(.didClose, for: tab)
-            updateTabGroupsAndSendNotifications(notify: notify)
+            updateAllTabDataAndSendNotifications(notify: notify)
         }
 
         if flushToDisk {
@@ -183,5 +189,11 @@ extension TabManager {
                 tab.close()
             }
         }
+    }
+
+    // MARK: - Blank Tabs
+    /// Removes any tabs with the location `about:blank`. Seen when clicking web links that open native apps.
+    func removeBlankTabs() {
+        removeTabs(tabs.filter { $0.url == URL.aboutBlank }, showToast: false)
     }
 }

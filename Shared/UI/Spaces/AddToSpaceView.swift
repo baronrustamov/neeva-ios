@@ -175,9 +175,9 @@ public class AddToSpaceRequest: ObservableObject {
         // Note: This creates a reference cycle between self and the mutation.
         // This means even if all other references are dropped to self, then
         // the mutation will attempt to run to completion.
-        self.cancellable = DeleteSpaceResultByUrlMutation(
-            input: DeleteSpaceResultByURLInput(spaceId: id, url: self.url.absoluteString)
-        ).perform { result in
+        self.cancellable = SpaceStore.shared.removeItemFromSpace(
+            spaceId: id, url: self.url.absoluteString
+        ) { result in
             self.cancellable = nil
             switch result {
             case .failure(let error):

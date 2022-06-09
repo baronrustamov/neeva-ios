@@ -100,7 +100,11 @@ class CookieCutterHelper: TabContentScript {
                 let bvc = SceneDelegate.getBVC(for: currentWebView)
                 cookieCutterModel.cookieWasHandled(bvc: bvc, domain: domain)
             case .started:
-                cookieCutterModel.cookiesBlocked = 0
+                if let domain = domain, cookieCutterModel.isSiteFlagged(domain: domain) {
+                    cookieCutterModel.cookiesBlocked = 1
+                } else {
+                    cookieCutterModel.cookiesBlocked = 0
+                }
             }
         }
 

@@ -86,17 +86,20 @@ struct TabGridContainer: View {
                 {
                     VStack(alignment: .leading, spacing: 0) {
                         SingleLevelTabCardsView(containerGeometry: geom, incognito: isIncognito)
+
                         Spacer()
+
                         if FeatureFlag[.enableArchivedTabsView]
-                            && tabModel.getRows(incognito: isIncognito).count > 0
+                            && tabModel.getRows(incognito: isIncognito).count > 1
                         {
                             ArchivedTabsView(containerGeometry: geom.size)
                         }
                     }.frame(minWidth: geom.size.width, minHeight: geom.size.height)
                 } else {
                     SingleLevelTabCardsView(containerGeometry: geom, incognito: isIncognito)
+
                     if FeatureFlag[.enableArchivedTabsView] && !isIncognito
-                        && tabModel.getRows(incognito: isIncognito).count > 0
+                        && tabModel.getRows(incognito: isIncognito).count > 1
                     {
                         ArchivedTabsView(containerGeometry: geom.size)
                     }
@@ -115,7 +118,7 @@ struct TabGridContainer: View {
         .useEffect(deps: gridModel.needsScrollToSelectedTab) { _ in
             if let selectedRowId = selectedRowId {
                 withAnimation(nil) {
-                    scrollProxy.scrollTo(selectedRowId)
+                    scrollProxy.scrollTo(selectedRowId, anchor: .center)
                 }
                 DispatchQueue.main.async { gridModel.didVerticalScroll += 1 }
             }
@@ -230,9 +233,9 @@ struct CardsContainer: View {
                         gridModel.scrollToSelectedTab()
                     }
 
-                    // isolate ArchivedTabsView when there is no tab to make it not scrollable
+                    // isolate ArchivedTabsView when there is no tab or one row of tabs to make it not scrollable
                     if FeatureFlag[.enableArchivedTabsView]
-                        && tabModel.getRows(incognito: false).count == 0
+                        && tabModel.getRows(incognito: false).count < 2
                     {
                         VStack {
                             Spacer()

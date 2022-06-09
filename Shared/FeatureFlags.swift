@@ -8,31 +8,32 @@ import Foundation
 /// Usage: add a `case` to this enum, then reference `FeatureFlag[.myFeature]` to check for that feature’s status.
 public enum FeatureFlag: String, CaseIterable, RawRepresentable {
     // IMPORTANT: when adding a new feature flag, make sure to keep this list
-    // in alphabetical order to reduce merge conflicts.
-
+    // in alphabetical order to reduce merge conflicts and keep the settings screen
+    // simple to scan.
     case bottomURLBar = "Bottom URL Bar"
     case cardStrip = "Carousel of cards instead of tab strip"
-    case topCardStrip = "Top Card Strip"
+    case cookieCutterRemindMeLater = "Cookie Cutter Remind Me Later"
+    case customSearchEngine = "Custom Search Engine"
     case debugURLBar = "URL Bar Debug Mode"
-    case enableTimeBasedSwitcher = "Enable time based tab switcher"
-    case demoteAfter15secondsTimeBasedSwitcher =
-        "demote tabs after 15 seconds in time based switcher"
     case enableArchivedTabsView = "Enable archivedTabsView in switcher"
+    case enableSuggestedSpaces = "Show Spaces from Neeva Community"
+    case enableTimeBasedSwitcher = "Enable time based tab switcher"
+    case incognitoQuickClose = "Incognito Quick Close"
     case inlineAccountSettings = "Inline Account Settings"
+    case interactiveScrollView = "Interactive Scroll View"
+    case lowMemoryZombieTabs = "Low Memory Zombie Tabs"
+    case newWeb3Features = "New Web3 Features"
     case pinToTopSites = "Pin to Top Sites"
+    case qrCodeSignIn = "Sign in with QR Code"
     case recommendedSpaces = "Recommended Spaces"
     case reverseChronologicalOrdering = "Sort tabs based on reverse chronological ordering"
+    case shortenTimeThresholdForArchivingTabs =
+        "shorten time threshold for archiving tabs (1 day -> 15 seconds, 7 days -> 30 seconds, 1 month -> 1 minute)"
     case spaceComments = "Comments from space on pages"
     case spacify = "Enable button to turn a page into a Space"
     case swipePlusPlus = "Additional forward and back swipe gestures"
-    case enableSuggestedSpaces = "Show Spaces from Neeva Community"
-    case customSearchEngine = "Custom Search Engine"
     case swipeToCloseTabs = "Swipe to close tabs"
-    case cookieCutterRemindMeLater = "Cookie Cutter Remind Me Later"
-    case newWeb3Features = "New Web3 Features"
-    case lowMemoryZombieTabs = "Low Memory Zombie Tabs"
-    case qrCodeSignIn = "Sign in with QR Code"
-    case interactiveScrollView = "Interactive Scroll View"
+    case topCardStrip = "Top Card Strip"
 
     public init?(caseName: String) {
         for value in FeatureFlag.allCases where "\(value)" == caseName {

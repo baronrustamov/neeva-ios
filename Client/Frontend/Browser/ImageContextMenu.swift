@@ -49,6 +49,7 @@ class ImageContextMenu: UIViewController {
         tableView.bounces = false
         tableView.separatorInset = .zero
         tableView.isScrollEnabled = false
+        tableView.isHidden = true
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0
         }
@@ -61,12 +62,21 @@ class ImageContextMenu: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.clipsToBounds = true
         view.layer.cornerRadius = ImageContextUX.tableCornerRadius
+        view.isHidden = true
+        return view
+    }()
+
+    private let loadingView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .DefaultBackground
+        view.layer.cornerRadius = ImageContextUX.tableCornerRadius
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
     private let loadingIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView()
-        indicator.tintColor = .label
+        indicator.tintColor = .DefaultBackground
         indicator.translatesAutoresizingMaskIntoConstraints = false
         return indicator
     }()
@@ -132,14 +142,19 @@ class ImageContextMenu: UIViewController {
 
 extension ImageContextMenu {
     private func configureViews() {
-        view.addSubviews(blurEffectView, imageContainerView, tableView)
+        view.addSubviews(blurEffectView, imageContainerView, tableView, loadingView)
         blurEffectView.makeAllEdges(equalTo: view)
         imageContainerView.makeEdges(
-            .leading, greaterThanOrequalTo: view, withOffset: ImageContextUX.itemSpacing)
+            .leading, greaterThanOrequalTo: view,
+            withOffset: ImageContextUX.itemSpacing)
         imageContainerView.makeEdges(
-            .trailing, lessThanOrEqualTo: view, withOffset: -ImageContextUX.itemSpacing)
+            .trailing, lessThanOrEqualTo: view,
+            withOffset: -ImageContextUX.itemSpacing)
         imageContainerView.makeCenterX(equalTo: view)
         imageContainerView.heightAnchor.constraint(
+            greaterThanOrEqualToConstant: 100
+        ).isActive = true
+        imageContainerView.widthAnchor.constraint(
             greaterThanOrEqualToConstant: 100
         ).isActive = true
         imageContainerView.bottomAnchor.constraint(
@@ -156,11 +171,15 @@ extension ImageContextMenu {
             equalTo: imageContainerView.bottomAnchor,
             constant: ImageContextUX.itemSpacing
         ).isActive = true
+        loadingView.makeCenter(equalTo: view)
+        loadingView.makeHeight(equalToConstant: 100)
+        loadingView.makeWidth(equalToConstant: 100)
         configureImageContainerView()
+        configureLoadingView()
     }
 
     private func configureImageContainerView() {
-        imageContainerView.addSubviews(loadingIndicator, imageView, baseDomainLabel)
+        imageContainerView.addSubviews(imageView, baseDomainLabel)
         imageView.makeEdges([.leading, .trailing, .top], equalTo: imageContainerView)
         imageView.bottomAnchor.constraint(
             equalTo: baseDomainLabel.topAnchor
@@ -170,10 +189,11 @@ extension ImageContextMenu {
             withOffset: 2 * ImageContextUX.itemSpacing)
         baseDomainLabel.makeEdges(.bottom, equalTo: imageContainerView)
         baseDomainLabel.makeHeight(equalToConstant: 40)
-        loadingIndicator.makeCenterX(equalTo: imageContainerView)
-        loadingIndicator.makeCenterY(equalTo: imageContainerView, withOffset: -20)
-        loadingIndicator.makeHeight(equalToConstant: 24)
-        loadingIndicator.makeWidth(equalToConstant: 24)
+    }
+
+    private func configureLoadingView() {
+        loadingView.addSubviews(loadingIndicator)
+        loadingIndicator.makeAllEdges(equalTo: loadingView)
     }
 
     private func setActions() {
@@ -195,7 +215,9 @@ extension ImageContextMenu {
                 multiplier: image.size.height / image.size.width
             ).isActive = true
             self.loadingIndicator.stopAnimating()
-            self.loadingIndicator.removeFromSuperview()
+            self.loadingView.removeFromSuperview()
+            self.imageContainerView.isHidden = false
+            self.tableView.isHidden = false
         }
     }
 }

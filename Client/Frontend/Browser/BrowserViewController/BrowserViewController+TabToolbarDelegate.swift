@@ -9,6 +9,7 @@ import SwiftUI
 enum ToolbarAction {
     case back
     case forward
+    case closeTab
     case reloadStop
     case overflow
     case longPressBackForward
@@ -47,6 +48,16 @@ extension BrowserViewController: ToolbarDelegate {
                 }
 
                 self.tabManager.selectedTab?.goForward()
+            case .closeTab:
+                ClientLogger.shared.logCounter(
+                    .ClickClose,
+                    attributes: EnvironmentHelper.shared.getAttributes() + [toolbarActionAttribute]
+                )
+
+                if let tab = self.tabManager.selectedTab {
+                    self.tabManager.close(tab)
+                    self.showTabTray()
+                }
             case .reloadStop:
                 if self.chromeModel.reloadButton == .reload {
                     ClientLogger.shared.logCounter(
@@ -98,7 +109,6 @@ extension BrowserViewController: ToolbarDelegate {
                     .ClickAddToSpaceButton,
                     attributes: EnvironmentHelper.shared.getAttributes() + [toolbarActionAttribute]
                 )
-
             case .showTabs:
                 self.showTabTray()
             case .share:
@@ -106,6 +116,7 @@ extension BrowserViewController: ToolbarDelegate {
             case .showZeroQuery:
                 self.showZeroQuery()
             }
+
             if action != .showZeroQuery,
                 self.tabContainerModel.currentContentUI == .zeroQuery
                     || self.tabContainerModel.currentContentUI == .suggestions

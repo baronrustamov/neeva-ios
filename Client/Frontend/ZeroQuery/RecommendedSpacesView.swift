@@ -33,7 +33,7 @@ struct RecommendedSpacesView: View {
                 .padding(.vertical, 16)
                 .environment(
                     \.onOpenURLForSpace,
-                    { url, _ in
+                    { url, id in
                         if url.absoluteString.starts(
                             with: NeevaConstants.appSpacesURL.absoluteString),
                             let navPath = NavigationPath.navigationPath(
@@ -51,7 +51,13 @@ struct RecommendedSpacesView: View {
                             viewModel.bvc.hideZeroQuery()
                         }
 
-                        ClientLogger.shared.logCounter(.SpacesRecommendedDetailUIVisited)
+                        ClientLogger.shared.logCounter(
+                            .SpacesRecommendedDetailUIVisited,
+                            attributes: [
+                                ClientLogCounterAttribute(
+                                    key: LogConfig.SpacesAttribute.spaceID, value: id)
+                            ]
+                        )
                     }
                 )
                 .environmentObject(viewModel.bvc.gridModel)

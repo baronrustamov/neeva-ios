@@ -161,6 +161,10 @@ struct PlaceView: View {
         _viewModel = StateObject(wrappedValue: viewModel)
     }
 
+    init(place: NeevaScopeSearch.PlaceItem) {
+        self.init(viewModel: PlaceViewModel(place))
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: PlaceViewUX.sectionSpacing) {
             GeometryReader { geometry in
@@ -533,6 +537,10 @@ struct PlaceListView: View {
 
     init(viewModel: PlaceListViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
+    }
+
+    init(placeList: NeevaScopeSearch.PlaceListResult) {
+        self.init(viewModel: PlaceListViewModel(placeList))
     }
 
     var body: some View {

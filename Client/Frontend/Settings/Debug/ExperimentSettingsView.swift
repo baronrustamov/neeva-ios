@@ -36,10 +36,10 @@ struct ExperimentSettingsView: View {
                     experiment: .promoCardTypeAfterFirstRun
                 )
 
-                OptionalPrefilledStringField<NeevaExperiment.DefaultBrowserChangeButton>(
-                    "DefaultBrowserChangeButton",
+                OptionalPrefilledStringField<NeevaExperiment.DefaultBrowserWelcomeScreen>(
+                    "DefaultBrowserWelcomeScreen",
                     value: $valueTextPromoCard,
-                    experiment: .defaultBrowserChangeButton
+                    experiment: .defaultBrowserWelcomeScreen
                 )
             }
         }

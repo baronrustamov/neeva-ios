@@ -57,7 +57,7 @@ extension TabManager {
 
         selectTab(tabToSelect, notify: true)
 
-        updateTabGroupsAndSendNotifications(notify: true)
+        updateAllTabDataAndSendNotifications(notify: true)
         return true
     }
 }

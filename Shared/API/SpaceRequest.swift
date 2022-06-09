@@ -6,6 +6,11 @@ import Apollo
 import Combine
 
 public class CreateSpaceRequest: MutationRequest<CreateSpaceMutation> {
+    // This constructor is used strictly for testing
+    public override init() {
+        super.init()
+    }
+
     public init(name: String) {
         super.init(mutation: CreateSpaceMutation(name: name))
     }

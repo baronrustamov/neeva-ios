@@ -6,7 +6,7 @@ import SDWebImageSwiftUI
 import Shared
 import SwiftUI
 
-struct BuyingGuideItem: View {
+struct BuyingGuideListItem: View {
     let guide: NeevaScopeSearch.BuyingGuide
     let index: Int
     let total: Int
@@ -77,15 +77,66 @@ struct BuyingGuideItem: View {
     }
 }
 
-struct BuyingGuideList: View {
+struct BuyingGuideListView: View {
     let buyingGuides: [NeevaScopeSearch.BuyingGuide]
 
     var body: some View {
         ScrollView(.horizontal) {
             HStack {
                 ForEach(Array(buyingGuides.enumerated()), id: \.0) { index, item in
-                    BuyingGuideItem(guide: item, index: index, total: buyingGuides.count)
+                    BuyingGuideListItem(guide: item, index: index, total: buyingGuides.count)
                 }
+            }
+        }
+    }
+}
+
+struct ReviewURLButton: View {
+    let url: URL
+    @Environment(\.onOpenURLForCheatsheet) var onOpenURLForCheatsheet
+
+    var body: some View {
+        Button(action: {
+            onOpenURLForCheatsheet(url, String(describing: Self.self))
+        }) {
+            getHostName()
+        }
+    }
+
+    @ViewBuilder
+    func getHostName() -> some View {
+        let host = url.baseDomain?.replacingOccurrences(of: ".com", with: "")
+        let lastPath = url.lastPathComponent
+            .replacingOccurrences(of: ".html", with: "")
+            .replacingOccurrences(of: "-", with: " ")
+        if host != nil {
+            HStack {
+                Text(host!).bold()
+                if !lastPath.isEmpty {
+                    Text("(")
+                        + Text(lastPath)
+                        + Text(")")
+                }
+            }
+            .withFont(unkerned: .bodyMedium)
+            .lineLimit(1)
+            .background(
+                RoundedRectangle(cornerRadius: 10).stroke(Color.gray, lineWidth: 1).padding(-6)
+            )
+            .padding(6)
+            .foregroundColor(.secondaryLabel)
+        }
+    }
+}
+
+struct BuyingGuideView: View {
+    let reviewURLs: [URL]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            Text("Buying Guide").withFont(.headingMedium)
+            ForEach(reviewURLs, id: \.self) { url in
+                ReviewURLButton(url: url)
             }
         }
     }
