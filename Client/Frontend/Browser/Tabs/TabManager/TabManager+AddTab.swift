@@ -29,9 +29,9 @@ extension TabManager {
             for tab in newTabs {
                 tab.rootUUID = rootUUID
             }
-
-            self.updateAllTabDataAndSendNotifications(notify: false)
         }
+
+        self.updateAllTabDataAndSendNotifications(notify: false)
 
         // Select the most recent.
         if shouldSelectTab {
