@@ -13,17 +13,19 @@ extension TabManager {
         // calculated in advance, and later used for finding rightOrLeftTab. In time-based
         // switcher, the normalTabs get filtered to make sure we only select tab in
         // today section.
-        guard
-            let index = tab.isIncognito
-                ? incognitoTabs.firstIndex(where: { $0 == tab })
-                : (FeatureFlag[.enableTimeBasedSwitcher]
-                    ? normalTabs.filter {
-                        $0.wasLastExecuted(.today)
-                    }.firstIndex(where: { $0 == tab })
-                    : normalTabs.firstIndex(where: { $0 == tab }))
-        else { return }
+        let index =
+            tab.isIncognito
+            ? incognitoTabs.firstIndex(where: { $0 == tab })
+            : (FeatureFlag[.enableTimeBasedSwitcher]
+                ? normalTabs.filter {
+                    $0.wasLastExecuted(.today)
+                }.firstIndex(where: { $0 == tab })
+                : normalTabs.firstIndex(where: { $0 == tab }))
+
         addTabsToRecentlyClosed([tab], showToast: showToast)
         removeTab(tab, flushToDisk: true, notify: true)
+
+        guard let index = index else { return }
 
         if let selectedTab = selectedTab, selectedTab.isIncognito == tab.isIncognito,
             updateSelectedTab
