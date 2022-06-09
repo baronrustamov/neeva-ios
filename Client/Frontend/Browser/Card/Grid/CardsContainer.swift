@@ -86,7 +86,9 @@ struct TabGridContainer: View {
                 {
                     VStack(alignment: .leading, spacing: 0) {
                         SingleLevelTabCardsView(containerGeometry: geom, incognito: isIncognito)
+
                         Spacer()
+
                         if FeatureFlag[.enableArchivedTabsView]
                             && tabModel.getRows(incognito: isIncognito).count > 1
                         {
@@ -95,6 +97,7 @@ struct TabGridContainer: View {
                     }.frame(minWidth: geom.size.width, minHeight: geom.size.height)
                 } else {
                     SingleLevelTabCardsView(containerGeometry: geom, incognito: isIncognito)
+
                     if FeatureFlag[.enableArchivedTabsView] && !isIncognito
                         && tabModel.getRows(incognito: isIncognito).count > 1
                     {
@@ -115,7 +118,7 @@ struct TabGridContainer: View {
         .useEffect(deps: gridModel.needsScrollToSelectedTab) { _ in
             if let selectedRowId = selectedRowId {
                 withAnimation(nil) {
-                    scrollProxy.scrollTo(selectedRowId)
+                    scrollProxy.scrollTo(selectedRowId, anchor: .center)
                 }
                 DispatchQueue.main.async { gridModel.didVerticalScroll += 1 }
             }

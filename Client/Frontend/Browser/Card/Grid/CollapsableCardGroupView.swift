@@ -6,11 +6,15 @@ import Defaults
 import Shared
 import SwiftUI
 
+typealias Row = TabCardModel.Row
+typealias TabCell = TabCardModel.Row.Cell
+
 struct CollapsedCardGroupView: View {
     @ObservedObject var groupDetails: TabGroupCardDetails
     let containerGeometry: GeometryProxy
     let rowIndex: Int?
-    let nextToCells: Bool
+    let previousCell: TabCell?
+    let nextCell: TabCell?
 
     @Environment(\.aspectRatio) private var aspectRatio
     @Environment(\.cardSize) private var size
@@ -46,11 +50,11 @@ struct CollapsedCardGroupView: View {
             ExpandedCardGroupRowView(
                 groupDetails: groupDetails, containerGeometry: containerGeometry,
                 range: 0..<groupDetails.allDetails.count, rowIndex: rowIndex,
-                nextToCells: nextToCells, singleLined: true
+                previousCell: previousCell, nextCell: nextCell, singleLined: true
             )
         } else {
             VStack(spacing: 0) {
-                TabGroupHeader(groupDetails: groupDetails, rowIndex: rowIndex, nextToCells: false)
+                TabGroupHeader(groupDetails: groupDetails, rowIndex: rowIndex)
                 scrollView
             }
             .animation(nil)
@@ -116,7 +120,8 @@ struct CollapsedCardGroupView: View {
             .useEffect(deps: gridModel.needsScrollToSelectedTab) { _ in
                 if groupDetails.allDetails.contains(where: \.isSelected) {
                     withAnimation(nil) {
-                        scrollProxy.scrollTo(groupDetails.allDetails.first(where: \.isSelected)?.id)
+                        scrollProxy.scrollTo(
+                            groupDetails.allDetails.first(where: \.isSelected)?.id, anchor: .center)
                     }
                     DispatchQueue.main.async { gridModel.didHorizontalScroll += 1 }
                 }
@@ -132,6 +137,17 @@ struct CollapsedCardGroupView: View {
             }
         }
     }
+
+    init(
+        groupDetails: TabGroupCardDetails, containerGeometry: GeometryProxy, row: Row,
+        cellIndex: Int
+    ) {
+        self.groupDetails = groupDetails
+        self.containerGeometry = containerGeometry
+        self.rowIndex = row.index
+        self.previousCell = row.cells.previousItem(before: cellIndex)
+        self.nextCell = row.cells.nextItem(after: cellIndex)
+    }
 }
 
 struct ExpandedCardGroupRowView: View {
@@ -139,15 +155,29 @@ struct ExpandedCardGroupRowView: View {
     let containerGeometry: GeometryProxy
     var range: Range<Int>
     let rowIndex: Int?
-    let nextToCells: Bool
+    let previousCell: TabCell?
+    let nextCell: TabCell?
     var singleLined: Bool = false
 
     @Environment(\.aspectRatio) private var aspectRatio
     @Environment(\.cardSize) private var size
     @EnvironmentObject var browserModel: BrowserModel
 
-    var horizontalPadding: CGFloat {
-        nextToCells ? 6 : 0
+    private let tabGroupPadding: CGFloat = 10
+    private let tabPadding: CGFloat = 6
+    var leadingPadding: CGFloat {
+        guard let previousCell = previousCell else {
+            return 0
+        }
+
+        return previousCell.isTabGroup ? tabGroupPadding : tabPadding
+    }
+    var trailingPadding: CGFloat {
+        guard let nextCell = nextCell else {
+            return 0
+        }
+
+        return nextCell.isTabGroup ? tabGroupPadding : tabPadding
     }
 
     var maxWidth: CGFloat {
@@ -155,14 +185,17 @@ struct ExpandedCardGroupRowView: View {
         let widthForCards = size * numberOfCards
         let cardSpacing = CardGridUX.GridSpacing * (numberOfCards + 1)
 
-        return widthForCards + cardSpacing + (horizontalPadding * 2)
+        return widthForCards + cardSpacing + leadingPadding + trailingPadding
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             if isFirstRow(range) {
                 TabGroupHeader(
-                    groupDetails: groupDetails, rowIndex: rowIndex, nextToCells: nextToCells)
+                    groupDetails: groupDetails, rowIndex: rowIndex
+                ).if(previousCell != nil) {
+                    $0.padding(.leading, tabPadding)
+                }
             } else {
                 HStack {
                     // Spacer to expand the width of the view
@@ -211,8 +244,9 @@ struct ExpandedCardGroupRowView: View {
                     isLastRow(range, groupDetails) ? 24 : 0,
                     corners: .bottom
                 )
-                .padding(.horizontal, horizontalPadding)
-        ).if(nextToCells || singleLined) {
+                .padding(.leading, leadingPadding)
+                .padding(.trailing, trailingPadding)
+        ).if(previousCell != nil || nextCell != nil || singleLined) {
             $0.frame(maxWidth: maxWidth)
         }
     }
@@ -229,13 +263,38 @@ struct ExpandedCardGroupRowView: View {
     func isFirstRow(_ rowInfo: Range<Int>) -> Bool {
         return rowInfo.first == 0
     }
+
+    init(
+        groupDetails: TabGroupCardDetails, containerGeometry: GeometryProxy, range: Range<Int>,
+        rowIndex: Int?, previousCell: TabCell?, nextCell: TabCell?, singleLined: Bool = false
+    ) {
+        self.groupDetails = groupDetails
+        self.containerGeometry = containerGeometry
+        self.range = range
+        self.rowIndex = rowIndex
+        self.previousCell = previousCell
+        self.nextCell = nextCell
+        self.singleLined = singleLined
+    }
+
+    init(
+        groupDetails: TabGroupCardDetails, containerGeometry: GeometryProxy, range: Range<Int>,
+        row: Row, cellIndex: Int, singleLined: Bool = false
+    ) {
+        self.groupDetails = groupDetails
+        self.containerGeometry = containerGeometry
+        self.range = range
+        self.rowIndex = row.index
+        self.previousCell = row.cells.previousItem(before: cellIndex)
+        self.nextCell = row.cells.nextItem(after: cellIndex)
+        self.singleLined = singleLined
+    }
 }
 
 struct TabGroupHeader: View {
     @ObservedObject var groupDetails: TabGroupCardDetails
     @Environment(\.columns) private var columns
     let rowIndex: Int?
-    let nextToCells: Bool
 
     @State private var renaming = false
     @State private var deleting = false {

@@ -218,6 +218,15 @@ class TabCardModel: CardModel {
                     return 0
                 }
             }
+
+            var isTabGroup: Bool {
+                switch self {
+                case .tabGroupInline, .tabGroupGridRow:
+                    return true
+                default:
+                    return false
+                }
+            }
         }
         var cells: [Cell]
         var index: Int?
