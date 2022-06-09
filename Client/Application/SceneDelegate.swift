@@ -13,13 +13,15 @@ import StoreKit
 private let log = Logger.browser
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-    var window: UIWindow?
-    private var scene: UIScene?
+    private static var activeSceneCount: Int = 0
 
+    var scene: UIScene?
+    var window: UIWindow?
     var bvc: BrowserViewController!
     private var geigerCounter: KMCGeigerCounter?
 
-    private static var activeSceneCount: Int = 0
+    @Default(.scenePreviousUIState) private var scenePreviousUIState
+    private let backgroundProcessor = BackgroundTaskProcessor(label: "SceneDelegate")
 
     // MARK: - Scene state
     func scene(
@@ -27,6 +29,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         self.scene = scene
+
         guard let scene = (scene as? UIWindowScene) else { return }
 
         window = .init(windowScene: scene)
@@ -65,7 +68,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         bvc.restorationClass = AppDelegate.self
 
         window!.rootViewController = bvc
-        bvc.tabManager.selectedTab?.reload()
+
+        // Restoring SceneUIState.
+        if FeatureFlag[.restoreAppUI] {
+            let sceneUIState = SceneUIState(rawValue: scenePreviousUIState)
+
+            switch sceneUIState {
+            case .cardGrid(let switcherState):
+                switch switcherState {
+                case .tabs:
+                    bvc.browserModel.showGridWithNoAnimation()
+                case .spaces:
+                    bvc.browserModel.showSpaces()
+                }
+            case .spaceDetailView(let id):
+                bvc.browserModel.showSpaces()
+                bvc.browserModel.openSpace(spaceId: id, bvc: bvc) {}
+            case .tab:
+                break
+            }
+        }
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
@@ -133,6 +155,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         getAppDelegate().updateTopSitesWidget()
         bvc.downloadQueue.pauseAll()
+    }
+
+    func setSceneUIState(to state: SceneUIState) {
+        // This ensures that the state is correctly saved.
+        backgroundProcessor.performTask {
+            DispatchQueue.main.sync {
+                self.scenePreviousUIState = state.rawValue
+            }
+        }
     }
 
     static func handleThemePreference(for option: AppearanceThemeOption) {

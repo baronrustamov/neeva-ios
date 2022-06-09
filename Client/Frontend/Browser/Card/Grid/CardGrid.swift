@@ -5,7 +5,7 @@
 import Shared
 import SwiftUI
 
-enum SwitcherViews: String, CaseIterable {
+enum SwitcherView: String, CaseIterable {
     case tabs = "Tabs"
     case spaces = "Spaces"
 }

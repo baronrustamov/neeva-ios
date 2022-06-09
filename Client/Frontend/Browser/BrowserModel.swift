@@ -36,14 +36,13 @@ class BrowserModel: ObservableObject {
     var notificationViewManager: NotificationViewManager
 
     func showGridWithAnimation() {
+        gridModel.setSwitcherState(to: .tabs)
         gridModel.switchModeWithoutAnimation = true
 
-        if gridModel.switcherState != .tabs {
-            gridModel.switcherState = .tabs
-        }
         if FeatureFlag[.enableTimeBasedSwitcher] {
             gridModel.tabCardModel.updateIfNeeded()
         }
+
         if tabManager.selectedTab?.isIncognito != incognitoModel.isIncognito {
             showGridWithNoAnimation()
         } else {
@@ -73,7 +72,7 @@ class BrowserModel: ObservableObject {
         cardTransitionModel.update(to: .hidden)
         contentVisibilityModel.update(showContent: false)
         showGrid = true
-        gridModel.switcherState = .spaces
+        gridModel.setSwitcherState(to: .spaces)
 
         if forceUpdate {
             updateSpaces()
@@ -109,10 +108,12 @@ class BrowserModel: ObservableObject {
         overlayManager.hideCurrentOverlay(ofPriority: .modal)
         contentVisibilityModel.update(showContent: true)
 
-        gridModel.switcherState = .tabs
+        gridModel.setSwitcherState(to: .tabs)
         gridModel.closeDetailView()
 
         tabManager.updateWebViewForSelectedTab(notify: true)
+
+        SceneDelegate.getCurrentSceneDelegate(with: tabManager.scene)?.setSceneUIState(to: .tab)
         gridModel.switchModeWithoutAnimation = false
         gridModel.tabCardModel.isSearchingForTabs = false
     }
@@ -123,6 +124,9 @@ class BrowserModel: ObservableObject {
         if showGrid, cardTransitionModel.state == .visibleForTrayShow {
             cardTransitionModel.update(to: .hidden)
             gridModel.switchModeWithoutAnimation = false
+
+            SceneDelegate.getCurrentSceneDelegate(with: tabManager.scene)?.setSceneUIState(
+                to: .cardGrid(gridModel.switcherState))
         } else {
             hideGridWithNoAnimation()
         }
@@ -174,7 +178,7 @@ class BrowserModel: ObservableObject {
 
     func openSpaceDigest(bvc: BrowserViewController) {
         bvc.showTabTray()
-        gridModel.switcherState = .spaces
+        gridModel.setSwitcherState(to: .spaces)
 
         openSpace(spaceId: SpaceStore.dailyDigestID, bvc: bvc) {}
     }

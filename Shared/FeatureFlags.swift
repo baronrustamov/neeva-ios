@@ -33,6 +33,7 @@ public enum FeatureFlag: String, CaseIterable, RawRepresentable {
     case spacify = "Enable button to turn a page into a Space"
     case swipePlusPlus = "Additional forward and back swipe gestures"
     case swipeToCloseTabs = "Swipe to close tabs"
+    case restoreAppUI = "Restore App UI"
     case topCardStrip = "Top Card Strip"
 
     public init?(caseName: String) {

@@ -38,7 +38,8 @@ struct CardStripContent: View {
         self.tabCardModel = TabCardModel(
             manager: tabManager)
         self.spaceCardModel = SpaceCardModel(
-            manager: NeevaUserInfo.shared.isUserLoggedIn ? .shared : .suggested)
+            manager: NeevaUserInfo.shared.isUserLoggedIn ? .shared : .suggested,
+            scene: tabManager.scene)
         self.sitesCardModel = SiteCardModel(urls: [], tabManager: tabManager)
         self.cardStripModel = CardStripModel()
         self.gridModel = bvc.gridModel

@@ -627,6 +627,13 @@ class Tab: NSObject, ObservableObject {
         if revUUID {
             self.screenshotUUID = UUID()
         }
+
+        guard let screenshotUUID = screenshotUUID, let screenshot = screenshot else {
+            return
+        }
+
+        TabManagerStore.shared.imageStore?.updateOne(
+            key: screenshotUUID.uuidString, image: screenshot)
     }
 
     func toggleChangeUserAgent() {

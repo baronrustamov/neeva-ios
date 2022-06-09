@@ -67,7 +67,7 @@ class CardTests: XCTestCase {
         chromeModel = TabChromeModel()
 
         SpaceStore.shared = .createMock([.stackOverflow, .savedForLater, .shared, .public])
-        spaceCardModel = SpaceCardModel()
+        spaceCardModel = SpaceCardModel(scene: nil)
     }
 
     override func tearDown() {
@@ -414,7 +414,7 @@ class CardTests: XCTestCase {
         manager.addTab()
         waitForCondition(condition: { manager.tabs.count == 3 })
 
-        gridModel.switcherState = .spaces
+        gridModel.setSwitcherState(to: .spaces)
         spaceCardModel.onDataUpdated()
         waitForCondition(condition: { spaceCardModel.allDetails.count == 4 })
 

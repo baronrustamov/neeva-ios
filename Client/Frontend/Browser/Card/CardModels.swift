@@ -517,20 +517,23 @@ class SpaceCardModel: CardModel {
     @Published private(set) var allDetailsWithExclusionList: [SpaceCardDetails] = []
     @Published var detailedSpace: SpaceCardDetails? {
         didSet {
-            guard detailedSpace == nil else {
+            if let detailedSpace = detailedSpace {
                 ClientLogger.shared.logCounter(
                     .SpacesDetailUIVisited,
                     attributes:
-                        getLogCounterAttributesForSpaces(details: detailedSpace!))
+                        getLogCounterAttributesForSpaces(details: detailedSpace))
+
                 // Collect separately. View definition depends on aggregate stats policy
                 ClientLogger.shared.logCounter(
                     .space_app_view,
                     attributes:
-                        getLogCounterAttributesForSpaces(details: detailedSpace!))
-                return
-            }
+                        getLogCounterAttributesForSpaces(details: detailedSpace))
 
-            if let id = spaceNeedsRefresh {
+                if let scene = scene, let id = detailedSpace.item?.id.id {
+                    SceneDelegate.getCurrentSceneDelegate(with: scene)?.setSceneUIState(
+                        to: .spaceDetailView(id))
+                }
+            } else if let id = spaceNeedsRefresh {
                 manager.refreshSpace(spaceID: id)
                 spaceNeedsRefresh = nil
 
@@ -559,10 +562,13 @@ class SpaceCardModel: CardModel {
     private var editingSubscription: AnyCancellable? = nil
     private var detailsSubscriptions: Set<AnyCancellable> = Set()
     private var spaceNeedsRefresh: String? = nil
+    private var scene: UIScene?
 
-    init(manager: SpaceStore = SpaceStore.shared) {
+    init(manager: SpaceStore = SpaceStore.shared, scene: UIScene?) {
         self.manager = manager
-        self.manager.spotlightEventDelegate = SpotlightLogger.shared
+        self.scene = scene
+
+        manager.spotlightEventDelegate = SpotlightLogger.shared
 
         NeevaUserInfo.shared.$isUserLoggedIn.sink { isLoggedIn in
             self.manager = isLoggedIn ? .shared : .suggested
