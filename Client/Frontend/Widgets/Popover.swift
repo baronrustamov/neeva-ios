@@ -24,6 +24,7 @@ extension View {
     func presentAsPopover<Content: View>(
         isPresented: Binding<Bool>,
         backgroundColor: UIColor? = nil,
+        useDimmingBackground: Bool = true,
         arrowDirections: UIPopoverArrowDirection? = nil,
         dismissOnTransition: Bool = false,
         onDismiss: (() -> Void)? = nil,
@@ -34,6 +35,7 @@ extension View {
                 isPresented: isPresented,
                 arrowDirections: arrowDirections,
                 backgroundColor: backgroundColor,
+                useDimmingBackground: useDimmingBackground,
                 dismissOnTransition: dismissOnTransition,
                 onDismiss: onDismiss
             ) {
@@ -51,6 +53,7 @@ struct Popover<Content: View>: UIViewControllerRepresentable {
     @Binding var isPresented: Bool
     let arrowDirections: UIPopoverArrowDirection?
     let backgroundColor: UIColor?
+    let useDimmingBackground: Bool
     let dismissOnTransition: Bool
     let onDismiss: (() -> Void)?
     let content: () -> Content
@@ -105,6 +108,7 @@ struct Popover<Content: View>: UIViewControllerRepresentable {
     /// This hosting controller is displayed inside the popover, and renders the user-specified content.
     class Host: UIHostingController<Content>, UIPopoverPresentationControllerDelegate {
         @Binding var isPresented: Bool
+        var useDimmingBackground: Bool = true
         var onDismiss: (() -> Void)?
 
         init(rootView: Content, isPresented: Binding<Bool>) {
@@ -121,9 +125,11 @@ struct Popover<Content: View>: UIViewControllerRepresentable {
             guard let controller = presentationController else { return }
             // The two subviews of the container view at this point are _UIPopoverDimmingView and _UICutoutShadowView.
             // Apply a custom background color here because — at least on iPhone — the default is `UIColor.clear`.
-            controller.containerView?.subviews.first(where: {
-                String(cString: object_getClassName($0)).lowercased().contains("dimming")
-            })?.backgroundColor = .ui.backdrop
+            if useDimmingBackground {
+                controller.containerView?.subviews.first(where: {
+                    String(cString: object_getClassName($0)).lowercased().contains("dimming")
+                })?.backgroundColor = .ui.backdrop
+            }
         }
 
         override func viewDidDisappear(_ animated: Bool) {
@@ -183,6 +189,7 @@ struct Popover<Content: View>: UIViewControllerRepresentable {
                 in: presentee.view.intrinsicContentSize)
             presentee.view.backgroundColor = backgroundColor
             presentee.onDismiss = onDismiss
+            presentee.useDimmingBackground = useDimmingBackground
         }
     }
 }

@@ -180,6 +180,7 @@ enum TabToolbarButtons {
             .presentAsPopover(
                 isPresented: $promoModel.showPromo,
                 backgroundColor: promoModel.getPopoverBackgroundColor(),
+                useDimmingBackground: promoModel.popoverDimBackground,
                 dismissOnTransition: true
             ) {
                 promoModel.getPopoverContent()

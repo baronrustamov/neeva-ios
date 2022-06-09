@@ -439,6 +439,7 @@ class Tab: NSObject, ObservableObject {
     }
 
     func close() {
+        // TODO: - deinit cheatsheet models
         contentScriptManager.uninstall(tab: self)
         webViewSubscriptions = []
 

@@ -172,8 +172,6 @@ class TabChromeModel: ObservableObject {
             }
         }
 
-        CheatsheetMenuViewModel.promoModel.subscribe(
-            to: tabManager.selectedTabURLPublisher.eraseToAnyPublisher()
-        )
+        CheatsheetMenuViewModel.promoModel.subscribe(to: tabManager)
     }
 }

@@ -277,6 +277,7 @@ private class FilterResource {
 }
 
 class BloomFilterManager {
+    static let shared = BloomFilterManager()
     static let subFolderName = "BloomFilter"
 
     private var redditFiler: FilterResource?
@@ -295,10 +296,10 @@ class BloomFilterManager {
         }
     }
 
-    func contains(_ key: String) -> Bool {
+    func contains(_ key: String) -> Bool? {
         guard let filter = redditFiler?.filter else {
             redditFiler?.load()
-            return false
+            return nil
         }
 
         return filter.mayContain(key: key)
