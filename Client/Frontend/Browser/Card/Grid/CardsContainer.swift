@@ -42,6 +42,8 @@ struct TabGridContainer: View {
     @Environment(\.columns) private var columns
     @State var cardStackGeom: CGSize = CGSize.zero
 
+    let useTabletInterface = UIDevice.current.useTabletInterface
+
     var selectedRowId: TabCardModel.Row.ID? {
         // note: this is still WIP, it's working but can remove some of the code
         if !FeatureFlag[.enableTimeBasedSwitcher] {
@@ -98,10 +100,18 @@ struct TabGridContainer: View {
                 } else {
                     SingleLevelTabCardsView(containerGeometry: geom, incognito: isIncognito)
 
-                    if FeatureFlag[.enableArchivedTabsView] && !isIncognito
-                        && tabModel.getRows(incognito: isIncognito).count > 1
+                    if FeatureFlag[.enableArchivedTabsView]
+                        && !isIncognito
+                        && tabModel.getRows(incognito: isIncognito).count > 0
                     {
-                        ArchivedTabsView(containerGeometry: geom.size)
+                        if (landscapeMode && !useTabletInterface)
+                            || (tabModel.getRows(incognito: isIncognito).count > 1
+                                && !landscapeMode)
+                            || (tabModel.getRows(incognito: isIncognito).count > 2
+                                && useTabletInterface)
+                        {
+                            ArchivedTabsView(containerGeometry: geom.size)
+                        }
                     }
                 }
             }.background(
@@ -192,6 +202,8 @@ struct CardsContainer: View {
     @State var generationId: Int = 0
     @State var containerGeom: CGSize = CGSize.zero
 
+    let useTabletInterface = UIDevice.current.useTabletInterface
+
     let columns: [GridItem]
 
     var body: some View {
@@ -223,8 +235,15 @@ struct CardsContainer: View {
                 // Normal Tabs
                 ZStack {
                     if !tabModel.isSearchingForTabs {
-                        EmptyCardGrid(isIncognito: false, isTopBar: chromeModel.inlineToolbar)
-                            .opacity(tabModel.normalDetails.isEmpty ? 1 : 0)
+                        EmptyCardGrid(
+                            isIncognito: false,
+                            isTopBar: chromeModel.inlineToolbar,
+                            showArchivedTabsView:
+                                FeatureFlag[.enableArchivedTabsView]
+                                && !useTabletInterface
+                                && tabModel.normalDetails.isEmpty
+                        )
+                        .opacity(tabModel.normalDetails.isEmpty ? 1 : 0)
                     }
 
                     CardScrollContainer(columns: columns) { scrollProxy in
@@ -234,13 +253,17 @@ struct CardsContainer: View {
                     }
 
                     // isolate ArchivedTabsView when there is no tab or one row of tabs to make it not scrollable
-                    if FeatureFlag[.enableArchivedTabsView]
-                        && tabModel.getRows(incognito: false).count < 2
-                    {
-                        VStack {
-                            Spacer()
-                            ArchivedTabsView(containerGeometry: containerGeom)
-                        }.frame(width: containerGeom.width, height: containerGeom.height)
+                    if FeatureFlag[.enableArchivedTabsView] {
+                        if (tabModel.getRows(incognito: false).count < 2
+                            && !useTabletInterface
+                            && !orientation.isLandscape)
+                            || (tabModel.getRows(incognito: false).count < 3 && useTabletInterface)
+                        {
+                            VStack {
+                                Spacer()
+                                ArchivedTabsView(containerGeometry: containerGeom)
+                            }.frame(width: containerGeom.width, height: containerGeom.height)
+                        }
                     }
                 }
                 .offset(
@@ -257,8 +280,12 @@ struct CardsContainer: View {
                 // Incognito Tabs
                 ZStack {
                     if !tabModel.isSearchingForTabs {
-                        EmptyCardGrid(isIncognito: true, isTopBar: chromeModel.inlineToolbar)
-                            .opacity(tabModel.incognitoDetails.isEmpty ? 1 : 0)
+                        EmptyCardGrid(
+                            isIncognito: true,
+                            isTopBar: chromeModel.inlineToolbar,
+                            showArchivedTabsView: false
+                        )
+                        .opacity(tabModel.incognitoDetails.isEmpty ? 1 : 0)
                     }
 
                     CardScrollContainer(columns: columns) { scrollProxy in
