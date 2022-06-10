@@ -128,7 +128,7 @@ struct TabGridContainer: View {
         .useEffect(deps: gridModel.needsScrollToSelectedTab) { _ in
             if let selectedRowId = selectedRowId {
                 withAnimation(nil) {
-                    scrollProxy.scrollTo(selectedRowId, anchor: .center)
+                    scrollProxy.scrollTo(selectedRowId)
                 }
                 DispatchQueue.main.async { gridModel.didVerticalScroll += 1 }
             }

@@ -121,7 +121,7 @@ struct CollapsedCardGroupView: View {
                 if groupDetails.allDetails.contains(where: \.isSelected) {
                     withAnimation(nil) {
                         scrollProxy.scrollTo(
-                            groupDetails.allDetails.first(where: \.isSelected)?.id, anchor: .center)
+                            groupDetails.allDetails.first(where: \.isSelected)?.id)
                     }
                     DispatchQueue.main.async { gridModel.didHorizontalScroll += 1 }
                 }
