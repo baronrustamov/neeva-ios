@@ -126,7 +126,7 @@ class BrowserModel: ObservableObject {
             gridModel.switchModeWithoutAnimation = false
 
             SceneDelegate.getCurrentSceneDelegate(with: tabManager.scene)?.setSceneUIState(
-                to: .cardGrid(gridModel.switcherState))
+                to: .cardGrid(gridModel.switcherState, tabManager.isIncognito))
         } else {
             hideGridWithNoAnimation()
         }

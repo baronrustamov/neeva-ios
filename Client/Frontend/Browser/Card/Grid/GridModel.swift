@@ -30,7 +30,7 @@ class GridModel: ObservableObject {
             }
 
             SceneDelegate.getCurrentSceneDelegate(with: tabCardModel.manager.scene)?
-                .setSceneUIState(to: .cardGrid(switcherState))
+                .setSceneUIState(to: .cardGrid(switcherState, tabCardModel.manager.isIncognito))
         }
     }
     @Published var gridCanAnimate = false
@@ -83,6 +83,8 @@ class GridModel: ObservableObject {
 
         tabCardModel.manager.switchIncognitoMode(
             incognito: incognito, fromTabTray: true, openLazyTab: false)
+        SceneDelegate.getCurrentSceneDelegate(with: tabCardModel.manager.scene)?
+            .setSceneUIState(to: .cardGrid(switcherState, tabCardModel.manager.isIncognito))
     }
 
     func switchToSpaces() {
@@ -140,6 +142,6 @@ class GridModel: ObservableObject {
         }
 
         SceneDelegate.getCurrentSceneDelegate(with: tabCardModel.manager.scene)?.setSceneUIState(
-            to: .cardGrid(switcherState))
+            to: .cardGrid(switcherState, tabCardModel.manager.isIncognito))
     }
 }

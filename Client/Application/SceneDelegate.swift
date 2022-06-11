@@ -74,10 +74,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             let sceneUIState = SceneUIState(rawValue: scenePreviousUIState)
 
             switch sceneUIState {
-            case .cardGrid(let switcherState):
+            case .cardGrid(let switcherState, let isIncognito):
                 switch switcherState {
                 case .tabs:
                     bvc.browserModel.showGridWithNoAnimation()
+                    bvc.browserModel.gridModel.switchToTabs(incognito: isIncognito)
                 case .spaces:
                     bvc.browserModel.showSpaces()
                 }

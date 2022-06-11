@@ -5,6 +5,16 @@
 import Foundation
 
 extension Array where Element: Any {
+    /// Checks if an item exists at an index before attempting to read it.
+    /// If element does not exists, returns nil.
+    public subscript(safeIndex index: Int) -> Element? {
+        if self.indices.contains(index) {
+            return self[index]
+        }
+
+        return nil
+    }
+
     /// Finds the item before the passed index. If it does not exist, returns nil.
     public func previousItem(before index: Int) -> Element? {
         let index = index - 1

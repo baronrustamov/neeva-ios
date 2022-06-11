@@ -549,7 +549,6 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
                 }
             }
         }
-
     }
 
     func updateSpace() {
