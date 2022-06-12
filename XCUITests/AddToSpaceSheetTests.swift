@@ -35,11 +35,11 @@ class AddToSpaceSheetTests: BaseTestCase {
         XCTAssertTrue(app.staticTexts[String(Nicon.bookmark.rawValue)].exists)
 
         // Add to Space
-        app.staticTexts["My Space"].forceTapElement()
+        app.staticTexts[SpaceServiceMock.mySpaceTitle].forceTapElement()
 
         // Confirmation view
-        waitForExistence(app.staticTexts["Saved to \"My Space\""])
-        XCTAssertTrue(app.staticTexts["Saved to \"My Space\""].exists)
+        waitForExistence(app.staticTexts["Saved to \"\(SpaceServiceMock.mySpaceTitle)\""])
+        XCTAssertTrue(app.staticTexts["Saved to \"\(SpaceServiceMock.mySpaceTitle)\""].exists)
     }
 
     func testBookmarkIconOpensSheet() {
@@ -86,22 +86,22 @@ class AddToSpaceSheetTests: BaseTestCase {
     func testDeleteItemFromExistingSpace() {
         // Add item to Space
         app.buttons["Add To Space"].tap()
-        app.staticTexts["My Space"].forceTapElement()
+        app.staticTexts[SpaceServiceMock.mySpaceTitle].forceTapElement()
 
         // Confirm the item was added
-        waitForExistence(app.staticTexts["Saved to \"My Space\""])
-        XCTAssertTrue(app.staticTexts["Saved to \"My Space\""].exists)
+        waitForExistence(app.staticTexts["Saved to \"\(SpaceServiceMock.mySpaceTitle)\""])
+        XCTAssertTrue(app.staticTexts["Saved to \"\(SpaceServiceMock.mySpaceTitle)\""].exists)
 
         app.buttons["Close"].forceTapElement()
-        waitForNoExistence(app.staticTexts["Saved to \"My Space\""])
+        waitForNoExistence(app.staticTexts["Saved to \"\(SpaceServiceMock.mySpaceTitle)\""])
 
         // Remove item from Space
         app.buttons["Add To Space"].tap()
-        app.staticTexts["My Space"].forceTapElement()
+        app.staticTexts[SpaceServiceMock.mySpaceTitle].forceTapElement()
 
         // Confirm the item was removed
-        waitForExistence(app.staticTexts["Deleted from \"My Space\""])
-        XCTAssertTrue(app.staticTexts["Deleted from \"My Space\""].exists)
+        waitForExistence(app.staticTexts["Deleted from \"\(SpaceServiceMock.mySpaceTitle)\""])
+        XCTAssertTrue(app.staticTexts["Deleted from \"\(SpaceServiceMock.mySpaceTitle)\""].exists)
     }
 
     // If you are having trouble getting this test to pass locally,
@@ -113,18 +113,18 @@ class AddToSpaceSheetTests: BaseTestCase {
         app.textFields["Search Spaces"].forceTapElement()
         app.textFields["Search Spaces"].typeText("aa")
 
-        XCTAssertFalse(app.staticTexts["My Space"].exists)
+        XCTAssertFalse(app.staticTexts[SpaceServiceMock.mySpaceTitle].exists)
 
         // \u{8} is backspace
         app.textFields["Search Spaces"].typeText("\u{8}")
 
-        XCTAssertTrue(app.staticTexts["My Space"].exists)
+        XCTAssertTrue(app.staticTexts[SpaceServiceMock.mySpaceTitle].exists)
     }
 
     func testSpacesVisibleFromAddToSpaceSheet() {
         app.buttons["Add To Space"].tap()
 
-        XCTAssertTrue(app.staticTexts["My Space"].exists)
+        XCTAssertTrue(app.staticTexts[SpaceServiceMock.mySpaceTitle].exists)
     }
 
     func testViewSpacesButton() throws {

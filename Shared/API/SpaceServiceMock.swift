@@ -15,14 +15,16 @@ public class SpaceServiceMock: SpaceService {
     private struct SpaceMock {
         var space: SpaceApollo
 
-        init(name: String) {
+        init(name: String, owner: Bool = true) {
             space = SpaceApollo(
                 pageMetadata: SpaceApollo.PageMetadatum(
                     pageId: name),
                 space: SpaceApollo.Space(
                     name: name,
                     lastModifiedTs: ISO8601DateFormatter().string(from: Date()),
-                    userAcl: SpaceApollo.Space.UserAcl(acl: SpaceACLLevel.owner),
+                    userAcl: SpaceApollo.Space.UserAcl(
+                        acl: (owner ? SpaceACLLevel.owner : SpaceACLLevel.publicView)),
+                    hasPublicAcl: !owner,
                     resultCount: 0,
                     isDefaultSpace: false
                 )
@@ -44,14 +46,31 @@ public class SpaceServiceMock: SpaceService {
         }
     }
 
+    public static let mySpaceTitle = "My Space"
+    public static let spaceNotOwnedByMeTitle = "Space not owned by me"
+
     private var spaces: [String: SpaceMock] = [
-        "My Space": SpaceMock(name: "My Space")
+        mySpaceTitle: SpaceMock(name: mySpaceTitle),
+        spaceNotOwnedByMeTitle: SpaceMock(name: spaceNotOwnedByMeTitle, owner: false),
     ]
     private var spacesData: [String: SpaceDataMock] = [
-        "My Space": SpaceDataMock(name: "My Space")
+        mySpaceTitle: SpaceDataMock(name: mySpaceTitle),
+        spaceNotOwnedByMeTitle: SpaceDataMock(name: spaceNotOwnedByMeTitle),
     ]
 
-    public init() {}
+    public init() {
+        // Populate the Spaces
+        spacesData[SpaceServiceMock.spaceNotOwnedByMeTitle]?.spaceData.entities.append(
+            SpaceEntityData(
+                id: "MySpace",
+                url: URL(string: "https://myspace.com"),
+                title: "MySpace",
+                snippet: nil,
+                thumbnail: nil,
+                previewEntity: .webPage
+            )
+        )
+    }
 
     public func addPublicACL(spaceID: String) -> AddPublicACLRequest? {
         return nil
