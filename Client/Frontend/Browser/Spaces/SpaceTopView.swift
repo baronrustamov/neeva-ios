@@ -21,9 +21,7 @@ struct SpaceTopView: View {
     @Binding var headerVisible: Bool
     let addToAnotherSpace: (URL, String?, String?) -> Void
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    var space: Space? {
-        primitive.manager.get(for: primitive.id)
-    }
+    var space: Space?
 
     var canEdit: Bool {
         primitive.ACL >= .edit
@@ -212,21 +210,41 @@ struct SpaceTopView: View {
         }
     }
 
-    @ViewBuilder var deleteButton: some View {
-        if let space = space {
-            Button {
+    @ViewBuilder var followButton: some View {
+        Button {
+            if !primitive.isFollowing, let spaceId = space?.id.id {
+                SpaceStore.followSpace(spaceId: spaceId) {
+                    SpaceStore.shared.refresh()
+                }
+            } else {
                 showConfirmDeleteAlert = true
-            } label: {
-                Label(
-                    title: {
-                        Text(space.ACL == .owner ? "Delete Space" : "Unfollow")
-                            .withFont(.labelMedium)
-                            .lineLimit(1)
-                            .foregroundColor(Color.secondaryLabel)
-                    },
-                    icon: { Image(systemName: "trash") }
-                )
             }
+        } label: {
+            Label(
+                title: {
+                    Text(primitive.isFollowing ? "Unfollow" : "Follow")
+                        .withFont(.labelMedium)
+                        .lineLimit(1)
+                        .foregroundColor(Color.secondaryLabel)
+                },
+                icon: { Image(systemName: primitive.isFollowing ? "trash" : "plus") }
+            )
+        }
+    }
+
+    @ViewBuilder var deleteButton: some View {
+        Button {
+            showConfirmDeleteAlert = true
+        } label: {
+            Label(
+                title: {
+                    Text("Delete Space")
+                        .withFont(.labelMedium)
+                        .lineLimit(1)
+                        .foregroundColor(Color.secondaryLabel)
+                },
+                icon: { Image(systemName: "trash") }
+            )
         }
     }
 
@@ -266,7 +284,11 @@ struct SpaceTopView: View {
         Menu(
             content: {
                 if let space = space, !space.isDefaultSpace {
-                    deleteButton
+                    if space.ACL == .owner {
+                        deleteButton
+                    } else {
+                        followButton
+                    }
                     addToAnotherSpaceButton
                 }
 

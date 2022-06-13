@@ -42,7 +42,6 @@ struct SpacesProfileView: View {
     @State private var cardSize: CGFloat = CardUX.DefaultCardSize
     @State private var columnCount: Int = 2
     @State private var selectedSpace: String?
-
     @Environment(\.onOpenURLForSpace) var onOpenURLForSpace
     @Environment(\.shareURL) var shareURL
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass

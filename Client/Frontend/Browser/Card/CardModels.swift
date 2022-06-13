@@ -582,7 +582,7 @@ class SpaceCardModel: CardModel {
 
     private func listenManagerState() {
         self.anyCancellable = manager.$state.sink { [weak self] state in
-            guard let self = self, self.detailedSpace == nil, case .ready = state,
+            guard let self = self, case .ready = state,
                 self.manager.updatedSpacesFromLastRefresh.count > 0
             else {
                 return

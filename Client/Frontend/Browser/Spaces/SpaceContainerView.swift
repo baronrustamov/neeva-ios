@@ -38,7 +38,8 @@ struct SpaceContainerView: View {
             SpaceTopView(
                 primitive: primitive,
                 headerVisible: $headerVisible,
-                addToAnotherSpace: addToAnotherSpace
+                addToAnotherSpace: addToAnotherSpace,
+                space: space
             )
 
             profileUINavigationLink
@@ -99,6 +100,8 @@ struct SpaceContainerView: View {
                     },
                     owner: space.owner
                 )
+                .environment(\.onOpenURLForSpace, onOpenURLForSpace)
+                .environment(\.shareURL, shareURL)
             }
         } label: {
             EmptyView()
