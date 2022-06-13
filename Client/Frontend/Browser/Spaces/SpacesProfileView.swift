@@ -7,7 +7,6 @@ import Shared
 import SwiftUI
 
 class SpacesProfileViewModel: ObservableObject {
-
     @Published var spaceCards: [SpaceCardDetails] = []
     @Published var owner: Space.Owner?
     @Published var isLoading: Bool = false

@@ -280,6 +280,7 @@ public struct LogConfig {
         case ViewSpacesFromSheet
         case SpaceFilterClicked
         case OpenSuggestedSpace
+        case SpaceFailedToOpen
 
         // MARK: ratings card
         case RatingsRateExperience
@@ -628,6 +629,7 @@ public struct LogConfig {
         case .ViewSpacesFromSheet: return .Spaces
         case .SpaceFilterClicked: return .Spaces
         case .OpenSuggestedSpace: return .Spaces
+        case .SpaceFailedToOpen: return .Spaces
 
         // MARK: - RatingsCard
         case .RatingsRateExperience: return .RatingsCard

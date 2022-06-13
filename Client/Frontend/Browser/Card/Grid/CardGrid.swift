@@ -51,9 +51,10 @@ struct CardGridBackground: View {
 }
 
 struct CardGrid: View {
-    @EnvironmentObject var tabCardModel: TabCardModel
-    @EnvironmentObject var spaceModel: SpaceCardModel
     @EnvironmentObject var gridModel: GridModel
+    @EnvironmentObject var spaceModel: SpaceCardModel
+    @EnvironmentObject var tabCardModel: TabCardModel
+    @EnvironmentObject var toastViewManager: ToastViewManager
     @EnvironmentObject var walletDetailsModel: WalletDetailsModel
 
     @Environment(\.onOpenURLForSpace) var onOpenURLForSpace
@@ -105,21 +106,6 @@ struct CardGrid: View {
         .background(cardContainerBackground)
     }
 
-    @ViewBuilder
-    var loadingIndicator: some View {
-        ZStack {
-            Color.TrayBackground
-                .opacity(0.5)
-
-            RoundedRectangle(cornerRadius: 8)
-                .foregroundColor(Color(UIColor.DefaultBackground))
-                .shadow(color: .black.opacity(0.1), radius: 12)
-                .frame(width: 50, height: 50)
-
-            ProgressView()
-        }
-    }
-
     func updateCardSize(width: CGFloat, topToolbar: Bool) {
         guard gridModel.canResizeGrid else {
             return
@@ -151,11 +137,6 @@ struct CardGrid: View {
                 )
                 .background(CardGridBackground())
                 .modifier(SwipeToSwitchToSpacesGesture())
-
-            if gridModel.isLoading {
-                loadingIndicator
-                    .ignoresSafeArea()
-            }
 
             NavigationLink(
                 destination: detailedSpaceView,

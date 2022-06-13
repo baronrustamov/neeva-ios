@@ -49,9 +49,6 @@ class GridModel: ObservableObject {
     @Published var didHorizontalScroll: Int = 0
     @Published var canResizeGrid = true
 
-    // Spaces
-    @Published var isLoading = false
-
     private var subscriptions: Set<AnyCancellable> = []
     private let tabMenu: TabMenu
 
@@ -122,9 +119,17 @@ class GridModel: ObservableObject {
             to: .spaceDetailView(id))
 
         DispatchQueue.main.async { [self] in
+            // Prevents duplicate calls to spaceFailedToOpen
+            var didFailToOpen = false
+
             spaceCardModel.detailedSpace = SpaceCardDetails(id: id, manager: SpaceStore.shared)
-            spaceCardModel.detailedSpace?.refresh()
             showingDetailView = true
+            spaceCardModel.detailedSpace?.refresh { wasSuccessful in
+                if !wasSuccessful && !didFailToOpen {
+                    didFailToOpen = true
+                    self.spaceFailedToOpen()
+                }
+            }
         }
     }
 
@@ -143,5 +148,18 @@ class GridModel: ObservableObject {
 
         SceneDelegate.getCurrentSceneDelegate(with: tabCardModel.manager.scene)?.setSceneUIState(
             to: .cardGrid(switcherState, tabCardModel.manager.isIncognito))
+    }
+
+    func spaceFailedToOpen() {
+        closeDetailView()
+
+        let toastViewManager = SceneDelegate.getBVC(with: tabCardModel.manager.scene)
+            .toastViewManager
+        ToastDefaults().showToast(
+            with:
+                "Unable to open Space. Check that the Space is shared with you and the link is correct.",
+            toastViewManager: toastViewManager)
+
+        ClientLogger.shared.logCounter(.SpaceFailedToOpen, attributes: [])
     }
 }

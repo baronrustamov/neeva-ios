@@ -529,7 +529,7 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
         }.shadow(radius: 0)
     }
 
-    func refresh() {
+    func refresh(completion: @escaping (Bool) -> Void = { _ in }) {
         guard !(self.item?.isDigest ?? false) else { return }
 
         if isFollowing {
@@ -547,6 +547,10 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
                 withAnimation(.easeOut) {
                     self.refreshSpaceSubscription = nil
                 }
+
+                completion(true)
+            } else {
+                completion(false)
             }
         }
     }

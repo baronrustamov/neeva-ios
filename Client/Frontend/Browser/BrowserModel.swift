@@ -154,7 +154,12 @@ class BrowserModel: ObservableObject {
 
             if let existingSpace = existingSpace {
                 openSpace(spaceID: existingSpace.id)
-                existingSpace.refresh()
+                existingSpace.refresh { wasSuccessful in
+                    if !wasSuccessful {
+                        self.gridModel.spaceFailedToOpen()
+                    }
+                }
+
                 return
             }
 
