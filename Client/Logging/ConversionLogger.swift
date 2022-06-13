@@ -94,7 +94,9 @@ class ConversionLogger {
                 // after verifying the pipeline is working
                 var neevaTokenRequest = URLRequest(url: NeevaConstants.neevaTokenApiURL)
                 neevaTokenRequest.httpMethod = "POST"
-                let neevaTokenData = "sessionUUID=\(Defaults[.sessionUUIDv2])&aaaToken=\(token)"
+                let encodedToken = token.replacingOccurrences(of: "+", with: "%2B")
+                let neevaTokenData =
+                    "sessionUUID=\(Defaults[.sessionUUIDv2])&aaaToken=\(encodedToken)"
                 neevaTokenRequest.httpBody = Data(neevaTokenData.utf8)
                 neevaTokenRequest.setValue(
                     "application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
