@@ -42,6 +42,7 @@ protocol TabDelegate {
 
 public enum TimeFilter: String {
     case today = "Today"
+    case yesterday = "Yesterday"
     case lastWeek = "Past 7 Days"
     case lastMonth = "Past 30 Days"
     case overAMonth = "Older"
@@ -209,10 +210,13 @@ class Tab: NSObject, ObservableObject {
     var isArchived: Bool {
         switch archivedTabsDuration {
         case .week:
-            return !(wasLastExecuted(.today) || wasLastExecuted(.lastWeek))
+            return
+                !(wasLastExecuted(.today) || wasLastExecuted(.yesterday)
+                || wasLastExecuted(.lastWeek))
         case .month:
             return
-                !(wasLastExecuted(.today) || wasLastExecuted(.lastWeek)
+                !(wasLastExecuted(.today) || wasLastExecuted(.yesterday)
+                || wasLastExecuted(.lastWeek)
                 || wasLastExecuted(.lastMonth))
         case .forever:
             return false
@@ -869,10 +873,16 @@ public func isLastExecutedTimeInTimeFilter(_ lastExecutedTime: Timestamp, _ byTi
             byAdding: .second, value: -15, to: Date())
         : Calendar.current.date(
             byAdding: .day, value: -1, to: Date())
-    let minusOneWeekToCurrentDate =
+    let minusTwoDaysToCurrentDate =
         FeatureFlag[.shortenTimeThresholdForArchivingTabs]
         ? Calendar.current.date(
             byAdding: .second, value: -30, to: Date())
+        : Calendar.current.date(
+            byAdding: .day, value: -2, to: Date())
+    let minusOneWeekToCurrentDate =
+        FeatureFlag[.shortenTimeThresholdForArchivingTabs]
+        ? Calendar.current.date(
+            byAdding: .second, value: -45, to: Date())
         : Calendar.current.date(
             byAdding: .day, value: -7, to: Date())
     let minusOneMonthToCurrentDate =
@@ -882,6 +892,7 @@ public func isLastExecutedTimeInTimeFilter(_ lastExecutedTime: Timestamp, _ byTi
         : Calendar.current.date(
             byAdding: .month, value: -1, to: Date())
     guard let startOfOneDayAgo = minusOneDayToCurrentDate,
+        let startOfTwodaysAgo = minusTwoDaysToCurrentDate,
         let startOfLastWeek = minusOneWeekToCurrentDate,
         let startOfLastMonth = minusOneMonthToCurrentDate
     else {
@@ -895,11 +906,17 @@ public func isLastExecutedTimeInTimeFilter(_ lastExecutedTime: Timestamp, _ byTi
         return FeatureFlag[.shortenTimeThresholdForArchivingTabs]
             ? lastExecutedTime > Int64(startOfOneDayAgo.timeIntervalSince1970 * 1000)
             : Date.fromTimestamp(lastExecutedTime).isToday()
+    case .yesterday:
+        return FeatureFlag[.shortenTimeThresholdForArchivingTabs]
+            ? (lastExecutedTime < Int64(startOfOneDayAgo.timeIntervalSince1970 * 1000)
+                && lastExecutedTime > Int64(startOfTwodaysAgo.timeIntervalSince1970 * 1000))
+            : Date.fromTimestamp(lastExecutedTime).isYesterday()
     case .lastWeek:
         return
             (FeatureFlag[.shortenTimeThresholdForArchivingTabs]
-            ? lastExecutedTime < Int64(startOfOneDayAgo.timeIntervalSince1970 * 1000)
-            : !Date.fromTimestamp(lastExecutedTime).isToday())
+            ? lastExecutedTime < Int64(startOfTwodaysAgo.timeIntervalSince1970 * 1000)
+            : !Date.fromTimestamp(lastExecutedTime).isToday()
+                && !Date.fromTimestamp(lastExecutedTime).isYesterday())
             && lastExecutedTime > Int64(startOfLastWeek.timeIntervalSince1970 * 1000)
     case .lastMonth:
         return lastExecutedTime < Int64(startOfLastWeek.timeIntervalSince1970 * 1000)

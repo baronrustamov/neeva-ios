@@ -48,6 +48,7 @@ class TabCardModel: CardModel {
     @Default(.archivedTabsDuration) var archivedTabsDuration
     var needsUpdateRows: Bool = false
     static let todayRowHeaderID: String = "today-header"
+    static let yesterdayRowHeaderID: String = "yesterday-header"
     static let lastweekRowHeaderID: String = "lastWeek-header"
     static let lastMonthRowHeaderID: String = "lastMonth-header"
     static let olderRowHeaderID: String = "older-header"
@@ -72,6 +73,7 @@ class TabCardModel: CardModel {
     private func updateRows() {
         if FeatureFlag[.enableTimeBasedSwitcher] {
             timeBasedNormalRows[.today] = buildRows(incognito: false, byTime: .today)
+            timeBasedNormalRows[.yesterday] = buildRows(incognito: false, byTime: .yesterday)
             timeBasedNormalRows[.lastWeek] = buildRows(
                 incognito: false, byTime: .lastWeek)
             // TODO: in the future, we might apply time-based treatments to incognito mode.
@@ -120,7 +122,8 @@ class TabCardModel: CardModel {
                     incognitoRows
             } else {
                 returnValue =
-                    (timeBasedNormalRows[.today] ?? []) + (timeBasedNormalRows[.lastWeek] ?? [])
+                    (timeBasedNormalRows[.today] ?? []) + (timeBasedNormalRows[.yesterday] ?? [])
+                    + (timeBasedNormalRows[.lastWeek] ?? [])
                     + getOlderRows()
             }
         } else {
@@ -183,6 +186,8 @@ class TabCardModel: CardModel {
                     switch timeFilter {
                     case .today:
                         return TabCardModel.todayRowHeaderID
+                    case .yesterday:
+                        return TabCardModel.yesterdayRowHeaderID
                     case .lastWeek:
                         return lastweekRowHeaderID
                     case .lastMonth:
