@@ -24,6 +24,9 @@ class ArchivedTabsPanelModel: ObservableObject {
     var archivedTabs: [Tab]
     var archivedTabGroups: [String: TabGroup]
     var groupedSites = ArchivedTabsData()
+    var numOfArchivedTabs: Int {
+        return archivedTabs.count
+    }
     @Default(.archivedTabsDuration) var archivedTabsDuration
     private var updateArchivedTabsSubscription: AnyCancellable?
 

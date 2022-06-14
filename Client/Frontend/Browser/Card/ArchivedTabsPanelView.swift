@@ -25,7 +25,9 @@ struct ArchivedTabsPanelView: View {
     @ObservedObject var model: ArchivedTabsPanelModel
     @Default(.archivedTabsDuration) var archivedTabsDuration
     @State var showArchivedTabsSettings = false
+    @State private var confirmationShow = false
     let onDismiss: () -> Void
+    private let clearAllArchiveButtonTitle = "Are you sure you want to close all archived tabs?"
 
     var archivedTabsLabel: String {
         switch archivedTabsDuration {
@@ -36,6 +38,23 @@ struct ArchivedTabsPanelView: View {
         case .forever:
             return "Never"
         }
+    }
+
+    var clearAllArchivesButton: some View {
+        HStack(spacing: 0) {
+            Text("Clear All Archived Tabs")
+                .withFont(.bodyLarge)
+                .foregroundColor(.red)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.vertical, 10)
+            Spacer()
+        }
+        .padding(.horizontal, 16)
+        .frame(height: 52)
+    }
+
+    var clearAllArchiveButtonText: String {
+        return "Close \(model.numOfArchivedTabs) \(model.numOfArchivedTabs > 1 ? "Tabs" : "Tab")"
     }
 
     var content: some View {
@@ -67,18 +86,40 @@ struct ArchivedTabsPanelView: View {
                 Color.groupedBackground.frame(height: 1)
 
                 Button(action: {
-                    model.clearArchivedTabs()
+                    confirmationShow = true
                 }) {
-                    HStack(spacing: 0) {
-                        Text("Clear All Archived Tabs")
-                            .withFont(.bodyLarge)
-                            .foregroundColor(.red)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .padding(.vertical, 10)
-                        Spacer()
+                    if #available(iOS 15.0, *) {
+                        clearAllArchivesButton
+                            .confirmationDialog(
+                                clearAllArchiveButtonTitle,
+                                isPresented: $confirmationShow,
+                                titleVisibility: .visible
+                            ) {
+                                Button(
+                                    clearAllArchiveButtonText,
+                                    role: .destructive
+                                ) {
+                                    model.clearArchivedTabs()
+                                }
+                            }
+                    } else {
+                        clearAllArchivesButton
+                            .actionSheet(isPresented: $confirmationShow) {
+                                ActionSheet(
+                                    title: Text(clearAllArchiveButtonTitle),
+                                    buttons: [
+                                        .destructive(
+                                            Text(
+                                                clearAllArchiveButtonText
+                                            )
+                                        ) {
+                                            model.clearArchivedTabs()
+                                        },
+                                        .cancel(),
+                                    ]
+                                )
+                            }
                     }
-                    .padding(.horizontal, 16)
-                    .frame(height: 52)
                 }
 
                 NavigationLink(isActive: $showArchivedTabsSettings) {
