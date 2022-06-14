@@ -417,6 +417,8 @@ public struct LogConfig {
             || category == .PromoCard
             || category == .Web3
             || category == .CookieCutter
+            || category == .UI
+            || category == .OverflowMenu
         {
             return true
         }
@@ -458,6 +460,8 @@ public struct LogConfig {
             || category == .Notification
             || category == .Cheatsheet
             || category == .CookieCutter
+            || category == .UI
+            || category == .OverflowMenu
 
         let validInteraction =
             path == .SpacesLoginRequired || path == .SpacesRecommendedDetailUIVisited
@@ -576,6 +580,7 @@ public struct LogConfig {
         case .LogErrorForInterstitialEvents: return .FirstRun
         case .NeevaAttributionRequestError: return .FirstRun
         case .DefaultBrowserInterstitialRestoreImp: return .FirstRun
+        case .SpacesRecommendedDetailUIVisited: return .FirstRun
 
         // MARK: - PromoCard
         case .PromoCardAppear: return .PromoCard
@@ -619,7 +624,6 @@ public struct LogConfig {
         case .SpacesDetailEntityClicked: return .Spaces
         case .SpacesDetailEditButtonClicked: return .Spaces
         case .SpacesDetailShareButtonClicked: return .Spaces
-        case .SpacesRecommendedDetailUIVisited: return .Spaces
         case .SpacesLoginRequired: return .Spaces
         case .OwnerSharedSpace: return .Spaces
         case .FollowerSharedSpace: return .Spaces
