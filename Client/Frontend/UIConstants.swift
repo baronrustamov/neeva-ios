@@ -36,6 +36,9 @@ public struct UIConstants {
         return ToolbarHeight + safeArea.bottom
     }
 
+    // ArchivedTab View
+    static let ArchivedTabsViewHeight: CGFloat = 80
+
     /// JPEG compression quality for persisted screenshots. Must be between 0-1.
     static let ScreenshotQuality: Float = 0.3
     static let ActiveScreenshotQuality: CGFloat = 0.5

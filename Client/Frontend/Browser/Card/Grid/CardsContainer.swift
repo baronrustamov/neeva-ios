@@ -42,8 +42,6 @@ struct TabGridContainer: View {
     @Environment(\.columns) private var columns
     @State var cardStackGeom: CGSize = CGSize.zero
 
-    let useTabletInterface = UIDevice.current.useTabletInterface
-
     var selectedRowId: TabCardModel.Row.ID? {
         // note: this is still WIP, it's working but can remove some of the code
         if !FeatureFlag[.enableTimeBasedSwitcher] {
@@ -83,37 +81,7 @@ struct TabGridContainer: View {
             LazyVStack(alignment: .leading, spacing: 0) {
                 // When there aren't enough tabs to make the scroll view scrollable, we build a VStack
                 // with spacer to pin ArchivedTabsView at the bottom of the scrollView.
-                if FeatureFlag[.enableTimeBasedSwitcher] && !isIncognito
-                    && geom.size.height >= cardStackGeom.height
-                {
-                    VStack(alignment: .leading, spacing: 0) {
-                        SingleLevelTabCardsView(containerGeometry: geom, incognito: isIncognito)
-
-                        Spacer()
-
-                        if FeatureFlag[.enableArchivedTabsView]
-                            && tabModel.getRows(incognito: isIncognito).count > 1
-                        {
-                            ArchivedTabsView(containerGeometry: geom.size)
-                        }
-                    }.frame(minWidth: geom.size.width, minHeight: geom.size.height)
-                } else {
-                    SingleLevelTabCardsView(containerGeometry: geom, incognito: isIncognito)
-
-                    if FeatureFlag[.enableArchivedTabsView]
-                        && !isIncognito
-                        && tabModel.getRows(incognito: isIncognito).count > 0
-                    {
-                        if (landscapeMode && !useTabletInterface)
-                            || (tabModel.getRows(incognito: isIncognito).count > 1
-                                && !landscapeMode)
-                            || (tabModel.getRows(incognito: isIncognito).count > 2
-                                && useTabletInterface)
-                        {
-                            ArchivedTabsView(containerGeometry: geom.size)
-                        }
-                    }
-                }
+                SingleLevelTabCardsView(containerGeometry: geom, incognito: isIncognito)
             }.background(
                 GeometryReader { proxy in
                     Color.clear
@@ -123,6 +91,12 @@ struct TabGridContainer: View {
                 }
             )
         }
+        .frame(
+            minHeight:
+                geom.size.height - UIConstants.ArchivedTabsViewHeight - UIConstants.ToolbarHeight,
+            maxHeight: .infinity,
+            alignment: .top
+        )
         .environment(\.aspectRatio, CardUX.DefaultTabCardRatio)
         .padding(.vertical, !FeatureFlag[.enableTimeBasedSwitcher] ? (landscapeMode ? 8 : 16) : 0)
         .useEffect(deps: gridModel.needsScrollToSelectedTab) { _ in
@@ -202,8 +176,6 @@ struct CardsContainer: View {
     @State var generationId: Int = 0
     @State var containerGeom: CGSize = CGSize.zero
 
-    let useTabletInterface = UIDevice.current.useTabletInterface
-
     let columns: [GridItem]
 
     var body: some View {
@@ -240,7 +212,6 @@ struct CardsContainer: View {
                             isTopBar: chromeModel.inlineToolbar,
                             showArchivedTabsView:
                                 FeatureFlag[.enableArchivedTabsView]
-                                && !useTabletInterface
                                 && tabModel.normalDetails.isEmpty
                         )
                         .opacity(tabModel.normalDetails.isEmpty ? 1 : 0)
@@ -248,22 +219,13 @@ struct CardsContainer: View {
 
                     CardScrollContainer(columns: columns) { scrollProxy in
                         TabGridContainer(isIncognito: false, geom: geom, scrollProxy: scrollProxy)
+                        if FeatureFlag[.enableArchivedTabsView]
+                            && tabModel.getRows(incognito: false).count > 0
+                        {
+                            ArchivedTabsView(containerGeometry: geom.size)
+                        }
                     }.onAppear {
                         gridModel.scrollToSelectedTab()
-                    }
-
-                    // isolate ArchivedTabsView when there is no tab or one row of tabs to make it not scrollable
-                    if FeatureFlag[.enableArchivedTabsView] {
-                        if (tabModel.getRows(incognito: false).count < 2
-                            && !useTabletInterface
-                            && !orientation.isLandscape)
-                            || (tabModel.getRows(incognito: false).count < 3 && useTabletInterface)
-                        {
-                            VStack {
-                                Spacer()
-                                ArchivedTabsView(containerGeometry: containerGeom)
-                            }.frame(width: containerGeom.width, height: containerGeom.height)
-                        }
                     }
                 }
                 .offset(

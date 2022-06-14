@@ -11,7 +11,6 @@ struct EmptyCardGrid: View {
     let showArchivedTabsView: Bool
 
     @State var containerGeom: CGSize = CGSize.zero
-    let useTabletInterface = UIDevice.current.useTabletInterface
 
     var body: some View {
         VStack {
