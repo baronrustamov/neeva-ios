@@ -147,3 +147,30 @@ class TrackingStatsViewModel: ObservableObject {
         onDataUpdated()
     }
 }
+
+class TrackingStatsHistoricalModel {
+    struct Data {
+        var domains: [String: Int] = [:]
+        var numberOfTrackers: Int {
+            domains.map { $0.value }.reduce(0, +)
+        }
+
+        mutating func add(domain: String) {
+            domains[domain] = (domains[domain] ?? 0) + 1
+        }
+    }
+
+    private(set) var data: [Date: [URL: Data]] = [:]
+
+    public func addBlockedDomain(to url: URL, domain: String) {
+        let today = Date.getDate(dayOffset: 0)
+
+        if data[today] == nil {
+            let data = Data()
+            data.add(domain: domain)
+            data[today] = [url: data]
+        } else {
+
+        }
+    }
+}
