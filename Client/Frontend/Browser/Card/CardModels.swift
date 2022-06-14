@@ -71,22 +71,17 @@ class TabCardModel: CardModel {
     private(set) var tabsDidChange = false
 
     private func updateRows() {
-        if FeatureFlag[.enableTimeBasedSwitcher] {
-            timeBasedNormalRows[.today] = buildRows(incognito: false, byTime: .today)
-            timeBasedNormalRows[.yesterday] = buildRows(incognito: false, byTime: .yesterday)
-            timeBasedNormalRows[.lastWeek] = buildRows(
-                incognito: false, byTime: .lastWeek)
-            // TODO: in the future, we might apply time-based treatments to incognito mode.
-            incognitoRows = buildRows(incognito: true)
-            if archivedTabsDuration == .month {
-                timeBasedNormalRows[.lastMonth] = buildRows(incognito: false, byTime: .lastMonth)
-            } else if archivedTabsDuration == .forever {
-                timeBasedNormalRows[.lastMonth] = buildRows(incognito: false, byTime: .lastMonth)
-                timeBasedNormalRows[.overAMonth] = buildRows(incognito: false, byTime: .overAMonth)
-            }
-        } else {
-            incognitoRows = buildRows(incognito: true)
-            normalRows = buildRows(incognito: false)
+        timeBasedNormalRows[.today] = buildRows(incognito: false, byTime: .today)
+        timeBasedNormalRows[.yesterday] = buildRows(incognito: false, byTime: .yesterday)
+        timeBasedNormalRows[.lastWeek] = buildRows(
+            incognito: false, byTime: .lastWeek)
+        // TODO: in the future, we might apply time-based treatments to incognito mode.
+        incognitoRows = buildRows(incognito: true)
+        if archivedTabsDuration == .month {
+            timeBasedNormalRows[.lastMonth] = buildRows(incognito: false, byTime: .lastMonth)
+        } else if archivedTabsDuration == .forever {
+            timeBasedNormalRows[.lastMonth] = buildRows(incognito: false, byTime: .lastMonth)
+            timeBasedNormalRows[.overAMonth] = buildRows(incognito: false, byTime: .overAMonth)
         }
 
         // Defer signaling until after we have finished updating. This way our state is
@@ -115,19 +110,15 @@ class TabCardModel: CardModel {
             return []
         }
 
-        if FeatureFlag[.enableTimeBasedSwitcher] {
-            if incognito {
-                returnValue =
-                    // TODO: in the future, we might apply time-based treatments to incognito mode.
-                    incognitoRows
-            } else {
-                returnValue =
-                    (timeBasedNormalRows[.today] ?? []) + (timeBasedNormalRows[.yesterday] ?? [])
-                    + (timeBasedNormalRows[.lastWeek] ?? [])
-                    + getOlderRows()
-            }
+        if incognito {
+            returnValue =
+                // TODO: in the future, we might apply time-based treatments to incognito mode.
+                incognitoRows
         } else {
-            returnValue = incognito ? incognitoRows : normalRows
+            returnValue =
+                (timeBasedNormalRows[.today] ?? []) + (timeBasedNormalRows[.yesterday] ?? [])
+                + (timeBasedNormalRows[.lastWeek] ?? [])
+                + getOlderRows()
         }
 
         for id in 0..<returnValue.count {
@@ -247,7 +238,7 @@ class TabCardModel: CardModel {
             let tabGroup = manager.getTabGroup(for: tab)
             return (tabGroup == nil || isRepresentativeTab(tab, in: tabGroup!))
                 && tab.isIncognito == incognito
-                && (FeatureFlag[.enableTimeBasedSwitcher] && !incognito
+                && (!incognito
                     ? (tabGroup != nil
                         ? tabGroup!.wasLastExecuted(byTime!) : tab.wasLastExecuted(byTime!)) : true)
                 && tabIncludedInSearch(tabCard)
@@ -374,7 +365,7 @@ class TabCardModel: CardModel {
             !$0.cells.isEmpty
         }
 
-        if FeatureFlag[.enableTimeBasedSwitcher] && !rows.isEmpty, let byTime = byTime {
+        if !rows.isEmpty, let byTime = byTime {
             rows.insert(Row(cells: [Row.Cell.sectionHeader(byTime)]), at: 0)
         }
 
@@ -382,11 +373,7 @@ class TabCardModel: CardModel {
     }
 
     func onDataUpdated() {
-        allDetails =
-            FeatureFlag[.enableArchivedTabsView]
-            ? manager.activeTabs
-                .map { TabCardDetails(tab: $0, manager: manager) }
-            : manager.getAll().map { TabCardDetails(tab: $0, manager: manager) }
+        allDetails = manager.activeTabs.map { TabCardDetails(tab: $0, manager: manager) }
 
         if FeatureFlag[.reverseChronologicalOrdering] {
             allDetails = allDetails.reversed()
@@ -449,7 +436,10 @@ class TabCardModel: CardModel {
     }
 
     func buildRowsForTesting() -> [Row] {
-        buildRows(incognito: false)
+        timeBasedNormalRows[.today] = buildRows(incognito: false, byTime: .today)
+        timeBasedNormalRows[.lastWeek] = buildRows(
+            incognito: false, byTime: .lastWeek)
+        return getRows(incognito: false)
     }
 
     // MARK: init
@@ -467,14 +457,12 @@ class TabCardModel: CardModel {
             }
         }.store(in: &subscription)
 
-        if FeatureFlag[.enableTimeBasedSwitcher] {
-            manager.selectedTabPublisher.sink { [weak self] tab in
-                guard let self = self, let _ = tab else {
-                    return
-                }
-                self.needsUpdateRows = true
-            }.store(in: &subscription)
-        }
+        manager.selectedTabPublisher.sink { [weak self] tab in
+            guard let self = self, let _ = tab else {
+                return
+            }
+            self.needsUpdateRows = true
+        }.store(in: &subscription)
 
         _tabGroupExpanded.publisher.sink { [weak self] _ in
             self?.updateRows()

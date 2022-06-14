@@ -216,7 +216,7 @@ class TabManager: NSObject {
         if isIncognito {
             return incognitoTabs.count
         } else {
-            return FeatureFlag[.enableArchivedTabsView] ? activeNormalTabs.count : normalTabs.count
+            return activeNormalTabs.count
         }
     }
 
@@ -484,12 +484,7 @@ class TabManager: NSObject {
 
         activeTabGroups = getAll()
             .reduce(into: [String: [Tab]]()) { dict, tab in
-                if FeatureFlag[.enableArchivedTabsView] {
-                    if !tab.isArchived {
-                        dict[tab.rootUUID, default: []].append(tab)
-                    }
-                } else {
-                    // If archivedTabsView is disabled, use the old tab group definition.
+                if !tab.isArchived {
                     dict[tab.rootUUID, default: []].append(tab)
                 }
             }.filter { $0.value.count > 1 }.reduce(into: [String: TabGroup]()) { dict, element in

@@ -63,12 +63,11 @@ struct GeneralSettingsSection: View {
                 description: "When Closing All Tabs"
             )
         }
-        if FeatureFlag[.enableArchivedTabsView] {
-            NavigationLink(isActive: $showArchivedTabsSettings) {
-                ArchivedTabSettings()
-            } label: {
-                Text("Keep Tabs")
-            }
+
+        NavigationLink(isActive: $showArchivedTabsSettings) {
+            ArchivedTabSettings()
+        } label: {
+            Text("Keep Tabs")
         }
     }
 }

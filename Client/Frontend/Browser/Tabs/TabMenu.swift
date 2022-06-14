@@ -26,8 +26,7 @@ struct TabMenu {
             tabManager.removeTabs(
                 isIncognito
                     ? tabManager.incognitoTabs
-                    : FeatureFlag[.enableTimeBasedSwitcher]
-                        ? tabManager.activeNormalTabs : tabManager.normalTabs)
+                    : tabManager.activeNormalTabs)
             return
         }
 
@@ -46,8 +45,7 @@ struct TabMenu {
             tabManager.removeTabs(
                 isIncognito
                     ? tabManager.incognitoTabs
-                    : FeatureFlag[.enableTimeBasedSwitcher]
-                        ? tabManager.activeNormalTabs : tabManager.normalTabs, showToast: false)
+                    : tabManager.activeNormalTabs, showToast: false)
         }
         closeAction.accessibilityLabel = "Confirm Close All Tabs"
 

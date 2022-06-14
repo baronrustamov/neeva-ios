@@ -14,20 +14,23 @@ struct EmptyCardGrid: View {
 
     var body: some View {
         VStack {
-            Spacer()
-            Image(decorative: isIncognito ? "EmptyTabTrayIncognito" : "EmptyTabTray")
-            Text(isIncognito ? "Create and manage incognito tabs" : "Create and manage tabs")
-                .withFont(.headingXLarge)
-            Text("Tap + \(isTopBar ? "above" : "below") to create a new tab")
-                .withFont(.bodyMedium)
-            Spacer()
+            VStack {
+                Spacer()
+                Image(decorative: isIncognito ? "EmptyTabTrayIncognito" : "EmptyTabTray")
+                Text(isIncognito ? "Create and manage incognito tabs" : "Create and manage tabs")
+                    .withFont(.headingXLarge)
+                Text("Tap + \(isTopBar ? "above" : "below") to create a new tab")
+                    .withFont(.bodyMedium)
+                Spacer()
+            }
+            .accessibilityElement(children: .combine)
+            .accessibilityIdentifier(isIncognito ? "EmptyTabTrayIncognito" : "EmptyTabTray")
+            .accessibilityLabel(
+                Text(isIncognito ? "Empty Card Grid (Incognito)" : "Empty Card Grid"))
             if showArchivedTabsView {
                 ArchivedTabsView(containerGeometry: containerGeom)
             }
         }
-        .accessibilityElement(children: .combine)
-        .accessibilityIdentifier(isIncognito ? "EmptyTabTrayIncognito" : "EmptyTabTray")
-        .accessibilityLabel(Text(isIncognito ? "Empty Card Grid (Incognito)" : "Empty Card Grid"))
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

@@ -38,10 +38,7 @@ class BrowserModel: ObservableObject {
     func showGridWithAnimation() {
         gridModel.setSwitcherState(to: .tabs)
         gridModel.switchModeWithoutAnimation = true
-
-        if FeatureFlag[.enableTimeBasedSwitcher] {
-            gridModel.tabCardModel.updateIfNeeded()
-        }
+        gridModel.tabCardModel.updateIfNeeded()
 
         if tabManager.selectedTab?.isIncognito != incognitoModel.isIncognito {
             showGridWithNoAnimation()

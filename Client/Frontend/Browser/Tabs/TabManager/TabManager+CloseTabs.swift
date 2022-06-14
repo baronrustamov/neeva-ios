@@ -13,14 +13,14 @@ extension TabManager {
         // calculated in advance, and later used for finding rightOrLeftTab. In time-based
         // switcher, the normalTabs get filtered to make sure we only select tab in
         // today section.
+        let normalTabsToday = normalTabs.filter {
+            $0.wasLastExecuted(.today)
+        }
+
         let index =
             tab.isIncognito
             ? incognitoTabs.firstIndex(where: { $0 == tab })
-            : (FeatureFlag[.enableTimeBasedSwitcher]
-                ? normalTabs.filter {
-                    $0.wasLastExecuted(.today)
-                }.firstIndex(where: { $0 == tab })
-                : normalTabs.firstIndex(where: { $0 == tab }))
+            : normalTabsToday.firstIndex(where: { $0 == tab })
 
         addTabsToRecentlyClosed([tab], showToast: showToast)
         removeTab(tab, flushToDisk: true, notify: true)
@@ -105,15 +105,13 @@ extension TabManager {
         let viableTabs: [Tab] =
             tab.isIncognito
             ? incognitoTabs
-            : (FeatureFlag[.enableTimeBasedSwitcher]
-                ? normalTabs.filter {
-                    $0.wasLastExecuted(.today)
-                } : normalTabs)
+            : normalTabs.filter {
+                $0.wasLastExecuted(.today)
+            }
         let bvc = SceneDelegate.getBVC(with: scene)
 
         if closedLastNormalTab || closedLastIncognitoTab
-            || (FeatureFlag[.enableTimeBasedSwitcher]
-                ? !viableTabs.contains(where: { $0.wasLastExecuted(.today) }) : false)
+            || !viableTabs.contains(where: { $0.wasLastExecuted(.today) })
         {
             DispatchQueue.main.async {
                 self.selectTab(nil, notify: notify)

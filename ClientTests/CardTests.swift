@@ -40,6 +40,7 @@ class CardTests: XCTestCase {
     var spaceCardModel: SpaceCardModel!
     var switcherToolbarModel: SwitcherToolbarModel!
     var chromeModel: TabChromeModel!
+    var archivedTabsPanelModel: ArchivedTabsPanelModel!
 
     @Default(.tabGroupExpanded) private var tabGroupExpanded: Set<String>
 
@@ -65,6 +66,7 @@ class CardTests: XCTestCase {
             notificationViewManager: NotificationViewManager(overlayManager: OverlayManager()),
             overlayManager: OverlayManager())
         chromeModel = TabChromeModel()
+        archivedTabsPanelModel = ArchivedTabsPanelModel(tabManager: manager)
 
         SpaceStore.shared = .createMock([.stackOverflow, .savedForLater, .shared, .public])
         spaceCardModel = SpaceCardModel(scene: nil)
@@ -159,17 +161,17 @@ class CardTests: XCTestCase {
 
         let buildRowsPromotetab4 = tabCardModel.buildRowsForTesting()
 
-        // Two rows in total
-        XCTAssertEqual(buildRowsPromotetab4.count, 2)
+        // Three rows in total (including "today" section header)
+        XCTAssertEqual(buildRowsPromotetab4.count, 3)
 
-        // First row has 2 cells
-        XCTAssertEqual(buildRowsPromotetab4[0].cells.count, 2)
+        // Second row has 2 cells
+        XCTAssertEqual(buildRowsPromotetab4[1].cells.count, 2)
 
-        // Second row has 1 cell
-        XCTAssertEqual(buildRowsPromotetab4[1].cells.count, 1)
+        // Third row has 1 cell
+        XCTAssertEqual(buildRowsPromotetab4[2].cells.count, 1)
 
-        // Second cell of the first row should be tab 4
-        XCTAssertEqual(buildRowsPromotetab4[0].cells[1].id, tab4.id)
+        // Second cell of the second row should be tab 4
+        XCTAssertEqual(buildRowsPromotetab4[1].cells[1].id, tab4.id)
 
         /*
          All tabGroupGridRow should occupy a row by itself. The following test makes sure
@@ -189,15 +191,15 @@ class CardTests: XCTestCase {
 
         let buildRowsDontPromotetab6 = tabCardModel.buildRowsForTesting()
 
-        // There should be four rows in total
-        XCTAssertEqual(buildRowsDontPromotetab6.count, 4)
+        // There should be five rows in total (including "today" section header)
+        XCTAssertEqual(buildRowsDontPromotetab6.count, 5)
 
-        // Third row should only have 1 tab
-        XCTAssertEqual(buildRowsDontPromotetab6[2].numTabsInRow, 1)
+        // Fourth row should only have 1 tab
+        XCTAssertEqual(buildRowsDontPromotetab6[3].numTabsInRow, 1)
 
-        // Fourth row should only have 1 tab, and it will be tab6
-        XCTAssertEqual(buildRowsDontPromotetab6[3].cells.count, 1)
-        XCTAssertEqual(buildRowsDontPromotetab6[3].cells[0].id, tab6.id)
+        // Fifth row should only have 1 tab, and it will be tab6
+        XCTAssertEqual(buildRowsDontPromotetab6[4].cells.count, 1)
+        XCTAssertEqual(buildRowsDontPromotetab6[4].cells[0].id, tab6.id)
 
         tabGroupExpanded.remove(tab2.rootUUID)
     }
@@ -224,17 +226,17 @@ class CardTests: XCTestCase {
         tabCardModel.columnCount = 3
         let buildRowsAllSameRow = tabCardModel.buildRowsForTesting()
 
-        // There should be only two rows
-        XCTAssertEqual(buildRowsAllSameRow.count, 2)
+        // There should be three rows (including "today" section header)
+        XCTAssertEqual(buildRowsAllSameRow.count, 3)
 
-        // First row should only have two cells
-        XCTAssertEqual(buildRowsAllSameRow[0].cells.count, 2)
+        // Second row should only have two cells
+        XCTAssertEqual(buildRowsAllSameRow[1].cells.count, 2)
 
-        // First cell of the first row should have 1 tab
-        XCTAssertEqual(buildRowsAllSameRow[0].cells[0].numTabs, 1)
+        // First cell of the second row should have 1 tab
+        XCTAssertEqual(buildRowsAllSameRow[1].cells[0].numTabs, 1)
 
-        // Second cell of the first row should have two tabs
-        XCTAssertEqual(buildRowsAllSameRow[0].cells[1].numTabs, 2)
+        // Second cell of the second row should have two tabs
+        XCTAssertEqual(buildRowsAllSameRow[1].cells[1].numTabs, 2)
 
         /*
          All tabGroupGridRow should occupy a row by itself. The following test makes sure
@@ -255,18 +257,17 @@ class CardTests: XCTestCase {
         tabCardModel.columnCount = 3
         let buildRowsDontPromotetab8 = tabCardModel.buildRowsForTesting()
 
-        // There should be four rows in total
-        XCTAssertEqual(buildRowsDontPromotetab8.count, 4)
+        // There should be five rows in total (including "today" section header)
+        XCTAssertEqual(buildRowsDontPromotetab8.count, 5)
 
-        // Third row should only have 1 tab
-        XCTAssertEqual(buildRowsDontPromotetab8[2].numTabsInRow, 1)
+        // Fourth row should only have 1 tab
+        XCTAssertEqual(buildRowsDontPromotetab8[3].numTabsInRow, 1)
 
-        // Fourth row should only have 1 tab, and it will be tab8
-        XCTAssertEqual(buildRowsDontPromotetab8[3].cells.count, 1)
-        XCTAssertEqual(buildRowsDontPromotetab8[3].cells[0].id, tab8.id)
+        // Fifth row should only have 1 tab, and it will be tab8
+        XCTAssertEqual(buildRowsDontPromotetab8[4].cells.count, 1)
+        XCTAssertEqual(buildRowsDontPromotetab8[4].cells[0].id, tab8.id)
 
         tabGroupExpanded.remove(tab2.rootUUID)
-
     }
 
     func testPinnedTab() throws {
@@ -285,8 +286,8 @@ class CardTests: XCTestCase {
 
         let buildRowsTwoTabs = tabCardModel.buildRowsForTesting()
 
-        XCTAssertEqual(buildRowsTwoTabs[0].cells.count, 2)
-        XCTAssertEqual(buildRowsTwoTabs[0].cells[0].id, tab2.id)
+        XCTAssertEqual(buildRowsTwoTabs[1].cells.count, 2)
+        XCTAssertEqual(buildRowsTwoTabs[1].cells[0].id, tab2.id)
     }
 
     func testPinnedTabGroup() throws {
@@ -307,8 +308,8 @@ class CardTests: XCTestCase {
 
         let buildRowsThreeTabs = tabCardModel.buildRowsForTesting()
 
-        XCTAssertEqual(buildRowsThreeTabs[0].numTabsInRow, 2)
-        XCTAssertNotEqual(buildRowsThreeTabs[0].cells[0].id, tab5.id)
+        XCTAssertEqual(buildRowsThreeTabs[1].numTabsInRow, 2)
+        XCTAssertNotEqual(buildRowsThreeTabs[1].cells[0].id, tab5.id)
     }
 
     func testPinnedTabsBeforeNonPinnedTabs() throws {
@@ -330,8 +331,8 @@ class CardTests: XCTestCase {
 
         let buildRowsFourTabs = tabCardModel.buildRowsForTesting()
 
-        XCTAssertEqual(buildRowsFourTabs.count, 3)
-        XCTAssertEqual(buildRowsFourTabs[2].cells[0].id, tab9.id)
+        XCTAssertEqual(buildRowsFourTabs.count, 4)
+        XCTAssertEqual(buildRowsFourTabs[3].cells[0].id, tab9.id)
     }
 
     func testSpaceDetails() throws {
@@ -453,5 +454,83 @@ class CardTests: XCTestCase {
         manager.selectTab(tab1, notify: true)
         manager.toggleIncognitoMode(clearSelectedTab: false)
         XCTAssertEqual(tab1.tabUUID, manager.selectedTab?.tabUUID)
+    }
+
+    // MARK: - Time-based Switcher Tests
+    /// Add a new tab and a tab last used one day ago, check if they show up in the correct section.
+    func testTabsInTimeSection() {
+        let startOfOneDayAgo = Calendar.current.date(
+            byAdding: .day, value: -1, to: Date())
+        guard let startOfOneDayAgo = startOfOneDayAgo else { return }
+
+        let tab1 = manager.addTab()
+        let tab2 = manager.addTab()
+        tab2.lastExecutedTime = UInt64(startOfOneDayAgo.timeIntervalSince1970) * 1000
+        manager.updateAllTabDataAndSendNotifications(notify: true)
+
+        XCTAssertEqual(tabCardModel.timeBasedNormalRows[.today]?.count, 2)
+        XCTAssertEqual(tabCardModel.timeBasedNormalRows[.today]?[1].cells[0].id, tab1.id)
+        XCTAssertEqual(tabCardModel.timeBasedNormalRows[.yesterday]?.count, 2)
+        XCTAssertEqual(tabCardModel.timeBasedNormalRows[.yesterday]?[1].cells[0].id, tab2.id)
+    }
+
+    /// Add a tab last used over a week ago, check if it shows up in the archives.
+    /// Default time threshold to archive a tab is 7 days.
+    func testTabsInArchivedSection() {
+        let startOfEightDaysAgo = Calendar.current.date(
+            byAdding: .day, value: -8, to: Date())
+        guard let startOfEightDaysAgo = startOfEightDaysAgo else { return }
+
+        let tab1 = manager.addTab()
+        tab1.lastExecutedTime = UInt64(startOfEightDaysAgo.timeIntervalSince1970) * 1000
+        manager.updateAllTabDataAndSendNotifications(notify: true)
+
+        XCTAssertEqual(manager.archivedTabs[0].id, tab1.id)
+    }
+
+    /// Add a tab last used over a week ago, select it and make sure it becomes an active tab.
+    func testSelectTabFromArchives() {
+        let startOfEightDaysAgo = Calendar.current.date(
+            byAdding: .day, value: -8, to: Date())
+        guard let startOfEightDaysAgo = startOfEightDaysAgo else { return }
+
+        let tab1 = manager.addTab()
+        tab1.lastExecutedTime = UInt64(startOfEightDaysAgo.timeIntervalSince1970) * 1000
+        manager.selectTab(tab1, notify: true)
+
+        XCTAssertEqual(manager.activeTabs[0], tab1)
+    }
+
+    /// Close the last tab in today section and check that no tab is selected.
+    func testNoNewTabSelectedAfterClosingLastTabInToday() {
+        let startOfOneDayAgo = Calendar.current.date(
+            byAdding: .day, value: -1, to: Date())
+        guard let startOfOneDayAgo = startOfOneDayAgo else { return }
+
+        let tab1 = manager.addTab()
+        let tab2 = manager.addTab()
+        tab2.lastExecutedTime = UInt64(startOfOneDayAgo.timeIntervalSince1970) * 1000
+        manager.updateAllTabDataAndSendNotifications(notify: true)
+        manager.selectTab(tab1, notify: true)
+        manager.removeTab(tab1)
+        waitForCondition(condition: { manager.selectedTab == nil })
+    }
+
+    /// Check ArchivedTabsPanelModel.clearArchivedTabs() removes archived tabs.
+    func testClearArchivedTabs() {
+        let startOfEightDaysAgo = Calendar.current.date(
+            byAdding: .day, value: -8, to: Date())
+        guard let startOfEightDaysAgo = startOfEightDaysAgo else { return }
+
+        let tab1 = manager.addTab()
+        let tab2 = manager.addTab()
+        tab1.lastExecutedTime = UInt64(startOfEightDaysAgo.timeIntervalSince1970) * 1000
+        tab2.lastExecutedTime = UInt64(startOfEightDaysAgo.timeIntervalSince1970) * 1000
+
+        manager.updateAllTabDataAndSendNotifications(notify: false)
+        archivedTabsPanelModel.loadData()
+        XCTAssertEqual(archivedTabsPanelModel.groupedSites.sites[.lastMonth]?.count, 2)
+        archivedTabsPanelModel.clearArchivedTabs()
+        XCTAssertEqual(archivedTabsPanelModel.groupedSites.sites[.lastMonth]?.count, 0)
     }
 }
