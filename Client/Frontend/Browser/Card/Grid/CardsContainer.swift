@@ -86,7 +86,7 @@ struct TabGridContainer: View {
         }
         .frame(
             minHeight:
-                geom.size.height - UIConstants.ArchivedTabsViewHeight - UIConstants.ToolbarHeight,
+                geom.size.height - UIConstants.ArchivedTabsViewHeight - CardGridUX.GridSpacing,
             maxHeight: .infinity,
             alignment: .top
         )
@@ -202,18 +202,23 @@ struct CardsContainer: View {
                         EmptyCardGrid(
                             isIncognito: false,
                             isTopBar: chromeModel.inlineToolbar,
-                            showArchivedTabsView: tabModel.manager.activeTabs.isEmpty
+                            showArchivedTabsView:
+                                tabModel.manager.activeNormalTabs.isEmpty
                         )
                         .opacity(tabModel.normalDetails.isEmpty ? 1 : 0)
                     }
 
-                    CardScrollContainer(columns: columns) { scrollProxy in
-                        TabGridContainer(isIncognito: false, geom: geom, scrollProxy: scrollProxy)
-                        if tabModel.getRows(incognito: false).count > 0 {
+                    if !tabModel.manager.activeNormalTabs.isEmpty {
+                        CardScrollContainer(columns: columns) { scrollProxy in
+                            TabGridContainer(
+                                isIncognito: false,
+                                geom: geom,
+                                scrollProxy: scrollProxy
+                            )
                             ArchivedTabsView(containerGeometry: geom.size)
+                        }.onAppear {
+                            gridModel.scrollToSelectedTab()
                         }
-                    }.onAppear {
-                        gridModel.scrollToSelectedTab()
                     }
                 }
                 .offset(
