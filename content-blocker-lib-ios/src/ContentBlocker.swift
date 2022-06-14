@@ -39,6 +39,7 @@ enum BlocklistFileName: String, CaseIterable {
         case .easyPrivacy:
             fileList.append(.easyPrivacy)
         case .easyPrivacyStrict:
+            fileList.append(.easyPrivacy)
             fileList.append(.easyPrivacyStrict)
             if Defaults[.adBlockEnabled] {
                 fileList.append(.easyListAdBlock)
