@@ -20,6 +20,15 @@ extension EnvironmentValues {
 public enum SettingsPage: String {
     case archivedTabs = "general"
     case cookieCutter = "privacy"
+
+    func settingId() -> String {
+        switch self {
+        case .archivedTabs:
+            return "archived-tabs-setting"
+        case .cookieCutter:
+            return "cookie-cutter-setting"
+        }
+    }
 }
 
 struct SettingsView: View {
@@ -82,7 +91,7 @@ struct SettingsView: View {
                         }
                     }.onAppear {
                         if let openPage = openPage {
-                            reader.scrollTo("\(openPage.rawValue)-section")
+                            reader.scrollTo("\(openPage.settingId())")
                         }
                     }.onDisappear(perform: TourManager.shared.notifyCurrentViewClose)
                 }
