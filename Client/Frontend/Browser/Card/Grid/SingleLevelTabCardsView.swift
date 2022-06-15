@@ -77,7 +77,6 @@ struct SingleLevelTabCardsView: View {
                                 Text(byTime.rawValue)
                                     .withFont(.labelLarge)
                                     .foregroundColor(.label)
-                                    .padding(.leading, 20)
                                     .padding(.top, 12)
                                     .padding(.bottom, 8)
                                 Spacer()
