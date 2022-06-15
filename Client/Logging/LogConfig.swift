@@ -228,6 +228,7 @@ public struct LogConfig {
         case DefaultBrowserOnboardingInterstitialSkip
         case DefaultBrowserOnboardingInterstitialRemind
         case DefaultBrowserOnboardingInterstitialOpen
+        case DefaultBrowserOnboardingInterstitialOpenAgain
         case DefaultBrowserOnboardingInterstitialContinue
         case DefaultBrowserOnboardingInterstitialVideo
         case DefaultBrowserOnboardingInterstitialScreenTime
@@ -572,6 +573,7 @@ public struct LogConfig {
         case .DefaultBrowserOnboardingInterstitialSkip: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialRemind: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialOpen: return .FirstRun
+        case .DefaultBrowserOnboardingInterstitialOpenAgain: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialContinue: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialVideo: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialScreenTime: return .FirstRun

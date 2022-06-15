@@ -343,13 +343,19 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                             }
                             interstitialModel.openButtonText = "Continue"
                             interstitialModel.onboardingState = .continueState
+                            ClientLogger.shared.logCounter(
+                                .DefaultBrowserOnboardingInterstitialOpen)
                         case .continueState:
                             interstitialModel.openButtonText = "Open Neeva Settings"
                             interstitialModel.showSecondaryOnboardingButton = true
-                            interstitialModel.openSettingsButtonClickAction()
+                            interstitialModel.openSettingsButtonClickAction(
+                                interaction: .DefaultBrowserOnboardingInterstitialContinue
+                            )
                             interstitialModel.onboardingState = .openedSettingsState
                         case .openedSettingsState:
-                            interstitialModel.openSettingsButtonClickAction()
+                            interstitialModel.openSettingsButtonClickAction(
+                                interaction: .DefaultBrowserOnboardingInterstitialOpenAgain
+                            )
                         }
 
                     } else {
