@@ -537,7 +537,8 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
         }
 
         refreshSpaceSubscription = manager.$state.sink { state in
-            if case .ready = state {
+            switch state {
+            case .ready:
                 if self.manager.updatedSpacesFromLastRefresh.first?.id.id ?? ""
                     == self.id || !self.isFollowing
                 {
@@ -547,9 +548,10 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
                 withAnimation(.easeOut) {
                     self.refreshSpaceSubscription = nil
                 }
-
                 completion(true)
-            } else {
+            case .refreshing:
+                return
+            case .failed:
                 completion(false)
             }
         }
