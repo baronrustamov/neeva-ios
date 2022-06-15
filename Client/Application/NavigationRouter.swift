@@ -26,6 +26,7 @@ enum NavigationPath {
     case closeIncogntioTabs
     case space(String, [String]?, Bool)
     case spaceDigest
+    case openSetting(SettingsPage?)
     case fastTap(String, Bool)
     case configNewsProvider(isIncognito: Bool)
     case openDefaultBrowserEducation
@@ -95,6 +96,11 @@ enum NavigationPath {
 
         } else if urlString.starts(with: "\(scheme)://open-default-browser-education") {
             self = .openDefaultBrowserEducation
+        } else if urlString.starts(with: "\(scheme)://open-setting"),
+            let pageParam = components.valueForQuery("page"),
+            let page = SettingsPage(rawValue: pageParam)
+        {
+            self = .openSetting(page)
         } else {
             return nil
         }
@@ -125,6 +131,8 @@ enum NavigationPath {
             case .walletConnect(let wcURL):
                 bvc.connectWallet(to: wcURL)
         #endif
+        case .openSetting(let page):
+            NavigationPath.handleOpenSetting(page: page, with: bvc)
         }
     }
 
@@ -261,6 +269,14 @@ enum NavigationPath {
             bvc.searchQueryModel.value = query
         }
     }
+
+    private static func handleOpenSetting(page: SettingsPage?, with bvc: BrowserViewController) {
+        guard let page = page else {
+            return
+        }
+        bvc.openSettings(openPage: page)
+    }
+
 }
 
 extension NavigationPath: Equatable {}

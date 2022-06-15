@@ -35,7 +35,7 @@ struct PrivacySettingsSection: View {
             CookieCutterSettings(cookieCutterEnabled: cookieCutterModel.cookieCutterEnabled)
         } label: {
             Text("Cookie Cutter")
-        }
+        }.id("cookie-cutter-setting")
 
         NavigationLinkButton("Privacy Policy") {
             ClientLogger.shared.logCounter(

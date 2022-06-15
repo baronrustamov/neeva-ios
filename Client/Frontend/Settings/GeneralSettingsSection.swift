@@ -68,7 +68,7 @@ struct GeneralSettingsSection: View {
             ArchivedTabSettings()
         } label: {
             Text("Keep Tabs")
-        }
+        }.id("archived-tabs-setting")
     }
 }
 
