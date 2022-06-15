@@ -41,7 +41,7 @@ class InterstitialViewModel: ObservableObject {
         showRemindButton: Bool = true,
         showCloseButton: Bool = true,
         showSecondaryOnboardingButton: Bool = true,
-        isInExperimentArm: Bool = true,
+        isInExperimentArm: Bool = false,
         onboardingState: OnboardingState = .initialState,
         onOpenSettingsAction: (() -> Void)? = nil,
         onCloseAction: (() -> Void)? = nil
@@ -59,7 +59,9 @@ class InterstitialViewModel: ObservableObject {
         self.remindButtonText = "Remind Me Later"
     }
 
-    func openSettingsButtonClickAction() {
+    func openSettingsButtonClickAction(
+        interaction: LogConfig.Interaction = .DefaultBrowserOnboardingInterstitialOpen
+    ) {
         if let onOpenSettingsAction = onOpenSettingsAction {
             onOpenSettingsAction()
         }
@@ -67,7 +69,7 @@ class InterstitialViewModel: ObservableObject {
         Defaults[.lastDefaultBrowserInterstitialChoice] =
             DefaultBrowserInterstitialChoice.openSettings.rawValue
         ClientLogger.shared.logCounter(
-            .DefaultBrowserOnboardingInterstitialOpen,
+            interaction,
             attributes: [
                 ClientLogCounterAttribute(
                     key:
