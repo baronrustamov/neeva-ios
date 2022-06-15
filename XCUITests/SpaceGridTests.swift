@@ -32,23 +32,22 @@ class SpaceGridTests: BaseTestCase {
         XCTAssertTrue(app.buttons["Space Filter"].exists)
     }
 
-    // THIS IS FLAKY -- see issue 3805
-    //    func testSpaceFilter() {
-    //        app.buttons["Show Tabs"].tap()
-    //        app.buttons["Spaces"].tap()
-    //
-    //        XCTAssertTrue(app.buttons[SpaceServiceMock.spaceNotOwnedByMeTitle].exists)
-    //
-    //        app.buttons["Space Filter"].tap()
-    //        app.buttons["Owned by me"].forceTapElement()
-    //
-    //        waitForNoExistence(app.buttons[SpaceServiceMock.spaceNotOwnedByMeTitle])
-    //        XCTAssertFalse(app.buttons[SpaceServiceMock.spaceNotOwnedByMeTitle].exists)
-    //
-    //        app.buttons["All Spaces"].forceTapElement()
-    //
-    //        XCTAssertTrue(app.buttons[SpaceServiceMock.spaceNotOwnedByMeTitle].exists)
-    //    }
+    func testSpaceFilter() {
+        app.buttons["Show Tabs"].tap()
+        app.buttons["Spaces"].tap()
+
+        XCTAssertTrue(app.buttons[SpaceServiceMock.spaceNotOwnedByMeTitle].exists)
+
+        app.buttons["Space Filter"].tap()
+        app.buttons["Owned by me"].forceTapElement()
+
+        waitForNoExistence(app.buttons[SpaceServiceMock.spaceNotOwnedByMeTitle])
+        XCTAssertFalse(app.buttons[SpaceServiceMock.spaceNotOwnedByMeTitle].exists)
+
+        app.buttons["All Spaces"].forceTapElement()
+
+        XCTAssertTrue(app.buttons[SpaceServiceMock.spaceNotOwnedByMeTitle].exists)
+    }
 
     // This is tested in AddToSpaceSheetTests.swift, but the function
     // is left here just as a reminder that it is being covered.
