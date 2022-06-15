@@ -215,6 +215,7 @@ struct CardsContainer: View {
                                 geom: geom,
                                 scrollProxy: scrollProxy
                             )
+                            .zIndex(1)
                             ArchivedTabsView(containerGeometry: geom.size)
                         }.onAppear {
                             gridModel.scrollToSelectedTab()
