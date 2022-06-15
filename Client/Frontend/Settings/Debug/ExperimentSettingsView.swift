@@ -41,6 +41,12 @@ struct ExperimentSettingsView: View {
                     value: $valueTextPromoCard,
                     experiment: .defaultBrowserWelcomeScreen
                 )
+
+                OptionalPrefilledStringField<NeevaExperiment.DefaultBrowserNewScreen>(
+                    "DefaultBrowserNewScreen",
+                    value: $valueTextPromoCard,
+                    experiment: .defaultBrowserNewScreen
+                )
             }
         }
         .listStyle(.insetGrouped)

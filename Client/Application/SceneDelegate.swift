@@ -118,6 +118,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         getAppDelegate().setUpWebServer(getAppDelegate().profile)
 
         NotificationPermissionHelper.shared.updatePermissionState()
+
+        // Continue playing the video if there is a player
+        if let interstitialViewModel = bvc.interstitialViewModel {
+            interstitialViewModel.player?.play()
+        }
     }
 
     func sceneWillEnterForeground(_ scene: UIScene) {

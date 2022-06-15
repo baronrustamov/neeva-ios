@@ -165,6 +165,8 @@ class BrowserViewController: UIViewController, ModalPresenter {
     private(set) var readerModeCache: ReaderModeCache
     private(set) var screenshotHelper: ScreenshotHelper!
 
+    var interstitialViewModel: InterstitialViewModel?
+
     // popover rotation handling
     var displayedPopoverController: UIViewController?
     var updateDisplayedPopoverProperties: (() -> Void)?

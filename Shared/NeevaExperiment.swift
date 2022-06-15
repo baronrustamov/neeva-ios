@@ -85,6 +85,12 @@ extension NeevaExperiment {
         case trackingMsg
         case privacyMsg
     }
+
+    public enum DefaultBrowserNewScreen: String, ExperimentArms {
+        case control
+        case newScreen
+        case newScreenWithVideo
+    }
 }
 
 // Experiment Example */
@@ -99,4 +105,8 @@ where Arm == NeevaExperiment.PromoCardTypeAfterFirstRun {
 
 extension NeevaExperiment.Experiment where Arm == NeevaExperiment.DefaultBrowserWelcomeScreen {
     public static let defaultBrowserWelcomeScreen = Self()
+}
+
+extension NeevaExperiment.Experiment where Arm == NeevaExperiment.DefaultBrowserNewScreen {
+    public static let defaultBrowserNewScreen = Self()
 }

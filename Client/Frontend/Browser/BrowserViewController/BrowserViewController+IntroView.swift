@@ -120,13 +120,17 @@ extension BrowserViewController {
 // MARK: - Default Browser
 extension BrowserViewController {
     func presentDefaultBrowserFirstRun() {
-        let welcomeScreenArm = NeevaExperiment.startExperiment(for: .defaultBrowserWelcomeScreen)
+        let _ = NeevaExperiment.startExperiment(for: .defaultBrowserWelcomeScreen)
         NeevaExperiment.logStartExperiment(for: .defaultBrowserWelcomeScreen)
+        let arm = NeevaExperiment.startExperiment(for: .defaultBrowserNewScreen)
+        NeevaExperiment.logStartExperiment(for: .defaultBrowserNewScreen)
         let interstitialModel = InterstitialViewModel(
+            isInExperimentArm: arm == .newScreen || arm == .newScreenWithVideo,
             onCloseAction: {
                 self.overlayManager.hideCurrentOverlay()
             }
         )
+        self.interstitialViewModel = interstitialModel
         overlayManager.presentFullScreenModal(
             content: AnyView(
                 DefaultBrowserInterstitialWelcomeView()
@@ -137,7 +141,8 @@ extension BrowserViewController {
                         AppDelegate.setRotationLock(to: .all)
                     }
                     .environmentObject(interstitialModel)
-            )
+            ),
+            ignoreSafeArea: false
         ) {
             Defaults[.didShowDefaultBrowserInterstitialFromSkipToBrowser] = true
             Defaults[.introSeen] = true
@@ -151,7 +156,10 @@ extension BrowserViewController {
     }
 
     func restoreDefaultBrowserFirstRun() {
+        let arm = NeevaExperiment.arm(for: .defaultBrowserNewScreen)
         let interstitialModel = InterstitialViewModel(
+            isInExperimentArm: arm == .newScreen || arm == .newScreenWithVideo,
+            onboardingState: .openedSettingsState,
             onCloseAction: {
                 self.overlayManager.hideCurrentOverlay()
             }
@@ -167,7 +175,8 @@ extension BrowserViewController {
                     }
                     .environmentObject(interstitialModel)
             ),
-            animate: false
+            animate: false,
+            ignoreSafeArea: false
         ) {
             ClientLogger.shared.logCounter(
                 .DefaultBrowserInterstitialRestoreImp

@@ -177,6 +177,10 @@ class TestAppDelegate: AppDelegate {
                 experimentArm: NeevaExperiment.DefaultBrowserWelcomeScreen.control.rawValue)
 
             NeevaExperiment.forceExperimentArm(
+                experiment: .defaultBrowserNewScreen,
+                experimentArm: NeevaExperiment.DefaultBrowserNewScreen.control.rawValue)
+
+            NeevaExperiment.forceExperimentArm(
                 experiment: .promoCardTypeAfterFirstRun,
                 experimentArm: NeevaExperiment.PromoCardTypeAfterFirstRun.control.rawValue)
         }

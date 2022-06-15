@@ -228,6 +228,9 @@ public struct LogConfig {
         case DefaultBrowserOnboardingInterstitialSkip
         case DefaultBrowserOnboardingInterstitialRemind
         case DefaultBrowserOnboardingInterstitialOpen
+        case DefaultBrowserOnboardingInterstitialContinue
+        case DefaultBrowserOnboardingInterstitialVideo
+        case DefaultBrowserOnboardingInterstitialScreenTime
         /// Promo card impression (without 2 second)
         case DefaultBrowserPromoCardImp
 
@@ -569,6 +572,9 @@ public struct LogConfig {
         case .DefaultBrowserOnboardingInterstitialSkip: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialRemind: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialOpen: return .FirstRun
+        case .DefaultBrowserOnboardingInterstitialContinue: return .FirstRun
+        case .DefaultBrowserOnboardingInterstitialVideo: return .FirstRun
+        case .DefaultBrowserOnboardingInterstitialScreenTime: return .FirstRun
         case .DefaultBrowserInterstitialImp: return .FirstRun
         case .OpenDefaultBrowserURL: return .FirstRun
         case .StartExperiment: return .FirstRun
@@ -774,6 +780,8 @@ public struct LogConfig {
 
         /// First Run Logging Error
         public static let FirstRunLogErrorMessage = "FirstRunLogErrorMessage"
+
+        public static let InterstitialTimeSpent = "InterstitialTimeSpent"
     }
 
     public struct UIInteractionAttribute {

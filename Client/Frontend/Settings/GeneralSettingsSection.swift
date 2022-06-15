@@ -35,7 +35,8 @@ struct GeneralSettingsSection: View {
                 .environmentObject(
                     InterstitialViewModel(
                         trigger: .defaultBrowserSettings,
-                        showCloseButton: false
+                        showCloseButton: false,
+                        onboardingState: .openedSettingsState
                     )
                 )
                 .onAppear {

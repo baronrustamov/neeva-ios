@@ -87,12 +87,15 @@ class OverlayManager: ObservableObject {
     var queuedOverlays = [(OverlayType, Bool, (() -> Void)?)]()
 
     public func presentFullScreenModal(
-        content: AnyView, animate: Bool = true, completion: (() -> Void)? = nil
+        content: AnyView, animate: Bool = true, ignoreSafeArea: Bool = true,
+        completion: (() -> Void)? = nil
     ) {
         let content = AnyView(
             content
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .ignoresSafeArea()
+                .if(ignoreSafeArea) { view in
+                    view.ignoresSafeArea()
+                }
         )
 
         show(overlay: .fullScreenModal(content), animate: animate, completion: completion)
