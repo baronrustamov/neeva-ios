@@ -14,15 +14,7 @@ class GridModel: ObservableObject {
     @Published private(set) var pickerHeight: CGFloat = UIConstants
         .TopToolbarHeightWithToolbarButtonsShowing
     @Published private(set) var switcherState: SwitcherView = .tabs {
-        willSet {
-            gridCanAnimate = true
-        }
-
         didSet {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.gridCanAnimate = false
-            }
-
             if case .spaces = switcherState {
                 ClientLogger.shared.logCounter(
                     .SpacesUIVisited,
@@ -70,8 +62,14 @@ class GridModel: ObservableObject {
     }
 
     public func setSwitcherState(to state: SwitcherView) {
+        gridCanAnimate = true
+
         if state != switcherState {
             switcherState = state
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.gridCanAnimate = false
         }
     }
 

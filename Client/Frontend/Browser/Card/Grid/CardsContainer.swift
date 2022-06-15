@@ -180,6 +180,7 @@ struct CardsContainer: View {
                             SpaceCardsView()
                                 .environment(\.columns, columns)
                         }.animation(nil)
+
                         if !NeevaUserInfo.shared.isUserLoggedIn {
                             SpacesIntroOverlayContent()
                         }
@@ -204,8 +205,7 @@ struct CardsContainer: View {
                             isTopBar: chromeModel.inlineToolbar,
                             showArchivedTabsView:
                                 tabModel.manager.activeNormalTabs.isEmpty
-                        )
-                        .opacity(tabModel.normalDetails.isEmpty ? 1 : 0)
+                        ).opacity(tabModel.normalDetails.isEmpty ? 1 : 0)
                     }
 
                     if !tabModel.manager.activeNormalTabs.isEmpty {
@@ -215,13 +215,13 @@ struct CardsContainer: View {
                                 geom: geom,
                                 scrollProxy: scrollProxy
                             )
+
                             ArchivedTabsView(containerGeometry: geom.size)
                         }.onAppear {
                             gridModel.scrollToSelectedTab()
                         }
                     }
-                }
-                .offset(
+                }.offset(
                     x: (gridModel.switcherState == .tabs
                         ? (incognitoModel.isIncognito ? geom.widthIncludingSafeArea : 0)
                         : -geom.widthIncludingSafeArea)
@@ -239,8 +239,7 @@ struct CardsContainer: View {
                             isIncognito: true,
                             isTopBar: chromeModel.inlineToolbar,
                             showArchivedTabsView: false
-                        )
-                        .opacity(tabModel.incognitoDetails.isEmpty ? 1 : 0)
+                        ).opacity(tabModel.incognitoDetails.isEmpty ? 1 : 0)
                     }
 
                     CardScrollContainer(columns: columns) { scrollProxy in

@@ -29,13 +29,12 @@ struct SegmentTappedModifier: ViewModifier {
     @Binding var selectedSegmentIndex: Int
 
     func body(content: Content) -> some View {
-        Button(action: {
+        Button {
             segment.selectedAction()
             selectedSegmentIndex = index
-        }) {
+        } label: {
             content
-        }
-        .accessibilityAddTraits(index == selectedSegmentIndex ? .isSelected : [])
+        }.accessibilityAddTraits(index == selectedSegmentIndex ? .isSelected : [])
     }
 }
 
