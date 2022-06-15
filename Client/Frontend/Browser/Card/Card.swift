@@ -188,12 +188,11 @@ struct Card<Details>: View where Details: CardDetails {
     @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var cardTransitionModel: CardTransitionModel
     @State private var isPressed = false
-    @State private var showingRemoveSpaceWarning = false
 
     var body: some View {
         GeometryReader { geom in
             VStack(alignment: .center, spacing: 0) {
-                let button = Button {
+                Button {
                     selectionCompletion()
                     details.onSelect()
                 } label: {
@@ -224,60 +223,7 @@ struct Card<Details>: View where Details: CardDetails {
                         thumbnailDrawsHeader: details.thumbnailDrawsHeader,
                         isIncognito: incognitoModel.isIncognito)
                 )
-
-                if let tabDetails = details as? TabCardDetails {
-                    button
-                        .if(!animate) { view in
-                            view
-                                // add padding to all tab grids
-                                .padding(1.5)
-                                // remove padding of unselected tab grid to eliminate edge when open contextMenu
-                                .padding(tabDetails.isSelected ? 0 : -1.5)
-                                .contextMenu(menuItems: tabDetails.contextMenu)
-                                // remove padding of selected tab
-                                .padding(tabDetails.isSelected ? -1.5 : 0)
-                        }
-                } else if let spaceDetails = details as? SpaceCardDetails {
-                    button
-                        .if(!animate) { view in
-                            view
-                                .padding(1.5)
-                                .contextMenu {
-                                    Button {
-                                        showingRemoveSpaceWarning = true
-                                    } label: {
-                                        Label(
-                                            spaceDetails.item?.ACL == .owner
-                                                ? "Delete Space" : "Unfollow", systemSymbol: .trash)
-                                    }
-                                }
-                                .actionSheet(isPresented: $showingRemoveSpaceWarning) {
-                                    ActionSheet(
-                                        // Compilation fails if we don't concat separate Text views for title
-                                        title: Text("Are you sure you want to ")
-                                            + Text(
-                                                spaceDetails.item?.ACL == .owner
-                                                    ? "delete" : "unfollow")
-                                            + Text(" this space?"),
-                                        buttons: [
-                                            .destructive(
-                                                Text(
-                                                    spaceDetails.item?.ACL == .owner
-                                                        ? "Delete Space" : "Unfollow Space"),
-                                                action: {
-                                                    spaceDetails.item?.ACL == .owner
-                                                        ? spaceDetails.deleteSpace()
-                                                        : spaceDetails.unfollowSpace()
-                                                }),
-                                            .cancel(),
-                                        ]
-                                    )
-                                }
-                                .padding(-1.5)
-                        }
-                } else {
-                    button
-                }
+                .modifier(CardModifier(details: details, animate: animate))
 
                 if !details.thumbnailDrawsHeader {
                     HStack(spacing: 0) {
@@ -355,6 +301,118 @@ struct Card<Details>: View where Details: CardDetails {
                         tabCardModel: tabModel, draggingDetail: tabCardDetail)
                     return NSItemProvider(object: tabCardDetail.id as NSString)
                 })
+        }
+    }
+
+    private struct CardModifier: ViewModifier {
+        let details: Details
+        let animate: Bool
+
+        @ViewBuilder
+        func body(content: Content) -> some View {
+            if let tabDetails = details as? TabCardDetails {
+                content
+                    .modifier(TabCardModifier(details: tabDetails, animate: animate))
+            } else if let spaceDetails = details as? SpaceCardDetails {
+                content
+                    .modifier(SpaceCardModifier(details: spaceDetails, animate: animate))
+            } else {
+                content
+            }
+        }
+    }
+
+    private struct SpaceCardModifier: ViewModifier {
+        @ObservedObject var details: SpaceCardDetails
+        let animate: Bool
+        @State var showingRemoveSpaceWarning: Bool = false
+
+        // These two buttons (removeButton, pinButton) are broken
+        // out into computed properties in order to make things
+        // easier for the compiler.
+        @ViewBuilder
+        var removeButton: some View {
+            Button {
+                showingRemoveSpaceWarning = true
+            } label: {
+                Label(
+                    details.item?.ACL == .owner
+                        ? "Delete Space" : "Unfollow", systemSymbol: .trash)
+            }
+        }
+
+        // `isPinnable` is used to disable the pin option, for example,
+        // in the "Verified Creators" Profile UI.
+        @ViewBuilder
+        var pinButton: some View {
+            if details.isPinnable {
+                Button {
+                    details.pinSpace()
+                } label: {
+                    if let isPinned = details.item?.isPinned {
+                        Label(
+                            isPinned ? "Unpin" : "Pin",
+                            systemSymbol: (isPinned ? .pinSlash : .pin))
+                    }
+                }
+            }
+        }
+
+        @ViewBuilder
+        func body(content: Content) -> some View {
+            content
+                .if(!animate) { view in
+                    view
+                        .padding(1.5)
+                        .contextMenu {
+                            removeButton
+                            pinButton
+                        }
+                        .actionSheet(isPresented: $showingRemoveSpaceWarning) {
+                            ActionSheet(
+                                // Compilation fails if we don't concat separate Text views for title
+                                title: Text("Are you sure you want to ")
+                                    + Text(
+                                        details.item?.ACL == .owner
+                                            ? "delete" : "unfollow")
+                                    + Text(" this space?"),
+                                buttons: [
+                                    .destructive(
+                                        Text(
+                                            details.item?.ACL == .owner
+                                                ? "Delete Space" : "Unfollow Space"),
+                                        action: {
+                                            details.item?.ACL == .owner
+                                                ? details.deleteSpace()
+                                                : details.unfollowSpace()
+                                        }),
+                                    .cancel(),
+                                ]
+                            )
+                        }
+                        .padding(-1.5)
+                }
+        }
+
+    }
+
+    private struct TabCardModifier: ViewModifier {
+        @ObservedObject var details: TabCardDetails
+        let animate: Bool
+
+        @ViewBuilder
+        func body(content: Content) -> some View {
+            content
+                .if(!animate) { view in
+                    view
+                        // add padding to all tab grids
+                        .padding(1.5)
+                        // remove padding of unselected tab grid to eliminate edge when open contextMenu
+                        .padding(details.isSelected ? 0 : -1.5)
+                        .contextMenu(menuItems: details.contextMenu)
+                        // remove padding of selected tab
+                        .padding(details.isSelected ? -1.5 : 0)
+                }
         }
     }
 }

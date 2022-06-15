@@ -77,6 +77,9 @@ public protocol SpaceService {
     func reorderSpace(spaceID: String, ids: [String]) -> ReorderSpaceRequest?
 
     @discardableResult
+    func pinSpace(spaceId: String, isPinned: Bool) -> PinSpaceRequest?
+
+    @discardableResult
     func unfollowSpace(spaceID: String) -> UnfollowSpaceRequest?
 
     @discardableResult

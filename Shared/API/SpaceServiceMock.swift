@@ -236,6 +236,10 @@ public class SpaceServiceMock: SpaceService {
         return nil
     }
 
+    public func pinSpace(spaceId: String, isPinned: Bool) -> PinSpaceRequest? {
+        return nil
+    }
+
     public func unfollowSpace(spaceID: String) -> UnfollowSpaceRequest? {
         return nil
     }

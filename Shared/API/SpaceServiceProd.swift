@@ -113,6 +113,10 @@ public class SpaceServiceProd: SpaceService {
         return ReorderSpaceRequest(spaceID: spaceID, ids: ids)
     }
 
+    public func pinSpace(spaceId: String, isPinned: Bool) -> PinSpaceRequest? {
+        return PinSpaceRequest(spaceId: spaceId, isPinned: isPinned)
+    }
+
     public func updateSpaceEntity(
         spaceID: String, entityID: String, title: String, snippet: String?, thumbnail: String?
     ) -> UpdateSpaceEntityRequest? {

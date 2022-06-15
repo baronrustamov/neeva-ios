@@ -537,8 +537,14 @@ class SpaceCardModel: CardModel {
     @Published var filterState: SpaceFilterState = .allSpaces
 
     var detailsMatchingFilter: [SpaceCardDetails] {
-        let spaces = allDetails.filter {
+        var spaces = allDetails.filter {
             NeevaFeatureFlags[.enableSpaceDigestCard] || $0.id != SpaceStore.dailyDigestID
+        }
+
+        // Put the pinned Spaces first
+        spaces.sort {
+            guard let firstItem = $0.item, let secondItem = $1.item else { return true }
+            return firstItem.isPinned && !secondItem.isPinned
         }
 
         switch filterState {

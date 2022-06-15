@@ -479,10 +479,10 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
     @Published var showingDetails = false
 
     var id: String
-    var item: Space?
-    var closeButtonImage: UIImage? = nil
+    var isPinnable: Bool = true
     @Published var allDetails: [SpaceEntityThumbnail] = []
     @Published var allDetailsWithExclusionList: [SpaceEntityThumbnail] = []
+    @Published var item: Space?
     @Published private(set) var refreshSpaceSubscription: AnyCancellable? = nil
 
     var isFollowing: Bool {
@@ -497,16 +497,35 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
         item?.displayTitle ?? ""
     }
 
+    var closeButtonImage: UIImage? {
+        guard let item = item, item.isPinned else { return nil }
+        return UIImage(systemName: "pin.fill")
+    }
+
+    // This is used to manage some of the Combine subscriptions in
+    // this class. `subscriptionCount` is a simple ref counter,
+    // and when all of our subscriptions are complete, we clear out
+    // the `Set` and let the garbage collector do its thing.
+    var subscriptions: Set<AnyCancellable> = []
+    var subscriptionCount: Int = 0 {
+        didSet {
+            if subscriptionCount == 0 {
+                subscriptions.removeAll()
+            }
+        }
+    }
+
     init(id: String, manager: SpaceStore) {
         self.id = id
         self.manager = manager
         updateSpace()
     }
 
-    init(space: Space, manager: SpaceStore) {
+    init(space: Space, manager: SpaceStore, isPinnable: Bool = true) {
         self.item = space
         self.id = space.id.id
         self.manager = manager
+        self.isPinnable = isPinnable
         updateDetails()
     }
 
@@ -604,38 +623,56 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
         return true
     }
 
-    private var deleteSubscription: AnyCancellable?
-
     func deleteSpace() {
         let request = manager.deleteSpace(spaceId: id)
-        deleteSubscription = request?.$state.sink { [self] state in
+        subscriptionCount += 1
+        request?.$state.sink { [self] state in
             switch state {
-            case .success:
-                manager.refresh(force: true)
-                deleteSubscription?.cancel()
-            case .failure:
-                deleteSubscription?.cancel()
             case .initial:
                 Logger.browser.info("Waiting for result from deleting space")
+            case .success:
+                manager.refresh(force: true)
+                fallthrough
+            case .failure:
+                subscriptionCount -= 1
             }
-        }
+        }.store(in: &subscriptions)
     }
-
-    private var unfollowSubscription: AnyCancellable?
 
     func unfollowSpace() {
         let request = manager.unfollowSpace(spaceId: id)
-        unfollowSubscription = request?.$state.sink { [self] state in
+        subscriptionCount += 1
+        request?.$state.sink { [self] state in
             switch state {
-            case .success:
-                manager.refresh(force: true)
-                unfollowSubscription?.cancel()
-            case .failure:
-                unfollowSubscription?.cancel()
             case .initial:
                 Logger.browser.info("Waiting for result from unfollowing space")
+            case .success:
+                manager.refresh(force: true)
+                fallthrough
+            case .failure:
+                subscriptionCount -= 1
             }
-        }
+        }.store(in: &subscriptions)
+    }
+
+    func pinSpace() {
+        let request = manager.pinSpace(spaceId: id)
+        subscriptionCount += 1
+        request?.$state.sink { [self] state in
+            switch state {
+            case .initial:
+                Logger.browser.info("Waiting for result from toggling space pin")
+            case .success:
+                manager.refresh(force: true) { [self] in
+                    // Keep our state up-to-date and propagate
+                    // changes to the UI
+                    item = manager.allSpaces.first { $0.id.id == id }
+                }
+                fallthrough
+            case .failure:
+                subscriptionCount -= 1
+            }
+        }.store(in: &subscriptions)
     }
 }
 

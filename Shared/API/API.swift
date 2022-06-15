@@ -1526,6 +1526,8 @@ public enum InteractionType: RawRepresentable, Equatable, Hashable, CaseIterable
   case deleteSpace
   /// The user left the space
   case leaveSpace
+  /// The user pinned the space
+  case pinSpace
   /// The user accepted a space sharing invite
   case acceptSpaceInvite
   /// The user declined a space sharing invite
@@ -1620,6 +1622,7 @@ public enum InteractionType: RawRepresentable, Equatable, Hashable, CaseIterable
       case "EditSpace": self = .editSpace
       case "DeleteSpace": self = .deleteSpace
       case "LeaveSpace": self = .leaveSpace
+      case "PinSpace": self = .pinSpace
       case "AcceptSpaceInvite": self = .acceptSpaceInvite
       case "DeclineSpaceInvite": self = .declineSpaceInvite
       case "ViewOriginalSnapshotPage": self = .viewOriginalSnapshotPage
@@ -1681,6 +1684,7 @@ public enum InteractionType: RawRepresentable, Equatable, Hashable, CaseIterable
       case .editSpace: return "EditSpace"
       case .deleteSpace: return "DeleteSpace"
       case .leaveSpace: return "LeaveSpace"
+      case .pinSpace: return "PinSpace"
       case .acceptSpaceInvite: return "AcceptSpaceInvite"
       case .declineSpaceInvite: return "DeclineSpaceInvite"
       case .viewOriginalSnapshotPage: return "ViewOriginalSnapshotPage"
@@ -1742,6 +1746,7 @@ public enum InteractionType: RawRepresentable, Equatable, Hashable, CaseIterable
       case (.editSpace, .editSpace): return true
       case (.deleteSpace, .deleteSpace): return true
       case (.leaveSpace, .leaveSpace): return true
+      case (.pinSpace, .pinSpace): return true
       case (.acceptSpaceInvite, .acceptSpaceInvite): return true
       case (.declineSpaceInvite, .declineSpaceInvite): return true
       case (.viewOriginalSnapshotPage, .viewOriginalSnapshotPage): return true
@@ -1804,6 +1809,7 @@ public enum InteractionType: RawRepresentable, Equatable, Hashable, CaseIterable
       .editSpace,
       .deleteSpace,
       .leaveSpace,
+      .pinSpace,
       .acceptSpaceInvite,
       .declineSpaceInvite,
       .viewOriginalSnapshotPage,
@@ -4697,6 +4703,35 @@ public struct ClaimGeneratedItemInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "resultID")
+    }
+  }
+}
+
+public struct PinSpaceInput: GraphQLMapConvertible {
+  public var graphQLMap: GraphQLMap
+
+  /// - Parameters:
+  ///   - id
+  ///   - isPinned
+  public init(id: String, isPinned: Swift.Optional<Bool?> = nil) {
+    graphQLMap = ["id": id, "isPinned": isPinned]
+  }
+
+  public var id: String {
+    get {
+      return graphQLMap["id"] as! String
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "id")
+    }
+  }
+
+  public var isPinned: Swift.Optional<Bool?> {
+    get {
+      return graphQLMap["isPinned"] as? Swift.Optional<Bool?> ?? Swift.Optional<Bool?>.none
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "isPinned")
     }
   }
 }
@@ -14549,6 +14584,7 @@ public final class ListSpacesQuery: GraphQLQuery {
             }
             resultCount
             isDefaultSpace
+            isPinned
           }
         }
       }
@@ -14557,7 +14593,7 @@ public final class ListSpacesQuery: GraphQLQuery {
 
   public let operationName: String = "ListSpaces"
 
-  public let operationIdentifier: String? = "cc92fe7546f431b5888b47b5bca2033a8868098b2444926fefb350304613fd00"
+  public let operationIdentifier: String? = "5b0c40acfca2b540c9bab44c5b09cf64ee61a53ea8d424a0faeefbf6915c32fe"
 
   public var kind: ListSpacesKind?
 
@@ -14752,6 +14788,7 @@ public final class ListSpacesQuery: GraphQLQuery {
               GraphQLField("thumbnailSize", type: .object(ThumbnailSize.selections)),
               GraphQLField("resultCount", type: .scalar(Int.self)),
               GraphQLField("isDefaultSpace", type: .scalar(Bool.self)),
+              GraphQLField("isPinned", type: .scalar(Bool.self)),
             ]
           }
 
@@ -14761,8 +14798,8 @@ public final class ListSpacesQuery: GraphQLQuery {
             self.resultMap = unsafeResultMap
           }
 
-          public init(name: String? = nil, lastModifiedTs: String? = nil, owner: Owner? = nil, notifications: [Notification]? = nil, userAcl: UserAcl? = nil, acl: [Acl]? = nil, hasPublicAcl: Bool? = nil, thumbnail: String? = nil, thumbnailSize: ThumbnailSize? = nil, resultCount: Int? = nil, isDefaultSpace: Bool? = nil) {
-            self.init(unsafeResultMap: ["__typename": "SpaceData", "name": name, "lastModifiedTs": lastModifiedTs, "owner": owner.flatMap { (value: Owner) -> ResultMap in value.resultMap }, "notifications": notifications.flatMap { (value: [Notification]) -> [ResultMap] in value.map { (value: Notification) -> ResultMap in value.resultMap } }, "userACL": userAcl.flatMap { (value: UserAcl) -> ResultMap in value.resultMap }, "acl": acl.flatMap { (value: [Acl]) -> [ResultMap] in value.map { (value: Acl) -> ResultMap in value.resultMap } }, "hasPublicACL": hasPublicAcl, "thumbnail": thumbnail, "thumbnailSize": thumbnailSize.flatMap { (value: ThumbnailSize) -> ResultMap in value.resultMap }, "resultCount": resultCount, "isDefaultSpace": isDefaultSpace])
+          public init(name: String? = nil, lastModifiedTs: String? = nil, owner: Owner? = nil, notifications: [Notification]? = nil, userAcl: UserAcl? = nil, acl: [Acl]? = nil, hasPublicAcl: Bool? = nil, thumbnail: String? = nil, thumbnailSize: ThumbnailSize? = nil, resultCount: Int? = nil, isDefaultSpace: Bool? = nil, isPinned: Bool? = nil) {
+            self.init(unsafeResultMap: ["__typename": "SpaceData", "name": name, "lastModifiedTs": lastModifiedTs, "owner": owner.flatMap { (value: Owner) -> ResultMap in value.resultMap }, "notifications": notifications.flatMap { (value: [Notification]) -> [ResultMap] in value.map { (value: Notification) -> ResultMap in value.resultMap } }, "userACL": userAcl.flatMap { (value: UserAcl) -> ResultMap in value.resultMap }, "acl": acl.flatMap { (value: [Acl]) -> [ResultMap] in value.map { (value: Acl) -> ResultMap in value.resultMap } }, "hasPublicACL": hasPublicAcl, "thumbnail": thumbnail, "thumbnailSize": thumbnailSize.flatMap { (value: ThumbnailSize) -> ResultMap in value.resultMap }, "resultCount": resultCount, "isDefaultSpace": isDefaultSpace, "isPinned": isPinned])
           }
 
           public var __typename: String {
@@ -14870,6 +14907,15 @@ public final class ListSpacesQuery: GraphQLQuery {
             }
             set {
               resultMap.updateValue(newValue, forKey: "isDefaultSpace")
+            }
+          }
+
+          public var isPinned: Bool? {
+            get {
+              return resultMap["isPinned"] as? Bool
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "isPinned")
             }
           }
 
@@ -21424,6 +21470,60 @@ public final class ClaimGeneratedItemMutation: GraphQLMutation {
         set {
           resultMap.updateValue(newValue, forKey: "applied")
         }
+      }
+    }
+  }
+}
+
+public final class PinSpaceMutation: GraphQLMutation {
+  /// The raw GraphQL definition of this operation.
+  public let operationDefinition: String =
+    """
+    mutation PinSpace($input: PinSpaceInput!) {
+      pinSpace(input: $input)
+    }
+    """
+
+  public let operationName: String = "PinSpace"
+
+  public let operationIdentifier: String? = "24e96d732de4246f0fe83132795a819f3fc9282e9997373368abffc7b6fc73ea"
+
+  public var input: PinSpaceInput
+
+  public init(input: PinSpaceInput) {
+    self.input = input
+  }
+
+  public var variables: GraphQLMap? {
+    return ["input": input]
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["Mutation"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("pinSpace", arguments: ["input": GraphQLVariable("input")], type: .nonNull(.scalar(Bool.self))),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(pinSpace: Bool) {
+      self.init(unsafeResultMap: ["__typename": "Mutation", "pinSpace": pinSpace])
+    }
+
+    /// API to pin/unpin a space.
+    public var pinSpace: Bool {
+      get {
+        return resultMap["pinSpace"]! as! Bool
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "pinSpace")
       }
     }
   }

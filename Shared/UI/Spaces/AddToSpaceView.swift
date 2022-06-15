@@ -222,12 +222,17 @@ public struct AddToSpaceView: View {
     }
 
     func filter(_ spaces: [Space]) -> [Space] {
+        // Put the pinned Spaces first
+        let sortedSpaces = spaces.sorted {
+            return $0.isPinned && !$1.isPinned
+        }
+
         if !searchTerm.isEmpty {
-            return spaces.filter {
+            return sortedSpaces.filter {
                 $0.name.localizedCaseInsensitiveContains(searchTerm)
             }
         }
-        return spaces
+        return sortedSpaces
     }
 
     var searchHeader: some View {

@@ -80,13 +80,14 @@ public class Space: Hashable, Identifiable {
     public let notifications: [Notification]?
     public var isDigest = false
     public var owner: Owner?
+    public var isPinned: Bool
 
     init(
         id: SpaceID, name: String, description: String? = nil, followers: Int? = nil,
         views: Int? = nil, lastModifiedTs: String, thumbnail: String?,
         resultCount: Int, isDefaultSpace: Bool, isShared: Bool, isPublic: Bool,
         userACL: SpaceACLLevel, acls: [Acl] = [], notifications: [Notification]? = nil,
-        owner: Owner? = nil
+        owner: Owner? = nil, isPinned: Bool = false
     ) {
         self.id = id
         self.name = name
@@ -103,6 +104,7 @@ public class Space: Hashable, Identifiable {
         self.acls = acls
         self.notifications = notifications
         self.owner = owner
+        self.isPinned = isPinned
     }
 
     init(from model: SpacesDataQueryController.Space) {
@@ -122,6 +124,7 @@ public class Space: Hashable, Identifiable {
         self.acls = []
         self.notifications = nil
         self.contentData = model.entities
+        self.isPinned = false
     }
 
     public var url: URL {
@@ -431,7 +434,8 @@ public class SpaceStore: ObservableObject {
                     notifications: space.notifications,
                     owner: SpacesMetadata.Owner(
                         displayName: space.owner?.displayName ?? "",
-                        pictureUrl: space.owner?.pictureUrl ?? "")
+                        pictureUrl: space.owner?.pictureUrl ?? ""),
+                    isPinned: space.isPinned ?? false
                 )
 
                 /// Note, we avoid parsing `lastModifiedTs` here and instead just use it as
@@ -729,5 +733,13 @@ public class SpaceStore: ObservableObject {
     ) -> Combine.Cancellable? {
         return SpaceServiceProvider.shared.deleteSpaceResultByUrlMutation(
             spaceId: spaceId, url: url, completion: completion)
+    }
+
+    // When we pass `isPinned` to SpaceServiceProvider, what we're really conveying is
+    // whether the Space *should* be pinned or not. This parameter's name is arguably
+    // pretty poor, but it is left this way to be consistent with the back end.
+    public func pinSpace(spaceId: String) -> PinSpaceRequest? {
+        let isPinned = allSpaces.first { $0.id.value == spaceId }?.isPinned ?? true
+        return SpaceServiceProvider.shared.pinSpace(spaceId: spaceId, isPinned: !isPinned)
     }
 }
