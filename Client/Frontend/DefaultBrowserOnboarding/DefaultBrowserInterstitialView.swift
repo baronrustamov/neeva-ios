@@ -5,11 +5,11 @@
 import Foundation
 import SwiftUI
 
-struct DefaultBrowserInterstitialView<Detail: View, Header: View>: View {
+struct DefaultBrowserInterstitialView<Content: View>: View {
     @EnvironmentObject var interstitialModel: InterstitialViewModel
 
-    var detail: Detail
-    var header: Header
+    var showSecondaryButton: Bool = true
+    var content: Content
     var primaryButton: String
     var secondaryButton: String?
     var primaryAction: () -> Void
@@ -18,55 +18,53 @@ struct DefaultBrowserInterstitialView<Detail: View, Header: View>: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     var body: some View {
-        VStack(alignment: horizontalSizeClass == .regular ? .center : .leading) {
-            Spacer()
-            VStack(alignment: .leading) {
-                header
+        ZStack {
+            VStack(alignment: horizontalSizeClass == .regular ? .center : .leading) {
+                content
+                Spacer().frame(height: 150)
             }
-            Spacer()
-            detail
-            Spacer()
-            if let _ = secondaryButton {
+            .padding(.horizontal, 32)
+            VStack {
                 Spacer()
-            }
-            Button(
-                action: {
-                    primaryAction()
-                },
-                label: {
-                    Text(primaryButton)
-                        .withFont(.labelLarge)
-                        .foregroundColor(.brand.white)
-                        .padding(13)
-                        .frame(maxWidth: .infinity)
-                }
-            )
-            .buttonStyle(.neeva(.primary))
-            .padding(.top, secondaryButton != nil ? 0 : 10)
-
-            if let secondaryButton = secondaryButton {
                 Button(
                     action: {
-                        if let secondaryAction = secondaryAction {
-                            secondaryAction()
-                        }
+                        primaryAction()
                     },
                     label: {
-                        Text(secondaryButton)
+                        Text(primaryButton)
                             .withFont(.labelLarge)
-                            .foregroundColor(.ui.adaptive.blue)
+                            .foregroundColor(.brand.white)
                             .padding(13)
                             .frame(maxWidth: .infinity)
-                            .padding(.horizontal, 16)
                     }
                 )
-                .padding(.top, 10)
+                .buttonStyle(.neeva(.primary))
+
+                if let secondaryButton = secondaryButton {
+                    Button(
+                        action: {
+                            if let secondaryAction = secondaryAction {
+                                secondaryAction()
+                            }
+                        },
+                        label: {
+                            Text(secondaryButton)
+                                .withFont(.labelLarge)
+                                .foregroundColor(.ui.adaptive.blue)
+                                .padding(13)
+                                .frame(maxWidth: .infinity)
+                                .padding(.horizontal, 16)
+                        }
+                    )
+                    .opacity(showSecondaryButton ? 1 : 0)
+                    .padding(.top, 10)
+                } else {
+                    Spacer()
+                        .frame(height: 65)
+                }
             }
-            if interstitialModel.isInWelcomeScreenExperimentArms() && secondaryButton == nil {
-                Spacer()
-            }
-            Spacer()
+            .padding(.horizontal, 32)
+            .padding(.bottom, 20)
         }
-        .padding(.horizontal, 32)
     }
 }
