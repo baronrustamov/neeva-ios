@@ -274,7 +274,10 @@ enum NavigationPath {
         guard let page = page else {
             return
         }
-        bvc.openSettings(openPage: page)
+        // TODO: look for a better solution to make sure the app state is set up properly before handling the notification deep link
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            bvc.openSettings(openPage: page)
+        }
     }
 
 }
