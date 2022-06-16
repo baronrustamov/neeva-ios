@@ -80,12 +80,6 @@ extension NeevaExperiment {
         case previewSignUp
     }
 
-    public enum DefaultBrowserWelcomeScreen: String, ExperimentArms {
-        case control
-        case trackingMsg
-        case privacyMsg
-    }
-
     public enum DefaultBrowserNewScreen: String, ExperimentArms {
         case control
         case newScreen
@@ -101,10 +95,6 @@ extension NeevaExperiment {
 extension NeevaExperiment.Experiment
 where Arm == NeevaExperiment.PromoCardTypeAfterFirstRun {
     public static let promoCardTypeAfterFirstRun = Self()
-}
-
-extension NeevaExperiment.Experiment where Arm == NeevaExperiment.DefaultBrowserWelcomeScreen {
-    public static let defaultBrowserWelcomeScreen = Self()
 }
 
 extension NeevaExperiment.Experiment where Arm == NeevaExperiment.DefaultBrowserNewScreen {
