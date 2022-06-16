@@ -57,39 +57,25 @@ struct DefaultBrowserInterstitialWelcomeView: View {
             Spacer()
         } else {
             VStack(alignment: .leading) {
-                if interstitialModel.isInWelcomeScreenExperimentArms() {
-                    VStack(alignment: .leading) {
-                        Image(interstitialModel.imageForWelcomeExperiment(), bundle: .main)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(maxWidth: 475)
-                            .border(Color.tertiaryLabel, width: 1).padding(.horizontal, -32)
-                            .padding(.top, 30)
-                    }
-                } else {
-                    Text("Welcome to Neeva")
-                        .font(.system(size: 32, weight: .light))
-                        .padding(.bottom, 5)
-                        .padding(.top, 50)
-                    Text("The first ad-free, private search engine")
-                        .withFont(.bodyLarge)
+                VStack(alignment: .leading) {
+                    Image("neeva_interstitial_welcome_page_privacy", bundle: .main)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(maxWidth: 475)
+                        .border(Color.tertiaryLabel, width: 1).padding(.horizontal, -32)
+                        .padding(.top, 30)
                 }
             }
             Spacer()
-            if interstitialModel.isInWelcomeScreenExperimentArms() {
-                VStack(alignment: .leading) {
-                    Text(interstitialModel.titleForFirstScreenWelcomeExperiment())
-                        .font(.system(size: 32, weight: .bold))
-                        .padding(.bottom, 5)
-                    Text(interstitialModel.bodyForFirstScreenWelcomeExperiment())
-                        .foregroundColor(Color.ui.gray30)
-                        .withFont(.bodyXLarge)
-                }
-            } else {
-                Image("default-browser-prompt", bundle: .main)
-                    .resizable()
-                    .frame(width: 300, height: 205)
-                    .padding(.bottom, 32)
+            VStack(alignment: .leading) {
+                Text("Privacy Made Easy")
+                    .font(.system(size: 32, weight: .bold))
+                    .padding(.bottom, 5)
+                Text(
+                    "You’re just a step away from ad-free search, and browsing without ads, trackers or pop-ups"
+                )
+                .foregroundColor(Color.ui.gray30)
+                .withFont(.bodyXLarge)
             }
             Spacer()
         }

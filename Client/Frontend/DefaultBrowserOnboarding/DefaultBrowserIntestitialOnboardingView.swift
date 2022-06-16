@@ -126,23 +126,13 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                 }
             }.frame(maxWidth: .infinity, alignment: .leading)
         } else {
-            if interstitialModel.isInWelcomeScreenExperimentArms() {
-                Text("Make Neeva your Default Browser")
-                    .font(.system(size: 32, weight: .bold))
-                Text(
-                    interstitialModel.bodyForSecondScreenWelcomeExperiment()
-                )
-                .withFont(.bodyXLarge)
-                .foregroundColor(Color.ui.gray30)
-            } else {
-                Text("Make Neeva your Default Browser")
-                    .font(.system(size: 32, weight: .light))
-                Text(
-                    "Block invasive trackers across the Web. Open links safely with blazing fast browsing and peace of mind."
-                )
-                .withFont(.bodyLarge)
-                .foregroundColor(.secondaryLabel)
-            }
+            Text("Make Neeva your Default Browser")
+                .font(.system(size: 32, weight: .bold))
+            Text(
+                "With Neeva as your default, you can search and browse ad-free. No annoying trackers or pop-ups."
+            )
+            .withFont(.bodyXLarge)
+            .foregroundColor(Color.ui.gray30)
         }
     }
 

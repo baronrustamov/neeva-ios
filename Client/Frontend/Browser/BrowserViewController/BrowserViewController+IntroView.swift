@@ -120,8 +120,6 @@ extension BrowserViewController {
 // MARK: - Default Browser
 extension BrowserViewController {
     func presentDefaultBrowserFirstRun() {
-        let _ = NeevaExperiment.startExperiment(for: .defaultBrowserWelcomeScreen)
-        NeevaExperiment.logStartExperiment(for: .defaultBrowserWelcomeScreen)
         let arm = NeevaExperiment.startExperiment(for: .defaultBrowserNewScreen)
         NeevaExperiment.logStartExperiment(for: .defaultBrowserNewScreen)
         let interstitialModel = InterstitialViewModel(
