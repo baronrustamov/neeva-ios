@@ -333,11 +333,25 @@ struct Card<Details>: View where Details: CardDetails {
         @ViewBuilder
         var removeButton: some View {
             Button {
-                showingRemoveSpaceWarning = true
+                guard !details.isFollowing else {
+                    showingRemoveSpaceWarning = true
+                    return
+                }
+
+                if let spaceId = details.item?.id.id {
+                    SpaceStore.followSpace(spaceId: spaceId) {
+                        SpaceStore.shared.refresh()
+                    }
+                }
+
             } label: {
-                Label(
-                    details.item?.ACL == .owner
-                        ? "Delete Space" : "Unfollow", systemSymbol: .trash)
+                if details.isFollowing {
+                    Label(
+                        details.item?.ACL == .owner ? "Delete Space" : "Unfollow",
+                        systemSymbol: .trash)
+                } else {
+                    Label("Follow", systemSymbol: .plus)
+                }
             }
         }
 
