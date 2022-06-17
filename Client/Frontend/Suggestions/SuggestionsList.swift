@@ -57,7 +57,7 @@ struct SuggestionsList: View {
                     }
                 }
 
-                if suggestionModel.shouldShowSearchSuggestions {
+                if suggestionModel.shouldShowSearchSuggestions && suggestionModel.error == nil {
                     SuggestionsSection(
                         header: LocalizedStringKey(searchSuggestionLabel)
                     ) {

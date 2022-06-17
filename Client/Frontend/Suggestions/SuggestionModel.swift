@@ -205,12 +205,11 @@ class SuggestionModel: ObservableObject {
             }
             switch result {
             case .failure(let error):
-                ClientLogger.shared.logCounter(
-                    .SuggestionErrorLoginViewImpression,
-                    attributes: EnvironmentHelper.shared.getFirstRunAttributes())
                 let nsError = error as NSError
                 if nsError.domain != NSURLErrorDomain || nsError.code != NSURLErrorCancelled {
                     self.error = error
+                    self.findInPageSuggestion = .findInPage(searchQuery)
+                    ClientLogger.shared.logCounter(.suggestionError)
                 }
             case .success(
                 let (

@@ -14,17 +14,8 @@ struct SuggestionsContent: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            if let error = suggestionModel.error {
-                GeometryReader { geom in
-                    ScrollView {
-                        ErrorView(error, in: self, tryAgain: suggestionModel.reload)
-                            .frame(minHeight: geom.size.height)
-                    }
-                }
-            } else {
-                SuggestionsList()
-                    .environmentObject(suggestionModel)
-            }
+            SuggestionsList()
+                .environmentObject(suggestionModel)
         }.onAppear {
             suggestionModel.reload()
         }

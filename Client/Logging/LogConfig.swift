@@ -251,6 +251,7 @@ public struct LogConfig {
         case openSuggestedSite
         case tabSuggestion
         case editCurrentURL
+        case suggestionError
 
         // MARK: referral promo
         /// Open referral promo
@@ -615,6 +616,7 @@ public struct LogConfig {
         case .openSuggestedSite: return .Suggestions
         case .tabSuggestion: return .Suggestions
         case .editCurrentURL: return .Suggestions
+        case .suggestionError: return .Suggestions
 
         // MARK: - ReferralPromo
         case .OpenReferralPromo: return .ReferralPromo
