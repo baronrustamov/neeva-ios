@@ -264,7 +264,9 @@ public class CheatsheetPromoModel: ObservableObject {
             // If try cheatsheet promo is shown on a page on which UGC also hits
             // need to dismiss UGC promo state before sending `showTryCheatsheetPopover` change
             if let url = url {
-                self.stateStorage.performTransition(on: url, transition: .dismissPromo)
+                if self.stateStorage != nil {
+                    self.stateStorage.performTransition(on: url, transition: .dismissPromo)
+                }
             }
             Defaults[.showTryCheatsheetPopover] = false
             if let currentURL = url,
