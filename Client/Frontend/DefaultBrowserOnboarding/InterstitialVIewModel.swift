@@ -16,6 +16,7 @@ class InterstitialViewModel: ObservableObject {
     var trigger: OpenDefaultBrowserOnboardingTrigger
     var showRemindButton: Bool
     var showCloseButton: Bool
+    var restoreFromBackground: Bool
     var showSecondaryOnboardingButton: Bool
 
     var onOpenSettingsAction: (() -> Void)?
@@ -39,6 +40,7 @@ class InterstitialViewModel: ObservableObject {
     init(
         trigger: OpenDefaultBrowserOnboardingTrigger = .defaultBrowserFirstScreen,
         showRemindButton: Bool = true,
+        restoreFromBackground: Bool = false,
         showCloseButton: Bool = true,
         showSecondaryOnboardingButton: Bool = true,
         isInExperimentArm: Bool = false,
@@ -49,14 +51,15 @@ class InterstitialViewModel: ObservableObject {
         self.trigger = trigger
         self.showRemindButton = showRemindButton
         self.showCloseButton = showCloseButton
+        self.restoreFromBackground = restoreFromBackground
         self.onOpenSettingsAction = onOpenSettingsAction
         self.onCloseAction = onCloseAction
         self.showSecondaryOnboardingButton = showSecondaryOnboardingButton
         self.onboardingState = onboardingState
         self.isInExperimentArm = isInExperimentArm
 
-        self.openButtonText = "Open Neeva Settings"
-        self.remindButtonText = "Remind Me Later"
+        self.openButtonText = restoreFromBackground ? "Back to Settings" : "Open Neeva Settings"
+        self.remindButtonText = restoreFromBackground ? "Continue to Neeva" : "Remind Me Later"
     }
 
     func openSettingsButtonClickAction(
@@ -66,6 +69,18 @@ class InterstitialViewModel: ObservableObject {
             onOpenSettingsAction()
         }
         didTakeAction = true
+
+        openButtonText = "Back to Settings"
+        if Defaults[.didDismissDefaultBrowserInterstitial] == false
+            && !Defaults[.didFirstNavigation]
+        {
+            remindButtonText = "Continue to Neeva"
+            // TODO once we decide on arm, should convert this to be a state
+            // as we are not really in restore state, this will work for all
+            // arms right now
+            restoreFromBackground = true
+        }
+
         Defaults[.lastDefaultBrowserInterstitialChoice] =
             DefaultBrowserInterstitialChoice.openSettings.rawValue
         ClientLogger.shared.logCounter(
@@ -85,7 +100,11 @@ class InterstitialViewModel: ObservableObject {
     }
 
     func defaultBrowserSecondaryButtonAction() {
-        remindLaterAction()
+        if restoreFromBackground {
+            closeAction()
+        } else {
+            remindLaterAction()
+        }
         didTakeAction = true
     }
 
