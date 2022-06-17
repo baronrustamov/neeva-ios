@@ -336,7 +336,8 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                             ClientLogger.shared.logCounter(
                                 .DefaultBrowserOnboardingInterstitialOpen)
                         case .continueState:
-                            interstitialModel.openButtonText = "Open Neeva Settings"
+                            interstitialModel.openButtonText = "Back to Settings"
+                            interstitialModel.remindButtonText = "Continue to Neeva"
                             interstitialModel.showSecondaryOnboardingButton = true
                             interstitialModel.openSettingsButtonClickAction(
                                 interaction: .DefaultBrowserOnboardingInterstitialContinue
