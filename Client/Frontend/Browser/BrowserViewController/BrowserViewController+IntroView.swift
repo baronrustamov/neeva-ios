@@ -156,6 +156,7 @@ extension BrowserViewController {
     func restoreDefaultBrowserFirstRun() {
         let arm = NeevaExperiment.arm(for: .defaultBrowserNewScreen)
         let interstitialModel = InterstitialViewModel(
+            restoreFromBackground: true,
             isInExperimentArm: arm == .newScreen || arm == .newScreenWithVideo,
             onboardingState: .openedSettingsState,
             onCloseAction: {
