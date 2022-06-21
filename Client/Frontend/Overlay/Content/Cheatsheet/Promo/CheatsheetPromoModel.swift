@@ -39,7 +39,7 @@ private struct PromoStateStorage {
         }
 
         // if cannot construct canonical url, consider as miss
-        guard let canonicalURL = CanonicalURL(from: url)?.asString
+        guard let canonicalURL = CanonicalURL(from: url, relaxed: true)?.asString
         else {
             cache[url] = .missed
             return

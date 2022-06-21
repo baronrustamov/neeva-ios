@@ -8,6 +8,26 @@ import XCTest
 import Yams
 
 class BloomFilterTests: XCTestCase {
+    func testStripMobile() throws {
+        struct Case {
+            let input: String
+            let output: String
+        }
+        let cases = [
+            Case(input: "https://en.m.wikipedia.org", output: "https://en.wikipedia.org"),
+            Case(input: "https://mobile.facebook.com", output: "https://www.facebook.com"),
+            Case(input: "https://m.hotnews.ro", output: "https://www.hotnews.ro"),
+        ]
+
+        for c in cases {
+            let input = try XCTUnwrap(URLComponents(string: c.input))
+            XCTAssertEqual(
+                c.output,
+                CanonicalURL.stripMobile(url: input)?.string
+            )
+        }
+    }
+
     func testCanonicalURL() throws {
         let testBundleID = try XCTUnwrap(Bundle.main.bundleIdentifier) + ".SharedTests"
         let testBundle = try XCTUnwrap(Bundle(identifier: testBundleID))
