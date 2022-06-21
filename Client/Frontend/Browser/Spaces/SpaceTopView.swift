@@ -303,7 +303,7 @@ struct SpaceTopView: View {
                 }
             },
             label: {
-                Symbol(decorative: .ellipsis, style: .labelMedium)
+                Symbol(.ellipsis, style: .labelMedium, label: "Overflow Menu")
                     .foregroundColor(Color.label)
                     .tapTargetFrame()
             }

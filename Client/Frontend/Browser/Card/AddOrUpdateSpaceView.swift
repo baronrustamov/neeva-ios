@@ -198,6 +198,7 @@ struct AddOrUpdateSpaceView: View {
                 inputField(
                     title: .titleField, bodyText: "Please provide a title", inputText: $titleText
                 ).modifier(TextFieldBackgroundModifier())
+                    .accessibilityIdentifier("addToSpaceTitle")
 
                 ZStack(alignment: .topTrailing) {
                     inputField(
@@ -234,6 +235,7 @@ struct AddOrUpdateSpaceView: View {
                         title: .urlField, bodyText: "Add a URL to your new item (optional)",
                         inputText: $urlText
                     ).modifier(TextFieldBackgroundModifier())
+                        .accessibilityIdentifier("addToSpaceUrl")
                 }
                 Button(
                     action: {

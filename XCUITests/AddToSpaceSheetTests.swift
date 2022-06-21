@@ -111,6 +111,7 @@ class AddToSpaceSheetTests: BaseTestCase {
     func testSearchForSpace() {
         app.buttons["Add To Space"].tap()
         app.textFields["Search Spaces"].forceTapElement()
+        app.textFields["Search Spaces"].forceTapElement()
         app.textFields["Search Spaces"].typeText("aa")
 
         XCTAssertFalse(app.staticTexts[SpaceServiceMock.mySpaceTitle].exists)
