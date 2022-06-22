@@ -36,7 +36,7 @@ class BaseTestCase: XCTestCase {
     }
 
     func setUpApp() {
-        if !launchArguments.contains("FIREFOX_PERFORMANCE_TEST") {
+        if !launchArguments.contains("NEEVA_PERFORMANCE_TEST") {
             app.launchArguments = [LaunchArguments.Test] + launchArguments
         } else {
             app.launchArguments = [LaunchArguments.PerformanceTest] + launchArguments

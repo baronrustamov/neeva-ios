@@ -29,7 +29,7 @@ class SpaceDetailPageTopBarTests: BaseTestCase {
     func testaddItemToSpace() {
         app.buttons["Show Tabs"].tap()
         app.buttons["Spaces"].tap()
-        app.buttons[SpaceServiceMock.mySpaceTitle].forceTapElement()
+        app.buttons[SpaceServiceMock.mySpaceTitle].tap(force: true)
 
         waitForExistence(app.buttons["Learn More About Spaces"])
         XCTAssertTrue(app.buttons["Learn More About Spaces"].exists)
@@ -41,8 +41,8 @@ class SpaceDetailPageTopBarTests: BaseTestCase {
         //
         // Also, `typeText` works pretty poorly, so
         // double force tapping reduces flakiness.
-        app.textFields["addToSpaceTitle"].forceTapElement()
-        app.textFields["addToSpaceTitle"].forceTapElement()
+        app.textFields["addToSpaceTitle"].tap(force: true)
+        app.textFields["addToSpaceTitle"].tap(force: true)
         app.typeText("The Book of Mozilla")
 
         // URL field
@@ -51,7 +51,7 @@ class SpaceDetailPageTopBarTests: BaseTestCase {
         app.textFields["addToSpaceUrl"].tap()
         app.typeText(path(forTestPage: "test-mozilla-book.html"))
 
-        app.buttons["Save"].forceTapElement()
+        app.buttons["Save"].tap(force: true)
 
         XCTAssertFalse(app.buttons["Learn More About Spaces"].exists)
         XCTAssertTrue(app.staticTexts["The Book of Mozilla"].exists)
@@ -64,17 +64,17 @@ class SpaceDetailPageTopBarTests: BaseTestCase {
         app.buttons["Show Tabs"].tap()
         app.buttons["Spaces"].tap()
         app.buttons[SpaceServiceMock.mySpaceTitle].tap()
-        app.buttons["Compose"].forceTapElement()
+        app.buttons["Compose"].tap(force: true)
 
         waitForExistence(app.textFields["addToSpaceTitle"])
-        app.textFields["addToSpaceTitle"].forceTapElement()
-        app.textFields["addToSpaceTitle"].forceTapElement()
+        app.textFields["addToSpaceTitle"].tap(force: true)
+        app.textFields["addToSpaceTitle"].tap(force: true)
         app.typeText("2")
 
-        app.buttons["Save"].forceTapElement()
+        app.buttons["Save"].tap(force: true)
 
         waitForExistence(app.buttons["Return to all Spaces view"])
-        app.buttons["Return to all Spaces view"].forceTapElement()
+        app.buttons["Return to all Spaces view"].tap(force: true)
 
         XCTAssertTrue(app.staticTexts["\(SpaceServiceMock.mySpaceTitle)2"].exists)
     }
@@ -107,7 +107,7 @@ class SpaceDetailPageTopBarTests: BaseTestCase {
         XCTAssertTrue(app.buttons["Add to another Space"].exists)
         XCTAssertTrue(app.buttons["Open all Space links"].exists)
 
-        app.buttons["Return to all Spaces view"].forceTapElement()
+        app.buttons["Return to all Spaces view"].tap(force: true)
 
         // A Space I don't own
         app.buttons[SpaceServiceMock.spaceNotOwnedByMeTitle].tap()
@@ -127,7 +127,7 @@ class SpaceDetailPageTopBarTests: BaseTestCase {
         app.buttons["Show Tabs"].tap()
         app.buttons["Spaces"].tap()
         app.buttons[SpaceServiceMock.mySpaceTitle].tap()
-        app.buttons["Overflow Menu"].forceTapElement()
+        app.buttons["Overflow Menu"].tap(force: true)
         waitForExistence(app.buttons["Delete Space"])
         app.buttons["Delete Space"].tap()
 

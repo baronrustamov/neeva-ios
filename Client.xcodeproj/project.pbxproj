@@ -787,7 +787,6 @@
 		663322C0276D66220046EC1C /* KeyboardListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663322BF276D66220046EC1C /* KeyboardListener.swift */; };
 		663AFC4E26A25B2300E4C492 /* NSItemProviderExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663AFC4D26A25B2300E4C492 /* NSItemProviderExtensions.swift */; };
 		66430430267C19D200674549 /* ToastDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6643042F267C19D200674549 /* ToastDefaults.swift */; };
-		664825F0268FD106000E7F6A /* XCUIElementExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 664825EF268FD106000E7F6A /* XCUIElementExtension.swift */; };
 		6650585C26E68D0900C9CD51 /* BaseNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6650585B26E68D0900C9CD51 /* BaseNotification.swift */; };
 		6650586026E68F2F00C9CD51 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6650585F26E68F2F00C9CD51 /* NotificationManager.swift */; };
 		665451DF2759B9B50077CA1F /* SegmentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665451DE2759B9B50077CA1F /* SegmentedPicker.swift */; };
@@ -2240,7 +2239,6 @@
 		663322BF276D66220046EC1C /* KeyboardListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardListener.swift; sourceTree = "<group>"; };
 		663AFC4D26A25B2300E4C492 /* NSItemProviderExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSItemProviderExtensions.swift; sourceTree = "<group>"; };
 		6643042F267C19D200674549 /* ToastDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastDefaults.swift; sourceTree = "<group>"; };
-		664825EF268FD106000E7F6A /* XCUIElementExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCUIElementExtension.swift; sourceTree = "<group>"; };
 		6650585B26E68D0900C9CD51 /* BaseNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNotification.swift; sourceTree = "<group>"; };
 		6650585F26E68F2F00C9CD51 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		665451DE2759B9B50077CA1F /* SegmentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedPicker.swift; sourceTree = "<group>"; };
@@ -3617,7 +3615,6 @@
 				3BF4B8E81D38497A00493393 /* BaseTestCase.swift */,
 				6618B51B26AB3CBD00ED51C9 /* BaseTestCase+GoToExtension.swift */,
 				6618B51D26AB48D200ED51C9 /* BaseTestCase+ActionExtension.swift */,
-				664825EF268FD106000E7F6A /* XCUIElementExtension.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -6917,6 +6914,7 @@
 				6618B51E26AB48D200ED51C9 /* BaseTestCase+ActionExtension.swift in Sources */,
 				9BFAA4A32857D2B9008DEEB6 /* SpaceDetailPageTopBarTests.swift in Sources */,
 				664825F0268FD106000E7F6A /* XCUIElementExtension.swift in Sources */,
+				9BFAA4A32857D2B9008DEEB6 /* SpaceDetailPageTopBarTests.swift in Sources */,
 				B6420CD1280F46F200B94101 /* TabRestoreTests.swift in Sources */,
 				66E26DB126E2F80200EB23D6 /* EditURLTests.swift in Sources */,
 			);

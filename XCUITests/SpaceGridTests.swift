@@ -39,12 +39,12 @@ class SpaceGridTests: BaseTestCase {
         XCTAssertTrue(app.buttons[SpaceServiceMock.spaceNotOwnedByMeTitle].exists)
 
         app.buttons["Space Filter"].tap()
-        app.buttons["Owned by me"].forceTapElement()
+        app.buttons["Owned by me"].tap(force: true)
 
         waitForNoExistence(app.buttons[SpaceServiceMock.spaceNotOwnedByMeTitle])
         XCTAssertFalse(app.buttons[SpaceServiceMock.spaceNotOwnedByMeTitle].exists)
 
-        app.buttons["All Spaces"].forceTapElement()
+        app.buttons["All Spaces"].tap(force: true)
 
         XCTAssertTrue(app.buttons[SpaceServiceMock.spaceNotOwnedByMeTitle].exists)
     }
