@@ -200,11 +200,6 @@ public struct LogConfig {
         case StartExperiment
         /// Tap on Get started in welcome screen
         case GetStartedInWelcome
-        /// Resolved AdService attributionToken (if one exists)
-        case ResolvedAttributionToken
-        /// Request AttributionToken error
-        case ResolvedAttributionTokenError
-        case ResolvedAttributionTokenRetryError
         /// Log first navigation
         case FirstNavigation
         /// Log interstitial logging error
@@ -590,9 +585,6 @@ public struct LogConfig {
         case .OpenDefaultBrowserURL: return .FirstRun
         case .StartExperiment: return .FirstRun
         case .GetStartedInWelcome: return .FirstRun
-        case .ResolvedAttributionToken: return .FirstRun
-        case .ResolvedAttributionTokenError: return .FirstRun
-        case .ResolvedAttributionTokenRetryError: return .FirstRun
         case .FirstNavigation: return .FirstRun
         case .LogErrorForInterstitialEvents: return .FirstRun
         case .NeevaAttributionRequestError: return .FirstRun
@@ -787,13 +779,10 @@ public struct LogConfig {
         public static let PreviewModeQueryCount = "PreviewModeQueryCount"
         /// Session UUID v2
         public static let SessionUUIDv2 = "SessionUUIDv2"
+        /// Attribution Token Error Message
+        public static let AttributionTokenErrorToken = "AttributionTokenErrorToken"
         /// Attribution Token Error Type
         public static let AttributionTokenErrorType = "AttributionTokenErrorType"
-        /// Attribution Token Error Message
-        public static let AttributionTokenErrorMessage = "AttributionTokenErrorMessage"
-        public static let AttributionTokenErrorToken = "AttributionTokenErrorToken"
-        public static let AttributionTokenErrorDataStr = "AttributionTokenErrorDataStr"
-        public static let AttributionTokenErrorResponseCode = "AttributionTokenErrorResponseCode"
 
         /// The name of the Cookie Cutter provider that was used.
         public static let CookieCutterProviderUsed = "CookieCutterProviderUsed"

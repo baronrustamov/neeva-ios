@@ -11,7 +11,6 @@ import SwiftyJSON
 
 private enum AttributionTokenErrorType: String {
     case olderIOSRequest
-    case jsonParsingError
     case requestError
     case emptyToken
 }
@@ -36,62 +35,16 @@ class ConversionLogger {
         if event.rawValue == 0 {
             SKAdNetwork.registerAppForAdNetworkAttribution()
             #if !targetEnvironment(simulator)
-                logAttributionData()
+                logAttributionToken()
             #endif
         } else {
             SKAdNetwork.updateConversionValue(event.rawValue)
         }
     }
 
-    private static func logAttributionData() {
+    private static func logAttributionToken() {
         if #available(iOS 14.3, *) {
             if let token = try? AAAttribution.attributionToken() {
-                // Kick-off a POST request to resolve the token.
-                guard let url = URL(string: "https://api-adservices.apple.com/api/v1/") else {
-                    return
-                }
-                var request = URLRequest(url: url)
-                request.httpMethod = "POST"
-                request.httpBody = Data(token.utf8)
-                request.setValue("text/plain", forHTTPHeaderField: "Content-Type")
-
-                URLSession.shared.dataTask(with: request) { data, response, error in
-                    guard error == nil else {
-                        Logger.browser.error(
-                            "Failed to resolve attributionToken: \(error!.localizedDescription)")
-                        logAttributionDataError(
-                            errorType: AttributionTokenErrorType.requestError,
-                            token: token,
-                            error: error,
-                            response: response
-                        )
-                        retryAttributionRequest()
-                        return
-                    }
-                    if let data = data, let json = try? JSON(data: data) {
-                        DispatchQueue.main.async {
-                            var attributes = EnvironmentHelper.shared.getFirstRunAttributes()
-                            for (key, value) in json {
-                                attributes.append(
-                                    ClientLogCounterAttribute(
-                                        key: "AT-\(key)", value: value.stringValue))
-                            }
-                            ClientLogger.shared.logCounter(
-                                .ResolvedAttributionToken, attributes: attributes)
-                        }
-                    } else {
-                        logAttributionDataError(
-                            errorType: AttributionTokenErrorType.jsonParsingError,
-                            token: token,
-                            data: data,
-                            response: response
-                        )
-                        retryAttributionRequest()
-                    }
-                }.resume()
-
-                // TODO: remove the client side attribution resolving logic in next release
-                // after verifying the pipeline is working
                 var neevaTokenRequest = URLRequest(url: NeevaConstants.neevaTokenApiURL)
                 neevaTokenRequest.httpMethod = "POST"
                 let encodedToken = token.replacingOccurrences(of: "+", with: "%2B")
@@ -103,45 +56,27 @@ class ConversionLogger {
 
                 URLSession.shared.dataTask(with: neevaTokenRequest) { data, response, error in
                     guard error == nil else {
-                        logNeevaRequestError(token: token)
+                        logNeevaRequestError(token: token, errorType: .requestError)
                         return
                     }
                     if let response = response, let httpResponse = response as? HTTPURLResponse {
                         if httpResponse.statusCode != 200 {
-                            logNeevaRequestError(token: token)
+                            logNeevaRequestError(token: token, errorType: .requestError)
                         }
                     }
                 }.resume()
             } else {
-                logAttributionDataError(
-                    errorType: AttributionTokenErrorType.emptyToken,
-                    error: nil
-                )
+                logNeevaRequestError(token: nil, errorType: .emptyToken)
             }
         } else {
-            logAttributionDataError(
-                errorType: AttributionTokenErrorType.olderIOSRequest,
-                error: nil
-            )
+            logNeevaRequestError(token: nil, errorType: .olderIOSRequest)
         }
     }
 
-    private static func retryAttributionRequest() {
-        if shouldRetryRequestAfterFailure {
-            // retry after 20 seconds
-            DispatchQueue.main.asyncAfter(deadline: .now() + 20.0) {
-                shouldRetryRequestAfterFailure = false
-                logAttributionData()
-            }
-        }
-    }
-
-    private static func logAttributionDataError(
-        errorType: AttributionTokenErrorType,
-        token: String? = nil,
-        error: Error? = nil,
-        data: Data? = nil,
-        response: URLResponse? = nil
+    // This logger function is called from a background thread
+    private static func logNeevaRequestError(
+        token: String?,
+        errorType: AttributionTokenErrorType
     ) {
         DispatchQueue.main.async {
             var attributes = EnvironmentHelper.shared.getFirstRunAttributes()
@@ -151,30 +86,6 @@ class ConversionLogger {
                     value: errorType.rawValue
                 )
             )
-            if let message = error?.localizedDescription {
-                attributes.append(
-                    ClientLogCounterAttribute(
-                        key: LogConfig.Attribute.AttributionTokenErrorMessage,
-                        value: message
-                    )
-                )
-            }
-            if let data = data, let dataStr = String(data: data, encoding: .utf8) {
-                attributes.append(
-                    ClientLogCounterAttribute(
-                        key: LogConfig.Attribute.AttributionTokenErrorDataStr,
-                        value: String(dataStr.prefix(300))
-                    )
-                )
-            }
-            if let response = response, let httpResponse = response as? HTTPURLResponse {
-                attributes.append(
-                    ClientLogCounterAttribute(
-                        key: LogConfig.Attribute.AttributionTokenErrorResponseCode,
-                        value: String(httpResponse.statusCode)
-                    )
-                )
-            }
             if let token = token {
                 attributes.append(
                     ClientLogCounterAttribute(
@@ -183,28 +94,9 @@ class ConversionLogger {
                     )
                 )
             }
-
-            ClientLogger.shared.logCounter(
-                shouldRetryRequestAfterFailure
-                    ? .ResolvedAttributionTokenError : .ResolvedAttributionTokenRetryError,
-                attributes: attributes
-            )
-        }
-    }
-
-    // This logger function is called from a background thread
-    private static func logNeevaRequestError(
-        token: String
-    ) {
-        DispatchQueue.main.async {
             ClientLogger.shared.logCounter(
                 .NeevaAttributionRequestError,
-                attributes: [
-                    ClientLogCounterAttribute(
-                        key: LogConfig.Attribute.AttributionTokenErrorToken,
-                        value: token
-                    )
-                ]
+                attributes: attributes
             )
         }
     }
