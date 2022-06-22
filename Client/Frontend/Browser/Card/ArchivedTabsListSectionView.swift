@@ -14,15 +14,28 @@ struct ArchivedTabsRowView: View {
 
     @Environment(\.selectionCompletion) private var selectionCompletion: () -> Void
 
+    func getURLForTab(tab: Tab) -> URL? {
+        if let url = tab.url ?? tab.sessionData?.currentUrl {
+            if let internalUrl = InternalURL(url) {
+                return internalUrl.extractedUrlParam
+            }
+            return url
+        }
+
+        return nil
+    }
+
     var body: some View {
         Button {
             tabManager.select(tab)
             selectionCompletion()
         } label: {
             HStack {
-                if let url = tab.url {
+                let url = getURLForTab(tab: tab)
+                if let url = url {
                     FaviconView(forSiteUrl: url)
                         .frame(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize)
+                        .cornerRadius(4)
                         .padding(.trailing, padding)
                 }
 
@@ -30,7 +43,7 @@ struct ArchivedTabsRowView: View {
                     Text(tab.title ?? "")
                         .foregroundColor(.label)
 
-                    Text(tab.url?.absoluteString ?? "")
+                    Text(url?.absoluteString ?? "")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }.lineLimit(1)
