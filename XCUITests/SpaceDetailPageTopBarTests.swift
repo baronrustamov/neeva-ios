@@ -41,14 +41,14 @@ class SpaceDetailPageTopBarTests: BaseTestCase {
         //
         // Also, `typeText` works pretty poorly, so
         // double force tapping reduces flakiness.
-        app.textFields["addToSpaceTitle"].tap(force: true)
-        app.textFields["addToSpaceTitle"].tap(force: true)
+        app.textFields["addOrUpdateSpaceTitle"].tap(force: true)
+        app.textFields["addOrUpdateSpaceTitle"].tap(force: true)
         app.typeText("The Book of Mozilla")
 
         // URL field
-        waitForExistence(app.textFields["addToSpaceUrl"])
-        app.textFields["addToSpaceUrl"].tap()
-        app.textFields["addToSpaceUrl"].tap()
+        waitForExistence(app.textFields["addOrUpdateSpaceUrl"])
+        app.textFields["addOrUpdateSpaceUrl"].tap()
+        app.textFields["addOrUpdateSpaceUrl"].tap()
         app.typeText(path(forTestPage: "test-mozilla-book.html"))
 
         app.buttons["Save"].tap(force: true)
@@ -66,9 +66,9 @@ class SpaceDetailPageTopBarTests: BaseTestCase {
         app.buttons[SpaceServiceMock.mySpaceTitle].tap()
         app.buttons["Compose"].tap(force: true)
 
-        waitForExistence(app.textFields["addToSpaceTitle"])
-        app.textFields["addToSpaceTitle"].tap(force: true)
-        app.textFields["addToSpaceTitle"].tap(force: true)
+        waitForExistence(app.textFields["addOrUpdateSpaceTitle"])
+        app.textFields["addOrUpdateSpaceTitle"].tap(force: true)
+        app.textFields["addOrUpdateSpaceTitle"].tap(force: true)
         app.typeText("2")
 
         app.buttons["Save"].tap(force: true)

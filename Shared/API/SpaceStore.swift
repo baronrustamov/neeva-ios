@@ -169,7 +169,7 @@ public class Space: Hashable, Identifiable {
 public class SpaceStore: ObservableObject {
     public static var shared = SpaceStore()
     public static var suggested = SpaceStore(
-        suggestedID: "RMB2VXVA5vvSSw1tvVG2ShtnkRZE2CqJmzlgqzYb")
+        suggestedID: SpaceConstants.suggestedSpaceId)
 
     public static var promotionalSpaceId = "-ysvXOiH2HWXsXeN_QaVFzwWEF_ASvtOW_yylJEM"
     public static let dailyDigestID = "spaceDailyDigest"

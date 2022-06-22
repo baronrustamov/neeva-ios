@@ -198,7 +198,7 @@ struct AddOrUpdateSpaceView: View {
                 inputField(
                     title: .titleField, bodyText: "Please provide a title", inputText: $titleText
                 ).modifier(TextFieldBackgroundModifier())
-                    .accessibilityIdentifier("addToSpaceTitle")
+                    .accessibilityIdentifier("addOrUpdateSpaceTitle")
 
                 ZStack(alignment: .topTrailing) {
                     inputField(
@@ -210,6 +210,7 @@ struct AddOrUpdateSpaceView: View {
                         UITextView.appearance().backgroundColor = .systemBackground.elevated
                     }
                     .modifier(TextFieldBackgroundModifier())
+                    .accessibilityIdentifier("addOrUpdateSpaceDescription")
 
                     Button {
                         openMarkdownArticle()
@@ -235,7 +236,7 @@ struct AddOrUpdateSpaceView: View {
                         title: .urlField, bodyText: "Add a URL to your new item (optional)",
                         inputText: $urlText
                     ).modifier(TextFieldBackgroundModifier())
-                        .accessibilityIdentifier("addToSpaceUrl")
+                        .accessibilityIdentifier("addOrUpdateSpaceUrl")
                 }
                 Button(
                     action: {

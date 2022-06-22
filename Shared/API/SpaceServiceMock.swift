@@ -27,9 +27,19 @@ public class SpaceServiceMock: SpaceService {
                 space: SpaceApollo.Space(
                     name: name,
                     lastModifiedTs: ISO8601DateFormatter().string(from: lastModifiedTs),
+                    owner: SpaceApollo.Space.Owner(displayName: "Test User", pictureUrl: ""),
                     userAcl: SpaceApollo.Space.UserAcl(
                         acl: (isOwner ? SpaceACLLevel.owner : SpaceACLLevel.publicView)
                     ),
+                    acl: [
+                        SpaceApollo.Space.Acl(
+                            userId: "0",
+                            profile: SpaceApollo.Space.Acl.Profile(
+                                displayName: "Test User", email: "testuser@example.com",
+                                pictureUrl: ""
+                            ),
+                            acl: isOwner ? SpaceACLLevel.owner : SpaceACLLevel.publicView)
+                    ],
                     // Assume that "my" Spaces are private, and all others are public
                     hasPublicAcl: !isOwner,
                     resultCount: resultCount,
@@ -39,7 +49,15 @@ public class SpaceServiceMock: SpaceService {
         }
 
         var spaceDataApollo: SpaceDataApollo {
-            SpaceDataApollo(id: id, name: name, entities: entities, comments: [], generators: [])
+            SpaceDataApollo(
+                id: id, name: name,
+                owner: SpacesMetadata.Owner(
+                    displayName: "Test User", pictureUrl: ""
+                ),
+                entities: entities,
+                comments: [],
+                generators: []
+            )
         }
 
         init(name: String, isOwner: Bool = true) {
@@ -86,9 +104,11 @@ public class SpaceServiceMock: SpaceService {
         let mySpace = SpaceMock(name: SpaceServiceMock.mySpaceTitle)
         let spaceNotOwnedByMe = SpaceMock(
             name: SpaceServiceMock.spaceNotOwnedByMeTitle, isOwner: false)
+        let spaceEntityTestsSpace = SpaceMock(name: "SpaceEntityTests Space")
 
         spaces[mySpace.id] = mySpace
         spaces[spaceNotOwnedByMe.id] = spaceNotOwnedByMe
+        spaces[spaceEntityTestsSpace.id] = spaceEntityTestsSpace
 
         // Populate the Spaces
         spaces[spaceNotOwnedByMe.id]?.addSpaceEntity(
@@ -96,6 +116,16 @@ public class SpaceServiceMock: SpaceService {
             description:
                 "This is a Space entity description that is very long and needs to be expanded in order to see the whole thing",
             url: "https://myspace.com")
+
+        // For tests in SpaceEntityTests.swift
+        spaces[spaceEntityTestsSpace.id]?.addSpaceEntity(
+            title: "Example", url: "https://example.com")
+        spaces[spaceEntityTestsSpace.id]?.addSpaceEntity(
+            title: "Neeva", url: "https://neeva.com")
+        spaces[spaceEntityTestsSpace.id]?.addSpaceEntity(
+            title: "Yahoo", url: "https://yahoo.com")
+        spaces[spaceEntityTestsSpace.id]?.addSpaceEntity(
+            title: "Cnn", url: "https://cnn.com")
     }
 
     public func addPublicACL(spaceID: String) -> AddPublicACLRequest? {
@@ -171,7 +201,10 @@ public class SpaceServiceMock: SpaceService {
     }
 
     public func deleteSpaceItems(spaceID: String, ids: [String]) -> DeleteSpaceItemsRequest? {
-        return nil
+        if let space = spaces[spaceID] {
+            space.entities = space.entities.filter { !ids.contains($0.id) }
+        }
+        return DeleteSpaceItemsRequest()
     }
 
     public func deleteSpaceResultByUrlMutation(
@@ -229,7 +262,7 @@ public class SpaceServiceMock: SpaceService {
                     var arr: [SpaceDataApollo] = []
                     spaceIds.forEach { id in
                         // ignore suggested space
-                        guard id != "RMB2VXVA5vvSSw1tvVG2ShtnkRZE2CqJmzlgqzYb" else { return }
+                        guard id != SpaceConstants.suggestedSpaceId else { return }
                         if let match = spaces[id] {
                             arr.append(match.spaceDataApollo)
                         }
