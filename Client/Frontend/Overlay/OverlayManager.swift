@@ -78,6 +78,7 @@ class OverlayManager: ObservableObject {
     @Published var offsetForBottomBar = false
     @Published var hideBottomBar = false
     @Published var isPresentedViewControllerVisible = false
+    @Published var backgroundOpacityLevel = 5
 
     /// Used to control full screen/popover sheets
     @Published var showFullScreenPopoverSheet = false

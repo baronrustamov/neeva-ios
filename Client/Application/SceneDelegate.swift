@@ -590,6 +590,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 Defaults[.contentBlockingStrength] = BlockingStrength.easyPrivacyStrict.rawValue
             }
 
+            if previousVersion.compare("1.46.0", options: .numeric) == .orderedAscending {
+                if (!NeevaUserInfo.shared.hasLoginCookie()
+                    || Defaults[.notificationPermissionState]
+                        != NotificationPermissionStatus.authorized.rawValue)
+                    && (!Defaults[.didSetDefaultBrowser] && !Defaults[.adBlockEnabled]
+                        && !Defaults[.didShowAdBlockerPromo])
+                {
+                    Defaults[.didShowAdBlockerPromo] = true
+                    if bvc != nil {
+                        bvc.shouldShowAdBlockPromo = true
+                    }
+                }
+            }
+
             return true
         }
 
