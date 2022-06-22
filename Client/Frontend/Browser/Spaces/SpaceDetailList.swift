@@ -57,7 +57,6 @@ struct SpaceDetailList: View {
                             onShowProfileUI: onShowProfileUI
                         )
                         .modifier(ListSeparatorModifier())
-                        .iPadOnlyID()
                         .onAppear {
                             headerVisible = UIDevice.current.userInterfaceIdiom != .pad
                         }
@@ -135,7 +134,6 @@ struct SpaceDetailList: View {
                         .onDrag {
                             NSItemProvider(id: details.id)
                         }
-                        .iPadOnlyID()
                     }
                     .onDelete(perform: canEdit ? onDelete : nil)
                     .onMove(perform: canEdit ? onMove : nil)
@@ -316,28 +314,6 @@ struct ListStyleModifier: ViewModifier {
                 }
         } else {
             content
-        }
-    }
-}
-
-struct iPadOnlyStackNavigation: ViewModifier {
-    func body(content: Content) -> some View {
-        if UIDevice.current.useTabletInterface {
-            content
-                .navigationViewStyle(.stack)
-        } else {
-            content
-                .navigationViewStyle(.automatic)
-        }
-    }
-}
-
-extension View {
-    @ViewBuilder func iPadOnlyID() -> some View {
-        if UIDevice.current.useTabletInterface {
-            self.id(UUID())
-        } else {
-            self
         }
     }
 }
