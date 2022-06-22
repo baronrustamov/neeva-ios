@@ -100,6 +100,9 @@ struct ArchivedTabsPanelView: View {
                                     role: .destructive
                                 ) {
                                     model.clearArchivedTabs()
+                                    ClientLogger.shared.logCounter(
+                                        .clearArchivedTabs,
+                                        attributes: EnvironmentHelper.shared.getAttributes())
                                 }
                             }
                     } else {

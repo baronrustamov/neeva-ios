@@ -385,6 +385,9 @@ public struct LogConfig {
 
         // MARK: Cookie Cutter
         case CookieNoticeHandled
+
+        // MARK: Archived Tabs
+        case clearArchivedTabs
     }
 
     /// Specify a comma separated string with these values to
@@ -411,6 +414,7 @@ public struct LogConfig {
         case DebugMode = "DebugMode"
         case Web3 = "Web3"
         case CookieCutter = "CookieCutter"
+        case ArchiveTab = "ArchiveTab"
     }
 
     public static var enabledLoggingCategories: Set<InteractionCategory>?
@@ -739,6 +743,8 @@ public struct LogConfig {
 
         // MARK: Cookie Cutter
         case .CookieNoticeHandled: return .CookieCutter
+        // MARK: Archived Tabs
+        case .clearArchivedTabs: return .ArchiveTab
         }
     }
 
@@ -751,6 +757,8 @@ public struct LogConfig {
         public static let NormalTabsOpened = "NormalTabsOpened"
         /// Number of incognito tabs opened
         public static let IncognitoTabsOpened = "PrivateTabsOpened"
+        /// Number of archived tabs
+        public static let NumberOfArchivedTabsTotal = "NumberOfArchivedTabsTotal"
         /// Number of zombie tabs opened
         public static let NumberOfZombieTabs = "NumberOfZombieTabs"
         /// Number of tab groups in total
@@ -874,6 +882,7 @@ public struct LogConfig {
     }
 
     public struct TabsAttribute {
+        public static let selectedTabSection = "SelectedTabSection"
         public static let selectedTabIndex = "SelectedTabIndex"
         public static let selectedTabRow = "SelectedTabRow"
     }
