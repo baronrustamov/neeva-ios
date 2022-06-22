@@ -256,10 +256,6 @@ class TabManager: NSObject {
             return
         }
 
-        if selectedTab.shouldCreateWebViewUponSelect {
-            updateWebViewForSelectedTab(notify: false)
-        }
-
         let isArchived = selectedTab.isArchived
         selectedTab.lastExecutedTime = Date.nowMilliseconds()
         selectedTab.applyTheme()
@@ -272,6 +268,8 @@ class TabManager: NSObject {
         if notify {
             sendSelectTabNotifications(previous: previous)
             selectedTabWebViewPublisher.send(selectedTab.webView)
+        } else if selectedTab.shouldCreateWebViewUponSelect {
+            updateWebViewForSelectedTab(notify: false)
         }
 
         if let tab = tab, tab.isIncognito, let url = tab.url, NeevaConstants.isAppHost(url.host),
@@ -442,7 +440,10 @@ class TabManager: NSObject {
 
     func sendSelectTabNotifications(previous: Tab? = nil) {
         selectedTabPublisher.send(selectedTab)
-        updateWebViewForSelectedTab(notify: true)
+
+        if selectedTab?.shouldCreateWebViewUponSelect ?? true {
+            updateWebViewForSelectedTab(notify: true)
+        }
 
         if let tab = previous {
             TabEvent.post(.didLoseFocus, for: tab)
