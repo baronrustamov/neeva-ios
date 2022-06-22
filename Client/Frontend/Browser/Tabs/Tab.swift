@@ -40,7 +40,7 @@ protocol TabDelegate {
     @objc optional func tab(_ tab: Tab, willDeleteWebView webView: WKWebView)
 }
 
-public enum TimeFilter: String {
+public enum TimeFilter: String, CaseIterable {
     case today = "Today"
     case yesterday = "Yesterday"
     case lastWeek = "Past 7 Days"

@@ -276,11 +276,20 @@ struct CardsContainer: View {
     }
 }
 
-func getLogCounterAttributesForTabs(selectedTabRow: Int?) -> [ClientLogCounterAttribute] {
+func getLogCounterAttributesForTabs(tab: Tab) -> [ClientLogCounterAttribute] {
+    var lastExecutedTime = ""
+
+    for time in TimeFilter.allCases {
+        if tab.wasLastExecuted(time) {
+            lastExecutedTime = time.rawValue
+            break
+        }
+    }
+
     var attributes = EnvironmentHelper.shared.getAttributes()
     attributes.append(
         ClientLogCounterAttribute(
-            key: LogConfig.TabsAttribute.selectedTabRow,
-            value: String(selectedTabRow ?? 0)))
+            key: LogConfig.TabsAttribute.selectedTabSection,
+            value: lastExecutedTime))
     return attributes
 }

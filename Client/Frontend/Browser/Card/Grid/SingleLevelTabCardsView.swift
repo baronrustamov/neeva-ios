@@ -64,7 +64,7 @@ struct SingleLevelTabCardsView: View {
                                 ClientLogger.shared.logCounter(
                                     .SelectTab,
                                     attributes: getLogCounterAttributesForTabs(
-                                        selectedTabRow: row.index))
+                                        tab: tabDetails.tab))
                                 browserModel.hideGridWithAnimation(tabToBeSelected: tabDetails.tab)
                             }
                     case .sectionHeader(let byTime):
