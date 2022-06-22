@@ -61,9 +61,12 @@ private struct PromoStateStorage {
 
         switch transition {
         case .dismissPromo:
+            if state.showPromo {
+                state.showBubble = true
+            }
             state.showPromo = false
-            state.showBubble = true
         case .dismissBubble:
+            state.showPromo = false
             state.showBubble = false
         }
 
@@ -234,7 +237,7 @@ public class CheatsheetPromoModel: ObservableObject {
                     return
                 }
 
-                self.promoType = nil
+                self.promoType = .UGC
                 self.showPromo = false
                 self.showBubble = cachedState.showBubble
                 self.objectWillChange.send()
@@ -245,28 +248,14 @@ public class CheatsheetPromoModel: ObservableObject {
     //MARK: - Interaction Methods
     func openSheet(on url: URL?) {
         precondition(Thread.isMainThread)
-        if promoType == .UGC,
-            showBubble
-        {
-            if let url = url {
-                dismissBubble(on: url)
-            } else {
-                assertionFailure("Inconsistence state for bubble")
-                clearDisplayedStates()
-            }
-        } else {
-            dismissPromo(on: url)
-        }
-    }
-
-    private func dismissPromo(on url: URL?) {
-        if promoType == .tryCheatsheet {
+        switch promoType {
+        case .tryCheatsheet:
             // If try cheatsheet promo is shown on a page on which UGC also hits
             // need to dismiss UGC promo state before sending `showTryCheatsheetPopover` change
-            if let url = url {
-                if self.stateStorage != nil {
-                    self.stateStorage.performTransition(on: url, transition: .dismissPromo)
-                }
+            if Defaults[.useCheatsheetBloomFilters],
+                let url = url
+            {
+                self.stateStorage?.performTransition(on: url, transition: .dismissPromo)
             }
             Defaults[.showTryCheatsheetPopover] = false
             if let currentURL = url,
@@ -275,27 +264,22 @@ public class CheatsheetPromoModel: ObservableObject {
                 Defaults[.seenTryCheatsheetPopoverOnRecipe] = true
             }
             clearDisplayedStates()
-        } else if promoType == .UGC {
+        case .UGC:
+            // transition straight to dismiss bubble
             if let url = url {
-                onDissmissUGCPromo(on: url)
+                dismissBubble(on: url)
             } else {
-                assertionFailure("Inconsistence state for UGC promo")
+                assertionFailure("Inconsistence state for bubble")
                 clearDisplayedStates()
             }
+        case .none:
+            break
         }
     }
 
     private func dismissBubble(on url: URL) {
         Self.queue.async {
             self.stateStorage.performTransition(on: url, transition: .dismissBubble)
-            self.updateDisplayedStateFromUGCStorage(for: url)
-        }
-    }
-
-    private func onDissmissUGCPromo(on url: URL) {
-        cancelUGCIndicatorDismissTimer()
-        Self.queue.async {
-            self.stateStorage.performTransition(on: url, transition: .dismissPromo)
             self.updateDisplayedStateFromUGCStorage(for: url)
         }
     }
@@ -308,7 +292,7 @@ public class CheatsheetPromoModel: ObservableObject {
             withTimeInterval: Self.ugcIndicatorDurationS,
             repeats: false
         ) { [weak self] _ in
-            self?.onDissmissUGCPromo(on: targetURL)
+            self?.onUGCTimerFired(on: targetURL)
         }
     }
 
@@ -318,6 +302,14 @@ public class CheatsheetPromoModel: ObservableObject {
             "Timer must be invalidated from the same thread on which it was installed.")
         ugcIndicatorDismissTimer?.invalidate()
         ugcIndicatorDismissTimer = nil
+    }
+
+    private func onUGCTimerFired(on url: URL) {
+        cancelUGCIndicatorDismissTimer()
+        Self.queue.async {
+            self.stateStorage.performTransition(on: url, transition: .dismissPromo)
+            self.updateDisplayedStateFromUGCStorage(for: url)
+        }
     }
 }
 
