@@ -70,6 +70,11 @@ struct TrackingSettingsSectionBlock: View {
 
         Section {
             Toggle("Ad Blocking", isOn: $adBlockEnabled)
+                .onChange(of: adBlockEnabled) { value in
+                    if adBlockEnabled {
+                        ClientLogger.shared.logCounter(.AdBlockEnabled)
+                    }
+                }
                 .disabled(contentBlockingStrength != BlockingStrength.easyPrivacyStrict.rawValue)
         }
     }

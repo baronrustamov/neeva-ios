@@ -55,9 +55,11 @@ struct PopoverView<Content: View>: View {
                     )
                     // 88 is button height + VStack padding + outer padding
                     .frame(
-                        minWidth: 400,
+                        minWidth:
+                            style.isAdBlockerPromo ? 0 : 400,
                         maxWidth: geo.size.width - (horizontalPadding * 2),
-                        maxHeight: geo.size.height - (verticalPadding * 2) - 88,
+                        maxHeight: geo.size.height - (verticalPadding * 2)
+                            - (style.isAdBlockerPromo ? 0 : 88),
                         alignment: .center
                     ).fixedSize(horizontal: !style.expandPopoverWidth, vertical: true)
 
@@ -66,7 +68,7 @@ struct PopoverView<Content: View>: View {
 
                 Spacer()
             }
-            .padding(.horizontal, horizontalPadding)
+            .padding(.horizontal, style.isAdBlockerPromo ? 0 : horizontalPadding)
             .padding(.vertical, verticalPadding)
             .accessibilityAction(.escape, onDismiss)
         }

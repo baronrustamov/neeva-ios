@@ -234,6 +234,11 @@ public struct LogConfig {
         case DefaultBrowserOnboardingInterstitialScreenTime
         /// Promo card impression (without 2 second)
         case DefaultBrowserPromoCardImp
+        case AdBlockPromoImp
+        case AdBlockPromoClose
+        case AdBlockPromoRemind
+        case AdBlockPromoSetup
+        case AdBlockEnabled
 
         // MARK: selected suggestion
         case QuerySuggestion
@@ -598,6 +603,11 @@ public struct LogConfig {
         case .GoToSysAppSettings: return .PromoCard
         case .DefaultBrowserPromoCardImp: return .PromoCard
         case .DismissDefaultBrowserOnboardingScreen: return .PromoCard
+        case .AdBlockPromoImp: return .PromoCard
+        case .AdBlockPromoClose: return .PromoCard
+        case .AdBlockPromoRemind: return .PromoCard
+        case .AdBlockPromoSetup: return .PromoCard
+        case .AdBlockEnabled: return .PromoCard
 
         // MARK: - Suggestions
         case .QuerySuggestion: return .Suggestions
