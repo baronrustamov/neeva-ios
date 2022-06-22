@@ -116,6 +116,7 @@ public class EnvironmentHelper {
 
         let attributes = [
             normalTabsOpened, incongitoTabsOpened, numTabGroupsTotal, numChildTabsTotal,
+            numArchivedTabsTotal,
             deviceTheme, deviceOrientation, deviceScreensSize,
             isUserSignedIn, getSessionUUID(),
         ]
