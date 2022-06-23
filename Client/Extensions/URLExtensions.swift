@@ -20,4 +20,11 @@ extension URL {
     public func isNeevaSearchResultsPageURL() -> Bool {
         return isNeevaURL() && path == "/search"
     }
+
+    public var isImage: Bool {
+        return pathExtension == "jpeg"
+            || pathExtension == "jpg"
+            || pathExtension == "png"
+            || pathExtension == "gif"
+    }
 }

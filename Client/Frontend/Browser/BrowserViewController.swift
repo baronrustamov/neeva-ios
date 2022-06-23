@@ -1643,16 +1643,11 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             return
         }
 
-        getImageData(imageURL) { data in
-            let thumbnail = UIImage(data: data)
-
-            self.showAddToSpacesSheet(
-                url: pageURL,
-                title: self.tabManager.selectedTab?.title, thumbnail: thumbnail,
-                webView: webView)
-
-            BrowserViewController.contextMenuElements = nil
-        }
+        showAddToSpacesSheet(
+            url: pageURL,
+            title: self.tabManager.selectedTab?.title,
+            thumbnail: imageURL,
+            webView: webView)
     }
 
     fileprivate func getImageData(_ url: URL, success: @escaping (Data) -> Void) {
@@ -1728,7 +1723,7 @@ extension BrowserViewController: JSPromptAlertControllerDelegate {
 extension BrowserViewController {
     func showAddToSpacesSheet(
         url: URL, title: String?, description: String? = nil,
-        thumbnail: UIImage? = nil, webView: WKWebView,
+        thumbnail: URL? = nil, webView: WKWebView,
         importData: SpaceImportHandler? = nil
     ) {
         // TODO: Avoid needing to lookup the Tab when we already have the WebView.
@@ -1777,17 +1772,18 @@ extension BrowserViewController {
             }
 
             model?.thumbnailURLCandidates[url] = thumbnailUrls
+
             let thumbnailUrl = thumbnailUrls.first(where: {
-                $0.absoluteString.hasSuffix("jpeg") || $0.absoluteString.hasSuffix("jpg")
-                    || $0.absoluteString.hasSuffix("png")
+                $0.isImage
             })
-            SDWebImageDownloader.shared.downloadImage(with: thumbnailUrl) { image, _, _, _ in
-                self.showAddToSpacesSheet(
-                    url: url, title: updater?.title ?? title,
-                    description: description ?? updater?.description ?? output?.first?.first,
-                    thumbnail: image,
-                    importData: importData, updater: updater)
-            }
+
+            self.showAddToSpacesSheet(
+                url: url,
+                title: updater?.title ?? title,
+                description: description ?? updater?.description ?? output?.first?.first,
+                thumbnail: thumbnailUrl,
+                importData: importData,
+                updater: updater)
         }
     }
 
@@ -1802,8 +1798,10 @@ extension BrowserViewController {
     }
 
     func showAddToSpacesSheet(
-        url: URL, title: String?,
-        description: String?, thumbnail: UIImage? = nil,
+        url: URL,
+        title: String?,
+        description: String?,
+        thumbnail: URL? = nil,
         importData: SpaceImportHandler? = nil,
         updater: SocialInfoUpdater? = nil
     ) {

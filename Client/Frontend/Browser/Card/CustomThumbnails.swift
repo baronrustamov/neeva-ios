@@ -6,17 +6,9 @@ import SDWebImageSwiftUI
 import SwiftUI
 
 class CustomThumbnailModel: ObservableObject {
-    @Published var selectedThumbnail = URL.aboutBlank {
-        didSet {
-            guard let dataString = thumbnailData[selectedThumbnail] else {
-                return
-            }
-            selectedData = "data:image/jpeg;base64," + dataString
-        }
-    }
-    @Published var selectedData: String? = nil
+    @Published var selectedThumbnail: URL? = nil
     @Published var selectedSpaceThumbnailEntityID: String? = nil
-    @Published var thumbnailData = [URL: String]()
+    @Published var thumbnailData: [URL] = []
     @Published var showing = true
 }
 
@@ -92,29 +84,13 @@ struct URLBasedThumbnailView: View {
                 WebImage(url: thumbnail)
                     .onSuccess { image, data, cacheType in
                         guard model.showing,
-                            model.thumbnailData.index(forKey: thumbnail) == nil
+                            !model.thumbnailData.contains(thumbnail)
                         else {
                             return
                         }
 
-                        DispatchQueue.global(qos: .userInitiated).async {
-                            // compress and encode on a background thread with
-                            // user initiated priority.
-                            guard
-                                let data = image.jpegData(
-                                    compressionQuality: 0.7
-                                        - min(
-                                            0.4,
-                                            0.2 * floor(image.size.width / 1000)))
-                            else {
-                                return
-                            }
-
-                            let string = data.base64EncodedString()
-
-                            DispatchQueue.main.async {
-                                model.thumbnailData[thumbnail] = string
-                            }
+                        DispatchQueue.main.async {
+                            model.thumbnailData.append(thumbnail)
                         }
                     }
                     .resizable()

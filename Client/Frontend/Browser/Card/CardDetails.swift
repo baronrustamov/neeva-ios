@@ -378,14 +378,7 @@ class SpaceEntityThumbnail: CardDetails, AccessingManagerProvider {
     }
 
     var isImage: Bool {
-        guard let pathExtension = data.url?.pathExtension else {
-            return false
-        }
-
-        return pathExtension == "jpeg"
-            || pathExtension == "jpg"
-            || pathExtension == "png"
-            || pathExtension == "gif"
+        return data.url?.isImage ?? false
     }
 
     var richEntityPreviewURL: URL? {
