@@ -21,9 +21,8 @@ struct SpacesFilterView: View {
                         label: "All Spaces",
                         symbol: spaceCardModel.filterState == .allSpaces ? .checkmark : nil
                     ) {
-                        DispatchQueue.main.async {
-                            spaceCardModel.filterState = .allSpaces
-                        }
+                        spaceCardModel.objectWillChange.send()
+                        spaceCardModel.filterState = .allSpaces
                     }.onTapGesture {
                         logFilterTapped()
                     }
@@ -34,9 +33,8 @@ struct SpacesFilterView: View {
                         label: "Owned by me",
                         symbol: spaceCardModel.filterState == .ownedByMe ? .checkmark : nil
                     ) {
-                        DispatchQueue.main.async {
-                            spaceCardModel.filterState = .ownedByMe
-                        }
+                        spaceCardModel.objectWillChange.send()
+                        spaceCardModel.filterState = .ownedByMe
                     }.onTapGesture {
                         logFilterTapped()
                     }
