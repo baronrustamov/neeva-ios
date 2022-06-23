@@ -75,6 +75,23 @@ query CheatsheetInfo($input: String!, $title: String) {
         Title
         Domain
         Snippet
+        Forum {
+            url
+            source
+            domain
+            score
+            date
+            title
+            body
+            percentUpvoted
+            numComments
+            comments {
+                url
+                score
+                date
+                body
+            }
+        }
     }
   }
 }

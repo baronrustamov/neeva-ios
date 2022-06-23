@@ -254,7 +254,7 @@ public class CheatsheetMenuViewModel: ObservableObject {
         }
 
         if NeevaFeatureFlags[.enableBacklink] {
-            let ugcDiscussion = UGCDiscussion(backlinks: cheatsheetInfo.backlinkURL)
+            let ugcDiscussion = UGCDiscussion(backlinks: cheatsheetInfo.backlinks)
             if !ugcDiscussion.isEmpty {
                 results.append(.discussions(ugcDiscussion))
             }

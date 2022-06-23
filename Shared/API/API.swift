@@ -5368,6 +5368,25 @@ public final class CheatsheetInfoQuery: GraphQLQuery {
           Title
           Domain
           Snippet
+          Forum {
+            __typename
+            url
+            source
+            domain
+            score
+            date
+            title
+            body
+            percentUpvoted
+            numComments
+            comments {
+              __typename
+              url
+              score
+              date
+              body
+            }
+          }
         }
       }
     }
@@ -5375,7 +5394,7 @@ public final class CheatsheetInfoQuery: GraphQLQuery {
 
   public let operationName: String = "CheatsheetInfo"
 
-  public let operationIdentifier: String? = "0d5e9df6b7b5107c5c840747e13947eec0f6a3dcca920297ddceed901f4eefdc"
+  public let operationIdentifier: String? = "f043892504c312b6f8419efc08215a434c0bd80fda31d384d1efce9fa916d558"
 
   public var input: String
   public var title: String?
@@ -6155,6 +6174,7 @@ public final class CheatsheetInfoQuery: GraphQLQuery {
             GraphQLField("Title", type: .scalar(String.self)),
             GraphQLField("Domain", type: .scalar(String.self)),
             GraphQLField("Snippet", type: .scalar(String.self)),
+            GraphQLField("Forum", type: .object(Forum.selections)),
           ]
         }
 
@@ -6164,8 +6184,8 @@ public final class CheatsheetInfoQuery: GraphQLQuery {
           self.resultMap = unsafeResultMap
         }
 
-        public init(url: String? = nil, title: String? = nil, domain: String? = nil, snippet: String? = nil) {
-          self.init(unsafeResultMap: ["__typename": "BacklinkEntry", "URL": url, "Title": title, "Domain": domain, "Snippet": snippet])
+        public init(url: String? = nil, title: String? = nil, domain: String? = nil, snippet: String? = nil, forum: Forum? = nil) {
+          self.init(unsafeResultMap: ["__typename": "BacklinkEntry", "URL": url, "Title": title, "Domain": domain, "Snippet": snippet, "Forum": forum.flatMap { (value: Forum) -> ResultMap in value.resultMap }])
         }
 
         public var __typename: String {
@@ -6210,6 +6230,213 @@ public final class CheatsheetInfoQuery: GraphQLQuery {
           }
           set {
             resultMap.updateValue(newValue, forKey: "Snippet")
+          }
+        }
+
+        public var forum: Forum? {
+          get {
+            return (resultMap["Forum"] as? ResultMap).flatMap { Forum(unsafeResultMap: $0) }
+          }
+          set {
+            resultMap.updateValue(newValue?.resultMap, forKey: "Forum")
+          }
+        }
+
+        public struct Forum: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["WebForum"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("url", type: .scalar(String.self)),
+              GraphQLField("source", type: .scalar(String.self)),
+              GraphQLField("domain", type: .scalar(String.self)),
+              GraphQLField("score", type: .scalar(Int.self)),
+              GraphQLField("date", type: .scalar(String.self)),
+              GraphQLField("title", type: .scalar(String.self)),
+              GraphQLField("body", type: .scalar(String.self)),
+              GraphQLField("percentUpvoted", type: .scalar(Int.self)),
+              GraphQLField("numComments", type: .scalar(Int.self)),
+              GraphQLField("comments", type: .list(.nonNull(.object(Comment.selections)))),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(url: String? = nil, source: String? = nil, domain: String? = nil, score: Int? = nil, date: String? = nil, title: String? = nil, body: String? = nil, percentUpvoted: Int? = nil, numComments: Int? = nil, comments: [Comment]? = nil) {
+            self.init(unsafeResultMap: ["__typename": "WebForum", "url": url, "source": source, "domain": domain, "score": score, "date": date, "title": title, "body": body, "percentUpvoted": percentUpvoted, "numComments": numComments, "comments": comments.flatMap { (value: [Comment]) -> [ResultMap] in value.map { (value: Comment) -> ResultMap in value.resultMap } }])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          public var url: String? {
+            get {
+              return resultMap["url"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "url")
+            }
+          }
+
+          public var source: String? {
+            get {
+              return resultMap["source"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "source")
+            }
+          }
+
+          public var domain: String? {
+            get {
+              return resultMap["domain"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "domain")
+            }
+          }
+
+          public var score: Int? {
+            get {
+              return resultMap["score"] as? Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "score")
+            }
+          }
+
+          public var date: String? {
+            get {
+              return resultMap["date"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "date")
+            }
+          }
+
+          public var title: String? {
+            get {
+              return resultMap["title"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "title")
+            }
+          }
+
+          public var body: String? {
+            get {
+              return resultMap["body"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "body")
+            }
+          }
+
+          public var percentUpvoted: Int? {
+            get {
+              return resultMap["percentUpvoted"] as? Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "percentUpvoted")
+            }
+          }
+
+          public var numComments: Int? {
+            get {
+              return resultMap["numComments"] as? Int
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "numComments")
+            }
+          }
+
+          public var comments: [Comment]? {
+            get {
+              return (resultMap["comments"] as? [ResultMap]).flatMap { (value: [ResultMap]) -> [Comment] in value.map { (value: ResultMap) -> Comment in Comment(unsafeResultMap: value) } }
+            }
+            set {
+              resultMap.updateValue(newValue.flatMap { (value: [Comment]) -> [ResultMap] in value.map { (value: Comment) -> ResultMap in value.resultMap } }, forKey: "comments")
+            }
+          }
+
+          public struct Comment: GraphQLSelectionSet {
+            public static let possibleTypes: [String] = ["WebForumComment"]
+
+            public static var selections: [GraphQLSelection] {
+              return [
+                GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+                GraphQLField("url", type: .scalar(String.self)),
+                GraphQLField("score", type: .scalar(Int.self)),
+                GraphQLField("date", type: .scalar(String.self)),
+                GraphQLField("body", type: .scalar(String.self)),
+              ]
+            }
+
+            public private(set) var resultMap: ResultMap
+
+            public init(unsafeResultMap: ResultMap) {
+              self.resultMap = unsafeResultMap
+            }
+
+            public init(url: String? = nil, score: Int? = nil, date: String? = nil, body: String? = nil) {
+              self.init(unsafeResultMap: ["__typename": "WebForumComment", "url": url, "score": score, "date": date, "body": body])
+            }
+
+            public var __typename: String {
+              get {
+                return resultMap["__typename"]! as! String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "__typename")
+              }
+            }
+
+            public var url: String? {
+              get {
+                return resultMap["url"] as? String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "url")
+              }
+            }
+
+            public var score: Int? {
+              get {
+                return resultMap["score"] as? Int
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "score")
+              }
+            }
+
+            public var date: String? {
+              get {
+                return resultMap["date"] as? String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "date")
+              }
+            }
+
+            public var body: String? {
+              get {
+                return resultMap["body"] as? String
+              }
+              set {
+                resultMap.updateValue(newValue, forKey: "body")
+              }
+            }
           }
         }
       }
@@ -8202,7 +8429,7 @@ public final class SearchQuery: GraphQLQuery {
           }
 
           public struct SubResult: GraphQLSelectionSet {
-            public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelView", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web"]
+            public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelView", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
 
             public static var selections: [GraphQLSelection] {
               return [
@@ -8511,6 +8738,10 @@ public final class SearchQuery: GraphQLQuery {
 
             public static func makeWeb() -> SubResult {
               return SubResult(unsafeResultMap: ["__typename": "Web"])
+            }
+
+            public static func makeUGCDiscussion() -> SubResult {
+              return SubResult(unsafeResultMap: ["__typename": "UGCDiscussion"])
             }
 
             public static func makeNews(news: AsNews.News? = nil) -> SubResult {
@@ -8859,7 +9090,7 @@ public final class SearchQuery: GraphQLQuery {
           }
 
           public struct TypeSpecific: GraphQLSelectionSet {
-            public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelView", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web"]
+            public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelView", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
 
             public static var selections: [GraphQLSelection] {
               return [
@@ -9140,6 +9371,10 @@ public final class SearchQuery: GraphQLQuery {
 
             public static func makeWeather() -> TypeSpecific {
               return TypeSpecific(unsafeResultMap: ["__typename": "Weather"])
+            }
+
+            public static func makeUGCDiscussion() -> TypeSpecific {
+              return TypeSpecific(unsafeResultMap: ["__typename": "UGCDiscussion"])
             }
 
             public static func makeRichEntity(richEntity: AsRichEntity.RichEntity? = nil) -> TypeSpecific {
@@ -14910,6 +15145,7 @@ public final class ListSpacesQuery: GraphQLQuery {
             }
           }
 
+          /// Whether the space should be pinned to the top of the spaces list
           public var isPinned: Bool? {
             get {
               return resultMap["isPinned"] as? Bool
@@ -16804,7 +17040,7 @@ public final class GetRelatedSpacesQuery: GraphQLQuery {
                   }
 
                   public struct TypeSpecific: GraphQLSelectionSet {
-                    public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelView", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web"]
+                    public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelView", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
 
                     public static var selections: [GraphQLSelection] {
                       return [
@@ -17101,6 +17337,10 @@ public final class GetRelatedSpacesQuery: GraphQLQuery {
 
                     public static func makeWeather() -> TypeSpecific {
                       return TypeSpecific(unsafeResultMap: ["__typename": "Weather"])
+                    }
+
+                    public static func makeUGCDiscussion() -> TypeSpecific {
+                      return TypeSpecific(unsafeResultMap: ["__typename": "UGCDiscussion"])
                     }
 
                     public static func makeTechDoc(techDoc: AsTechDoc.TechDoc? = nil) -> TypeSpecific {
@@ -19225,7 +19465,7 @@ public final class GetSpacesDataQuery: GraphQLQuery {
                 }
 
                 public struct TypeSpecific: GraphQLSelectionSet {
-                  public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelView", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web"]
+                  public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelView", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
 
                   public static var selections: [GraphQLSelection] {
                     return [
@@ -19522,6 +19762,10 @@ public final class GetSpacesDataQuery: GraphQLQuery {
 
                   public static func makeWeather() -> TypeSpecific {
                     return TypeSpecific(unsafeResultMap: ["__typename": "Weather"])
+                  }
+
+                  public static func makeUGCDiscussion() -> TypeSpecific {
+                    return TypeSpecific(unsafeResultMap: ["__typename": "UGCDiscussion"])
                   }
 
                   public static func makeTechDoc(techDoc: AsTechDoc.TechDoc? = nil) -> TypeSpecific {
@@ -23409,7 +23653,7 @@ public struct SpacesMetadata: GraphQLFragment {
         }
 
         public struct TypeSpecific: GraphQLSelectionSet {
-          public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelView", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web"]
+          public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelView", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
 
           public static var selections: [GraphQLSelection] {
             return [
@@ -23706,6 +23950,10 @@ public struct SpacesMetadata: GraphQLFragment {
 
           public static func makeWeather() -> TypeSpecific {
             return TypeSpecific(unsafeResultMap: ["__typename": "Weather"])
+          }
+
+          public static func makeUGCDiscussion() -> TypeSpecific {
+            return TypeSpecific(unsafeResultMap: ["__typename": "UGCDiscussion"])
           }
 
           public static func makeTechDoc(techDoc: AsTechDoc.TechDoc? = nil) -> TypeSpecific {

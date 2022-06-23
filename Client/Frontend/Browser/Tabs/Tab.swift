@@ -567,6 +567,12 @@ class Tab: NSObject, ObservableObject {
 
     func getMostRecentQuery(restrictToCurrentNavigation: Bool = false) -> QueryForNavigation.Query?
     {
+        guard Thread.isMainThread else {
+            return DispatchQueue.main.sync {
+                getMostRecentQuery(restrictToCurrentNavigation: restrictToCurrentNavigation)
+            }
+        }
+
         guard let webView = webView else {
             return nil
         }

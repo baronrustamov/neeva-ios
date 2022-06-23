@@ -12,4 +12,12 @@ extension String {
     var removingHTMLencoding: String? {
         try? self.htmlUnescape(strict: true)
     }
+
+    public func tryRemovingHTMLencoding(strict: Bool) -> String {
+        do {
+            return try self.htmlUnescape(strict: strict)
+        } catch {
+            return self
+        }
+    }
 }
