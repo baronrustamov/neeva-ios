@@ -6,32 +6,12 @@ import Shared
 import Storage
 import SwiftUI
 
-enum TimeSection: Int, CaseIterable {
-    case today
-    case yesterday
-    case lastWeek
-    case lastMonth
-
-    var title: String? {
-        switch self {
-        case .today:
-            return Strings.TableDateSectionTitleToday
-        case .yesterday:
-            return Strings.TableDateSectionTitleYesterday
-        case .lastWeek:
-            return Strings.TableDateSectionTitleLastWeek
-        case .lastMonth:
-            return Strings.TableDateSectionTitleLastMonth
-        }
-    }
-}
-
 struct HistorySectionHeader: View {
-    let section: TimeSection
+    let text: String
 
     var title: some View {
         HStack {
-            Text(section.title ?? "")
+            Text(String(text))
                 .fontWeight(.medium)
             Spacer()
         }
@@ -102,28 +82,8 @@ struct HistoryPanelView: View {
                 Spacer()
             } else {
                 VStack(spacing: 0) {
-                    ForEach(TimeSection.allCases, id: \.self) { section in
-                        let itemsInSection =
-                            useFilteredSites
-                            ? model.filteredSites.itemsForSection(section.rawValue)
-                            : model.groupedSites.itemsForSection(section.rawValue)
-
-                        if itemsInSection.count > 0 {
-                            Section(header: HistorySectionHeader(section: section)) {
-                                SiteListView(
-                                    tabManager: model.tabManager,
-                                    historyPanelModel: model,
-                                    sites: itemsInSection,
-                                    siteTimeSection: section,
-                                    itemAtIndexAppeared: { index in
-                                        model.loadNextItemsIfNeeded(from: index)
-                                    },
-                                    deleteSite: { site in
-                                        model.removeItemFromHistory(site: site)
-                                    }
-                                ).accessibilityLabel(Text("History List"))
-                            }
-                        }
+                    ForEach(DateGroupedTableDataSection.allCases, id: \.self) { section in
+                        buildDaySections(section: section)
                     }
                 }.padding(.top, 20)
             }
@@ -207,6 +167,53 @@ struct HistoryPanelView: View {
             }
 
             OverlayView(limitToOverlayType: [.toast(nil)])
+        }
+    }
+
+    private func buildDaySections(section: DateGroupedTableDataSection) -> some View {
+        Group {
+            let itemsInSection =
+                useFilteredSites
+                ? model.filteredSites.itemsForSection(section)
+                : model.groupedSites.itemsForSection(section)
+
+            switch section {
+            case .today, .yesterday:
+                buildSiteList(
+                    with: Array(itemsInSection[0].data), in: section,
+                    sectionHeaderTitle: section.rawValue)
+            case .older:
+                VStack(spacing: 0) {
+                    ForEach(itemsInSection, id: \.self) { item in
+                        if let sites = item.data {
+                            buildSiteList(
+                                with: sites, in: section, sectionHeaderTitle: item.dateString)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private func buildSiteList(
+        with sites: [Site], in section: DateGroupedTableDataSection, sectionHeaderTitle: String
+    ) -> some View {
+        Group {
+            if sites.count > 0 {
+                Section(header: HistorySectionHeader(text: sectionHeaderTitle)) {
+                    SiteListView(
+                        tabManager: model.tabManager,
+                        historyPanelModel: model,
+                        data: .sites(sites, section),
+                        itemAtIndexAppeared: { index in
+                            model.loadNextItemsIfNeeded(from: index)
+                        },
+                        deleteSite: { site in
+                            model.removeItemFromHistory(site: site)
+                        }
+                    ).accessibilityLabel(Text("History List"))
+                }
+            }
         }
     }
 }

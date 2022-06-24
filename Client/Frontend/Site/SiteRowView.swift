@@ -6,21 +6,106 @@ import Shared
 import Storage
 import SwiftUI
 
-struct SiteRowView: View {
+private struct SiteRowViewUX {
+    static let padding: CGFloat = 4
+}
+
+enum SiteRowData {
+    case site(Site, (Site) -> Void)
+    case savedTab(SavedTab)
+}
+
+private struct SiteRowButton: View {
+    let title: String?
+    let url: URL?
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack {
+                if let url = url {
+                    FaviconView(forSiteUrl: url)
+                        .frame(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize)
+                        .padding(.trailing, SiteRowViewUX.padding)
+                }
+
+                VStack(alignment: .leading, spacing: SiteRowViewUX.padding) {
+                    Text(title ?? "")
+                        .foregroundColor(.label)
+
+                    Text(url?.absoluteString ?? "")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }.lineLimit(1)
+
+                Spacer()
+            }
+            .padding(.trailing, -6)
+            .padding(.horizontal, GroupedCellUX.padding)
+            .padding(.vertical, 10)
+            .frame(minHeight: GroupedCellUX.minCellHeight)
+        }
+    }
+}
+
+private struct SiteView: View {
     @Environment(\.onOpenURL) var openURL
 
+    let site: Site
+    let title: String
     let tabManager: TabManager
-    private let padding: CGFloat = 4
+    let action: () -> Void
+    let deleteSite: (Site) -> Void
 
-    var site: Site? = nil
-    var savedTab: SavedTab? = nil
+    var body: some View {
+        SiteRowButton(title: title, url: site.url) {
+            action()
+            openURL(site.url)
+        }
+        .accessibilityLabel(Text(title.isEmpty ? site.url.absoluteString : title))
+        .accessibilityIdentifier(site.url.absoluteString)
+        .buttonStyle(.tableCell)
+        .contextMenu {
+            TabMenu(tabManager: tabManager).swiftUIOpenInNewTabMenu(site.url)
 
-    var deleteSite: (Site) -> Void = { _ in }
-    var action: () -> Void
+            Button {
+                deleteSite(site)
+            } label: {
+                Label {
+                    Text("Delete")
+                } icon: {
+                    Symbol(decorative: .trash)
+                }
+            }
+        }
+    }
+}
 
-    @ViewBuilder
-    var siteContent: some View {
-        if let site = site {
+private struct SavedTabView: View {
+    let savedTab: SavedTab
+    let tabManager: TabManager
+    let action: () -> Void
+
+    var body: some View {
+        SiteRowButton(title: savedTab.title, url: savedTab.url, action: action)
+            .accessibilityLabel(Text(savedTab.title ?? ""))
+            .accessibilityIdentifier(savedTab.url?.absoluteString ?? "")
+            .buttonStyle(.tableCell)
+            .contextMenu {
+                TabMenu(tabManager: tabManager).swiftUIOpenInNewTabMenu(savedTab)
+            }
+    }
+}
+
+struct SiteRowView: View {
+    let tabManager: TabManager
+
+    let data: SiteRowData
+    let action: () -> Void
+
+    var body: some View {
+        switch data {
+        case .site(let site, let deleteSite):
             let title: String = {
                 if site.displayTitle.isEmpty {
                     return site.title
@@ -29,91 +114,11 @@ struct SiteRowView: View {
                 return site.displayTitle
             }()
 
-            Button {
-                action()
-                openURL(site.url)
-            } label: {
-                HStack {
-                    FaviconView(forSite: site)
-                        .frame(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize)
-                        .padding(.trailing, padding)
-
-                    VStack(alignment: .leading, spacing: padding) {
-                        Text(title)
-                            .foregroundColor(.label)
-
-                        Text(site.url.absoluteString)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }.lineLimit(1)
-
-                    Spacer()
-                }
-                .padding(.trailing, -6)
-                .padding(.horizontal, GroupedCellUX.padding)
-                .padding(.vertical, 10)
-                .frame(minHeight: GroupedCellUX.minCellHeight)
-            }
-            .accessibilityLabel(Text(title.isEmpty ? site.url.absoluteString : title))
-            .accessibilityIdentifier(site.url.absoluteString)
-            .buttonStyle(.tableCell)
-            .contextMenu {
-                TabMenu(tabManager: tabManager).swiftUIOpenInNewTabMenu(site.url)
-
-                Button {
-                    deleteSite(site)
-                } label: {
-                    Label {
-                        Text("Delete")
-                    } icon: {
-                        Symbol(decorative: .trash)
-                    }
-                }
-            }
-        }
-    }
-
-    @ViewBuilder
-    var savedTabContent: some View {
-        if let savedTab = savedTab {
-            Button(action: action) {
-                HStack {
-                    if let url = savedTab.url {
-                        FaviconView(forSiteUrl: url)
-                            .frame(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize)
-                            .padding(.trailing, padding)
-                    }
-
-                    VStack(alignment: .leading, spacing: padding) {
-                        Text(savedTab.title ?? "")
-                            .foregroundColor(.label)
-
-                        Text(savedTab.url?.absoluteString ?? "")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }.lineLimit(1)
-
-                    Spacer()
-                }
-                .padding(.trailing, -6)
-                .padding(.horizontal, GroupedCellUX.padding)
-                .padding(.vertical, 10)
-                .frame(minHeight: GroupedCellUX.minCellHeight)
-            }
-            .accessibilityLabel(Text(savedTab.title ?? ""))
-            .accessibilityIdentifier(savedTab.url?.absoluteString ?? "")
-            .buttonStyle(.tableCell)
-            .contextMenu {
-                TabMenu(tabManager: tabManager).swiftUIOpenInNewTabMenu(savedTab)
-            }
-        }
-    }
-
-    var body: some View {
-        if site != nil {
-            siteContent
-        } else {
-            savedTabContent
+            SiteView(
+                site: site, title: title, tabManager: tabManager, action: action,
+                deleteSite: deleteSite)
+        case .savedTab(let savedTab):
+            SavedTabView(savedTab: savedTab, tabManager: tabManager, action: action)
         }
     }
 }

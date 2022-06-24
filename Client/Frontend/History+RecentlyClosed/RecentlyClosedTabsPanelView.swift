@@ -25,7 +25,7 @@ struct RecentlyClosedTabsPanelView: View {
             LazyVStack(spacing: 0) {
                 SiteListView(
                     tabManager: model.tabManager,
-                    savedTabs: model.recentlyClosedTabs,
+                    data: .savedTabs(model.recentlyClosedTabs),
                     tappedItemAtIndex: { index in
                         model.restoreTab(at: index)
                         onDismiss()
