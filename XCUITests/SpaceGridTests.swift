@@ -116,4 +116,65 @@ class SpaceGridTests: BaseTestCase {
 
         XCTAssertTrue(app.buttons["Learn More About Spaces"].exists)
     }
+
+    func testPinSpace() {
+        app.buttons["Show Tabs"].tap()
+        app.buttons["Spaces"].tap()
+        app.buttons[SpaceServiceMock.mySpaceTitle].press(forDuration: 0.5)
+
+        XCTAssertTrue(app.buttons["Pin"].exists)
+
+        app.buttons["Pin"].tap()
+
+        waitForExistence(app.scrollViews["CardGrid"])
+        // Assert that the Space named `mySpaceTitle` comes first
+        XCTAssertTrue(
+            app.scrollViews["CardGrid"]
+                .descendants(matching: .button)
+                .firstMatch.label
+                .contains(SpaceServiceMock.mySpaceTitle)
+        )
+        // This is a bit of a hack -- unfortunately, the pin
+        // button neighbors the Space in the element tree, so
+        // we just check if the Space is first and the pin badge exists.
+        XCTAssertTrue(app.buttons["pin"].exists)
+    }
+
+    func testUnpinSpace() {
+        app.buttons["Show Tabs"].tap()
+        app.buttons["Spaces"].tap()
+
+        XCTAssertFalse(app.buttons["pin"].exists)
+
+        app.buttons[SpaceServiceMock.mySpaceTitle].press(forDuration: 0.5)
+        app.buttons["Pin"].tap()
+
+        waitForExistence(app.scrollViews["CardGrid"])
+        XCTAssertTrue(app.buttons["pin"].exists)
+
+        app.buttons[SpaceServiceMock.mySpaceTitle].press(forDuration: 0.5)
+        app.buttons["Unpin"].tap()
+
+        waitForExistence(app.scrollViews["CardGrid"])
+        XCTAssertFalse(app.buttons["pin"].exists)
+    }
+
+    func testPinnedSpaceIsFirstInAddToSpaceSheet() {
+        app.buttons["Show Tabs"].tap()
+        app.buttons["Spaces"].tap()
+        app.buttons[SpaceServiceMock.mySpaceTitle].press(forDuration: 0.5)
+        app.buttons["Pin"].tap()
+
+        waitForExistence(app.scrollViews["CardGrid"])
+
+        app.buttons["Normal Tabs"].tap()
+        openURL(path(forTestPage: "test-mozilla-book.html"))
+        app.buttons["Add To Space"].tap()
+
+        // Assert that the pinned Space comes first
+        XCTAssertTrue(
+            app.staticTexts["spaceListItemName"]
+                .firstMatch.label == SpaceServiceMock.mySpaceTitle
+        )
+    }
 }

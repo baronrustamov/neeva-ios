@@ -86,6 +86,7 @@ class AddToSpaceSheetTests: BaseTestCase {
     func testDeleteItemFromExistingSpace() {
         // Add item to Space
         app.buttons["Add To Space"].tap()
+        waitForExistence(app.staticTexts[SpaceServiceMock.mySpaceTitle])
         app.staticTexts[SpaceServiceMock.mySpaceTitle].tap(force: true)
 
         // Confirm the item was added
@@ -97,6 +98,7 @@ class AddToSpaceSheetTests: BaseTestCase {
 
         // Remove item from Space
         app.buttons["Add To Space"].tap()
+        waitForExistence(app.staticTexts[SpaceServiceMock.mySpaceTitle])
         app.staticTexts[SpaceServiceMock.mySpaceTitle].tap(force: true)
 
         // Confirm the item was removed

@@ -208,6 +208,11 @@ public class UpdateProfileRequest: MutationRequest<UpdateUserProfileMutation> {
 }
 
 public class PinSpaceRequest: MutationRequest<PinSpaceMutation> {
+    // This constructor is used strictly for testing
+    public override init() {
+        super.init()
+    }
+
     public init(spaceId: String, isPinned: Bool) {
         super.init(
             mutation: PinSpaceMutation(input: PinSpaceInput(id: spaceId, isPinned: isPinned)))

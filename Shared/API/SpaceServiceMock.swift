@@ -18,6 +18,7 @@ public class SpaceServiceMock: SpaceService {
         var isOwner: Bool
         var isPublic: Bool
         var resultCount: Int = 0
+        var isPinned: Bool = false
 
         // SpaceDataApollo properties
         var entities: [SpaceEntityData] = []
@@ -43,7 +44,8 @@ public class SpaceServiceMock: SpaceService {
                     ],
                     hasPublicAcl: isPublic,
                     resultCount: resultCount,
-                    isDefaultSpace: false
+                    isDefaultSpace: false,
+                    isPinned: isPinned
                 )
             )
         }
@@ -314,7 +316,20 @@ public class SpaceServiceMock: SpaceService {
     }
 
     public func pinSpace(spaceId: String, isPinned: Bool) -> PinSpaceRequest? {
-        return nil
+        let request = PinSpaceRequest()
+
+        // Simulate a network request
+        DispatchQueue.main.async { [self] in
+            if let space = spaces[spaceId] {
+                space.isPinned = isPinned
+                request.state = .success
+            } else {
+                request.state = .failure
+            }
+
+        }
+
+        return request
     }
 
     public func unfollowSpace(spaceID: String) -> UnfollowSpaceRequest? {
