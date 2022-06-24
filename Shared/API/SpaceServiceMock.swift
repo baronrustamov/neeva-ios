@@ -16,6 +16,7 @@ public class SpaceServiceMock: SpaceService {
         var name: String
         var lastModifiedTs: Date = Date()
         var isOwner: Bool
+        var isPublic: Bool
         var resultCount: Int = 0
 
         // SpaceDataApollo properties
@@ -40,8 +41,7 @@ public class SpaceServiceMock: SpaceService {
                             ),
                             acl: isOwner ? SpaceACLLevel.owner : SpaceACLLevel.publicView)
                     ],
-                    // Assume that "my" Spaces are private, and all others are public
-                    hasPublicAcl: !isOwner,
+                    hasPublicAcl: isPublic,
                     resultCount: resultCount,
                     isDefaultSpace: false
                 )
@@ -60,9 +60,10 @@ public class SpaceServiceMock: SpaceService {
             )
         }
 
-        init(name: String, isOwner: Bool = true) {
+        init(name: String, isOwner: Bool = true, isPublic: Bool = false) {
             self.name = name
             self.isOwner = isOwner
+            self.isPublic = isPublic
         }
 
         @discardableResult
@@ -103,12 +104,17 @@ public class SpaceServiceMock: SpaceService {
     public init() {
         let mySpace = SpaceMock(name: SpaceServiceMock.mySpaceTitle)
         let spaceNotOwnedByMe = SpaceMock(
-            name: SpaceServiceMock.spaceNotOwnedByMeTitle, isOwner: false)
+            name: SpaceServiceMock.spaceNotOwnedByMeTitle, isOwner: false, isPublic: true)
         let spaceEntityTestsSpace = SpaceMock(name: "SpaceEntityTests Space")
+        let spacePublicAclTestsSpace1 = SpaceMock(name: "SpacePublicAclTests Space1")
+        let spacePublicAclTestsSpace2 = SpaceMock(
+            name: "SpacePublicAclTests Space2", isPublic: true)
 
         spaces[mySpace.id] = mySpace
         spaces[spaceNotOwnedByMe.id] = spaceNotOwnedByMe
         spaces[spaceEntityTestsSpace.id] = spaceEntityTestsSpace
+        spaces[spacePublicAclTestsSpace1.id] = spacePublicAclTestsSpace1
+        spaces[spacePublicAclTestsSpace2.id] = spacePublicAclTestsSpace2
 
         // Populate the Spaces
         spaces[spaceNotOwnedByMe.id]?.addSpaceEntity(
@@ -126,10 +132,28 @@ public class SpaceServiceMock: SpaceService {
             title: "Yahoo", url: "https://yahoo.com")
         spaces[spaceEntityTestsSpace.id]?.addSpaceEntity(
             title: "Cnn", url: "https://cnn.com")
+
+        // SpacePublicAclTests
+        spaces[spacePublicAclTestsSpace1.id]?.addSpaceEntity(
+            title: "Neeva", url: "https://neeva.com")
+        spaces[spacePublicAclTestsSpace2.id]?.addSpaceEntity(
+            title: "Neeva", url: "https://neeva.com")
     }
 
     public func addPublicACL(spaceID: String) -> AddPublicACLRequest? {
-        return nil
+        let request = AddPublicACLRequest()
+
+        // Simulate a network request
+        DispatchQueue.main.async { [self] in
+            if let space = spaces[spaceID] {
+                space.isPublic = true
+                request.state = .success
+            } else {
+                request.state = .failure
+            }
+        }
+
+        return request
     }
 
     public func addSoloACLs(spaceID: String, emails: [String], acl: SpaceACLLevel, note: String)
@@ -192,7 +216,19 @@ public class SpaceServiceMock: SpaceService {
     }
 
     public func deletePublicACL(spaceID: String) -> DeletePublicACLRequest? {
-        return nil
+        let request = DeletePublicACLRequest()
+
+        // Simulate a network request
+        DispatchQueue.main.async { [self] in
+            if let space = spaces[spaceID] {
+                space.isPublic = false
+                request.state = .success
+            } else {
+                request.state = .failure
+            }
+        }
+
+        return request
     }
 
     public func deleteSpace(spaceID: String) -> DeleteSpaceRequest? {
