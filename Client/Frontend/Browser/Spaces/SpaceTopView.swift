@@ -19,7 +19,7 @@ struct SpaceTopView: View {
     @State private var showConfirmDeleteAlert = false
     @ObservedObject var primitive: SpaceCardDetails
     @Binding var headerVisible: Bool
-    let addToAnotherSpace: (URL, String?, String?) -> Void
+    let addToAnotherSpace: (URL, String?, String?, String?) -> Void
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var space: Space?
 
@@ -251,7 +251,8 @@ struct SpaceTopView: View {
     @ViewBuilder var addToAnotherSpaceButton: some View {
         if let space = space {
             Button {
-                self.addToAnotherSpace(space.url, space.displayTitle, space.description)
+                self.addToAnotherSpace(
+                    space.url, space.displayTitle, space.description, space.thumbnail)
             } label: {
                 Label("Add to another Space", systemSymbol: .docOnDoc)
             }

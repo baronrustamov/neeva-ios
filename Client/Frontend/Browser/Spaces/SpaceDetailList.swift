@@ -20,7 +20,7 @@ struct SpaceDetailList: View {
     @Binding var isVerifiedProfile: Bool
     var onShowProfileUI: () -> Void
     let onShowAnotherSpace: (String) -> Void
-    let addToAnotherSpace: (URL, String?, String?) -> Void
+    let addToAnotherSpace: (URL, String?, String?, String?) -> Void
     @State var addingComment = false
     @StateObject var spaceCommentsModel = SpaceCommentsModel()
 

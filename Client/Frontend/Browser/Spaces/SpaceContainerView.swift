@@ -83,11 +83,13 @@ struct SpaceContainerView: View {
         }
     }
 
-    private func addToAnotherSpace(url: URL, title: String?, description: String?) {
+    private func addToAnotherSpace(
+        url: URL, title: String?, description: String?, thumbnail: String?
+    ) {
         spacesModel.detailedSpace = nil
         SceneDelegate.getBVC(with: tabModel.manager.scene)
             .showAddToSpacesSheet(
-                url: url, title: title, description: description)
+                url: url, title: title, description: description, thumbnail: thumbnail)
     }
 
     private var profileUINavigationLink: some View {

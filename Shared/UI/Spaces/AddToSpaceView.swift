@@ -11,7 +11,7 @@ public class AddToSpaceRequest: ObservableObject {
     public let title: String
     public let description: String?  // meta description
     public let url: URL
-    public let thumbnail: URL?
+    public let thumbnail: String?
     public let updater: SocialInfoUpdater?
 
     public enum Mode {
@@ -75,7 +75,7 @@ public class AddToSpaceRequest: ObservableObject {
     ///   - url: The URL of the newly created entity
     public init(
         title: String, description: String?, url: URL,
-        thumbnail: URL? = nil, updater: SocialInfoUpdater? = nil
+        thumbnail: String? = nil, updater: SocialInfoUpdater? = nil
     ) {
         self.title = title
         self.description = description
@@ -120,7 +120,7 @@ public class AddToSpaceRequest: ObservableObject {
             spaceId: id,
             url: self.url.absoluteString,
             title: self.title,
-            thumbnail: self.thumbnail?.absoluteString,
+            thumbnail: self.thumbnail,
             data: self.description,
             mediaType: "text/plain",
             isBase64: false

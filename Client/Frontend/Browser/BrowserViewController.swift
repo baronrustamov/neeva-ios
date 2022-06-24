@@ -1775,7 +1775,7 @@ extension BrowserViewController {
 
             let thumbnailUrl = thumbnailUrls.first(where: {
                 $0.isImage
-            })
+            })?.absoluteString
 
             self.showAddToSpacesSheet(
                 url: url,
@@ -1801,7 +1801,7 @@ extension BrowserViewController {
         url: URL,
         title: String?,
         description: String?,
-        thumbnail: URL? = nil,
+        thumbnail: String? = nil,
         importData: SpaceImportHandler? = nil,
         updater: SocialInfoUpdater? = nil
     ) {
