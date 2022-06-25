@@ -28,19 +28,22 @@ class SimulatedSwipeModel: ObservableObject {
     }
 
     @discardableResult func goBack() -> Bool {
-        guard canGoBack(), swipeDirection == .back, let tab = tabManager.selectedTab else {
+        guard canGoBack(),
+            swipeDirection == .back,
+            let tab = tabManager.selectedTab
+        else {
             return false
         }
 
         if let _ = tab.parent {
             tabManager.removeTab(tab, showToast: false)
+            return true
         } else if let id = tab.parentSpaceID {
             SceneDelegate.getBVC(with: tabManager.scene).browserModel.openSpace(spaceID: id)
-        } else {
-            return false
+            return true
         }
 
-        return true
+        return false
     }
 
     @discardableResult func goForward() -> Bool {

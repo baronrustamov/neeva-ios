@@ -32,9 +32,13 @@ class SimulatedSwipeController:
 
         register(self, forTabEvents: .didChangeURL)
 
-        model.tabManager.selectedTabPublisher.sink { [weak self] in
-            self?.selectedTabChanged(selected: $0)
-        }.store(in: &subscriptions)
+        model.tabManager.selectedTabPublisher
+            // need to reschedule on main to avoid simultaneous access
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                self?.selectedTabChanged(selected: $0)
+            }
+            .store(in: &subscriptions)
 
         self.animator = SimulatedSwipeAnimator(
             model: model,
@@ -128,19 +132,25 @@ class SimulatedSwipeController:
     }
 
     func updateBackVisibility(tab: Tab?) {
-        guard let tab = tab else {
+        guard let tab = tab,
+            !tab.canGoBack
+        else {
             model.hidden = true
             return
         }
 
-        if tab.canGoBack {
-            model.hidden = true
-        } else if let _ = tab.parent {
+        // if tab cannot go back, check to see if there's another back target
+        if let _ = tab.parent {
             model.hidden = false
             model.chromeModel.canGoBack = true
         } else if let id = tab.parentSpaceID, !id.isEmpty {
             model.hidden = false
             model.chromeModel.canGoBack = true
+        } else {
+            // if no back target, hide the simulated swipe
+            // and set the back state to the tab's back state
+            model.hidden = true
+            model.chromeModel.canGoBack = tab.canGoBack
         }
     }
 
