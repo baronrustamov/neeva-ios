@@ -262,13 +262,20 @@ extension BaseTestCase {
 }
 
 extension XCUIElement {
+    /*
+     * Tap the element, regardless of whether it is "hittable" or not.
+     * We deliberately avoid checking `isHittable`, which is sometimes problematic.
+     * See this SO comment and related discussion:
+     *
+     * "In this case, checking self.isHittable as suggested was causing an infinite loop.
+     * Skipping that if clause and directly calling coordinate.tap() fixed the issue."
+     * https://stackoverflow.com/a/33534187
+     */
     func tap(force: Bool = true) {
-        // There appears to be a bug with tapping elements sometimes, despite them being on-screen and tappable, due to hittable being false.
-        // See: http://stackoverflow.com/a/33534187/1248491
-        if isHittable {
-            tap()
-        } else if force {
+        if force {
             coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        } else {
+            tap()
         }
     }
 }
