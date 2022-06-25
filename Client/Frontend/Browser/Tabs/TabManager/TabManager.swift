@@ -69,11 +69,13 @@ class TabManager: NSObject {
         return TabManager.makeWebViewConfig(isIncognito: true)
     }()
 
-    // enables undo of recently closed tabs
-    /// supports closing/restoring a group of tabs or a single tab (alone in an array)
+    // Enables undo of recently closed tabs
+    /// Supports closing/restoring a group of tabs or a single tab (alone in an array)
     var recentlyClosedTabs = [[SavedTab]]()
     var recentlyClosedTabsFlattened: [SavedTab] {
-        Array(recentlyClosedTabs.joined())
+        Array(recentlyClosedTabs.joined()).filter {
+            !InternalURL.isValid(url: ($0.url ?? URL(string: "")))
+        }
     }
 
     // groups tabs closed together in a certain amount of time into one Toast

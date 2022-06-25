@@ -110,8 +110,7 @@ struct SwitcherToolbarView: View {
                                 }
                             },
                             identifier: "SwitcherOverflowButton"
-                        )
-                        .tapTargetFrame()
+                        ).tapTargetFrame()
                     }
                 }
 
@@ -119,7 +118,7 @@ struct SwitcherToolbarView: View {
                     Spacer()
                 }
 
-                SecondaryMenuButton(action: {
+                Button {
                     switch gridModel.switcherState {
                     case .tabs:
                         toolbarModel.openLazyTab()
@@ -127,48 +126,54 @@ struct SwitcherToolbarView: View {
                     case .spaces:
                         toolbarModel.createNewSpace()
                     }
-                }) {
-                    $0.setImage(Symbol.uiImage(.plus, size: 20), for: .normal)
-                    $0.tintColor = UIColor.label
-                    $0.accessibilityIdentifier = "TabTrayController.addTabButton"
-                    $0.setDynamicMenu(gridModel.buildRecentlyClosedTabsMenu)
-                    $0.isEnabled =
-                        gridModel.switcherState == .tabs || NeevaUserInfo.shared.isUserLoggedIn
+                } label: {
+                    Symbol(.plus, size: 20, weight: .medium, label: "Add Tab")
                 }
                 .tapTargetFrame()
-                .accessibilityLabel(String.TabTrayAddTabAccessibilityLabel)
+                .contextMenu {
+                    if bvc.tabManager.recentlyClosedTabsFlattened.count > 0 {
+                        ContextMenuActionsBuilder.RecentlyClosedTabsAction(
+                            tabManager: bvc.tabManager, fromTab: false)
+                    }
+                }
+                .disabled(gridModel.switcherState != .tabs && !NeevaUserInfo.shared.isUserLoggedIn)
+                .accentColor(.label)
 
                 if !top {
                     Spacer()
                 }
 
-                SecondaryMenuButton(action: {
+                Button {
                     switch gridModel.switcherState {
                     case .tabs:
                         browserModel.hideGridWithAnimation()
                     case .spaces:
                         browserModel.hideGridWithNoAnimation()
                     }
-                }) { button in
-                    let font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-                    let title = NSAttributedString(
-                        string: "Done",
-                        attributes: [NSAttributedString.Key.font: font])
-                    button.setAttributedTitle(title, for: .normal)
-                    button.setTitleColor(
-                        tabModel.manager.selectedTab == nil ? .secondaryLabel : .label, for: .normal
-                    )
-                    button.setDynamicMenu {
-                        gridModel.buildCloseAllTabsMenu(sourceView: button)
-                    }
-                    button.isEnabled = tabModel.manager.selectedTab != nil
-                    button.accessibilityLabel = "Done"
+                } label: {
+                    Text("Done")
+                        .font(.system(size: 16, weight: .semibold, design: .default))
                 }
                 .tapTargetFrame()
-                .accessibilityLabel(String.TabTrayDoneAccessibilityLabel)
+                .accentColor(tabModel.manager.selectedTab == nil ? .secondaryLabel : .label)
+                .disabled(tabModel.manager.selectedTab == nil)
                 .accessibilityIdentifier("TabTrayController.doneButton")
                 .accessibilityValue(
-                    Text(tabModel.manager.selectedTab == nil ? "Disabled" : "Enabled"))
+                    Text(tabModel.manager.selectedTab == nil ? "Disabled" : "Enabled")
+                )
+                .padding(.horizontal, 10)  // a) Padding for contextMenu
+                .contextMenu {
+                    ContextMenuActionsBuilder.CloseAllTabsAction(tabManager: bvc.tabManager) {
+                        gridModel.showConfirmCloseAllTabs = true
+                    }
+                }
+                .padding(.horizontal, -10)  // Remove extra padding added in `a`
+                .modifier(
+                    MenuBuilder.ConfirmCloseAllTabsConfirmationDialog(
+                        showMenu: $gridModel.showConfirmCloseAllTabs,
+                        tabManager: browserModel.tabManager)
+                )
+                .allowsHitTesting(tabModel.manager.selectedTab != nil)
             }
             .padding(.horizontal, 16)
             .frame(

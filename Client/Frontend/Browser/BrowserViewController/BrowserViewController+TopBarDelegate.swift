@@ -24,45 +24,6 @@ extension BrowserViewController: TopBarDelegate {
         tabManager.selectedTab?.stop()
     }
 
-    func urlBarReloadMenu() -> UIMenu? {
-        guard
-            let tab = tabManager.selectedTab,
-            tab.webView?.url != nil,
-            (tab.getContentScript(name: ReaderMode.name()) as? ReaderMode)?.state != .active
-        else { return nil }
-
-        let toggleActionTitle: String
-        let iconName: SFSymbol
-
-        let willSwitchToMobile =
-            UserAgent.isDesktop(ua: UserAgent.getUserAgent())
-            ? !tab.changedUserAgent : tab.changedUserAgent
-        if willSwitchToMobile {
-            toggleActionTitle = Strings.AppMenuViewMobileSiteTitleString
-            iconName = UIConstants.hasHomeButton ? .iphoneHomebutton : .iphone
-        } else {
-            toggleActionTitle = Strings.AppMenuViewDesktopSiteTitleString
-            iconName = .laptopcomputer
-        }
-
-        Haptics.longPress()
-
-        return UIMenu(
-            children: [
-                UIAction(title: toggleActionTitle, image: UIImage(systemSymbol: iconName)) { _ in
-                    if let url = tab.url {
-                        tab.toggleChangeUserAgent()
-                        Tab.ChangeUserAgent.updateDomainList(
-                            forUrl: url,
-                            isChangedUA: tab.changedUserAgent,
-                            isIncognito: self.incognitoModel.isIncognito
-                        )
-                    }
-                }
-            ]
-        )
-    }
-
     func urlBar(didSubmitText text: String, isSearchQuerySuggestion: Bool = false) {
         // When user enter text in the url bar, assume user figured out
         // how to search from url bar, so auto dismiss the search input tour prompt

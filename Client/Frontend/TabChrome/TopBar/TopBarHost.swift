@@ -8,7 +8,6 @@ import SwiftUI
 
 // For sharing to work, this must currently be the BrowserViewController
 protocol TopBarDelegate: ToolbarDelegate {
-    func urlBarReloadMenu() -> UIMenu?
     func urlBarDidPressStop()
     func urlBarDidPressReload()
     func urlBarDidEnterOverlayMode()
@@ -42,9 +41,6 @@ struct TopBarContent: View {
             performTabToolbarAction: {
                 chromeModel.topBarDelegate?.performTabToolbarAction($0)
             },
-            buildTabsMenu: {
-                chromeModel.topBarDelegate?.tabToolbarTabsMenu(sourceView: $0)
-            },
             onReload: {
                 switch chromeModel.reloadButton {
                 case .reload:
@@ -72,7 +68,6 @@ struct TopBarContent: View {
                     bvc.share(tab: tab, from: shareView, presentableVC: bvc)
                 }
             },
-            buildReloadMenu: { chromeModel.topBarDelegate?.urlBarReloadMenu() },
             onMenuAction: { chromeModel.topBarDelegate?.perform(menuAction: $0) },
             newTab: newTab,
             onCancel: onCancel,
@@ -94,11 +89,9 @@ struct TopBarContent: View {
 
     @ViewBuilder func topBarView(
         performTabToolbarAction: @escaping (ToolbarAction) -> Void,
-        buildTabsMenu: @escaping (_ sourceView: UIView) -> UIMenu?,
         onReload: @escaping () -> Void,
         onSubmit: @escaping (String) -> Void,
         onShare: @escaping (UIView) -> Void,
-        buildReloadMenu: @escaping () -> UIMenu?,
         onMenuAction: @escaping (OverflowMenuAction) -> Void,
         newTab: @escaping () -> Void,
         onCancel: @escaping () -> Void,
@@ -107,11 +100,9 @@ struct TopBarContent: View {
         #if XYZ
             Web3TopBarView(
                 performTabToolbarAction: performTabToolbarAction,
-                buildTabsMenu: buildTabsMenu,
                 onReload: onReload,
                 onSubmit: onSubmit,
                 onShare: onShare,
-                buildReloadMenu: buildReloadMenu,
                 onMenuAction: onMenuAction,
                 newTab: newTab,
                 onCancel: onCancel,
@@ -120,11 +111,9 @@ struct TopBarContent: View {
         #else
             TopBarView(
                 performTabToolbarAction: performTabToolbarAction,
-                buildTabsMenu: buildTabsMenu,
                 onReload: onReload,
                 onSubmit: onSubmit,
                 onShare: onShare,
-                buildReloadMenu: buildReloadMenu,
                 onMenuAction: onMenuAction,
                 newTab: newTab,
                 onCancel: onCancel,

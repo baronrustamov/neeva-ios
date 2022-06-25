@@ -8,11 +8,9 @@ import SwiftUI
 
 struct TopBarView: View {
     let performTabToolbarAction: (ToolbarAction) -> Void
-    let buildTabsMenu: (_ sourceView: UIView) -> UIMenu?
     let onReload: () -> Void
     let onSubmit: (String) -> Void
     let onShare: (UIView) -> Void
-    let buildReloadMenu: () -> UIMenu?
     let onMenuAction: (OverflowMenuAction) -> Void
     let newTab: () -> Void
     let onCancel: () -> Void
@@ -67,8 +65,7 @@ struct TopBarView: View {
                 }
 
                 TabLocationView(
-                    onReload: onReload, onSubmit: onSubmit, onShare: onShare,
-                    buildReloadMenu: buildReloadMenu, onCancel: onCancel
+                    onReload: onReload, onSubmit: onSubmit, onShare: onShare, onCancel: onCancel
                 )
                 .padding(.horizontal, chrome.inlineToolbar ? 0 : 8)
                 .padding(.top, chrome.inlineToolbar ? 8 : 3)
@@ -95,8 +92,7 @@ struct TopBarView: View {
                         }
 
                         TabToolbarButtons.ShowTabs(
-                            weight: .regular, action: { performTabToolbarAction(.showTabs) },
-                            buildMenu: buildTabsMenu
+                            weight: .regular, action: { performTabToolbarAction(.showTabs) }
                         )
                         .tapTargetFrame()
                     }.transition(.offset(x: 300, y: 0).combined(with: .opacity))

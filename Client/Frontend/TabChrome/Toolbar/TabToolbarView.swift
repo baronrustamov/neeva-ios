@@ -18,7 +18,6 @@ struct TabToolbarView: View {
     @Default(.currentTheme) var currentTheme
 
     let performAction: (ToolbarAction) -> Void
-    let buildTabsMenu: (_ sourceView: UIView) -> UIMenu?
     let onNeevaButtonPressed: () -> Void
 
     var body: some View {
@@ -30,7 +29,6 @@ struct TabToolbarView: View {
             #if XYZ
                 Web3Toolbar(
                     opacity: scrollingControlModel.controlOpacity,
-                    buildTabsMenu: buildTabsMenu,
                     onBack: { performAction(.back) },
                     onLongPress: { performAction(.longPressBackForward) },
                     overFlowMenuAction: { performAction(.overflow) },
@@ -72,8 +70,7 @@ struct TabToolbarView: View {
             }
             TabToolbarButtons.ShowTabs(
                 weight: .medium,
-                action: { performAction(.showTabs) },
-                buildMenu: buildTabsMenu
+                action: { performAction(.showTabs) }
             ).frame(height: 44)
         }
         .padding(.top, 2)
@@ -97,7 +94,7 @@ struct TabToolbarView_Previews: PreviewProvider {
     static var previews: some View {
         let make = { (model: TabChromeModel) in
             TabToolbarView(
-                performAction: { _ in }, buildTabsMenu: { _ in nil }, onNeevaButtonPressed: {}
+                performAction: { _ in }, onNeevaButtonPressed: {}
             )
             .environmentObject(model)
         }

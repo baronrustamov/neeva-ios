@@ -26,7 +26,6 @@ struct TabLocationView: View {
     let onReload: () -> Void
     let onSubmit: (String) -> Void
     let onShare: (UIView) -> Void
-    let buildReloadMenu: () -> UIMenu?
     let onCancel: () -> Void
 
     @EnvironmentObject private var model: LocationViewModel
@@ -233,14 +232,14 @@ struct TabLocationView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             TabLocationView(
-                onReload: {}, onSubmit: { _ in }, onShare: { _ in }, buildReloadMenu: { nil },
+                onReload: {}, onSubmit: { _ in }, onShare: { _ in },
                 onCancel: {}
             )
             .environmentObject(LocationViewModel(previewURL: nil, isSecure: true))
             .previewDisplayName("Placeholder")
 
             TabLocationView(
-                onReload: {}, onSubmit: { _ in }, onShare: { _ in }, buildReloadMenu: { nil },
+                onReload: {}, onSubmit: { _ in }, onShare: { _ in },
                 onCancel: {}
             )
             .environmentObject(
@@ -250,7 +249,7 @@ struct TabLocationView_Previews: PreviewProvider {
             )
             .previewDisplayName("Long domain")
             TabLocationView(
-                onReload: {}, onSubmit: { _ in }, onShare: { _ in }, buildReloadMenu: { nil },
+                onReload: {}, onSubmit: { _ in }, onShare: { _ in },
                 onCancel: {}
             )
             .environmentObject(IncognitoModel(isIncognito: true))
@@ -259,7 +258,7 @@ struct TabLocationView_Previews: PreviewProvider {
             )
             .previewDisplayName("Incognito")
             TabLocationView(
-                onReload: {}, onSubmit: { _ in }, onShare: { _ in }, buildReloadMenu: { nil },
+                onReload: {}, onSubmit: { _ in }, onShare: { _ in },
                 onCancel: {}
             )
             .environmentObject(
@@ -269,7 +268,7 @@ struct TabLocationView_Previews: PreviewProvider {
             )
             .previewDisplayName("Search")
             TabLocationView(
-                onReload: {}, onSubmit: { _ in }, onShare: { _ in }, buildReloadMenu: { nil },
+                onReload: {}, onSubmit: { _ in }, onShare: { _ in },
                 onCancel: {}
             )
             .environmentObject(IncognitoModel(isIncognito: true))

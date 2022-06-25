@@ -6,9 +6,7 @@ import SwiftUI
 import WalletCore
 
 struct Web3Toolbar: View {
-
     private let opacity: CGFloat
-    private let buildTabsMenu: (_ sourceView: UIView) -> UIMenu?
     private let onBack: () -> Void
     private let onLongPress: () -> Void
     private let overFlowMenuAction: () -> Void
@@ -18,7 +16,6 @@ struct Web3Toolbar: View {
 
     init(
         opacity: CGFloat,
-        buildTabsMenu: @escaping (_ sourceView: UIView) -> UIMenu?,
         onBack: @escaping () -> Void,
         onLongPress: @escaping () -> Void,
         overFlowMenuAction: @escaping () -> Void,
@@ -26,7 +23,6 @@ struct Web3Toolbar: View {
         zeroQueryAction: @escaping () -> Void
     ) {
         self.opacity = opacity
-        self.buildTabsMenu = buildTabsMenu
         self.onBack = onBack
         self.onLongPress = onLongPress
         self.overFlowMenuAction = overFlowMenuAction
@@ -54,8 +50,7 @@ struct Web3Toolbar: View {
             )
             TabToolbarButtons.ShowTabs(
                 weight: .medium,
-                action: showTabsAction,
-                buildMenu: buildTabsMenu
+                action: showTabsAction
             ).frame(height: 44)
         }
         .padding(.top, 2)

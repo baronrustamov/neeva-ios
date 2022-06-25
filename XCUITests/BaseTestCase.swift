@@ -185,12 +185,12 @@ class BaseTestCase: XCTestCase {
         } else {
             waitForExistence(app.buttons["Show Tabs"], timeout: 3)
             app.buttons["Show Tabs"].press(forDuration: 1)
+            waitForExistence(app.buttons["Close Tab"])
         }
 
         let closeAllTabButton = app.buttons["Close All Tabs"]
         if closeAllTabButton.exists {
             closeAllTabButton.tap()
-
             waitForExistence(app.buttons["Confirm Close All Tabs"], timeout: 3)
             app.buttons["Confirm Close All Tabs"].tap()
         } else {

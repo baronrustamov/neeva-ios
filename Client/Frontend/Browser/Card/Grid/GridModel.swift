@@ -40,16 +40,21 @@ class GridModel: ObservableObject {
     @Published var didVerticalScroll: Int = 0
     @Published var didHorizontalScroll: Int = 0
     @Published var canResizeGrid = true
+    @Published var showConfirmCloseAllTabs = false
+    @Published var numberOfTabsForCurrentState = 0
 
     private var subscriptions: Set<AnyCancellable> = []
-    private let tabMenu: TabMenu
 
     init(tabManager: TabManager, tabCardModel: TabCardModel) {
         self.tabCardModel = tabCardModel
         self.spaceCardModel = SpaceCardModel(
             manager: NeevaUserInfo.shared.isUserLoggedIn ? .shared : .suggested,
             scene: tabManager.scene)
-        self.tabMenu = TabMenu(tabManager: tabManager)
+        self.numberOfTabsForCurrentState = tabManager.getTabCountForCurrentType()
+
+        tabManager.tabsUpdatedPublisher.sink { _ in
+            self.numberOfTabsForCurrentState = tabManager.getTabCountForCurrentType()
+        }.store(in: &subscriptions)
     }
 
     // Ensure that the selected Card is visible by scrolling it into view
@@ -84,18 +89,6 @@ class GridModel: ObservableObject {
 
     func switchToSpaces() {
         setSwitcherState(to: .spaces)
-    }
-
-    func buildCloseAllTabsMenu(sourceView: UIView) -> UIMenu {
-        if switcherState == .tabs {
-            return UIMenu(sections: [[tabMenu.createCloseAllTabsAction(sourceView: sourceView)]])
-        } else {
-            return UIMenu()
-        }
-    }
-
-    func buildRecentlyClosedTabsMenu() -> UIMenu {
-        tabMenu.createRecentlyClosedTabsMenu()
     }
 
     func openSpaceInDetailView(_ space: SpaceCardDetails?) {

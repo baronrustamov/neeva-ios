@@ -146,7 +146,8 @@ extension BrowserViewController {
                 .ClickCloseAllTabs,
                 attributes: EnvironmentHelper.shared.getAttributes() + [overflowMenuAttribute]
             )
-            TabMenu(tabManager: tabManager).showConfirmCloseAllTabs(sourceView: targetButtonView)
+
+            gridModel.showConfirmCloseAllTabs = true
         case .support(let image):
             // This will log twice.
             ClientLogger.shared.logCounter(

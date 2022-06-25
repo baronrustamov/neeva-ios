@@ -38,7 +38,7 @@ extension BrowserViewController {
 
     @objc func newTabKeyCommand() {
         openLazyTab(
-            openedFrom: browserModel.contentVisibilityModel.showContent ? .openTab(nil) : .tabTray)
+            openedFrom: browserModel.contentVisibilityModel.showContent ? .newTabButton : .tabTray)
     }
 
     @objc func newIncognitoTabKeyCommand() {
@@ -101,7 +101,7 @@ extension BrowserViewController {
                     tabManager.incognitoTabs, showToast: false)
             }
         } else {
-            tabManager.removeTabs(tabManager.normalTabs, showToast: false)
+            tabManager.removeTabs(tabManager.activeNormalTabs, showToast: false)
         }
     }
 

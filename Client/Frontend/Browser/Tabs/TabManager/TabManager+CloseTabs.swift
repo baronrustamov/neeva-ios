@@ -8,7 +8,11 @@ import XCGLogger
 private let log = Logger.browser
 
 extension TabManager {
-    func removeTab(_ tab: Tab, showToast: Bool = false, updateSelectedTab: Bool = true) {
+    func removeTab(_ tab: Tab?, showToast: Bool = false, updateSelectedTab: Bool = true) {
+        guard let tab = tab else {
+            return
+        }
+
         // The index of the removed tab w.r.s to the normalTabs/incognitoTabs is
         // calculated in advance, and later used for finding rightOrLeftTab. In time-based
         // switcher, the normalTabs get filtered to make sure we only select tab in

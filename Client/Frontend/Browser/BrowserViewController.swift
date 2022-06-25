@@ -829,7 +829,6 @@ class BrowserViewController: UIViewController, ModalPresenter {
         }
 
         browserModel.scrollingControlModel.showToolbars(animated: true)
-
         showZeroQuery(openedFrom: openedFrom, isLazyTab: true)
     }
 

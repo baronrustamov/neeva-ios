@@ -229,7 +229,8 @@ extension TabManager {
 
     // MARK: - Restore Tabs
     func restoreSavedTabs(
-        _ savedTabs: [SavedTab], isIncognito: Bool = false, shouldSelectTab: Bool = true
+        _ savedTabs: [SavedTab], isIncognito: Bool = false, shouldSelectTab: Bool = true,
+        overrideSelectedTab: Bool = false
     ) -> Tab? {
         // makes sure at least one tab is selected
         // if no tab selected, select the last one (most recently closed)
@@ -264,7 +265,9 @@ extension TabManager {
         // Prevents a sticky tab tray
         SceneDelegate.getBVC(with: scene).browserModel.cardTransitionModel.update(to: .hidden)
 
-        if let selectedSavedTab = selectedSavedTab, shouldSelectTab, selectedTab == nil {
+        if let selectedSavedTab = selectedSavedTab, shouldSelectTab,
+            selectedTab == nil || overrideSelectedTab
+        {
             self.selectTab(selectedSavedTab, notify: true)
         }
 

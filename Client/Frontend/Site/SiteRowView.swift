@@ -66,7 +66,8 @@ private struct SiteView: View {
         .accessibilityIdentifier(site.url.absoluteString)
         .buttonStyle(.tableCell)
         .contextMenu {
-            TabMenu(tabManager: tabManager).swiftUIOpenInNewTabMenu(site.url)
+            ContextMenuActionsBuilder.OpenInTabAction(
+                content: .url(site.url), tabManager: tabManager)
 
             Button {
                 deleteSite(site)
@@ -92,7 +93,8 @@ private struct SavedTabView: View {
             .accessibilityIdentifier(savedTab.url?.absoluteString ?? "")
             .buttonStyle(.tableCell)
             .contextMenu {
-                TabMenu(tabManager: tabManager).swiftUIOpenInNewTabMenu(savedTab)
+                ContextMenuActionsBuilder.OpenInTabAction(
+                    content: .tab(savedTab), tabManager: tabManager)
             }
     }
 }

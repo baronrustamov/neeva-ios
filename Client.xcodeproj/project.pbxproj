@@ -542,7 +542,6 @@
 		4A42C54D27E58487003B9826 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BE7B251B054D4400641031 /* main.swift */; };
 		4A42C54E27E58487003B9826 /* BrowserHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B109A2275E9CD80010EBE4 /* BrowserHost.swift */; };
 		4A42C55027E58487003B9826 /* WebPagesForTesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7A651020699BD200B52A5F /* WebPagesForTesting.swift */; };
-		4A42C55127E58487003B9826 /* SecondaryMenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94D4098268BAADC003A6766 /* SecondaryMenuButton.swift */; };
 		4A42C55227E58487003B9826 /* BrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A994951A3686BD008AD1AC /* BrowserViewController.swift */; };
 		4A42C55327E58487003B9826 /* SuggestionsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A68CCB63E2A565CB03F832 /* SuggestionsContent.swift */; };
 		4A42C55427E58487003B9826 /* SpacesFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6679BBB9276AAFD700290041 /* SpacesFilterView.swift */; };
@@ -556,7 +555,7 @@
 		4A42C55D27E58487003B9826 /* DownloadQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625C97208E87F10081F3B2 /* DownloadQueue.swift */; };
 		4A42C55E27E58487003B9826 /* NeevaExperimentExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 674439C727BEEE9000749F75 /* NeevaExperimentExtensions.swift */; };
 		4A42C55F27E58487003B9826 /* BackForwardListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 666CDFA5278D11E0004A9B1E /* BackForwardListView.swift */; };
-		4A42C56027E58487003B9826 /* TabMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C3C772267A8909002B50B1 /* TabMenu.swift */; };
+		4A42C56027E58487003B9826 /* MenuBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C3C772267A8909002B50B1 /* MenuBuilder.swift */; };
 		4A42C56127E58487003B9826 /* InlineSearchProductView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCF864CA276C328300E94B3A /* InlineSearchProductView.swift */; };
 		4A42C56327E58487003B9826 /* InternalSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C965BDD5268E728F00F02224 /* InternalSettingsView.swift */; };
 		4A42C56427E58487003B9826 /* NeevaScopeLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32FAB3DB27B62A5E00FEBDFE /* NeevaScopeLoadingView.swift */; };
@@ -843,7 +842,7 @@
 		66C3C76C267A8858002B50B1 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C3C763267A8858002B50B1 /* ToastView.swift */; };
 		66C3C76F267A8858002B50B1 /* ToastProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C3C766267A8858002B50B1 /* ToastProgressView.swift */; };
 		66C3C770267A8858002B50B1 /* ToastViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C3C767267A8858002B50B1 /* ToastViewManager.swift */; };
-		66C3C773267A8909002B50B1 /* TabMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C3C772267A8909002B50B1 /* TabMenu.swift */; };
+		66C3C773267A8909002B50B1 /* MenuBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C3C772267A8909002B50B1 /* MenuBuilder.swift */; };
 		66C423E22758652900C7E6EE /* DraggableBannerModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C423E12758652900C7E6EE /* DraggableBannerModifier.swift */; };
 		66C5224927604533003C7F2D /* SuggestionBackButtonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C5224827604533003C7F2D /* SuggestionBackButtonTests.swift */; };
 		66C5224C27607965003C7F2D /* UIDeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C5224A2760770C003C7F2D /* UIDeviceExtension.swift */; };
@@ -1133,7 +1132,6 @@
 		C94D40682684CC35003A6766 /* PublisherExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94D40672684CC35003A6766 /* PublisherExtensions.swift */; };
 		C94D406C2684E677003A6766 /* SearchQueryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94D406B2684E677003A6766 /* SearchQueryModel.swift */; };
 		C94D4096268A617F003A6766 /* NeevaFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94D4095268A617F003A6766 /* NeevaFonts.swift */; };
-		C94D4099268BAADC003A6766 /* SecondaryMenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94D4098268BAADC003A6766 /* SecondaryMenuButton.swift */; };
 		C94D409D268CADD4003A6766 /* LocationEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94D409C268CADD4003A6766 /* LocationEditView.swift */; };
 		C962778F26A21BC80078CDAF /* ArithmeticExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C962778E26A21BC80078CDAF /* ArithmeticExtensions.swift */; };
 		C9655DE926A08FA600925912 /* PressReportingButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9655DE826A08FA600925912 /* PressReportingButtonStyle.swift */; };
@@ -2300,7 +2298,7 @@
 		66C3C763267A8858002B50B1 /* ToastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		66C3C766267A8858002B50B1 /* ToastProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastProgressView.swift; sourceTree = "<group>"; };
 		66C3C767267A8858002B50B1 /* ToastViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastViewManager.swift; sourceTree = "<group>"; };
-		66C3C772267A8909002B50B1 /* TabMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabMenu.swift; sourceTree = "<group>"; };
+		66C3C772267A8909002B50B1 /* MenuBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuBuilder.swift; sourceTree = "<group>"; };
 		66C423E12758652900C7E6EE /* DraggableBannerModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraggableBannerModifier.swift; sourceTree = "<group>"; };
 		66C5224827604533003C7F2D /* SuggestionBackButtonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionBackButtonTests.swift; sourceTree = "<group>"; };
 		66C5224A2760770C003C7F2D /* UIDeviceExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDeviceExtension.swift; sourceTree = "<group>"; };
@@ -2576,7 +2574,6 @@
 		C94D40692684D442003A6766 /* SuggestionPositionInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionPositionInfo.swift; sourceTree = "<group>"; };
 		C94D406B2684E677003A6766 /* SearchQueryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchQueryModel.swift; sourceTree = "<group>"; };
 		C94D4095268A617F003A6766 /* NeevaFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeevaFonts.swift; sourceTree = "<group>"; };
-		C94D4098268BAADC003A6766 /* SecondaryMenuButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryMenuButton.swift; sourceTree = "<group>"; };
 		C94D409C268CADD4003A6766 /* LocationEditView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationEditView.swift; sourceTree = "<group>"; };
 		C962778E26A21BC80078CDAF /* ArithmeticExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArithmeticExtensions.swift; sourceTree = "<group>"; };
 		C9655DE826A08FA600925912 /* PressReportingButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PressReportingButtonStyle.swift; sourceTree = "<group>"; };
@@ -3383,7 +3380,6 @@
 				D3A994961A3686BD008AD1AC /* Tab.swift */,
 				C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */,
 				63306D422110B3CD00F25400 /* TabManagerStore.swift */,
-				66C3C772267A8909002B50B1 /* TabMenu.swift */,
 				DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */,
 				C87AA4A12614C1FC00F1318F /* IncognitoDescriptionView.swift */,
 				665A23D32755D8D5006AD997 /* QueryForNavigation.swift */,
@@ -4771,7 +4767,6 @@
 				C9E5F2CA2678F05E00025A7F /* Popover.swift */,
 				C9655DE826A08FA600925912 /* PressReportingButtonStyle.swift */,
 				C9F49CBC266FDA9500F3408A /* SearchBar.swift */,
-				C94D4098268BAADC003A6766 /* SecondaryMenuButton.swift */,
 				D38A1BEC1A9FA2CA00F6A386 /* SiteTableViewController.swift */,
 				59A68B1F857A8638598A63A0 /* TwoLineCell.swift */,
 				C9157BB826BDDA4E009678D9 /* ViewRef.swift */,
@@ -4856,6 +4851,7 @@
 				B61D068F27ED27E10075F65E /* ContentVisibilityModel.swift */,
 				D0625C97208E87F10081F3B2 /* DownloadQueue.swift */,
 				663322BF276D66220046EC1C /* KeyboardListener.swift */,
+				66C3C772267A8909002B50B1 /* MenuBuilder.swift */,
 				D0C95E35200FDC5400E4E51C /* MetadataParserHelper.swift */,
 				EBB8950B2193994A00EB91A0 /* NeevaTabContentBlocker.swift */,
 				7BA8D1C61BA037F500C8AE9E /* OpenInHelper.swift */,
@@ -7337,7 +7333,6 @@
 				4A42C54E27E58487003B9826 /* BrowserHost.swift in Sources */,
 				4A42C55027E58487003B9826 /* WebPagesForTesting.swift in Sources */,
 				E67B0B48280F0296008D1CCD /* YourCollectionDetailView.swift in Sources */,
-				4A42C55127E58487003B9826 /* SecondaryMenuButton.swift in Sources */,
 				4A42C55227E58487003B9826 /* BrowserViewController.swift in Sources */,
 				20167FCE2824601900223B9E /* FindView.swift in Sources */,
 				4A42C55327E58487003B9826 /* SuggestionsContent.swift in Sources */,
@@ -7352,7 +7347,7 @@
 				4A42C55D27E58487003B9826 /* DownloadQueue.swift in Sources */,
 				4A42C55E27E58487003B9826 /* NeevaExperimentExtensions.swift in Sources */,
 				4A42C55F27E58487003B9826 /* BackForwardListView.swift in Sources */,
-				4A42C56027E58487003B9826 /* TabMenu.swift in Sources */,
+				4A42C56027E58487003B9826 /* MenuBuilder.swift in Sources */,
 				4A42C56127E58487003B9826 /* InlineSearchProductView.swift in Sources */,
 				4A42C56327E58487003B9826 /* InternalSettingsView.swift in Sources */,
 				4A42C56427E58487003B9826 /* NeevaScopeLoadingView.swift in Sources */,
@@ -7937,7 +7932,6 @@
 				EB8A0A77206ABCE000A9859A /* WebPagesForTesting.swift in Sources */,
 				206954A427FF4257000360D6 /* SiteListView.swift in Sources */,
 				E971498E2849564000A6A1FC /* CheatsheetNoResultView.swift in Sources */,
-				C94D4099268BAADC003A6766 /* SecondaryMenuButton.swift in Sources */,
 				8AC5D2C128468E9200E44B04 /* SwitcherToolbarView.swift in Sources */,
 				D3A9949C1A3686BD008AD1AC /* BrowserViewController.swift in Sources */,
 				59A681BDFC95A19F05E07223 /* SuggestionsContent.swift in Sources */,
@@ -7957,7 +7951,7 @@
 				671B91EF28384CFF000197C4 /* DefaultBrowserInterstitialView.swift in Sources */,
 				666CDFA6278D11E0004A9B1E /* BackForwardListView.swift in Sources */,
 				3234500927EBAF9600F16237 /* CheatsheetInfoView.swift in Sources */,
-				66C3C773267A8909002B50B1 /* TabMenu.swift in Sources */,
+				66C3C773267A8909002B50B1 /* MenuBuilder.swift in Sources */,
 				BCF864CB276C328300E94B3A /* InlineSearchProductView.swift in Sources */,
 				C965BDD6268E729000F02224 /* InternalSettingsView.swift in Sources */,
 				32FAB3DE27B62A5F00FEBDFE /* NeevaScopeLoadingView.swift in Sources */,
