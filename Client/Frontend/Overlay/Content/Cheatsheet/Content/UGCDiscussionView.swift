@@ -74,7 +74,7 @@ struct RedditDiscussion: Identifiable {
         if let filteredComments = backlink.comments?.compactMap({ RedditComment(from: $0) }),
             !filteredComments.isEmpty
         {
-            self.content = .comments(filteredComments)
+            self.content = .comments(Array(filteredComments.prefix(10)))
         } else if let body = backlink.snippet?.tryRemovingHTMLencoding(strict: true),
             !body.isEmptyOrWhitespace()
         {
@@ -257,7 +257,7 @@ private struct RedditDiscussionView: View {
             case .comments(let comments):
                 ScrollView(.horizontal, showsIndicators: true) {
                     HStack(alignment: .top, spacing: UXConst.commentSpacing) {
-                        LazyHStack(alignment: .top, spacing: UXConst.commentSpacing) {
+                        HStack(alignment: .top, spacing: UXConst.commentSpacing) {
                             ForEach(comments) { comment in
                                 RedditCommentView(comment: comment, fallbackURL: discussion.url)
                             }
@@ -271,10 +271,7 @@ private struct RedditDiscussionView: View {
                         .padding(.vertical, 20)
                         .opacity(showMoreCommentsButton ? 1 : 0)
                     }
-                    // This modifier is needed to use LazyHStack inside the two scroll views
-                    .frame(minHeight: UXConst.commentRowMinHeight, alignment: .topLeading)
                 }
-                // This modifier is needed to use LazyHStack inside the two scroll views
                 .fixedSize(horizontal: false, vertical: true)
             }
         }
