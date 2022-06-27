@@ -535,30 +535,13 @@ class SpaceCardModel: CardModel {
     }
     @Published var updatedItemIDs = [String]()
     @Published var filterState: SpaceFilterState = .allSpaces
-
-    var detailsMatchingFilter: [SpaceCardDetails] {
-        var spaces = allDetails.filter {
-            NeevaFeatureFlags[.enableSpaceDigestCard] || $0.id != SpaceStore.dailyDigestID
-        }
-
-        // Put the pinned Spaces first
-        spaces.sort {
-            guard let firstItem = $0.item, let secondItem = $1.item else { return true }
-            return firstItem.isPinned && !secondItem.isPinned
-        }
-
-        switch filterState {
-        case .allSpaces:
-            return spaces
-        case .ownedByMe:
-            return spaces.filter { $0.item?.userACL == .owner }
-        }
-    }
+    @Published var sortType: SpaceSortState = .updatedDate
 
     var thumbnailURLCandidates = [URL: [URL]]()
     private var anyCancellable: AnyCancellable? = nil
     private var recommendationSubscription: AnyCancellable? = nil
     private var editingSubscription: AnyCancellable? = nil
+    private var mutationSubscription: AnyCancellable? = nil
     private var detailsSubscriptions: Set<AnyCancellable> = Set()
     private var spaceNeedsRefresh: String? = nil
     private var scene: UIScene?
@@ -572,11 +555,13 @@ class SpaceCardModel: CardModel {
         NeevaUserInfo.shared.$isUserLoggedIn.sink { isLoggedIn in
             self.manager = isLoggedIn ? .shared : .suggested
             self.listenManagerState()
+            self.listenSpaceMutations()
             DispatchQueue.main.async {
                 self.manager.refresh()
             }
         }.store(in: &detailsSubscriptions)
         listenManagerState()
+        listenSpaceMutations()
     }
 
     private func listenManagerState() {
@@ -612,6 +597,17 @@ class SpaceCardModel: CardModel {
                 self.objectWillChange.send()
             }
         }
+    }
+
+    private func listenSpaceMutations() {
+        mutationSubscription = manager.spaceLocalMutation.sink { [weak self] space in
+            guard let self = self else { return }
+            if let space = space {
+                let spaceCardDetails = SpaceCardDetails(space: space, manager: self.manager)
+                self.allDetails.append(spaceCardDetails)
+            }
+        }
+
     }
 
     func onDataUpdated() {
@@ -778,7 +774,7 @@ class SpaceCardModel: CardModel {
                 switch state {
                 case .success:
                     self.editingSubscription?.cancel()
-                    self.manager.refresh()
+                    self.manager.deleteSpace(with: spaceID)
                 case .failure:
                     self.editingSubscription?.cancel()
                 case .initial:
@@ -791,7 +787,7 @@ class SpaceCardModel: CardModel {
                 switch state {
                 case .success:
                     self.editingSubscription?.cancel()
-                    self.manager.refresh()
+                    self.manager.deleteSpace(with: spaceID)
                 case .failure:
                     self.editingSubscription?.cancel()
                 case .initial:

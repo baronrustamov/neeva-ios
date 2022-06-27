@@ -5,41 +5,53 @@
 import Shared
 import SwiftUI
 
-enum SpaceFilterState {
-    case allSpaces
-    case ownedByMe
+enum SpaceFilterState: String, CaseIterable, Identifiable {
+    case allSpaces = "All Spaces"
+    case ownedByMe = "Owned by me"
+
+    var id: RawValue { rawValue }
+}
+
+public enum SpaceSortState: String, CaseIterable, Identifiable {
+    case updatedDate = "Last Updated"
+    case name = "Name"
+
+    public var id: RawValue { rawValue }
+
+    public var keyPath: KeyPath<Space, String> {
+        switch self {
+        case .updatedDate: return \Space.lastModifiedTs
+        case .name: return \Space.name
+        }
+    }
+
 }
 
 struct SpacesFilterView: View {
     @EnvironmentObject var spaceCardModel: SpaceCardModel
+    @ObservedObject var spaceStore: SpaceStore = SpaceStore.shared
 
     var body: some View {
         GroupedStack {
             GroupedCell.Decoration {
                 VStack(spacing: 0) {
-                    GroupedRowButtonView(
-                        label: "All Spaces",
-                        symbol: spaceCardModel.filterState == .allSpaces ? .checkmark : nil
-                    ) {
-                        spaceCardModel.objectWillChange.send()
-                        spaceCardModel.filterState = .allSpaces
-                    }.onTapGesture {
-                        logFilterTapped()
-                    }
+                    ForEach(Array(SpaceFilterState.allCases.enumerated()), id: \.element.id) {
+                        data in
+                        GroupedRowButtonView(
+                            label: LocalizedStringKey(data.element.rawValue),
+                            symbol: spaceCardModel.filterState == data.element ? .checkmark : nil
+                        ) {
+                            spaceCardModel.objectWillChange.send()
+                            spaceCardModel.filterState = data.element
+                        }.onTapGesture {
+                            logFilterTapped()
+                        }
+                        if data.offset < SpaceFilterState.allCases.count - 1 {
+                            Color.secondaryBackground.frame(height: 1)
+                        }
 
-                    Color.groupedBackground.frame(height: 1)
-
-                    GroupedRowButtonView(
-                        label: "Owned by me",
-                        symbol: spaceCardModel.filterState == .ownedByMe ? .checkmark : nil
-                    ) {
-                        spaceCardModel.objectWillChange.send()
-                        spaceCardModel.filterState = .ownedByMe
-                    }.onTapGesture {
-                        logFilterTapped()
-                    }
+                    }.accentColor(.label)
                 }
-                .accentColor(.label)
             }
         }
         .overlayIsFixedHeight(isFixedHeight: true)

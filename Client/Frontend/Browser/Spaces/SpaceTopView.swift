@@ -213,9 +213,7 @@ struct SpaceTopView: View {
     @ViewBuilder var followButton: some View {
         Button {
             if !primitive.isFollowing, let spaceId = space?.id.id {
-                SpaceStore.followSpace(spaceId: spaceId) {
-                    SpaceStore.shared.refresh()
-                }
+                SpaceStore.shared.followSpace(spaceId: spaceId)
             } else {
                 showConfirmDeleteAlert = true
             }

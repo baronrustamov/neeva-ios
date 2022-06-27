@@ -561,7 +561,7 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
                     self.refreshSpaceSubscription = nil
                 }
                 completion(true)
-            case .refreshing:
+            case .refreshing, .mutatingLocally:
                 return
             case .failed:
                 completion(false)
@@ -617,14 +617,14 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
     }
 
     func deleteSpace() {
-        let request = manager.deleteSpace(spaceId: id)
+        let request = manager.sendDeleteSpaceRequest(spaceId: id)
         subscriptionCount += 1
         request?.$state.sink { [self] state in
             switch state {
             case .initial:
                 Logger.browser.info("Waiting for result from deleting space")
             case .success:
-                manager.refresh(force: true)
+                manager.deleteSpace(with: id)
                 fallthrough
             case .failure:
                 subscriptionCount -= 1
@@ -633,14 +633,14 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
     }
 
     func unfollowSpace() {
-        let request = manager.unfollowSpace(spaceId: id)
+        let request = manager.sendUnfollowSpaceRequest(spaceId: id)
         subscriptionCount += 1
         request?.$state.sink { [self] state in
             switch state {
             case .initial:
                 Logger.browser.info("Waiting for result from unfollowing space")
             case .success:
-                manager.refresh(force: true)
+                manager.deleteSpace(with: id)
                 fallthrough
             case .failure:
                 subscriptionCount -= 1
@@ -649,18 +649,14 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
     }
 
     func pinSpace() {
-        let request = manager.pinSpace(spaceId: id)
+        let request = manager.sendPinSpaceRequest(spaceId: id)
         subscriptionCount += 1
         request?.$state.sink { [self] state in
             switch state {
             case .initial:
                 Logger.browser.info("Waiting for result from toggling space pin")
             case .success:
-                manager.refresh(force: true) { [self] in
-                    // Keep our state up-to-date and propagate
-                    // changes to the UI
-                    item = manager.allSpaces.first { $0.id.id == id }
-                }
+                manager.togglePinSpace(with: id)
                 fallthrough
             case .failure:
                 subscriptionCount -= 1

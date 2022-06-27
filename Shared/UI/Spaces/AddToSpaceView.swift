@@ -152,7 +152,7 @@ public class AddToSpaceRequest: ObservableObject {
         // Note: This creates a reference cycle between self and the mutation.
         // This means even if all other references are dropped to self, then
         // the mutation will attempt to run to completion.
-        self.cancellable = SpaceStore.shared.removeItemFromSpace(
+        self.cancellable = SpaceStore.shared.sendRemoveItemFromSpaceRequest(
             spaceId: id, url: self.url.absoluteString
         ) { result in
             self.cancellable = nil
@@ -277,6 +277,8 @@ public struct AddToSpaceView: View {
                                     .padding(.leading, 16)
                             }
                         }
+                    case .mutatingLocally:
+                        EmptyView()
                     case .failed(let error):
                         ErrorView(error, in: self, tryAgain: { spaceStore.refresh() })
                             .frame(maxHeight: .infinity)
