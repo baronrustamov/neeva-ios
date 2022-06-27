@@ -38,7 +38,7 @@ extension TabManager {
         }
     }
 
-    /// - Returns: Returns a bool of whether there were tabs to restore
+    /// - Returns: Returns a bool of whether a tab was selected.
     func restoreTabs(_ forced: Bool = false) -> Bool {
         log.info("Restoring tabs")
 
@@ -49,15 +49,19 @@ extension TabManager {
             return false
         }
 
-        var tabToSelect = store.restoreStartupTabs(
+        let tabToSelect = store.restoreStartupTabs(
             for: scene, clearIncognitoTabs: Defaults[.closeIncognitoTabs], tabManager: self)
-        if Defaults[.lastSessionPrivate], !(tabToSelect?.isIncognito ?? false) {
-            tabToSelect = addTab(isIncognito: true, notify: false)
+
+        if var tabToSelect = tabToSelect {
+            if Defaults[.lastSessionPrivate], !tabToSelect.isIncognito {
+                tabToSelect = addTab(isIncognito: true, notify: false)
+            }
+
+            selectTab(tabToSelect, notify: true)
         }
 
-        selectTab(tabToSelect, notify: true)
-
         updateAllTabDataAndSendNotifications(notify: true)
-        return true
+
+        return tabToSelect != nil
     }
 }

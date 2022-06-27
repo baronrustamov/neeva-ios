@@ -510,7 +510,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
         // config log environment variable
         ClientLogger.shared.env = EnvironmentHelper.shared.env
 
-        let _ = tabManager.restoreTabs()
+        let didSelectTabOnStartup = tabManager.restoreTabs()
 
         // Handle the case of an existing user upgrading to a version of the app
         // that supports preview mode. They will have tabs already, so we don't
@@ -523,7 +523,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
         DispatchQueue.main.async {
             if Self.createNewTabOnStartForTesting {
                 self.tabManager.select(self.tabManager.addTab())
-            } else if self.tabManager.normalTabs.isEmpty {
+            } else if !didSelectTabOnStartup {
                 #if XYZ
                     self.showZeroQuery()
                 #else

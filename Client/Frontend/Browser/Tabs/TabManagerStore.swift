@@ -171,14 +171,16 @@ class TabManagerStore {
                 flushToDisk: false, zombie: true, isIncognito: savedTab.isIncognito, notify: false)
             savedTab.configureTab(tab, imageStore: imageStore)
 
-            if savedTab.isSelected {
+            if savedTab.isSelected, tab.wasLastExecuted(.today) {
                 tabToSelect = tab
             }
         }
 
         if tabToSelect == nil {
-            if !tabManager.normalTabs.isEmpty {
-                tabToSelect = tabManager.tabs.first(where: { $0.isIncognito == false })
+            if !tabManager.activeTabs.isEmpty {
+                tabToSelect = tabManager.activeTabs.first(where: {
+                    $0.isIncognito == false && $0.wasLastExecuted(.today)
+                })
             } else {
                 SceneDelegate.getBVC(with: tabManager.scene).showTabTray()
             }
