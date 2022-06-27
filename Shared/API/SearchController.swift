@@ -244,7 +244,6 @@ public enum NeevaScopeSearch {
     public class SearchController:
         QueryController<SearchQuery, [SearchController.RichResult]>
     {
-
         public struct RichResult: Identifiable {
             public var id = UUID()
             public var result: RichSearchResult
@@ -257,6 +256,14 @@ public enum NeevaScopeSearch {
             }
         }
 
+        private static let queue = DispatchQueue(
+            label: "co.neeva.app.ios.shared.SearchController",
+            qos: .userInitiated,
+            attributes: [],
+            autoreleaseFrequency: .inherit,
+            target: nil
+        )
+
         private var query: String
 
         public init(query: String) {
@@ -264,8 +271,9 @@ public enum NeevaScopeSearch {
             super.init()
         }
 
+        @available(*, unavailable)
         public override func reload() {
-            self.perform(query: SearchQuery(query: query))
+            fatalError("reload() has not been implemented")
         }
 
         private class func constructProductCluster(
@@ -921,7 +929,11 @@ public enum NeevaScopeSearch {
         @discardableResult public static func getRichResult(
             query: String, completion: @escaping (Result<[RichResult], Error>) -> Void
         ) -> Combine.Cancellable {
-            Self.perform(query: SearchQuery(query: query), completion: completion)
+            Self.perform(
+                query: SearchQuery(query: query),
+                on: queue,
+                completion: completion
+            )
         }
     }
 }

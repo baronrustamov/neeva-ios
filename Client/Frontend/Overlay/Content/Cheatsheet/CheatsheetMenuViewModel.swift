@@ -111,67 +111,64 @@ public class CheatsheetMenuViewModel: ObservableObject {
         CheatsheetQueryController.getCheatsheetInfo(
             url: url.absoluteString, title: pageTitle ?? ""
         ) { [self] result in
-            // Apollo calls call back on main
-            DispatchQueue.global(qos: .userInitiated).async { [self] in
-                switch result {
-                case .success(let cheatsheetInfo):
-                    // when cheatsheet data fetched successfully
-                    // fetch other rich result
-                    let query: String
-                    let querySource: LogConfig.CheatsheetAttribute.QuerySource
+            switch result {
+            case .success(let cheatsheetInfo):
+                // when cheatsheet data fetched successfully
+                // fetch other rich result
+                let query: String
+                let querySource: LogConfig.CheatsheetAttribute.QuerySource
 
-                    if let queries = cheatsheetInfo.first?.memorizedQuery,
-                        let firstQuery = queries.first
-                    {
-                        // U2Q
-                        querySource = .uToQ
-                        query = firstQuery
-                    } else if let recentQuery = self.tab?.getMostRecentQuery(
-                        restrictToCurrentNavigation: true)
-                    {
-                        // Fallback
-                        // if we don't have memorized query from the url
-                        // use last tab query
-                        if let suggested = recentQuery.suggested {
-                            querySource = .fastTapQuery
-                            query = suggested
-                        } else {
-                            querySource = .typedQuery
-                            query = recentQuery.typed
-                        }
+                if let queries = cheatsheetInfo.first?.memorizedQuery,
+                    let firstQuery = queries.first
+                {
+                    // U2Q
+                    querySource = .uToQ
+                    query = firstQuery
+                } else if let recentQuery = self.tab?.getMostRecentQuery(
+                    restrictToCurrentNavigation: true)
+                {
+                    // Fallback
+                    // if we don't have memorized query from the url
+                    // use last tab query
+                    if let suggested = recentQuery.suggested {
+                        querySource = .fastTapQuery
+                        query = suggested
                     } else {
-                        // Second Fallback
-                        // use current url as query for fallback
-                        querySource = .pageURL
-                        query = url.absoluteString
+                        querySource = .typedQuery
+                        query = recentQuery.typed
                     }
+                } else {
+                    // Second Fallback
+                    // use current url as query for fallback
+                    querySource = .pageURL
+                    query = url.absoluteString
+                }
 
-                    // Log fallback level
-                    DispatchQueue.main.async {
-                        ClientLogger.shared.logCounter(
-                            .CheatsheetQueryFallback,
-                            attributes: EnvironmentHelper.shared.getAttributes() + [
-                                ClientLogCounterAttribute(
-                                    key: LogConfig.CheatsheetAttribute.cheatsheetQuerySource,
-                                    value: querySource.rawValue
-                                )
-                            ]
-                        )
-                    }
+                // Log fallback level
+                DispatchQueue.main.async {
+                    ClientLogger.shared.logCounter(
+                        .CheatsheetQueryFallback,
+                        attributes: EnvironmentHelper.shared.getAttributes() + [
+                            ClientLogCounterAttribute(
+                                key: LogConfig.CheatsheetAttribute.cheatsheetQuerySource,
+                                value: querySource.rawValue
+                            )
+                        ]
+                    )
+                }
 
-                    self.query = query
-                    if let data = cheatsheetInfo.first {
-                        self.results = self.parseResults(from: data).map {
-                            CheatsheetResult(data: $0)
-                        }
+                self.query = query
+                if let data = cheatsheetInfo.first {
+                    self.results = self.parseResults(from: data).map {
+                        CheatsheetResult(data: $0)
                     }
-                    self.getRichResultByQuery(query)
-                case .failure(let error):
-                    self.cheatsheetDataError = error
-                    DispatchQueue.main.async { [self] in
-                        self.logFetchError(error, api: .getInfo)
-                        self.cheatsheetDataLoading = false
-                    }
+                }
+                self.getRichResultByQuery(query)
+            case .failure(let error):
+                self.cheatsheetDataError = error
+                DispatchQueue.main.async { [self] in
+                    self.logFetchError(error, api: .getInfo)
+                    self.cheatsheetDataLoading = false
                 }
             }
         }
@@ -186,35 +183,32 @@ public class CheatsheetMenuViewModel: ObservableObject {
     // MARK: - Data Parsing Methods
     private func getRichResultByQuery(_ query: String) {
         NeevaScopeSearch.SearchController.getRichResult(query: query) { searchResult in
-            // Apollo calls call back on main
-            DispatchQueue.global(qos: .userInitiated).async { [self] in
-                switch searchResult {
-                case .success(let richResults):
-                    // log if a bad URL was received
-                    if richResults.lazy.map({ $0.dataComplete }).contains(false) {
-                        DispatchQueue.main.async {
-                            ClientLogger.shared.logCounter(
-                                .CheatsheetBadURLString,
-                                attributes: EnvironmentHelper.shared.getAttributes()
-                            )
-                        }
+            switch searchResult {
+            case .success(let richResults):
+                // log if a bad URL was received
+                if richResults.lazy.map({ $0.dataComplete }).contains(false) {
+                    DispatchQueue.main.async {
+                        ClientLogger.shared.logCounter(
+                            .CheatsheetBadURLString,
+                            attributes: EnvironmentHelper.shared.getAttributes()
+                        )
                     }
-                    self.results += self.parseResults(from: richResults).map {
-                        CheatsheetResult(data: $0)
-                    }
-                case .failure(let error):
-                    DispatchQueue.main.async { [self] in
-                        self.logFetchError(error, api: .search)
-                    }
-                    self.searchRichResultsError = error
                 }
-
-                self.results.sort {
-                    $0.data.order < $1.data.order
+                self.results += self.parseResults(from: richResults).map {
+                    CheatsheetResult(data: $0)
                 }
+            case .failure(let error):
                 DispatchQueue.main.async { [self] in
-                    self.cheatsheetDataLoading = false
+                    self.logFetchError(error, api: .search)
                 }
+                self.searchRichResultsError = error
+            }
+
+            self.results.sort {
+                $0.data.order < $1.data.order
+            }
+            DispatchQueue.main.async { [self] in
+                self.cheatsheetDataLoading = false
             }
         }
     }

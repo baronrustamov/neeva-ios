@@ -98,6 +98,14 @@ public class CheatsheetQueryController:
         return formatter
     }()
 
+    private static let queue = DispatchQueue(
+        label: "co.neeva.app.ios.shared.CheatsheetQueryController",
+        qos: .userInitiated,
+        attributes: [],
+        autoreleaseFrequency: .inherit,
+        target: nil
+    )
+
     public struct PriceHistory {
         public var InStock: Bool
         public var Max: PriceDate
@@ -213,8 +221,9 @@ public class CheatsheetQueryController:
         super.init()
     }
 
+    @available(*, unavailable)
     public override func reload() {
-        self.perform(query: CheatsheetInfoQuery(input: url.absoluteString))
+        fatalError("reload() has not been implemented")
     }
 
     public override class func processData(_ data: CheatsheetInfoQuery.Data) -> [CheatsheetInfo] {
@@ -316,6 +325,10 @@ public class CheatsheetQueryController:
     @discardableResult public static func getCheatsheetInfo(
         url: String, title: String, completion: @escaping (Result<[CheatsheetInfo], Error>) -> Void
     ) -> Combine.Cancellable {
-        Self.perform(query: CheatsheetInfoQuery(input: url, title: title), completion: completion)
+        Self.perform(
+            query: CheatsheetInfoQuery(input: url, title: title),
+            on: queue,
+            completion: completion
+        )
     }
 }
