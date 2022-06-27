@@ -476,8 +476,8 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
     fileprivate func setupConstraints() {
         DispatchQueue.main.async {
-            self.browserHost.view.makeAllEdges(equalTo: self.view.superview)
-            self.webViewContainerBackdrop.makeAllEdges(equalTo: self.view.superview)
+            self.browserHost.view.makeAllEdges(equalTo: self.view)
+            self.webViewContainerBackdrop.makeAllEdges(equalTo: self.view)
         }
     }
 
