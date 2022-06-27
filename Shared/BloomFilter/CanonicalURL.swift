@@ -91,28 +91,36 @@ public struct CanonicalURL {
 
     public var asString: String? { data.string }
 
-    public init?(from components: URLComponents, relaxed: Bool = false) {
-        var components = Self.canonicalize(components) ?? components
+    public init?(from components: URLComponents, stripMobile: Bool = false, relaxed: Bool = false) {
+        var components = components
+        if stripMobile,
+            let stripped = Self.stripMobile(url: components)
+        {
+            components = stripped
+        }
+
+        components = Self.canonicalize(components) ?? components
+
         if relaxed {
             Self.relax(url: &components)
         }
         self.data = components
     }
 
-    public init?(from urlString: String, relaxed: Bool = false) {
+    public init?(from urlString: String, stripMobile: Bool = false, relaxed: Bool = false) {
         guard let components = URLComponents(string: urlString) else {
             return nil
         }
 
-        self.init(from: components, relaxed: relaxed)
+        self.init(from: components, stripMobile: stripMobile, relaxed: relaxed)
     }
 
-    public init?(from url: URL, relaxed: Bool = false) {
+    public init?(from url: URL, stripMobile: Bool = false, relaxed: Bool = false) {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
             return nil
         }
 
-        self.init(from: components, relaxed: relaxed)
+        self.init(from: components, stripMobile: stripMobile, relaxed: relaxed)
     }
 
     public static func stripMobile(url: URLComponents) -> URLComponents? {
