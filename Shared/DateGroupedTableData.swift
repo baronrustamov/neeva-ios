@@ -114,7 +114,7 @@ public struct DateGroupedTableData<T: Equatable> {
                 Section(
                     dateString: Date.getDate(dayOffset: -1).formatToString(
                         formatter: defaultFormatter),
-                    data: today.map({ $0 }))
+                    data: yesterday.map({ $0 }))
             ]
         case .older:
             let other = older.sorted {
