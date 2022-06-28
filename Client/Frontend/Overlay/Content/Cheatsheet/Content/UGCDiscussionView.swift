@@ -252,6 +252,8 @@ private struct RedditDiscussionView: View {
                             expanded.toggle()
                         }
                         .withFont(unkerned: .bodyMedium)
+                        .padding(.leading)
+                        .background(Color.background)
                     }
                 }
             case .comments(let comments):
