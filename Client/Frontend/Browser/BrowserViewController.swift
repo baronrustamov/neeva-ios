@@ -130,11 +130,14 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
     private(set) lazy var simulateForwardModel: SimulatedSwipeModel = {
         SimulatedSwipeModel(
-            tabManager: tabManager, chromeModel: chromeModel, swipeDirection: .forward)
+            tabManager: tabManager, chromeModel: chromeModel, swipeDirection: .forward
+        )
     }()
 
     private(set) lazy var simulatedSwipeModel: SimulatedSwipeModel = {
-        SimulatedSwipeModel(tabManager: tabManager, chromeModel: chromeModel, swipeDirection: .back)
+        SimulatedSwipeModel(
+            tabManager: tabManager, chromeModel: chromeModel, swipeDirection: .back
+        )
     }()
 
     private(set) lazy var tabContainerModel: TabContainerModel = {

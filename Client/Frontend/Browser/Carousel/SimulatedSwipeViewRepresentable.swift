@@ -5,17 +5,72 @@
 import SwiftUI
 
 struct SimulatedSwipeViewRepresentable: UIViewControllerRepresentable {
-    let model: SimulatedSwipeModel
+    @ObservedObject var model: SimulatedSwipeModel
+    @ObservedObject var progressModel: CarouselProgressModel
     let superview: UIView!
+
+    class Coordinator: NSObject {
+        weak var vc: SimulatedSwipeController?
+
+        func removeProgressViewFromHierarchy() {
+            guard let vc = vc else {
+                return
+            }
+
+            vc.progressView.view.removeFromSuperview()
+            vc.progressView.removeFromParent()
+        }
+
+        func addProgressView(to bvc: BrowserViewController) {
+            guard let vc = vc else {
+                return
+            }
+
+            bvc.addChild(vc.progressView)
+            bvc.view.addSubviews(vc.progressView.view)
+            vc.progressView.didMove(toParent: bvc)
+        }
+
+        func makeProgressViewConstraints() {
+            guard let vc = vc else {
+                return
+            }
+
+            vc.progressView.view.makeEdges(
+                [.leading, .trailing],
+                equalTo: vc.view.superview
+            )
+            vc.progressView.view.makeEdges(
+                .bottom,
+                equalTo: vc.view,
+                withOffset: -UIConstants.BottomToolbarHeight
+            )
+        }
+    }
+
+    init(model: SimulatedSwipeModel, superview: UIView!) {
+        self.model = model
+        self.progressModel = model.progressModel
+        self.superview = superview
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
 
     func makeUIViewController(context: Context) -> SimulatedSwipeController {
         let simulatedSwipeController = SimulatedSwipeController(model: model, superview: superview)
         simulatedSwipeController.view.isHidden = true
 
+        model.coordinator = context.coordinator
+
         return simulatedSwipeController
     }
 
-    func updateUIViewController(_ uiViewController: SimulatedSwipeController, context: Context) {
-        // Nothing to do here
+    func updateUIViewController(
+        _ uiViewController: SimulatedSwipeController,
+        context: Context
+    ) {
+        uiViewController.view.isHidden = model.hidden
     }
 }
