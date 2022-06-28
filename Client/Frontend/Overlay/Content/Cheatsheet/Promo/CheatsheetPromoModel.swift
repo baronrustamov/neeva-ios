@@ -162,7 +162,10 @@ public class CheatsheetPromoModel: ObservableObject {
                 // avoid flashing the popover when app launches
                 !(url.scheme == InternalURL.scheme),
                 // cheatsheet is not used on NeevaDomain
-                !NeevaConstants.isInNeevaDomain(url)
+                !NeevaConstants.isInNeevaDomain(url),
+                // Do not show promo when page is not valid
+                !TabChromeModel.isPage(url: url),
+                !TabChromeModel.isErrorPage(url: url)
             else {
                 self?.clearDisplayedStates()
                 return
