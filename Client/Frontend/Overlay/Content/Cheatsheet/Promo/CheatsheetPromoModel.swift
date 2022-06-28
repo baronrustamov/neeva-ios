@@ -164,7 +164,7 @@ public class CheatsheetPromoModel: ObservableObject {
                 // cheatsheet is not used on NeevaDomain
                 !NeevaConstants.isInNeevaDomain(url),
                 // Do not show promo when page is not valid
-                !TabChromeModel.isPage(url: url),
+                TabChromeModel.isPage(url: url),
                 !TabChromeModel.isErrorPage(url: url)
             else {
                 self?.clearDisplayedStates()
