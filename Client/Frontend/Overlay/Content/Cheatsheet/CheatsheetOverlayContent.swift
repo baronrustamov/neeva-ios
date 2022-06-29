@@ -42,7 +42,7 @@ struct CheatsheetOverlayContent: View {
                         ClientLogCounterAttribute(key: "url", value: url.absoluteString),
                     ]
             )
-            self.tabManager.createOrSwitchToTab(for: url)
+            self.tabManager.createOrSwitchToTab(for: url, from: self.tabManager.selectedTab)
         }
     }
 }

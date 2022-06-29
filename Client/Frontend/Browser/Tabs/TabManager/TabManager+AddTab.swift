@@ -63,7 +63,9 @@ extension TabManager {
 
     func addTab(
         _ request: URLRequest? = nil, webView: WKWebView? = nil,
-        configuration: WKWebViewConfiguration? = nil, atIndex: Int? = nil, afterTab: Tab? = nil,
+        configuration: WKWebViewConfiguration? = nil,
+        atIndex: Int? = nil,
+        afterTab parent: Tab? = nil,
         flushToDisk: Bool, zombie: Bool, isIncognito: Bool = false,
         query: String? = nil, suggestedQuery: String? = nil,
         visitType: VisitType? = nil, notify: Bool = true
@@ -77,11 +79,14 @@ extension TabManager {
         let bvc = SceneDelegate.getBVC(with: scene)
         let tab = Tab(bvc: bvc, configuration: configuration, isIncognito: isIncognito)
         configureTab(
-            tab, request: request, webView: webView, atIndex: atIndex, afterTab: afterTab,
+            tab,
+            request: request, webView: webView,
+            atIndex: atIndex, afterTab: parent,
             flushToDisk: flushToDisk, zombie: zombie,
             query: query, suggestedQuery: suggestedQuery,
             visitType: visitType,
-            notify: notify)
+            notify: notify
+        )
 
         return tab
     }

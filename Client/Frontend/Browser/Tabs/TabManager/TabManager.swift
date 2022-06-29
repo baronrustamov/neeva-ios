@@ -178,38 +178,49 @@ class TabManager: NSObject {
     }
 
     // MARK: - Get Tab
-    func getTabFor(_ url: URL) -> Tab? {
+    func getTabFor(_ url: URL, with parent: Tab? = nil) -> Tab? {
         assert(Thread.isMainThread)
 
         let options: [URL.EqualsOption] = [
             .normalizeHost, .ignoreFragment, .ignoreLastSlash, .ignoreScheme,
         ]
 
-        log.info("Looking for matching tab, url: \(url)")
+        log.info(
+            "Looking for matching tab, url: \(url) under parent tab: \(String(describing: tab))"
+        )
 
-        for tab in tabs.filter({ $0.isIncognito == self.isIncognito }) {
+        let incognito = self.isIncognito
+        return tabs.first { tab in
+            guard tab.isIncognito == incognito else {
+                return false
+            }
+
             // Tab.url will be nil if the Tab is yet to be restored.
-            if let tabUrl = tab.url {
-                log.info("Checking tabUrl: \(tabUrl)")
-                if url.equals(tabUrl, with: options) {
-                    return tab
+            if let tabURL = tab.url {
+                log.info("Checking tabURL: \(tabURL)")
+                if url.equals(tabURL, with: options) {
+                    if let parent = parent {
+                        return tab.parent == parent
+                    } else {
+                        return true
+                    }
                 }
             } else if let sessionUrl = tab.sessionData?.currentUrl {  // Match zombie tabs
                 log.info("Checking sessionUrl: \(sessionUrl)")
-                if url.equals(sessionUrl, with: options) {
-                    return tab
-                }
 
-                if let nestedUrl = InternalURL.unwrapSessionRestore(url: sessionUrl) {
-                    log.info("Checking extractedUrlParam: \(nestedUrl)")
-                    if url.equals(nestedUrl, with: options) {
-                        return tab
+                if url.equals(sessionUrl, with: options)
+                    || url.equals(InternalURL.unwrapSessionRestore(url: sessionUrl), with: options)
+                {
+                    if let parent = parent {
+                        return tab.parent == parent || tab.parentUUID == parent.tabUUID
+                    } else {
+                        return true
                     }
                 }
             }
-        }
 
-        return nil
+            return false
+        }
     }
 
     func getTabCountForCurrentType() -> Int {

@@ -14,7 +14,8 @@ extension TabManager {
     @discardableResult func createOrSwitchToTab(
         for url: URL,
         query: String? = nil, suggestedQuery: String? = nil,
-        visitType: VisitType? = nil
+        visitType: VisitType? = nil,
+        from parentTab: Tab? = nil
     )
         -> CreateOrSwitchToTabResult
     {
@@ -22,7 +23,7 @@ extension TabManager {
             ScreenshotHelper(controller: SceneDelegate.getBVC(with: scene)).takeScreenshot(tab)
         }
 
-        if let existingTab = getTabFor(url) {
+        if let existingTab = getTabFor(url, with: parentTab) {
             selectTab(existingTab, notify: true)
             existingTab.browserViewController?
                 .postLocationChangeNotificationForTab(existingTab, visitType: visitType)
@@ -30,6 +31,7 @@ extension TabManager {
         } else {
             let newTab = addTab(
                 URLRequest(url: url),
+                afterTab: parentTab,
                 flushToDisk: true,
                 zombie: false,
                 isIncognito: isIncognito,
