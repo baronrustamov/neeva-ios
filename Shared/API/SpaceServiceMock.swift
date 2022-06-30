@@ -96,6 +96,19 @@ public class SpaceServiceMock: SpaceService {
             // This operation is always successful.
             return true
         }
+
+        static func handleMutationRequest<T: GraphQLMutation>(
+            request: MutationRequest<T>, body: @escaping () -> Bool
+        ) {
+            // Using DispatchQueue.async simulates a network request, making the tests more realistic.
+            DispatchQueue.main.async {
+                if body() {
+                    request.state = .success
+                } else {
+                    request.state = .failure
+                }
+            }
+        }
     }
 
     public static let mySpaceTitle = "My Space"
@@ -143,27 +156,24 @@ public class SpaceServiceMock: SpaceService {
     }
 
     public func addPublicACL(spaceID: String) -> AddPublicACLRequest? {
-        let request = AddPublicACLRequest()
+        let request = AddPublicACLRequest(spaceID: spaceID, testMode: true)
 
-        // Simulate a network request
-        DispatchQueue.main.async { [self] in
-            if let space = spaces[spaceID] {
-                space.isPublic = true
-                request.state = .success
-            } else {
-                request.state = .failure
-            }
+        SpaceMock.handleMutationRequest(request: request) { [self] in
+            spaces[spaceID]?.isPublic = true
+            return spaces[spaceID] != nil
         }
 
         return request
     }
 
+    // TODO(jon): Waiting for solo ACL management to work better. See issue #3916
     public func addSoloACLs(spaceID: String, emails: [String], acl: SpaceACLLevel, note: String)
         -> AddSoloACLsRequest?
     {
         return nil
     }
 
+    // TODO(jon): Waiting for Space comment system to work better. See issue #3917
     public func addSpaceComment(spaceID: String, comment: String) -> AddSpaceCommentRequest? {
         return nil
     }
@@ -189,10 +199,22 @@ public class SpaceServiceMock: SpaceService {
         }
     }
 
+    // This can't really be tested because AddOrUpdateSpaceView already adds a new local entity.
+    // However, this function is still implemented for completeness.
     public func addToSpaceWithURL(spaceID: String, url: String, title: String, description: String?)
         -> AddToSpaceWithURLRequest?
     {
-        return nil
+        let request = AddToSpaceWithURLRequest(
+            spaceID: spaceID, url: url, title: title, description: description, testMode: true)
+
+        SpaceMock.handleMutationRequest(request: request) { [self] in
+            if let space = spaces[spaceID] {
+                space.addSpaceEntity(title: title, description: description ?? "", url: url)
+            }
+            return spaces[spaceID] != nil
+        }
+
+        return request
     }
 
     public func claimGeneratedItem(spaceID: String, entityID: String) -> ClaimGeneratedItem? {
@@ -200,14 +222,14 @@ public class SpaceServiceMock: SpaceService {
     }
 
     public func createSpace(name: String) -> CreateSpaceRequest? {
-        let space = SpaceMock(name: name)
-        spaces[space.id] = space
+        let request = CreateSpaceRequest(name: name, testMode: true)
 
-        let request = CreateSpaceRequest()
+        // This operation is always successful
+        SpaceMock.handleMutationRequest(request: request) { [self] in
+            let space = SpaceMock(name: name)
+            spaces[space.id] = space
 
-        // Simulate a network request
-        DispatchQueue.main.async {
-            request.state = .success
+            return true
         }
 
         return request
@@ -218,31 +240,39 @@ public class SpaceServiceMock: SpaceService {
     }
 
     public func deletePublicACL(spaceID: String) -> DeletePublicACLRequest? {
-        let request = DeletePublicACLRequest()
+        let request = DeletePublicACLRequest(spaceID: spaceID, testMode: true)
 
-        // Simulate a network request
-        DispatchQueue.main.async { [self] in
-            if let space = spaces[spaceID] {
-                space.isPublic = false
-                request.state = .success
-            } else {
-                request.state = .failure
-            }
+        SpaceMock.handleMutationRequest(request: request) { [self] in
+            spaces[spaceID]?.isPublic = false
+            return spaces[spaceID] != nil
         }
 
         return request
     }
 
     public func deleteSpace(spaceID: String) -> DeleteSpaceRequest? {
-        spaces[spaceID] = nil
-        return DeleteSpaceRequest()
+        let request = DeleteSpaceRequest(spaceID: spaceID, testMode: true)
+
+        SpaceMock.handleMutationRequest(request: request) { [self] in
+            spaces[spaceID] = nil
+            return true
+        }
+
+        return request
     }
 
     public func deleteSpaceItems(spaceID: String, ids: [String]) -> DeleteSpaceItemsRequest? {
-        if let space = spaces[spaceID] {
-            space.entities = space.entities.filter { !ids.contains($0.id) }
+        let request = DeleteSpaceItemsRequest(spaceID: spaceID, ids: ids, testMode: true)
+
+        SpaceMock.handleMutationRequest(request: request) { [self] in
+            if let space = spaces[spaceID] {
+                space.entities = space.entities.filter { !ids.contains($0.id) }
+            }
+
+            return spaces[spaceID] != nil
         }
-        return DeleteSpaceItemsRequest()
+
+        return request
     }
 
     public func deleteSpaceResultByUrlMutation(
@@ -316,25 +346,26 @@ public class SpaceServiceMock: SpaceService {
     }
 
     public func pinSpace(spaceId: String, isPinned: Bool) -> PinSpaceRequest? {
-        let request = PinSpaceRequest()
+        let request = PinSpaceRequest(spaceId: spaceId, isPinned: isPinned, testMode: true)
 
-        // Simulate a network request
-        DispatchQueue.main.async { [self] in
-            if let space = spaces[spaceId] {
-                space.isPinned = isPinned
-                request.state = .success
-            } else {
-                request.state = .failure
-            }
-
+        SpaceMock.handleMutationRequest(request: request) { [self] in
+            spaces[spaceId]?.isPinned = isPinned
+            return spaces[spaceId] != nil
         }
 
         return request
     }
 
     public func unfollowSpace(spaceID: String) -> UnfollowSpaceRequest? {
-        spaces[spaceID] = nil
-        return UnfollowSpaceRequest()
+        let request = UnfollowSpaceRequest(spaceID: spaceID, testMode: true)
+
+        // This operation is always successful
+        SpaceMock.handleMutationRequest(request: request) { [self] in
+            spaces[spaceID] = nil
+            return true
+        }
+
+        return request
     }
 
     public func updateProfile(firstName: String, lastName: String) -> UpdateProfileRequest? {
@@ -346,8 +377,16 @@ public class SpaceServiceMock: SpaceService {
         spaceID: String, title: String,
         description: String? = nil, thumbnail: String? = nil
     ) -> UpdateSpaceRequest? {
-        spaces[spaceID]?.name = title
-        return UpdateSpaceRequest()
+        let request = UpdateSpaceRequest(
+            spaceID: spaceID, title: title, description: description, thumbnail: thumbnail,
+            testMode: true)
+
+        SpaceMock.handleMutationRequest(request: request) { [self] in
+            spaces[spaceID]?.name = title
+            return spaces[spaceID] != nil
+        }
+
+        return request
     }
 
     public func updateSpaceEntity(

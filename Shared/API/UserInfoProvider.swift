@@ -95,7 +95,7 @@ open class UserInfoProvider {
 }
 
 public class ResendVerificationEmailRequest: MutationRequest<ResendVerificationEmailMutation> {
-    public override init() {
+    public init() {
         super.init(mutation: ResendVerificationEmailMutation())
     }
 }

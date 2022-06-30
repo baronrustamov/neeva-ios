@@ -17,10 +17,10 @@ open class MutationRequest<Mutation: GraphQLMutation>: ObservableObject {
     @Published public var state: State = .initial
     @Published public var error: Error?
 
-    // This constructor is used strictly for testing
-    public init() {}
+    public init(mutation: Mutation, testMode: Bool = false) {
+        // Do nothing in test mode
+        guard !testMode else { return }
 
-    public init(mutation: Mutation) {
         assert(subcription == nil)
 
         self.subcription = mutation.perform { result in
