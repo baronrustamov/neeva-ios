@@ -873,61 +873,21 @@ class TabWebView: WKWebView, MenuHelperInterface {
 public func isLastExecutedTimeInTimeFilter(_ lastExecutedTime: Timestamp, _ byTime: TimeFilter)
     -> Bool
 {
-    let minusOneDayToCurrentDate =
-        FeatureFlag[.shortenTimeThresholdForArchivingTabs]
-        ? Calendar.current.date(
-            byAdding: .second, value: -15, to: Date())
-        : Calendar.current.date(
-            byAdding: .day, value: -1, to: Date())
-    let minusTwoDaysToCurrentDate =
-        FeatureFlag[.shortenTimeThresholdForArchivingTabs]
-        ? Calendar.current.date(
-            byAdding: .second, value: -30, to: Date())
-        : Calendar.current.date(
-            byAdding: .day, value: -2, to: Date())
-    let minusOneWeekToCurrentDate =
-        FeatureFlag[.shortenTimeThresholdForArchivingTabs]
-        ? Calendar.current.date(
-            byAdding: .second, value: -45, to: Date())
-        : Calendar.current.date(
-            byAdding: .day, value: -7, to: Date())
-    let minusOneMonthToCurrentDate =
-        FeatureFlag[.shortenTimeThresholdForArchivingTabs]
-        ? Calendar.current.date(
-            byAdding: .minute, value: -1, to: Date())
-        : Calendar.current.date(
-            byAdding: .month, value: -1, to: Date())
-    guard let startOfOneDayAgo = minusOneDayToCurrentDate,
-        let startOfTwodaysAgo = minusTwoDaysToCurrentDate,
-        let startOfLastWeek = minusOneWeekToCurrentDate,
-        let startOfLastMonth = minusOneMonthToCurrentDate
-    else {
-        return true
-    }
-    // timeIntervalSince1970 returns the number of seconds. It is converted
-    // to milliseconds by multiplying by 1000 to compare with lastExecutedTime
-    // which is stored in milliseconds.
+    // lastExecutedTime is passed in milliseconds, needs to be converted to seconds.
+    let lastExecutedTimeSeconds = lastExecutedTime / 1000
+    let dateLastExecutedTime = Date(timeIntervalSince1970: TimeInterval(lastExecutedTimeSeconds))
+
     switch byTime {
     case .today:
-        return FeatureFlag[.shortenTimeThresholdForArchivingTabs]
-            ? lastExecutedTime > Int64(startOfOneDayAgo.timeIntervalSince1970 * 1000)
-            : Date.fromTimestamp(lastExecutedTime).isToday()
+        return dateLastExecutedTime.isToday()
     case .yesterday:
-        return FeatureFlag[.shortenTimeThresholdForArchivingTabs]
-            ? (lastExecutedTime < Int64(startOfOneDayAgo.timeIntervalSince1970 * 1000)
-                && lastExecutedTime > Int64(startOfTwodaysAgo.timeIntervalSince1970 * 1000))
-            : Date.fromTimestamp(lastExecutedTime).isYesterday()
+        return dateLastExecutedTime.isYesterday()
     case .lastWeek:
-        return
-            (FeatureFlag[.shortenTimeThresholdForArchivingTabs]
-            ? lastExecutedTime < Int64(startOfTwodaysAgo.timeIntervalSince1970 * 1000)
-            : !Date.fromTimestamp(lastExecutedTime).isToday()
-                && !Date.fromTimestamp(lastExecutedTime).isYesterday())
-            && lastExecutedTime > Int64(startOfLastWeek.timeIntervalSince1970 * 1000)
+        return dateLastExecutedTime.isWithinLast7Days()
+            && !(dateLastExecutedTime.isToday() || dateLastExecutedTime.isYesterday())
     case .lastMonth:
-        return lastExecutedTime < Int64(startOfLastWeek.timeIntervalSince1970 * 1000)
-            && lastExecutedTime > Int64(startOfLastMonth.timeIntervalSince1970 * 1000)
+        return !dateLastExecutedTime.isWithinLast7Days() && dateLastExecutedTime.isWithinLastMonth()
     case .overAMonth:
-        return lastExecutedTime < Int64(startOfLastMonth.timeIntervalSince1970 * 1000)
+        return !dateLastExecutedTime.isWithinLastMonth()
     }
 }

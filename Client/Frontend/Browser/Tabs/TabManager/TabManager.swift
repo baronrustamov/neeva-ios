@@ -395,11 +395,11 @@ class TabManager: NSObject {
         else { return false }
 
         let parentTabIsMostRecentUsed = mostRecentTab(inTabs: viableTabs) == parentTab
-
         if parentTabIsMostRecentUsed, parentTab.lastExecutedTime != nil {
             selectTab(parentTab, previous: tab, notify: true)
             return true
         }
+
         return false
     }
 

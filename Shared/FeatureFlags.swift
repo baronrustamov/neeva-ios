@@ -25,8 +25,6 @@ public enum FeatureFlag: String, CaseIterable, RawRepresentable {
     case qrCodeSignIn = "Sign in with QR Code"
     case recommendedSpaces = "Recommended Spaces"
     case reverseChronologicalOrdering = "Sort tabs based on reverse chronological ordering"
-    case shortenTimeThresholdForArchivingTabs =
-        "shorten time threshold for archiving tabs (1 day -> 15 seconds, 7 days -> 30 seconds, 1 month -> 1 minute)"
     case spaceComments = "Comments from space on pages"
     case spacify = "Enable button to turn a page into a Space"
     case swipePlusPlus = "Additional forward and back swipe gestures"

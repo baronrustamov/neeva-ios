@@ -567,6 +567,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
         screenshotHelper.viewIsVisible = true
         screenshotHelper.takePendingScreenshots(tabManager.tabs)
+        tabManager.selectedTab?.lastExecutedTime = Date.nowMilliseconds()
 
         super.viewDidAppear(animated)
 

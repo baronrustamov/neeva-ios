@@ -29,11 +29,7 @@ extension TabManager {
         addTabsToRecentlyClosed([tab], showToast: showToast)
         removeTab(tab, flushToDisk: true, notify: true)
 
-        guard let index = index else { return }
-
-        if let selectedTab = selectedTab, selectedTab.isIncognito == tab.isIncognito,
-            updateSelectedTab
-        {
+        if (selectedTab?.isIncognito ?? false) == tab.isIncognito, updateSelectedTab {
             updateSelectedTabAfterRemovalOf(tab, deletedIndex: index, notify: true)
         }
     }
@@ -51,7 +47,6 @@ extension TabManager {
         }
 
         let previous = selectedTab
-
         let lastTab = tabsToBeRemoved[tabsToBeRemoved.count - 1]
         let lastTabIndex = tabs.firstIndex(of: lastTab)
         let tabsToKeep = self.tabs.filter { !tabsToBeRemoved.contains($0) }
@@ -61,8 +56,7 @@ extension TabManager {
         }
 
         tabsToBeRemoved.forEach { tab in
-            tab.close()
-            TabEvent.post(.didClose, for: tab)
+            removeTab(tab, flushToDisk: false, notify: false)
         }
 
         if notify {
@@ -101,7 +95,9 @@ extension TabManager {
         }
     }
 
-    private func updateSelectedTabAfterRemovalOf(_ tab: Tab, deletedIndex: Int, notify: Bool) {
+    private func updateSelectedTabAfterRemovalOf(
+        _ tab: Tab, deletedIndex: Int?, notify: Bool
+    ) {
         let closedLastNormalTab = !tab.isIncognito && normalTabs.isEmpty
         let closedLastIncognitoTab = tab.isIncognito && incognitoTabs.isEmpty
         // In time-based switcher, the normalTabs gets filtered to make sure we only
@@ -114,6 +110,11 @@ extension TabManager {
             }
         let bvc = SceneDelegate.getBVC(with: scene)
 
+        if let selectedTab = selectedTab, viableTabs.contains(selectedTab) {
+            // The selectedTab still exists, no need to find another tab to select.
+            return
+        }
+
         if closedLastNormalTab || closedLastIncognitoTab
             || !viableTabs.contains(where: { $0.wasLastExecuted(.today) })
         {
@@ -121,7 +122,7 @@ extension TabManager {
                 self.selectTab(nil, notify: notify)
                 bvc.showTabTray()
             }
-        } else if let selectedTab = selectedTab, !viableTabs.contains(selectedTab) {
+        } else if let selectedTab = selectedTab, let deletedIndex = deletedIndex {
             if !selectParentTab(afterRemoving: selectedTab) {
                 if let rightOrLeftTab = viableTabs[safe: deletedIndex]
                     ?? viableTabs[safe: deletedIndex - 1]
@@ -133,8 +134,10 @@ extension TabManager {
                         notify: notify)
                 }
             }
+        } else {
+            selectTab(nil, notify: false)
+            SceneDelegate.getBVC(with: scene).browserModel.showGridWithNoAnimation()
         }
-
     }
 
     // MARK: - Remove All Tabs
