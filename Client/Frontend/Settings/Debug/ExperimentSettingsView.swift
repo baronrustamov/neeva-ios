@@ -36,10 +36,10 @@ struct ExperimentSettingsView: View {
                     experiment: .promoCardTypeAfterFirstRun
                 )
 
-                OptionalPrefilledStringField<NeevaExperiment.DefaultBrowserNewScreen>(
-                    "DefaultBrowserNewScreen",
+                OptionalPrefilledStringField<NeevaExperiment.DefaultBrowserVideo>(
+                    "DefaultBrowserVideo",
                     value: $valueTextNewScreen,
-                    experiment: .defaultBrowserNewScreen
+                    experiment: .defaultBrowserVideo
                 )
             }
         }

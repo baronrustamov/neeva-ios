@@ -120,10 +120,10 @@ extension BrowserViewController {
 // MARK: - Default Browser
 extension BrowserViewController {
     func presentDefaultBrowserFirstRun() {
-        let arm = NeevaExperiment.startExperiment(for: .defaultBrowserNewScreen)
-        NeevaExperiment.logStartExperiment(for: .defaultBrowserNewScreen)
+        let arm = NeevaExperiment.startExperiment(for: .defaultBrowserVideo)
+        NeevaExperiment.logStartExperiment(for: .defaultBrowserVideo)
         let interstitialModel = InterstitialViewModel(
-            isInExperimentArm: arm == .newScreen || arm == .newScreenWithVideo,
+            isInExperimentArm: arm == .video,
             onCloseAction: {
                 self.overlayManager.hideCurrentOverlay()
             }
@@ -154,10 +154,10 @@ extension BrowserViewController {
     }
 
     func restoreDefaultBrowserFirstRun() {
-        let arm = NeevaExperiment.arm(for: .defaultBrowserNewScreen)
+        let arm = NeevaExperiment.arm(for: .defaultBrowserVideo)
         let interstitialModel = InterstitialViewModel(
             restoreFromBackground: true,
-            isInExperimentArm: arm == .newScreen || arm == .newScreenWithVideo,
+            isInExperimentArm: arm == .video,
             onboardingState: .openedSettingsState,
             onCloseAction: {
                 self.overlayManager.hideCurrentOverlay()

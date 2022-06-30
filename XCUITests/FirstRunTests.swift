@@ -17,8 +17,8 @@ class FirstRunTests: BaseTestCase {
     }
 
     func openNeevaSettings() {
-        waitForExistence(app.buttons["Get Started"])
-        app.buttons["Get Started"].tap()
+        waitForExistence(app.buttons["Let's Go"])
+        app.buttons["Let's Go"].tap()
 
         waitForExistence(app.buttons["Open Neeva Settings"])
 
@@ -45,16 +45,16 @@ class FirstRunTests: BaseTestCase {
     func testOpenNeevaSettingsAndRemind() throws {
         openNeevaSettings()
 
-        waitForExistence(app.buttons["Remind Me Later"])
-        app.buttons["Remind Me Later"].tap()
+        waitForExistence(app.buttons["Continue to Neeva"])
+        app.buttons["Continue to Neeva"].tap()
 
         openURL(websiteExample["url"]!)
         waitUntilPageLoad()
     }
 
     func testRemindMeLater() throws {
-        waitForExistence(app.buttons["Get Started"])
-        app.buttons["Get Started"].tap()
+        waitForExistence(app.buttons["Let's Go"])
+        app.buttons["Let's Go"].tap()
 
         waitForExistence(app.buttons["Remind Me Later"])
         app.buttons["Remind Me Later"].tap()
@@ -64,8 +64,8 @@ class FirstRunTests: BaseTestCase {
     }
 
     func testDirectClose() throws {
-        waitForExistence(app.buttons["Get Started"])
-        app.buttons["Get Started"].tap()
+        waitForExistence(app.buttons["Let's Go"])
+        app.buttons["Let's Go"].tap()
 
         waitForExistence(app.buttons["close"])
         app.buttons["close"].tap()
@@ -76,8 +76,8 @@ class FirstRunTests: BaseTestCase {
 
     func testTriggerSignInModalAndClose() throws {
         try skipTest(issue: 3696, "Disabled as this test is flaky")
-        waitForExistence(app.buttons["Get Started"])
-        app.buttons["Get Started"].tap()
+        waitForExistence(app.buttons["Let's Go"])
+        app.buttons["Let's Go"].tap()
 
         waitForExistence(app.buttons["close"])
         app.buttons["close"].tap()

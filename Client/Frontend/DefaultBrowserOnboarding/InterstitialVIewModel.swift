@@ -17,7 +17,6 @@ class InterstitialViewModel: ObservableObject {
     var showRemindButton: Bool
     var showCloseButton: Bool
     var restoreFromBackground: Bool
-    var showSecondaryOnboardingButton: Bool
 
     var onOpenSettingsAction: (() -> Void)?
     var onCloseAction: (() -> Void)?
@@ -33,7 +32,6 @@ class InterstitialViewModel: ObservableObject {
 
     enum OnboardingState {
         case initialState
-        case continueState
         case openedSettingsState
     }
 
@@ -42,7 +40,6 @@ class InterstitialViewModel: ObservableObject {
         showRemindButton: Bool = true,
         restoreFromBackground: Bool = false,
         showCloseButton: Bool = true,
-        showSecondaryOnboardingButton: Bool = true,
         isInExperimentArm: Bool = false,
         onboardingState: OnboardingState = .initialState,
         onOpenSettingsAction: (() -> Void)? = nil,
@@ -54,7 +51,6 @@ class InterstitialViewModel: ObservableObject {
         self.restoreFromBackground = restoreFromBackground
         self.onOpenSettingsAction = onOpenSettingsAction
         self.onCloseAction = onCloseAction
-        self.showSecondaryOnboardingButton = showSecondaryOnboardingButton
         self.onboardingState = onboardingState
         self.isInExperimentArm = isInExperimentArm
 

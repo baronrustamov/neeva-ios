@@ -110,93 +110,24 @@ struct DefaultBrowserInterstitialOnboardingView: View {
 
     @ViewBuilder
     var header: some View {
-        if interstitialModel.isInExperimentArm {
-            VStack(alignment: .leading) {
-                Text("Make Neeva your Default Browser to")
-                    .font(.system(size: 32, weight: .bold))
-                    .padding(.bottom, 10)
-                ForEach(interstitialModel.onboardingPageBullets(), id: \.self) { bulletText in
-                    HStack {
-                        Symbol(decorative: .checkmarkCircleFill, size: 16)
-                            .foregroundColor(Color.ui.adaptive.blue)
-                        Text(bulletText).withFont(unkerned: .bodyLarge).foregroundColor(
-                            Color.ui.gray30)
-                    }
-                    .padding(.vertical, 5)
-                }
-            }.frame(maxWidth: .infinity, alignment: .leading)
-        } else {
-            Text("Make Neeva your Default Browser")
+        VStack(alignment: .leading) {
+            Text("Make Neeva your Default Browser to")
                 .font(.system(size: 32, weight: .bold))
-            Text(
-                "With Neeva as your default, you can search and browse ad-free. No annoying trackers or pop-ups."
-            )
-            .withFont(.bodyXLarge)
-            .foregroundColor(Color.ui.gray30)
-        }
+                .padding(.bottom, 10)
+            ForEach(interstitialModel.onboardingPageBullets(), id: \.self) { bulletText in
+                HStack {
+                    Symbol(decorative: .checkmarkCircleFill, size: 16)
+                        .foregroundColor(Color.ui.adaptive.blue)
+                    Text(bulletText).withFont(unkerned: .bodyLarge).foregroundColor(
+                        Color.ui.gray30)
+                }
+                .padding(.vertical, 5)
+            }
+        }.frame(maxWidth: .infinity, alignment: .leading)
     }
 
     @ViewBuilder
     var detail: some View {
-        VStack(alignment: .leading) {
-            Text("Follow these 3 easy steps:")
-                .withFont(.bodyLarge)
-                .foregroundColor(.secondaryLabel)
-                .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: .infinity, alignment: .leading)
-        }.frame(maxWidth: .infinity, alignment: .leading)
-        VStack(alignment: .leading) {
-            HStack {
-                Symbol(decorative: .gear, size: 16)
-                    .foregroundColor(.secondaryLabel)
-                    .frame(width: 32, height: 32)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 4)
-                            .stroke(Color(UIColor.systemGray5), lineWidth: 1)
-                    )
-                Text("1. Open Neeva Settings")
-                    .withFont(.bodyXLarge)
-                    .padding(.leading, 15)
-            }
-            Divider()
-            HStack {
-                Symbol(decorative: .chevronForward, size: 16)
-                    .foregroundColor(.secondaryLabel)
-                    .frame(width: 32, height: 32)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 4)
-                            .stroke(Color(UIColor.systemGray5), lineWidth: 1)
-                    )
-
-                Text("2. Tap Default Browser App")
-                    .withFont(.bodyXLarge)
-                    .padding(.leading, 15)
-            }
-            Divider()
-            HStack {
-                Image("neevaMenuIcon")
-                    .frame(width: 32, height: 32)
-                    .background(Color(.white))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 4)
-                            .stroke(Color(UIColor.systemGray5), lineWidth: 1)
-                    )
-                    .clipShape(RoundedRectangle(cornerRadius: 4))
-
-                Text("3. Select Neeva")
-                    .withFont(.bodyXLarge)
-                    .padding(.leading, 15)
-            }
-        }.padding(20)
-            .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(Color(UIColor.systemGray5), lineWidth: 5)
-            )
-            .padding(.horizontal, -16)
-    }
-
-    @ViewBuilder
-    var detailExp: some View {
         VStack(alignment: .leading) {
             Text("Follow these 2 easy steps:")
                 .withFont(.bodyLarge)
@@ -239,7 +170,7 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                     .stroke(Color(UIColor.systemGray5), lineWidth: 5)
             )
             .padding(.horizontal, -16)
-        if NeevaExperiment.arm(for: .defaultBrowserNewScreen) == .newScreenWithVideo {
+        if NeevaExperiment.arm(for: .defaultBrowserVideo) == .video {
             Button(
                 action: {
                     withAnimation {
@@ -251,7 +182,7 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                 },
                 label: {
                     Label("Show me how", systemSymbol: .playCircleFill).withFont(
-                        unkerned: .bodyLarge)
+                        unkerned: .bodyXLarge)
                 }
             ).padding(.vertical, 20)
         }
@@ -259,42 +190,32 @@ struct DefaultBrowserInterstitialOnboardingView: View {
 
     @ViewBuilder
     var content: some View {
-        if interstitialModel.isInExperimentArm {
-            VStack(alignment: .leading) {
-                Spacer().repeated(2)
-                header
-                Spacer()
-                if showSteps || interstitialModel.onboardingState == .openedSettingsState {
-                    if NeevaExperiment.arm(for: .defaultBrowserNewScreen) == .newScreenWithVideo {
-                        ZStack {
-                            if showVideo {
-                                VStack {
-                                    LoopingPlayer(viewModel: interstitialModel).frame(
-                                        width: 320, height: 240
-                                    ).cornerRadius(10.0)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 10).stroke(
-                                                Color.tertiaryLabel, lineWidth: 3)
-                                        )
-                                }.padding(.bottom, 15)
-                            } else {
-                                VStack {
-                                    detailExp
-                                }
-                            }
-                        }
-                    } else {
-                        detailExp
-                            .padding(.bottom, 15)
-                    }
-                }
-            }
-        } else {
-            Spacer()
+        VStack(alignment: .leading) {
+            Spacer().repeated(2)
             header
             Spacer()
-            detail
-            Spacer()
+            if NeevaExperiment.arm(for: .defaultBrowserVideo) == .video {
+                ZStack {
+                    if showVideo {
+                        VStack {
+                            LoopingPlayer(viewModel: interstitialModel).frame(
+                                width: 320, height: 240
+                            ).cornerRadius(10.0)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10).stroke(
+                                        Color.tertiaryLabel, lineWidth: 3)
+                                )
+                        }.padding(.bottom, 15)
+                    } else {
+                        VStack {
+                            detail
+                        }
+                    }
+                }
+            } else {
+                detail
+                    .padding(.bottom, 15)
+            }
         }
     }
 
@@ -315,7 +236,6 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                 }
             }
             DefaultBrowserInterstitialView(
-                showSecondaryButton: interstitialModel.showSecondaryOnboardingButton,
                 content: content,
                 primaryButton: interstitialModel.openButtonText,
                 secondaryButton: interstitialModel.showRemindButton
@@ -323,34 +243,19 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                         == NotificationPermissionStatus.undecided.rawValue
                     ? interstitialModel.remindButtonText : nil,
                 primaryAction: {
-                    if interstitialModel.isInExperimentArm {
-                        // TODO: refactor to use the view model for this action
-                        switch interstitialModel.onboardingState {
-                        case .initialState:
-                            withAnimation {
-                                showSteps.toggle()
-                                interstitialModel.showSecondaryOnboardingButton = false
-                            }
-                            interstitialModel.openButtonText = "Continue"
-                            interstitialModel.onboardingState = .continueState
-                            ClientLogger.shared.logCounter(
-                                .DefaultBrowserOnboardingInterstitialOpen)
-                        case .continueState:
-                            interstitialModel.openButtonText = "Back to Settings"
-                            interstitialModel.remindButtonText = "Continue to Neeva"
-                            interstitialModel.showSecondaryOnboardingButton = true
-                            interstitialModel.openSettingsButtonClickAction(
-                                interaction: .DefaultBrowserOnboardingInterstitialContinue
-                            )
-                            interstitialModel.onboardingState = .openedSettingsState
-                        case .openedSettingsState:
-                            interstitialModel.openSettingsButtonClickAction(
-                                interaction: .DefaultBrowserOnboardingInterstitialOpenAgain
-                            )
-                        }
-
-                    } else {
-                        interstitialModel.openSettingsButtonClickAction()
+                    // TODO: refactor to use the view model for this action
+                    switch interstitialModel.onboardingState {
+                    case .initialState:
+                        interstitialModel.openButtonText = "Back to Settings"
+                        interstitialModel.remindButtonText = "Continue to Neeva"
+                        interstitialModel.openSettingsButtonClickAction(
+                            interaction: .DefaultBrowserOnboardingInterstitialOpen
+                        )
+                        interstitialModel.onboardingState = .openedSettingsState
+                    case .openedSettingsState:
+                        interstitialModel.openSettingsButtonClickAction(
+                            interaction: .DefaultBrowserOnboardingInterstitialOpenAgain
+                        )
                     }
                 },
                 secondaryAction: interstitialModel.showRemindButton
