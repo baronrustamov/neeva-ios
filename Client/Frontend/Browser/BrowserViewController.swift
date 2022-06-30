@@ -618,7 +618,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
         // Have to be a lazy tab to close a lazy tab
         guard self.zeroQueryModel.isLazyTab else {
             print("Tried to close lazy tab that wasn't a lazy tab")
-            hideZeroQuery()
+            dismissEditingAndHideZeroQuery()
             return
         }
 
@@ -634,30 +634,43 @@ class BrowserViewController: UIViewController, ModalPresenter {
                 break
             }
 
-            self.hideZeroQuery()
+            self.dismissEditingAndHideZeroQuery()
         }
     }
 
-    public func hideZeroQuery(wasCancelled: Bool = false) {
+    public func dismissEditingAndHideZeroQuery(
+        wasCancelled: Bool = false,
+        completionHandler: (() -> Void)? = nil
+    ) {
         chromeModel.setEditingLocation(to: false)
 
-        DispatchQueue.main.async { [self] in
-            tabContainerModel.updateContent(.hideZeroQuery)
-            zeroQueryModel.reset(bvc: self, wasCancelled: wasCancelled)
+        DispatchQueue.main.async { [weak self] in
+            self?.hideZeroQuery(wasCancelled: wasCancelled)
+            completionHandler?()
         }
+    }
+
+    public func dismissEditingAndHideZeroQuerySync(wasCancelled: Bool = false) {
+        chromeModel.setEditingLocation(to: false)
+        hideZeroQuery(wasCancelled: wasCancelled)
+    }
+
+    private func hideZeroQuery(wasCancelled: Bool = false) {
+        tabContainerModel.updateContent(.hideZeroQuery)
+        zeroQueryModel.reset(bvc: self, wasCancelled: wasCancelled)
     }
 
     fileprivate func updateInZeroQuery(_ url: URL?) {
         if !chromeModel.isEditingLocation {
             guard let url = url else {
-                hideZeroQuery()
+                dismissEditingAndHideZeroQuery()
                 return
             }
 
             if !url.absoluteString.hasPrefix(
                 "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)")
             {
-                hideZeroQuery()
+                dismissEditingAndHideZeroQuery()
             }
         }
     }
@@ -674,7 +687,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
         }
 
         if zeroQueryModel.targetTab == .existingOrNewTab {
-            hideZeroQuery()
+            dismissEditingAndHideZeroQuery()
             tabManager.createOrSwitchToTab(
                 for: url,
                 query: searchQueryModel.value,
@@ -682,7 +695,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
                 visitType: visitType
             )
         } else if zeroQueryModel.isLazyTab || zeroQueryModel.targetTab == .newTab {
-            hideZeroQuery()
+            dismissEditingAndHideZeroQuery()
             openURLInNewTab(
                 url,
                 isIncognito: zeroQueryModel.isIncognito,
@@ -863,7 +876,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
             presentedViewController.dismiss(animated: true, completion: nil)
         } else if chromeModel.isEditingLocation {
             // Closes the Suggest UI
-            chromeModel.setEditingLocation(to: false)
+            dismissEditingAndHideZeroQuerySync(wasCancelled: false)
         }
 
         introViewModel.dismiss(nil)
@@ -1300,7 +1313,7 @@ extension BrowserViewController: ZeroQueryPanelDelegate {
         if NeevaUserInfo.shared.isUserLoggedIn
             && url.absoluteString.starts(with: NeevaConstants.appSpacesURL.absoluteString)
         {
-            hideZeroQuery()
+            dismissEditingAndHideZeroQuery()
             browserModel.openSpace(spaceID: url.lastPathComponent)
             return
         }
@@ -1308,7 +1321,7 @@ extension BrowserViewController: ZeroQueryPanelDelegate {
     }
 
     func zeroQueryPanelDidRequestToOpenInNewTab(_ url: URL, isIncognito: Bool) {
-        hideZeroQuery()
+        dismissEditingAndHideZeroQuery()
         openURLInBackground(url, isIncognito: isIncognito)
     }
 

@@ -109,7 +109,7 @@ class ZeroQueryModel: ObservableObject {
         self.bvc.presentIntroViewController(
             true,
             completion: {
-                self.bvc.hideZeroQuery()
+                self.bvc.dismissEditingAndHideZeroQuery()
             })
     }
 

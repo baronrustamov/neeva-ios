@@ -129,7 +129,8 @@ class TabChromeModel: ObservableObject {
     }
 
     func hideZeroQuery() {
-        SceneDelegate.getBVC(with: topBarDelegate?.tabManager.scene).hideZeroQuery()
+        SceneDelegate.getBVC(with: topBarDelegate?.tabManager.scene)
+            .dismissEditingAndHideZeroQuery()
     }
 
     private func setupURLObserver() {

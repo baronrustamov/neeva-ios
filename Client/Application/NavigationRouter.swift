@@ -235,7 +235,8 @@ enum NavigationPath {
             bvc.switchToTabForWidgetURLOrOpen(newURL, uuid: uuid, isIncognito: false)
         } else {
             bvc.openLazyTab(
-                openedFrom: .openTab(bvc.tabManager.selectedTab), switchToIncognitoMode: false)
+                openedFrom: .openTab(bvc.tabManager.selectedTab), switchToIncognitoMode: false
+            )
         }
     }
 

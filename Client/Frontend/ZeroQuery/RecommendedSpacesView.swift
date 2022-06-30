@@ -43,12 +43,12 @@ struct RecommendedSpacesView: View {
                                         + url.lastPathComponent)!,
                                 with: viewModel.bvc)
                         {
-                            viewModel.bvc.hideZeroQuery()
+                            viewModel.bvc.dismissEditingAndHideZeroQuery()
                             NavigationPath.handle(nav: navPath, with: viewModel.bvc)
                         } else {
                             viewModel.bvc.tabManager.createOrSwitchToTab(
                                 for: url)
-                            viewModel.bvc.hideZeroQuery()
+                            viewModel.bvc.dismissEditingAndHideZeroQuery()
                         }
 
                         ClientLogger.shared.logCounter(

@@ -121,7 +121,7 @@ extension BrowserViewController: ToolbarDelegate {
                 self.tabContainerModel.currentContentUI == .zeroQuery
                     || self.tabContainerModel.currentContentUI == .suggestions
             {
-                self.hideZeroQuery()
+                self.dismissEditingAndHideZeroQuery()
             }
         }
     }

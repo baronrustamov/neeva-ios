@@ -115,7 +115,8 @@ class QuickActions: NSObject {
                 isIncognito
                 ? bvc.tabManager.incognitoTabs.count == 0 : bvc.tabManager.normalTabs.count == 0
             bvc.openLazyTab(
-                openedFrom: isEmpty ? .tabTray : .openTab(nil), switchToIncognitoMode: isIncognito)
+                openedFrom: isEmpty ? .tabTray : .openTab(nil), switchToIncognitoMode: isIncognito
+            )
         }
     }
 }

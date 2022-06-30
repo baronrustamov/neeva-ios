@@ -146,7 +146,7 @@ class SettingsViewController: UIHostingController<AnyView> {
                     bvc.presentIntroViewController(
                         true,
                         completion: {
-                            bvc.hideZeroQuery()
+                            bvc.dismissEditingAndHideZeroQuery()
                         })
                 }
             }
