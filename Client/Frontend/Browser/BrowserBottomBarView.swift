@@ -7,8 +7,6 @@ import Shared
 import SwiftUI
 
 struct BrowserBottomBarView: View {
-    let bvc: BrowserViewController
-
     @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var chromeModel: TabChromeModel
     @EnvironmentObject var overlayManager: OverlayManager
@@ -18,18 +16,7 @@ struct BrowserBottomBarView: View {
         if !browserModel.showGrid && !chromeModel.inlineToolbar && !chromeModel.isEditingLocation
             && (Defaults[.didFirstNavigation] || NeevaConstants.currentTarget == .xyz)
         {
-            TabToolbarContent(
-                onNeevaButtonPressed: {
-                    ClientLogger.shared.logCounter(
-                        .OpenCheatsheet,
-                        attributes: EnvironmentHelper.shared.getAttributes()
-                    )
-                    CheatsheetMenuViewModel.promoModel.openSheet(
-                        on: chromeModel.topBarDelegate?.tabManager.selectedTab?.url
-                    )
-                    bvc.showCheatSheetOverlay()
-                }
-            )
+            TabToolbarContent()
         } else if browserModel.showGrid {
             SwitcherToolbarView(top: false)
         }

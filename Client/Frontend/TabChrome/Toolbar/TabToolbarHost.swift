@@ -10,14 +10,11 @@ protocol ToolbarDelegate: AnyObject {
 }
 
 struct TabToolbarContent: View {
-    let onNeevaButtonPressed: () -> Void
-
     @EnvironmentObject private var chromeModel: TabChromeModel
 
     var body: some View {
         TabToolbarView(
-            performAction: { chromeModel.toolbarDelegate?.performTabToolbarAction($0) },
-            onNeevaButtonPressed: onNeevaButtonPressed
+            performAction: { chromeModel.toolbarDelegate?.performTabToolbarAction($0) }
         )
     }
 }

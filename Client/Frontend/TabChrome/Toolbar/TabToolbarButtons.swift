@@ -162,8 +162,8 @@ enum TabToolbarButtons {
 
     struct Neeva: View {
         let iconWidth: CGFloat
-        let action: () -> Void
 
+        @EnvironmentObject private var chromeModel: TabChromeModel
         @EnvironmentObject private var promoModel: CheatsheetPromoModel
         @EnvironmentObject private var incognitoModel: IncognitoModel
         @Environment(\.isEnabled) private var isEnabled
@@ -175,7 +175,18 @@ enum TabToolbarButtons {
         var body: some View {
             TabToolbarButton(
                 label: icon,
-                action: action
+                action: {
+                    ClientLogger.shared.logCounter(
+                        .OpenCheatsheet,
+                        attributes: EnvironmentHelper.shared.getAttributes()
+                    )
+                    promoModel.openSheet(
+                        on: chromeModel.topBarDelegate?.tabManager.selectedTab?.url
+                    )
+                    if let bvc = chromeModel.topBarDelegate as? BrowserViewController {
+                        bvc.showCheatSheetOverlay()
+                    }
+                }
             )
             .presentAsPopover(
                 isPresented: $promoModel.showPromo,

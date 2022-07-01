@@ -88,6 +88,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
     }()
 
     let chromeModel = TabChromeModel()
+    let cheatsheetPromoModel = CheatsheetPromoModel()
     let incognitoModel = IncognitoModel(isIncognito: false)
 
     lazy var tabCardModel: TabCardModel = {
@@ -237,6 +238,10 @@ class BrowserViewController: UIViewController, ModalPresenter {
             web3Model.toastDelegate = self
             web3Model.updateCurrentSession()
         #endif
+
+        cheatsheetPromoModel.subscribe(to: self.tabManager)
+        cheatsheetPromoModel.subscribe(to: self.browserModel.contentVisibilityModel)
+
         didInit()
     }
 

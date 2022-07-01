@@ -18,8 +18,6 @@ public class CheatsheetMenuViewModel: ObservableObject {
 
     private weak var tab: Tab?
 
-    static let promoModel = CheatsheetPromoModel()
-
     // Store the data used to initiate the request in case the values changes
     private(set) var sourcePage: SourcePage?
 

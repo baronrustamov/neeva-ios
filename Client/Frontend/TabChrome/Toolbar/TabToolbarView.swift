@@ -18,7 +18,6 @@ struct TabToolbarView: View {
     @Default(.currentTheme) var currentTheme
 
     let performAction: (ToolbarAction) -> Void
-    let onNeevaButtonPressed: () -> Void
 
     var body: some View {
         VStack(spacing: 0) {
@@ -82,11 +81,8 @@ struct TabToolbarView: View {
 
     @ViewBuilder
     private var neevaButton: some View {
-        TabToolbarButtons.Neeva(iconWidth: 22) {
-            onNeevaButtonPressed()
-        }
-        .environmentObject(CheatsheetMenuViewModel.promoModel)
-        .disabled(!chromeModel.isPage || chromeModel.isErrorPage)
+        TabToolbarButtons.Neeva(iconWidth: 22)
+            .disabled(!chromeModel.isPage || chromeModel.isErrorPage)
     }
 }
 
@@ -94,7 +90,7 @@ struct TabToolbarView_Previews: PreviewProvider {
     static var previews: some View {
         let make = { (model: TabChromeModel) in
             TabToolbarView(
-                performAction: { _ in }, onNeevaButtonPressed: {}
+                performAction: { _ in }
             )
             .environmentObject(model)
         }

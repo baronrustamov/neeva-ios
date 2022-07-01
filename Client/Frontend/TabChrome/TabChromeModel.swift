@@ -172,8 +172,6 @@ class TabChromeModel: ObservableObject {
                 self?.urlInSpace = result
             }
         }
-
-        CheatsheetMenuViewModel.promoModel.subscribe(to: tabManager)
     }
 
     class func isPage(url: URL?) -> Bool {

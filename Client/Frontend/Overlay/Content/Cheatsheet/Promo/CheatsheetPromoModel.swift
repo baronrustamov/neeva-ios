@@ -80,6 +80,12 @@ public class CheatsheetPromoModel: ObservableObject {
         case UGC
     }
 
+    private enum UIUpdate {
+        case clearPromo
+        case setTryPromo
+        case syncUGCState(state: PromoStateStorage.State, url: URL)
+    }
+
     // MARK: - Static Properties
     private static let queue = DispatchQueue(
         label: "co.neeva.app.ios.browser.CheatsheetPromoModel",
@@ -105,6 +111,10 @@ public class CheatsheetPromoModel: ObservableObject {
     private var tabSelectionSubscription: AnyCancellable?
     private var ugcIndicatorDismissTimer: Timer?
 
+    private var currentURL: URL?
+    private let uiUpdatePublisher = PassthroughSubject<UIUpdate, Never>()
+    private var uiUpdateSubscription: AnyCancellable?
+
     init() {
         if Defaults[.useCheatsheetBloomFilters] {
             stateStorage = PromoStateStorage()
@@ -112,6 +122,26 @@ public class CheatsheetPromoModel: ObservableObject {
     }
 
     // MARK: - Subscription Methods
+    func subscribe(to visibilityManager: ContentVisibilityModel) {
+        // we wait until the browser has finished animating and the
+        // webcontent and tool bar is fully visible
+        uiUpdateSubscription?.cancel()
+        uiUpdateSubscription = Publishers.CombineLatest(
+            uiUpdatePublisher,
+            visibilityManager.$showContent
+        )
+        .compactMap { update, visible -> UIUpdate? in
+            guard visible else {
+                return nil
+            }
+            return update
+        }
+        .receive(on: DispatchQueue.main)
+        .sink { [weak self] update in
+            self?.perform(uiUpdate: update)
+        }
+    }
+
     /// Subscribe to tabManager's selectedTabPublisher
     func subscribe(to tabManager: TabManager) {
         if Defaults[.useCheatsheetBloomFilters] {
@@ -138,7 +168,7 @@ public class CheatsheetPromoModel: ObservableObject {
             .removeDuplicates()
             .sink { [weak self] tab in
                 self?.tabEventSubcription?.cancel()
-                self?.clearDisplayedStates()
+                self?.scheduleClearDisplayedStates()
                 if let tab = tab {
                     self?.subscribe(to: tab)
                 }
@@ -158,6 +188,7 @@ public class CheatsheetPromoModel: ObservableObject {
         .sink { [weak self] showPopover, url, _ in
             // check isInNeevaDomain on Main
             precondition(Thread.isMainThread)
+            self?.currentURL = url
             guard let url = url,
                 // avoid flashing the popover when app launches
                 !(url.scheme == InternalURL.scheme),
@@ -167,7 +198,7 @@ public class CheatsheetPromoModel: ObservableObject {
                 TabChromeModel.isPage(url: url),
                 !TabChromeModel.isErrorPage(url: url)
             else {
-                self?.clearDisplayedStates()
+                self?.scheduleClearDisplayedStates()
                 return
             }
 
@@ -180,9 +211,7 @@ public class CheatsheetPromoModel: ObservableObject {
             }
 
             if showIntroPopover {
-                DispatchQueue.main.asyncAfter(deadline: .now() + Self.showPromoDelay) {
-                    self?.setDisplayedStateForTryCheatsheet()
-                }
+                self?.scheduleSetDisplayedStateForTryCheatsheet()
             } else if Defaults[.useCheatsheetBloomFilters] {
                 Self.queue.async {
                     self?.updateDisplayedStateFromUGCStorage(for: url)
@@ -192,20 +221,36 @@ public class CheatsheetPromoModel: ObservableObject {
     }
 
     // MARK: - State Management Methods
-    private func clearDisplayedStates() {
-        precondition(Thread.isMainThread)
-        self.showPromo = false
-        self.showBubble = false
-        self.promoType = nil
-        self.objectWillChange.send()
+    private func perform(uiUpdate: UIUpdate) {
+        switch uiUpdate {
+        case .clearPromo:
+            showPromo = false
+            showBubble = false
+            promoType = nil
+        case .setTryPromo:
+            showPromo = true
+            showBubble = false
+            promoType = .tryCheatsheet
+        case .syncUGCState(let state, let url):
+            guard currentURL == url else {
+                return
+            }
+            promoType = .UGC
+            showPromo = state.showPromo
+            showBubble = state.showBubble
+            if showPromo {
+                setupUGCIndicatorDismissTimer(targetURL: url)
+            }
+        }
+        objectWillChange.send()
     }
 
-    private func setDisplayedStateForTryCheatsheet() {
-        precondition(Thread.isMainThread)
-        self.showPromo = true
-        self.showBubble = false
-        self.promoType = .tryCheatsheet
-        self.objectWillChange.send()
+    private func scheduleClearDisplayedStates() {
+        uiUpdatePublisher.send(.clearPromo)
+    }
+
+    private func scheduleSetDisplayedStateForTryCheatsheet() {
+        uiUpdatePublisher.send(.setTryPromo)
     }
 
     private func updateDisplayedStateFromUGCStorage(for url: URL) {
@@ -213,39 +258,15 @@ public class CheatsheetPromoModel: ObservableObject {
         guard Defaults[.useCheatsheetBloomFilters],
             let cachedState = stateStorage.getState(for: url)
         else {
-            DispatchQueue.main.async { [weak self] in
-                self?.clearDisplayedStates()
-            }
+            scheduleClearDisplayedStates()
             return
         }
 
-        if cachedState.showPromo {
-            // Sometimes popover can be presented when the tab selection animation has not finished yet
-            // that would cause the popover to dismiss itself immediately and clears the flag
-            // 200ms delays seems to be sufficient
-            DispatchQueue.main.asyncAfter(deadline: .now() + Self.showPromoDelay) { [weak self] in
-                guard let self = self else {
-                    return
-                }
-
-                self.promoType = .UGC
-                self.showPromo = true
-                self.showBubble = false
-                self.setupUGCIndicatorDismissTimer(targetURL: url)
-                self.objectWillChange.send()
-            }
-        } else {
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else {
-                    return
-                }
-
-                self.promoType = .UGC
-                self.showPromo = false
-                self.showBubble = cachedState.showBubble
-                self.objectWillChange.send()
-            }
-        }
+        // Since this function schedules ui update on a background thread,
+        // the page's url could have changed by the time the update is executed
+        // need to make sure that the url is still the one for which
+        // we acquired the state
+        uiUpdatePublisher.send(.syncUGCState(state: cachedState, url: url))
     }
 
     //MARK: - Interaction Methods
@@ -266,14 +287,14 @@ public class CheatsheetPromoModel: ObservableObject {
             {
                 Defaults[.seenTryCheatsheetPopoverOnRecipe] = true
             }
-            clearDisplayedStates()
+            scheduleClearDisplayedStates()
         case .UGC:
             // transition straight to dismiss bubble
             if let url = url {
                 dismissBubble(on: url)
             } else {
                 assertionFailure("Inconsistence state for bubble")
-                clearDisplayedStates()
+                scheduleClearDisplayedStates()
             }
         case .none:
             break
