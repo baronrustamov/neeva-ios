@@ -88,6 +88,7 @@ struct SingleLevelTabCardsView: View {
             .padding(.horizontal, CardGridUX.GridSpacing)
             .background(Color.background)
             .zIndex(row.cells.contains(where: \.isSelected) ? 1 : 0)
+            .onDrop(of: ["public.url", "public.text"], delegate: tabModel)
         }
     }
 

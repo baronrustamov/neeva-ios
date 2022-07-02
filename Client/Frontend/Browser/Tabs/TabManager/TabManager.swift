@@ -468,10 +468,20 @@ class TabManager: NSObject {
     }
 
     func rearrangeTabs(fromIndex: Int, toIndex: Int, notify: Bool) {
+        let toRootUUID = tabs[toIndex].rootUUID
+        if getTabGroup(for: toRootUUID) != nil {
+            // If the Tab is being dropped in a TabGroup, change it's,
+            // rootUUID so it joins the TabGroup.
+            tabs[fromIndex].rootUUID = toRootUUID
+        } else {
+            // Tab was dragged out of a TabGroup, reset it's rootUUID.
+            tabs[fromIndex].rootUUID = UUID().uuidString
+        }
+
         tabs.rearrange(from: fromIndex, to: toIndex)
 
         if notify {
-            updateActiveTabsAndSendNotifications(notify: true)
+            updateAllTabDataAndSendNotifications(notify: true)
         }
 
         preserveTabs()

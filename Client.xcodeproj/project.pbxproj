@@ -102,6 +102,8 @@
 		20D21E372820C1A800A7C384 /* CookieCutterOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205132B2282093B0003AAE96 /* CookieCutterOnboardingView.swift */; };
 		20D297F6281DAA3B0036DDBA /* ZombieTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D297F5281DAA3B0036DDBA /* ZombieTabTests.swift */; };
 		20E51A112819D8BB00394720 /* CookieCutterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200976842810EA620055A02B /* CookieCutterHelper.swift */; };
+		20EA89F4286CC54200C432DF /* CardDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EA89F3286CC54200C432DF /* CardDropDelegate.swift */; };
+		20EA89F5286CD71400C432DF /* CardDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EA89F3286CC54200C432DF /* CardDropDelegate.swift */; };
 		20ED47CE27F28235002E3ADF /* BrowserViewController+IntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20ED47CD27F28235002E3ADF /* BrowserViewController+IntroView.swift */; };
 		20F2889227FD1BA9005A8A79 /* HistoryPanelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F2889127FD1BA9005A8A79 /* HistoryPanelModel.swift */; };
 		20F2889427FD20B4005A8A79 /* HistoryPanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F2889327FD20B4005A8A79 /* HistoryPanelViewController.swift */; };
@@ -1996,6 +1998,7 @@
 		20BB666B2821E0F0001FA7E9 /* ChangeNotificationPreferenceDialogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeNotificationPreferenceDialogView.swift; sourceTree = "<group>"; };
 		20C5B262282D82F400BD35B9 /* CookieCutterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCutterTests.swift; sourceTree = "<group>"; };
 		20D297F5281DAA3B0036DDBA /* ZombieTabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZombieTabTests.swift; sourceTree = "<group>"; };
+		20EA89F3286CC54200C432DF /* CardDropDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDropDelegate.swift; sourceTree = "<group>"; };
 		20ED47CD27F28235002E3ADF /* BrowserViewController+IntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+IntroView.swift"; sourceTree = "<group>"; };
 		20F2889127FD1BA9005A8A79 /* HistoryPanelModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPanelModel.swift; sourceTree = "<group>"; };
 		20F2889327FD20B4005A8A79 /* HistoryPanelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPanelViewController.swift; sourceTree = "<group>"; };
@@ -3700,6 +3703,7 @@
 				4AB2039F267D4EEC00920F39 /* BrowserPrimitive.swift */,
 				4A88F97626630F39007C203D /* Card.swift */,
 				4A88F97426630EFC007C203D /* CardDetails.swift */,
+				20EA89F3286CC54200C432DF /* CardDropDelegate.swift */,
 				203A9382283F1E9C00FA4E73 /* CardGroupView.swift */,
 				C9655DEE26A09A8600925912 /* CardListViews.swift */,
 				4A3D2992268583710082F293 /* CardModels.swift */,
@@ -7281,6 +7285,7 @@
 				F8418EE3282B6D6A004F1305 /* SpacesLoginRequiredView.swift in Sources */,
 				4A42C52827E58487003B9826 /* Roobert.swift in Sources */,
 				E6EA734E27F610B600845FFB /* URLExtensions.swift in Sources */,
+				20EA89F5286CD71400C432DF /* CardDropDelegate.swift in Sources */,
 				4A42C52927E58487003B9826 /* NotificationSettingsView.swift in Sources */,
 				677DFDB62838A9F500E879D3 /* InterstitialVIewModel.swift in Sources */,
 				4AB8161027EBC3190017203D /* ConversionLogger.swift in Sources */,
@@ -7919,6 +7924,7 @@
 				C832BF8126E1566E00B9A1F8 /* CheatsheetOverlayContent.swift in Sources */,
 				EBB89508219398E500EB91A0 /* ContentBlocker+Safelist.swift in Sources */,
 				C94D40682684CC35003A6766 /* PublisherExtensions.swift in Sources */,
+				20EA89F4286CC54200C432DF /* CardDropDelegate.swift in Sources */,
 				D3A9949D1A3686BD008AD1AC /* Tab.swift in Sources */,
 				E65075571E37F714006961AC /* FaviconSupport.swift in Sources */,
 				C9299E36268F9CF300758795 /* CloseButton.swift in Sources */,

@@ -125,7 +125,7 @@ extension CardDetails where Self: AccessingManagerProvider, Self.Manager.Item ==
     }
 }
 
-public class TabCardDetails: CardDetails, AccessingManagerProvider,
+public class TabCardDetails: CardDropDelegate, CardDetails, AccessingManagerProvider,
     ClosingManagerProvider, SelectingManagerProvider
 {
     typealias Item = Tab
@@ -136,13 +136,6 @@ public class TabCardDetails: CardDetails, AccessingManagerProvider,
 
     let tab: Tab
     var item: Tab? { tab }
-
-    struct DragState {
-        var tabCardModel: TabCardModel?
-        var draggingDetail: TabCardDetails?
-    }
-
-    static var dragState: DragState?
 
     var manager: TabManager
     var isChild: Bool
@@ -192,6 +185,7 @@ public class TabCardDetails: CardDetails, AccessingManagerProvider,
         self.tab = tab
         self.manager = manager
         self.isChild = isChild
+        super.init(tabManager: manager)
 
         tab.$isPinned.sink { [weak self] _ in
             self?.objectWillChange.send()
@@ -210,17 +204,8 @@ public class TabCardDetails: CardDetails, AccessingManagerProvider,
             .store(in: &subscriptions)
     }
 
-    // This function is called when the user drop their item
-    public func performDrop(info: DropInfo) -> Bool {
-        Self.dragState = nil
-        return true
-    }
-
-    // This function is called right when an item is dragged onto another item
-    public func dropEntered(info: DropInfo) {
-        guard let _ = Self.dragState?.tabCardModel,
-            let draggingDetail = Self.dragState?.draggingDetail
-        else {
+    public override func dropEntered(info: DropInfo) {
+        guard let draggingDetail = CardDropDelegate.draggingDetail else {
             return
         }
 
@@ -235,35 +220,15 @@ public class TabCardDetails: CardDetails, AccessingManagerProvider,
             } ?? 0
 
         if fromIndex != toIndex {
-            if interactWithGroupOrPinnedTabs() {
+            if manager[toIndex]?.isPinned ?? false {
                 return
             }
-            manager.rearrangeTabs(fromIndex: fromIndex, toIndex: toIndex, notify: true)
-        }
-    }
 
-    private func interactWithGroupOrPinnedTabs() -> Bool {
-        guard let tabCardModel = Self.dragState?.tabCardModel,
-            let draggingDetail = Self.dragState?.draggingDetail
-        else {
-            return false
+            // super.dropEntered, sends notifications, no need to send them here.
+            manager.rearrangeTabs(fromIndex: fromIndex, toIndex: toIndex, notify: false)
         }
 
-        let toIndex =
-            tabCardModel.allDetails.firstIndex {
-                $0.id == self.id
-            } ?? 0
-
-        // disable dropping on tab groups or pinned tabs
-        return tabCardModel.allTabGroupDetails.contains(where: { $0.id == self.rootID })
-            || tabCardModel.allDetails[toIndex].isPinned
-
-    }
-
-    // this function will be called when the dragging state of an item has changed, including
-    // the location that it is getting dragged.
-    public func dropUpdated(info: DropInfo) -> DropProposal? {
-        return DropProposal(operation: .move)
+        super.dropEntered(info: info)
     }
 
     func onClose() {
@@ -286,9 +251,9 @@ public class TabCardDetails: CardDetails, AccessingManagerProvider,
                 Label("Open in Incognito", image: "incognito")
             }.disabled(url == nil)
 
-            Button(action: { [self] in
+            Button { [self] in
                 tab.showAddToSpacesSheet()
-            }) {
+            } label: {
                 Label("Save to Spaces", systemSymbol: .bookmark)
             }.disabled(url == nil)
 
@@ -299,57 +264,44 @@ public class TabCardDetails: CardDetails, AccessingManagerProvider,
                     Label("Share", systemSymbol: .squareAndArrowUp)
                 }
             } else {
-                Button(action: {}) {
+                Button {
+                } label: {
                     Label("Share", systemSymbol: .squareAndArrowUp)
                 }.disabled(true)
             }
 
             if isChild {
-                Button(
-                    action: { [self] in
-                        ClientLogger.shared.logCounter(.tabRemovedFromGroup)
-                        manager.removeTabFromTabGroup(tab)
-                        ToastDefaults().showToastForPinningTab(
-                            pinning: isPinned, tabManager: manager)
-                    },
-                    label: {
-                        Label("Remove from group", systemSymbol: .arrowUpForwardSquare)
-                    }
-                )
+                Button { [self] in
+                    ClientLogger.shared.logCounter(.tabRemovedFromGroup)
+                    manager.removeTabFromTabGroup(tab)
+                } label: {
+                    Label("Remove from group", systemSymbol: .arrowUpForwardSquare)
+                }
             }
 
-            Button(
-                action: { [self] in
-                    manager.toggleTabPinnedState(tab)
-                },
-                label: {
-                    isPinned
-                        ? Label("Unpin tab", systemSymbol: .pinSlash)
-                        : Label("Pin tab", systemSymbol: .pin)
-                }
-            )
+            Button { [self] in
+                manager.toggleTabPinnedState(tab)
+                ToastDefaults().showToastForPinningTab(pinning: isPinned, tabManager: manager)
+            } label: {
+                isPinned
+                    ? Label("Unpin tab", systemSymbol: .pinSlash)
+                    : Label("Pin tab", systemSymbol: .pin)
+            }
 
             Divider()
 
             if #available(iOS 15.0, *) {
-                Button(
-                    role: .destructive,
-                    action: { [self] in
-                        manager.close(tab)
-                    },
-                    label: {
-                        Label("Close Tab", systemSymbol: .trash)
-                    }
-                )
+                Button(role: .destructive) { [self] in
+                    manager.close(tab)
+                } label: {
+                    Label("Close Tab", systemSymbol: .trash)
+                }
             } else {
-                Button(
-                    action: { [self] in
-                        manager.close(tab)
-                    },
-                    label: {
-                        Label("Close Tab", systemSymbol: .trash)
-                    }
-                )
+                Button { [self] in
+                    manager.close(tab)
+                } label: {
+                    Label("Close Tab", systemSymbol: .trash)
+                }
             }
         }
     }
@@ -712,8 +664,7 @@ class SiteCardDetails: CardDetails, AccessingManagerProvider {
 }
 
 // TabGroupCardDetails are not to be used for storing data because they can be recreated.
-class TabGroupCardDetails: ObservableObject {
-
+class TabGroupCardDetails: CardDropDelegate, ObservableObject {
     @Default(.tabGroupExpanded) private var tabGroupExpanded: Set<String>
 
     @Published var manager: TabManager
@@ -789,6 +740,7 @@ class TabGroupCardDetails: ObservableObject {
     init(tabGroup: TabGroup, tabManager: TabManager) {
         self.id = tabGroup.id
         self.manager = tabManager
+        super.init(tabManager: tabManager)
 
         if FeatureFlag[.reverseChronologicalOrdering] {
             allDetails = allDetails.reversed()
@@ -825,5 +777,16 @@ class TabGroupCardDetails: ObservableObject {
         if let item = manager.getTabGroup(for: id) {
             manager.closeTabGroup(item, showToast: showToast)
         }
+    }
+
+    public override func dropEntered(info: DropInfo) {
+        guard let draggingDetail = CardDropDelegate.draggingDetail else {
+            return
+        }
+
+        // If a Tab is dragged onto the TabGroup, assign it's rootUUID so it joins the TabGroup.
+        draggingDetail.tab.rootUUID = id
+
+        super.dropEntered(info: info)
     }
 }

@@ -207,8 +207,7 @@ struct Card<Details>: View where Details: CardDetails {
                         )
                         .clipped()
                         .if(
-                            tabCardDetail != nil && !tabCardDetail!.isChild
-                                && !tabCardDetail!.isPinned
+                            tabCardDetail != nil && !tabCardDetail!.isPinned
                         ) { view in
                             view
                                 .modifier(DragModifier(tabCardDetail: tabCardDetail!))
@@ -295,12 +294,10 @@ struct Card<Details>: View where Details: CardDetails {
 
         @ViewBuilder
         func body(content: Content) -> some View {
-            content
-                .onDrag({
-                    TabCardDetails.dragState = TabCardDetails.DragState(
-                        tabCardModel: tabModel, draggingDetail: tabCardDetail)
-                    return NSItemProvider(object: tabCardDetail.id as NSString)
-                })
+            content.onDrag {
+                CardDropDelegate.draggingDetail = tabCardDetail
+                return NSItemProvider(object: tabCardDetail.id as NSString)
+            }
         }
     }
 

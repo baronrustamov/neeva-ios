@@ -24,7 +24,7 @@ protocol CardModel: ThumbnailModel {
     func onDataUpdated()
 }
 
-class TabCardModel: CardModel {
+class TabCardModel: CardDropDelegate, CardModel {
     private var subscription: Set<AnyCancellable> = Set()
 
     private(set) var manager: TabManager
@@ -442,9 +442,20 @@ class TabCardModel: CardModel {
         return getRows(incognito: false)
     }
 
+    public override func dropEntered(info: DropInfo) {
+        guard let draggingDetail = TabCardDetails.draggingDetail else {
+            return
+        }
+
+        // If a Tab is dragged onto the base grid, reset it's rootUUID to remove it from a TabGroup.
+        draggingDetail.tab.rootUUID = UUID().uuidString
+        super.dropEntered(info: info)
+    }
+
     // MARK: init
     init(manager: TabManager) {
         self.manager = manager
+        super.init(tabManager: manager)
 
         manager.tabsUpdatedPublisher.sink { [weak self] in
             self?.tabsDidChange = true

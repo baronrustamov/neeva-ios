@@ -62,7 +62,7 @@ struct CollapsedCardGroupView: View {
             .background(
                 Color.secondarySystemFill
                     .cornerRadius(24, corners: cornersToRound)
-            )
+            ).onDrop(of: ["public.url", "public.text"], delegate: groupDetails)
         }
     }
 
@@ -248,7 +248,7 @@ struct ExpandedCardGroupRowView: View {
                 .padding(.trailing, trailingPadding)
         ).if(previousCell != nil || nextCell != nil || singleLined) {
             $0.frame(maxWidth: maxWidth)
-        }
+        }.onDrop(of: ["public.url", "public.text"], delegate: groupDetails)
     }
 
     func isLastRow(_ rowInfo: Range<Int>, _ groupDetails: TabGroupCardDetails) -> Bool {
