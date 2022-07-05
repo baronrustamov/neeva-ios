@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import Combine
+import Defaults
 import Foundation
 import Shared
 
@@ -193,15 +194,52 @@ private enum BloomFilterLoader {
 
 // MARK: - FilterResource
 private class FilterResource {
-    enum State {
+    struct Configuration {
+        let identifier: String
+        let filterURL: URL
+        let checksumURL: URL
+        var localURL: URL
+
+        static let reddit = Configuration(
+            identifier: "reddit",
+            filterURL: URL(string: "https://s.neeva.co/web/neevascope/v1/reddit.bin")!,
+            checksumURL: URL(string: "https://s.neeva.co/web/neevascope/v1/reddit_latest.json")!,
+            localURL: URL(fileURLWithPath: "")
+        )
+    }
+
+    enum State: CustomStringConvertible {
         case notInitialized
         case loading
         case ready(BloomFilter)
         case error(Error)
+
+        var description: String {
+            switch self {
+            case .notInitialized:
+                return "notInitialized"
+            case .loading:
+                return "loading"
+            case .ready:
+                return "ready"
+            case .error(let error):
+                return "Error: \(error)"
+            }
+        }
     }
 
     // MARK: - Private Properteis
-    private var state: State = .notInitialized
+    private let identifier: String
+    private var state: State = .notInitialized {
+        didSet {
+            switch state {
+            case .ready, .error:
+                Defaults[.redditFilterHealth] = state.description
+            default:
+                break
+            }
+        }
+    }
 
     private let queue = DispatchQueue(
         label: "co.neeva.app.ios.browser.BloomFilterResource",
@@ -211,9 +249,9 @@ private class FilterResource {
         target: nil
     )
 
-    private var filterURL: URL
-    private var checksumURL: URL
-    private var saveToPath: URL
+    private let filterURL: URL
+    private let checksumURL: URL
+    private let saveToPath: URL
 
     var filter: BloomFilter? {
         precondition(!Thread.isMainThread)
@@ -225,10 +263,11 @@ private class FilterResource {
         }
     }
 
-    init(url: URL, checksumURL: URL, saveTo localURL: URL) {
-        self.filterURL = url
-        self.checksumURL = checksumURL
-        self.saveToPath = localURL
+    init(_ configuration: Configuration) {
+        self.identifier = configuration.identifier
+        self.filterURL = configuration.filterURL
+        self.checksumURL = configuration.checksumURL
+        self.saveToPath = configuration.localURL
     }
 
     func load() {
@@ -283,17 +322,13 @@ class BloomFilterManager {
     private var redditFiler: FilterResource?
 
     init() {
-        if let url = URL(string: "https://s.neeva.co/web/neevascope/v1/reddit.bin"),
-            let checksumURL = URL(string: "https://s.neeva.co/web/neevascope/v1/reddit_latest.json")
-        {
-            let localPath = Self.getSaveToDirectory()?
-                .appendingPathComponent(url.lastPathComponent)
-            redditFiler = FilterResource(
-                url: url,
-                checksumURL: checksumURL,
-                saveTo: localPath ?? URL(fileURLWithPath: "")
+        var redditConfig = FilterResource.Configuration.reddit
+        if let saveToDirectory = Self.getSaveToDirectory() {
+            redditConfig.localURL = saveToDirectory.appendingPathComponent(
+                redditConfig.filterURL.lastPathComponent
             )
         }
+        redditFiler = FilterResource(redditConfig)
     }
 
     func contains(_ key: String) -> Bool? {

@@ -8,7 +8,7 @@ import Foundation
 import Shared
 import SwiftUI
 
-/// Methods in this class are not thread safe
+/// Methods in this struct are not thread safe
 private struct PromoStateStorage {
     struct State {
         var showPromo: Bool
@@ -38,9 +38,12 @@ private struct PromoStateStorage {
             return
         }
 
+        Defaults[.numOfUGCTests] += 1
+
         // if cannot construct canonical url, consider as miss
         guard let canonicalURL = CanonicalURL(from: url, stripMobile: true, relaxed: true)?.asString
         else {
+            Defaults[.numOfUGCCanonicalError] += 1
             cache[url] = .missed
             return
         }
@@ -52,6 +55,7 @@ private struct PromoStateStorage {
         }
 
         cache[url] = result ? .hit : .missed
+        Defaults[.numOfUGCHits] += result ? 1 : 0
     }
 
     mutating func performTransition(on url: URL, transition: Transition) {
@@ -68,6 +72,7 @@ private struct PromoStateStorage {
         case .dismissBubble:
             state.showPromo = false
             state.showBubble = false
+            Defaults[.numOfUGCClears] += 1
         }
 
         cache[url] = state

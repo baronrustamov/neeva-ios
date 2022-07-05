@@ -347,6 +347,7 @@ public struct LogConfig {
         case OpenCheatsheetSupport
         case CheatsheetBadURLString
         case CheatsheetFetchError
+        case CheatsheetUGCStatsForSession
 
         // MARK: tab group
         case tabGroupExpanded
@@ -702,6 +703,7 @@ public struct LogConfig {
         case .OpenCheatsheetSupport: return .Cheatsheet
         case .CheatsheetBadURLString: return .Cheatsheet
         case .CheatsheetFetchError: return .Cheatsheet
+        case .CheatsheetUGCStatsForSession: return .Cheatsheet
 
         // MARK: - TabGroup
         case .tabGroupExpanded: return .TabGroup
@@ -869,6 +871,14 @@ public struct LogConfig {
         public enum API: String {
             case getInfo
             case search
+        }
+
+        public enum UGCStat: String {
+            case filterHealth
+            case ugcTest
+            case ugcHit
+            case ugcClear
+            case ugcCanonicalError
         }
     }
 
