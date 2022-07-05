@@ -240,8 +240,7 @@ class TabCardModel: CardDropDelegate, CardModel {
                 && tab.isIncognito == incognito
                 && (!incognito
                     ? (tabGroup != nil
-                        ? tabGroup!.isPinnedTodayOrWasLastExecuted(byTime!)
-                        : tab.isPinnedTodayOrWasLastExecuted(byTime!)) : true)
+                        ? tabGroup!.wasLastExecuted(byTime!) : tab.wasLastExecuted(byTime!)) : true)
                 && tabIncludedInSearch(tabCard)
         }
 

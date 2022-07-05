@@ -18,7 +18,7 @@ extension TabManager {
         // switcher, the normalTabs get filtered to make sure we only select tab in
         // today section.
         let normalTabsToday = normalTabs.filter {
-            $0.isPinnedTodayOrWasLastExecuted(.today)
+            $0.wasLastExecuted(.today)
         }
 
         let index =
@@ -106,7 +106,7 @@ extension TabManager {
             tab.isIncognito
             ? incognitoTabs
             : normalTabs.filter {
-                $0.isPinnedTodayOrWasLastExecuted(.today)
+                $0.wasLastExecuted(.today)
             }
         let bvc = SceneDelegate.getBVC(with: scene)
 
@@ -116,7 +116,7 @@ extension TabManager {
         }
 
         if closedLastNormalTab || closedLastIncognitoTab
-            || !viableTabs.contains(where: { $0.isPinnedTodayOrWasLastExecuted(.today) })
+            || !viableTabs.contains(where: { $0.wasLastExecuted(.today) })
         {
             DispatchQueue.main.async {
                 self.selectTab(nil, notify: notify)

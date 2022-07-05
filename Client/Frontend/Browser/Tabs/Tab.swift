@@ -211,15 +211,13 @@ class Tab: NSObject, ObservableObject {
         switch archivedTabsDuration {
         case .week:
             return
-                !(isPinnedTodayOrWasLastExecuted(.today)
-                || isPinnedTodayOrWasLastExecuted(.yesterday)
-                || isPinnedTodayOrWasLastExecuted(.lastWeek))
+                !(wasLastExecuted(.today) || wasLastExecuted(.yesterday)
+                || wasLastExecuted(.lastWeek))
         case .month:
             return
-                !(isPinnedTodayOrWasLastExecuted(.today)
-                || isPinnedTodayOrWasLastExecuted(.yesterday)
-                || isPinnedTodayOrWasLastExecuted(.lastWeek)
-                || isPinnedTodayOrWasLastExecuted(.lastMonth))
+                !(wasLastExecuted(.today) || wasLastExecuted(.yesterday)
+                || wasLastExecuted(.lastWeek)
+                || wasLastExecuted(.lastMonth))
         case .forever:
             return false
         }
@@ -708,12 +706,11 @@ class Tab: NSObject, ObservableObject {
         }
     }
 
-    func isPinnedTodayOrWasLastExecuted(_ byTime: TimeFilter) -> Bool {
+    func wasLastExecuted(_ byTime: TimeFilter) -> Bool {
         // The fallback value won't be used. tab.lastExecutedTime is
         // guaranteed to be non-nil in configureTab()
         let lastExecutedTime = lastExecutedTime ?? Date.nowMilliseconds()
-        return isPinned
-            ? byTime == .today : isLastExecutedTimeInTimeFilter(lastExecutedTime, byTime)
+        return isLastExecutedTimeInTimeFilter(lastExecutedTime, byTime)
     }
 }
 
