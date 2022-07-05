@@ -67,8 +67,8 @@ extension ContextMenuHelper: UIGestureRecognizerDelegate, UIScrollViewDelegate {
         // WebKit installs gesture handlers async. If `replaceWebViewLongPress` is called after a wkwebview in most cases a small delay is sufficient
         // See also https://bugs.webkit.org/show_bug.cgi?id=193366
         nativeHighlightLongPressRecognizer =
-            gestureRecognizerWithDescriptionFragment(
-                "action=_highlightLongPressRecognized:") as? UILongPressGestureRecognizer
+            gestureRecognizerWithDescriptionFragment("ContextMenuHelper")
+            as? UILongPressGestureRecognizer
 
         let imageLongPressGestureRecognizer = UILongPressGestureRecognizer(
             target: self, action: #selector(self.handleImageLongPress))
