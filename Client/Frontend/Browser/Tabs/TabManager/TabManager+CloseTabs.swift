@@ -198,6 +198,22 @@ extension TabManager {
         }
     }
 
+    /// Used when the user logs out. Clears any Neeva tabs so they are logged out there too.
+    func clearNeevaTabs() {
+        let neevaTabs = tabs.filter { $0.url?.isNeevaURL() ?? false }
+        neevaTabs.forEach { tab in
+            if tab == selectedTab {
+                tab.reload()
+            } else {
+                tab.close()
+            }
+
+            // Clear the tab's screenshot by setting it to nil.
+            // Will be erased from memory when `storeChanges` is called.
+            tab.setScreenshot(nil)
+        }
+    }
+
     // MARK: - Blank Tabs
     /// Removes any tabs with the location `about:blank`. Seen when clicking web links that open native apps.
     func removeBlankTabs() {

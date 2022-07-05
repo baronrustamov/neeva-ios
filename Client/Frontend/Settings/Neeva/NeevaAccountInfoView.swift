@@ -6,12 +6,12 @@ import Shared
 import SwiftUI
 
 struct NeevaAccountInfoView: View {
-    @ObservedObject var userInfo: NeevaUserInfo
-    @Binding var isPresented: Bool
-
+    @EnvironmentObject var browserModel: BrowserModel
     @Environment(\.onOpenURL) var openURL
 
     @State var signingOut = false
+    @Binding var isPresented: Bool
+    @ObservedObject var userInfo: NeevaUserInfo
 
     var body: some View {
         List {
@@ -122,12 +122,16 @@ struct NeevaAccountInfoView: View {
                                     ClientLogger.shared.logCounter(
                                         .SettingSignout,
                                         attributes: EnvironmentHelper.shared.getAttributes())
+
                                     if userInfo.hasLoginCookie() {
                                         NotificationPermissionHelper.shared
                                             .deleteDeviceTokenFromServer()
+
                                         userInfo.clearCache()
                                         userInfo.deleteLoginCookie()
                                         userInfo.didLogOut()
+                                        browserModel.tabManager.clearNeevaTabs()
+
                                         isPresented = false
                                     }
                                 },
@@ -145,11 +149,12 @@ struct NeevaAccountInfoView_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(SSOProvider.allCases, id: \.self) { authProvider in
             NeevaAccountInfoView(
+                isPresented: .constant(true),
                 userInfo: NeevaUserInfo(
                     previewDisplayName: "First Last", email: "name@example.com",
                     pictureUrl:
                         "https://pbs.twimg.com/profile_images/1273823608297500672/MBtG7NMI_400x400.jpg",
-                    authProvider: authProvider), isPresented: .constant(true))
+                    authProvider: authProvider))
         }.previewLayout(.fixed(width: 375, height: 150))
     }
 }

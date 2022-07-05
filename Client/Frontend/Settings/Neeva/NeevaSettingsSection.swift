@@ -52,7 +52,7 @@ struct NeevaSettingsSection: View {
         {
             NavigationLink(
                 destination: NeevaAccountInfoView(
-                    userInfo: userInfo, isPresented: $showingAccountDetails),
+                    isPresented: $showingAccountDetails, userInfo: userInfo),
                 isActive: $showingAccountDetails
             ) {
                 NeevaAccountRow(userInfo: userInfo)
