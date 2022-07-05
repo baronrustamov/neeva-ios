@@ -327,12 +327,8 @@ class BrowserViewController: UIViewController, ModalPresenter {
         let showToolbar = shouldShowFooterForTraitCollection(newCollection)
         chromeModel.inlineToolbar = !showToolbar
 
-        if let tab = tabManager.selectedTab,
-            let webView = tab.webView
-        {
+        if let tab = tabManager.selectedTab {
             updateURLBarDisplayURL(tab)
-            chromeModel.canGoBack = webView.canGoBack
-            chromeModel.canGoForward = webView.canGoForward
         }
     }
 
