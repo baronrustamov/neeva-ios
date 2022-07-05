@@ -791,6 +791,8 @@ public struct LogConfig {
         public static let FirstRunLogErrorMessage = "FirstRunLogErrorMessage"
 
         public static let InterstitialTimeSpent = "InterstitialTimeSpent"
+
+        public static let pushNotificationToken = "PushNotificationToken"
     }
 
     public struct UIInteractionAttribute {

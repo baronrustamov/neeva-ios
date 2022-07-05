@@ -136,6 +136,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         bvc.tabManager.removeBlankTabs()
         bvc.downloadQueue.resumeAll()
 
+        var attributes = EnvironmentHelper.shared.getAttributes()
+        if !NeevaUserInfo.shared.hasLoginCookie(),
+            let token = Defaults[.notificationToken]
+        {
+            attributes.append(
+                ClientLogCounterAttribute(
+                    key: LogConfig.Attribute.pushNotificationToken,
+                    value: token
+                )
+            )
+        }
         ClientLogger.shared.logCounter(
             .AppEnterForeground,
             attributes: EnvironmentHelper.shared.getAttributes()
