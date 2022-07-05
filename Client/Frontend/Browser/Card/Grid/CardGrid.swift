@@ -137,7 +137,6 @@ struct CardGrid: View {
                 )
                 .background(CardGridBackground())
                 .modifier(SwipeToSwitchToSpacesGesture())
-
             NavigationLink(
                 destination: detailedSpaceView,
                 isActive: $gridModel.showingDetailView

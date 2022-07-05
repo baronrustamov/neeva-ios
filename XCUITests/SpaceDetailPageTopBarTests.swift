@@ -151,6 +151,7 @@ class SpaceDetailPageTopBarTests: BaseTestCase {
         // Action sheet
         waitForExistence(app.buttons["Unfollow Space"])
         app.buttons["Unfollow Space"].tap()
+        app.buttons["Return to all Spaces view"].tap()
 
         waitForExistence(app.buttons[SpaceServiceMock.mySpaceTitle])
         XCTAssertTrue(app.buttons[SpaceServiceMock.mySpaceTitle].exists)

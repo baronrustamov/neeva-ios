@@ -466,11 +466,12 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
         updateSpace()
     }
 
-    init(space: Space, manager: SpaceStore, isPinnable: Bool = true) {
+    init(space: Space, manager: SpaceStore, showingDetails: Bool = false, isPinnable: Bool = true) {
         self.item = space
         self.id = space.id.id
         self.manager = manager
         self.isPinnable = isPinnable
+        self.showingDetails = showingDetails
         updateDetails()
     }
 

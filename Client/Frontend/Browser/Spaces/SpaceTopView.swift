@@ -315,8 +315,9 @@ struct SpaceTopView: View {
                     .destructive(
                         Text(space?.ACL == .owner ? "Delete Space" : "Unfollow Space"),
                         action: {
-                            gridModel.closeDetailView()
-
+                            if space?.ACL == .owner {
+                                presentationMode.wrappedValue.dismiss()
+                            }
                             guard
                                 let index = spacesModel.allDetails.firstIndex(where: {
                                     primitive.id == $0.id

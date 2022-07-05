@@ -75,6 +75,7 @@ class AddToSpaceSheetTests: BaseTestCase {
         app.buttons["Save"].tap(force: true)
 
         // Confirm we are on the Space detail page
+        waitForExistence(app.buttons["Start Searching"])
         XCTAssertTrue(app.buttons["Start Searching"].exists)
 
         app.buttons["Return to all Spaces view"].tap()

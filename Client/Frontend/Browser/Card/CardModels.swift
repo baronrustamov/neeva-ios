@@ -579,9 +579,7 @@ class SpaceCardModel: CardModel {
         self.anyCancellable = manager.$state.sink { [weak self] state in
             guard let self = self, case .ready = state,
                 self.manager.updatedSpacesFromLastRefresh.count > 0
-            else {
-                return
-            }
+            else { return }
 
             if self.manager.updatedSpacesFromLastRefresh.count == 1,
                 let id = self.manager.updatedSpacesFromLastRefresh.first?.id.id,
@@ -600,7 +598,10 @@ class SpaceCardModel: CardModel {
 
             DispatchQueue.main.async {
                 self.allDetails = self.manager.getAll().map {
-                    SpaceCardDetails(space: $0, manager: self.manager)
+                    SpaceCardDetails(
+                        space: $0,
+                        manager: self.manager,
+                        showingDetails: self.detailedSpace?.item?.id.id == $0.id.id)
                 }
 
                 self.listenForShowingDetails()
@@ -610,12 +611,33 @@ class SpaceCardModel: CardModel {
         }
     }
 
+    func listenForShowingDetails() {
+        allDetails.forEach { details in
+            self.subscribeToShowingDetails(for: details)
+        }
+    }
+
+    private func subscribeToShowingDetails(for details: SpaceCardDetails) {
+        details.$showingDetails.sink { [weak self] showingDetails in
+            guard let space = self?.allDetails.first(where: { $0.id == details.id }) else {
+                return
+            }
+
+            if showingDetails {
+                self?.detailedSpace = space
+            } else if self?.detailedSpace == space {
+                self?.detailedSpace = nil
+            }
+        }.store(in: &detailsSubscriptions)
+    }
+
     private func listenSpaceMutations() {
         mutationSubscription = manager.spaceLocalMutation.sink { [weak self] space in
             guard let self = self else { return }
             if let space = space {
-                let spaceCardDetails = SpaceCardDetails(space: space, manager: self.manager)
-                self.allDetails.append(spaceCardDetails)
+                let details = SpaceCardDetails(space: space, manager: self.manager)
+                self.allDetails.append(details)
+                self.subscribeToShowingDetails(for: details)
             }
         }
 
@@ -627,23 +649,6 @@ class SpaceCardModel: CardModel {
         }
 
         listenForShowingDetails()
-    }
-
-    func listenForShowingDetails() {
-        allDetails.forEach { details in
-            let detailID = details.id
-            details.$showingDetails.sink { [weak self] showingDetails in
-                guard let space = self?.allDetails.first(where: { $0.id == detailID }) else {
-                    return
-                }
-
-                if showingDetails {
-                    self?.detailedSpace = space
-                } else if self?.detailedSpace == space {
-                    self?.detailedSpace = nil
-                }
-            }.store(in: &detailsSubscriptions)
-        }
     }
 
     func add(spaceID: String, url: String, title: String, description: String? = nil) {

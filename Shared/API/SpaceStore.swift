@@ -368,7 +368,9 @@ public class SpaceStore: ObservableObject {
             switch result {
             case .success(let arr):
                 guard let model = arr.first else { return }
-                completion(Space(from: model))
+                let space = Space(from: model)
+                completion(space)
+                self.updatedSpacesFromLastRefresh = [space]
                 self.state = .ready
             case .failure(let error):
                 Logger.browser.error(error.localizedDescription)
