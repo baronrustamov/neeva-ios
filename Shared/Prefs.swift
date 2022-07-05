@@ -146,7 +146,7 @@ extension Defaults.Keys {
     public static let showNeevaMenuWillMove = Defaults.BoolKey(
         "showNeevaMenuWillMove", default: true)
     public static let useCheatsheetBloomFilters = Defaults.BoolKey(
-        "useCheatsheetBloomFilters", default: false
+        "useCheatsheetBloomFilters", default: true
     )
 
     // MARK: - notification
