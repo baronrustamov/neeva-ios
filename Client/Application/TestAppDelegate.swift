@@ -199,6 +199,10 @@ class TestAppDelegate: AppDelegate {
             SpaceServiceProvider.shared = SpaceServiceMock()
         }
 
+        if launchArguments.contains(LaunchArguments.DisableCheatsheetBloomFilters) {
+            Defaults[.useCheatsheetBloomFilters] = false
+        }
+
         // Deferred to here in case the ClearProfile argument was set.
         if let loginCookie = loginCookie {
             NeevaUserInfo.shared.setLoginCookie(loginCookie)

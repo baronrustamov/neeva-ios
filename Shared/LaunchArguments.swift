@@ -30,4 +30,6 @@ public struct LaunchArguments {
     public static let EnableMockSpaces = "ENABLE_MOCK_SPACES"
 
     public static let DontAddTabOnLaunch = "DONT_ADD_TAB_ON_LAUNCH"
+
+    public static let DisableCheatsheetBloomFilters = "DISABLE_CHEATSHEET_BLOOM_FILTERS"
 }

@@ -5,6 +5,12 @@
 import XCTest
 
 class TabGroupTests: BaseTestCase {
+    override func setUp() {
+        launchArguments.append(LaunchArguments.DisableCheatsheetBloomFilters)
+
+        super.setUp()
+    }
+
     // MARK: - NYTimes Test Case
     // The NYTimes case is where a URL is opened from say nytimes.com,
     // and a sublink i.e. nytimes.com/article is opened.
