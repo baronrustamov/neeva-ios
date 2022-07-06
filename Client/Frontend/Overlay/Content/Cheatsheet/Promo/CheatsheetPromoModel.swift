@@ -107,6 +107,7 @@ public class CheatsheetPromoModel: ObservableObject {
     @Published var showPromo: Bool = false
     @Published var showBubble: Bool = false
     var popoverDimBackground: Bool { !(promoType == .UGC) }
+    var popoverUseAlternativeShadow: Bool { promoType == .UGC }
 
     // MARK: - Private Properties
     private var stateStorage: PromoStateStorage!
