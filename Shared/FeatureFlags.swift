@@ -31,6 +31,7 @@ public enum FeatureFlag: String, CaseIterable, RawRepresentable {
     case swipeToCloseTabs = "Swipe to close tabs"
     case restoreAppUI = "Restore App UI"
     case topCardStrip = "Top Card Strip"
+    case oldDBFirstRun = "Old Default Browser Interstitial"
 
     public init?(caseName: String) {
         for value in FeatureFlag.allCases where "\(value)" == caseName {

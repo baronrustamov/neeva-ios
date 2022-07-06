@@ -151,11 +151,19 @@ class InterstitialViewModel: ObservableObject {
     }
 
     func welcomePageBullets() -> [String] {
-        return [
-            "Ad-Free Search",
-            "Block Ads. Block Trackers",
-            "Block Cookie Pop-ups",
-        ]
+        if FeatureFlag[.oldDBFirstRun] {
+            return [
+                "Ad-Free Search",
+                "Block Ads. Block Trackers",
+                "Block Cookie Pop-ups",
+            ]
+        } else {
+            return [
+                "Ad-free search results",
+                "Browser without ads or trackers",
+                "Cookie pop-up blocker",
+            ]
+        }
     }
 
     func onboardingPageBullets() -> [String] {

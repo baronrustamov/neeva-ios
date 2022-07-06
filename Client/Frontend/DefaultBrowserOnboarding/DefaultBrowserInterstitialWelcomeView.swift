@@ -13,7 +13,7 @@ struct DefaultBrowserInterstitialWelcomeView: View {
     @State private var switchToDefaultBrowserScreen = false
 
     @ViewBuilder
-    var content: some View {
+    var oldContent: some View {
         ZStack(alignment: .top) {
             VStack {
                 Image("welcome-gradient", bundle: .main).resizable()
@@ -23,11 +23,15 @@ struct DefaultBrowserInterstitialWelcomeView: View {
             }
             VStack {
                 Spacer()
+
                 Image("welcome-logo", bundle: .main)
                     .frame(width: 100, height: 20)
+
                 Spacer()
+
                 ZStack {
                     Color.white.clipShape(RoundedRectangle(cornerRadius: 20))
+
                     VStack(alignment: .leading) {
                         Image("welcome-shield", bundle: .main).frame(width: 32, height: 32)
                         Text("Privacy Made Easy")
@@ -43,7 +47,10 @@ struct DefaultBrowserInterstitialWelcomeView: View {
                             }
                             .padding(.vertical, 5)
                         }
-                    }.padding(48).frame(width: 315).overlay(
+                    }
+                    .padding(48)
+                    .frame(width: 315)
+                    .overlay(
                         RoundedRectangle(cornerRadius: 20)
                             .stroke(Color.ui.gray96, lineWidth: 2)
                     )
@@ -56,11 +63,39 @@ struct DefaultBrowserInterstitialWelcomeView: View {
         Spacer()
     }
 
+    @ViewBuilder
+    var newContent: some View {
+        VStack(alignment: .leading) {
+            Text("Neeva puts you in charge of\nyour internet experience.")
+                .font(.system(size: UIConstants.hasHomeButton ? 24 : 36, weight: .bold))
+                .padding(.bottom, 15)
+            ForEach(interstitialModel.welcomePageBullets(), id: \.self) {
+                bulletText in
+                HStack {
+                    Symbol(decorative: .checkmarkCircleFill, size: 20)
+                        .foregroundColor(Color.ui.adaptive.blue)
+                    Text(bulletText).font(.system(size: 16, weight: .bold))
+                }
+                .padding(.vertical, 5)
+            }
+        }.frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 45)
+    }
+
+    @ViewBuilder
+    var content: some View {
+        if FeatureFlag[.oldDBFirstRun] {
+            oldContent
+        } else {
+            DefaultBrowserInterstitialBackdrop(content: newContent)
+        }
+    }
+
     var body: some View {
         if switchToDefaultBrowserScreen {
             DefaultBrowserInterstitialOnboardingView()
         } else {
             DefaultBrowserInterstitialView(
+                showLogo: true,
                 content: content,
                 primaryButton: "Let's Go",
                 primaryAction: {

@@ -5,10 +5,53 @@
 import Foundation
 import SwiftUI
 
+struct DefaultBrowserInterstitialBackdrop<Content: View>: View {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
+    var content: Content
+
+    var body: some View {
+        ZStack(alignment: .top) {
+            Rectangle()
+                .frame(height: 150)
+                .frame(maxWidth: .infinity)
+                .foregroundColor(
+                    Color.brand.variant.adaptive.polar
+                )
+                .padding(.horizontal, -32)
+                .ignoresSafeArea()
+
+            VStack(spacing: 0) {
+                Spacer().frame(height: UIConstants.hasHomeButton ? 10 : 50)
+
+                VStack(alignment: .leading, spacing: 0) {
+                    Image("welcome-shield", bundle: .main)
+                        .frame(width: 32, height: 32)
+                        .padding(.top, horizontalSizeClass == .regular ? 200 : 50)
+                        .padding(.bottom, 15)
+                        .padding(.horizontal, 45)
+                    content
+                }
+                .background(Color(UIColor.systemBackground)).cornerRadius(20)
+                .padding(.top, 10)
+                .padding(.horizontal, -32)
+            }
+            .shadow(
+                color: Color.brand.variant.adaptive.shadow,
+                radius: 8,
+                x: 0,
+                y: -8
+            )
+        }
+        Spacer()
+    }
+}
+
 struct DefaultBrowserInterstitialView<Content: View>: View {
     @EnvironmentObject var interstitialModel: InterstitialViewModel
 
     var showSecondaryButton: Bool = true
+    var showLogo: Bool = false
     var content: Content
     var primaryButton: String
     var secondaryButton: String?
@@ -65,6 +108,14 @@ struct DefaultBrowserInterstitialView<Content: View>: View {
             }
             .padding(.horizontal, 32)
             .padding(.bottom, 20)
+            if showLogo {
+                VStack(spacing: 0) {
+                    Spacer()
+                    Image("neevaMenuIcon")
+                        .padding(.bottom, 40)
+                        .frame(width: 32, height: 32)
+                }
+            }
         }
     }
 }
