@@ -197,14 +197,16 @@ struct SpaceDetailList: View {
             }
         }
     }
-    
+
     private func onPinToggle(spaceItemId: String, isPinned: Bool) {
-        guard let index = primitive.item?.contentData?.firstIndex(where: { $0.id == spaceItemId }) else {
+        guard let index = primitive.item?.contentData?.firstIndex(where: { $0.id == spaceItemId })
+        else {
             return
         }
         primitive.item?.contentData?[index].isPinned = isPinned
-        
-        spacesModel.pinSpaceItem(spaceId: primitive.id, spaceItemId: spaceItemId, isPinned: isPinned)
+
+        spacesModel.pinSpaceItem(
+            spaceId: primitive.id, spaceItemId: spaceItemId, isPinned: isPinned)
     }
 
     private func onMove(source: IndexSet, destination: Int) {

@@ -105,7 +105,7 @@ struct SpaceActionsModifier: ViewModifier {
     let onPinToggle: (String, Bool) -> Void
     let addToAnotherSpace: (URL, String?, String?, String?) -> Void
     let editSpaceItem: () -> Void
-    
+
     var isPinned: Bool {
         return details.item?.isPinned ?? false
     }
@@ -128,7 +128,7 @@ struct SpaceActionsModifier: ViewModifier {
                     } label: {
                         Label("Delete", systemImage: "")
                     }
-                    
+
                     if details.data.generatorID != nil && isNewsItem {
                         Button {
                             keepNewsItem()
