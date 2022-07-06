@@ -78,11 +78,19 @@ extension ContextMenuHelper: UIGestureRecognizerDelegate, UIScrollViewDelegate {
     private func gestureRecognizerWithDescriptionFragment(_ descriptionFragment: String)
         -> UIGestureRecognizer?
     {
-        let result = tab?.webView?.scrollView.subviews.compactMap({ $0.gestureRecognizers })
-            .joined().first(where: {
+        if let scrollView = tab?.webView?.scrollView {
+            let scrollViewGestures: [UIGestureRecognizer] = scrollView.gestureRecognizers ?? []
+            let subViewGestures: [UIGestureRecognizer] = Array(
+                (scrollView.subviews.compactMap({ $0.gestureRecognizers }).joined()))
+            let allGestures: [UIGestureRecognizer] = scrollViewGestures + subViewGestures
+            let result = allGestures.first {
                 $0.description.contains(descriptionFragment)
-            })
-        return result
+            }
+
+            return result
+        }
+
+        return nil
     }
 
     @objc func handleImageLongPress(_ sender: UIGestureRecognizer) {
