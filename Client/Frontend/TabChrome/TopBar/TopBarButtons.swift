@@ -123,11 +123,10 @@ struct TopBarSpaceFilterButton: View {
                 presenting = false
             }
         ) {
-            VerticalScrollViewIfNeeded {
-                SpacesFilterView()
-                    .topBarPopoverPadding()
-                    .environmentObject(spaceCardModel)
-            }.frame(minWidth: 325, minHeight: 128)
+            SpacesFilterView()
+                .topBarPopoverPadding()
+                .environmentObject(spaceCardModel)
+                .frame(minWidth: 325)
         }
     }
 }

@@ -125,11 +125,22 @@ public class SpaceServiceMock: SpaceService {
         let spacePublicAclTestsSpace2 = SpaceMock(
             name: "SpacePublicAclTests Space2", isPublic: true)
 
+        // Starting with AAA and ZZZ makes it easier to test sorting by Name
+        let spaceSortTestSpace1 = SpaceMock(
+            name: "AAA Space")
+        let spaceSortTestSpace2 = SpaceMock(
+            name: "ZZZ Space")
+
         spaces[mySpace.id] = mySpace
         spaces[spaceNotOwnedByMe.id] = spaceNotOwnedByMe
         spaces[spaceEntityTestsSpace.id] = spaceEntityTestsSpace
         spaces[spacePublicAclTestsSpace1.id] = spacePublicAclTestsSpace1
         spaces[spacePublicAclTestsSpace2.id] = spacePublicAclTestsSpace2
+        spaces[spaceSortTestSpace1.id] = spaceSortTestSpace1
+        spaces[spaceSortTestSpace2.id] = spaceSortTestSpace2
+
+        // This is for testing "Last Updated"
+        spaceSortTestSpace1.lastModifiedTs = Date.distantPast
 
         // Populate the Spaces
         spaces[spaceNotOwnedByMe.id]?.addSpaceEntity(

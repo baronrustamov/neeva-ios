@@ -12,15 +12,15 @@ class SpaceCardsViewModel: ObservableObject {
 
     init(spacesModel: SpaceCardModel) {
         subscriber = spacesModel.$allDetails
-            .combineLatest(spacesModel.$filterState, spacesModel.$sortType)
-            .sink { (arr, filter, sort) in
+            .combineLatest(spacesModel.$filterState, spacesModel.$sortType, spacesModel.$sortOrder)
+            .sink { (arr, filter, sort, order) in
                 self.dataSource =
                     arr.filter {
                         NeevaFeatureFlags[.enableSpaceDigestCard]
                             || $0.id != SpaceStore.dailyDigestID
                     }
                     .filterSpaces(by: filter)
-                    .sortSpaces(by: sort)
+                    .sortSpaces(by: sort, order: order)
             }
     }
 
@@ -42,8 +42,10 @@ struct SpaceCardsView: View {
 }
 
 extension MutableCollection where Self == [SpaceCardDetails] {
-    // TODO: (Burak) Rewrite with sort feature
-    fileprivate func sortSpaces(by sortType: SpaceSortState) -> Self {
+    fileprivate func sortSpaces(
+        by sortType: SpaceSortState,
+        order: SpaceSortOrder
+    ) -> Self {
         let dateFormatter = ISO8601DateFormatter()
         var temp = self
         return temp.sorted(
@@ -52,14 +54,17 @@ extension MutableCollection where Self == [SpaceCardDetails] {
                 return firstItem.isPinned && !secondItem.isPinned
             },
             {
-                guard let firstItem = $0.item, let secondItem = $1.item else { return true }
-                if let date1 = dateFormatter.date(from: firstItem[keyPath: sortType.keyPath]),
-                    let date2 = dateFormatter.date(from: secondItem[keyPath: sortType.keyPath])
+                guard let firstItem = $0.item?[keyPath: sortType.keyPath],
+                    let secondItem = $1.item?[keyPath: sortType.keyPath]
+                else {
+                    return true
+                }
+                if let date1 = dateFormatter.date(from: firstItem),
+                    let date2 = dateFormatter.date(from: secondItem)
                 {
-                    return date1 > date2
+                    return order.makeComparator()(date1, date2)
                 } else {
-                    return firstItem[keyPath: sortType.keyPath]
-                        < secondItem[keyPath: sortType.keyPath]
+                    return order.makeComparator()(firstItem, secondItem)
                 }
             })
     }

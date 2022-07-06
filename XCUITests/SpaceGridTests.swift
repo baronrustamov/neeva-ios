@@ -49,6 +49,45 @@ class SpaceGridTests: BaseTestCase {
         XCTAssertTrue(app.buttons[SpaceServiceMock.spaceNotOwnedByMeTitle].exists)
     }
 
+    func testSpaceSort() {
+        app.buttons["Show Tabs"].tap()
+        app.buttons["Spaces"].tap()
+        app.buttons["Space Filter"].tap()
+
+        // Assert that the arrow is up
+        XCTAssertTrue(
+            app.buttons["Last Updated"]
+                .children(matching: .staticText)
+                .matching(identifier: String(Nicon.arrowUp.rawValue)).element.exists
+        )
+
+        // Change the sort order
+        app.buttons["Last Updated"].tap(force: true)
+
+        // Assert that the AAA Space is now first
+        XCTAssertTrue(
+            app.scrollViews["CardGrid"]
+                .descendants(matching: .button)
+                .firstMatch.label.starts(with: "AAA Space"))
+
+        app.buttons["Name"].tap(force: true)
+
+        XCTAssertTrue(
+            app.buttons["Name"]
+                .children(matching: .staticText)
+                .matching(identifier: String(Nicon.arrowDown.rawValue)).element.exists
+        )
+
+        app.buttons["Name"].tap(force: true)
+
+        // Assert that the ZZZ Space is now first
+        XCTAssertTrue(
+            app.scrollViews["CardGrid"]
+                .descendants(matching: .button)
+                .firstMatch.label.starts(with: "ZZZ Space"))
+
+    }
+
     // This is tested in AddToSpaceSheetTests.swift, but the function
     // is left here just as a reminder that it is being covered.
     //    func testCreateSpace() {}

@@ -547,6 +547,7 @@ class SpaceCardModel: CardModel {
     @Published var updatedItemIDs = [String]()
     @Published var filterState: SpaceFilterState = .allSpaces
     @Published var sortType: SpaceSortState = .updatedDate
+    @Published var sortOrder: SpaceSortOrder = .descending
 
     var thumbnailURLCandidates = [URL: [URL]]()
     private var anyCancellable: AnyCancellable? = nil
