@@ -197,6 +197,18 @@ extension Color {
             public static let maya = Color(UIColor.brand.variant.maya)
             public static let gold = Color(UIColor.brand.variant.gold)
             public static let purple = Color(UIColor.brand.variant.purple)
+
+            public enum adaptive {
+                public static let polar = Color(
+                    light: Color(UIColor.brand.variant.polar),
+                    dark: Color(hex: 0x415AFF)
+                )
+
+                public static let shadow = Color(
+                    light: Color(hex: 0x4D88E8, opacity: 0.1),
+                    dark: Color(hex: 0x1C3BC7, opacity: 0.1)
+                )
+            }
         }
 
         public static let charcoal = Color(UIColor.brand.charcoal)
