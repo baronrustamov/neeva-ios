@@ -83,7 +83,7 @@ struct DefaultBrowserInterstitialWelcomeView: View {
 
     @ViewBuilder
     var content: some View {
-        if FeatureFlag[.oldDBFirstRun] {
+        if NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) != .welcomeV2 {
             oldContent
         } else {
             DefaultBrowserInterstitialBackdrop(content: newContent)
