@@ -120,7 +120,7 @@ public class SpaceServiceProd: SpaceService {
     public func pinSpaceItem(spaceId: String, spaceItemId: String, isPinned: Bool)
         -> PinSpaceItemRequest?
     {
-        return pinSpaceItem(spaceId: spaceId, spaceItemId: spaceItemId, isPinned: isPinned)
+        return PinSpaceItemRequest(spaceId: spaceId, spaceItemId: spaceItemId, isPinned: isPinned)
     }
 
     public func updateSpaceEntity(

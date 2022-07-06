@@ -14,6 +14,7 @@ struct SpaceEntityDetailView: View {
     let details: SpaceEntityThumbnail
     let onSelected: () -> Void
     let onDelete: (Int) -> Void
+    let onPinToggle: (String, Bool) -> Void
     let addToAnotherSpace: (URL, String?, String?, String?) -> Void
     let editSpaceItem: () -> Void
     let index: Int
@@ -75,7 +76,10 @@ struct SpaceEntityDetailView: View {
                     },
                     onDelete: {
                         onDelete(index)
-                    }, addToAnotherSpace: addToAnotherSpace, editSpaceItem: editSpaceItem)
+                    },
+                    onPinToggle: onPinToggle,
+                    addToAnotherSpace: addToAnotherSpace,
+                    editSpaceItem: editSpaceItem)
             )
         }
         .scaleEffect(isPressed ? 0.95 : 1)
@@ -98,8 +102,13 @@ struct SpaceActionsModifier: ViewModifier {
     let details: SpaceEntityThumbnail
     let keepNewsItem: () -> Void
     let onDelete: () -> Void
+    let onPinToggle: (String, Bool) -> Void
     let addToAnotherSpace: (URL, String?, String?, String?) -> Void
     let editSpaceItem: () -> Void
+    
+    var isPinned: Bool {
+        return details.item?.isPinned ?? false
+    }
 
     var isNewsItem: Bool {
         switch details.data.previewEntity {
@@ -119,7 +128,7 @@ struct SpaceActionsModifier: ViewModifier {
                     } label: {
                         Label("Delete", systemImage: "")
                     }
-
+                    
                     if details.data.generatorID != nil && isNewsItem {
                         Button {
                             keepNewsItem()
@@ -127,6 +136,11 @@ struct SpaceActionsModifier: ViewModifier {
                             Label("Keep", systemImage: "")
                         }.tint(.blue)
                     } else {
+                        Button {
+                            onPinToggle(details.id, !isPinned)
+                        } label: {
+                            Label(isPinned ? "Unpin" : "Pin", systemImage: "")
+                        }
                         Button {
                             addToAnotherSpace(
                                 (details.data.url)!,

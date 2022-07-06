@@ -123,6 +123,9 @@ struct SpaceDetailList: View {
                             onDelete: { index in
                                 onDelete(offsets: IndexSet([index]))
                             },
+                            onPinToggle: { id, isPinned in
+                                onPinToggle(spaceItemId: id, isPinned: isPinned)
+                            },
                             addToAnotherSpace: addToAnotherSpace,
                             editSpaceItem: editSpaceItem,
                             index: primitive.allDetails.firstIndex { $0.id == details.id }
@@ -193,6 +196,15 @@ struct SpaceDetailList: View {
                 primitive.allDetails.insert(entitiesToBeDeleted[index], at: 0)
             }
         }
+    }
+    
+    private func onPinToggle(spaceItemId: String, isPinned: Bool) {
+        guard let index = primitive.item?.contentData?.firstIndex(where: { $0.id == spaceItemId }) else {
+            return
+        }
+        primitive.item?.contentData?[index].isPinned = isPinned
+        
+        spacesModel.pinSpaceItem(spaceId: primitive.id, spaceItemId: spaceItemId, isPinned: isPinned)
     }
 
     private func onMove(source: IndexSet, destination: Int) {

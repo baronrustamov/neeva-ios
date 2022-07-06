@@ -707,6 +707,15 @@ class SpaceCardModel: CardModel {
             }
         }
     }
+    
+    func pinSpaceItem(spaceId: String, spaceItemId: String, isPinned: Bool) {
+        DispatchQueue.main.async {
+            let request = SpaceServiceProvider.shared.pinSpaceItem(spaceId: spaceId, spaceItemId: spaceItemId, isPinned: isPinned)
+            request?.$state.sink { state in
+                self.spaceNeedsRefresh = spaceId
+            }.cancel()
+        }
+    }
 
     func reorder(space spaceID: String, entities: [String]) {
         DispatchQueue.main.async {
