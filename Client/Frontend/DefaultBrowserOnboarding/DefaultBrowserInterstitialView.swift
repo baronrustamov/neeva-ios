@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import Foundation
+import Shared
 import SwiftUI
 
 struct DefaultBrowserInterstitialBackdrop<Content: View>: View {
@@ -108,7 +109,7 @@ struct DefaultBrowserInterstitialView<Content: View>: View {
             }
             .padding(.horizontal, 32)
             .padding(.bottom, 20)
-            if showLogo {
+            if showLogo && NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) == .welcomeV2 {
                 VStack(spacing: 0) {
                     Spacer()
                     Image("neevaMenuIcon")

@@ -106,7 +106,6 @@ struct DefaultBrowserInterstitialOnboardingView: View {
     @Default(.notificationPermissionState) var notificationPermissionState
 
     @State private var showSteps = false
-    @State private var showVideo = false
 
     @ViewBuilder
     var oldHeader: some View {
@@ -137,7 +136,8 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, FeatureFlag[.oldDBFirstRun] ? 0 : 45)
+        .padding(
+            .horizontal, NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) != .welcomeV2 ? 0 : 45)
 
         VStack(alignment: .leading) {
             HStack {
@@ -151,7 +151,9 @@ struct DefaultBrowserInterstitialOnboardingView: View {
 
                 Text("1. Tap Default Browser App")
                     .withFont(.bodyXLarge)
-                    .padding(.leading, FeatureFlag[.oldDBFirstRun] ? 15 : 8)
+                    .padding(
+                        .leading,
+                        NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) != .welcomeV2 ? 15 : 8)
             }
             Divider()
             HStack {
@@ -166,40 +168,20 @@ struct DefaultBrowserInterstitialOnboardingView: View {
 
                 Text("2. Select Neeva")
                     .withFont(.bodyXLarge)
-                    .padding(.leading, FeatureFlag[.oldDBFirstRun] ? 15 : 8)
+                    .padding(
+                        .leading,
+                        NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) != .welcomeV2 ? 15 : 8)
             }
-        }.padding(FeatureFlag[.oldDBFirstRun] ? 20 : 15)
-            .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(Color(UIColor.systemGray5), lineWidth: 5)
-            )
-            .padding(.horizontal, FeatureFlag[.oldDBFirstRun] ? -16 : 40)
-        if NeevaExperiment.arm(for: .defaultBrowserVideo) == .video {
-            Button(
-                action: {
-                    withAnimation {
-                        showVideo.toggle()
-                        ClientLogger.shared.logCounter(
-                            .DefaultBrowserOnboardingInterstitialVideo
-                        )
-                    }
-                },
-                label: {
-                    if FeatureFlag[.oldDBFirstRun] {
-                        Label("Show me how", systemSymbol: .playCircleFill).withFont(
-                            unkerned: .bodyXLarge)
-                    } else {
-                        HStack {
-                            Symbol(decorative: .playCircleFill, size: 20)
-                                .frame(width: 32, height: 32)
-                            Text("Show Me How").font(.system(size: 16, weight: .medium))
-                        }
-                    }
-                }
-            )
-            .padding(.top, FeatureFlag[.oldDBFirstRun] ? 20 : 30)
-            .padding(.bottom, FeatureFlag[.oldDBFirstRun] ? 20 : 10)
         }
+        .padding(NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) != .welcomeV2 ? 20 : 15)
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(Color(UIColor.systemGray5), lineWidth: 5)
+        )
+        .padding(
+            .horizontal, NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) != .welcomeV2 ? -16 : 40
+        )
+        .padding(.bottom, 20)
     }
 
     @ViewBuilder
@@ -208,28 +190,8 @@ struct DefaultBrowserInterstitialOnboardingView: View {
             Spacer().repeated(2)
             oldHeader
             Spacer()
-            if NeevaExperiment.arm(for: .defaultBrowserVideo) == .video {
-                ZStack {
-                    if showVideo {
-                        VStack(alignment: .center) {
-                            LoopingPlayer(viewModel: interstitialModel).frame(
-                                width: 320, height: 240
-                            ).cornerRadius(10.0)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10).stroke(
-                                        Color.tertiaryLabel, lineWidth: 3)
-                                )
-                        }.padding(.bottom, 15)
-                    } else {
-                        VStack {
-                            detail
-                        }
-                    }
-                }
-            } else {
-                detail
-                    .padding(.bottom, 15)
-            }
+            detail
+                .padding(.bottom, 15)
         }
     }
 
@@ -249,38 +211,13 @@ struct DefaultBrowserInterstitialOnboardingView: View {
     var newContent: some View {
         newHeader
         Spacer()
-        if NeevaExperiment.arm(for: .defaultBrowserVideo) == .video {
-            ZStack {
-                if showVideo {
-                    HStack {
-                        Spacer()
-                        VStack {
-                            LoopingPlayer(viewModel: interstitialModel).frame(
-                                width: 320, height: 240
-                            ).cornerRadius(10.0)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 10).stroke(
-                                        Color.tertiaryLabel, lineWidth: 3)
-                                )
-                        }
-                        .padding(.bottom, 15)
-                        Spacer()
-                    }
-                } else {
-                    VStack {
-                        detail
-                    }
-                }
-            }
-        } else {
-            detail
-                .padding(.bottom, 15)
-        }
+        detail
+            .padding(.bottom, 15)
     }
 
     @ViewBuilder
     var content: some View {
-        if FeatureFlag[.oldDBFirstRun] {
+        if NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) != .welcomeV2 {
             oldContent
         } else {
             DefaultBrowserInterstitialBackdrop(content: newContent)
@@ -321,7 +258,7 @@ struct DefaultBrowserInterstitialOnboardingView: View {
             )
             if interstitialModel.showCloseButton {
                 VStack {
-                    if !FeatureFlag[.oldDBFirstRun] {
+                    if NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) == .welcomeV2 {
                         Spacer().frame(height: UIConstants.hasHomeButton ? 10 : 50)
                     }
                     HStack {
@@ -329,8 +266,16 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                         CloseButton(action: {
                             interstitialModel.closeAction()
                         })
-                        .padding(.trailing, FeatureFlag[.oldDBFirstRun] ? 20 : 10)
-                        .padding(.top, FeatureFlag[.oldDBFirstRun] ? 20 : 16)
+                        .padding(
+                            .trailing,
+                            NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) != .welcomeV2
+                                ? 20 : 10
+                        )
+                        .padding(
+                            .top,
+                            NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) != .welcomeV2
+                                ? 20 : 16
+                        )
                         .background(Color.clear)
                     }
                     Spacer()
