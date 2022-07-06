@@ -612,6 +612,7 @@ public class SpaceStore: ObservableObject {
                     title: space.name,
                     snippet: nil,
                     thumbnail: nil,
+                    isPinned: false,
                     previewEntity: .spaceLink(space.id))
                 spaceDailyDigest.contentData?.append(headerData)
 
@@ -643,6 +644,7 @@ public class SpaceStore: ObservableObject {
                         title: "\(extraItemCount) more",
                         snippet: nil,
                         thumbnail: nil,
+                        isPinned: false,
                         previewEntity: .spaceLink(space.id))
                     spaceDailyDigest.contentData?.append(seeMore)
                 }

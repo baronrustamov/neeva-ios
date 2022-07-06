@@ -27,6 +27,7 @@ fragment spacesMetadata on SpaceData {
         title
         snippet
         thumbnail
+        isPinned
         generator {
             id
         }
@@ -306,4 +307,8 @@ mutation ClaimGeneratedItem($input: ClaimGeneratedItemInput!) {
 
 mutation PinSpace($input: PinSpaceInput!) {
     pinSpace(input: $input)
+}
+
+mutation PinSpaceItem($input: PinSpaceItemInput!) {
+    pinSpaceItem(input: $input)
 }

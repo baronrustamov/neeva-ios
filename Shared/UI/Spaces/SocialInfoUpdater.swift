@@ -115,6 +115,7 @@ public class SocialInfoUpdater: ObservableObject {
             title: title,
             snippet: description,
             thumbnail: thumbnail,
+            isPinned: oldData.isPinned,
             previewEntity: .webPage)
         space.contentData?.replaceSubrange(
             index..<(index + 1), with: [newData])

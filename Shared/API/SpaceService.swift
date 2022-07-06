@@ -80,6 +80,9 @@ public protocol SpaceService {
     func pinSpace(spaceId: String, isPinned: Bool) -> PinSpaceRequest?
 
     @discardableResult
+    func pinSpaceItem(spaceId: String, spaceItemId: String, isPinned: Bool) -> PinSpaceItemRequest?
+
+    @discardableResult
     func unfollowSpace(spaceID: String) -> UnfollowSpaceRequest?
 
     @discardableResult

@@ -117,6 +117,7 @@ public class SpaceServiceMock: SpaceService {
                     title: title,
                     snippet: description,
                     thumbnail: "",
+                    isPinned: false,
                     previewEntity: .webPage
                 )
             )
@@ -513,6 +514,24 @@ public class SpaceServiceMock: SpaceService {
         SpaceMock.handleMutationRequest(request: request) { [self] in
             spaces[spaceId]?.isPinned = isPinned
             return spaces[spaceId] != nil
+        }
+
+        return request
+    }
+
+    public func pinSpaceItem(spaceId: String, spaceItemId: String, isPinned: Bool)
+        -> PinSpaceItemRequest?
+    {
+        let request = PinSpaceItemRequest(
+            spaceId: spaceId, spaceItemId: spaceItemId, isPinned: isPinned, testMode: true)
+
+        SpaceMock.handleMutationRequest(request: request) { [self] in
+            guard let index = spaces[spaceId]?.entities.firstIndex(where: { $0.id == spaceItemId })
+            else {
+                return false
+            }
+            spaces[spaceId]?.entities[index].isPinned = isPinned
+            return true
         }
 
         return request

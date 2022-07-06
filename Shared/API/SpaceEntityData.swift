@@ -32,18 +32,21 @@ public struct SpaceEntityData {
     public let title: String?
     public let snippet: String?
     public let thumbnail: String?
+    public var isPinned: Bool
     public let previewEntity: PreviewEntity
     public var generatorID: String?
 
     public init(
         id: String, url: URL?, title: String?, snippet: String?,
-        thumbnail: String?, previewEntity: PreviewEntity, generatorID: String? = nil
+        thumbnail: String?, isPinned: Bool?, previewEntity: PreviewEntity,
+        generatorID: String? = nil
     ) {
         self.id = id
         self.url = url
         self.title = title
         self.snippet = snippet
         self.thumbnail = thumbnail
+        self.isPinned = isPinned ?? false
         self.previewEntity = previewEntity
         self.generatorID = generatorID
     }

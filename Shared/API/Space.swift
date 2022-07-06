@@ -80,6 +80,7 @@ public class SpacesDataQueryController: QueryController<
                                     title: spaceEntity.title,
                                     snippet: spaceEntity.snippet,
                                     thumbnail: spaceEntity.thumbnail,
+                                    isPinned: spaceEntity.isPinned,
                                     previewEntity: SpaceEntityData.previewEntity(from: spaceEntity),
                                     generatorID: spaceEntity.generator?.id)
                             )
@@ -174,6 +175,7 @@ class RelatedSpacesQueryController: QueryController<
                                     title: spaceEntity.title,
                                     snippet: spaceEntity.snippet,
                                     thumbnail: spaceEntity.thumbnail,
+                                    isPinned: spaceEntity.isPinned,
                                     previewEntity: SpaceEntityData.previewEntity(from: spaceEntity),
                                     generatorID: spaceEntity.generator?.id)
                             )

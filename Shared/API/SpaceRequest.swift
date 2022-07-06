@@ -153,3 +153,13 @@ public class PinSpaceRequest: MutationRequest<PinSpaceMutation> {
             testMode: testMode)
     }
 }
+
+public class PinSpaceItemRequest: MutationRequest<PinSpaceItemMutation> {
+    public init(spaceId: String, spaceItemId: String, isPinned: Bool, testMode: Bool = false) {
+        super.init(
+            mutation: PinSpaceItemMutation(
+                input: PinSpaceItemInput(
+                    spaceId: spaceId, spaceItemId: spaceItemId, isPinned: isPinned)),
+            testMode: false)
+    }
+}

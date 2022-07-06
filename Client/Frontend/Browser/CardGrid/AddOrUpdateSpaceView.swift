@@ -250,6 +250,7 @@ struct AddOrUpdateSpaceView: View {
                                 title: titleText,
                                 snippet: descriptionText,
                                 thumbnail: nil,
+                                isPinned: false,
                                 previewEntity: .webPage)
                             // modify target spaceCardDetail's Data and signal changes
                             space.contentData?.insert(data, at: 0)
@@ -273,6 +274,7 @@ struct AddOrUpdateSpaceView: View {
                                 snippet: descriptionText,
                                 thumbnail: thumbnailModel.selectedThumbnail?.absoluteString
                                     ?? oldData.thumbnail,
+                                isPinned: oldData.isPinned,
                                 previewEntity: oldData.previewEntity)
                             space.contentData?.replaceSubrange(
                                 index..<(index + 1), with: [newData])
