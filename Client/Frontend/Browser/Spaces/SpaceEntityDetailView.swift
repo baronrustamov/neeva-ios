@@ -140,7 +140,7 @@ struct SpaceActionsModifier: ViewModifier {
                             onPinToggle(details.id, !isPinned)
                         } label: {
                             Label(isPinned ? "Unpin" : "Pin", systemImage: "")
-                        }
+                        }.tint(.orange)
                         Button {
                             addToAnotherSpace(
                                 (details.data.url)!,
