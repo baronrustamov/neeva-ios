@@ -136,8 +136,10 @@ class TabManagerStore {
         -> Tab?
     {
         let selectedTab = restoreTabs(
-            savedTabs: getStartupTabs(for: scene), clearIncognitoTabs: clearIncognitoTabs,
-            tabManager: tabManager)
+            savedTabs: getStartupTabs(for: scene),
+            clearIncognitoTabs: clearIncognitoTabs,
+            tabManager: tabManager
+        )
         return selectedTab
     }
 
@@ -165,16 +167,23 @@ class TabManagerStore {
         // do notifications after all of the mutations to `TabManager.tabs` are done.
 
         var tabToSelect: Tab?
+        var restoredTabs = [Tab]()
+        restoredTabs.reserveCapacity(savedTabs.count)
+
         for savedTab in savedTabs {
             // Provide an empty request to prevent a new tab from loading the home screen
             let tab = tabManager.addTab(
                 flushToDisk: false, zombie: true, isIncognito: savedTab.isIncognito, notify: false)
             savedTab.configureTab(tab, imageStore: imageStore)
 
+            restoredTabs.append(tab)
+
             if savedTab.isSelected, tab.wasLastExecuted(.today) {
                 tabToSelect = tab
             }
         }
+
+        tabManager.resolveParentRef(for: restoredTabs)
 
         if tabToSelect == nil {
             if !tabManager.activeTabs.isEmpty {

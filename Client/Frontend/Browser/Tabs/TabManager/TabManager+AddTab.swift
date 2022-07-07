@@ -240,12 +240,14 @@ extension TabManager {
         // makes sure at least one tab is selected
         // if no tab selected, select the last one (most recently closed)
         var selectedSavedTab: Tab?
+        var restoredTabs = [Tab]()
+        restoredTabs.reserveCapacity(savedTabs.count)
 
-        for index in 0..<savedTabs.count {
+        for index in savedTabs.indices {
             let savedTab = savedTabs[index]
             let urlRequest: URLRequest? = savedTab.url != nil ? URLRequest(url: savedTab.url!) : nil
 
-            var tab: Tab!
+            var tab: Tab
             if let tabIndex = savedTab.tabIndex {
                 tab = addTab(
                     urlRequest, atIndex: tabIndex, flushToDisk: false, zombie: true,
@@ -258,12 +260,16 @@ extension TabManager {
 
             savedTab.configureTab(tab, imageStore: store.imageStore)
 
+            restoredTabs.append(tab)
+
             if savedTab.isSelected {
                 selectedSavedTab = tab
             } else if index == savedTabs.count - 1 && selectedSavedTab == nil {
                 selectedSavedTab = tab
             }
         }
+
+        resolveParentRef(for: restoredTabs, restrictToActiveTabs: true)
 
         updateAllTabDataAndSendNotifications(notify: true)
 
@@ -288,5 +294,21 @@ extension TabManager {
 
     func restoreAllClosedTabs() {
         _ = restoreSavedTabs(Array(recentlyClosedTabs.joined()))
+    }
+
+    func resolveParentRef(for restoredTabs: [Tab], restrictToActiveTabs: Bool = false) {
+        let tabs = restrictToActiveTabs ? self.activeTabs : self.tabs
+        let uuidMapping = [String: Tab](
+            uniqueKeysWithValues: zip(tabs.map { $0.tabUUID }, tabs)
+        )
+
+        restoredTabs.forEach { tab in
+            guard let parentUUID = tab.parentUUID,
+                UUID(uuidString: parentUUID) != nil
+            else {
+                return
+            }
+            tab.parent = uuidMapping[parentUUID]
+        }
     }
 }

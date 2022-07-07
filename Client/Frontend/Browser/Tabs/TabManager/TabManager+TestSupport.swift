@@ -27,6 +27,15 @@ extension TabManager {
         return store.getStartupTabs(for: SceneDelegate.getCurrentScene(for: nil)).count
     }
 
+    func testRestoreTabs() {
+        assert(AppConstants.IsRunningTest)
+        let _ = store.restoreStartupTabs(
+            for: SceneDelegate.getCurrentScene(for: nil),
+            clearIncognitoTabs: false,
+            tabManager: self
+        )
+    }
+
     func testClearArchive() {
         assert(AppConstants.IsRunningTest)
         store.clearArchive(for: SceneDelegate.getCurrentScene(for: nil))

@@ -54,19 +54,35 @@ class TabManagerStoreTests: XCTestCase {
     }
 
     // Without session data, a Tab can't become a SavedTab and get archived
-    func addTabWithSessionData(isIncognito: Bool = false) {
+    @discardableResult
+    func addTabWithSessionData(isIncognito: Bool = false) -> Tab {
+        return addTabWithSessionData(isIncognito: isIncognito) { tab in
+            manager.configureTab(
+                tab,
+                request: URLRequest(url: tab.url!),
+                flushToDisk: false,
+                zombie: false,
+                notify: true
+            )
+        }
+    }
+
+    @discardableResult
+    func addTabWithSessionData(
+        isIncognito: Bool = false,
+        configureTab: (Tab) -> Void
+    ) -> Tab {
         let tab = Tab(
             bvc: SceneDelegate.getBVC(for: nil), configuration: configuration,
             isIncognito: isIncognito)
         tab.setURL(URL(string: "\(webServerBase!)/hello"))
-        manager.configureTab(
-            tab, request: URLRequest(url: tab.url!), flushToDisk: false, zombie: false, notify: true
-        )
+        configureTab(tab)
         tab.sessionData = SessionData(
             currentPage: 0, urls: [tab.url!],
             queries: [nil], suggestedQueries: [nil], queryLocations: [nil],
             lastUsedTime: Date.nowMilliseconds()
         )
+        return tab
     }
 
     func testNoData() {
@@ -107,5 +123,35 @@ class TabManagerStoreTests: XCTestCase {
         waitForCondition {
             self.manager.testTabCountOnDisk() == 1
         }
+    }
+
+    func testParentRefsAreRestored() throws {
+        // create and save two tabs
+        let tab1 = addTabWithSessionData()
+        let tab2 = addTabWithSessionData {
+            manager.configureTab(
+                $0, request: URLRequest(url: $0.url!),
+                afterTab: tab1,
+                flushToDisk: false, zombie: false, notify: true
+            )
+        }
+        waitForCondition {
+            self.manager.testTabCountOnDisk() == 2
+        }
+
+        // verify parent tab relationship
+        XCTAssertEqual(tab1, tab2.parent)
+
+        let newManager = TabManager(profile: profile, imageStore: nil)
+        XCTAssertEqual(newManager.tabs.count, 0)
+
+        // restore tabs
+        newManager.testRestoreTabs()
+        XCTAssertEqual(newManager.tabs.count, 2)
+
+        // verify parent is restored
+        let childTab = try XCTUnwrap(newManager.tabs.first { $0.parent != nil })
+        let parentTab = try XCTUnwrap(childTab.parent)
+        XCTAssertTrue(newManager.tabs.contains(parentTab))
     }
 }
