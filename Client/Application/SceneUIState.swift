@@ -6,6 +6,7 @@ import Defaults
 import Foundation
 
 extension Defaults.Keys {
+    static let sceneLastOpenedTime = Defaults.Key<Date>("sceneLastOpenedTime", default: Date())
     static let scenePreviousUIState = Defaults.Key<String>("scenePreviousUIState", default: "tab")
 }
 

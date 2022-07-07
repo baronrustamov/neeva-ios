@@ -20,6 +20,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var bvc: BrowserViewController!
     private var geigerCounter: KMCGeigerCounter?
 
+    @Default(.sceneLastOpenedTime) private var sceneLastOpenedTime
+    private var urlHandledOnLaunch = false
+
     @Default(.scenePreviousUIState) private var scenePreviousUIState
     private let backgroundProcessor = BackgroundTaskProcessor(label: "SceneDelegate")
 
@@ -56,38 +59,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
 
         updateCurrentVersion()
-    }
 
-    private func setupRootViewController(_ scene: UIScene) {
-        let profile = getAppDelegate().profile
-
-        self.bvc = BrowserViewController(profile: profile, window: window!, scene: scene)
-
-        bvc.edgesForExtendedLayout = []
-        bvc.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
-        bvc.restorationClass = AppDelegate.self
-
-        window!.rootViewController = bvc
-
-        // Restoring SceneUIState.
-        if FeatureFlag[.restoreAppUI] {
-            let sceneUIState = SceneUIState(rawValue: scenePreviousUIState)
-
-            switch sceneUIState {
-            case .cardGrid(let switcherState, let isIncognito):
-                switch switcherState {
-                case .tabs:
-                    bvc.browserModel.showGridWithNoAnimation()
-                    bvc.browserModel.gridModel.switchToTabs(incognito: isIncognito)
-                case .spaces:
-                    bvc.browserModel.showSpaces()
-                }
-            case .spaceDetailView(let id):
-                bvc.browserModel.showSpaces()
-                bvc.browserModel.openSpace(spaceId: id, bvc: bvc) {}
-            case .tab:
-                break
-            }
+        if !urlHandledOnLaunch {
+            restoreSceneState()
         }
     }
 
@@ -176,6 +150,61 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         bvc.downloadQueue.pauseAll()
     }
 
+    // MARK: - Scene Setup
+    private func setupRootViewController(_ scene: UIScene) {
+        let profile = getAppDelegate().profile
+
+        self.bvc = BrowserViewController(profile: profile, window: window!, scene: scene)
+
+        bvc.edgesForExtendedLayout = []
+        bvc.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
+        bvc.restorationClass = AppDelegate.self
+
+        window!.rootViewController = bvc
+    }
+
+    private func restoreSceneState() {
+        let shouldSetEditingLocationToTrue =
+            FeatureFlag[.openZeroQueryAfterLongDuration]
+            && sceneLastOpenedTime.hoursBetweenDate(toDate: Date()) > 1
+
+        // Restoring SceneUIState.
+        if FeatureFlag[.restoreAppUI] {
+            let sceneUIState = SceneUIState(rawValue: scenePreviousUIState)
+
+            switch sceneUIState {
+            case .cardGrid(let switcherState, let isIncognito):
+                switch switcherState {
+                case .tabs:
+                    bvc.browserModel.showGridWithNoAnimation()
+
+                    // Makes sure the incognito state is correctly set in the CardGrid.
+                    bvc.browserModel.gridModel.switchToTabs(incognito: isIncognito)
+                case .spaces:
+                    if !shouldSetEditingLocationToTrue {
+                        bvc.browserModel.showSpaces()
+                    }
+                }
+            case .spaceDetailView(let id):
+                if !shouldSetEditingLocationToTrue {
+                    bvc.browserModel.showSpaces()
+                    bvc.browserModel.openSpace(spaceId: id, bvc: bvc) {}
+                }
+            case .tab:
+                break
+            }
+        }
+
+        DispatchQueue.main.async { [self] in
+            // Show the ZeroQuery UI if the user hasn't opened the app within the hour.
+            if shouldSetEditingLocationToTrue {
+                bvc.chromeModel.setEditingLocation(to: true)
+            }
+
+            self.sceneLastOpenedTime = Date()
+        }
+    }
+
     func setSceneUIState(to state: SceneUIState) {
         // This ensures that the state is correctly saved.
         backgroundProcessor.performTask {
@@ -198,9 +227,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
 
-    // MARK: - URL managment
+    // MARK: - URL Handling
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-        // almost always one URL
+        // Almost always one URL
         guard let url = URLContexts.first?.url,
             let routerpath = NavigationPath(bvc: bvc, url: url)
         else {
@@ -224,6 +253,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                         value: "1"
                     )
                 )
+
+                urlHandledOnLaunch = true
             }
             ClientLogger.shared.logCounter(.OpenDefaultBrowserURL, attributes: attributes)
             ConversionLogger.log(event: .handledNavigationAsDefaultBrowser)
@@ -235,6 +266,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             if !self.checkForSignInToken(in: url) {
                 log.info("Passing URL to router path: \(routerpath)")
                 NavigationPath.handle(nav: routerpath, with: self.bvc)
+                self.urlHandledOnLaunch = true
             }
         }
     }
@@ -256,6 +288,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 let url = URL(string: urlString)
             {
                 self.bvc.switchToTabForURLOrOpen(url)
+                self.urlHandledOnLaunch = true
             }
         } else if userActivity.activityType == CSSearchableItemActionType,
             let itemIdentifier = userActivity.userInfo?[CSSearchableItemActivityIdentifier]
@@ -279,6 +312,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 )
 
                 self.bvc.switchToTabForURLOrOpen(url)
+                self.urlHandledOnLaunch = true
             } else {
                 // this itemIdentifier is the spaces id
                 ClientLogger.shared.logCounter(
@@ -295,19 +329,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
                 self.bvc.browserModel.openSpace(
                     spaceId: itemIdentifier, bvc: self.bvc, completion: {})
+                self.urlHandledOnLaunch = true
             }
         } else if !continueSiriIntent(continue: userActivity) {
             _ = checkForUniversalURL(continue: userActivity)
         }
     }
 
-    func continueSiriIntent(continue userActivity: NSUserActivity) -> Bool {
+    private func continueSiriIntent(continue userActivity: NSUserActivity) -> Bool {
         var attributes = [
             EnvironmentHelper.shared.getSessionUUID()
         ]
+
         if let intent = userActivity.interaction?.intent as? OpenURLIntent {
             self.bvc.openURLInNewTab(intent.url)
             ClientLogger.shared.logCounter(.openURLShortcut, attributes: attributes)
+            self.urlHandledOnLaunch = true
+
             return true
         }
 
@@ -330,14 +368,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     )
                 }
             }
+
             ClientLogger.shared.logCounter(.searchShortcut, attributes: attributes)
+            self.urlHandledOnLaunch = true
+
             return true
         }
 
         return false
     }
 
-    func checkForUniversalURL(continue userActivity: NSUserActivity) -> Bool {
+    private func checkForUniversalURL(continue userActivity: NSUserActivity) -> Bool {
         // Get URL components from the incoming user activity.
         guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
             let incomingURL = userActivity.webpageURL
@@ -349,6 +390,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         if !self.checkForSignInToken(in: incomingURL) {
             self.bvc.openURLInNewTab(incomingURL)
+            self.urlHandledOnLaunch = true
         }
 
         return true
