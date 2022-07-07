@@ -425,7 +425,10 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
 
     var id: String
     var isPinnable: Bool = true
+    var listSubscription: AnyCancellable?
     @Published var allDetails: [SpaceEntityThumbnail] = []
+    @Published var unpinnedDetails: [SpaceEntityThumbnail] = []
+    @Published var pinnedDetails: [SpaceEntityThumbnail] = []
     @Published var allDetailsWithExclusionList: [SpaceEntityThumbnail] = []
     @Published var item: Space?
     @Published private(set) var refreshSpaceSubscription: AnyCancellable? = nil
@@ -464,6 +467,7 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
         self.id = id
         self.manager = manager
         updateSpace()
+        subscribeToList()
     }
 
     init(space: Space, manager: SpaceStore, showingDetails: Bool = false, isPinnable: Bool = true) {
@@ -473,6 +477,14 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
         self.isPinnable = isPinnable
         self.showingDetails = showingDetails
         updateDetails()
+        subscribeToList()
+    }
+
+    private func subscribeToList() {
+        listSubscription = $allDetails.sink(receiveValue: { details in
+            self.unpinnedDetails = details.filter({ !($0.item?.isPinned ?? false) })
+            self.pinnedDetails = details.filter({ ($0.item?.isPinned ?? false) })
+        })
     }
 
     var thumbnail: some View {

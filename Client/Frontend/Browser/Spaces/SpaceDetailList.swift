@@ -71,75 +71,39 @@ struct SpaceDetailList: View {
                         EmptySpaceView()
                     }
 
-                    ForEach(primitive.allDetails, id: \.id) { details in
-                        let editSpaceItem = {
-                            guard let space = primitive.item else {
-                                return
+                    if !primitive.pinnedDetails.isEmpty {
+                        Section {
+                            ForEach(primitive.pinnedDetails, id: \.id) { details in
+                                createListItem(details)
                             }
-
-                            SceneDelegate.getBVC(with: tabModel.manager.scene)
-                                .showModal(
-                                    style: .withTitle,
-                                    toPosition: .top
-                                ) {
-                                    AddOrUpdateSpaceContent(
-                                        space: space,
-                                        config: .updateSpaceItem(details.id)
-                                    ) { helpURL in
-                                        SceneDelegate.getBVC(with: tabModel.manager.scene)
-                                            .openURLInNewTab(helpURL)
-                                    }
-                                    .environmentObject(spacesModel)
-                                }
+                            .onDelete(perform: canEdit ? onDelete : nil)
+                            .onMove(perform: { indexSet, destination in
+                                guard canEdit else { return }
+                                onMove(source: indexSet, destination: destination, isPinned: true)
+                            })
+                        } header: {
+                            HStack(spacing: 4) {
+                                Symbol(decorative: .pin)
+                                Text("Pinned")
+                            }.padding(.bottom, 8)
                         }
 
-                        SpaceEntityDetailView(
-                            details: details,
-                            onSelected: {
-                                guard let url = details.data.url else { return }
+                    }
 
-                                if url.absoluteString.hasPrefix(
-                                    NeevaConstants.appSpacesURL.absoluteString)
-                                {
-                                    let id = String(
-                                        url.absoluteString.dropFirst(
-                                            NeevaConstants.appSpacesURL.absoluteString.count + 1))
-                                    onShowAnotherSpace(id)
-                                    return
-                                }
-
-                                gridModel.closeDetailView()
-                                browserModel.hideGridWithNoAnimation()
-                                let bvc = SceneDelegate.getBVC(with: tabModel.manager.scene)
-                                if let navPath = NavigationPath.navigationPath(
-                                    from: url, with: bvc)
-                                {
-                                    NavigationPath.handle(nav: navPath, with: bvc)
-                                    return
-                                }
-
-                                onOpenURLForSpace(url, primitive.id)
-                            },
-                            onDelete: { index in
-                                onDelete(offsets: IndexSet([index]))
-                            },
-                            onPinToggle: { id, isPinned in
-                                onPinToggle(spaceItemId: id, isPinned: isPinned)
-                            },
-                            addToAnotherSpace: addToAnotherSpace,
-                            editSpaceItem: editSpaceItem,
-                            index: primitive.allDetails.firstIndex { $0.id == details.id }
-                                ?? 0,
-                            canEdit: canEdit
-                        )
-                        .modifier(ListSeparatorModifier())
-                        .listRowBackground(Color.DefaultBackground)
-                        .onDrag {
-                            NSItemProvider(id: details.id)
+                    Section {
+                        ForEach(primitive.unpinnedDetails, id: \.id) { details in
+                            createListItem(details)
+                        }
+                        .onDelete(perform: canEdit ? onDelete : nil)
+                        .onMove(perform: { indexSet, destination in
+                            guard canEdit else { return }
+                            onMove(source: indexSet, destination: destination, isPinned: false)
+                        })
+                    } header: {
+                        if !primitive.pinnedDetails.isEmpty {
+                            Text("")
                         }
                     }
-                    .onDelete(perform: canEdit ? onDelete : nil)
-                    .onMove(perform: canEdit ? onMove : nil)
 
                     if let generators = primitive.item?.generators, !generators.isEmpty {
                         SpaceGeneratorHeader(generators: generators)
@@ -174,6 +138,75 @@ struct SpaceDetailList: View {
         }
     }
 
+    @ViewBuilder
+    fileprivate func createListItem(_ details: SpaceEntityThumbnail) -> some View {
+        let editSpaceItem = {
+            guard let space = primitive.item else {
+                return
+            }
+
+            SceneDelegate.getBVC(with: tabModel.manager.scene)
+                .showModal(
+                    style: .withTitle,
+                    toPosition: .top
+                ) {
+                    AddOrUpdateSpaceContent(
+                        space: space,
+                        config: .updateSpaceItem(details.id)
+                    ) { helpURL in
+                        SceneDelegate.getBVC(with: tabModel.manager.scene)
+                            .openURLInNewTab(helpURL)
+                    }
+                    .environmentObject(spacesModel)
+                }
+        }
+
+        SpaceEntityDetailView(
+            details: details,
+            onSelected: {
+                guard let url = details.data.url else { return }
+
+                if url.absoluteString.hasPrefix(
+                    NeevaConstants.appSpacesURL.absoluteString)
+                {
+                    let id = String(
+                        url.absoluteString.dropFirst(
+                            NeevaConstants.appSpacesURL.absoluteString.count + 1))
+                    onShowAnotherSpace(id)
+                    return
+                }
+
+                gridModel.closeDetailView()
+                browserModel.hideGridWithNoAnimation()
+                let bvc = SceneDelegate.getBVC(with: tabModel.manager.scene)
+                if let navPath = NavigationPath.navigationPath(
+                    from: url, with: bvc)
+                {
+                    NavigationPath.handle(nav: navPath, with: bvc)
+                    return
+                }
+
+                onOpenURLForSpace(url, primitive.id)
+            },
+            onDelete: { index in
+                onDelete(offsets: IndexSet([index]))
+            },
+            onPinToggle: { id, isPinned in
+                onPinToggle(spaceItemId: id, isPinned: isPinned)
+            },
+            addToAnotherSpace: addToAnotherSpace,
+            editSpaceItem: editSpaceItem,
+            index: primitive.allDetails.firstIndex { $0.id == details.id }
+                ?? 0,
+            canEdit: canEdit
+        )
+        .modifier(ListSeparatorModifier())
+        .listRowBackground(Color.DefaultBackground)
+        .onDrag {
+            NSItemProvider(id: details.id)
+        }
+    }
+
     private var progressView: some View {
         HStack {
             Spacer()
@@ -205,13 +238,32 @@ struct SpaceDetailList: View {
         }
         primitive.item?.contentData?[index].isPinned = isPinned
 
+        if isPinned,
+            let itemIndex = primitive.unpinnedDetails.firstIndex(where: {
+                $0.item?.id == spaceItemId
+            })
+        {
+            let item = primitive.unpinnedDetails.remove(at: itemIndex)
+            primitive.pinnedDetails.insert(item, at: 0)
+        } else if let itemIndex = primitive.pinnedDetails.firstIndex(where: {
+            $0.item?.id == spaceItemId
+        }) {
+            let item = primitive.pinnedDetails.remove(at: itemIndex)
+            primitive.unpinnedDetails.insert(item, at: 0)
+        }
+
         spacesModel.pinSpaceItem(
             spaceId: primitive.id, spaceItemId: spaceItemId, isPinned: isPinned)
     }
 
-    private func onMove(source: IndexSet, destination: Int) {
-        primitive.allDetails.move(fromOffsets: source, toOffset: destination)
-        spacesModel.reorder(space: primitive.id, entities: primitive.allDetails.map { $0.id })
+    private func onMove(source: IndexSet, destination: Int, isPinned: Bool) {
+        if isPinned {
+            primitive.pinnedDetails.move(fromOffsets: source, toOffset: destination)
+        } else {
+            primitive.unpinnedDetails.move(fromOffsets: source, toOffset: destination)
+        }
+        let dataSource = primitive.pinnedDetails + primitive.unpinnedDetails
+        spacesModel.reorder(space: primitive.id, entities: dataSource.map { $0.id })
     }
 }
 

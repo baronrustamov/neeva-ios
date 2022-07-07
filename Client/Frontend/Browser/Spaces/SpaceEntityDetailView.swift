@@ -162,6 +162,13 @@ struct SpaceActionsModifier: ViewModifier {
                 .contextMenu(
                     ContextMenu(menuItems: {
                         if details.ACL >= .edit {
+                            Button {
+                                onPinToggle(details.id, !isPinned)
+                            } label: {
+                                Label(
+                                    isPinned ? "Unpin" : "Pin",
+                                    systemSymbol: isPinned ? .pinSlash : .pin)
+                            }
                             Button(
                                 action: {
                                     editSpaceItem()
