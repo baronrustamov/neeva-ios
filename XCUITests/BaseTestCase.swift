@@ -179,14 +179,12 @@ class BaseTestCase: XCTestCase {
     }
 
     public func closeAllTabs(fromTabSwitcher: Bool = false, createNewTab: Bool = true) {
-        if fromTabSwitcher {
-            waitForExistence(app.buttons["Done"], timeout: 3)
-            app.buttons["Done"].press(forDuration: 1)
-        } else {
+        if !fromTabSwitcher {
             waitForExistence(app.buttons["Show Tabs"], timeout: 3)
-            app.buttons["Show Tabs"].press(forDuration: 1)
-            waitForExistence(app.buttons["Close Tab"])
+            app.buttons["Show Tabs"].tap()
         }
+        waitForExistence(app.buttons["Done"], timeout: 3)
+        app.buttons["Done"].press(forDuration: 1)
 
         let closeAllTabButton = app.buttons["Close All Tabs"]
         if closeAllTabButton.exists {

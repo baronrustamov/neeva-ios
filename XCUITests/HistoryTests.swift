@@ -48,6 +48,7 @@ class HistoryTests: BaseTestCase {
             launchArguments = [
                 LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew,
                 LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + historyDB,
+                LaunchArguments.DisableCheatsheetBloomFilters,
             ]
         }
         launchArguments.append(LaunchArguments.DontAddTabOnLaunch)
