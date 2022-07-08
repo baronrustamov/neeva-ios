@@ -66,16 +66,6 @@ struct ShareToView: View {
 
     @ViewBuilder
     private var contentView: some View {
-        if viewModel.loading {
-            ProgressView()
-                .padding(12)
-        } else {
-            shareView
-            Spacer()
-        }
-    }
-
-    private var shareView: some View {
         VStack(alignment: .leading, spacing: ShareToUX.padding) {
             ItemDetailView(item: $viewModel.shareItem)
             VStack(spacing: 0) {
