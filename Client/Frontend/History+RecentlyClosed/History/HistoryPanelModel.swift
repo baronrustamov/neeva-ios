@@ -6,26 +6,6 @@ import Foundation
 import Shared
 import Storage
 
-enum HistoryClearableTimeFrame: String, CaseIterable {
-    case lastHour = "Last Hour"
-    case today = "Today"
-    case todayAndYesterday = "Today & Yesterday"
-    case all = "Everything"
-
-    var hours: Int? {
-        switch self {
-        case .lastHour:
-            return 1
-        case .today:
-            return 24
-        case .todayAndYesterday:
-            return 48
-        default:
-            return nil
-        }
-    }
-}
-
 enum HistoryPanelUX {
     static let IconSize: CGFloat = 23
 }
@@ -145,29 +125,6 @@ class HistoryPanelModel: ObservableObject {
 
     // MARK: - User Action
     // History Items
-    func removeItemsFromHistory(timeFrame: HistoryClearableTimeFrame) {
-        if let hours = timeFrame.hours {
-            if let date = Calendar.current.date(byAdding: .hour, value: -hours, to: Date()) {
-                let types = WKWebsiteDataStore.allWebsiteDataTypes()
-                WKWebsiteDataStore.default().removeData(
-                    ofTypes: types, modifiedSince: date, completionHandler: {})
-
-                self.profile.history.removeHistoryFromDate(date).uponQueue(.main) { _ in
-                    // we don't keep persistent identifiers to the activities so we can only delete all
-                    UserActivityHandler.clearIndexedItems()
-                    self.reloadData()
-                }
-            }
-        } else {
-            self.profile.history.clearHistory().uponQueue(.main) { _ in
-                UserActivityHandler.clearIndexedItems()
-
-                self.reloadData()
-                self.tabManager.recentlyClosedTabs.removeAll()
-            }
-        }
-    }
-
     func removeItemFromHistory(site: Site) {
         profile.history.removeHistoryForURL(site.url).uponQueue(.main) { result in
             self.groupedSites.remove(site)

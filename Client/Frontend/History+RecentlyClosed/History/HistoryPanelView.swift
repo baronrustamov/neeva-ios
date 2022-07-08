@@ -30,7 +30,7 @@ struct HistoryPanelView: View {
     @Environment(\.onOpenURL) var openURL
 
     @State var showRecentlyClosedTabs = false
-    @State var showClearHistoryMenu = false
+    @State var showClearBrowsingData = false
 
     // History search
     @StateObject var siteFilter = DebounceObject()
@@ -55,9 +55,15 @@ struct HistoryPanelView: View {
             // Recently closed tabs and clear history
             GroupedCell.Decoration {
                 VStack(spacing: 0) {
-                    GroupedRowButtonView(label: "Clear Recent History", symbol: .trash) {
-                        showClearHistoryMenu = true
+                    GroupedRowButtonView(label: "Clear Browsing Data", symbol: .chevronRight) {
+                        showClearBrowsingData = true
                     }.disabled(model.groupedSites.isEmpty)
+
+                    NavigationLink(isActive: $showClearBrowsingData) {
+                        DataManagementView()
+                    } label: {
+                        EmptyView()
+                    }
 
                     Color.groupedBackground.frame(height: 1)
 
@@ -105,43 +111,9 @@ struct HistoryPanelView: View {
                 historyList
                     .refreshable {
                         model.reloadData()
-                    }.confirmationDialog(
-                        Strings.ClearHistoryMenuTitle, isPresented: $showClearHistoryMenu
-                    ) {
-                        ForEach(HistoryClearableTimeFrame.allCases, id: \.self) { timeFrame in
-                            Button(role: .destructive) {
-                                model.removeItemsFromHistory(timeFrame: timeFrame)
-                            } label: {
-                                Text(timeFrame.rawValue)
-                            }
-                        }
-                    } message: {
-                        Text(Strings.ClearHistoryMenuTitle)
                     }
             } else {
                 historyList
-                    .actionSheet(isPresented: $showClearHistoryMenu) {
-                        ActionSheet(
-                            title: Text(Strings.ClearHistoryMenuTitle),
-                            buttons: [
-                                .destructive(Text(HistoryClearableTimeFrame.lastHour.rawValue)) {
-                                    model.removeItemsFromHistory(timeFrame: .lastHour)
-                                },
-                                .destructive(Text(HistoryClearableTimeFrame.today.rawValue)) {
-                                    model.removeItemsFromHistory(timeFrame: .today)
-                                },
-                                .destructive(
-                                    Text(HistoryClearableTimeFrame.todayAndYesterday.rawValue)
-                                ) {
-                                    model.removeItemsFromHistory(timeFrame: .todayAndYesterday)
-                                },
-                                .destructive(Text(HistoryClearableTimeFrame.all.rawValue)) {
-                                    model.removeItemsFromHistory(timeFrame: .all)
-                                },
-                                .cancel(),
-                            ]
-                        )
-                    }
             }
         }
     }

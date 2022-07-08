@@ -101,6 +101,14 @@ struct DebugSettingsSection: View {
                     tabManager.addTabsForURLs(urls, zombie: true)
                 }
 
+                Button(String("Archive all tabs")) {
+                    guard let tabManager = SceneDelegate.getTabManagerOrNil() else {
+                        return
+                    }
+
+                    tabManager.tabs.forEach { $0.lastExecutedTime = 0 }
+                }
+
                 Button(String("Force Crash App")) {
                     crash()
                 }

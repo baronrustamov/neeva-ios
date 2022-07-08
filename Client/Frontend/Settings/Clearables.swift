@@ -41,6 +41,18 @@ class HistoryClearable: Clearable {
     }
 }
 
+class ArchivedTabsClearable: Clearable {
+    func clear() -> Success {
+        SceneDelegate.getAllBVCs().forEach {
+            let manager = $0.tabManager
+            manager.removeTabs(
+                manager.tabs.filter { $0.isArchived }, updateSelectedTab: false,
+                dontAddToRecentlyClosed: true, notify: false)
+        }
+        return Success()
+    }
+}
+
 // Clear the web cache. Note, this has to close all open tabs in order to ensure the data
 // cached in them isn't flushed to disk.
 class CacheClearable: Clearable {

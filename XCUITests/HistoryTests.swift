@@ -23,7 +23,9 @@ class HistoryTests: BaseTestCase {
     // This DDBB contains those 4 websites listed in the name
     let historyDB = "browserYoutubeTwitterMozillaExample.db"
 
-    let clearRecentHistoryOptions = ["Last Hour", "Today", "Today & Yesterday", "Everything"]
+    let clearBrowsingDataOptions = [
+        "Browsing History", "Archived Tabs", "Cache", "Cookies", "Cookie Cutter Exclusions",
+    ]
 
     func clearWebsiteData() {
         goToSettings()
@@ -297,11 +299,13 @@ class HistoryTests: BaseTestCase {
 
         goToHistory()
 
-        waitForExistence(app.buttons["Clear Recent History"])
-        app.buttons["Clear Recent History"].tap()
+        waitForExistence(app.buttons["Clear Browsing Data"])
+        app.buttons["Clear Browsing Data"].tap()
 
-        for option in clearRecentHistoryOptions {
-            XCTAssertTrue(app.sheets.buttons[option].exists)
+        for option in clearBrowsingDataOptions {
+            XCTAssertTrue(
+                app.cells.containing(NSPredicate(format: "label CONTAINS %@", option)).element
+                    .exists)
         }
     }
 
