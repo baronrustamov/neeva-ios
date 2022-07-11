@@ -27,7 +27,7 @@ class BaseTestCase: XCTestCase {
         LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SetSignInOnce,
         LaunchArguments.SetDidFirstNavigation, LaunchArguments.SkipWhatsNew,
         LaunchArguments.SkipETPCoverSheet, LaunchArguments.DeviceName,
-        "\(LaunchArguments.ServerPort)\(serverPort)",
+        "\(LaunchArguments.ServerPort)\(serverPort)", LaunchArguments.DisableCheatsheetBloomFilters,
     ]
 
     var testName: String {
@@ -136,13 +136,16 @@ class BaseTestCase: XCTestCase {
         waitForNoExistence(progressIndicator, timeoutValue: 20.0)
     }
 
-    public func openURL(_ url: String = "example.com", waitForPageLoad: Bool = true) {
+    public func openURL(
+        _ url: String = "example.com", fromTabTray: Bool = false, waitForPageLoad: Bool = true
+    ) {
         // If the tab tray is visible, then start a new tab.
-        if app.buttons["Add Tab"].exists {
+        if app.buttons["Add Tab"].exists || fromTabTray {
             app.buttons["Add Tab"].tap()
+            waitForExistence(app.buttons["Cancel"])
         }
 
-        if !app.buttons["Cancel"].exists {
+        if !app.buttons["Cancel"].exists && !fromTabTray {
             goToAddressBar()
         }
 
@@ -183,6 +186,7 @@ class BaseTestCase: XCTestCase {
             waitForExistence(app.buttons["Show Tabs"], timeout: 3)
             app.buttons["Show Tabs"].tap()
         }
+
         waitForExistence(app.buttons["Done"], timeout: 3)
         app.buttons["Done"].press(forDuration: 1)
 

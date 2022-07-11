@@ -47,16 +47,6 @@ class UITestBase: KIFTestCase {
         return UIDevice.current.userInterfaceIdiom == .pad
     }
 
-    func addHistoryEntry(_ title: String, url: URL) {
-        let info: [AnyHashable: Any] = [
-            "url": url,
-            "title": title,
-            "visitType": VisitType.link.rawValue,
-        ]
-
-        NotificationCenter.default.post(name: .OnLocationChange, object: self, userInfo: info)
-    }
-
     func ensureAutocompletionResult(textField: UITextField, prefix: String, completion: String) {
         let autocompleteFieldlabel =
             textField.subviews.first { $0.accessibilityIdentifier == "autocomplete" } as? UILabel

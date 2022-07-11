@@ -77,7 +77,6 @@ extension BaseTestCase {
     /// Launches from tab page
     func goToHistory() {
         showAppNavigationMenu(for: "History")
-
         waitForExistence(app.buttons["History"])
         app.buttons["History"].tap(force: true)
     }
@@ -85,9 +84,9 @@ extension BaseTestCase {
     /// Launches from tab page, then opens history
     func goToRecentlyClosedPage() {
         goToHistory()
-
-        waitForExistence(app.buttons["Recently Closed Tabs"])
+        waitForExistence(app.buttons["Recently Closed Tabs"], timeout: 30)
         app.buttons["Recently Closed Tabs"].tap()
+        waitForExistence(app.scrollViews["recentlyClosedPanel"])
     }
 
     /// Launches from tab page, then opens the overflow menu

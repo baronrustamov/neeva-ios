@@ -26,9 +26,7 @@ class FindInPageTests: BaseTestCase {
     }
 
     // Smoketest
-    func testFindFromMenu() throws {
-        try skipTest(issue: 1387, "Can't find the next/previous disabled button")
-
+    func testFindFromMenu() {
         openFindInPageFromMenu(path(forTestPage: "test-mozilla-book.html"))
 
         // Enter some text to start finding
