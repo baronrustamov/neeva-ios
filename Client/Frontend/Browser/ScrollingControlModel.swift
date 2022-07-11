@@ -30,21 +30,6 @@ class ScrollingControlModel: NSObject, ObservableObject {
 
     private let chromeModel: TabChromeModel
 
-    init(tabManager: TabManager, chromeModel: TabChromeModel) {
-        self.scrollView = tabManager.selectedTab?.webView!.scrollView
-        self.chromeModel = chromeModel
-        super.init()
-
-        setupDelegates(newTab: tabManager.selectedTab)
-
-        tabManager.selectedTabPublisher
-            .sink { [weak self] newTab in
-                guard let self = self else { return }
-                self.setupDelegates(newTab: newTab)
-            }
-            .store(in: &subscriptions)
-    }
-
     private var headerHeight: CGFloat = 0
     private(set) var footerHeight: CGFloat = 0
 
@@ -76,24 +61,25 @@ class ScrollingControlModel: NSObject, ObservableObject {
     fileprivate var scrollDirection: ScrollDirection = .down
     fileprivate var toolbarState: ToolbarState = .visible
 
-    func setupDelegates(newTab: Tab?) {
-        self.scrollView?.delegate = nil
-        self.scrollView?.removeGestureRecognizer(self.panGesture)
+    func setupTabDelegates(newTab: Tab?) {
         self.tab = newTab
+        self.tabSubscriptions = []
 
-        if let tab = newTab, let scrollView = tab.webView?.scrollView {
-            scrollView.addGestureRecognizer(self.panGesture)
-            scrollView.delegate = self
-
-            self.scrollView = scrollView
-
-            self.tabSubscriptions = []
+        if let tab = newTab {
             tab.$isLoading
                 .assign(to: \.tabIsLoading, on: self)
                 .store(in: &self.tabSubscriptions)
-        } else {
-            self.scrollView = nil
-            self.tabSubscriptions = []
+        }
+    }
+
+    func setupScrollViewDelegate(newScrollView: UIScrollView?) {
+        self.scrollView?.delegate = nil
+        self.scrollView?.removeGestureRecognizer(self.panGesture)
+        self.scrollView = newScrollView
+
+        if let scrollView = newScrollView {
+            scrollView.addGestureRecognizer(self.panGesture)
+            scrollView.delegate = self
         }
     }
 
@@ -168,6 +154,29 @@ class ScrollingControlModel: NSObject, ObservableObject {
 
     fileprivate func roundNum(_ num: CGFloat) -> CGFloat {
         return round(100 * num) / 100
+    }
+
+    init(tabManager: TabManager, chromeModel: TabChromeModel) {
+        self.scrollView = tabManager.selectedTab?.webView!.scrollView
+        self.chromeModel = chromeModel
+        super.init()
+
+        setupTabDelegates(newTab: tabManager.selectedTab)
+        setupScrollViewDelegate(newScrollView: tabManager.selectedTab?.webView?.scrollView)
+
+        tabManager.selectedTabPublisher
+            .sink { [weak self] newTab in
+                guard let self = self else { return }
+                self.setupTabDelegates(newTab: newTab)
+            }
+            .store(in: &subscriptions)
+
+        tabManager.selectedTabWebViewPublisher
+            .sink { [weak self] newWebView in
+                guard let self = self else { return }
+                self.setupScrollViewDelegate(newScrollView: newWebView?.scrollView)
+            }
+            .store(in: &subscriptions)
     }
 }
 
