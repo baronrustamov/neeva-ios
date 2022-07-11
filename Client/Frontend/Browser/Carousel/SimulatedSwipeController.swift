@@ -21,7 +21,17 @@ class SimulatedSwipeController:
     var model: SimulatedSwipeModel
     var animator: SimulatedSwipeAnimator!
     var superview: UIView!
-    var blankView: UIView!
+    let blankView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemBackground
+        return view
+    }()
+    let targetPreviewView: UIImageView = {
+        let view = UIImageView(image: nil)
+        view.contentMode = .scaleAspectFit
+        view.isHidden = true
+        return view
+    }()
     var progressView: UIHostingController<CarouselProgressView>!
 
     init(model: SimulatedSwipeModel, superview: UIView!) {
@@ -46,38 +56,50 @@ class SimulatedSwipeController:
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clear
-        blankView = UIView()
-        blankView.backgroundColor = .white
-        self.view.addSubview(blankView)
+
+        setupSubviews()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    private func setupSubviews() {
+        // Create and connect subviews
+        blankView.addSubview(targetPreviewView)
+        self.view.addSubview(blankView)
 
-        blankView.makeEdges([.top, .bottom], equalTo: superview)
-        blankView.makeWidth(equalTo: superview, withOffset: -SwipeUX.EdgeWidth)
+        // Set up layout constraints
+        blankView.makeEdges([.top, .bottom], equalTo: self.view)
+        blankView.makeWidth(equalTo: self.view, withOffset: -SwipeUX.EdgeWidth)
+
+        targetPreviewView.makeEdges([.top, .bottom], equalTo: blankView)
+        targetPreviewView.makeWidth(equalTo: self.view)
 
         switch model.swipeDirection {
         case .forward:
             blankView.makeEdges(.trailing, equalTo: self.view)
+            targetPreviewView.makeEdges(.trailing, equalTo: self.view)
         case .back:
             blankView.makeEdges(.leading, equalTo: self.view)
+            targetPreviewView.makeEdges(.leading, equalTo: self.view)
         }
     }
 
     func simulateForwardAnimatorStartedSwipe(_ animator: SimulatedSwipeAnimator) {
+        targetPreviewView.isHidden = false
         if model.swipeDirection == .forward {
             model.goForward()
         }
     }
 
     func simulateForwardAnimatorFinishedSwipe(_ animator: SimulatedSwipeAnimator) {
+        targetPreviewView.isHidden = true
         if model.swipeDirection == .back {
             model.goBack()
         }
+    }
+
+    func simulateForwardAnimatorCancelledSwipe(_ animator: SimulatedSwipeAnimator) {
+        targetPreviewView.isHidden = true
     }
 }

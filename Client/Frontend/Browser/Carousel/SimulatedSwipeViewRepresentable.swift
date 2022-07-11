@@ -12,6 +12,10 @@ struct SimulatedSwipeViewRepresentable: UIViewControllerRepresentable {
     class Coordinator: NSObject {
         weak var vc: SimulatedSwipeController?
 
+        func setPreviewImage(_ uiImage: UIImage?) {
+            vc?.targetPreviewView.image = uiImage
+        }
+
         func removeProgressViewFromHierarchy() {
             guard let vc = vc else {
                 return
@@ -63,6 +67,7 @@ struct SimulatedSwipeViewRepresentable: UIViewControllerRepresentable {
         simulatedSwipeController.view.isHidden = true
 
         model.coordinator = context.coordinator
+        context.coordinator.vc = simulatedSwipeController
 
         return simulatedSwipeController
     }

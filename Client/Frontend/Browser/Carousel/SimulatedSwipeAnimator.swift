@@ -29,6 +29,7 @@ private let DefaultParameters =
 
 protocol SimulateForwardAnimatorDelegate: AnyObject {
     func simulateForwardAnimatorStartedSwipe(_ animator: SimulatedSwipeAnimator)
+    func simulateForwardAnimatorCancelledSwipe(_ animator: SimulatedSwipeAnimator)
     func simulateForwardAnimatorFinishedSwipe(_ animator: SimulatedSwipeAnimator)
 }
 
@@ -75,10 +76,6 @@ class SimulatedSwipeAnimator: NSObject {
 //MARK: Private Helpers
 extension SimulatedSwipeAnimator {
     fileprivate func animateBackToCenter(canceledSwipe: Bool) {
-        if !canceledSwipe {
-            self.delegate?.simulateForwardAnimatorFinishedSwipe(self)
-        }
-
         if canceledSwipe {
             self.model?.overlayOffset = 0
 
@@ -87,8 +84,12 @@ extension SimulatedSwipeAnimator {
                 animations: {
                     self.contentView?.transform = .identity
                     self.animatingView?.transform = .identity
-                }, completion: { _ in })
+                },
+                completion: { _ in
+                    self.delegate?.simulateForwardAnimatorCancelledSwipe(self)
+                })
         } else {
+            self.delegate?.simulateForwardAnimatorFinishedSwipe(self)
             self.contentView?.transform = .identity
             UIView.animate(
                 withDuration: params.recenterAnimationDuration,
@@ -147,6 +148,7 @@ extension SimulatedSwipeAnimator {
         switch recognizer.state {
         case .began:
             prevOffset = containerCenter
+            self.delegate?.simulateForwardAnimatorStartedSwipe(self)
         case .changed:
             withAnimation {
                 model?.overlayOffset = translation.x

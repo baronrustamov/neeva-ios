@@ -105,6 +105,7 @@ class SimulatedSwipeModel: ObservableObject {
     }
 
     private func updateBackVisibility(tab: Tab?) {
+        coordinator?.setPreviewImage(nil)
         guard let tab = tab,
             !tab.canGoBack
         else {
@@ -113,9 +114,10 @@ class SimulatedSwipeModel: ObservableObject {
         }
 
         // if tab cannot go back, check to see if there's another back target
-        if let _ = tab.parent {
+        if let parent = tab.parent {
             hidden = false
             chromeModel.canGoBack = true
+            coordinator?.setPreviewImage(parent.screenshot)
         } else if let id = tab.parentSpaceID, !id.isEmpty {
             hidden = false
             chromeModel.canGoBack = true
