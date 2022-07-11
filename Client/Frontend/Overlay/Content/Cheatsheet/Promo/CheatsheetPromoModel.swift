@@ -129,16 +129,26 @@ public class CheatsheetPromoModel: ObservableObject {
     }
 
     // MARK: - Subscription Methods
-    func subscribe(to visibilityManager: ContentVisibilityModel) {
+    func subscribe(
+        to visibilityManager: ContentVisibilityModel,
+        overlayManager: OverlayManager
+    ) {
         // we wait until the browser has finished animating and the
         // webcontent and tool bar is fully visible
         uiUpdateSubscription?.cancel()
-        uiUpdateSubscription = Publishers.CombineLatest(
+        let isOverlayShowingPublisher = Publishers.CombineLatest(
+            overlayManager.$currentOverlay,
+            overlayManager.$animationCompleted
+        ).map { currentOverlay, animationCompleted in
+            return currentOverlay != nil || animationCompleted != nil
+        }.removeDuplicates()
+        uiUpdateSubscription = Publishers.CombineLatest3(
             uiUpdatePublisher,
-            visibilityManager.$showContent
+            visibilityManager.$showContent.removeDuplicates(),
+            isOverlayShowingPublisher
         )
-        .compactMap { update, visible -> UIUpdate? in
-            guard visible else {
+        .compactMap { update, visible, isOverlayShowing -> UIUpdate? in
+            guard visible, !isOverlayShowing else {
                 return nil
             }
             return update

@@ -240,7 +240,10 @@ class BrowserViewController: UIViewController, ModalPresenter {
         #endif
 
         cheatsheetPromoModel.subscribe(to: self.tabManager)
-        cheatsheetPromoModel.subscribe(to: self.browserModel.contentVisibilityModel)
+        cheatsheetPromoModel.subscribe(
+            to: self.browserModel.contentVisibilityModel,
+            overlayManager: self.overlayManager
+        )
 
         didInit()
     }
