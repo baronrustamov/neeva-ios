@@ -249,6 +249,25 @@ public class CheatsheetMenuViewModel: ObservableObject {
             let ugcDiscussion = UGCDiscussion(backlinks: cheatsheetInfo.backlinks)
             if !ugcDiscussion.isEmpty {
                 results.append(.discussions(ugcDiscussion))
+            } else {
+                if let inputURL = sourcePage?.url,
+                    let canonicalURL = CanonicalURL(
+                        from: inputURL, stripMobile: true, relaxed: true
+                    )?.asString,
+                    BloomFilterManager.shared.contains(canonicalURL) == false
+                {
+                    DispatchQueue.main.async {
+                        ClientLogger.shared.logCounter(
+                            .CheatsheetUGCHitNoRedditData,
+                            attributes: EnvironmentHelper.shared.getAttributes() + [
+                                ClientLogCounterAttribute(
+                                    key: LogConfig.CheatsheetAttribute.currentPageURL,
+                                    value: inputURL.absoluteString
+                                )
+                            ]
+                        )
+                    }
+                }
             }
         }
 

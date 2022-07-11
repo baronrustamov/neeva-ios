@@ -348,6 +348,7 @@ public enum LogConfig {
         case CheatsheetBadURLString
         case CheatsheetFetchError
         case CheatsheetUGCStatsForSession
+        case CheatsheetUGCHitNoRedditData
 
         // MARK: tab group
         case tabGroupExpanded
@@ -707,6 +708,7 @@ public enum LogConfig {
         case .CheatsheetBadURLString: return .Cheatsheet
         case .CheatsheetFetchError: return .Cheatsheet
         case .CheatsheetUGCStatsForSession: return .Cheatsheet
+        case .CheatsheetUGCHitNoRedditData: return .Cheatsheet
 
         // MARK: - TabGroup
         case .tabGroupExpanded: return .TabGroup
