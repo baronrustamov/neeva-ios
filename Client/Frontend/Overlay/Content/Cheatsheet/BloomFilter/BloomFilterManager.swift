@@ -37,17 +37,27 @@ private enum BloomFilterLoader {
 
     static private let fileManager = FileManager.default
 
-    static private var session: URLSession = {
-        // Put callbacks on utility level
+    static private var downloadQueue: OperationQueue = {
+        // Use utility-level serial queue for download operations
         let queue = OperationQueue()
+        queue.name = "co.neeva.app.ios.browser.BloomFilterLoader"
         queue.qualityOfService = .utility
+        queue.maxConcurrentOperationCount = 1
+        return queue
+    }()
+
+    static private var defaultSession: URLSession = {
+        return URLSession(configuration: .default, delegate: nil, delegateQueue: downloadQueue)
+    }()
+
+    static private var restrictedSession: URLSession = {
         // Disable downloading over cellular and restricted networks
         let config = URLSessionConfiguration.default
         config.allowsCellularAccess = false
         config.allowsExpensiveNetworkAccess = false
         config.allowsConstrainedNetworkAccess = false
         config.waitsForConnectivity = true
-        return URLSession(configuration: config, delegate: nil, delegateQueue: queue)
+        return URLSession(configuration: config, delegate: nil, delegateQueue: downloadQueue)
     }()
 
     static func loadFilter(
@@ -63,7 +73,7 @@ private enum BloomFilterLoader {
         }
 
         // get new checksum file from network
-        session.downloadTask(with: locations.checksumURL) { tempURL, response, error in
+        defaultSession.downloadTask(with: locations.checksumURL) { tempURL, response, error in
             if let error = error {
                 completion(.failure(error))
                 return
@@ -99,7 +109,7 @@ private enum BloomFilterLoader {
             }
 
             // Cannot return from current local file. Acquire new one
-            session.downloadTask(with: locations.binUrl) {
+            restrictedSession.downloadTask(with: locations.binUrl) {
                 tempFilterURL, filterResponse, filterError in
                 if let error = filterError {
                     completion(.failure(error))
