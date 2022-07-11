@@ -111,22 +111,7 @@ class Tab: NSObject, ObservableObject {
     private var observer: AnyCancellable?
     var pageZoom: CGFloat = 1.0 {
         didSet {
-            if let webView = webView {
-                webView.setValue(pageZoom, forKey: "viewScale")
-
-                // This effectively "pins" the top left of the content while the
-                // WKWebView is being zoomed. There's probably a better way to do this
-                let originalOffset = webView.scrollView.contentOffset
-                let newOffset = CGPoint(
-                    x: originalOffset.x, y: originalOffset.y * pageZoom)
-                observer = webView.scrollView.publisher(for: \.contentOffset)
-                    .sink { offset in
-                        if offset != originalOffset {
-                            webView.scrollView.contentOffset = newOffset
-                            self.observer = nil
-                        }
-                    }
-            }
+            webView?.setValue(pageZoom, forKey: "viewScale")
         }
     }
 
