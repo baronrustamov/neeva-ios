@@ -84,6 +84,8 @@
 		203A9383283F1E9C00FA4E73 /* CardGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203A9382283F1E9C00FA4E73 /* CardGroupView.swift */; };
 		203A9384283F1E9C00FA4E73 /* CardGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203A9382283F1E9C00FA4E73 /* CardGroupView.swift */; };
 		203A9385283F221900FA4E73 /* GridPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203A9380283F1E0E00FA4E73 /* GridPicker.swift */; };
+		204BF5CD28778B1C00A07AB6 /* CookieCutterHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 204BF5CB28778B1C00A07AB6 /* CookieCutterHelper.js */; };
+		204BF5D0287792FF00A07AB6 /* RedditPopupBlocker.js in Resources */ = {isa = PBXBuildFile; fileRef = 204BF5CF287792FF00A07AB6 /* RedditPopupBlocker.js */; };
 		205132B128208DB0003AAE96 /* SheetHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205132B028208DB0003AAE96 /* SheetHeader.swift */; };
 		205132B3282093B0003AAE96 /* CookieCutterOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205132B2282093B0003AAE96 /* CookieCutterOnboardingView.swift */; };
 		205789762852926D00E6CB6B /* DateGroupedTableData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205789752852926D00E6CB6B /* DateGroupedTableData.swift */; };
@@ -1979,6 +1981,8 @@
 		2034988D2843307C00799544 /* OrientationDependentStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientationDependentStack.swift; sourceTree = "<group>"; };
 		203A9380283F1E0E00FA4E73 /* GridPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridPicker.swift; sourceTree = "<group>"; };
 		203A9382283F1E9C00FA4E73 /* CardGroupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardGroupView.swift; sourceTree = "<group>"; };
+		204BF5CB28778B1C00A07AB6 /* CookieCutterHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = CookieCutterHelper.js; sourceTree = "<group>"; };
+		204BF5CF287792FF00A07AB6 /* RedditPopupBlocker.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = RedditPopupBlocker.js; sourceTree = "<group>"; };
 		205132B028208DB0003AAE96 /* SheetHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetHeader.swift; sourceTree = "<group>"; };
 		205132B2282093B0003AAE96 /* CookieCutterOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCutterOnboardingView.swift; sourceTree = "<group>"; };
 		205789752852926D00E6CB6B /* DateGroupedTableData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateGroupedTableData.swift; sourceTree = "<group>"; };
@@ -4714,6 +4718,7 @@
 				D000661320472890009BA6F6 /* __firefox__.js */,
 				D03F8F24200EACD8003C2224 /* ContextMenu.js */,
 				D0FCF7F61FE45E5D004A7995 /* PrintHandler.js */,
+				204BF5CF287792FF00A07AB6 /* RedditPopupBlocker.js */,
 			);
 			path = AtDocumentEnd;
 			sourceTree = "<group>";
@@ -4730,6 +4735,7 @@
 		D0FCF7ED1FE44DC3004A7995 /* AtDocumentEnd */ = {
 			isa = PBXGroup;
 			children = (
+				204BF5CB28778B1C00A07AB6 /* CookieCutterHelper.js */,
 				D0FCF8091FE47B49004A7995 /* CustomSearchHandler.js */,
 				D0C95DF1200EAD3000E4E51C /* FindInPage.js */,
 				D0C95E33200FDB3200E4E51C /* MetadataHelper.js */,
@@ -6513,6 +6519,7 @@
 				7B4980A81CE363ED0017547C /* Settings.xcassets in Resources */,
 				E4B7B7861A793CF20022C5E0 /* FiraSans-UltraLight.ttf in Resources */,
 				C9C18E1626559118004710CD /* Neeva.xcassets in Resources */,
+				204BF5D0287792FF00A07AB6 /* RedditPopupBlocker.js in Resources */,
 				F805A79F2840187D00372451 /* Black@3x~ipad.png in Resources */,
 				E4B7B77D1A793CF20022C5E0 /* FiraSans-Regular.ttf in Resources */,
 				E4B7B7791A793CF20022C5E0 /* FiraSans-Light.ttf in Resources */,
@@ -6547,6 +6554,7 @@
 				BC6D34892622D4DE0050DEC4 /* Roobert-Medium.otf in Resources */,
 				C9098F7726B0539000D2B5F4 /* webpack.config.js in Resources */,
 				679BB17C2714D069002F60FE /* easy_privacy.json in Resources */,
+				204BF5CD28778B1C00A07AB6 /* CookieCutterHelper.js in Resources */,
 				E4D6BEB91A0930EC00F538BD /* LaunchScreen.xib in Resources */,
 				F80983BD283849E00039FCBD /* Black@2x.png in Resources */,
 				2F44FB2D1A9D5D8500FD20CC /* FiraSans-BoldItalic.ttf in Resources */,
