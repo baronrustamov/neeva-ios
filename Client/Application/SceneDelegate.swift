@@ -711,6 +711,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     value: String(Defaults[.numOfUGCCanonicalError])
                 ),
                 ClientLogCounterAttribute(
+                    key: LogConfig.CheatsheetAttribute.UGCStat.ugcTestNoResult.rawValue,
+                    value: String(Defaults[.numOfUGCNoResult])
+                ),
+                ClientLogCounterAttribute(
                     key: LogConfig.CheatsheetAttribute.UGCStat.ugcHit.rawValue,
                     value: String(Defaults[.numOfUGCHits])
                 ),
@@ -722,6 +726,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         )
         Defaults[.numOfUGCTests] = 0
         Defaults[.numOfUGCCanonicalError] = 0
+        Defaults[.numOfUGCNoResult] = 0
         Defaults[.numOfUGCHits] = 0
         Defaults[.numOfUGCClears] = 0
         Defaults[.redditFilterHealth] = ""

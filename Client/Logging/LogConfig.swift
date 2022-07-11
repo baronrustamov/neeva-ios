@@ -876,6 +876,7 @@ public struct LogConfig {
         public enum UGCStat: String {
             case filterHealth
             case ugcTest
+            case ugcTestNoResult
             case ugcHit
             case ugcClear
             case ugcCanonicalError

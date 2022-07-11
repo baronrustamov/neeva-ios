@@ -51,6 +51,7 @@ private struct PromoStateStorage {
         // leave value as unintialized if bloom filter manager is not ready to produce a result
         guard let result = bloomFilterManager.contains(canonicalURL)
         else {
+            Defaults[.numOfUGCNoResult] += 1
             return
         }
 

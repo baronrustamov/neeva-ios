@@ -152,6 +152,7 @@ extension Defaults.Keys {
         "numOfUGCCanonicalError", default: 0
     )
     public static let numOfUGCTests = Defaults.Key<Int>("numOfUGCTests", default: 0)
+    public static let numOfUGCNoResult = Defaults.Key<Int>("numOfUGCNoResult", default: 0)
     public static let numOfUGCHits = Defaults.Key<Int>("numOfUGCHits", default: 0)
     public static let numOfUGCClears = Defaults.Key<Int>("numOfUGCClears", default: 0)
     public static let redditFilterHealth = Defaults.Key<String>("redditFilterHealth", default: "")
