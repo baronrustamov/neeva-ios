@@ -15,6 +15,19 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
         let token = tokenParts.joined()
         Defaults[.notificationToken] = token
+        ClientLogger.shared.logCounter(
+            .RegisterNotificationToken,
+            attributes: [
+                ClientLogCounterAttribute(
+                    key: LogConfig.Attribute.pushNotificationToken,
+                    value: token
+                ),
+                ClientLogCounterAttribute(
+                    key: LogConfig.Attribute.isUserSignedIn,
+                    value: String(NeevaUserInfo.shared.hasLoginCookie())
+                ),
+            ]
+        )
         Defaults[.didRegisterNotificationTokenOnServer] = true
         NotificationPermissionHelper.shared.registerDeviceTokenWithServer(deviceToken: token)
     }

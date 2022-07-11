@@ -221,6 +221,7 @@ public enum LogConfig {
         /// Close preview sign up card
         case ClosePreviewSignUpPromo
         case DefaultBrowserOnboardingInterstitialSkip
+        case DefaultBrowserOnboardingInterstitialContinueToNeeva
         case DefaultBrowserOnboardingInterstitialRemind
         case DefaultBrowserOnboardingInterstitialOpen
         case DefaultBrowserOnboardingInterstitialOpenAgain
@@ -313,6 +314,8 @@ public enum LogConfig {
         case PromoEnableNotification
         /// Close enable notification promo card
         case CloseEnableNotificationPromo
+        /// Register a push notification token
+        case RegisterNotificationToken
 
         // MARK: Spotlight
         // when url is opened from a user activity
@@ -581,6 +584,7 @@ public enum LogConfig {
         case .PreviewTapFakeSearchInput: return .FirstRun
         case .PreviewHomeSignin: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialSkip: return .FirstRun
+        case .DefaultBrowserOnboardingInterstitialContinueToNeeva: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialRemind: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialOpen: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialOpenAgain: return .FirstRun
@@ -678,6 +682,7 @@ public enum LogConfig {
         case .OpenNotification: return .Notification
         case .PromoEnableNotification: return .Notification
         case .CloseEnableNotificationPromo: return .Notification
+        case .RegisterNotificationToken: return .Notification
 
         // MARK: - Spotlight
         case .openURLFromUserActivity: return .Spotlight
@@ -776,6 +781,8 @@ public enum LogConfig {
         public static let isUserSignedIn = "IsUserSignedIn"
         /// Device name
         public static let DeviceName = "DeviceName"
+        /// Device OS
+        public static let DeviceOS = "DeviceOS"
         /// Session UUID
         public static let SessionUUID = "SessionUUID"
         /// First run search path and query

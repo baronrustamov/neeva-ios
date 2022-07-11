@@ -94,7 +94,9 @@ class InterstitialViewModel: ObservableObject {
 
     func defaultBrowserSecondaryButtonAction() {
         if restoreFromBackground {
-            closeAction()
+            closeAction(
+                interaction: .DefaultBrowserOnboardingInterstitialContinueToNeeva
+            )
         } else {
             remindLaterAction()
         }
@@ -126,7 +128,10 @@ class InterstitialViewModel: ObservableObject {
         )
     }
 
-    func closeAction(shouldLog: Bool = true) {
+    func closeAction(
+        shouldLog: Bool = true,
+        interaction: LogConfig.Interaction = .DefaultBrowserOnboardingInterstitialSkip
+    ) {
         if let onCloseAction = onCloseAction {
             onCloseAction()
         }
@@ -135,7 +140,7 @@ class InterstitialViewModel: ObservableObject {
             DefaultBrowserInterstitialChoice.skipForNow.rawValue
         if shouldLog {
             ClientLogger.shared.logCounter(
-                .DefaultBrowserOnboardingInterstitialSkip,
+                interaction,
                 attributes: [
                     ClientLogCounterAttribute(
                         key:

@@ -19,11 +19,13 @@ public class EnvironmentHelper {
         case previewQueryCount
         case tabs
         case tabGroups
+        case deviceOS
 
         static let firstRun: Categories = [
             .isUserSignedIn,
             .deviceTheme,
             .deviceName,
+            .deviceOS,
             .firstRunPath,
             .previewQueryCount,
         ]
@@ -78,6 +80,7 @@ public class EnvironmentHelper {
     public func getAttributes(
         for categories: Categories = [
             .tabs, .tabGroups, .deviceTheme, .deviceOrientation, .deviceScreenSize, .isUserSignedIn,
+            .deviceOS,
         ]
     ) -> [ClientLogCounterAttribute] {
         categories.flatMap { getAttributes(category: $0) } + [getSessionUUID()]
@@ -130,6 +133,12 @@ public class EnvironmentHelper {
             return [
                 ClientLogCounterAttribute(
                     key: LogConfig.Attribute.DeviceName, value: NeevaConstants.deviceNameValue
+                )
+            ]
+        case .deviceOS:
+            return [
+                ClientLogCounterAttribute(
+                    key: LogConfig.Attribute.DeviceOS, value: UIDevice.current.systemVersion
                 )
             ]
         case .deviceOrientation:
