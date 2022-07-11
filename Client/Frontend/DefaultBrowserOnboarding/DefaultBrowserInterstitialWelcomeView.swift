@@ -66,7 +66,7 @@ struct DefaultBrowserInterstitialWelcomeView: View {
     @ViewBuilder
     var newContent: some View {
         VStack(alignment: .leading) {
-            Text("Neeva puts you in charge of\nyour internet experience.")
+            Text("Neeva puts you in charge of\nyour life online.")
                 .font(.system(size: UIConstants.hasHomeButton ? 24 : 36, weight: .bold))
                 .padding(.bottom, 15)
             ForEach(interstitialModel.welcomePageBullets(), id: \.self) {
