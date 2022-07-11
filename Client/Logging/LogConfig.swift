@@ -332,6 +332,7 @@ public enum LogConfig {
 
         // MARK: Cheatsheet(NeevaScope)
         case CheatsheetPopoverImpression
+        case CheatsheetPopoverReachedLimit
         case CheatsheetUGCIndicatorImpression
         case OpenCheatsheet
         case CheatsheetEducationImpressionOnSRP
@@ -692,6 +693,7 @@ public enum LogConfig {
         case .RecipeCheatsheetShowMoreRecipe: return .RecipeCheatsheet
 
         case .CheatsheetPopoverImpression: return .Cheatsheet
+        case .CheatsheetPopoverReachedLimit: return .Cheatsheet
         case .CheatsheetUGCIndicatorImpression: return .Cheatsheet
         case .OpenCheatsheet: return .Cheatsheet
         case .CheatsheetEducationImpressionOnSRP: return .Cheatsheet

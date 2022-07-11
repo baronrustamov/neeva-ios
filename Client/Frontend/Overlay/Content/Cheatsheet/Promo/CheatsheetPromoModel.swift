@@ -218,7 +218,16 @@ public class CheatsheetPromoModel: ObservableObject {
             }
 
             if showIntroPopover {
-                self?.scheduleSetDisplayedStateForTryCheatsheet()
+                if Defaults[.tryCheatsheetPopoverCount] > 0 {
+                    self?.scheduleSetDisplayedStateForTryCheatsheet()
+                } else {
+                    ClientLogger.shared.logCounter(
+                        .CheatsheetPopoverReachedLimit,
+                        attributes: EnvironmentHelper.shared.getAttributes(for: [
+                            .isUserSignedIn
+                        ])
+                    )
+                }
             } else if Defaults[.useCheatsheetBloomFilters] {
                 Self.queue.async {
                     self?.updateDisplayedStateFromUGCStorage(for: url)
@@ -371,6 +380,9 @@ extension CheatsheetPromoModel {
             switch promo {
             case .tryCheatsheet:
                 CheatsheetTooltipPopoverView()
+                    .onAppear {
+                        Defaults[.tryCheatsheetPopoverCount] -= 1
+                    }
             case .UGC:
                 CheatsheetUGCIndicatorView()
                     .onDisappear {

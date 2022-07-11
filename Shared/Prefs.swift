@@ -139,6 +139,10 @@ extension Defaults.Keys {
 
     // MARK: - cheatsheet
     public static let seenCheatsheetIntro = Defaults.BoolKey("cheatsheetIntroSeen")
+    public static let tryCheatsheetPopoverCount = Defaults.Key<Int>(
+        "tryCheatsheetPopoverCount",
+        default: 5
+    )
     public static let showTryCheatsheetPopover = Defaults.BoolKey("showTryCheatsheetPopover")
     public static let seenTryCheatsheetPopoverOnRecipe = Defaults.BoolKey(
         "seenTryCheatsheetPopoverOnRecipe")
