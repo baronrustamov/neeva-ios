@@ -23,6 +23,10 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                     value: token
                 ),
                 ClientLogCounterAttribute(
+                    key: LogConfig.Attribute.pushNotificationTokenEnvironment,
+                    value: NotificationPermissionHelper.pushTokenEnvironment
+                ),
+                ClientLogCounterAttribute(
                     key: LogConfig.Attribute.isUserSignedIn,
                     value: String(NeevaUserInfo.shared.hasLoginCookie())
                 ),

@@ -28,6 +28,12 @@ public enum NotificationAuthorizationCallSite: String {
 class NotificationPermissionHelper {
     static let shared = NotificationPermissionHelper()
 
+    #if DEBUG
+        static let pushTokenEnvironment = "sandbox"
+    #else
+        static let pushTokenEnvironment = "prod"
+    #endif
+
     var permissionStatus: NotificationPermissionStatus {
         return NotificationPermissionStatus(rawValue: Defaults[.notificationPermissionState])
             ?? .undecided
@@ -165,16 +171,11 @@ class NotificationPermissionHelper {
             return
         }
 
-        #if DEBUG
-            let environment = "sandbox"
-        #else
-            let environment = "prod"
-        #endif
         AddDeviceTokenIosMutation(
             input: DeviceTokenInput(
                 deviceToken: deviceToken,
                 deviceId: UIDevice.current.identifierForVendor?.uuidString ?? "",
-                environment: environment)
+                environment: NotificationPermissionHelper.pushTokenEnvironment)
         ).perform { result in
             switch result {
             case .success:

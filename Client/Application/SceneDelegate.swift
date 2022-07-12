@@ -120,7 +120,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     value: token
                 )
             )
+            attributes.append(
+                ClientLogCounterAttribute(
+                    key: LogConfig.Attribute.pushNotificationTokenEnvironment,
+                    value: NotificationPermissionHelper.pushTokenEnvironment
+                )
+            )
         }
+
         ClientLogger.shared.logCounter(
             .AppEnterForeground,
             attributes: EnvironmentHelper.shared.getAttributes()

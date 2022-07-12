@@ -809,6 +809,8 @@ public enum LogConfig {
         public static let InterstitialTimeSpent = "InterstitialTimeSpent"
 
         public static let pushNotificationToken = "PushNotificationToken"
+
+        public static let pushNotificationTokenEnvironment = "PushNotificationTokenEnvironment"
     }
 
     public enum UIInteractionAttribute {
