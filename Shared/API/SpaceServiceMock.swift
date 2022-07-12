@@ -22,6 +22,7 @@ public class SpaceServiceMock: SpaceService {
 
         // SpaceDataApollo properties
         var entities: [SpaceEntityData] = []
+        var generators: [SpaceGeneratorData] = []
 
         var spaceApollo: SpaceApollo {
             SpaceApollo(
@@ -58,7 +59,7 @@ public class SpaceServiceMock: SpaceService {
                 ),
                 entities: entities,
                 comments: [],
-                generators: []
+                generators: generators
             )
         }
 
@@ -66,6 +67,37 @@ public class SpaceServiceMock: SpaceService {
             self.name = name
             self.isOwner = isOwner
             self.isPublic = isPublic
+        }
+
+        @discardableResult
+        func addGeneratedSpaceEntity(
+            title: String = "", description: String = "", url: String = "", generatorId: String = ""
+        ) -> String {
+            let id = UUID().uuidString
+            resultCount += 1
+            entities.append(
+                SpaceEntityData(
+                    id: id,
+                    url: URL(string: url),
+                    title: title,
+                    snippet: description,
+                    thumbnail: "",
+                    previewEntity: .newsItem(
+                        PreviewEntity.NewsItem(
+                            title: title,
+                            snippet: description,
+                            url: URL(string: url)!,
+                            thumbnailURL: nil,
+                            providerName: "NBC Sports",
+                            datePublished: ISO8601DateFormatter().string(from: Date()),
+                            faviconURL: nil,
+                            domain: nil
+                        )
+                    ),
+                    generatorID: generatorId
+                )
+            )
+            return id
         }
 
         @discardableResult
@@ -85,6 +117,13 @@ public class SpaceServiceMock: SpaceService {
                 )
             )
             return id
+        }
+
+        @discardableResult
+        func addSpaceGenerator(id: String, params: [String: String]) -> Bool {
+            generators.append(SpaceGeneratorData(id: id, params: params))
+            // This operation is always successful.
+            return true
         }
 
         @discardableResult
@@ -124,6 +163,9 @@ public class SpaceServiceMock: SpaceService {
         let spacePublicAclTestsSpace1 = SpaceMock(name: "SpacePublicAclTests Space1")
         let spacePublicAclTestsSpace2 = SpaceMock(
             name: "SpacePublicAclTests Space2", isPublic: true)
+        let spaceGeneratorTestsSpace = SpaceMock(name: "SpaceGeneratorTests Space")
+        let relatedSpaceTestsSpace1 = SpaceMock(name: "RelatedSpaceTests Space1")
+        let relatedSpaceTestsSpace2 = SpaceMock(name: "RelatedSpaceTests Space2")
 
         // Starting with AAA and ZZZ makes it easier to test sorting by Name
         let spaceSortTestSpace1 = SpaceMock(
@@ -136,6 +178,9 @@ public class SpaceServiceMock: SpaceService {
         spaces[spaceEntityTestsSpace.id] = spaceEntityTestsSpace
         spaces[spacePublicAclTestsSpace1.id] = spacePublicAclTestsSpace1
         spaces[spacePublicAclTestsSpace2.id] = spacePublicAclTestsSpace2
+        spaces[spaceGeneratorTestsSpace.id] = spaceGeneratorTestsSpace
+        spaces[relatedSpaceTestsSpace1.id] = relatedSpaceTestsSpace1
+        spaces[relatedSpaceTestsSpace2.id] = relatedSpaceTestsSpace2
         spaces[spaceSortTestSpace1.id] = spaceSortTestSpace1
         spaces[spaceSortTestSpace2.id] = spaceSortTestSpace2
 
@@ -164,6 +209,35 @@ public class SpaceServiceMock: SpaceService {
             title: "Neeva", url: "https://neeva.com")
         spaces[spacePublicAclTestsSpace2.id]?.addSpaceEntity(
             title: "Neeva", url: "https://neeva.com")
+
+        // SpaceGeneratorTests
+        let generatorId = "g:5mfpHdgkXYQaFZz6zjXYTHHTyIL0gWPP4RWsidv4"
+        spaces[spaceGeneratorTestsSpace.id]?.addSpaceGenerator(
+            id: generatorId,
+            params: [
+                "query": "golden state",
+                "count": "2",
+                "location": "",
+            ]
+        )
+        spaces[spaceGeneratorTestsSpace.id]?.addGeneratedSpaceEntity(
+            title: "First generated entity",
+            description:
+                """
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ultricies integer quis auctor elit sed vulputate mi sit amet. Sit amet luctus venenatis lectus magna fringilla urna porttitor.
+                """, url: "https://example.com", generatorId: generatorId)
+        spaces[spaceGeneratorTestsSpace.id]?.addGeneratedSpaceEntity(
+            title: "Second generated entity",
+            description:
+                """
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ultricies integer quis auctor elit sed vulputate mi sit amet. Sit amet luctus venenatis lectus magna fringilla urna porttitor.
+                """, url: "https://example.com", generatorId: generatorId)
+
+        // RelatedSpaceTests
+        spaces[relatedSpaceTestsSpace1.id]?.addSpaceEntity(
+            title: "Main Space Entity", url: "https://example.com")
+        spaces[relatedSpaceTestsSpace2.id]?.addSpaceEntity(
+            title: "Related Space Entity", url: "https://example.com")
     }
 
     public func addPublicACL(spaceID: String) -> AddPublicACLRequest? {
@@ -229,7 +303,17 @@ public class SpaceServiceMock: SpaceService {
     }
 
     public func claimGeneratedItem(spaceID: String, entityID: String) -> ClaimGeneratedItem? {
-        return nil
+        let request = ClaimGeneratedItem(spaceID: spaceID, entityID: entityID, testMode: true)
+
+        SpaceMock.handleMutationRequest(request: request) { [self] in
+            if var entity = spaces[spaceID]?.entities.first(where: { $0.id == entityID }) {
+                entity.generatorID = nil
+                return true
+            }
+            return false
+        }
+
+        return request
     }
 
     public func createSpace(name: String) -> CreateSpaceRequest? {
@@ -247,7 +331,26 @@ public class SpaceServiceMock: SpaceService {
     }
 
     public func deleteGenerator(spaceID: String, generatorID: String) -> DeleteGeneratorRequest? {
-        return nil
+        let request = DeleteGeneratorRequest(
+            spaceID: spaceID, generatorID: generatorID, testMode: true)
+
+        SpaceMock.handleMutationRequest(request: request) { [self] in
+            if let space = spaces[spaceID],
+                let index = space.generators.firstIndex(where: { $0.id == generatorID })
+            {
+                space.generators.remove(at: index)
+                // "Keep" all the entities added by the generator.
+                for (index, entity) in space.entities.enumerated() {
+                    if entity.generatorID == generatorID {
+                        space.entities[index].generatorID = nil
+                    }
+                }
+                return true
+            }
+            return false
+        }
+
+        return request
     }
 
     public func deletePublicACL(spaceID: String) -> DeletePublicACLRequest? {
@@ -306,18 +409,47 @@ public class SpaceServiceMock: SpaceService {
         }
     }
 
+    // Used only for RelatedSpaceTests.swift
     public func getRelatedSpacesCountData(
         spaceID: String,
         completion: @escaping (Result<Int, Error>) -> Void
     ) -> Combine.Cancellable? {
-        return nil
+        // Simulate a network request
+        DispatchQueue.main.async { [self] in
+            completion(
+                Result<Int, Error>(catching: {
+                    return spaces[spaceID]!.name.contains("RelatedSpaceTests Space") ? 2 : 0
+                })
+            )
+        }
+
+        return AnyCancellable {
+            // do nothing
+        }
     }
 
+    // Used only for RelatedSpaceTests.swift
     public func getRelatedSpacesData(
         spaceID: String,
         completion: @escaping (Result<[SpacesDataQueryController.Space], Error>) -> Void
     ) -> Combine.Cancellable? {
-        return nil
+        // Simulate a network request
+        DispatchQueue.main.async { [self] in
+            completion(
+                Result<[SpacesDataQueryController.Space], Error>(catching: {
+                    return [
+                        spaces.first { $0.value.name == "RelatedSpaceTests Space1" }!.value
+                            .spaceDataApollo,
+                        spaces.first { $0.value.name == "RelatedSpaceTests Space2" }!.value
+                            .spaceDataApollo,
+                    ]
+                })
+            )
+        }
+
+        return AnyCancellable {
+            // do nothing
+        }
     }
 
     public func getSpaces(
@@ -353,7 +485,19 @@ public class SpaceServiceMock: SpaceService {
     }
 
     public func reorderSpace(spaceID: String, ids: [String]) -> ReorderSpaceRequest? {
-        return nil
+        let request = ReorderSpaceRequest(spaceID: spaceID, ids: ids, testMode: true)
+
+        SpaceMock.handleMutationRequest(request: request) { [self] in
+            if let space = spaces[spaceID] {
+                space.entities.sort {
+                    // Abort if the ID is not found.
+                    ids.firstIndex(of: $0.id)! < ids.firstIndex(of: $1.id)!
+                }
+            }
+            return spaces[spaceID] != nil
+        }
+
+        return request
     }
 
     public func pinSpace(spaceId: String, isPinned: Bool) -> PinSpaceRequest? {
@@ -379,8 +523,21 @@ public class SpaceServiceMock: SpaceService {
         return request
     }
 
+    // TODO(jon): Test this once profile name updates work reliably. Issue #3961
     public func updateProfile(firstName: String, lastName: String) -> UpdateProfileRequest? {
-        return nil
+        let request = UpdateProfileRequest(firstName: firstName, lastName: lastName, testMode: true)
+
+        SpaceMock.handleMutationRequest(request: request) {
+            /*if lastName.isEmpty {
+                // Cannot assign to property: 'displayName' setter is inaccessible
+                NeevaUserInfo.shared.displayName = firstName
+            } else {
+                NeevaUserInfo.shared.displayName = "\(firstName) \(lastName)"
+            }*/
+            return true
+        }
+
+        return request
     }
 
     // TODO(jon): update description and thumbnail
@@ -400,9 +557,33 @@ public class SpaceServiceMock: SpaceService {
         return request
     }
 
+    // This mirrors AddOrUpdateSpaceView's Save button logic.
     public func updateSpaceEntity(
         spaceID: String, entityID: String, title: String, snippet: String?, thumbnail: String?
     ) -> UpdateSpaceEntityRequest? {
-        return nil
+        let request = UpdateSpaceEntityRequest(
+            spaceID: spaceID, entityID: entityID, title: title, snippet: snippet,
+            thumbnail: thumbnail, testMode: true)
+
+        SpaceMock.handleMutationRequest(request: request) { [self] in
+            if let oldData = spaces[spaceID]?.entities.first(where: { $0.id == entityID }),
+                let index = spaces[spaceID]?.entities.firstIndex(where: { $0.id == entityID })
+            {
+                let newData = SpaceEntityData(
+                    id: oldData.id,
+                    url: oldData.url,
+                    title: title,
+                    snippet: snippet,
+                    thumbnail: thumbnail,
+                    previewEntity: oldData.previewEntity
+                )
+                spaces[spaceID]?.entities.replaceSubrange(
+                    index..<(index + 1), with: [newData])
+            }
+
+            return spaces[spaceID]?.entities.first(where: { $0.id == entityID }) != nil
+        }
+
+        return request
     }
 }

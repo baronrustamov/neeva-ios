@@ -349,9 +349,8 @@ struct ShareSpaceView: View {
                                     ? ""
                                     : String(
                                         nameText.dropFirst(index!.utf16Offset(in: nameText) + 1))
-                                let _ =
-                                    SpaceServiceProvider.shared.updateProfile(
-                                        firstName: firstName, lastName: lastName)
+                                SpaceServiceProvider.shared.updateProfile(
+                                    firstName: firstName, lastName: lastName)
                             }
                         }
                     }

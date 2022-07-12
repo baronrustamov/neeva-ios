@@ -112,4 +112,24 @@ class SpaceEntityTests: BaseTestCase {
                 .matching(identifier: "Click to add description")
                 .element.exists)
     }
+
+    func testEntityReordering() {
+        // Prevents the XCUIElementQuery from breaking
+        waitForExistence(app.buttons["Example"])
+
+        var buttons = app.descendants(matching: .button).allElementsBoundByIndex.map { $0.label }
+
+        XCTAssertTrue(buttons.firstIndex(of: "Example")! < buttons.firstIndex(of: "Yahoo")!)
+
+        app.buttons["Yahoo"]
+            .press(
+                forDuration: 0.5,
+                thenDragTo: app.staticTexts["Only visible to you and people you shared with"]
+            )
+        waitForExistence(app.buttons["Example"])
+
+        buttons = app.descendants(matching: .button).allElementsBoundByIndex.map { $0.label }
+
+        XCTAssertTrue(buttons.firstIndex(of: "Yahoo")! < buttons.firstIndex(of: "Example")!)
+    }
 }
