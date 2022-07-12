@@ -26,6 +26,15 @@ class AddToSpaceSheetTests: BaseTestCase {
         openURL(path(forTestPage: "test-mozilla-book.html"))
     }
 
+    func expandAddToSpaceSheet() {
+        app.staticTexts["Save to Spaces"]
+            .coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            .press(
+                forDuration: 0.5,
+                thenDragTo: app.buttons["Address Bar"]
+                    .coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)))
+    }
+
     func testAddSpaceViaSheet() {
         openURL("example.com")
         app.buttons["Add To Space"].tap()
@@ -35,6 +44,7 @@ class AddToSpaceSheetTests: BaseTestCase {
         XCTAssertTrue(app.staticTexts[String(Nicon.bookmark.rawValue)].exists)
 
         // Add to Space
+        expandAddToSpaceSheet()
         app.staticTexts[SpaceServiceMock.mySpaceTitle].tap(force: true)
 
         // Confirmation view
@@ -88,6 +98,7 @@ class AddToSpaceSheetTests: BaseTestCase {
         // Add item to Space
         app.buttons["Add To Space"].tap()
         waitForExistence(app.staticTexts[SpaceServiceMock.mySpaceTitle])
+        expandAddToSpaceSheet()
         app.staticTexts[SpaceServiceMock.mySpaceTitle].tap(force: true)
 
         // Confirm the item was added
@@ -100,6 +111,7 @@ class AddToSpaceSheetTests: BaseTestCase {
         // Remove item from Space
         app.buttons["Add To Space"].tap()
         waitForExistence(app.staticTexts[SpaceServiceMock.mySpaceTitle])
+        expandAddToSpaceSheet()
         app.staticTexts[SpaceServiceMock.mySpaceTitle].tap(force: true)
 
         // Confirm the item was removed
@@ -113,6 +125,7 @@ class AddToSpaceSheetTests: BaseTestCase {
     // https://stackoverflow.com/a/34095158
     func testSearchForSpace() {
         app.buttons["Add To Space"].tap()
+        expandAddToSpaceSheet()
         app.textFields["Search Spaces"].tap(force: true)
         app.textFields["Search Spaces"].tap(force: true)
         app.textFields["Search Spaces"].typeText("aa")
