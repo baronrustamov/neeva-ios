@@ -81,13 +81,7 @@ struct SpaceDetailList: View {
                                 guard canEdit else { return }
                                 onMove(source: indexSet, destination: destination, isPinned: true)
                             })
-                        } header: {
-                            HStack(spacing: 4) {
-                                Symbol(decorative: .pin)
-                                Text("Pinned")
-                            }.padding(.bottom, 8)
                         }
-
                     }
 
                     Section {
@@ -99,10 +93,6 @@ struct SpaceDetailList: View {
                             guard canEdit else { return }
                             onMove(source: indexSet, destination: destination, isPinned: false)
                         })
-                    } header: {
-                        if !primitive.pinnedDetails.isEmpty {
-                            Text("")
-                        }
                     }
 
                     if let generators = primitive.item?.generators, !generators.isEmpty {
@@ -241,15 +231,20 @@ struct SpaceDetailList: View {
         if isPinned,
             let itemIndex = primitive.unpinnedDetails.firstIndex(where: {
                 $0.item?.id == spaceItemId
-            })
+            }),
+            let actualIndex = primitive.allDetails.filter({ $0.data.isPinned }).firstIndex(
+                where: { $0.id == spaceItemId })
         {
             let item = primitive.unpinnedDetails.remove(at: itemIndex)
-            primitive.pinnedDetails.insert(item, at: 0)
+            primitive.pinnedDetails.insert(item, at: actualIndex)
         } else if let itemIndex = primitive.pinnedDetails.firstIndex(where: {
             $0.item?.id == spaceItemId
-        }) {
+        }),
+            let actualIndex = primitive.allDetails.filter({ !$0.data.isPinned }).firstIndex(
+                where: { $0.id == spaceItemId })
+        {
             let item = primitive.pinnedDetails.remove(at: itemIndex)
-            primitive.unpinnedDetails.insert(item, at: 0)
+            primitive.unpinnedDetails.insert(item, at: actualIndex)
         }
 
         spacesModel.pinSpaceItem(

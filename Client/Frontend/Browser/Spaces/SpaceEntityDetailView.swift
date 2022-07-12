@@ -24,67 +24,80 @@ struct SpaceEntityDetailView: View {
     @State private var isPreviewActive: Bool = false
 
     var body: some View {
-        VStack(spacing: 0) {
-            if index > 0 {
-                Color.secondaryBackground.frame(height: 2).edgesIgnoringSafeArea(.top)
-                Spacer(minLength: 0)
-            }
-
-            let spaceLink: SpaceID? = {
-                if case .spaceLink(let id) = details.data.previewEntity {
-                    return id
+        HStack(spacing: 0) {
+            VStack(spacing: 0) {
+                if index > 0 {
+                    Color.secondaryBackground.frame(height: 2).edgesIgnoringSafeArea(.top)
+                    Spacer(minLength: 0)
                 }
-                return nil
-            }()
 
-            if spaceLink == nil, details.data.url != nil {
-                SpaceListContentView(
-                    details: details,
-                    editSpaceItem: editSpaceItem,
-                    onSelected: onSelected
-                )
-            } else if let spaceLink = spaceLink,
-                let destinationDetails = spaceCardModel.allDetails.first(where: {
-                    $0.id == spaceLink.id
-                })
-            {
-                let isDigestSeeMore = details.id == .init(SpaceStore.dailyDigestSeeMoreID)
+                let spaceLink: SpaceID? = {
+                    if case .spaceLink(let id) = details.data.previewEntity {
+                        return id
+                    }
+                    return nil
+                }()
 
-                NavigationLink(
-                    destination: SpaceContainerView(primitive: destinationDetails)
-                ) {
+                if spaceLink == nil, details.data.url != nil {
+                    SpaceListContentView(
+                        details: details,
+                        editSpaceItem: editSpaceItem,
+                        onSelected: onSelected
+                    )
+                } else if let spaceLink = spaceLink,
+                    let destinationDetails = spaceCardModel.allDetails.first(where: {
+                        $0.id == spaceLink.id
+                    })
+                {
+                    let isDigestSeeMore = details.id == .init(SpaceStore.dailyDigestSeeMoreID)
+
+                    NavigationLink(
+                        destination: SpaceContainerView(primitive: destinationDetails)
+                    ) {
+                        SpaceNoteEntityView(
+                            details: details, showDescriptions: showDescriptions,
+                            isDigestSeeMore: isDigestSeeMore)
+                    }
+                } else {
+                    // notes and section title
                     SpaceNoteEntityView(
-                        details: details, showDescriptions: showDescriptions,
-                        isDigestSeeMore: isDigestSeeMore)
+                        details: details, showDescriptions: showDescriptions
+                    )
                 }
-            } else {
-                // notes and section title
-                SpaceNoteEntityView(
-                    details: details, showDescriptions: showDescriptions
+
+            }.background(Color.DefaultBackground)
+
+            if details.data.isPinned {
+                Image(systemSymbol: .pinFill)
+                    .resizable()
+                    .foregroundColor(.secondaryLabel)
+                    .padding(6)
+                    .frame(width: CardUX.CloseButtonSize, height: CardUX.CloseButtonSize)
+                    .background(Color(UIColor.systemGray6))
+                    .clipShape(Circle())
+                    .padding(6)
+            }
+        }.background(Color.orange)
+            .if(canEdit) {
+                $0.modifier(
+                    SpaceActionsModifier(
+                        details: details,
+                        keepNewsItem: {
+                            details.data.generatorID = nil
+                            spaceCardModel.claimGeneratedItem(
+                                spaceID: details.spaceID, entityID: details.id)
+                        },
+                        onDelete: {
+                            onDelete(index)
+                        },
+                        onPinToggle: onPinToggle,
+                        addToAnotherSpace: addToAnotherSpace,
+                        editSpaceItem: editSpaceItem)
                 )
             }
-
-        }
-        .if(canEdit) {
-            $0.modifier(
-                SpaceActionsModifier(
-                    details: details,
-                    keepNewsItem: {
-                        details.data.generatorID = nil
-                        spaceCardModel.claimGeneratedItem(
-                            spaceID: details.spaceID, entityID: details.id)
-                    },
-                    onDelete: {
-                        onDelete(index)
-                    },
-                    onPinToggle: onPinToggle,
-                    addToAnotherSpace: addToAnotherSpace,
-                    editSpaceItem: editSpaceItem)
-            )
-        }
-        .scaleEffect(isPressed ? 0.95 : 1)
-        .accessibilityLabel(details.title)
-        .accessibilityHint("Space Item")
+            .scaleEffect(isPressed ? 0.95 : 1)
+            .accessibilityLabel(details.title)
+            .accessibilityHint("Space Item")
     }
 
 }

@@ -318,7 +318,7 @@ class SpaceEntityThumbnail: CardDetails, AccessingManagerProvider {
 
     let spaceID: String
     let space: Space?
-    var data: SpaceEntityData
+    @ObservedObject var data: SpaceEntityData
 
     var id: String
     var item: SpaceEntityData? { manager.get(for: id) }
