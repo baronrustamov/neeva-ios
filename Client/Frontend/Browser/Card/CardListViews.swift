@@ -13,8 +13,8 @@ class SpaceCardsViewModel: ObservableObject {
     init(spacesModel: SpaceCardModel) {
         subscriber = spacesModel.$allDetails
             .combineLatest(spacesModel.$filterState, spacesModel.$sortType, spacesModel.$sortOrder)
-            .sink { (arr, filter, sort, order) in
-                self.dataSource =
+            .sink { [weak self] (arr, filter, sort, order) in
+                self?.dataSource =
                     arr.filter {
                         NeevaFeatureFlags[.enableSpaceDigestCard]
                             || $0.id != SpaceStore.dailyDigestID
