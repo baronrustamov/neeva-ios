@@ -11,8 +11,10 @@ public class SpaceServiceMock: SpaceService {
     public typealias SpaceDataApollo = SpacesDataQueryController.Space
 
     class SpaceMock {
+        static var idCounter: Int = 0
+
         // SpaceApollo properties
-        var id: String = UUID().uuidString
+        var id: String
         var name: String
         var lastModifiedTs: Date = Date()
         var isOwner: Bool
@@ -64,6 +66,8 @@ public class SpaceServiceMock: SpaceService {
         }
 
         init(name: String, isOwner: Bool = true, isPublic: Bool = false) {
+            id = "\(SpaceMock.idCounter)"
+            SpaceMock.idCounter = SpaceMock.idCounter + 1
             self.name = name
             self.isOwner = isOwner
             self.isPublic = isPublic
@@ -458,7 +462,9 @@ public class SpaceServiceMock: SpaceService {
         return AnyCancellable({ [self] in
             completion(
                 Result<[SpaceApollo], Error>(catching: {
-                    return spaces.map { $0.value.spaceApollo }
+                    return Array(spaces.values)
+                        .sorted { ($0.lastModifiedTs, $0.id) < ($1.lastModifiedTs, $1.id) }
+                        .map { $0.spaceApollo }
                 }))
         })
     }
