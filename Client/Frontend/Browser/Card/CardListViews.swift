@@ -8,22 +8,35 @@ import SwiftUI
 
 class SpaceCardsViewModel: ObservableObject {
     @Published var dataSource: [SpaceCardDetails] = []
+    // Because allDetails is an an array of ref types
+    // updating properties in each detail will not trigger an update
+    // we need an alternative way to signal an update
+    private var refreshSignal = CurrentValueSubject<Void, Never>(Void())
     private var subscriber: AnyCancellable?
 
     init(spacesModel: SpaceCardModel) {
-        subscriber = spacesModel.$allDetails
-            .combineLatest(spacesModel.$filterState, spacesModel.$sortType, spacesModel.$sortOrder)
-            .sink { [weak self] (arr, filter, sort, order) in
-                self?.dataSource =
-                    arr.filter {
-                        NeevaFeatureFlags[.enableSpaceDigestCard]
-                            || $0.id != SpaceStore.dailyDigestID
-                    }
-                    .filterSpaces(by: filter)
-                    .sortSpaces(by: sort, order: order)
-            }
+        subscriber = Publishers.CombineLatest4(
+            spacesModel.$allDetails,
+            spacesModel.$filterState,
+            spacesModel.$sortType,
+            spacesModel.$sortOrder
+        )
+        .combineLatest(refreshSignal)
+        .sink { [weak self] in
+            let (arr, filter, sort, order) = $0.0
+            self?.dataSource =
+                arr.filter {
+                    NeevaFeatureFlags[.enableSpaceDigestCard]
+                        || $0.id != SpaceStore.dailyDigestID
+                }
+                .filterSpaces(by: filter)
+                .sortSpaces(by: sort, order: order)
+        }
     }
 
+    func refresh() {
+        refreshSignal.send()
+    }
 }
 
 struct SpaceCardsView: View {

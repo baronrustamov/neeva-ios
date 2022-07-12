@@ -597,6 +597,10 @@ class SpaceCardModel: CardModel {
                 if indexInStore != indexInDetails {
                     let indices: IndexSet = [indexInDetails]
                     self.allDetails.move(fromOffsets: indices, toOffset: indexInStore)
+                } else {
+                    // without moving the elements around, the array struct is unchanged
+                    // because the elements are reference types. We need to signal a refresh
+                    self.cardsViewModel.refresh()
                 }
                 return
             }
