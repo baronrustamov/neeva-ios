@@ -3,11 +3,10 @@ browser.runtime.sendMessage({ "getPreference": "neevaRedirect"}).then((response)
     const possibleReferalURLs = ["https://www.google.com/", "https://www.bing.com/", "https://www.ecosia.com/",
                                   "https://search.yahoo.com/", "https://duckduckgo.com/", "https://yandex.com/",
                                   "https://www.baidu.com/", "https://www.so.com/", "https://www.sogou.com/", "https://neeva.com/"];
-
-    referrerURL = window.document.referrer;
+    let referrerURL = window.document.referrer;
 
     if (searchQuery != null && response["value"] && !possibleReferalURLs.includes(referrerURL)) {
-        const url = `https://neeva.com/search?q=${searchQuery}&src=nvobar`;
+        let url = `https://neeva.com/search?q=${searchQuery}&src=ios_safari_extension`;
         window.location.replace(url);
     }
 });

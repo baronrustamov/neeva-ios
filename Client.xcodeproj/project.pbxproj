@@ -84,12 +84,20 @@
 		203A9383283F1E9C00FA4E73 /* CardGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203A9382283F1E9C00FA4E73 /* CardGroupView.swift */; };
 		203A9384283F1E9C00FA4E73 /* CardGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203A9382283F1E9C00FA4E73 /* CardGroupView.swift */; };
 		203A9385283F221900FA4E73 /* GridPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203A9380283F1E0E00FA4E73 /* GridPicker.swift */; };
+		204A9B3D286B85EA00E7E931 /* scripts in Resources */ = {isa = PBXBuildFile; fileRef = 204A9B3C286B85E900E7E931 /* scripts */; };
+		204A9B40286B8A4800E7E931 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 204A9B3F286B8A4800E7E931 /* background.js */; };
+		204A9B41286B8A4800E7E931 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = 204A9B3E286B8A4800E7E931 /* content.js */; };
+		204A9B45286BB78400E7E931 /* cookieCutterContentScript.js in Resources */ = {isa = PBXBuildFile; fileRef = 204A9B44286BB78400E7E931 /* cookieCutterContentScript.js */; };
+		204A9B46286BBBB700E7E931 /* cookieCutterContentScript.js in Resources */ = {isa = PBXBuildFile; fileRef = 204A9B44286BB78400E7E931 /* cookieCutterContentScript.js */; };
 		204BF5CD28778B1C00A07AB6 /* CookieCutterHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 204BF5CB28778B1C00A07AB6 /* CookieCutterHelper.js */; };
 		204BF5D0287792FF00A07AB6 /* RedditPopupBlocker.js in Resources */ = {isa = PBXBuildFile; fileRef = 204BF5CF287792FF00A07AB6 /* RedditPopupBlocker.js */; };
 		205132B128208DB0003AAE96 /* SheetHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205132B028208DB0003AAE96 /* SheetHeader.swift */; };
 		205132B3282093B0003AAE96 /* CookieCutterOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205132B2282093B0003AAE96 /* CookieCutterOnboardingView.swift */; };
 		205789762852926D00E6CB6B /* DateGroupedTableData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205789752852926D00E6CB6B /* DateGroupedTableData.swift */; };
 		205789782852931A00E6CB6B /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205789772852931A00E6CB6B /* DateExtensions.swift */; };
+		20587947286F6A0800994E15 /* checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 20587944286F6A0800994E15 /* checkmark.png */; };
+		20587948286F6A0800994E15 /* picker.css in Resources */ = {isa = PBXBuildFile; fileRef = 20587945286F6A0800994E15 /* picker.css */; };
+		20587949286F6A0800994E15 /* switch.css in Resources */ = {isa = PBXBuildFile; fileRef = 20587946286F6A0800994E15 /* switch.css */; };
 		206954A427FF4257000360D6 /* SiteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206954A327FF4257000360D6 /* SiteListView.swift */; };
 		206954A627FF425B000360D6 /* SiteRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206954A527FF425B000360D6 /* SiteRowView.swift */; };
 		206954A827FF449E000360D6 /* RecentlyClosedTabsPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206954A727FF449E000360D6 /* RecentlyClosedTabsPanelView.swift */; };
@@ -98,6 +106,9 @@
 		2097EC152835B4EB00A41DD8 /* SceneUIState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2097EC142835B4EB00A41DD8 /* SceneUIState.swift */; };
 		209CD9A327DBF9F20069675C /* TabGroupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209CD9A227DBF9F20069675C /* TabGroupTests.swift */; };
 		20A5D15327F6A43E00DB88FE /* HistoryPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A5D15227F6A43E00DB88FE /* HistoryPanelView.swift */; };
+		20B2DC5928501D870095ED46 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = 20B2DC5528501D870095ED46 /* popup.js */; };
+		20B2DC5B28501D870095ED46 /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = 20B2DC5728501D870095ED46 /* popup.html */; };
+		20B2DC5C28501D870095ED46 /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = 20B2DC5828501D870095ED46 /* popup.css */; };
 		20BB666C2821E0F0001FA7E9 /* ChangeNotificationPreferenceDialogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BB666B2821E0F0001FA7E9 /* ChangeNotificationPreferenceDialogView.swift */; };
 		20BB666E28220F11001FA7E9 /* ChangeNotificationPreferenceDialogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BB666B2821E0F0001FA7E9 /* ChangeNotificationPreferenceDialogView.swift */; };
 		20C5B263282D82F400BD35B9 /* CookieCutterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C5B262282D82F400BD35B9 /* CookieCutterTests.swift */; };
@@ -770,8 +781,6 @@
 		6604922826843975002AC35D /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 6604922726843975002AC35D /* Intents.intentdefinition */; };
 		6604922926843A57002AC35D /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 6604922726843975002AC35D /* Intents.intentdefinition */; };
 		6614ACB026F16F30003E244C /* NotificationList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6614ACAF26F16F30003E244C /* NotificationList.swift */; };
-		6614C9F727190618003ACE0E /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 6614C9F627190617003ACE0E /* background.js */; };
-		6614C9F827191AD5003ACE0E /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 6614C9F627190617003ACE0E /* background.js */; };
 		661519D726A9C3A6008E2725 /* AppClipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661519D626A9C3A6008E2725 /* AppClipTests.swift */; };
 		6617174B27573C80005E05F4 /* NotificationViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6617174A27573C80005E05F4 /* NotificationViewManager.swift */; };
 		6618B51C26AB3CBD00ED51C9 /* BaseTestCase+GoToExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6618B51B26AB3CBD00ED51C9 /* BaseTestCase+GoToExtension.swift */; };
@@ -861,10 +870,6 @@
 		66E25064270FDDB30085AA35 /* _locales in Resources */ = {isa = PBXBuildFile; fileRef = 66E25063270FDDB30085AA35 /* _locales */; };
 		66E25066270FDDB30085AA35 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 66E25065270FDDB30085AA35 /* images */; };
 		66E25068270FDDB30085AA35 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 66E25067270FDDB30085AA35 /* manifest.json */; };
-		66E2506C270FDDB30085AA35 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = 66E2506B270FDDB30085AA35 /* content.js */; };
-		66E2506E270FDDB30085AA35 /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = 66E2506D270FDDB30085AA35 /* popup.html */; };
-		66E25070270FDDB30085AA35 /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = 66E2506F270FDDB30085AA35 /* popup.css */; };
-		66E25072270FDDB30085AA35 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = 66E25071270FDDB30085AA35 /* popup.js */; };
 		66E25074270FDDB30085AA35 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66E2503F270FDDB30085AA35 /* Assets.xcassets */; };
 		66E26DB126E2F80200EB23D6 /* EditURLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E26DB026E2F80200EB23D6 /* EditURLTests.swift */; };
 		66E34CDA2710E83600F30A3D /* LocalNotificiations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E34CD92710E83600F30A3D /* LocalNotificiations.swift */; };
@@ -1981,12 +1986,19 @@
 		2034988D2843307C00799544 /* OrientationDependentStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientationDependentStack.swift; sourceTree = "<group>"; };
 		203A9380283F1E0E00FA4E73 /* GridPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridPicker.swift; sourceTree = "<group>"; };
 		203A9382283F1E9C00FA4E73 /* CardGroupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardGroupView.swift; sourceTree = "<group>"; };
+		204A9B3C286B85E900E7E931 /* scripts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = scripts; sourceTree = "<group>"; };
+		204A9B3E286B8A4800E7E931 /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = content.js; sourceTree = "<group>"; };
+		204A9B3F286B8A4800E7E931 /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = background.js; sourceTree = "<group>"; };
+		204A9B44286BB78400E7E931 /* cookieCutterContentScript.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = cookieCutterContentScript.js; sourceTree = "<group>"; };
 		204BF5CB28778B1C00A07AB6 /* CookieCutterHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = CookieCutterHelper.js; sourceTree = "<group>"; };
 		204BF5CF287792FF00A07AB6 /* RedditPopupBlocker.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = RedditPopupBlocker.js; sourceTree = "<group>"; };
 		205132B028208DB0003AAE96 /* SheetHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetHeader.swift; sourceTree = "<group>"; };
 		205132B2282093B0003AAE96 /* CookieCutterOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCutterOnboardingView.swift; sourceTree = "<group>"; };
 		205789752852926D00E6CB6B /* DateGroupedTableData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateGroupedTableData.swift; sourceTree = "<group>"; };
 		205789772852931A00E6CB6B /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
+		20587944286F6A0800994E15 /* checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkmark.png; sourceTree = "<group>"; };
+		20587945286F6A0800994E15 /* picker.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = picker.css; sourceTree = "<group>"; };
+		20587946286F6A0800994E15 /* switch.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = switch.css; sourceTree = "<group>"; };
 		206954A327FF4257000360D6 /* SiteListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteListView.swift; sourceTree = "<group>"; };
 		206954A527FF425B000360D6 /* SiteRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteRowView.swift; sourceTree = "<group>"; };
 		206954A727FF449E000360D6 /* RecentlyClosedTabsPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyClosedTabsPanelView.swift; sourceTree = "<group>"; };
@@ -1994,6 +2006,9 @@
 		2097EC142835B4EB00A41DD8 /* SceneUIState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneUIState.swift; sourceTree = "<group>"; };
 		209CD9A227DBF9F20069675C /* TabGroupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupTests.swift; sourceTree = "<group>"; };
 		20A5D15227F6A43E00DB88FE /* HistoryPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPanelView.swift; sourceTree = "<group>"; };
+		20B2DC5528501D870095ED46 /* popup.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = popup.js; sourceTree = "<group>"; };
+		20B2DC5728501D870095ED46 /* popup.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = popup.html; sourceTree = "<group>"; };
+		20B2DC5828501D870095ED46 /* popup.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = popup.css; sourceTree = "<group>"; };
 		20BB666B2821E0F0001FA7E9 /* ChangeNotificationPreferenceDialogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeNotificationPreferenceDialogView.swift; sourceTree = "<group>"; };
 		20C5B262282D82F400BD35B9 /* CookieCutterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCutterTests.swift; sourceTree = "<group>"; };
 		20D297F5281DAA3B0036DDBA /* ZombieTabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZombieTabTests.swift; sourceTree = "<group>"; };
@@ -2225,7 +2240,6 @@
 		63306D442110BAF000F25400 /* TabManagerStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManagerStoreTests.swift; sourceTree = "<group>"; };
 		6604922726843975002AC35D /* Intents.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = Intents.intentdefinition; sourceTree = "<group>"; };
 		6614ACAF26F16F30003E244C /* NotificationList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationList.swift; sourceTree = "<group>"; };
-		6614C9F627190617003ACE0E /* background.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = background.js; sourceTree = "<group>"; };
 		661519D226A9C3A6008E2725 /* AppClipTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppClipTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		661519D626A9C3A6008E2725 /* AppClipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppClipTests.swift; sourceTree = "<group>"; };
 		661519D826A9C3A6008E2725 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -2323,10 +2337,6 @@
 		66E25063270FDDB30085AA35 /* _locales */ = {isa = PBXFileReference; lastKnownFileType = folder; path = _locales; sourceTree = "<group>"; };
 		66E25065270FDDB30085AA35 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		66E25067270FDDB30085AA35 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = manifest.json; sourceTree = "<group>"; };
-		66E2506B270FDDB30085AA35 /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = content.js; sourceTree = "<group>"; };
-		66E2506D270FDDB30085AA35 /* popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = popup.html; sourceTree = "<group>"; };
-		66E2506F270FDDB30085AA35 /* popup.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = popup.css; sourceTree = "<group>"; };
-		66E25071270FDDB30085AA35 /* popup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = popup.js; sourceTree = "<group>"; };
 		66E25073270FDDB30085AA35 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		66E26DB026E2F80200EB23D6 /* EditURLTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditURLTests.swift; sourceTree = "<group>"; };
 		66E2ED882697C3B400E01010 /* KeyboardShortcutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcutTests.swift; sourceTree = "<group>"; };
@@ -3355,6 +3365,19 @@
 			path = History;
 			sourceTree = "<group>";
 		};
+		20B2DC5428501D870095ED46 /* popup */ = {
+			isa = PBXGroup;
+			children = (
+				20B2DC5528501D870095ED46 /* popup.js */,
+				20B2DC5728501D870095ED46 /* popup.html */,
+				20B2DC5828501D870095ED46 /* popup.css */,
+				20587945286F6A0800994E15 /* picker.css */,
+				20587946286F6A0800994E15 /* switch.css */,
+				20587944286F6A0800994E15 /* checkmark.png */,
+			);
+			path = popup;
+			sourceTree = "<group>";
+		};
 		23ED80FD25C899D700D0E9D5 /* DefaultBrowserOnboarding */ = {
 			isa = PBXGroup;
 			children = (
@@ -4058,14 +4081,14 @@
 		66E25062270FDDB30085AA35 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				20B2DC5428501D870095ED46 /* popup */,
 				66E25063270FDDB30085AA35 /* _locales */,
 				66E25065270FDDB30085AA35 /* images */,
+				204A9B3C286B85E900E7E931 /* scripts */,
 				66E25067270FDDB30085AA35 /* manifest.json */,
-				6614C9F627190617003ACE0E /* background.js */,
-				66E2506B270FDDB30085AA35 /* content.js */,
-				66E2506D270FDDB30085AA35 /* popup.html */,
-				66E2506F270FDDB30085AA35 /* popup.css */,
-				66E25071270FDDB30085AA35 /* popup.js */,
+				204A9B3F286B8A4800E7E931 /* background.js */,
+				204A9B3E286B8A4800E7E931 /* content.js */,
+				204A9B44286BB78400E7E931 /* cookieCutterContentScript.js */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -6396,8 +6419,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				204A9B45286BB78400E7E931 /* cookieCutterContentScript.js in Resources */,
 				66879339271929240093FA2B /* NeevaIcon.png in Resources */,
-				6614C9F727190618003ACE0E /* background.js in Resources */,
 				66E25030270FDDB20085AA35 /* Main.html in Resources */,
 				661A3955271E48A2002F32F5 /* Main.storyboard in Resources */,
 				66E25074270FDDB30085AA35 /* Assets.xcassets in Resources */,
@@ -6423,14 +6446,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6614C9F827191AD5003ACE0E /* background.js in Resources */,
-				66E25070270FDDB30085AA35 /* popup.css in Resources */,
-				66E2506E270FDDB30085AA35 /* popup.html in Resources */,
+				20587947286F6A0800994E15 /* checkmark.png in Resources */,
+				20587948286F6A0800994E15 /* picker.css in Resources */,
+				20587949286F6A0800994E15 /* switch.css in Resources */,
+				204A9B46286BBBB700E7E931 /* cookieCutterContentScript.js in Resources */,
+				204A9B40286B8A4800E7E931 /* background.js in Resources */,
 				66E25066270FDDB30085AA35 /* images in Resources */,
+				204A9B3D286B85EA00E7E931 /* scripts in Resources */,
+				20B2DC5B28501D870095ED46 /* popup.html in Resources */,
+				20B2DC5928501D870095ED46 /* popup.js in Resources */,
 				66E25068270FDDB30085AA35 /* manifest.json in Resources */,
+				204A9B41286B8A4800E7E931 /* content.js in Resources */,
+				20B2DC5C28501D870095ED46 /* popup.css in Resources */,
 				66E25064270FDDB30085AA35 /* _locales in Resources */,
-				66E2506C270FDDB30085AA35 /* content.js in Resources */,
-				66E25072270FDDB30085AA35 /* popup.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8833,7 +8861,7 @@
 					"-framework",
 					SafariServices,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = co.neeva.app.ios.browser.SafariExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = "co.neeva.app.ios.browser-dev.neeva-for-safari.safariExtension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Neeva Browser Safari Extension";
 				SKIP_INSTALL = YES;
@@ -8883,7 +8911,7 @@
 					"-framework",
 					SafariServices,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "co.neeva.app.ios.browser-dev.SafariExtension";
+				PRODUCT_BUNDLE_IDENTIFIER = "co.neeva.app.ios.browser-dev.neeva-for-safari.safariExtension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -8938,7 +8966,7 @@
 					"-framework",
 					WebKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "neeva.Neeva-for-Safari";
+				PRODUCT_BUNDLE_IDENTIFIER = "co.neeva.app.ios.browser-dev.neeva-for-safari";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -8994,7 +9022,7 @@
 					"-framework",
 					WebKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "neeva.Neeva-for-Safari";
+				PRODUCT_BUNDLE_IDENTIFIER = "co.neeva.app.ios.browser-dev.neeva-for-safari";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_EMIT_LOC_STRINGS = YES;

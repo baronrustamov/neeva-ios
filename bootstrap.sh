@@ -27,6 +27,9 @@ fi
 yarn install
 yarn build
 
+# Build Node.js dependencies and build user scripts for NeevaForSafari
+./NeevaForSafari/NeevaForSafariExtension/Scripts/config.sh
+
 # swift-format
 git submodule update --init --recursive
 pushd swift-format
