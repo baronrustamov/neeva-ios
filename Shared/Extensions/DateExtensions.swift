@@ -5,7 +5,7 @@
 import Foundation
 
 extension Date {
-    static func getDate(dayOffset: Int) -> Date {
+    static public func getDate(dayOffset: Int) -> Date {
         let calendar = Calendar.current
         let components = calendar.dateComponents([.year, .month, .day], from: Date())
         let today = calendar.date(from: components)!

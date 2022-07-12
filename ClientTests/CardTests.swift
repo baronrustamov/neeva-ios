@@ -533,4 +533,22 @@ class CardTests: XCTestCase {
         archivedTabsPanelModel.clearArchivedTabs()
         XCTAssertEqual(archivedTabsPanelModel.groupedSites.sites[.lastMonth]?.count, 0)
     }
+
+    func testRestoreTabDeletedFromYesterday() {
+        // Add tab to yesterday section
+        let yesterdaysDate = Date.getDate(dayOffset: -1)
+        let tab1 = manager.addTab()
+        tab1.lastExecutedTime = UInt64(yesterdaysDate.timeIntervalSince1970) * 1000
+        manager.updateAllTabDataAndSendNotifications(notify: true)
+
+        XCTAssertEqual(tabCardModel.timeBasedNormalRows[.yesterday]?.count, 2)
+
+        // Close and then restore tab
+        manager.removeTab(tab1)
+        let restoredTab = manager.restoreSavedTabs(Array(manager.recentlyClosedTabs.joined()))
+
+        // Verify tab is in today section
+        XCTAssertEqual(tabCardModel.timeBasedNormalRows[.today]?.count, 2)
+        XCTAssertEqual(manager.selectedTab, restoredTab)
+    }
 }

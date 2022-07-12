@@ -269,14 +269,11 @@ class TabManager: NSObject {
             return
         }
 
-        let isArchived = selectedTab.isArchived
         selectedTab.lastExecutedTime = Date.nowMilliseconds()
         selectedTab.applyTheme()
 
-        if isArchived {
-            // Tab data needs to be updated when a tab is brought back from archives.
-            updateAllTabDataAndSendNotifications(notify: true)
-        }
+        // Tab data needs to be updated after the lastExecutedTime is modified.
+        updateAllTabDataAndSendNotifications(notify: notify)
 
         if notify {
             sendSelectTabNotifications(previous: previous)

@@ -271,8 +271,6 @@ extension TabManager {
 
         resolveParentRef(for: restoredTabs, restrictToActiveTabs: true)
 
-        updateAllTabDataAndSendNotifications(notify: true)
-
         // Prevents a sticky tab tray
         SceneDelegate.getBVC(with: scene).browserModel.cardTransitionModel.update(to: .hidden)
 
