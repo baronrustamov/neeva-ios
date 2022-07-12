@@ -30,7 +30,7 @@ struct SpaceCardsView: View {
     @ObservedObject var viewModel: SpaceCardsViewModel
 
     init(spacesModel: SpaceCardModel) {
-        self.viewModel = SpaceCardsViewModel(spacesModel: spacesModel)
+        self.viewModel = spacesModel.cardsViewModel
     }
 
     var body: some View {

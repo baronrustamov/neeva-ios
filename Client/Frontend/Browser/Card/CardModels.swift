@@ -549,6 +549,8 @@ class SpaceCardModel: CardModel {
     @Published var sortType: SpaceSortState = .updatedDate
     @Published var sortOrder: SpaceSortOrder = .descending
 
+    private(set) var cardsViewModel: SpaceCardsViewModel!
+
     var thumbnailURLCandidates = [URL: [URL]]()
     private var anyCancellable: AnyCancellable? = nil
     private var recommendationSubscription: AnyCancellable? = nil
@@ -574,6 +576,8 @@ class SpaceCardModel: CardModel {
         }.store(in: &detailsSubscriptions)
         listenManagerState()
         listenSpaceMutations()
+
+        cardsViewModel = SpaceCardsViewModel(spacesModel: self)
     }
 
     private func listenManagerState() {
