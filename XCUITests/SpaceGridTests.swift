@@ -49,7 +49,8 @@ class SpaceGridTests: BaseTestCase {
         XCTAssertTrue(app.buttons[SpaceServiceMock.spaceNotOwnedByMeTitle].exists)
     }
 
-    func testSpaceSort() {
+    func testSpaceSort() throws {
+        try skipTest(issue: 4036, "Feature removed temporarily")
         app.buttons["Show Tabs"].tap()
         app.buttons["Spaces"].tap()
         app.buttons["Space Filter"].tap()
