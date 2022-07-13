@@ -15,6 +15,8 @@ struct DebugSettingsSection: View {
     @Environment(\.onOpenURL) var openURL
     @Default(.enableGeigerCounter) var enableGeigerCounter
 
+    let tabManager = SceneDelegate.getTabManagerOrNil()
+
     var body: some View {
         Group {
             Section(header: Text(verbatim: "Debug — Neeva")) {
@@ -67,46 +69,41 @@ struct DebugSettingsSection: View {
             DebugDBSettingsSection()
 
             Section(header: Text(verbatim: "Performance")) {
-                Button(String("Make all tabs zombies (excluding selected)")) {
-                    guard let tabManager = SceneDelegate.getTabManagerOrNil() else {
-                        return
-                    }
+                // Show some debug data.
+                Text("All Active Tabs: ")
+                    + Text(String(tabManager?.tabs.filter { !$0.isArchived }.count ?? 0))
+                Text("Active Tabs (Zombie): ")
+                    + Text(
+                        String(
+                            tabManager?.tabs.filter { !$0.isArchived && $0.webView == nil }.count
+                                ?? 0))
+                Text("Archived Tabs: ")
+                    + Text(String(tabManager?.tabs.filter { $0.isArchived }.count ?? 0))
 
-                    tabManager.makeTabsIntoZombies(tabsToKeepAlive: 1)
+                Button(String("Make all tabs zombies (excluding selected)")) {
+                    tabManager?.makeTabsIntoZombies(tabsToKeepAlive: 1)
                 }
 
                 Button(String("Create 100 tabs")) {
-                    guard let tabManager = SceneDelegate.getTabManagerOrNil() else {
-                        return
-                    }
-
                     var urls = [URL]()
                     for _ in 0...99 {
                         urls.append(URL(string: "https://example.com")!)
                     }
 
-                    tabManager.addTabsForURLs(urls, zombie: true)
+                    tabManager?.addTabsForURLs(urls, zombie: true)
                 }
 
                 Button(String("Create 500 tabs")) {
-                    guard let tabManager = SceneDelegate.getTabManagerOrNil() else {
-                        return
-                    }
-
                     var urls = [URL]()
                     for _ in 0...499 {
                         urls.append(URL(string: "https://example.com")!)
                     }
 
-                    tabManager.addTabsForURLs(urls, zombie: true)
+                    tabManager?.addTabsForURLs(urls, zombie: true)
                 }
 
                 Button(String("Archive all tabs")) {
-                    guard let tabManager = SceneDelegate.getTabManagerOrNil() else {
-                        return
-                    }
-
-                    tabManager.tabs.forEach { $0.lastExecutedTime = 0 }
+                    tabManager?.tabs.forEach { $0.lastExecutedTime = 0 }
                 }
 
                 Button(String("Force Crash App")) {
