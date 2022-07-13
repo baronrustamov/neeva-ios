@@ -9,6 +9,9 @@ class SpacePublicAclTests: BaseTestCase {
     let privateSpaceName = "SpacePublicAclTests Space1"
     let publicSpaceName = "SpacePublicAclTests Space2"
 
+    let strOnlyVisible = "Only visible to you and people you shared with"
+    let strOwnerSpace = "You'll be shown as the owner of the Space"
+
     override func setUp() {
         launchArguments = [
             // The argument below is needed to use the local server
@@ -30,28 +33,28 @@ class SpacePublicAclTests: BaseTestCase {
     func testAddPublicAcl() {
         app.buttons[privateSpaceName].tap(force: true)
 
-        XCTAssertTrue(app.staticTexts["Only visible to you and people you shared with"].exists)
+        waitForExistence(app.staticTexts[strOnlyVisible])
+        XCTAssertTrue(app.staticTexts[strOnlyVisible].exists)
 
         app.buttons["Share"].tap()
 
         XCTAssertTrue(app.switches.firstMatch.value as? String == "0")
 
+        waitForExistence(app.switches.firstMatch)
         app.switches.firstMatch.tap()
-        // Anti-flake
-        if app.switches.firstMatch.value as? String == "0" {
-            app.switches.firstMatch.tap()
-        }
 
-        XCTAssertTrue(app.staticTexts["You'll be shown as the owner of the Space"].exists)
-        XCTAssertFalse(app.staticTexts["Only visible to you and people you shared with"].exists)
+        XCTAssertTrue(app.staticTexts[strOwnerSpace].exists)
+        XCTAssertFalse(app.staticTexts[strOnlyVisible].exists)
         XCTAssertFalse(app.switches.firstMatch.value as? String == "0")
     }
 
     func testDeletePublicAcl() {
         app.buttons[publicSpaceName].tap(force: true)
 
-        XCTAssertFalse(app.staticTexts["Only visible to you and people you shared with"].exists)
+        waitForNoExistence(app.staticTexts[strOnlyVisible])
+        XCTAssertFalse(app.staticTexts[strOnlyVisible].exists)
 
+        waitForExistence(app.buttons["Share"])
         app.buttons["Share"].tap()
 
         XCTAssertTrue(app.switches.firstMatch.value as? String == "1")
@@ -62,8 +65,8 @@ class SpacePublicAclTests: BaseTestCase {
             app.switches.firstMatch.tap()
         }
 
-        XCTAssertTrue(app.staticTexts["Only visible to you and people you shared with"].exists)
-        XCTAssertFalse(app.staticTexts["You'll be shown as the owner of the Space"].exists)
+        XCTAssertTrue(app.staticTexts[strOnlyVisible].exists)
+        XCTAssertFalse(app.staticTexts[strOwnerSpace].exists)
         XCTAssertFalse(app.switches.firstMatch.value as? String == "1")
     }
 }

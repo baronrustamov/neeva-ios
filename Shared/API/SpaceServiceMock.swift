@@ -66,8 +66,8 @@ public class SpaceServiceMock: SpaceService {
         }
 
         init(name: String, isOwner: Bool = true, isPublic: Bool = false) {
-            id = "\(SpaceMock.idCounter)"
-            SpaceMock.idCounter = SpaceMock.idCounter + 1
+            id = "\(Self.idCounter)"
+            Self.idCounter = Self.idCounter + 1
             self.name = name
             self.isOwner = isOwner
             self.isPublic = isPublic
