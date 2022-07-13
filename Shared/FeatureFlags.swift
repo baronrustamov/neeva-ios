@@ -19,6 +19,7 @@ public enum FeatureFlag: String, CaseIterable, RawRepresentable {
     case incognitoQuickClose = "Incognito Quick Close"
     case inlineAccountSettings = "Inline Account Settings"
     case interactiveScrollView = "Interactive Scroll View"
+    case limitNumberOfWebViews = "Limit Number of Active WebViews"
     case newWeb3Features = "New Web3 Features"
     case oldDBFirstRun = "Old Default Browser Interstitial"
     case openZeroQueryAfterLongDuration = "Open Zero Query After Inactive Duration"
