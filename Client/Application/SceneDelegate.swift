@@ -130,7 +130,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         ClientLogger.shared.logCounter(
             .AppEnterForeground,
-            attributes: EnvironmentHelper.shared.getAttributes()
+            attributes: attributes
         )
 
         // send number of spotlight index events from the last session
