@@ -32,15 +32,20 @@ class UITestBase: KIFTestCase {
     ])
 
     func resetToHome() {
-        if (try? tester().tryFindingTappableView(withAccessibilityLabel: "Cancel")) != nil {
-            tester().tapView(withAccessibilityLabel: "Cancel")
-        }
-
+        SceneDelegate.getBVC(for: nil).popToBVC()
         closeAllTabs()
     }
 
     func getNumberOfTabs() -> Int {
         SceneDelegate.getTabManagerOrNil()?.tabs.count ?? 0
+    }
+
+    func isSelectedTabIncognito() -> Bool {
+        SceneDelegate.getTabManagerOrNil()?.selectedTab?.isIncognito ?? false
+    }
+
+    func isIncognito() -> Bool {
+        SceneDelegate.getBVCOrNil()?.incognitoModel.isIncognito ?? false
     }
 
     func isiPad() -> Bool {
@@ -64,11 +69,7 @@ class UITestBase: KIFTestCase {
     }
 
     override func setUp() {
-        if tester().viewExistsWithLabel("Done") && getNumberOfTabs() == 0 {
-            tester().tapView(withAccessibilityLabel: "Add Tab")
-            openURL()
-        }
-
+        openURL()
         tester().waitForAnimationsToFinish()
     }
 

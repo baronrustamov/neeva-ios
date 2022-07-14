@@ -629,12 +629,20 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
         DispatchQueue.main.async {
             switch self.zeroQueryModel.openedFrom {
+            case .createdTab:
+                self.tabManager.close(self.tabManager.selectedTab!)
+            case .newTabButton:
+                if self.tabManager.selectedTab == nil {
+                    self.showTabTray()
+                }
+            case .openTab(let openedTab):
+                if openedTab == nil && self.tabManager.selectedTab == nil {
+                    self.showTabTray()
+                }
             case .tabTray:
                 if Defaults[.didFirstNavigation] {
                     self.showTabTray()
                 }
-            case .createdTab:
-                self.tabManager.close(self.tabManager.selectedTab!)
             default:
                 break
             }
@@ -865,7 +873,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
     }
 
     /// Closes or hides any overlayed views and returns to the selected tab
-    fileprivate func popToBVC() {
+    func popToBVC() {
         if browserModel.showGrid {
             // Hides CardGrid
             browserModel.hideGridWithNoAnimation()

@@ -31,8 +31,8 @@ extension UITestBase {
         openURL(url)
     }
 
-    func openURL(_ url: String = "example.com ") {
-        if !tester().viewExistsWithLabel("Cancel") {
+    func openURL(_ url: String = "example.com ", forceSkipAddressBar: Bool = false) {
+        if !tester().viewExistsWithLabel("Cancel") && !forceSkipAddressBar {
             goToAddressBar()
         }
 

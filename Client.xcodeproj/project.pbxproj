@@ -68,6 +68,7 @@
 		2011A43B283D480800947E6B /* SceneUIState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2097EC142835B4EB00A41DD8 /* SceneUIState.swift */; };
 		2011A43D283D8B6300947E6B /* BrowserViewController+ShowModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2011A43C283D8B6300947E6B /* BrowserViewController+ShowModal.swift */; };
 		2011A43E283D8DC500947E6B /* BrowserViewController+ShowModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2011A43C283D8B6300947E6B /* BrowserViewController+ShowModal.swift */; };
+		2015BD3628808BF100BA63E0 /* ShortcutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2015BD3528808BF100BA63E0 /* ShortcutTests.swift */; };
 		20167FC72824484800223B9E /* FindInCardGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20167FC62824484800223B9E /* FindInCardGridView.swift */; };
 		20167FCA282448DB00223B9E /* FindView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20167FC9282448DB00223B9E /* FindView.swift */; };
 		20167FCC28245C8100223B9E /* FindInCardGridTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20167FCB28245C8100223B9E /* FindInCardGridTests.swift */; };
@@ -1977,6 +1978,7 @@
 		200976842810EA620055A02B /* CookieCutterHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCutterHelper.swift; sourceTree = "<group>"; };
 		2011A43C283D8B6300947E6B /* BrowserViewController+ShowModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+ShowModal.swift"; sourceTree = "<group>"; };
 		20139C7F28552B7D001C26AD /* AlertDialogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertDialogView.swift; sourceTree = "<group>"; };
+		2015BD3528808BF100BA63E0 /* ShortcutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutTests.swift; sourceTree = "<group>"; };
 		20167FC62824484800223B9E /* FindInCardGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindInCardGridView.swift; sourceTree = "<group>"; };
 		20167FC9282448DB00223B9E /* FindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindView.swift; sourceTree = "<group>"; };
 		20167FCB28245C8100223B9E /* FindInCardGridTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindInCardGridTests.swift; sourceTree = "<group>"; };
@@ -4838,6 +4840,7 @@
 				DADC62D9226E3297003AFF8B /* ReopenLastTabTests.swift */,
 				D3CFD3631CC5605B0064AB4A /* SecurityTests.swift */,
 				D3C3EB641B6FF44000388E9A /* SessionRestoreTests.swift */,
+				2015BD3528808BF100BA63E0 /* ShortcutTests.swift */,
 				744B0FFD1B4F172E00100422 /* ToolbarTests.swift */,
 				D375A91F1AE71675001B30D5 /* ViewMemoryLeakTests.swift */,
 				D39FA1611A83E0EC00EE869C /* Supporting Files */,
@@ -7571,6 +7574,7 @@
 				66F571D726BD9CE800BEECF9 /* UITestBase+GoToExtension.swift in Sources */,
 				66F571D926BD9CF700BEECF9 /* UITestBase+ActionExtension.swift in Sources */,
 				667DB63A2698E3DF0054A222 /* KeyboardShortcutTests.swift in Sources */,
+				2015BD3628808BF100BA63E0 /* ShortcutTests.swift in Sources */,
 				E6A92ADB1C52A8DA00743291 /* LoginInputTests.swift in Sources */,
 				DADC62DA226E3297003AFF8B /* ReopenLastTabTests.swift in Sources */,
 				D375A9201AE71675001B30D5 /* ViewMemoryLeakTests.swift in Sources */,

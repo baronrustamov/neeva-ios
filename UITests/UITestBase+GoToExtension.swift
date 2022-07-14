@@ -11,6 +11,18 @@ extension UITestBase {
         SceneDelegate.getBVC(for: nil).chromeModel.setEditingLocation(to: true)
     }
 
+    func goToCardGrid() {
+        guard !tester().viewExistsWithLabel("Done") else {
+            return
+        }
+
+        tester().waitForAnimationsToFinish()
+        tester().waitForView(withAccessibilityLabel: "Show Tabs")
+        tester().tapView(withAccessibilityLabel: "Show Tabs")
+
+        tester().waitForView(withAccessibilityLabel: "Done")
+    }
+
     func goToOverflowMenu() {
         tester().waitForAnimationsToFinish()
         tester().waitForView(withAccessibilityLabel: "More")

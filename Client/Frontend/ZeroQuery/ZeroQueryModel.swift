@@ -16,11 +16,11 @@ protocol ZeroQueryPanelDelegate: AnyObject {
 }
 
 enum ZeroQueryOpenedLocation: Equatable {
-    case tabTray
-    case openTab(Tab?)
-    case createdTab
     case backButton
+    case createdTab
     case newTabButton
+    case openTab(Tab?)
+    case tabTray
 
     var openedTab: Tab? {
         switch self {

@@ -23,7 +23,6 @@ enum ShortcutType: String {
 }
 
 class QuickActions: NSObject {
-
     fileprivate let log = Logger.browser
 
     static let Version = "1.0"
@@ -106,17 +105,11 @@ class QuickActions: NSObject {
         }
     }
 
-    fileprivate func handleOpenNewTab(
+    func handleOpenNewTab(
         withBrowserViewController bvc: BrowserViewController, isIncognito: Bool
     ) {
-        // Wait for animations that run when returning to foreground to finish
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            let isEmpty =
-                isIncognito
-                ? bvc.tabManager.incognitoTabs.count == 0 : bvc.tabManager.normalTabs.count == 0
-            bvc.openLazyTab(
-                openedFrom: isEmpty ? .tabTray : .openTab(nil), switchToIncognitoMode: isIncognito
-            )
-        }
+        bvc.openLazyTab(
+            openedFrom: bvc.browserModel.showGrid ? .tabTray : .newTabButton,
+            switchToIncognitoMode: isIncognito)
     }
 }
