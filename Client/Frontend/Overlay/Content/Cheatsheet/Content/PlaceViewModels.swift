@@ -101,7 +101,6 @@ class PlaceViewModel: ObservableObject {
     }
 
     init(_ place: NeevaScopeSearch.PlaceItem) {
-        print("init")
         self.place = place
 
         mapRegion = MKCoordinateRegion(

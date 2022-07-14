@@ -427,7 +427,7 @@ class Tab: NSObject, ObservableObject {
         #endif
     }
 
-    func close() {
+    func closeWebView() {
         // TODO: - deinit cheatsheet models
         contentScriptManager.uninstall(tab: self)
         webViewSubscriptions = []
@@ -436,6 +436,7 @@ class Tab: NSObject, ObservableObject {
             tabDelegate?.tab?(self, willDeleteWebView: webView)
         }
 
+        saveSessionData()
         webView?.navigationDelegate = nil
         webView?.removeFromSuperview()
         webView = nil
@@ -538,12 +539,10 @@ class Tab: NSObject, ObservableObject {
         }
 
         if let _ = webView?.reloadFromOrigin() {
-            print("reloaded zombified tab from origin")
             return
         }
 
         if let webView = self.webView {
-            print("restoring webView from scratch")
             restore(webView)
         }
 
@@ -696,6 +695,43 @@ class Tab: NSObject, ObservableObject {
         // guaranteed to be non-nil in configureTab()
         let lastExecutedTime = lastExecutedTime ?? Date.nowMilliseconds()
         return isLastExecutedTimeInTimeFilter(lastExecutedTime, byTime)
+    }
+
+    private func saveSessionData() {
+        let currentItem: WKBackForwardListItem! = webView?.backForwardList.currentItem
+
+        // Freshly created WebViews won't have any history entries at all.
+        // If we have no history, no need to create the SessionData.
+        if currentItem != nil {
+            // Here we create the SessionData for the tab and pass that to the SavedTab.
+            let navigationList = webView?.backForwardList.all ?? []
+            let urls = navigationList.compactMap { $0.url }
+            let currentPage = -(webView?.backForwardList.forwardList ?? []).count
+            let queries = navigationList.map {
+                queryForNavigation.findQueryFor(navigation: $0)
+            }
+
+            sessionData = SessionData(
+                currentPage: currentPage, urls: urls,
+                queries: queries.map { $0?.typed },
+                suggestedQueries: queries.map { $0?.suggested },
+                queryLocations: queries.map { $0?.location },
+                lastUsedTime: lastExecutedTime ?? Date.nowMilliseconds()
+            )
+        }
+    }
+
+    func saveSessionDataAndCreateSavedTab(isSelected: Bool, tabIndex: Int?) -> SavedTab {
+        saveSessionData()
+
+        return SavedTab(
+            screenshotUUID: screenshotUUID, isSelected: isSelected,
+            title: title ?? lastTitle, isIncognito: isIncognito, isPinned: isPinned,
+            pinnedTime: pinnedTime, lastExecutedTIme: lastExecutedTime,
+            faviconURL: displayFavicon?.url, url: url, sessionData: sessionData,
+            uuid: tabUUID, rootUUID: rootUUID, parentUUID: parentUUID ?? "",
+            tabIndex: tabIndex, parentSpaceID: parentSpaceID ?? "",
+            pageZoom: pageZoom)
     }
 }
 

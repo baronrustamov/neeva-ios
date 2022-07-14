@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import Storage
+import SwiftUI
 import XCGLogger
 
 private let log = Logger.storage
@@ -64,7 +65,8 @@ class TabManagerStore {
 
         for tab in tabs {
             tab.tabUUID = tab.tabUUID.isEmpty ? UUID().uuidString : tab.tabUUID
-            let savedTab = SavedTab(tab: tab, isSelected: tab == selectedTab, tabIndex: nil)
+            let savedTab = tab.saveSessionDataAndCreateSavedTab(
+                isSelected: tab == selectedTab, tabIndex: nil)
             savedTabs.append(savedTab)
 
             if let image = tab.screenshot, let uuid = tab.screenshotUUID {
