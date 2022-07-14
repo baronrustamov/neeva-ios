@@ -199,7 +199,7 @@ extension TabManager {
         let tabsWithWebViewsCap = min(tabsToKeepAlive, tabsWithWebViews.count)
         // Close all Tabs that exceed the cap.
         for index in tabsWithWebViewsCap..<tabsWithWebViews.count {
-            tabsWithWebViews[index].close()
+            tabsWithWebViews[index].closeWebView()
         }
     }
 
