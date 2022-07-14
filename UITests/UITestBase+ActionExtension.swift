@@ -14,7 +14,19 @@ extension UITestBase {
     }
 
     func openNewTab(to url: String = "example.com ") {
-        SceneDelegate.getBVC(for: nil).newTabKeyCommand()
+        if tester().viewExistsWithLabel("Done") {
+            tester().tapView(withAccessibilityLabel: "Add Tab")
+        } else {
+            tester().waitForView(withAccessibilityLabel: "Show Tabs")
+            tester().longPressView(withAccessibilityLabel: "Show Tabs", duration: 1)
+
+            if tester().viewExistsWithLabel("New Tab") {
+                tester().tapView(withAccessibilityLabel: "New Tab")
+            } else {
+                tester().tapView(withAccessibilityLabel: "New Incognito Tab")
+            }
+        }
+
         tester().waitForAnimationsToFinish()
         openURL(url)
     }

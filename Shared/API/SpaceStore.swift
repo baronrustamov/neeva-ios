@@ -769,7 +769,50 @@ extension SpaceStore {
             item.isPinned.toggle()
             updatedSpacesFromLastRefresh = [item]
             state = .ready
+            sort()
         }
     }
 
+    private func sort() {
+        state = .mutatingLocally
+        allSpaces.sort()
+        updatedSpacesFromLastRefresh = allSpaces
+        state = .ready
+    }
+
+}
+
+extension MutableCollection where Self == [Space] {
+    fileprivate mutating func sort() {
+        let dateFormatter = ISO8601DateFormatter()
+        self = sorted(
+            by: {
+                return $0.isPinned && !$1.isPinned
+            },
+            {
+                if let date1 = dateFormatter.date(from: $0.lastModifiedTs),
+                    let date2 = dateFormatter.date(from: $1.lastModifiedTs)
+                {
+                    return date1 < date2
+                } else {
+                    return false
+                }
+            })
+    }
+
+}
+
+extension MutableCollection where Self: RandomAccessCollection {
+    mutating func sorted(
+        by firstPredicate: (Element, Element) -> Bool,
+        _ secondPredicate: (Element, Element) -> Bool
+    ) -> [Self.Element] {
+        sorted(by:) { lhs, rhs in
+            if firstPredicate(lhs, rhs) { return true }
+            if firstPredicate(rhs, lhs) { return false }
+            if secondPredicate(lhs, rhs) { return true }
+            if secondPredicate(rhs, lhs) { return false }
+            return false
+        }
+    }
 }

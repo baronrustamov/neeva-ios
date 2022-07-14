@@ -79,7 +79,7 @@ extension TabManager {
         }
 
         tabs.remove(at: removalIndex)
-        tab.close()
+        tab.closeWebView()
 
         if tab.isIncognito && incognitoTabs.count < 1 {
             incognitoConfiguration = TabManager.makeWebViewConfig(isIncognito: true)
@@ -164,8 +164,8 @@ extension TabManager {
         }
 
         let savedTabs = tabs.map {
-            SavedTab(
-                tab: $0, isSelected: selectedTab === $0, tabIndex: self.tabs.firstIndex(of: $0))
+            $0.saveSessionDataAndCreateSavedTab(
+                isSelected: selectedTab === $0, tabIndex: self.tabs.firstIndex(of: $0))
         }
         recentlyClosedTabs.insert(savedTabs, at: 0)
 
@@ -210,7 +210,7 @@ extension TabManager {
             if tab == selectedTab {
                 tab.reload()
             } else {
-                tab.close()
+                tab.closeWebView()
             }
 
             // Clear the tab's screenshot by setting it to nil.

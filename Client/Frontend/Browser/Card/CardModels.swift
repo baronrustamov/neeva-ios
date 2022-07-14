@@ -546,8 +546,24 @@ class SpaceCardModel: CardModel {
     }
     @Published var updatedItemIDs = [String]()
     @Published var filterState: SpaceFilterState = .allSpaces
-    @Published var sortType: SpaceSortState = .updatedDate
-    @Published var sortOrder: SpaceSortOrder = .descending
+    var detailsMatchingFilter: [SpaceCardDetails] {
+        var spaces = allDetails.filter {
+            NeevaFeatureFlags[.enableSpaceDigestCard] || $0.id != SpaceStore.dailyDigestID
+        }
+
+        // Put the pinned Spaces first
+        spaces.sort {
+            guard let firstItem = $0.item, let secondItem = $1.item else { return true }
+            return firstItem.isPinned && !secondItem.isPinned
+        }
+
+        switch filterState {
+        case .allSpaces:
+            return spaces
+        case .ownedByMe:
+            return spaces.filter { $0.item?.userACL == .owner }
+        }
+    }
 
     var thumbnailURLCandidates = [URL: [URL]]()
     private var anyCancellable: AnyCancellable? = nil

@@ -17,10 +17,6 @@ class KeyboardShortcutTests: UITestBase {
         webRoot = SimplePageServer.start()
     }
 
-    func reset() {
-        bvc.closeAllTabsCommand()
-    }
-
     func openMultipleTabs(tester: KIFUITestActor) {
         for _ in 0...3 {
             openNewTab()
@@ -29,6 +25,11 @@ class KeyboardShortcutTests: UITestBase {
     }
 
     func previousTab(tester: KIFUITestActor) {
+        closeAllTabs()
+
+        openNewTab(to: "\(webRoot!)/numberedPage.html?page=1")
+        tester.waitForWebViewElementWithAccessibilityLabel("Page 1")
+
         openNewTab()
         tester.waitForWebViewElementWithAccessibilityLabel("Example Domain")
 
@@ -46,8 +47,6 @@ class KeyboardShortcutTests: UITestBase {
 
         bvc.findInPageKeyCommand()
         tester().waitForView(withAccessibilityLabel: "Done")
-
-        reset()
     }
 
     // MARK: UI
@@ -60,8 +59,6 @@ class KeyboardShortcutTests: UITestBase {
 
         bvc.selectLocationBarKeyCommand()
         openURL()
-
-        reset()
     }
 
     func testShowTabTrayKeyCommand() throws {
@@ -74,8 +71,6 @@ class KeyboardShortcutTests: UITestBase {
 
         bvc.showTabTrayKeyCommand()
         tester().waitForView(withAccessibilityLabel: "Normal Tabs")
-
-        reset()
     }
 
     // MARK: Tab Mangement
@@ -88,7 +83,6 @@ class KeyboardShortcutTests: UITestBase {
 
         // Make sure Lazy Tab popped up
         tester().waitForView(withAccessibilityLabel: "Cancel")
-        reset()
     }
 
     func testNewIncognitoTabKeyCommand() throws {
@@ -105,7 +99,6 @@ class KeyboardShortcutTests: UITestBase {
         tester().waitForView(withAccessibilityLabel: "Cancel")
 
         XCTAssert(bvc.incognitoModel.isIncognito == true)
-        reset()
     }
 
     func testNextTabKeyCommand() throws {
@@ -117,7 +110,6 @@ class KeyboardShortcutTests: UITestBase {
         bvc.nextTabKeyCommand()
 
         XCTAssert(bvc.tabManager.selectedTab == bvc.tabManager.tabs[1])
-        reset()
     }
 
     func testPreviousTabCommand() throws {
@@ -128,7 +120,6 @@ class KeyboardShortcutTests: UITestBase {
         previousTab(tester: tester())
 
         XCTAssert(bvc.tabManager.selectedTab == bvc.tabManager.tabs[0])
-        reset()
     }
 
     // MARK: - Close Tabs
@@ -141,7 +132,7 @@ class KeyboardShortcutTests: UITestBase {
         tester().waitForWebViewElementWithAccessibilityLabel("Example Domain")
 
         // Doesn't matter what this URL is, we don't need the page to load.
-        openNewTab(to: "https://neeva.com")
+        openNewTab(to: "\(webRoot!)/numberedPage.html?page=1")
         tester().waitForAnimationsToFinish()
 
         bvc.closeTabKeyCommand()
@@ -159,7 +150,6 @@ class KeyboardShortcutTests: UITestBase {
         bvc.closeAllTabsCommand()
 
         tester().waitForView(withAccessibilityLabel: "Empty Card Grid")
-        reset()
     }
 
     func testRestoreTabKeyCommand() throws {
@@ -172,7 +162,5 @@ class KeyboardShortcutTests: UITestBase {
         bvc.restoreTabKeyCommand()
 
         XCTAssert(bvc.tabManager.tabs.count > 1)
-
-        reset()
     }
 }

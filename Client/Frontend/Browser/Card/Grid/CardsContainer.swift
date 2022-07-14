@@ -177,7 +177,7 @@ struct CardsContainer: View {
                 CardScrollContainer(columns: columns) { scrollProxy in
                     VStack(alignment: .leading) {
                         LazyVGrid(columns: columns, spacing: CardGridUX.GridSpacing) {
-                            SpaceCardsView(spacesModel: spacesModel)
+                            SpaceCardsView()
                                 .environment(\.columns, columns)
                         }.animation(nil)
 

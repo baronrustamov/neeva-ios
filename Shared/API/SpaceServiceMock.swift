@@ -171,11 +171,12 @@ public class SpaceServiceMock: SpaceService {
         let relatedSpaceTestsSpace1 = SpaceMock(name: "RelatedSpaceTests Space1")
         let relatedSpaceTestsSpace2 = SpaceMock(name: "RelatedSpaceTests Space2")
 
+        // Disabled temporarily
         // Starting with AAA and ZZZ makes it easier to test sorting by Name
-        let spaceSortTestSpace1 = SpaceMock(
-            name: "AAA Space")
-        let spaceSortTestSpace2 = SpaceMock(
-            name: "ZZZ Space")
+        //        let spaceSortTestSpace1 = SpaceMock(
+        //            name: "AAA Space")
+        //        let spaceSortTestSpace2 = SpaceMock(
+        //            name: "ZZZ Space")
 
         spaces[mySpace.id] = mySpace
         spaces[spaceNotOwnedByMe.id] = spaceNotOwnedByMe
@@ -185,11 +186,13 @@ public class SpaceServiceMock: SpaceService {
         spaces[spaceGeneratorTestsSpace.id] = spaceGeneratorTestsSpace
         spaces[relatedSpaceTestsSpace1.id] = relatedSpaceTestsSpace1
         spaces[relatedSpaceTestsSpace2.id] = relatedSpaceTestsSpace2
-        spaces[spaceSortTestSpace1.id] = spaceSortTestSpace1
-        spaces[spaceSortTestSpace2.id] = spaceSortTestSpace2
 
-        // This is for testing "Last Updated"
-        spaceSortTestSpace1.lastModifiedTs = Date.distantPast
+        // Disabled temporarily
+        //        spaces[spaceSortTestSpace1.id] = spaceSortTestSpace1
+        //        spaces[spaceSortTestSpace2.id] = spaceSortTestSpace2
+        //
+        //        // This is for testing "Last Updated"
+        //        spaceSortTestSpace1.lastModifiedTs = Date.distantPast
 
         // Populate the Spaces
         spaces[spaceNotOwnedByMe.id]?.addSpaceEntity(
