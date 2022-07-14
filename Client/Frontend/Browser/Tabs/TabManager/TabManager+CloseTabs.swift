@@ -195,11 +195,10 @@ extension TabManager {
                 return $0.lastExecutedTime ?? 0 > $1.lastExecutedTime ?? 0
             }
 
-        // Prevent an exception if `tabsToKeepAlive` > `tabsWithWebViews.count`.
-        let tabsWithWebViewsCap = min(tabsToKeepAlive, tabsWithWebViews.count)
-        // Close all Tabs that exceed the cap.
-        for index in tabsWithWebViewsCap..<tabsWithWebViews.count {
-            tabsWithWebViews[index].closeWebView()
+        for (index, tab) in tabsWithWebViews.enumerated() {
+            if index >= tabsToKeepAlive && tab != selectedTab {
+                tab.closeWebView()
+            }
         }
     }
 
