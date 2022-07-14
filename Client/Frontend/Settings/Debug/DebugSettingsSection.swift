@@ -90,10 +90,28 @@ struct DebugSettingsSection: View {
                         urls.append(URL(string: "https://example.com")!)
                     }
 
+                    tabManager?.addTabsForURLs(urls, zombie: false)
+                }
+
+                Button(String("Create 100 zombie tabs")) {
+                    var urls = [URL]()
+                    for _ in 0...99 {
+                        urls.append(URL(string: "https://example.com")!)
+                    }
+
                     tabManager?.addTabsForURLs(urls, zombie: true)
                 }
 
                 Button(String("Create 500 tabs")) {
+                    var urls = [URL]()
+                    for _ in 0...499 {
+                        urls.append(URL(string: "https://example.com")!)
+                    }
+
+                    tabManager?.addTabsForURLs(urls, zombie: false)
+                }
+
+                Button(String("Create 500 zombie tabs")) {
                     var urls = [URL]()
                     for _ in 0...499 {
                         urls.append(URL(string: "https://example.com")!)

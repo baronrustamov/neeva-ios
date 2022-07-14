@@ -284,7 +284,9 @@ class TabManager: NSObject {
 
         if FeatureFlag[.limitNumberOfWebViews] {
             // Only allow 15 WebViews to be alive at once.
-            makeTabsIntoZombies(tabsToKeepAlive: 15)
+            DispatchQueue.main.async { [self] in
+                makeTabsIntoZombies(tabsToKeepAlive: 15)
+            }
         }
 
         if let tab = tab, tab.isIncognito, let url = tab.url, NeevaConstants.isAppHost(url.host),

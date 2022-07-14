@@ -186,15 +186,20 @@ extension TabManager {
     // MARK: - Zombie Tabs
     /// Turns all but the newest x Tabs into Zombie Tabs.
     func makeTabsIntoZombies(tabsToKeepAlive: Int = 10) {
-        // Filter tabs for each Scene
-        let tabs = tabs.sorted {
-            $0.lastExecutedTime ?? Timestamp() > $1.lastExecutedTime ?? Timestamp()
-        }
-
-        tabs.enumerated().forEach { index, tab in
-            if tab != selectedTab, index >= tabsToKeepAlive {
-                tab.close()
+        // Get all Tabs with WKWebViews, then sort by most recent (greatest)
+        // `lastExecutedTime` first.
+        let tabsWithWebViews = tabs.filter { $0.webView != nil }
+            .sorted {
+                // `selectedTab` always comes first.
+                if $0 == selectedTab || $1 == selectedTab { return $0 == selectedTab }
+                return $0.lastExecutedTime ?? 0 > $1.lastExecutedTime ?? 0
             }
+
+        // Prevent an exception if `tabsToKeepAlive` > `tabsWithWebViews.count`.
+        let tabsWithWebViewsCap = min(tabsToKeepAlive, tabsWithWebViews.count)
+        // Close all Tabs that exceed the cap.
+        for index in tabsWithWebViewsCap..<tabsWithWebViews.count {
+            tabsWithWebViews[index].close()
         }
     }
 
