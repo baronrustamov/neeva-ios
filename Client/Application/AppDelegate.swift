@@ -341,10 +341,8 @@ extension AppDelegate {
 
         ClientLogger.shared.logCounter(.LowMemoryWarning, attributes: attributes)
 
-        if !FeatureFlag[.limitNumberOfWebViews] {
-            for sceneDelegate in SceneDelegate.getAllSceneDelegates() {
-                sceneDelegate.bvc.tabManager.makeTabsIntoZombies()
-            }
+        for sceneDelegate in SceneDelegate.getAllSceneDelegates() {
+            sceneDelegate.bvc.tabManager.makeTabsIntoZombies()
         }
     }
 
