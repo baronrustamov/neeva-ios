@@ -186,8 +186,8 @@ extension TabManager {
     // MARK: - Zombie Tabs
     /// Turns all but the newest x Tabs into Zombie Tabs.
     func makeTabsIntoZombies(tabsToKeepAlive: Int = 10) {
-        // Get all Tabs with WKWebViews, then sort by most recent (greatest)
-        // `lastExecutedTime` first.
+        // Filter down the `tabs` array to just those with WKWebViews in order
+        // to optimize subsequent loops.
         let tabsWithWebViews = tabs.filter { $0.webView != nil }
             .sorted {
                 // `selectedTab` always comes first.
