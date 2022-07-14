@@ -34,19 +34,21 @@ struct ArchivedTabSettings: View {
         .pickerStyle(.inline)
         .applyToggleStyle()
         .navigationTitle(Text("Archive Tabs"))
+        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
-        .toolbar(content: {
-            ToolbarItem(placement: .navigation) {
-                Button(action: { self.presentation.wrappedValue.dismiss() }) {
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    self.presentation.wrappedValue.dismiss()
+                } label: {
                     HStack {
                         Image(systemName: "chevron.left")
                             .frame(width: 12, height: 20)
                         Text("Back")
                     }
                 }
-
             }
-        })
+        }
     }
 }
 
