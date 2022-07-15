@@ -54,7 +54,7 @@ enum TabToolbarButtons {
                 action: onBack,
                 longPressAction: onLongPress
             )
-            .disabled(!model.canGoBack && !model.canReturnToSuggestions)
+            .disabled(!model.canGoBack)
             .accessibilityAction(named: "Show Recent Pages", onLongPress)
         }
 

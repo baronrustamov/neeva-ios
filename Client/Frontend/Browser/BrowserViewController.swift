@@ -1219,18 +1219,6 @@ extension BrowserViewController: TabDelegate {
             }
             .store(in: &tab.webViewSubscriptions)
 
-        webView.publisher(for: \.canGoBack, options: .new)
-            .forEach(updateGestureHandler)
-            .filter { _ in tab === tabManager.selectedTab }
-            .assign(to: \.canGoBack, on: chromeModel)
-            .store(in: &tab.webViewSubscriptions)
-
-        webView.publisher(for: \.canGoForward, options: .new)
-            .forEach(updateGestureHandler)
-            .filter { _ in tab === tabManager.selectedTab }
-            .assign(to: \.canGoForward, on: chromeModel)
-            .store(in: &tab.webViewSubscriptions)
-
         webView.scrollView
             .publisher(for: \.contentSize, options: .new)
             .sink { [self] _ in
@@ -1401,12 +1389,7 @@ extension BrowserViewController {
         }
 
         updateFindInPageVisibility(visible: false, tab: previous)
-        chromeModel.canGoBack =
-            (simulatedSwipeModel.canGoBack()
-                || selected?.canGoBack ?? false)
-        chromeModel.canGoForward =
-            (simulateForwardModel.canGoForward()
-                || selected?.canGoForward ?? false)
+
         if let url = selected?.webView?.url, !InternalURL.isValid(url: url) {
             if selected?.isLoading ?? false {
                 chromeModel.estimatedProgress = selected?.estimatedProgress

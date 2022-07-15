@@ -33,9 +33,6 @@ extension BrowserViewController: ToolbarDelegate {
                     .ClickBack,
                     attributes: EnvironmentHelper.shared.getAttributes() + [toolbarActionAttribute]
                 )
-                if self.simulatedSwipeModel.goBack() {
-                    return
-                }
 
                 self.tabManager.selectedTab?.goBack()
             case .forward:

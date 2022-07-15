@@ -64,8 +64,6 @@ struct SimulatedSwipeViewRepresentable: UIViewControllerRepresentable {
 
     func makeUIViewController(context: Context) -> SimulatedSwipeController {
         let simulatedSwipeController = SimulatedSwipeController(model: model, superview: superview)
-        simulatedSwipeController.view.isHidden = true
-
         model.coordinator = context.coordinator
         context.coordinator.vc = simulatedSwipeController
 

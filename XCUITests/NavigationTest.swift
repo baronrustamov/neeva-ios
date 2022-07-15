@@ -6,7 +6,7 @@ import XCTest
 
 let website_2 = [
     "url": "www.example.com", "label": "Example", "value": "example", "link": "More information...",
-    "moreLinkLongPressUrl": "http://www.iana.org/domains/example",
+    "moreLinkLongPressUrl": "https://www.iana.org/domains/example",
     "moreLinkLongPressUrlPrivate": "https://www.iana.org/domains/example",
     "moreLinkLongPressInfo": "iana",
 ]
@@ -44,9 +44,9 @@ class NavigationTest: BaseTestCase {
         }
 
         // The URL is opened in a new tab, so the back / forward buttons are disabled
-        openURL(path(forTestPage: "test-example.html"))
+        openURL()
         waitUntilPageLoad()
-        waitForValueContains(app.buttons["Address Bar"], value: "localhost")
+        waitForValueContains(app.buttons["Address Bar"], value: "example.com")
         goToOverflowMenuButton(label: "Forward") { element in
             XCTAssertFalse(element.isEnabled)
         }
@@ -63,7 +63,7 @@ class NavigationTest: BaseTestCase {
         app.buttons["Back"].tap()
 
         waitUntilPageLoad()
-        waitForValueContains(app.buttons["Address Bar"], value: "localhost")
+        waitForValueContains(app.buttons["Address Bar"], value: "example.com")
 
         goForward()
         waitUntilPageLoad()
@@ -72,7 +72,7 @@ class NavigationTest: BaseTestCase {
 
     // Smoketest
     func testLongPressLinkOptions() {
-        openURL(path(forTestPage: "test-example.html"))
+        openURL()
         waitForExistence(app.webViews.links[website_2["link"]!], timeout: 30)
         app.webViews.links[website_2["link"]!].press(forDuration: 1)
         waitForExistence(app.otherElements.collectionViews.element(boundBy: 0), timeout: 5)
@@ -88,7 +88,7 @@ class NavigationTest: BaseTestCase {
     func testLongPressLinkOptionsIncognitoMode() {
         setIncognitoMode(enabled: true)
 
-        openURL(path(forTestPage: "test-example.html"))
+        openURL()
         waitForExistence(app.webViews.links[website_2["link"]!], timeout: 5)
         app.webViews.links[website_2["link"]!].press(forDuration: 1)
         waitForExistence(
@@ -163,7 +163,7 @@ class NavigationTest: BaseTestCase {
 
     private func longPressLinkOptions(optionSelected: String) {
         if !app.webViews.links[website_2["link"]!].exists {
-            openURL(path(forTestPage: "test-example.html"))
+            openURL()
             waitUntilPageLoad()
         }
 
@@ -324,8 +324,8 @@ class NavigationTest: BaseTestCase {
         openURL(path(forTestPage: "test-pdf.html"))
         waitUntilPageLoad()
 
-        waitForExistence(app.webViews.links["nineteen for me"])
-        app.webViews.links["nineteen for me"].tap()
+        waitForExistence(app.links["nineteen for me"])
+        app.links["nineteen for me"].tap(force: true)
         waitUntilPageLoad()
 
         goToShareSheet()
@@ -345,5 +345,35 @@ class NavigationTest: BaseTestCase {
         goToShareSheet()
         waitForExistence(
             app.navigationBars["UIActivityContentView"].otherElements["localhost"], timeout: 10)
+    }
+
+    func testBackNavigationAfterOpeningFromParentTab() {
+        openURL()
+        waitUntilPageLoad()
+
+        waitForExistence(app.links["More information..."])
+        app.links["More information..."].press(forDuration: 1)
+
+        waitForExistence(app.buttons["Open in New Tab"])
+        app.buttons["Open in New Tab"].tap()
+
+        waitForExistence(app.buttons["Switch"])
+        app.buttons["Switch"].tap()
+        waitUntilPageLoad()
+
+        waitForExistence(app.links["IDN Evaluation"])
+        app.links["IDN Evaluation"].tap()
+        waitUntilPageLoad()
+
+        // Make sure Tab return to the More information page.
+        app.buttons["Back"].tap()
+        waitForExistence(app.links["IDN Evaluation"])
+
+        // Make sure Tab returns to the parent Tab.
+        app.buttons["Back"].tap()
+        waitForExistence(app.links["More information..."])
+
+        // Current Tab, and default added Tab.
+        XCTAssertEqual(getNumberOfTabs(), 2)
     }
 }

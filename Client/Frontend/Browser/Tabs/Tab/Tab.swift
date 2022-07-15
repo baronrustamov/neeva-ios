@@ -98,15 +98,26 @@ class Tab: NSObject, ObservableObject {
     var needsReloadUponSelect = false
     var shouldCreateWebViewUponSelect = true
 
+    @Published private(set) var canGoBack = false
+    @Published private(set) var canGoForward = false
+
     // MARK: Properties mirrored from webView
     @Published private(set) var isLoading = false
     @Published private(set) var estimatedProgress: Double = 0
-    @Published private(set) var canGoBack = false
-    @Published private(set) var canGoForward = false
     @Published var title: String?
     /// For security reasons, the URL may differ from the web view’s URL.
     @Published var url: URL?
     @Default(.archivedTabsDuration) var archivedTabsDuration
+    private var webViewCanGoBack = false {
+        didSet {
+            updateCanGoBack()
+        }
+    }
+    private var webViewCanGoForward = false {
+        didSet {
+            updateCanGoForward()
+        }
+    }
 
     private var observer: AnyCancellable?
     var pageZoom: CGFloat = 1.0 {
@@ -121,12 +132,15 @@ class Tab: NSObject, ObservableObject {
         CheatsheetMenuViewModel(tab: self)
     }()
 
+    /// Called by BVC TabDelegate, updates the URL whenever it changes in the `WebView`.
     func setURL(_ newValue: URL?) {
         if let internalUrl = InternalURL(newValue), internalUrl.isAuthorized {
             url = internalUrl.stripAuthorization
         } else {
             url = newValue
         }
+
+        updateCanGoBackForward()
     }
 
     // MARK: - Navigation Properties
@@ -314,8 +328,8 @@ class Tab: NSObject, ObservableObject {
                 webView: \.title, to: \.title,
                 provided: { [weak self] in self?.hasContentProcess ?? false })
             send(webView: \.isLoading, to: \.isLoading)
-            send(webView: \.canGoBack, to: \.canGoBack)
-            send(webView: \.canGoForward, to: \.canGoForward)
+            send(webView: \.canGoBack, to: \.webViewCanGoBack)
+            send(webView: \.canGoForward, to: \.webViewCanGoForward)
 
             $isLoading
                 .combineLatest(webView.publisher(for: \.estimatedProgress, options: .new))
@@ -467,13 +481,60 @@ class Tab: NSObject, ObservableObject {
         return result.truncateTo(length: 100)
     }
 
-    func goBack() {
-        // Check if user launched the current URL from the Suggestion UI.
-        // If true, show the Suggest UI with that query loaded.
-        // Else just perform a regular back navigation.
-        if let navigation = webView?.backForwardList.currentItem,
+    func attachCurrentSearchQueryToCurrentNavigation() {
+        guard let webView = webView else {
+            return
+        }
+
+        queryForNavigation.attachCurrentSearchQueryToCurrentNavigation(webView: webView)
+        updateCanGoBackForward()
+    }
+
+    func backNavigationSuggestionQuery() -> String? {
+        guard let navigation = webView?.backForwardList.currentItem,
             let query = queryForNavigation.findQueryFor(navigation: navigation),
-            query.location == .suggestion,
+            query.location == .suggestion
+        else {
+            return nil
+        }
+
+        return query.typed
+    }
+
+    func updateCanGoBackForward() {
+        updateCanGoBack()
+        updateCanGoForward()
+    }
+
+    func updateCanGoBack() {
+        canGoBack =
+            backNavigationSuggestionQuery() != nil || parent != nil
+            || !(parentSpaceID ?? "").isEmpty || webViewCanGoBack
+
+        print(
+            ">>> updateCanGoBack. backNavigationSuggestionQuery: ", backNavigationSuggestionQuery())
+    }
+
+    func updateCanGoForward() {
+        if let webView = webView, SceneDelegate.getTabManager(for: webView).selectedTab == self {
+            canGoForward =
+                webViewCanGoForward
+                || SceneDelegate.getBVC(for: webView).simulateForwardModel.canGoForward()
+        } else {
+            canGoForward = webViewCanGoForward
+        }
+    }
+
+    func goBack() {
+        // If the user opened this tab from another one, close this one to return to the parent.
+        // Else if the user opened this tab from a space, return to the SpaceDetailView.
+        // Else if the user opened this tab from FastTap, return to FastTap.
+        // Else just perform a regular back navigation.
+        if let _ = parent, !webViewCanGoBack {
+            browserViewController?.tabManager.removeTab(self, showToast: false)
+        } else if let id = parentSpaceID, !id.isEmpty, !webViewCanGoBack {
+            browserViewController?.browserModel.openSpace(spaceID: id)
+        } else if let searchQuery = backNavigationSuggestionQuery(),
             let bvc = browserViewController
         {
             DispatchQueue.main.async {
@@ -481,7 +542,7 @@ class Tab: NSObject, ObservableObject {
 
                 // Small delayed needed to prevent animation intefernce
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    bvc.searchQueryModel.value = query.typed
+                    bvc.searchQueryModel.value = searchQuery
                     bvc.tabContainerModel.updateContent(
                         .showZeroQuery(
                             isIncognito: bvc.browserModel.incognitoModel.isIncognito,
@@ -497,11 +558,11 @@ class Tab: NSObject, ObservableObject {
     }
 
     func goForward() {
-        _ = webView?.goForward()
+        webView?.goForward()
     }
 
     func goToBackForwardListItem(_ item: WKBackForwardListItem) {
-        _ = webView?.go(to: item)
+        webView?.go(to: item)
     }
 
     @discardableResult func loadRequest(_ request: URLRequest) -> WKNavigation? {

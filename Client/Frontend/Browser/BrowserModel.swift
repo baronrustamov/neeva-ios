@@ -66,9 +66,7 @@ class BrowserModel: ObservableObject {
     }
 
     func showSpaces(forceUpdate: Bool = true) {
-        cardTransitionModel.update(to: .hidden)
-        contentVisibilityModel.update(showContent: false)
-        showGrid = true
+        showGridWithNoAnimation()
         gridModel.setSwitcherState(to: .spaces)
 
         if forceUpdate {

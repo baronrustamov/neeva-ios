@@ -51,6 +51,8 @@ class SimulatedSwipeController:
             )
             self.progressView.view.backgroundColor = .clear
         }
+
+        self.view.isHidden = true
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -3371,6 +3371,24 @@
 			path = History;
 			sourceTree = "<group>";
 		};
+		20C76FCF287DD9A900660915 /* Tab */ = {
+			isa = PBXGroup;
+			children = (
+				D3A994961A3686BD008AD1AC /* Tab.swift */,
+				C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */,
+			);
+			path = Tab;
+			sourceTree = "<group>";
+		};
+		20C76FD0287DD9B000660915 /* SavedTab */ = {
+			isa = PBXGroup;
+			children = (
+				63306D3821103EAE00F25400 /* SavedTab.swift */,
+				1DA3CE6224EEE83200422BB2 /* SavedTab+ConfigureExtension.swift */,
+			);
+			path = SavedTab;
+            sourceTree = "<group>";
+        };
 		20B2DC5428501D870095ED46 /* popup */ = {
 			isa = PBXGroup;
 			children = (
@@ -3401,12 +3419,9 @@
 		23F2C365244E44FA00FA4496 /* Tabs */ = {
 			isa = PBXGroup;
 			children = (
+				20C76FD0287DD9B000660915 /* SavedTab */,
+				20C76FCF287DD9A900660915 /* Tab */,
 				6658711A27D0085A003B4987 /* TabManager */,
-				63306D3821103EAE00F25400 /* SavedTab.swift */,
-				1DA3CE6224EEE83200422BB2 /* SavedTab+ConfigureExtension.swift */,
-				D3A994961A3686BD008AD1AC /* Tab.swift */,
-				C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */,
-				63306D422110B3CD00F25400 /* TabManagerStore.swift */,
 				DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */,
 				C87AA4A12614C1FC00F1318F /* IncognitoDescriptionView.swift */,
 				665A23D32755D8D5006AD997 /* QueryForNavigation.swift */,
@@ -3891,6 +3906,7 @@
 				6658712327D00957003B4987 /* TabManager+TabStorage.swift */,
 				6658712127D00940003B4987 /* TabManager+TestSupport.swift */,
 				6658711B27D0086B003B4987 /* TabManager+WKNavigationDelegate.swift */,
+				63306D422110B3CD00F25400 /* TabManagerStore.swift */,
 			);
 			path = TabManager;
 			sourceTree = "<group>";
@@ -8873,7 +8889,7 @@
 					"-framework",
 					SafariServices,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = co.neeva.app.ios.browser.SafariExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = "co.neeva.app.ios.browser.SafariExtension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Neeva Browser Safari Extension";
 				SKIP_INSTALL = YES;

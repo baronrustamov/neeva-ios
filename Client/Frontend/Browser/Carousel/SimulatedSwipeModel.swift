@@ -47,7 +47,7 @@ class SimulatedSwipeModel: ObservableObject {
     }
 
     // MARK: - Back Forward Methods
-    func canGoBack() -> Bool {
+    private func canGoBack() -> Bool {
         return isActive && swipeDirection == .back && !hidden
     }
 
@@ -55,23 +55,15 @@ class SimulatedSwipeModel: ObservableObject {
         return isActive && swipeDirection == .forward && !hidden
     }
 
-    @discardableResult func goBack() -> Bool {
+    func goBack() {
         guard canGoBack(),
             swipeDirection == .back,
             let tab = tabManager.selectedTab
         else {
-            return false
+            return
         }
 
-        if let _ = tab.parent {
-            tabManager.removeTab(tab, showToast: false)
-            return true
-        } else if let id = tab.parentSpaceID {
-            SceneDelegate.getBVC(with: tabManager.scene).browserModel.openSpace(spaceID: id)
-            return true
-        }
-
-        return false
+        tab.goBack()
     }
 
     @discardableResult func goForward() -> Bool {
@@ -99,6 +91,7 @@ class SimulatedSwipeModel: ObservableObject {
         switch swipeDirection {
         case .forward:
             updateForwardVisibility(id: tabUUID, results: forwardUrlMap[tabUUID, default: nil])
+            selected?.updateCanGoForward()
         case .back:
             updateBackVisibility(tab: selected)
         }
@@ -106,33 +99,22 @@ class SimulatedSwipeModel: ObservableObject {
 
     private func updateBackVisibility(tab: Tab?) {
         coordinator?.setPreviewImage(nil)
-        guard let tab = tab,
-            !tab.canGoBack
-        else {
+
+        guard let tab = tab else {
             hidden = true
             return
         }
 
-        // if tab cannot go back, check to see if there's another back target
-        if let parent = tab.parent {
-            hidden = false
-            chromeModel.canGoBack = true
+        hidden = !tab.canGoBack
+
+        if tab.backNavigationSuggestionQuery() == nil, let parent = tab.parent {
             coordinator?.setPreviewImage(parent.screenshot)
-        } else if let id = tab.parentSpaceID, !id.isEmpty {
-            hidden = false
-            chromeModel.canGoBack = true
-        } else {
-            // if no back target, hide the simulated swipe
-            // and set the back state to the tab's back state
-            hidden = true
-            chromeModel.canGoBack = tab.canGoBack
         }
     }
 
     private func updateForwardVisibility(id: String, results: [URL]?, index: Int = -1) {
         forwardUrlMap[id] = results
         hidden = results == nil
-        chromeModel.canGoForward = !hidden
 
         guard let results = results else {
             coordinator?.removeProgressViewFromHierarchy()
