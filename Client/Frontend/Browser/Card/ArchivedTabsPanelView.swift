@@ -40,17 +40,39 @@ struct ArchivedTabsPanelView: View {
         }
     }
 
-    var clearAllArchivesButton: some View {
-        HStack(spacing: 0) {
+    var clearAllArchivedButtonLabel: some View {
+        Group {
             Text("Clear All Archived Tabs")
                 .withFont(.bodyLarge)
-                .foregroundColor(.red)
+                .modify {
+                    if #unavailable(iOS 15.0), model.numOfArchivedTabs > 0 {
+                        $0.foregroundColor(.red)
+                    } else {
+                        $0
+                    }
+                }
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.vertical, 10)
             Spacer()
         }
+    }
+
+    var clearAllArchivedButton: some View {
+        VStack(alignment: .leading) {
+            if #available(iOS 15.0, *) {
+                Button(role: .destructive, action: { confirmationShow = true }) {
+                    clearAllArchivedButtonLabel
+
+                }
+            } else {
+                Button(action: { confirmationShow = true }) {
+                    clearAllArchivedButtonLabel
+                }
+            }
+        }
         .padding(.horizontal, 16)
         .frame(height: 52)
+        .disabled(model.numOfArchivedTabs == 0)
     }
 
     var clearAllArchiveButtonText: String {
@@ -85,44 +107,40 @@ struct ArchivedTabsPanelView: View {
 
                 Color.groupedBackground.frame(height: 1)
 
-                Button(action: {
-                    confirmationShow = true
-                }) {
-                    if #available(iOS 15.0, *) {
-                        clearAllArchivesButton
-                            .confirmationDialog(
-                                clearAllArchiveButtonTitle,
-                                isPresented: $confirmationShow,
-                                titleVisibility: .visible
+                if #available(iOS 15.0, *) {
+                    clearAllArchivedButton
+                        .confirmationDialog(
+                            clearAllArchiveButtonTitle,
+                            isPresented: $confirmationShow,
+                            titleVisibility: .visible
+                        ) {
+                            Button(
+                                clearAllArchiveButtonText,
+                                role: .destructive
                             ) {
-                                Button(
-                                    clearAllArchiveButtonText,
-                                    role: .destructive
-                                ) {
-                                    model.clearArchivedTabs()
-                                    ClientLogger.shared.logCounter(
-                                        .clearArchivedTabs,
-                                        attributes: EnvironmentHelper.shared.getAttributes())
-                                }
+                                model.clearArchivedTabs()
+                                ClientLogger.shared.logCounter(
+                                    .clearArchivedTabs,
+                                    attributes: EnvironmentHelper.shared.getAttributes())
                             }
-                    } else {
-                        clearAllArchivesButton
-                            .actionSheet(isPresented: $confirmationShow) {
-                                ActionSheet(
-                                    title: Text(clearAllArchiveButtonTitle),
-                                    buttons: [
-                                        .destructive(
-                                            Text(
-                                                clearAllArchiveButtonText
-                                            )
-                                        ) {
-                                            model.clearArchivedTabs()
-                                        },
-                                        .cancel(),
-                                    ]
-                                )
-                            }
-                    }
+                        }
+                } else {
+                    clearAllArchivedButton
+                        .actionSheet(isPresented: $confirmationShow) {
+                            ActionSheet(
+                                title: Text(clearAllArchiveButtonTitle),
+                                buttons: [
+                                    .destructive(
+                                        Text(
+                                            clearAllArchiveButtonText
+                                        )
+                                    ) {
+                                        model.clearArchivedTabs()
+                                    },
+                                    .cancel(),
+                                ]
+                            )
+                        }
                 }
 
                 NavigationLink(isActive: $showArchivedTabsSettings) {
