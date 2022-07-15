@@ -170,17 +170,19 @@ private struct FocusOnAppearModifier: ViewModifier {
     }
 }
 
-// Allows conditional View modifiers based on iOS version. https://stackoverflow.com/a/71203870
-// Usage:
-//
-// Text("Hello, world!")
-//   .modify {
-//     if #available(iOS 15.0, *) {
-//       $0.modifier()
-//     } else {
-//       $0
-//     }
-//   }
+/*
+    Allows conditional View modifiers based on iOS version. https://stackoverflow.com/a/71203870
+    Usage:
+
+    Text("Hello, world!")
+        .modify {
+            if #available(iOS 15.0, *) {
+                $0.modifier()
+            } else {
+                $0
+            }
+        }
+ */
 extension View {
     public func modify<Content>(@ViewBuilder _ transform: (Self) -> Content) -> Content {
         transform(self)
