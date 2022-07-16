@@ -50,6 +50,7 @@ struct ArchivedTabsPanelView: View {
         }
     }
 
+    @ViewBuilder
     var clearAllArchivedButton: some View {
         VStack(alignment: .leading) {
             if #available(iOS 15.0, *) {
@@ -72,6 +73,7 @@ struct ArchivedTabsPanelView: View {
         return "Close \(model.numOfArchivedTabs) \(model.numOfArchivedTabs > 1 ? "Tabs" : "Tab")"
     }
 
+    @ViewBuilder
     var content: some View {
         ScrollView {
             VStack(spacing: 0) {
