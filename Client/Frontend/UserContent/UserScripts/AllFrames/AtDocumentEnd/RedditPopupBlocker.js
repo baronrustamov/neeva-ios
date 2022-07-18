@@ -18,6 +18,10 @@ const redditViewer = () => {
         
     const seeThisPostIn = document.querySelector("shreddit-experience-tree");
     if (seeThisPostIn) seeThisPostIn.parentNode.removeChild(seeThisPostIn);
+
+    // Prevents a blur that would sometimes occur on thread pages.
+    const viewBlur = document.querySelector(".m-blurred");
+    if (viewBlur) viewBlur.style.filter = "none";
         
     const body = document.querySelector("body");
     body.classList.remove("scroll-disabled");
