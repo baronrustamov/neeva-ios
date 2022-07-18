@@ -24,7 +24,6 @@ class HistoryClearable: Clearable {
     }
 
     func clear() -> Success {
-
         // Treat desktop sites as part of browsing history.
         Tab.ChangeUserAgent.clear()
 
@@ -43,13 +42,14 @@ class HistoryClearable: Clearable {
 
 class ArchivedTabsClearable: Clearable {
     func clear() -> Success {
-        SceneDelegate.getAllBVCs().forEach {
-            let manager = $0.tabManager
-            manager.removeTabs(
-                manager.tabs.filter { $0.isArchived }, updateSelectedTab: false,
-                dontAddToRecentlyClosed: true, notify: false)
+        SceneDelegate.getAllTabManagers().forEach {
+            let archivedTabs = $0.tabs.filter { $0.isArchived }
+            $0.removeTabs(
+                archivedTabs, updateSelectedTab: false, dontAddToRecentlyClosed: true, notify: false
+            )
         }
-        return Success()
+
+        return succeed()
     }
 }
 
