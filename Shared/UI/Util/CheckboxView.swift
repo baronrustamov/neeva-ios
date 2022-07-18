@@ -4,29 +4,46 @@
 
 import SwiftUI
 
-public struct CheckboxView: View {
-    var checked: Bool
-    
+public struct CheckboxView<Label: View>: View {
+    @Binding var checked: Bool
+    var label: Label
+
     public var body: some View {
-        if checked {
-            Symbol(decorative: .checkmarkCircleFill, size: 20)
-                .foregroundColor(.blue)
-        } else {
-            Symbol(decorative: .circle, size: 20)
-                .foregroundColor(.tertiaryLabel)
+        Button {
+            checked.toggle()
+        } label: {
+            HStack {
+                if checked {
+                    Symbol(decorative: .checkmarkCircleFill, size: 20)
+                        .foregroundColor(.blue)
+                } else {
+                    Symbol(decorative: .circle, size: 20)
+                        .foregroundColor(.tertiaryLabel)
+                }
+
+                if let label = label {
+                    label
+                }
+            }
         }
     }
-    
-    public init(checked: Bool) {
-        self.checked = checked
+
+    public init(checked: Binding<Bool>, @ViewBuilder label: @escaping () -> Label) {
+        self._checked = checked
+        self.label = label()
     }
 }
 
 struct CheckboxView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            CheckboxView(checked: true)
-            CheckboxView(checked: false)
+            CheckboxView(checked: .constant(true)) {
+                Text("Label")
+            }
+
+            CheckboxView(checked: .constant(false)) {
+                Text("Label")
+            }
         }
     }
 }

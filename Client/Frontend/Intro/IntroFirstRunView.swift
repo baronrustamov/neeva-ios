@@ -54,10 +54,8 @@ struct FirstRunHomePage: View {
 
                     TermsAndPrivacyLinks(width: geom.size.width)
 
-                    Button(action: { model.marketingEmailOptOut.toggle() }) {
-                        HStack {
-                            CheckboxView(checked: model.marketingEmailOptOut)
-
+                    HStack {
+                        CheckboxView(checked: $model.marketingEmailOptOut) {
                             Text("Send me product & privacy tips")
                                 .font(.roobert(size: 13))
                                 .foregroundColor(Color.ui.gray20)

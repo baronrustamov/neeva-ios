@@ -14,7 +14,7 @@ struct OpenInAppOverlayView: View {
 
     @State var rememberMyChoice = false
     @Environment(\.hideOverlay) private var hideOverlay
-    
+
     var title: String {
         if let appName = appName {
             return "Open link in \(appName)?"
@@ -35,10 +35,8 @@ struct OpenInAppOverlayView: View {
                     .truncationMode(.middle)
                     .foregroundColor(.secondaryLabel)
             }.padding(.bottom, 14)
-            
-            HStack {
-                CheckboxView(checked: rememberMyChoice)
-                
+
+            CheckboxView(checked: $rememberMyChoice) {
                 Text("Remember my decision")
                     .withFont(.bodyLarge)
                     .foregroundColor(.label)
@@ -46,7 +44,7 @@ struct OpenInAppOverlayView: View {
 
             GroupedCellButton("Open") {
                 onOpen()
-                
+
                 if rememberMyChoice {
                     rememberChoice(value: true)
                 }
@@ -54,14 +52,14 @@ struct OpenInAppOverlayView: View {
 
             GroupedCellButton("Cancel", style: .labelLarge) {
                 onCancel()
-                
+
                 if rememberMyChoice {
                     rememberChoice(value: false)
                 }
             }.accessibilityIdentifier("CancelOpenInApp")
         }
     }
-    
+
     private func rememberChoice(value: Bool) {
         if let host = url.host {
             OpenInAppModel.shared.savePreferences(for: host, shouldOpenInApp: value)
@@ -73,8 +71,9 @@ struct OpenInAppOverlayView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             OpenInAppOverlayView(url: URL(string: "example.com")!, onOpen: {}, onCancel: {})
-            OpenInAppOverlayView(appName: "Neeva", url: URL(string: "example.com")!, onOpen: {}, onCancel: {})
+            OpenInAppOverlayView(
+                appName: "Neeva", url: URL(string: "example.com")!, onOpen: {}, onCancel: {})
         }
-       
+
     }
 }
