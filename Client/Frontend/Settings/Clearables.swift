@@ -118,3 +118,10 @@ class CookieCutterExclusionsClearable: Clearable {
         return TrackingProtectionClearable().clear()
     }
 }
+
+class OpenInAppPreferencesClearable: Clearable {
+    func clear() -> Success {
+        OpenInAppModel.shared.resetPreferences()
+        return succeed()
+    }
+}

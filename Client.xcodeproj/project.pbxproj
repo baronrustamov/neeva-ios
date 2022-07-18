@@ -123,6 +123,8 @@
 		20F2889227FD1BA9005A8A79 /* HistoryPanelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F2889127FD1BA9005A8A79 /* HistoryPanelModel.swift */; };
 		20F2889427FD20B4005A8A79 /* HistoryPanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F2889327FD20B4005A8A79 /* HistoryPanelViewController.swift */; };
 		20FBBE732838822B000F666B /* BackForwardListViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20FBBE722838822B000F666B /* BackForwardListViewTests.swift */; };
+		20FF021B28860F3800C93A96 /* CheckboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20FF021A28860F3800C93A96 /* CheckboxView.swift */; };
+		20FF021D288614AA00C93A96 /* OpenInAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20FF021C288614AA00C93A96 /* OpenInAppModel.swift */; };
 		2328616825C9BD3D0015EA47 /* DefaultBrowserOnboarding.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2328616725C9BD3D0015EA47 /* DefaultBrowserOnboarding.xcassets */; };
 		23BEA767251A99ED00A014BF /* NewYorkMedium-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 23BEA766251A99E300A014BF /* NewYorkMedium-Bold.otf */; };
 		23BEA768251A99ED00A014BF /* NewYorkMedium-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 23BEA765251A99E200A014BF /* NewYorkMedium-BoldItalic.otf */; };
@@ -1977,7 +1979,6 @@
 		1DDAD13C24F064F7007623C8 /* TopSitesWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesWidget.swift; sourceTree = "<group>"; };
 		200976842810EA620055A02B /* CookieCutterHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCutterHelper.swift; sourceTree = "<group>"; };
 		2011A43C283D8B6300947E6B /* BrowserViewController+ShowModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+ShowModal.swift"; sourceTree = "<group>"; };
-		20139C7F28552B7D001C26AD /* AlertDialogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertDialogView.swift; sourceTree = "<group>"; };
 		2015BD3528808BF100BA63E0 /* ShortcutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutTests.swift; sourceTree = "<group>"; };
 		20167FC62824484800223B9E /* FindInCardGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindInCardGridView.swift; sourceTree = "<group>"; };
 		20167FC9282448DB00223B9E /* FindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindView.swift; sourceTree = "<group>"; };
@@ -2021,6 +2022,8 @@
 		20F2889127FD1BA9005A8A79 /* HistoryPanelModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPanelModel.swift; sourceTree = "<group>"; };
 		20F2889327FD20B4005A8A79 /* HistoryPanelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPanelViewController.swift; sourceTree = "<group>"; };
 		20FBBE722838822B000F666B /* BackForwardListViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackForwardListViewTests.swift; sourceTree = "<group>"; };
+		20FF021A28860F3800C93A96 /* CheckboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxView.swift; sourceTree = "<group>"; };
+		20FF021C288614AA00C93A96 /* OpenInAppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenInAppModel.swift; sourceTree = "<group>"; };
 		2328616725C9BD3D0015EA47 /* DefaultBrowserOnboarding.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DefaultBrowserOnboarding.xcassets; sourceTree = "<group>"; };
 		23BEA763251A99E200A014BF /* NewYorkMedium-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkMedium-Regular.otf"; sourceTree = "<group>"; };
 		23BEA764251A99E200A014BF /* NewYorkMedium-RegularItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkMedium-RegularItalic.otf"; sourceTree = "<group>"; };
@@ -3371,6 +3374,19 @@
 			path = History;
 			sourceTree = "<group>";
 		};
+		20B2DC5428501D870095ED46 /* popup */ = {
+			isa = PBXGroup;
+			children = (
+				20B2DC5528501D870095ED46 /* popup.js */,
+				20B2DC5728501D870095ED46 /* popup.html */,
+				20B2DC5828501D870095ED46 /* popup.css */,
+				20587945286F6A0800994E15 /* picker.css */,
+				20587946286F6A0800994E15 /* switch.css */,
+				20587944286F6A0800994E15 /* checkmark.png */,
+			);
+			path = popup;
+			sourceTree = "<group>";
+		};
 		20C76FCF287DD9A900660915 /* Tab */ = {
 			isa = PBXGroup;
 			children = (
@@ -3387,19 +3403,6 @@
 				1DA3CE6224EEE83200422BB2 /* SavedTab+ConfigureExtension.swift */,
 			);
 			path = SavedTab;
-            sourceTree = "<group>";
-        };
-		20B2DC5428501D870095ED46 /* popup */ = {
-			isa = PBXGroup;
-			children = (
-				20B2DC5528501D870095ED46 /* popup.js */,
-				20B2DC5728501D870095ED46 /* popup.html */,
-				20B2DC5828501D870095ED46 /* popup.css */,
-				20587945286F6A0800994E15 /* picker.css */,
-				20587946286F6A0800994E15 /* switch.css */,
-				20587944286F6A0800994E15 /* checkmark.png */,
-			);
-			path = popup;
 			sourceTree = "<group>";
 		};
 		23ED80FD25C899D700D0E9D5 /* DefaultBrowserOnboarding */ = {
@@ -4034,6 +4037,7 @@
 		66BB89D726A64F83000C4BDF /* OpenInApp */ = {
 			isa = PBXGroup;
 			children = (
+				20FF021C288614AA00C93A96 /* OpenInAppModel.swift */,
 				66BB89D926A64FB0000C4BDF /* OpenInAppOverlayView.swift */,
 				C832BF5A26E0A7A400B9A1F8 /* OpenInAppOverlayContent.swift */,
 			);
@@ -4521,7 +4525,7 @@
 				675EEDD226D9AF1700473332 /* LongPressButton.swift */,
 				E942D43F281F275100B4A3EC /* SelectableTextModifier.swift */,
 				E61A44A72833F97B004AAC3F /* URLDisplayView.swift */,
-				20139C7F28552B7D001C26AD /* AlertDialogView.swift */,
+				20FF021A28860F3800C93A96 /* CheckboxView.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -6825,6 +6829,7 @@
 				C9C18E5D265598EA004710CD /* AbstractController.swift in Sources */,
 				1A840EB72787A0A7005F6003 /* SearchEngine.swift in Sources */,
 				C9C18E3E26559504004710CD /* ErrorView.swift in Sources */,
+				20FF021B28860F3800C93A96 /* CheckboxView.swift in Sources */,
 				1A840EB027861F95005F6003 /* LayoutDirectionExtensions.swift in Sources */,
 				4AD771AE2729C4C000B6769D /* PreviewEntities.swift in Sources */,
 				C9C18E60265599E5004710CD /* LoadingView.swift in Sources */,
@@ -7978,6 +7983,7 @@
 				C9299E36268F9CF300758795 /* CloseButton.swift in Sources */,
 				67462B2C27D8363D00141379 /* DefaultBrowserIntestitialOnboardingView.swift in Sources */,
 				C832BF5F26E0A9E400B9A1F8 /* HTTPAuthPromptOverlayContent.swift in Sources */,
+				20FF021D288614AA00C93A96 /* OpenInAppModel.swift in Sources */,
 				D3C744CD1A687D6C004CE85D /* URLFixup.swift in Sources */,
 				32D95B0427A37C8100447507 /* CheatsheetTooltipPopoverView.swift in Sources */,
 				E4A961181AC041C40069AD6F /* ReadabilityService.swift in Sources */,
@@ -8889,7 +8895,7 @@
 					"-framework",
 					SafariServices,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "co.neeva.app.ios.browser.SafariExtension";
+				PRODUCT_BUNDLE_IDENTIFIER = co.neeva.app.ios.browser.SafariExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Neeva Browser Safari Extension";
 				SKIP_INSTALL = YES;

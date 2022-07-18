@@ -56,11 +56,8 @@ struct FirstRunHomePage: View {
 
                     Button(action: { model.marketingEmailOptOut.toggle() }) {
                         HStack {
-                            model.marketingEmailOptOut
-                                ? Symbol(decorative: .circle, size: 20)
-                                    .foregroundColor(Color.tertiaryLabel)
-                                : Symbol(decorative: .checkmarkCircleFill, size: 20)
-                                    .foregroundColor(Color.blue)
+                            CheckboxView(checked: model.marketingEmailOptOut)
+
                             Text("Send me product & privacy tips")
                                 .font(.roobert(size: 13))
                                 .foregroundColor(Color.ui.gray20)

@@ -13,6 +13,7 @@ enum ClearableDataType: String, Identifiable, Codable, CaseIterable {
     case cache = "Cache"
     case cookies = "Cookies"
     case cookieCutterExclusions = "Cookie Cutter Exclusions"
+    case openInAppPreferences = "Open in App Preferences"
 
     #if XYZ
         case dapps = "Connected dApps"
@@ -28,6 +29,7 @@ enum ClearableDataType: String, Identifiable, Codable, CaseIterable {
         case .cache: return "Cache"
         case .cookies: return "Cookies"
         case .cookieCutterExclusions: return "Cookie Cutter Exclusions"
+        case .openInAppPreferences: return "Open in App Preferences"
         #if XYZ
             case .dapps: return "Connected dApps"
         #endif
@@ -57,6 +59,8 @@ enum ClearableDataType: String, Identifiable, Codable, CaseIterable {
             return CookiesClearable()
         case .cookieCutterExclusions:
             return CookieCutterExclusionsClearable()
+        case .openInAppPreferences:
+            return OpenInAppPreferencesClearable()
         #if XYZ
             case .dapps:
                 return ConnectedDAppsClearable()

@@ -490,17 +490,22 @@ extension BrowserViewController: WKNavigationDelegate {
         return String(id.dropFirst(prefix.count))
     }
 
-    // Use for links, that do not show a confirmation before opening.
+    // Use for links that do not show a confirmation before opening.
     fileprivate func showOverlay(forExternalUrl url: URL) {
         tabManager.selectedTab?.stop()
 
-        showModal(style: .grouped) {
-            OpenInAppOverlayContent(url: url) {
-                ToastDefaults().showToast(
-                    with:
-                        "Unable to open link in external app. Check if the app is installed on this device.",
-                    toastViewManager: self.toastViewManager)
-            }.environment(\.hideOverlay, { self.overlayManager.hideCurrentOverlay() })
+        if let host = url.host, let shouldOpenInApp = OpenInAppModel.shared.shouldOpenInApp(for: host) {
+            // User has set their preference for opening in external app.
+            // If they opened in app, we should do that.
+            // If they canceled we should not do anything.
+            if shouldOpenInApp {
+                OpenInAppModel.shared.openInApp(url: url, toastViewManager: self.toastViewManager)
+            }
+        } else {
+            showModal(style: .grouped) {
+                OpenInAppOverlayContent(url: url, toastViewManager: self.toastViewManager)
+                    .environment(\.hideOverlay, { self.overlayManager.hideCurrentOverlay() })
+            }
         }
     }
 
