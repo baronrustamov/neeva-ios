@@ -3,6 +3,7 @@
 export EXPORT_BUILD=false
 export CREATE_BRANCH=false
 export SKIP_PROMPT=true
+export BROWSER_PLATFORM=ios
 
 IOS_SCRIPTS_DIR=$(dirname $0)
 SCRIPTS_DIR=$NEEVA_REPO/client/browser/scripts/
