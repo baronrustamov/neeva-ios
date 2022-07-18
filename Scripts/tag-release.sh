@@ -1,6 +1,6 @@
 #!/bin/sh
 
-SCRIPTS_DIR=$(dirname $0)
+SCRIPTS_DIR=$NEEVA_REPO/client/browser/scripts/
 
 . $SCRIPTS_DIR/git-util.sh
 . $SCRIPTS_DIR/version-util.sh

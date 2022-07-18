@@ -4,7 +4,7 @@
 # number. It reads the current values and proposes new values. Normally,
 # the right thing to do is to just accept what this script produces.
 
-SCRIPTS_DIR=$(dirname $0)
+SCRIPTS_DIR=$NEEVA_REPO/client/browser/scripts/
 
 . $SCRIPTS_DIR/git-util.sh
 . $SCRIPTS_DIR/version-util.sh
@@ -113,4 +113,4 @@ read
 put_version "BROWSER_MARKETING_VERSION" $PROPOSED_BROWSER_MARKETING_VERSION
 put_version "BROWSER_PROJECT_VERSION" $PROPOSED_BROWSER_PROJECT_VERSION
 
-/usr/libexec/PlistBuddy -c "Set :PreferenceSpecifiers:0:DefaultValue $PROPOSED_BROWSER_MARKETING_VERSION" $ROOT_PLIST_FILE
+/usr/libexec/PlistBuddy -c "Set :PreferenceSpecifiers:0:DefaultValue $PROPOSED_BROWSER_MARKETING_VERSION" $IOS_ROOT_PLIST_FILE
