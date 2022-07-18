@@ -3371,6 +3371,19 @@
 			path = History;
 			sourceTree = "<group>";
 		};
+		20B2DC5428501D870095ED46 /* popup */ = {
+			isa = PBXGroup;
+			children = (
+				20B2DC5528501D870095ED46 /* popup.js */,
+				20B2DC5728501D870095ED46 /* popup.html */,
+				20B2DC5828501D870095ED46 /* popup.css */,
+				20587945286F6A0800994E15 /* picker.css */,
+				20587946286F6A0800994E15 /* switch.css */,
+				20587944286F6A0800994E15 /* checkmark.png */,
+			);
+			path = popup;
+			sourceTree = "<group>";
+		};
 		20C76FCF287DD9A900660915 /* Tab */ = {
 			isa = PBXGroup;
 			children = (
@@ -3387,19 +3400,6 @@
 				1DA3CE6224EEE83200422BB2 /* SavedTab+ConfigureExtension.swift */,
 			);
 			path = SavedTab;
-            sourceTree = "<group>";
-        };
-		20B2DC5428501D870095ED46 /* popup */ = {
-			isa = PBXGroup;
-			children = (
-				20B2DC5528501D870095ED46 /* popup.js */,
-				20B2DC5728501D870095ED46 /* popup.html */,
-				20B2DC5828501D870095ED46 /* popup.css */,
-				20587945286F6A0800994E15 /* picker.css */,
-				20587946286F6A0800994E15 /* switch.css */,
-				20587944286F6A0800994E15 /* checkmark.png */,
-			);
-			path = popup;
 			sourceTree = "<group>";
 		};
 		23ED80FD25C899D700D0E9D5 /* DefaultBrowserOnboarding */ = {
@@ -8889,7 +8889,7 @@
 					"-framework",
 					SafariServices,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "co.neeva.app.ios.browser.SafariExtension";
+				PRODUCT_BUNDLE_IDENTIFIER = co.neeva.app.ios.browser.SafariExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Neeva Browser Safari Extension";
 				SKIP_INSTALL = YES;
@@ -9842,8 +9842,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Developer;
 				CODE_SIGN_ENTITLEMENTS = Client/Entitlements/NeevaDev.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = A9735M6NPH;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Client/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -9857,6 +9857,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(NEEVA_ROOT_BUNDLE_INDENTIFIER)";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SHARED_DEFS = "MOZ_TARGET_CLIENT $(inherited)";
 				SKIP_INSTALL = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client/Client-Bridging-Header.h";
