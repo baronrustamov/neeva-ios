@@ -496,9 +496,10 @@ extension BrowserViewController: WKNavigationDelegate {
             let shouldOpenInApp = OpenInAppModel.shared.shouldOpenInApp(for: host)
         {
             // User has set their preference for opening in external app.
-            // If they opened in app, we should do that.
-            // If they canceled we should not do anything.
+            // If they previously opened in app, we should do that.
+            // If they previously canceled we should not do anything, and let the url load.
             if shouldOpenInApp {
+                tabManager.selectedTab?.stop()
                 OpenInAppModel.shared.openInApp(url: url, toastViewManager: self.toastViewManager)
             }
         } else {

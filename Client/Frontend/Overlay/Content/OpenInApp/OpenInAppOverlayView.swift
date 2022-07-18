@@ -74,6 +74,5 @@ struct OpenInAppOverlayView_Previews: PreviewProvider {
             OpenInAppOverlayView(
                 appName: "Neeva", url: URL(string: "example.com")!, onOpen: {}, onCancel: {})
         }
-
     }
 }
