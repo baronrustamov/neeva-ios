@@ -32,9 +32,6 @@ struct BrowserBottomBarView: View {
                     .frame(
                         height: UIConstants.TopToolbarHeightWithToolbarButtonsShowing
                     )
-                    .onHeightOfViewChanged { height in
-                        self.chromeModel.bottomBarHeight = height
-                    }
             }
         }.ignoresSafeArea(.keyboard)
     }

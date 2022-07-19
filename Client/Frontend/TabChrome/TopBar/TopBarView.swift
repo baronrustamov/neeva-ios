@@ -29,10 +29,6 @@ struct TopBarView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            if UIConstants.enableBottomURLBar {
-                separator.padding(.bottom, chrome.inlineToolbar ? 0 : 3)
-            }
-
             HStack(spacing: chrome.inlineToolbar ? 12 : 0) {
                 if Defaults[.didFirstNavigation] && chrome.inlineToolbar
                     && !chrome.isEditingLocation
@@ -102,14 +98,6 @@ struct TopBarView: View {
             .padding(.horizontal, shouldInsetHorizontally ? 12 : 0)
             .padding(.bottom, chrome.estimatedProgress == nil ? 0 : -1)
 
-            if chrome.showTopCardStrip {
-                GeometryReader { geo in
-                    CardStripContent(
-                        bvc: SceneDelegate.getBVC(with: chrome.topBarDelegate?.tabManager.scene),
-                        width: geo.size.width)
-                }
-            }
-
             if !chrome.isEditingLocation {
                 ZStack {
                     if let progress = chrome.estimatedProgress {
@@ -125,9 +113,7 @@ struct TopBarView: View {
                 .animation(.spring(), value: chrome.estimatedProgress)
             }
 
-            if !UIConstants.enableBottomURLBar {
-                separator
-            }
+            separator
         }
         .background(
             GeometryReader { geom in
@@ -143,7 +129,6 @@ struct TopBarView: View {
         .accessibilityElement(children: .contain)
         .offset(
             y: scrollingControlModel.headerTopOffset
-                * (UIConstants.enableBottomURLBar ? -1 : 1)
         )
     }
 }

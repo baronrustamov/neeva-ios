@@ -7,6 +7,7 @@ import Shared
 import SwiftUI
 
 class BrowserModel: ObservableObject {
+    // MARK: - Properties
     @Published var showGrid = false {
         didSet {
             if showGrid {
@@ -21,20 +22,21 @@ class BrowserModel: ObservableObject {
         }
     }
 
+    let cardStripModel: CardStripModel
+    let cardTransitionModel: CardTransitionModel
+    let contentVisibilityModel: ContentVisibilityModel
+    let cookieCutterModel = CookieCutterModel()
     let gridModel: GridModel
     let incognitoModel: IncognitoModel
+    let scrollingControlModel: ScrollingControlModel
+    let switcherToolbarModel: SwitcherToolbarModel
     let tabManager: TabManager
 
-    var cardTransitionModel: CardTransitionModel
-    var contentVisibilityModel: ContentVisibilityModel
-    var scrollingControlModel: ScrollingControlModel
-    let switcherToolbarModel: SwitcherToolbarModel
-    let cookieCutterModel = CookieCutterModel()
-
+    let notificationViewManager: NotificationViewManager
     let overlayManager: OverlayManager
-    var toastViewManager: ToastViewManager
-    var notificationViewManager: NotificationViewManager
+    let toastViewManager: ToastViewManager
 
+    // MARK: - Methods
     func showGridWithAnimation() {
         gridModel.setSwitcherState(to: .tabs)
         gridModel.switchModeWithoutAnimation = true
@@ -189,17 +191,18 @@ class BrowserModel: ObservableObject {
         toastViewManager: ToastViewManager, notificationViewManager: NotificationViewManager,
         overlayManager: OverlayManager
     ) {
-        self.gridModel = gridModel
-        self.tabManager = tabManager
-        self.incognitoModel = incognitoModel
+        self.cardStripModel = CardStripModel()
         self.cardTransitionModel = CardTransitionModel()
         self.contentVisibilityModel = ContentVisibilityModel()
+        self.gridModel = gridModel
+        self.incognitoModel = incognitoModel
         self.scrollingControlModel = ScrollingControlModel(
             tabManager: tabManager, chromeModel: chromeModel)
         self.switcherToolbarModel = switcherToolbarModel
+        self.tabManager = tabManager
 
-        self.toastViewManager = toastViewManager
         self.notificationViewManager = notificationViewManager
         self.overlayManager = overlayManager
+        self.toastViewManager = toastViewManager
     }
 }

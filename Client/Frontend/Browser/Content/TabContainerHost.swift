@@ -125,8 +125,8 @@ struct TabContainerContent: View {
         // Workaround a SwiftUI quirk. When the offset and padding negate one another
         // exactly, the container view will appear to snap up by an amount equal to
         // the padding. To avoid this, we apply the following hack :-/
-        if offsetY <= -chromeModel.topBarHeight {
-            offsetY = -chromeModel.topBarHeight + 0.1
+        if offsetY <= -scrollingControlModel.headerHeight {
+            offsetY = -scrollingControlModel.headerHeight + 0.1
         }
         return offsetY
     }
