@@ -33,6 +33,7 @@ class MockUserInfoProvider: UserInfoProvider {
                     authProvider: SSOProvider.okta.rawValue,
                     featureFlags: [],
                     userFlags: [],
+                    subscription: nil,
                     subscriptionType: nil,
                     isVerified: true
                 )

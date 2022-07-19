@@ -3022,6 +3022,146 @@ public enum PerfTraceStatus: RawRepresentable, Equatable, Hashable, CaseIterable
   }
 }
 
+public enum SubscriptionStatus: RawRepresentable, Equatable, Hashable, CaseIterable, Apollo.JSONDecodable, Apollo.JSONEncodable {
+  public typealias RawValue = String
+  case active
+  case pastDue
+  case unknown
+  /// Auto generated constant for unknown enum values
+  case __unknown(RawValue)
+
+  public init?(rawValue: RawValue) {
+    switch rawValue {
+      case "Active": self = .active
+      case "PastDue": self = .pastDue
+      case "Unknown": self = .unknown
+      default: self = .__unknown(rawValue)
+    }
+  }
+
+  public var rawValue: RawValue {
+    switch self {
+      case .active: return "Active"
+      case .pastDue: return "PastDue"
+      case .unknown: return "Unknown"
+      case .__unknown(let value): return value
+    }
+  }
+
+  public static func == (lhs: SubscriptionStatus, rhs: SubscriptionStatus) -> Bool {
+    switch (lhs, rhs) {
+      case (.active, .active): return true
+      case (.pastDue, .pastDue): return true
+      case (.unknown, .unknown): return true
+      case (.__unknown(let lhsValue), .__unknown(let rhsValue)): return lhsValue == rhsValue
+      default: return false
+    }
+  }
+
+  public static var allCases: [SubscriptionStatus] {
+    return [
+      .active,
+      .pastDue,
+      .unknown,
+    ]
+  }
+}
+
+public enum SubscriptionPlan: RawRepresentable, Equatable, Hashable, CaseIterable, Apollo.JSONDecodable, Apollo.JSONEncodable {
+  public typealias RawValue = String
+  case monthly
+  case annual
+  case unknown
+  /// Auto generated constant for unknown enum values
+  case __unknown(RawValue)
+
+  public init?(rawValue: RawValue) {
+    switch rawValue {
+      case "Monthly": self = .monthly
+      case "Annual": self = .annual
+      case "Unknown": self = .unknown
+      default: self = .__unknown(rawValue)
+    }
+  }
+
+  public var rawValue: RawValue {
+    switch self {
+      case .monthly: return "Monthly"
+      case .annual: return "Annual"
+      case .unknown: return "Unknown"
+      case .__unknown(let value): return value
+    }
+  }
+
+  public static func == (lhs: SubscriptionPlan, rhs: SubscriptionPlan) -> Bool {
+    switch (lhs, rhs) {
+      case (.monthly, .monthly): return true
+      case (.annual, .annual): return true
+      case (.unknown, .unknown): return true
+      case (.__unknown(let lhsValue), .__unknown(let rhsValue)): return lhsValue == rhsValue
+      default: return false
+    }
+  }
+
+  public static var allCases: [SubscriptionPlan] {
+    return [
+      .monthly,
+      .annual,
+      .unknown,
+    ]
+  }
+}
+
+public enum SubscriptionSource: RawRepresentable, Equatable, Hashable, CaseIterable, Apollo.JSONDecodable, Apollo.JSONEncodable {
+  public typealias RawValue = String
+  case `none`
+  case stripe
+  case apple
+  case lifetime
+  /// Auto generated constant for unknown enum values
+  case __unknown(RawValue)
+
+  public init?(rawValue: RawValue) {
+    switch rawValue {
+      case "None": self = .none
+      case "Stripe": self = .stripe
+      case "Apple": self = .apple
+      case "Lifetime": self = .lifetime
+      default: self = .__unknown(rawValue)
+    }
+  }
+
+  public var rawValue: RawValue {
+    switch self {
+      case .none: return "None"
+      case .stripe: return "Stripe"
+      case .apple: return "Apple"
+      case .lifetime: return "Lifetime"
+      case .__unknown(let value): return value
+    }
+  }
+
+  public static func == (lhs: SubscriptionSource, rhs: SubscriptionSource) -> Bool {
+    switch (lhs, rhs) {
+      case (.none, .none): return true
+      case (.stripe, .stripe): return true
+      case (.apple, .apple): return true
+      case (.lifetime, .lifetime): return true
+      case (.__unknown(let lhsValue), .__unknown(let rhsValue)): return lhsValue == rhsValue
+      default: return false
+    }
+  }
+
+  public static var allCases: [SubscriptionSource] {
+    return [
+      .none,
+      .stripe,
+      .apple,
+      .lifetime,
+    ]
+  }
+}
+
 public enum SubscriptionType: RawRepresentable, Equatable, Hashable, CaseIterable, Apollo.JSONDecodable, Apollo.JSONEncodable {
   public typealias RawValue = String
   case basic
@@ -3711,6 +3851,99 @@ public struct DomainTrustSignalsInput: GraphQLMapConvertible {
     set {
       graphQLMap.updateValue(newValue, forKey: "domains")
     }
+  }
+}
+
+public struct RegisterAppleSubscriptionInput: GraphQLMapConvertible {
+  public var graphQLMap: GraphQLMap
+
+  /// - Parameters:
+  ///   - originalTransactionId: The original transaction ID. Must be provided for every subscription.
+  ///   - userUuid: Uniquely identifies the user. Created when the subscription is is made.
+  ///   - plan: The subscription plan.
+  ///   - expiration: The date that the subscription expires.
+  public init(originalTransactionId: String, userUuid: Swift.Optional<String?> = nil, plan: Swift.Optional<AppleSubscriptionPlan?> = nil, expiration: Swift.Optional<String?> = nil) {
+    graphQLMap = ["originalTransactionID": originalTransactionId, "userUUID": userUuid, "plan": plan, "expiration": expiration]
+  }
+
+  /// The original transaction ID. Must be provided for every subscription.
+  public var originalTransactionId: String {
+    get {
+      return graphQLMap["originalTransactionID"] as! String
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "originalTransactionID")
+    }
+  }
+
+  /// Uniquely identifies the user. Created when the subscription is is made.
+  public var userUuid: Swift.Optional<String?> {
+    get {
+      return graphQLMap["userUUID"] as? Swift.Optional<String?> ?? Swift.Optional<String?>.none
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "userUUID")
+    }
+  }
+
+  /// The subscription plan.
+  public var plan: Swift.Optional<AppleSubscriptionPlan?> {
+    get {
+      return graphQLMap["plan"] as? Swift.Optional<AppleSubscriptionPlan?> ?? Swift.Optional<AppleSubscriptionPlan?>.none
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "plan")
+    }
+  }
+
+  /// The date that the subscription expires.
+  public var expiration: Swift.Optional<String?> {
+    get {
+      return graphQLMap["expiration"] as? Swift.Optional<String?> ?? Swift.Optional<String?>.none
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "expiration")
+    }
+  }
+}
+
+public enum AppleSubscriptionPlan: RawRepresentable, Equatable, Hashable, CaseIterable, Apollo.JSONDecodable, Apollo.JSONEncodable {
+  public typealias RawValue = String
+  case monthly
+  case annual
+  /// Auto generated constant for unknown enum values
+  case __unknown(RawValue)
+
+  public init?(rawValue: RawValue) {
+    switch rawValue {
+      case "Monthly": self = .monthly
+      case "Annual": self = .annual
+      default: self = .__unknown(rawValue)
+    }
+  }
+
+  public var rawValue: RawValue {
+    switch self {
+      case .monthly: return "Monthly"
+      case .annual: return "Annual"
+      case .__unknown(let value): return value
+    }
+  }
+
+  public static func == (lhs: AppleSubscriptionPlan, rhs: AppleSubscriptionPlan) -> Bool {
+    switch (lhs, rhs) {
+      case (.monthly, .monthly): return true
+      case (.annual, .annual): return true
+      case (.__unknown(let lhsValue), .__unknown(let rhsValue)): return lhsValue == rhsValue
+      default: return false
+    }
+  }
+
+  public static var allCases: [AppleSubscriptionPlan] {
+    return [
+      .monthly,
+      .annual,
+    ]
   }
 }
 
@@ -5000,6 +5233,17 @@ public final class UserInfoQuery: GraphQLQuery {
           stringValue
         }
         authProvider
+        subscription {
+          __typename
+          status
+          canceled
+          plan
+          source
+          apple {
+            __typename
+            uuid
+          }
+        }
         subscriptionType
       }
     }
@@ -5007,7 +5251,7 @@ public final class UserInfoQuery: GraphQLQuery {
 
   public let operationName: String = "UserInfo"
 
-  public let operationIdentifier: String? = "8cf56e9c3248d91180131675507fb3c06a45f613d81f08a51501e9bd004638bd"
+  public let operationIdentifier: String? = "b5f74ad14cb5f07636124f16243b0300b51588fdeaa1f324faee7d0ccb561a8f"
 
   public init() {
   }
@@ -5053,6 +5297,7 @@ public final class UserInfoQuery: GraphQLQuery {
           GraphQLField("isVerified", type: .scalar(Bool.self)),
           GraphQLField("featureFlags", type: .nonNull(.list(.nonNull(.object(FeatureFlag.selections))))),
           GraphQLField("authProvider", type: .scalar(String.self)),
+          GraphQLField("subscription", type: .object(Subscription.selections)),
           GraphQLField("subscriptionType", type: .scalar(SubscriptionType.self)),
         ]
       }
@@ -5063,8 +5308,8 @@ public final class UserInfoQuery: GraphQLQuery {
         self.resultMap = unsafeResultMap
       }
 
-      public init(id: GraphQLID, profile: Profile, flags: [String], isVerified: Bool? = nil, featureFlags: [FeatureFlag], authProvider: String? = nil, subscriptionType: SubscriptionType? = nil) {
-        self.init(unsafeResultMap: ["__typename": "User", "id": id, "profile": profile.resultMap, "flags": flags, "isVerified": isVerified, "featureFlags": featureFlags.map { (value: FeatureFlag) -> ResultMap in value.resultMap }, "authProvider": authProvider, "subscriptionType": subscriptionType])
+      public init(id: GraphQLID, profile: Profile, flags: [String], isVerified: Bool? = nil, featureFlags: [FeatureFlag], authProvider: String? = nil, subscription: Subscription? = nil, subscriptionType: SubscriptionType? = nil) {
+        self.init(unsafeResultMap: ["__typename": "User", "id": id, "profile": profile.resultMap, "flags": flags, "isVerified": isVerified, "featureFlags": featureFlags.map { (value: FeatureFlag) -> ResultMap in value.resultMap }, "authProvider": authProvider, "subscription": subscription.flatMap { (value: Subscription) -> ResultMap in value.resultMap }, "subscriptionType": subscriptionType])
       }
 
       public var __typename: String {
@@ -5133,6 +5378,16 @@ public final class UserInfoQuery: GraphQLQuery {
         }
         set {
           resultMap.updateValue(newValue, forKey: "authProvider")
+        }
+      }
+
+      /// User's paid subscription information.
+      public var subscription: Subscription? {
+        get {
+          return (resultMap["subscription"] as? ResultMap).flatMap { Subscription(unsafeResultMap: $0) }
+        }
+        set {
+          resultMap.updateValue(newValue?.resultMap, forKey: "subscription")
         }
       }
 
@@ -5289,6 +5544,129 @@ public final class UserInfoQuery: GraphQLQuery {
           }
           set {
             resultMap.updateValue(newValue, forKey: "stringValue")
+          }
+        }
+      }
+
+      public struct Subscription: GraphQLSelectionSet {
+        public static let possibleTypes: [String] = ["SubscriptionInfo"]
+
+        public static var selections: [GraphQLSelection] {
+          return [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("status", type: .scalar(SubscriptionStatus.self)),
+            GraphQLField("canceled", type: .scalar(Bool.self)),
+            GraphQLField("plan", type: .scalar(SubscriptionPlan.self)),
+            GraphQLField("source", type: .scalar(SubscriptionSource.self)),
+            GraphQLField("apple", type: .object(Apple.selections)),
+          ]
+        }
+
+        public private(set) var resultMap: ResultMap
+
+        public init(unsafeResultMap: ResultMap) {
+          self.resultMap = unsafeResultMap
+        }
+
+        public init(status: SubscriptionStatus? = nil, canceled: Bool? = nil, plan: SubscriptionPlan? = nil, source: SubscriptionSource? = nil, apple: Apple? = nil) {
+          self.init(unsafeResultMap: ["__typename": "SubscriptionInfo", "status": status, "canceled": canceled, "plan": plan, "source": source, "apple": apple.flatMap { (value: Apple) -> ResultMap in value.resultMap }])
+        }
+
+        public var __typename: String {
+          get {
+            return resultMap["__typename"]! as! String
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        public var status: SubscriptionStatus? {
+          get {
+            return resultMap["status"] as? SubscriptionStatus
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "status")
+          }
+        }
+
+        public var canceled: Bool? {
+          get {
+            return resultMap["canceled"] as? Bool
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "canceled")
+          }
+        }
+
+        public var plan: SubscriptionPlan? {
+          get {
+            return resultMap["plan"] as? SubscriptionPlan
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "plan")
+          }
+        }
+
+        /// Where the user's subscription comes from. If the user does not have a
+        /// subscription, this will be None.
+        public var source: SubscriptionSource? {
+          get {
+            return resultMap["source"] as? SubscriptionSource
+          }
+          set {
+            resultMap.updateValue(newValue, forKey: "source")
+          }
+        }
+
+        /// Apple-specific subscription information. If the source is not 'Apple', this
+        /// will be null.
+        public var apple: Apple? {
+          get {
+            return (resultMap["apple"] as? ResultMap).flatMap { Apple(unsafeResultMap: $0) }
+          }
+          set {
+            resultMap.updateValue(newValue?.resultMap, forKey: "apple")
+          }
+        }
+
+        public struct Apple: GraphQLSelectionSet {
+          public static let possibleTypes: [String] = ["SubscriptionInfoApple"]
+
+          public static var selections: [GraphQLSelection] {
+            return [
+              GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+              GraphQLField("uuid", type: .scalar(String.self)),
+            ]
+          }
+
+          public private(set) var resultMap: ResultMap
+
+          public init(unsafeResultMap: ResultMap) {
+            self.resultMap = unsafeResultMap
+          }
+
+          public init(uuid: String? = nil) {
+            self.init(unsafeResultMap: ["__typename": "SubscriptionInfoApple", "uuid": uuid])
+          }
+
+          public var __typename: String {
+            get {
+              return resultMap["__typename"]! as! String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          /// If the user has an Apple subscription, this is the user's UUID.
+          public var uuid: String? {
+            get {
+              return resultMap["uuid"] as? String
+            }
+            set {
+              resultMap.updateValue(newValue, forKey: "uuid")
+            }
           }
         }
       }
@@ -7670,6 +8048,115 @@ public final class CryptoWalletQuery: GraphQLQuery {
   }
 }
 
+public final class RegisterAppleSubscriptionMutation: GraphQLMutation {
+  /// The raw GraphQL definition of this operation.
+  public let operationDefinition: String =
+    """
+    mutation RegisterAppleSubscription($input: RegisterAppleSubscriptionInput!) {
+      registerAppleSubscription(input: $input) {
+        __typename
+        succeeded
+        error
+      }
+    }
+    """
+
+  public let operationName: String = "RegisterAppleSubscription"
+
+  public let operationIdentifier: String? = "42fb26713ff4f8a5a50d0f0741b0d9029040a14ec835d5ee33d0ea473f9a0df9"
+
+  public var input: RegisterAppleSubscriptionInput
+
+  public init(input: RegisterAppleSubscriptionInput) {
+    self.input = input
+  }
+
+  public var variables: GraphQLMap? {
+    return ["input": input]
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["Mutation"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("registerAppleSubscription", arguments: ["input": GraphQLVariable("input")], type: .object(RegisterAppleSubscription.selections)),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(registerAppleSubscription: RegisterAppleSubscription? = nil) {
+      self.init(unsafeResultMap: ["__typename": "Mutation", "registerAppleSubscription": registerAppleSubscription.flatMap { (value: RegisterAppleSubscription) -> ResultMap in value.resultMap }])
+    }
+
+    /// Register a new Apple subscription.
+    public var registerAppleSubscription: RegisterAppleSubscription? {
+      get {
+        return (resultMap["registerAppleSubscription"] as? ResultMap).flatMap { RegisterAppleSubscription(unsafeResultMap: $0) }
+      }
+      set {
+        resultMap.updateValue(newValue?.resultMap, forKey: "registerAppleSubscription")
+      }
+    }
+
+    public struct RegisterAppleSubscription: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["RegisterAppleSubscriptionResponse"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("succeeded", type: .nonNull(.scalar(Bool.self))),
+          GraphQLField("error", type: .scalar(String.self)),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(succeeded: Bool, error: String? = nil) {
+        self.init(unsafeResultMap: ["__typename": "RegisterAppleSubscriptionResponse", "succeeded": succeeded, "error": error])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// Whether or not the registration was successful.
+      public var succeeded: Bool {
+        get {
+          return resultMap["succeeded"]! as! Bool
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "succeeded")
+        }
+      }
+
+      /// Human-readable error string.
+      public var error: String? {
+        get {
+          return resultMap["error"] as? String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "error")
+        }
+      }
+    }
+  }
+}
+
 public final class SearchQuery: GraphQLQuery {
   /// The raw GraphQL definition of this operation.
   public let operationDefinition: String =
@@ -8429,7 +8916,7 @@ public final class SearchQuery: GraphQLQuery {
           }
 
           public struct SubResult: GraphQLSelectionSet {
-            public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelView", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
+            public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "CovidBanner", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelFactGroup", "TravelLocation", "TravelShelf", "TravelView", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
 
             public static var selections: [GraphQLSelection] {
               return [
@@ -8462,6 +8949,10 @@ public final class SearchQuery: GraphQLQuery {
 
             public static func makeContact() -> SubResult {
               return SubResult(unsafeResultMap: ["__typename": "Contact"])
+            }
+
+            public static func makeCovidBanner() -> SubResult {
+              return SubResult(unsafeResultMap: ["__typename": "CovidBanner"])
             }
 
             public static func makeCurrency() -> SubResult {
@@ -8710,6 +9201,18 @@ public final class SearchQuery: GraphQLQuery {
 
             public static func makeTranslation() -> SubResult {
               return SubResult(unsafeResultMap: ["__typename": "Translation"])
+            }
+
+            public static func makeTravelFactGroup() -> SubResult {
+              return SubResult(unsafeResultMap: ["__typename": "TravelFactGroup"])
+            }
+
+            public static func makeTravelLocation() -> SubResult {
+              return SubResult(unsafeResultMap: ["__typename": "TravelLocation"])
+            }
+
+            public static func makeTravelShelf() -> SubResult {
+              return SubResult(unsafeResultMap: ["__typename": "TravelShelf"])
             }
 
             public static func makeTravelView() -> SubResult {
@@ -9090,7 +9593,7 @@ public final class SearchQuery: GraphQLQuery {
           }
 
           public struct TypeSpecific: GraphQLSelectionSet {
-            public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelView", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
+            public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "CovidBanner", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelFactGroup", "TravelLocation", "TravelShelf", "TravelView", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
 
             public static var selections: [GraphQLSelection] {
               return [
@@ -9123,6 +9626,10 @@ public final class SearchQuery: GraphQLQuery {
 
             public static func makeContact() -> TypeSpecific {
               return TypeSpecific(unsafeResultMap: ["__typename": "Contact"])
+            }
+
+            public static func makeCovidBanner() -> TypeSpecific {
+              return TypeSpecific(unsafeResultMap: ["__typename": "CovidBanner"])
             }
 
             public static func makeCurrency() -> TypeSpecific {
@@ -9347,6 +9854,18 @@ public final class SearchQuery: GraphQLQuery {
 
             public static func makeTranslation() -> TypeSpecific {
               return TypeSpecific(unsafeResultMap: ["__typename": "Translation"])
+            }
+
+            public static func makeTravelFactGroup() -> TypeSpecific {
+              return TypeSpecific(unsafeResultMap: ["__typename": "TravelFactGroup"])
+            }
+
+            public static func makeTravelLocation() -> TypeSpecific {
+              return TypeSpecific(unsafeResultMap: ["__typename": "TravelLocation"])
+            }
+
+            public static func makeTravelShelf() -> TypeSpecific {
+              return TypeSpecific(unsafeResultMap: ["__typename": "TravelShelf"])
             }
 
             public static func makeTravelView() -> TypeSpecific {
@@ -17040,7 +17559,7 @@ public final class GetRelatedSpacesQuery: GraphQLQuery {
                   }
 
                   public struct TypeSpecific: GraphQLSelectionSet {
-                    public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelView", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
+                    public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "CovidBanner", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelFactGroup", "TravelLocation", "TravelShelf", "TravelView", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
 
                     public static var selections: [GraphQLSelection] {
                       return [
@@ -17073,6 +17592,10 @@ public final class GetRelatedSpacesQuery: GraphQLQuery {
 
                     public static func makeContact() -> TypeSpecific {
                       return TypeSpecific(unsafeResultMap: ["__typename": "Contact"])
+                    }
+
+                    public static func makeCovidBanner() -> TypeSpecific {
+                      return TypeSpecific(unsafeResultMap: ["__typename": "CovidBanner"])
                     }
 
                     public static func makeCurrency() -> TypeSpecific {
@@ -17313,6 +17836,18 @@ public final class GetRelatedSpacesQuery: GraphQLQuery {
 
                     public static func makeTranslation() -> TypeSpecific {
                       return TypeSpecific(unsafeResultMap: ["__typename": "Translation"])
+                    }
+
+                    public static func makeTravelFactGroup() -> TypeSpecific {
+                      return TypeSpecific(unsafeResultMap: ["__typename": "TravelFactGroup"])
+                    }
+
+                    public static func makeTravelLocation() -> TypeSpecific {
+                      return TypeSpecific(unsafeResultMap: ["__typename": "TravelLocation"])
+                    }
+
+                    public static func makeTravelShelf() -> TypeSpecific {
+                      return TypeSpecific(unsafeResultMap: ["__typename": "TravelShelf"])
                     }
 
                     public static func makeTravelView() -> TypeSpecific {
@@ -19465,7 +20000,7 @@ public final class GetSpacesDataQuery: GraphQLQuery {
                 }
 
                 public struct TypeSpecific: GraphQLSelectionSet {
-                  public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelView", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
+                  public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "CovidBanner", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelFactGroup", "TravelLocation", "TravelShelf", "TravelView", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
 
                   public static var selections: [GraphQLSelection] {
                     return [
@@ -19498,6 +20033,10 @@ public final class GetSpacesDataQuery: GraphQLQuery {
 
                   public static func makeContact() -> TypeSpecific {
                     return TypeSpecific(unsafeResultMap: ["__typename": "Contact"])
+                  }
+
+                  public static func makeCovidBanner() -> TypeSpecific {
+                    return TypeSpecific(unsafeResultMap: ["__typename": "CovidBanner"])
                   }
 
                   public static func makeCurrency() -> TypeSpecific {
@@ -19738,6 +20277,18 @@ public final class GetSpacesDataQuery: GraphQLQuery {
 
                   public static func makeTranslation() -> TypeSpecific {
                     return TypeSpecific(unsafeResultMap: ["__typename": "Translation"])
+                  }
+
+                  public static func makeTravelFactGroup() -> TypeSpecific {
+                    return TypeSpecific(unsafeResultMap: ["__typename": "TravelFactGroup"])
+                  }
+
+                  public static func makeTravelLocation() -> TypeSpecific {
+                    return TypeSpecific(unsafeResultMap: ["__typename": "TravelLocation"])
+                  }
+
+                  public static func makeTravelShelf() -> TypeSpecific {
+                    return TypeSpecific(unsafeResultMap: ["__typename": "TravelShelf"])
                   }
 
                   public static func makeTravelView() -> TypeSpecific {
@@ -23653,7 +24204,7 @@ public struct SpacesMetadata: GraphQLFragment {
         }
 
         public struct TypeSpecific: GraphQLSelectionSet {
-          public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelView", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
+          public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "CovidBanner", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelFactGroup", "TravelLocation", "TravelShelf", "TravelView", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
 
           public static var selections: [GraphQLSelection] {
             return [
@@ -23686,6 +24237,10 @@ public struct SpacesMetadata: GraphQLFragment {
 
           public static func makeContact() -> TypeSpecific {
             return TypeSpecific(unsafeResultMap: ["__typename": "Contact"])
+          }
+
+          public static func makeCovidBanner() -> TypeSpecific {
+            return TypeSpecific(unsafeResultMap: ["__typename": "CovidBanner"])
           }
 
           public static func makeCurrency() -> TypeSpecific {
@@ -23926,6 +24481,18 @@ public struct SpacesMetadata: GraphQLFragment {
 
           public static func makeTranslation() -> TypeSpecific {
             return TypeSpecific(unsafeResultMap: ["__typename": "Translation"])
+          }
+
+          public static func makeTravelFactGroup() -> TypeSpecific {
+            return TypeSpecific(unsafeResultMap: ["__typename": "TravelFactGroup"])
+          }
+
+          public static func makeTravelLocation() -> TypeSpecific {
+            return TypeSpecific(unsafeResultMap: ["__typename": "TravelLocation"])
+          }
+
+          public static func makeTravelShelf() -> TypeSpecific {
+            return TypeSpecific(unsafeResultMap: ["__typename": "TravelShelf"])
           }
 
           public static func makeTravelView() -> TypeSpecific {

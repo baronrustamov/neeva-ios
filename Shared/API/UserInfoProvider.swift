@@ -17,13 +17,15 @@ public struct UserInfo {
     let authProvider: String?
     let featureFlags: [UserInfoQuery.Data.User.FeatureFlag]
     let userFlags: [String]
+    let subscription: UserInfoQuery.Data.User.Subscription?
     let subscriptionType: SubscriptionType?
     let isVerified: Bool
 
     public init(
         id: String?, name: String?, email: String?, pictureUrl: String?, authProvider: String?,
         featureFlags: [UserInfoQuery.Data.User.FeatureFlag], userFlags: [String],
-        subscriptionType: SubscriptionType?, isVerified: Bool
+        subscription: UserInfoQuery.Data.User.Subscription?, subscriptionType: SubscriptionType?,
+        isVerified: Bool
     ) {
         self.id = id
         self.name = name
@@ -32,6 +34,7 @@ public struct UserInfo {
         self.authProvider = authProvider
         self.featureFlags = featureFlags
         self.userFlags = userFlags
+        self.subscription = subscription
         self.subscriptionType = subscriptionType
         self.isVerified = isVerified
     }
@@ -72,6 +75,7 @@ open class UserInfoProvider {
                         authProvider: data.user?.authProvider,
                         featureFlags: data.user?.featureFlags ?? [],
                         userFlags: data.user?.flags ?? [],
+                        subscription: data.user?.subscription,
                         subscriptionType: data.user?.subscriptionType,
                         isVerified: data.user?.isVerified ?? true
                     ))
