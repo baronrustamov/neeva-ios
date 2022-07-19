@@ -67,7 +67,7 @@ struct SpaceEntityDetailView: View {
 
             }.background(Color.DefaultBackground)
 
-            if details.data.isPinned {
+            if details.isPinned {
                 Image(systemSymbol: .pinFill)
                     .resizable()
                     .foregroundColor(.secondaryLabel)

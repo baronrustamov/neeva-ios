@@ -318,12 +318,13 @@ class SpaceEntityThumbnail: CardDetails, AccessingManagerProvider {
 
     let spaceID: String
     let space: Space?
-    @ObservedObject var data: SpaceEntityData
+    var data: SpaceEntityData
 
     var id: String
     var item: SpaceEntityData? { manager.get(for: id) }
     var closeButtonImage: UIImage? = nil
     var accessibilityLabel: String = "Space Item"
+    @Published var isPinned: Bool = false
 
     var ACL: SpaceACLLevel {
         manager.ACL
@@ -367,6 +368,7 @@ class SpaceEntityThumbnail: CardDetails, AccessingManagerProvider {
         self.data = data
         self.id = data.id
         self.space = space
+        self.isPinned = data.isPinned
     }
 
     func webImage(url: URL) -> some View {

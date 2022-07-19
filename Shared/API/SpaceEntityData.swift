@@ -5,7 +5,7 @@
 import Foundation
 import UIKit
 
-public class SpaceEntityData: ObservableObject {
+public struct SpaceEntityData {
     typealias SpaceEntity = SpacesMetadata.Entity.SpaceEntity
     typealias EntityRecipe = SpacesMetadata.Entity.SpaceEntity.Content
         .TypeSpecific.AsWeb.Web.Recipe
@@ -28,13 +28,13 @@ public class SpaceEntityData: ObservableObject {
     typealias ProductRating = PreviewEntity.ProductRating
 
     public let id: String
+    public let url: URL?
+    public let title: String?
+    public let snippet: String?
+    public let thumbnail: String?
+    public var isPinned: Bool
+    public let previewEntity: PreviewEntity
     public var generatorID: String?
-    @Published public var url: URL?
-    @Published public var title: String?
-    @Published public var snippet: String?
-    @Published public var thumbnail: String?
-    @Published public var isPinned: Bool
-    @Published public var previewEntity: PreviewEntity
 
     public init(
         id: String, url: URL?, title: String?, snippet: String?,

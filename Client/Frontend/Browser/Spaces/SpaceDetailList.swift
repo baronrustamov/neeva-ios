@@ -226,7 +226,9 @@ struct SpaceDetailList: View {
         else {
             return
         }
+        
         primitive.item?.contentData?[index].isPinned = isPinned
+        primitive.allDetails[index].isPinned = isPinned
 
         if isPinned,
             let itemIndex = primitive.unpinnedDetails.firstIndex(where: {
