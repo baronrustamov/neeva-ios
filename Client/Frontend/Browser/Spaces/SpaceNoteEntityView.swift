@@ -12,11 +12,16 @@ struct SpaceNoteEntityView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(details.title)
-                .withFont(isDigestSeeMore ? .bodyLarge : .headingMedium)
-                .foregroundColor(
-                    isDigestSeeMore ? .ui.adaptive.blue : .label)
-
+            HStack(spacing: 0) {
+                Text(details.title)
+                    .withFont(isDigestSeeMore ? .bodyLarge : .headingMedium)
+                    .foregroundColor(
+                        isDigestSeeMore ? .ui.adaptive.blue : .label)
+                Spacer()
+                if details.isPinned {
+                    SpacePinView()
+                }
+            }
             if let snippet = details.data.snippet,
                 !snippet.isEmptyOrWhitespace()
             {

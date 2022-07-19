@@ -13,6 +13,7 @@ struct SpaceEntitySummaryView: View {
     let previewEntity: PreviewEntity
     let url: URL?
     let socialURL: URL?
+    @ObservedObject var details: SpaceEntityThumbnail
     @Default(.showDescriptions) var showDescriptions
 
     var body: some View {
@@ -23,12 +24,18 @@ struct SpaceEntitySummaryView: View {
                         .frame(width: 12, height: 12)
                         .cornerRadius(4)
                 }
-                Text(title)
-                    .withFont(.headingMedium)
-                    .lineLimit(2)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .foregroundColor(.label)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                HStack(spacing: 0) {
+                    Text(title)
+                        .withFont(.headingMedium)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .foregroundColor(.label)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Spacer()
+                    if details.isPinned {
+                        SpacePinView()
+                    }
+                }
             }
             if let url = url {
                 EntityInfoView(

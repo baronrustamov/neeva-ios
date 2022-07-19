@@ -8,8 +8,7 @@ import SwiftUI
 struct SpaceImageEntityView: View {
 
     var url: URL
-    var title: String?
-    var baseDomain: String?
+    @ObservedObject var details: SpaceEntityThumbnail
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -20,14 +19,19 @@ struct SpaceImageEntityView: View {
                 .background(Color.groupedBackground)
                 .cornerRadius(SpaceViewUX.ThumbnailCornerRadius)
                 .padding(.bottom, 8)
-
-            if let title = title {
-                Text(title)
-                    .withFont(.bodyLarge)
-                    .lineLimit(1)
-                    .foregroundColor(Color.label)
+            if let title = details.title {
+                HStack(spacing: 0) {
+                    Text(title)
+                        .withFont(.bodyLarge)
+                        .lineLimit(1)
+                        .foregroundColor(Color.label)
+                    Spacer()
+                    if details.isPinned {
+                        SpacePinView()
+                    }
+                }
             }
-            if let domain = baseDomain {
+            if let domain = details.data.url?.baseDomain {
                 Text(domain)
                     .withFont(.bodySmall)
                     .lineLimit(1)

@@ -226,27 +226,27 @@ struct SpaceDetailList: View {
         else {
             return
         }
-        
+
         primitive.item?.contentData?[index].isPinned = isPinned
         primitive.allDetails[index].isPinned = isPinned
 
         if isPinned,
-            let itemIndex = primitive.unpinnedDetails.firstIndex(where: {
+            let indexInSection = primitive.unpinnedDetails.firstIndex(where: {
                 $0.item?.id == spaceItemId
             }),
-            let actualIndex = primitive.allDetails.filter({ $0.data.isPinned }).firstIndex(
+            let indexInDetails = primitive.allDetails.filter({ $0.isPinned }).firstIndex(
                 where: { $0.id == spaceItemId })
         {
-            let item = primitive.unpinnedDetails.remove(at: itemIndex)
-            primitive.pinnedDetails.insert(item, at: actualIndex)
-        } else if let itemIndex = primitive.pinnedDetails.firstIndex(where: {
+            let item = primitive.unpinnedDetails.remove(at: indexInSection)
+            primitive.pinnedDetails.insert(item, at: indexInDetails)
+        } else if let indexInSection = primitive.pinnedDetails.firstIndex(where: {
             $0.item?.id == spaceItemId
         }),
-            let actualIndex = primitive.allDetails.filter({ !$0.data.isPinned }).firstIndex(
+            let indexInDetails = primitive.allDetails.filter({ !$0.isPinned }).firstIndex(
                 where: { $0.id == spaceItemId })
         {
-            let item = primitive.pinnedDetails.remove(at: itemIndex)
-            primitive.unpinnedDetails.insert(item, at: actualIndex)
+            let item = primitive.pinnedDetails.remove(at: indexInSection)
+            primitive.unpinnedDetails.insert(item, at: indexInDetails)
         }
 
         spacesModel.pinSpaceItem(

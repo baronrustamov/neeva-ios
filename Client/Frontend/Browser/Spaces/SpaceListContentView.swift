@@ -120,8 +120,7 @@ struct SpaceListContentView: View {
             if details.isImage, let url = details.data.url {
                 SpaceImageEntityView(
                     url: url,
-                    title: details.title,
-                    baseDomain: details.data.url?.baseDomain
+                    details: details
                 )
             } else {
                 VStack(spacing: SpaceViewUX.ItemPadding) {
@@ -134,7 +133,8 @@ struct SpaceListContentView: View {
                             snippetToDisplay: snippetToDisplay,
                             previewEntity: details.data.previewEntity,
                             url: details.data.url,
-                            socialURL: socialURL
+                            socialURL: socialURL,
+                            details: details
                         )
                     }
                     SpaceEntityDescriptionView(
