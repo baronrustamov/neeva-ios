@@ -6,6 +6,7 @@ import XCTest
 
 class TabGroupTests: BaseTestCase {
     override func setUp() {
+        launchArguments.append(LaunchArguments.DontAddTabOnLaunch)
         launchArguments.append(LaunchArguments.DisableCheatsheetBloomFilters)
 
         super.setUp()
@@ -50,8 +51,6 @@ class TabGroupTests: BaseTestCase {
 
     /// Tests the case above, with multiple tabs.
     func testNYTimesCaseCreatesTabGroupRepeated() {
-        closeAllTabs(createNewTab: false)
-
         openTestURLInNewTab()
         openTestURLInNewTab()
         openTestURLInNewTab()
@@ -77,8 +76,6 @@ class TabGroupTests: BaseTestCase {
     }
 
     func testNYTimesCaseIssue3088() {
-        closeAllTabs(createNewTab: false)
-
         openTestURLInNewTab(andNavigateAway: true)
         openTestURLInNewTab(andNavigateAway: true)
         openTestURLInNewTab()
@@ -88,8 +85,6 @@ class TabGroupTests: BaseTestCase {
     }
 
     func testNYTimesCaseAfterTabRestore() {
-        closeAllTabs(createNewTab: false)
-
         openTestURLInNewTab(andNavigateAway: true)
         openURL(path(forTestPage: "test-mozilla-book.html"))
 
@@ -98,10 +93,9 @@ class TabGroupTests: BaseTestCase {
         app.buttons["Close"].firstMatch.tap()
 
         // Restore the closed tab.
-        app.buttons["Add Tab"].press(forDuration: 2.0)
-        waitForExistence(app.collectionViews.firstMatch)
-
-        app.collectionViews.firstMatch.buttons.firstMatch.tap()
+        app.buttons["Add Tab"].press(forDuration: 1)
+        waitForExistence(app.buttons["IANA-managed Reserved Domains"])
+        app.buttons["IANA-managed Reserved Domains"].tap()
 
         // This should result in a Tab Group.
         openURL()
@@ -111,9 +105,7 @@ class TabGroupTests: BaseTestCase {
     }
 
     func testUniqueSearchQueriesAfterTabRestore() {
-        closeAllTabs(createNewTab: false)
-
-        openURL(path(forTestPage: "test-example.html?q=1"))  // Simulate a search query
+        openURL(path(forTestPage: "test-example.html?q=1"))
         openURL(path(forTestPage: "test-mozilla-book.html"))
 
         goToTabTray()
@@ -121,13 +113,11 @@ class TabGroupTests: BaseTestCase {
         app.buttons["Close"].firstMatch.tap()
 
         // Restore the closed tab.
-        app.buttons["Add Tab"].press(forDuration: 2.0)
-        waitForExistence(app.collectionViews.firstMatch)
-
-        app.collectionViews.firstMatch.buttons.firstMatch.tap()
+        waitForExistence(app.buttons["restore"])
+        app.buttons["restore"].tap(force: true)
 
         // This should not result in a tab group.
-        openURL(path(forTestPage: "test-example.html?q=2"))  // Simulate a search query
+        openURL(path(forTestPage: "test-example.html?q=2"))
 
         goToTabTray()
         XCTAssertFalse(app.buttons["Tab Group, Example Domain"].exists)

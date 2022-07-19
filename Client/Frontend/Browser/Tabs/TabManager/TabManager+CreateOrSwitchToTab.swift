@@ -15,7 +15,8 @@ extension TabManager {
         for url: URL,
         query: String? = nil, suggestedQuery: String? = nil,
         visitType: VisitType? = nil,
-        from parentTab: Tab? = nil
+        from parentTab: Tab? = nil,
+        keepInParentTabGroup: Bool = true
     )
         -> CreateOrSwitchToTabResult
     {
@@ -23,15 +24,17 @@ extension TabManager {
             ScreenshotHelper(controller: SceneDelegate.getBVC(with: scene)).takeScreenshot(tab)
         }
 
-        if let existingTab = getTabFor(url, with: parentTab) {
+        if let existingTab = getTabFor(url, with: keepInParentTabGroup ? parentTab : nil) {
             selectTab(existingTab, notify: true)
             existingTab.browserViewController?
                 .postLocationChangeNotificationForTab(existingTab, visitType: visitType)
+
             return .switchedToExistingTab
         } else {
             let newTab = addTab(
                 URLRequest(url: url),
                 afterTab: parentTab,
+                keepInParentTabGroup: keepInParentTabGroup,
                 flushToDisk: true,
                 zombie: false,
                 isIncognito: isIncognito,
@@ -39,7 +42,6 @@ extension TabManager {
                 suggestedQuery: suggestedQuery,
                 visitType: visitType
             )
-
             selectTab(newTab, notify: true)
 
             return .createdNewTab

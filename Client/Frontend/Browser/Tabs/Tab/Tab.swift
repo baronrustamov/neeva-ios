@@ -510,9 +510,6 @@ class Tab: NSObject, ObservableObject {
         canGoBack =
             backNavigationSuggestionQuery() != nil || parent != nil
             || !(parentSpaceID ?? "").isEmpty || webViewCanGoBack
-
-        print(
-            ">>> updateCanGoBack. backNavigationSuggestionQuery: ", backNavigationSuggestionQuery())
     }
 
     func updateCanGoForward() {
@@ -525,16 +522,13 @@ class Tab: NSObject, ObservableObject {
         }
     }
 
-    func goBack() {
-        // If the user opened this tab from another one, close this one to return to the parent.
+    func goBack(checkBackNavigationSuggestionQuery: Bool = true) {
+        // If the user opened this tab from FastTap, return to FastTap.
+        // Else if the user opened this tab from another one, close this one to return to the parent.
         // Else if the user opened this tab from a space, return to the SpaceDetailView.
-        // Else if the user opened this tab from FastTap, return to FastTap.
         // Else just perform a regular back navigation.
-        if let _ = parent, !webViewCanGoBack {
-            browserViewController?.tabManager.removeTab(self, showToast: false)
-        } else if let id = parentSpaceID, !id.isEmpty, !webViewCanGoBack {
-            browserViewController?.browserModel.openSpace(spaceID: id)
-        } else if let searchQuery = backNavigationSuggestionQuery(),
+        if checkBackNavigationSuggestionQuery,
+            let searchQuery = backNavigationSuggestionQuery(),
             let bvc = browserViewController
         {
             DispatchQueue.main.async {
@@ -552,6 +546,10 @@ class Tab: NSObject, ObservableObject {
                     bvc.zeroQueryModel.targetTab = .currentTab
                 }
             }
+        } else if let _ = parent, !webViewCanGoBack {
+            browserViewController?.tabManager.removeTab(self, showToast: false)
+        } else if let id = parentSpaceID, !id.isEmpty, !webViewCanGoBack {
+            browserViewController?.browserModel.openSpace(spaceID: id)
         } else {
             webView?.goBack()
         }

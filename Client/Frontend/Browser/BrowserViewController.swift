@@ -705,7 +705,9 @@ class BrowserViewController: UIViewController, ModalPresenter {
                 for: url,
                 query: searchQueryModel.value,
                 suggestedQuery: suggestedQuery,
-                visitType: visitType
+                visitType: visitType,
+                from: zeroQueryModel.openedFrom?.openedTab,
+                keepInParentTabGroup: false
             )
         } else if zeroQueryModel.isLazyTab || zeroQueryModel.targetTab == .newTab {
             dismissEditingAndHideZeroQuery()
