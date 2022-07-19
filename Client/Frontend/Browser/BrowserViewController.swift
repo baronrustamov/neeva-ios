@@ -1936,11 +1936,15 @@ extension BrowserViewController {
             overlay: .backForwardList(
                 BackForwardListView(
                     model: BackForwardListModel(
-                        profile: profile, backForwardList: backForwardList),
+                        profile: profile, backForwardList: backForwardList
+                    ),
                     overlayManager: overlayManager,
                     navigationClicked: { navigationListItem in
                         self.tabManager.selectedTab?.goToBackForwardListItem(navigationListItem)
-                    })))
+                    }
+                )
+            )
+        )
     }
 }
 

@@ -122,10 +122,7 @@ struct BackForwardListView: View {
     var body: some View {
         GeometryReader { geom in
             let maxHeight: CGFloat = {
-                // 60 is the minimum amount of padding between the top of the view,
-                // and the top of the BackForwardListView so that the user can tap to close.
-                // Fictional number which can be modified as needed.
-                geom.size.height - 60
+                geom.size.height / 2
             }()
 
             VStack(spacing: 0) {
