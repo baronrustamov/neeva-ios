@@ -301,8 +301,11 @@ private struct SafariVCLink: View {
     let title: LocalizedStringKey
     let url: URL
 
+    private var _token: Any? = nil
     @available(iOS 15.0, *)
-    private(set) lazy var token: SFSafariViewController.PrewarmingToken? = nil
+    var token: SFSafariViewController.PrewarmingToken? {
+        _token as! SFSafariViewController.PrewarmingToken?
+    }
 
     @State private var modal = ModalState()
 
@@ -312,7 +315,7 @@ private struct SafariVCLink: View {
 
         // Strictly an optimization, no need for a fallback on older versions
         if #available(iOS 15.0, *) {
-            token = SFSafariViewController.prewarmConnections(to: [url])
+            _token = SFSafariViewController.prewarmConnections(to: [url])
         }
     }
 
