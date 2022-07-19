@@ -119,6 +119,7 @@
 		20E51A112819D8BB00394720 /* CookieCutterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200976842810EA620055A02B /* CookieCutterHelper.swift */; };
 		20EA89F4286CC54200C432DF /* CardDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EA89F3286CC54200C432DF /* CardDropDelegate.swift */; };
 		20EA89F5286CD71400C432DF /* CardDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EA89F3286CC54200C432DF /* CardDropDelegate.swift */; };
+		20EB6C2528866A98008D7E17 /* OpenInAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20FF021C288614AA00C93A96 /* OpenInAppModel.swift */; };
 		20ED47CE27F28235002E3ADF /* BrowserViewController+IntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20ED47CD27F28235002E3ADF /* BrowserViewController+IntroView.swift */; };
 		20F2889227FD1BA9005A8A79 /* HistoryPanelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F2889127FD1BA9005A8A79 /* HistoryPanelModel.swift */; };
 		20F2889427FD20B4005A8A79 /* HistoryPanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F2889327FD20B4005A8A79 /* HistoryPanelViewController.swift */; };
@@ -7419,6 +7420,7 @@
 				4A42C56827E58487003B9826 /* ShareExtensionHelper.swift in Sources */,
 				4A42C56927E58487003B9826 /* Intents.intentdefinition in Sources */,
 				4A42C56A27E58487003B9826 /* SessionRestoreHelper.swift in Sources */,
+				20EB6C2528866A98008D7E17 /* OpenInAppModel.swift in Sources */,
 				4A42C56B27E58487003B9826 /* CardStrip.swift in Sources */,
 				4A42C56C27E58487003B9826 /* GeometryExtensions.swift in Sources */,
 				4A42C56E27E58487003B9826 /* NeevaFeatureFlagSettingsView.swift in Sources */,
