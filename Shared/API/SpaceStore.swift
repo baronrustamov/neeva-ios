@@ -8,6 +8,8 @@ import CoreSpotlight
 import Defaults
 import Foundation
 
+let dateParser = ISO8601DateFormatter()
+
 public struct SpaceID: Hashable, Identifiable {
     let value: String
 
@@ -80,6 +82,7 @@ public class Space: Hashable, Identifiable {
     public let notifications: [Notification]?
     public var isDigest = false
     public var owner: Owner?
+    public var timestamp: TimeInterval
     @Published public var isPinned: Bool
 
     init(
@@ -105,6 +108,7 @@ public class Space: Hashable, Identifiable {
         self.notifications = notifications
         self.owner = owner
         self.isPinned = isPinned
+        self.timestamp = dateParser.date(from: lastModifiedTs)?.timeIntervalSince1970 ?? 0
     }
 
     init(from model: SpacesDataQueryController.Space) {
@@ -125,6 +129,7 @@ public class Space: Hashable, Identifiable {
         self.notifications = nil
         self.contentData = model.entities
         self.isPinned = false
+        self.timestamp = dateParser.date(from: lastModifiedTs)?.timeIntervalSince1970 ?? 0
     }
 
     public var url: URL {
@@ -769,50 +774,7 @@ extension SpaceStore {
             item.isPinned.toggle()
             updatedSpacesFromLastRefresh = [item]
             state = .ready
-            sort()
         }
     }
 
-    private func sort() {
-        state = .mutatingLocally
-        allSpaces.sort()
-        updatedSpacesFromLastRefresh = allSpaces
-        state = .ready
-    }
-
-}
-
-extension MutableCollection where Self == [Space] {
-    fileprivate mutating func sort() {
-        let dateFormatter = ISO8601DateFormatter()
-        self = sorted(
-            by: {
-                return $0.isPinned && !$1.isPinned
-            },
-            {
-                if let date1 = dateFormatter.date(from: $0.lastModifiedTs),
-                    let date2 = dateFormatter.date(from: $1.lastModifiedTs)
-                {
-                    return date1 < date2
-                } else {
-                    return false
-                }
-            })
-    }
-
-}
-
-extension MutableCollection where Self: RandomAccessCollection {
-    mutating func sorted(
-        by firstPredicate: (Element, Element) -> Bool,
-        _ secondPredicate: (Element, Element) -> Bool
-    ) -> [Self.Element] {
-        sorted(by:) { lhs, rhs in
-            if firstPredicate(lhs, rhs) { return true }
-            if firstPredicate(rhs, lhs) { return false }
-            if secondPredicate(lhs, rhs) { return true }
-            if secondPredicate(rhs, lhs) { return false }
-            return false
-        }
-    }
 }
