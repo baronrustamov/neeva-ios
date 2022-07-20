@@ -183,10 +183,14 @@ public struct NeevaConstants {
         return url.origin == appSearchURL.origin && url.path == appSearchURL.path
     }
 
-    public static func isInNeevaDomain(_ url: URL?) -> Bool {
+    public static func isInNeevaDomain(_ url: URL?, matchScheme: Bool = false) -> Bool {
         guard let url = url else { return false }
         // origin checks for scheme and host
-        return url.origin == appURL.origin
+        if matchScheme {
+            return url.origin == appURL.origin
+        } else {
+            return url.hostPort == appURL.hostPort
+        }
     }
 
     // Construct auth url for signin with apple

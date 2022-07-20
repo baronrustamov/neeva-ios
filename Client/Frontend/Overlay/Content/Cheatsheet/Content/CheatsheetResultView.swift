@@ -25,7 +25,7 @@ enum CheatsheetResultData {
 
 struct CheatsheetResult: Identifiable {
     let id = UUID()
-    let data: CheatsheetResultData
+    var data: CheatsheetResultData
 }
 
 struct CheatsheetResultView: View {

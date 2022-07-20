@@ -129,7 +129,7 @@ class Tab: NSObject, ObservableObject {
     // MARK: - Cheatsheet Properties
     /// Cheatsheet info for current url
     lazy private(set) var cheatsheetModel: CheatsheetMenuViewModel = {
-        CheatsheetMenuViewModel(tab: self)
+        CheatsheetMenuViewModel(tab: self, service: CheatsheetServiceProvider.shared)
     }()
 
     /// Called by BVC TabDelegate, updates the URL whenever it changes in the `WebView`.
