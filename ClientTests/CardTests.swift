@@ -341,16 +341,19 @@ class CardTests: XCTestCase {
             SpaceEntityData(
                 id: "id1", url: .aboutBlank, title: nil, snippet: nil,
                 thumbnail: SpaceThumbnails.githubThumbnail,
+                isPinned: false,
                 previewEntity: .webPage),
             SpaceEntityData(
                 id: "id2", url: .aboutBlank, title: nil, snippet: nil,
                 thumbnail: SpaceThumbnails.stackOverflowThumbnail,
+                isPinned: false,
                 previewEntity: .webPage),
         ]
         SpaceStore.shared.getAll().last!.contentData = [
             SpaceEntityData(
                 id: "id3", url: .aboutBlank, title: nil, snippet: nil,
                 thumbnail: SpaceThumbnails.githubThumbnail,
+                isPinned: false,
                 previewEntity: .webPage)
         ]
         let firstCard = SpaceCardDetails(
