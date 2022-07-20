@@ -160,14 +160,16 @@ public final class CheatsheetServiceProvider: CheatsheetDataService {
         if !ugcDiscussion.isEmpty {
             results.append(.discussions(ugcDiscussion))
         } else {
+            // If no UGC results are returned, check bloom filter
             if let canonicalURL = CanonicalURL(
                 from: inputURL, stripMobile: true, relaxed: true
             )?.asString,
-                BloomFilterManager.shared.contains(canonicalURL) == false
+                BloomFilterManager.shared.contains(canonicalURL) == true
             {
+                // Log false positive if bloom filter is true
                 DispatchQueue.main.async {
                     ClientLogger.shared.logCounter(
-                        .CheatsheetUGCHitNoRedditData,
+                        .CheatsheetUGCHitNoRedditDataV2,
                         attributes: EnvironmentHelper.shared.getAttributes() + [
                             ClientLogCounterAttribute(
                                 key: LogConfig.CheatsheetAttribute.currentPageURL,
