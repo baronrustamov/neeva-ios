@@ -1,0 +1,98 @@
+// Copyright 2022 Neeva Inc. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+import Foundation
+
+extension Strings {
+    public struct FirstRun {
+
+        public struct Welcome {
+            public static let TitleString = NSLocalizedString(
+                "FirstRun.Welcome.Title", tableName: "NeevaStrings",
+                value: "Privacy Made Easy", comment: "")
+
+            public static let TitleStringExp = NSLocalizedString(
+                "FirstRun.Welcome.Title.Arm1", tableName: "NeevaStrings",
+                value: "Neeva puts you in charge of\nyour life online.", comment: "")
+
+            public static let PrimaryButtonString = NSLocalizedString(
+                "FirstRun.Welcome.PrimaryButton", tableName: "NeevaStrings", value: "Let's go",
+                comment: "")
+
+            public static let FirstBullet = NSLocalizedString(
+                "FirstRun.Welcome.FirstBullet", tableName: "NeevaStrings", value: "Ad-Free Search",
+                comment: "")
+
+            public static let SecondBullet = NSLocalizedString(
+                "FirstRun.Welcome.SecondBullet", tableName: "NeevaStrings",
+                value: "Block Ads. Block Trackers", comment: "")
+
+            public static let ThirdBullet = NSLocalizedString(
+                "FirstRun.Welcome.ThirdBullet", tableName: "NeevaStrings",
+                value: "Block Cookie Pop-ups", comment: "")
+
+            public static let FirstBulletExp = NSLocalizedString(
+                "FirstRun.Welcome.FirstBullet.Arm1", tableName: "NeevaStrings",
+                value: "Ad-free search results", comment: "")
+
+            public static let SecondBulletExp = NSLocalizedString(
+                "FirstRun.Welcome.SecondBullet.Arm1", tableName: "NeevaStrings",
+                value: "Browser without ads or trackers", comment: "")
+
+            public static let ThirdBulletExp = NSLocalizedString(
+                "FirstRun.Welcome.ThirdBullet.Arm1", tableName: "NeevaStrings",
+                value: "Cookie pop-up blocker", comment: "")
+        }
+
+        public struct Onboarding {
+            public static let TitleString = NSLocalizedString(
+                "FirstRun.Onboarding.Title", tableName: "NeevaStrings",
+                value: "Make Neeva your Default Browser to", comment: "")
+
+            public static let FirstBullet = NSLocalizedString(
+                "FirstRun.Onboarding.FirstBullet", tableName: "NeevaStrings",
+                value: "Browse the Web Ad-Free", comment: "")
+
+            public static let SecondBullet = NSLocalizedString(
+                "FirstRun.Onboarding.SecondBullet", tableName: "NeevaStrings",
+                value: "Block Trackers, and Pop-ups", comment: "")
+
+            public static let FollowSteps = NSLocalizedString(
+                "FirstRun.Onboarding.FollowSteps", tableName: "NeevaStrings",
+                value: "Follow these 2 easy steps:", comment: "")
+
+            public static let FirstStep = NSLocalizedString(
+                "FirstRun.Onboarding.FirstStep", tableName: "NeevaStrings",
+                value: "1. Tap Default Browser App", comment: "")
+
+            public static let SecondStep = NSLocalizedString(
+                "FirstRun.Onboarding.SecondStep", tableName: "NeevaStrings",
+                value: "2. Select Neeva", comment: "")
+
+            public static let TitleStringExp = NSLocalizedString(
+                "FirstRun.Onboarding.Title.Arm1", tableName: "NeevaStrings",
+                value: "Want to use\nNeeva for all your browsing?", comment: "")
+
+            public static let SubtitleStringExp = NSLocalizedString(
+                "FirstRun.Onboarding.Subtitle.Arm1", tableName: "NeevaStrings",
+                value: "Make Neeva your default browser.", comment: "")
+
+            public static let RemindMeLater = NSLocalizedString(
+                "FirstRun.Onboarding.RemindMeLater", tableName: "NeevaStrings",
+                value: "Remind Me Later", comment: "")
+
+            public static let OpenNeevaSettings = NSLocalizedString(
+                "FirstRun.Onboarding.OpenNeevaSettings", tableName: "NeevaStrings",
+                value: "Open Neeva Settings", comment: "")
+
+            public static let ContinueToNeeva = NSLocalizedString(
+                "FirstRun.Onboarding.ContinueToNeeva", tableName: "NeevaStrings",
+                value: "Continue to Neeva", comment: "")
+
+            public static let BackToSettings = NSLocalizedString(
+                "FirstRun.Onboarding.BackToSettings", tableName: "NeevaStrings",
+                value: "Back to Settings", comment: "")
+        }
+    }
+}

@@ -934,6 +934,7 @@
 		67B0FAB6279A82B00023A1C5 /* NeevaExperiment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B0FAB5279A82B00023A1C5 /* NeevaExperiment.swift */; };
 		67B8D76428618A330044D0CF /* AdBlockerPromoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B8D76328618A330044D0CF /* AdBlockerPromoView.swift */; };
 		67B8D76528618A330044D0CF /* AdBlockerPromoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B8D76328618A330044D0CF /* AdBlockerPromoView.swift */; };
+		67BDDDB928874BD4008E5056 /* NeevaStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67BDDDB828874BD4008E5056 /* NeevaStrings.swift */; };
 		67C59950279B261D00660699 /* ExperimentSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67C5994F279B261D00660699 /* ExperimentSettingsView.swift */; };
 		67F19A8927EA2F4700239702 /* XYZClient.plist in Resources */ = {isa = PBXBuildFile; fileRef = 67F19A8827EA2F4700239702 /* XYZClient.plist */; };
 		67F2A52E27306AE900CAE11A /* NotificationSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F2A52D27306AE900CAE11A /* NotificationSettingsView.swift */; };
@@ -2393,6 +2394,7 @@
 		67B0FAB5279A82B00023A1C5 /* NeevaExperiment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeevaExperiment.swift; sourceTree = "<group>"; };
 		67B649C727B453E5006024C0 /* APIConfig.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = APIConfig.xcconfig; path = Client/APIConfig.xcconfig; sourceTree = "<group>"; };
 		67B8D76328618A330044D0CF /* AdBlockerPromoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdBlockerPromoView.swift; sourceTree = "<group>"; };
+		67BDDDB828874BD4008E5056 /* NeevaStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeevaStrings.swift; sourceTree = "<group>"; };
 		67C5994F279B261D00660699 /* ExperimentSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperimentSettingsView.swift; sourceTree = "<group>"; };
 		67F19A8827EA2F4700239702 /* XYZClient.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = XYZClient.plist; sourceTree = "<group>"; };
 		67F2A52D27306AE900CAE11A /* NotificationSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsView.swift; sourceTree = "<group>"; };
@@ -5016,6 +5018,7 @@
 				E65075901E37F7AB006961AC /* UserAgent.swift */,
 				4A8CE5ED27CCA66600735C75 /* ViewExtension.swift */,
 				E65075911E37F7AB006961AC /* WeakList.swift */,
+				67BDDDB828874BD4008E5056 /* NeevaStrings.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -5626,6 +5629,7 @@
 				288A2D811AB8B3260023ABC3 /* Sources */,
 				288A2D821AB8B3260023ABC3 /* Frameworks */,
 				288A2D841AB8B3260023ABC3 /* Resources */,
+				67BDDDBA28875607008E5056 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -6656,6 +6660,23 @@
 			shellPath = /bin/sh;
 			shellScript = "if [ -z \"$CI\" -a \"$CONFIGURATION\" = \"Debug\" ]; then\n    ./Scripts/swift-format.sh --check\nfi\n";
 		};
+		67BDDDBA28875607008E5056 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "file=\"unused.rb\"\nif [ -f \"$file\" ]\nthen\necho \"$file found.\"\nruby unused.rb xcode\nelse\necho \"unused.rb doesn't exist\"\nfi\n";
+		};
 		C93EFEDA26711CC3000396B5 /* Run Periphery */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -6788,6 +6809,7 @@
 				3215C67227B6191B00D593BF /* CAKeyframeAnimation+Extension.swift in Sources */,
 				BC8ABEA226D88F2500E4A415 /* SearchController.swift in Sources */,
 				E683F0C21E93D4E90035D990 /* DictionaryExtensions.swift in Sources */,
+				67BDDDB928874BD4008E5056 /* NeevaStrings.swift in Sources */,
 				E650759B1E37F7AB006961AC /* CrashSimulator.m in Sources */,
 				288A2DB51AB8B38D0023ABC3 /* Error.swift in Sources */,
 				C80E03E826B88FF000A7800A /* OptionalLogger.swift in Sources */,

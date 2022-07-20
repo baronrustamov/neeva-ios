@@ -51,8 +51,14 @@ class InterstitialViewModel: ObservableObject {
         self.onCloseAction = onCloseAction
         self.onboardingState = onboardingState
 
-        self.openButtonText = restoreFromBackground ? "Back to Settings" : "Open Neeva Settings"
-        self.remindButtonText = restoreFromBackground ? "Continue to Neeva" : "Remind Me Later"
+        self.openButtonText =
+            restoreFromBackground
+            ? Strings.FirstRun.Onboarding.BackToSettings
+            : Strings.FirstRun.Onboarding.OpenNeevaSettings
+        self.remindButtonText =
+            restoreFromBackground
+            ? Strings.FirstRun.Onboarding.ContinueToNeeva
+            : Strings.FirstRun.Onboarding.RemindMeLater
     }
 
     func openSettingsButtonClickAction(
@@ -63,11 +69,11 @@ class InterstitialViewModel: ObservableObject {
         }
         didTakeAction = true
 
-        openButtonText = "Back to Settings"
+        openButtonText = Strings.FirstRun.Onboarding.BackToSettings
         if Defaults[.didDismissDefaultBrowserInterstitial] == false
             && !Defaults[.didFirstNavigation]
         {
-            remindButtonText = "Continue to Neeva"
+            remindButtonText = Strings.FirstRun.Onboarding.ContinueToNeeva
             // TODO once we decide on arm, should convert this to be a state
             // as we are not really in restore state, this will work for all
             // arms right now
@@ -155,23 +161,23 @@ class InterstitialViewModel: ObservableObject {
     func welcomePageBullets() -> [String] {
         if NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) == .welcomeV2 {
             return [
-                "Ad-free search results",
-                "Browser without ads or trackers",
-                "Cookie pop-up blocker",
+                Strings.FirstRun.Welcome.FirstBulletExp,
+                Strings.FirstRun.Welcome.SecondBulletExp,
+                Strings.FirstRun.Welcome.ThirdBulletExp,
             ]
         } else {
             return [
-                "Ad-Free Search",
-                "Block Ads. Block Trackers",
-                "Block Cookie Pop-ups",
+                Strings.FirstRun.Welcome.FirstBullet,
+                Strings.FirstRun.Welcome.SecondBullet,
+                Strings.FirstRun.Welcome.ThirdBullet,
             ]
         }
     }
 
     func onboardingPageBullets() -> [String] {
         return [
-            "Browse the Web Ad-Free",
-            "Block Trackers, and Pop-ups",
+            Strings.FirstRun.Onboarding.FirstBullet,
+            Strings.FirstRun.Onboarding.SecondBullet,
         ]
     }
 }

@@ -110,7 +110,7 @@ struct DefaultBrowserInterstitialOnboardingView: View {
     @ViewBuilder
     var oldHeader: some View {
         VStack(alignment: .leading) {
-            Text("Make Neeva your Default Browser to")
+            Text(Strings.FirstRun.Onboarding.TitleString)
                 .font(.system(size: 32, weight: .bold))
                 .padding(.bottom, 10)
 
@@ -129,7 +129,7 @@ struct DefaultBrowserInterstitialOnboardingView: View {
     @ViewBuilder
     var detail: some View {
         VStack(alignment: .leading) {
-            Text("Follow these 2 easy steps:")
+            Text(Strings.FirstRun.Onboarding.FollowSteps)
                 .withFont(.bodyLarge)
                 .foregroundColor(.secondaryLabel)
                 .fixedSize(horizontal: false, vertical: true)
@@ -149,7 +149,7 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                             .stroke(Color(UIColor.systemGray5), lineWidth: 1)
                     )
 
-                Text("1. Tap Default Browser App")
+                Text(Strings.FirstRun.Onboarding.FirstStep)
                     .withFont(.bodyXLarge)
                     .padding(
                         .leading,
@@ -166,7 +166,7 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                     )
                     .clipShape(RoundedRectangle(cornerRadius: 4))
 
-                Text("2. Select Neeva")
+                Text(Strings.FirstRun.Onboarding.SecondStep)
                     .withFont(.bodyXLarge)
                     .padding(
                         .leading,
@@ -198,11 +198,11 @@ struct DefaultBrowserInterstitialOnboardingView: View {
     @ViewBuilder
     var newHeader: some View {
         VStack(alignment: .leading) {
-            Text("Want to use\nNeeva for all your browsing?")
+            Text(Strings.FirstRun.Onboarding.TitleStringExp)
                 .font(.system(size: UIConstants.hasHomeButton ? 24 : 36, weight: .bold))
                 .padding(.bottom, 15)
 
-            Text("Make Neeva your default browser.")
+            Text(Strings.FirstRun.Onboarding.SubtitleStringExp)
                 .font(.system(size: 16, weight: .bold))
         }.frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 45)
     }
@@ -237,8 +237,10 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                     // TODO: refactor to use the view model for this action
                     switch interstitialModel.onboardingState {
                     case .initialState:
-                        interstitialModel.openButtonText = "Back to Settings"
-                        interstitialModel.remindButtonText = "Continue to Neeva"
+                        interstitialModel.openButtonText =
+                            Strings.FirstRun.Onboarding.BackToSettings
+                        interstitialModel.remindButtonText =
+                            Strings.FirstRun.Onboarding.ContinueToNeeva
                         interstitialModel.openSettingsButtonClickAction(
                             interaction: .DefaultBrowserOnboardingInterstitialOpen
                         )
