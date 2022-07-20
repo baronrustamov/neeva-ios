@@ -14,7 +14,9 @@ struct CheatsheetOverlayContent: View {
 
     init(menuAction: @escaping (OverflowMenuAction) -> Void, tabManager: TabManager) {
         self.menuAction = menuAction
-        self.model = tabManager.selectedTab?.cheatsheetModel ?? CheatsheetMenuViewModel(tab: nil)
+        self.model =
+            tabManager.selectedTab?.cheatsheetModel
+            ?? CheatsheetMenuViewModel(tab: nil, service: CheatsheetServiceProvider.shared)
         self.isIncognito = tabManager.incognitoModel.isIncognito
         self.tabManager = tabManager
     }
