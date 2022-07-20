@@ -10,11 +10,14 @@ extension Strings {
         public struct Welcome {
             public static let TitleString = NSLocalizedString(
                 "FirstRun.Welcome.Title", tableName: "NeevaStrings",
-                value: "Privacy Made Easy", comment: "Title displayed when user opens the app the first time")
+                value: "Privacy Made Easy",
+                comment: "Title displayed when user opens the app the first time")
 
             public static let TitleStringExp = NSLocalizedString(
                 "FirstRun.Welcome.Title.Arm1", tableName: "NeevaStrings",
-                value: "Neeva puts you in charge of\nyour life online.", comment: "[Experiment] Another title displayed when user opens the app the first time")
+                value: "Neeva puts you in charge of\nyour life online.",
+                comment:
+                    "[Experiment] Another title displayed when user opens the app the first time")
 
             public static let PrimaryButtonString = NSLocalizedString(
                 "Let's go", tableName: "NeevaStrings", value: "Let's go",
@@ -26,29 +29,41 @@ extension Strings {
 
             public static let SecondBullet = NSLocalizedString(
                 "FirstRun.Welcome.SecondBullet", tableName: "NeevaStrings",
-                value: "Block Ads. Block Trackers", comment: "Second bullet in the list to promote Neeva's value on welcome screen")
+                value: "Block Ads. Block Trackers",
+                comment: "Second bullet in the list to promote Neeva's value on welcome screen")
 
             public static let ThirdBullet = NSLocalizedString(
                 "FirstRun.Welcome.ThirdBullet", tableName: "NeevaStrings",
-                value: "Block Cookie Pop-ups", comment: "Third bullet in the list to promote Neeva's value on welcome screen")
+                value: "Block Cookie Pop-ups",
+                comment: "Third bullet in the list to promote Neeva's value on welcome screen")
 
             public static let FirstBulletExp = NSLocalizedString(
                 "FirstRun.Welcome.FirstBullet.Arm1", tableName: "NeevaStrings",
-                value: "Ad-free search results", comment: "[Experiment] First bullet in the list to promote Neeva's value on welcome screen")
+                value: "Ad-free search results",
+                comment:
+                    "[Experiment] First bullet in the list to promote Neeva's value on welcome screen"
+            )
 
             public static let SecondBulletExp = NSLocalizedString(
                 "FirstRun.Welcome.SecondBullet.Arm1", tableName: "NeevaStrings",
-                value: "Browser without ads or trackers", comment: "[Experiment] Second bullet in the list to promote Neeva's value on welcome screen")
+                value: "Browser without ads or trackers",
+                comment:
+                    "[Experiment] Second bullet in the list to promote Neeva's value on welcome screen"
+            )
 
             public static let ThirdBulletExp = NSLocalizedString(
                 "FirstRun.Welcome.ThirdBullet.Arm1", tableName: "NeevaStrings",
-                value: "Cookie pop-up blocker", comment: "[Experiment] Third bullet in the list to promote Neeva's value on welcome screen")
+                value: "Cookie pop-up blocker",
+                comment:
+                    "[Experiment] Third bullet in the list to promote Neeva's value on welcome screen"
+            )
         }
 
         public struct Onboarding {
             public static let TitleString = NSLocalizedString(
                 "FirstRun.Onboarding.Title", tableName: "NeevaStrings",
-                value: "Make Neeva your Default Browser to", comment: "Title displayed on setting default browser screen")
+                value: "Make Neeva your Default Browser to",
+                comment: "Title displayed on setting default browser screen")
 
             public static let FirstBullet = NSLocalizedString(
                 "FirstRun.Onboarding.FirstBullet", tableName: "NeevaStrings",
