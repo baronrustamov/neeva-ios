@@ -53,12 +53,12 @@ class InterstitialViewModel: ObservableObject {
 
         self.openButtonText =
             restoreFromBackground
-            ? Strings.FirstRun.Onboarding.BackToSettings
-            : Strings.FirstRun.Onboarding.OpenNeevaSettings
+            ? Strings.BackToSettingsButton
+            : Strings.OpenNeevaSettingsButton
         self.remindButtonText =
             restoreFromBackground
-            ? Strings.FirstRun.Onboarding.ContinueToNeeva
-            : Strings.FirstRun.Onboarding.RemindMeLater
+            ? Strings.ContinueToNeevaButton
+            : Strings.RemindMeLaterButton
     }
 
     func openSettingsButtonClickAction(
@@ -69,11 +69,11 @@ class InterstitialViewModel: ObservableObject {
         }
         didTakeAction = true
 
-        openButtonText = Strings.FirstRun.Onboarding.BackToSettings
+        openButtonText = Strings.BackToSettingsButton
         if Defaults[.didDismissDefaultBrowserInterstitial] == false
             && !Defaults[.didFirstNavigation]
         {
-            remindButtonText = Strings.FirstRun.Onboarding.ContinueToNeeva
+            remindButtonText = Strings.ContinueToNeevaButton
             // TODO once we decide on arm, should convert this to be a state
             // as we are not really in restore state, this will work for all
             // arms right now
@@ -161,23 +161,23 @@ class InterstitialViewModel: ObservableObject {
     func welcomePageBullets() -> [String] {
         if NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) == .welcomeV2 {
             return [
-                Strings.FirstRun.Welcome.FirstBulletExp,
-                Strings.FirstRun.Welcome.SecondBulletExp,
-                Strings.FirstRun.Welcome.ThirdBulletExp,
+                Strings.FirstRunWelcomeFirstBulletExp,
+                Strings.FirstRunWelcomeSecondBulletExp,
+                Strings.FirstRunWelcomeThirdBulletExp,
             ]
         } else {
             return [
-                Strings.FirstRun.Welcome.FirstBullet,
-                Strings.FirstRun.Welcome.SecondBullet,
-                Strings.FirstRun.Welcome.ThirdBullet,
+                Strings.FirstRunWelcomeFirstBullet,
+                Strings.FirstRunWelcomeSecondBullet,
+                Strings.FirstRunWelcomeThirdBullet,
             ]
         }
     }
 
     func onboardingPageBullets() -> [String] {
         return [
-            Strings.FirstRun.Onboarding.FirstBullet,
-            Strings.FirstRun.Onboarding.SecondBullet,
+            Strings.ConfigDefaultBrowserFirstBullet,
+            Strings.ConfigDefaultBrowserSecondBullet,
         ]
     }
 }

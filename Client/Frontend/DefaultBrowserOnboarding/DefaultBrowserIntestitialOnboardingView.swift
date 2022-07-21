@@ -110,7 +110,7 @@ struct DefaultBrowserInterstitialOnboardingView: View {
     @ViewBuilder
     var oldHeader: some View {
         VStack(alignment: .leading) {
-            Text(Strings.FirstRun.Onboarding.TitleString)
+            Text(Strings.ConfigDefaultBrowserTitle)
                 .font(.system(size: 32, weight: .bold))
                 .padding(.bottom, 10)
 
@@ -129,7 +129,7 @@ struct DefaultBrowserInterstitialOnboardingView: View {
     @ViewBuilder
     var detail: some View {
         VStack(alignment: .leading) {
-            Text(Strings.FirstRun.Onboarding.FollowSteps)
+            Text(Strings.ConfigDefaultBrowserFollowSteps)
                 .withFont(.bodyLarge)
                 .foregroundColor(.secondaryLabel)
                 .fixedSize(horizontal: false, vertical: true)
@@ -149,7 +149,7 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                             .stroke(Color(UIColor.systemGray5), lineWidth: 1)
                     )
 
-                Text(Strings.FirstRun.Onboarding.FirstStep)
+                Text(Strings.ConfigDefaultBrowserFirstStep)
                     .withFont(.bodyXLarge)
                     .padding(
                         .leading,
@@ -166,7 +166,7 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                     )
                     .clipShape(RoundedRectangle(cornerRadius: 4))
 
-                Text(Strings.FirstRun.Onboarding.SecondStep)
+                Text(Strings.ConfigDefaultBrowserSecondStep)
                     .withFont(.bodyXLarge)
                     .padding(
                         .leading,
@@ -198,11 +198,11 @@ struct DefaultBrowserInterstitialOnboardingView: View {
     @ViewBuilder
     var newHeader: some View {
         VStack(alignment: .leading) {
-            Text(Strings.FirstRun.Onboarding.TitleStringExp)
+            Text(Strings.ConfigDefaultBrowserTitleExp)
                 .font(.system(size: UIConstants.hasHomeButton ? 24 : 36, weight: .bold))
                 .padding(.bottom, 15)
 
-            Text(Strings.FirstRun.Onboarding.SubtitleStringExp)
+            Text(Strings.ConfigDefaultBrowserSubtitleExp)
                 .font(.system(size: 16, weight: .bold))
         }.frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 45)
     }
@@ -238,9 +238,9 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                     switch interstitialModel.onboardingState {
                     case .initialState:
                         interstitialModel.openButtonText =
-                            Strings.FirstRun.Onboarding.BackToSettings
+                            Strings.BackToSettingsButton
                         interstitialModel.remindButtonText =
-                            Strings.FirstRun.Onboarding.ContinueToNeeva
+                            Strings.ContinueToNeevaButton
                         interstitialModel.openSettingsButtonClickAction(
                             interaction: .DefaultBrowserOnboardingInterstitialOpen
                         )

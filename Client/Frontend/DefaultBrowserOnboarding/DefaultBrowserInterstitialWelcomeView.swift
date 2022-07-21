@@ -34,7 +34,7 @@ struct DefaultBrowserInterstitialWelcomeView: View {
 
                     VStack(alignment: .leading) {
                         Image("welcome-shield", bundle: .main).frame(width: 32, height: 32)
-                        Text(Strings.FirstRun.Welcome.TitleString)
+                        Text(Strings.FirstRunWelcomeTitle)
                             .font(.system(size: 40, weight: .bold))
                             .foregroundColor(Color.ui.adaptive.blue)
                         ForEach(interstitialModel.welcomePageBullets(), id: \.self) {
@@ -66,7 +66,7 @@ struct DefaultBrowserInterstitialWelcomeView: View {
     @ViewBuilder
     var newContent: some View {
         VStack(alignment: .leading) {
-            Text(Strings.FirstRun.Welcome.TitleStringExp)
+            Text(Strings.FirstRunWelcomeTitleStringExp)
                 .font(.system(size: UIConstants.hasHomeButton ? 24 : 36, weight: .bold))
                 .padding(.bottom, 15)
             ForEach(interstitialModel.welcomePageBullets(), id: \.self) {
@@ -97,7 +97,7 @@ struct DefaultBrowserInterstitialWelcomeView: View {
             DefaultBrowserInterstitialView(
                 showLogo: true,
                 content: content,
-                primaryButton: Strings.FirstRun.Welcome.PrimaryButtonString,
+                primaryButton: Strings.LetsGoButton,
                 primaryAction: {
                     switchToDefaultBrowserScreen = true
                     ClientLogger.shared.logCounter(.GetStartedInWelcome)
