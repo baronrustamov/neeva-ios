@@ -51,39 +51,40 @@ class CookieCutterHelper: TabContentScript {
                     cookieCutterModel.flagSite(domain: domain)
                 }
             case .getPreferences:
-                do {
-                    if let domain = domain,
-                        let escapedEncoded = String(
-                            data: try JSONEncoder().encode([
+                if let domain = domain, let webView = currentWebView {
+                    if currentWebView?.url?.isNeevaURL() ?? false,
+                        cookieCutterModel.optIntoNeevaCookies
+                    {
+                        // Pass false so Cookie Cutter does not block these cookies.
+                        // The user has already consented to these cookies on first run.
+                        sendResponse(
+                            data: [
+                                "cookieCutterEnabled":
+                                    TrackingPreventionConfig.trackersPreventedFor(
+                                        domain, checkCookieCutterState: true),
+                                "marketing": false,
+                                "analytic": false,
+                                "social": false,
+                            ], webView: webView)
+                    } else {
+                        sendResponse(
+                            data: [
                                 "cookieCutterEnabled":
                                     TrackingPreventionConfig.trackersPreventedFor(
                                         domain, checkCookieCutterState: true),
                                 "marketing": !cookieCutterModel.marketingCookiesAllowed,
                                 "analytic": !cookieCutterModel.analyticCookiesAllowed,
                                 "social": !cookieCutterModel.socialCookiesAllowed,
-                            ]), encoding: .utf8)
-                    {
-                        currentWebView?.evaluateJavascriptInDefaultContentWorld(
-                            "__firefox__.setPreference(\(escapedEncoded))")
+                            ], webView: webView)
                     }
-                } catch {
-                    print("Error encoding escaped value: \(error)")
                 }
             case .increaseCounter:
                 cookieCutterModel.cookiesBlocked += 1
             case .isSiteFlagged:
-                do {
-                    if let domain = domain,
-                        let escapedEncoded = String(
-                            data: try JSONEncoder().encode([
-                                "isFlagged": cookieCutterModel.isSiteFlagged(domain: domain)
-                            ]), encoding: .utf8)
-                    {
-                        currentWebView?.evaluateJavascriptInDefaultContentWorld(
-                            "__firefox__.setIsSiteFlagged(\(escapedEncoded))")
-                    }
-                } catch {
-                    print("Error encoding escaped value: \(error)")
+                if let domain = domain, let webView = currentWebView {
+                    sendResponse(
+                        data: ["isFlagged": cookieCutterModel.isSiteFlagged(domain: domain)],
+                        webView: webView)
                 }
             case .logProvider:
                 if let provider = data["provider"] as? String {
@@ -109,6 +110,17 @@ class CookieCutterHelper: TabContentScript {
         }
 
         log.info("Cookie Cutter script updated: \(update)")
+    }
+
+    private func sendResponse(data: [String: Bool], webView: WKWebView) {
+        do {
+            if let escapedEncoded = String(data: try JSONEncoder().encode(data), encoding: .utf8) {
+                webView.evaluateJavascriptInDefaultContentWorld(
+                    "__firefox__.setIsSiteFlagged(\(escapedEncoded))")
+            }
+        } catch {
+            print("Error encoding escaped value: \(error)")
+        }
     }
 
     // MARK: - init

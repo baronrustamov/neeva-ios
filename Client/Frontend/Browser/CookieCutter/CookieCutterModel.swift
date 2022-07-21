@@ -16,6 +16,8 @@ extension Defaults.Keys {
         "profile_prefkey_cookieCutter_onboardingShowed", default: false)
     static let cookieCutterEnabled = Defaults.Key<Bool>(
         "profile_prefkey_cookieCutter_isEnabled", default: true)
+    static let optIntoNeevaCookies = Defaults.Key<Bool>(
+        "profile_prefkey_cookieCutter_optIntoNeevaCookies", default: false)
 
     fileprivate static let sitesFlaggedCookieCutter = Defaults.Key<[String]>(
         "profile_prefkey_cookieCutter_flaggedSites", default: [])
@@ -56,6 +58,7 @@ class CookieCutterModel: ObservableObject {
             }
         }
     }
+    @Default(.optIntoNeevaCookies) var optIntoNeevaCookies
 
     // User selected settings.
     @Default(.marketingCookies) var marketingCookiesAllowed {
