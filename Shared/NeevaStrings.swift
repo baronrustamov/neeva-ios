@@ -20,7 +20,7 @@ extension Strings {
                     "[Experiment] Another title displayed when user opens the app the first time")
 
             public static let PrimaryButtonString = NSLocalizedString(
-                "Let's go", tableName: "NeevaStrings", value: "Let's go",
+                "FirstRun.Welcome.PrimaryButton", tableName: "NeevaStrings", value: "Let's Go",
                 comment: "Button text on welcome screen")
 
             public static let FirstBullet = NSLocalizedString(
@@ -94,19 +94,19 @@ extension Strings {
                 value: "Make Neeva your default browser.", comment: "")
 
             public static let RemindMeLater = NSLocalizedString(
-                "Remind Me Later", tableName: "NeevaStrings",
+                "FirstRun.Onboarding.RemindMeLater", tableName: "NeevaStrings",
                 value: "Remind Me Later", comment: "")
 
             public static let OpenNeevaSettings = NSLocalizedString(
-                "Open Neeva Settings", tableName: "NeevaStrings",
+                "FirstRun.Onboarding.OpenNeevaSettings", tableName: "NeevaStrings",
                 value: "Open Neeva Settings", comment: "")
 
             public static let ContinueToNeeva = NSLocalizedString(
-                "Continue to Neeva", tableName: "NeevaStrings",
+                "FirstRun.Onboarding.ContinueToNeeva", tableName: "NeevaStrings",
                 value: "Continue to Neeva", comment: "")
 
             public static let BackToSettings = NSLocalizedString(
-                "Back to Settings", tableName: "NeevaStrings",
+                "FirstRun.Onboarding.BackToSettings", tableName: "NeevaStrings",
                 value: "Back to Settings", comment: "")
         }
     }
