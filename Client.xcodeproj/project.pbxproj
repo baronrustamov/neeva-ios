@@ -928,6 +928,7 @@
 		6790EFC5281098AC0033F5FD /* easy_privacy_strict.json in Resources */ = {isa = PBXBuildFile; fileRef = 6790EFC4281098AC0033F5FD /* easy_privacy_strict.json */; };
 		6790EFC6281098AC0033F5FD /* easy_privacy_strict.json in Resources */ = {isa = PBXBuildFile; fileRef = 6790EFC4281098AC0033F5FD /* easy_privacy_strict.json */; };
 		67942DD826F14F2A0023F623 /* NotificationPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67942DD726F14F2A0023F623 /* NotificationPromptView.swift */; };
+		67993B7D2889DC0F000CB0B8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 67993B7B2889DC0E000CB0B8 /* Localizable.strings */; };
 		679BB17C2714D069002F60FE /* easy_privacy.json in Resources */ = {isa = PBXBuildFile; fileRef = 679BB17B2714D069002F60FE /* easy_privacy.json */; };
 		67AA22F226C476F300F33D09 /* BrowserViewController+OverflowMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67AA22F126C476F300F33D09 /* BrowserViewController+OverflowMenu.swift */; };
 		67B0AAF626BA08A4000731E0 /* OverflowMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B0AAF526BA08A4000731E0 /* OverflowMenuView.swift */; };
@@ -2388,6 +2389,7 @@
 		6789191E2800A6B1006AF55D /* FirstRunTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstRunTests.swift; sourceTree = "<group>"; };
 		6790EFC4281098AC0033F5FD /* easy_privacy_strict.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = easy_privacy_strict.json; sourceTree = "<group>"; };
 		67942DD726F14F2A0023F623 /* NotificationPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPromptView.swift; sourceTree = "<group>"; };
+		67993B7C2889DC0E000CB0B8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		679BB17B2714D069002F60FE /* easy_privacy.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = easy_privacy.json; sourceTree = "<group>"; };
 		67AA22F126C476F300F33D09 /* BrowserViewController+OverflowMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+OverflowMenu.swift"; sourceTree = "<group>"; };
 		67B0AAF526BA08A4000731E0 /* OverflowMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverflowMenuView.swift; sourceTree = "<group>"; };
@@ -5355,6 +5357,7 @@
 		F84B21C01A090F8100AAB793 /* Client */ = {
 			isa = PBXGroup;
 			children = (
+				67993B7B2889DC0E000CB0B8 /* Localizable.strings */,
 				F80983C1283879890039FCBD /* AltAppIcons */,
 				F84B21E41A0910F600AAB793 /* Application */,
 				F84B21EB1A0910F600AAB793 /* Assets */,
@@ -6607,6 +6610,7 @@
 				E4D6BEB91A0930EC00F538BD /* LaunchScreen.xib in Resources */,
 				F80983BD283849E00039FCBD /* Black@2x.png in Resources */,
 				2F44FB2D1A9D5D8500FD20CC /* FiraSans-BoldItalic.ttf in Resources */,
+				67993B7D2889DC0F000CB0B8 /* Localizable.strings in Resources */,
 				C9AFE6E326582BCB000C5A03 /* OfflineError.html in Resources */,
 				23BEA769251A99ED00A014BF /* NewYorkMedium-Regular.otf in Resources */,
 				D03F8F23200EAC1F003C2224 /* AllFramesAtDocumentStart.js in Resources */,
@@ -8316,6 +8320,14 @@
 				66E2502F270FDDB20085AA35 /* Base */,
 			);
 			name = Main.html;
+			sourceTree = "<group>";
+		};
+		67993B7B2889DC0E000CB0B8 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				67993B7C2889DC0E000CB0B8 /* en */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 		67AF4B8392ADBAA41F1B3AD0 /* HistoryPanel.strings */ = {

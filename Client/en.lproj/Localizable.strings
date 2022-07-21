@@ -1,0 +1,193 @@
+/* [Overflow menu] button to control Text Size on webpage */
+"Text Size" = "Text Size";
+
+/* [Overflow menu] button to request desktop site on current page */
+"Request Desktop Site" = "Request Desktop Site";
+
+/* [Overflow menu] button to request mobile site on current page */
+"Request Mobile Site" = "Request Mobile Site";
+
+/* [Overflow menu] button to download current page */
+"Download Page" = "Download Page";
+
+/* [Overflow menu] button to reload current page */
+"Reload" = "Reload";
+
+/* [Overflow menu] button to stop loading current page */
+"Stop" = "Stop";
+
+/* [Overflow menu] button to go to next page in history */
+"Forward" = "Forward";
+
+/* [Overflow menu] button to go to previous page in history */
+"Back" = "Back";
+
+/* [Overflow menu] button to go to app settings */
+"Settings" = "Settings";
+
+/* [Overflow menu] button to go to browsing history */
+"History" = "History";
+
+/* [Overflow menu] button to go to downloads to see downloaded pages */
+"Downloads" = "Downloads";
+
+/* [Overflow menu] button to search text on current page */
+"Find on Page" = "Find on Page";
+
+/* [Overflow menu] button to search tabs in tab switcher */
+"Search Tabs" = "Search Tabs";
+
+/* [Settings] button to open configure default browser instruction screen */
+"Default Browser" = "Default Browser";
+
+/* [Archived Tab] section header to show for tabs created today */
+"Today" = "Today";
+
+/* [Archived Tab] section header to show for tabs created yesterday */
+"Yesterday" = "Yesterday";
+
+/* [Archived Tab] section header to show for tabs created in the past 7 days */
+"Past 7 Days" = "Past 7 Days";
+
+/* [Archived Tab] section header to show for tabs created in the last 30 days */
+"Past 30 Days" = "Past 30 Days";
+
+/* [Archived Tab] section header to show for tabs created older than 30 days */
+"Older" = "Older";
+
+/* [Tab Switcher] [a11y] Empty card grid in tab switcher */
+"Empty Card Grid" = "Empty Card Grid";
+
+/* [Tab Switcher] [a11y] Empty incognito card grid in tab switcher */
+"Empty Card Grid (Incognito)" = "Empty Card Grid (Incognito)";
+
+"Kill the clutter" = "Kill the clutter";
+
+"Save and share instantly. Stay organized by adding images, websites, documents to a Space today" = "Save and share instantly. Stay organized by adding images, websites, documents to a Space today";
+
+"Sign Up To Get Started" = "Sign Up To Get Started";
+
+"Learn More About Spaces" = "Learn More About Spaces";
+
+"All Spaces" = "All Spaces";
+
+"Owned by me" = "Owned by me";
+
+"Unfollow" = "Unfollow";
+
+"Delete Space" = "Delete Space";
+
+"Unpin" = "Unpin";
+
+"Pin" = "Pin";
+
+"Unfollow Space" = "Unfollow Space";
+
+"Delete Space" = "Delete Space";
+
+"Add to another Space" = "Add to another Space";
+
+"Open all Space links" = "Open all Space links";
+
+"Update Space" = "Update Space";
+
+"Edit item" = "Edit item";
+
+"Add item" = "Add item";
+
+"TITLE" = "TITLE";
+
+"DESCRIPTION" = "DESCRIPTION";
+
+"URL" = "URL";
+
+"Update" = "Update";
+
+"Edit Name" = "Edit Name";
+
+"Can comment" = "Can comment";
+
+"Can view" = "Can view";
+
+"Can edit" = "Can edit";
+
+"After 7 Days" = "After 7 Days";
+
+"After 30 Days" = "After 30 Days";
+
+"Never" = "Never";
+
+"Account Settings" = "Account Settings";
+
+"Connected Apps" = "Connected Apps";
+
+"Invite your friends!" = "Invite your friends!";
+
+"Show Search Suggestions" = "Show Search Suggestions";
+
+"Welcome Tours" = "Welcome Tours";
+
+"Show Tour" = "Show Tour";
+
+"Help Center" = "Help Center";
+
+"Licenses" = "Licenses";
+
+"Terms" = "Terms";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Block Pop-up Windows";
+
+/* Title of setting to enable link previews when long-pressing links. */
+"Show Link Previews" = "Show Link Previews";
+
+/* Description displayed under the ”Show Link Previews” option */
+"When Long-pressing Links" = "When Long-pressing Links";
+
+"Require Confirmation" = "Require Confirmation";
+
+"When Closing All Tabs" = "When Closing All Tabs";
+
+"Clear Browsing Data" = "Clear Browsing Data";
+
+"Close Incognito Tabs" = "Close Incognito Tabs";
+
+"When Leaving Incognito Mode" = "When Leaving Incognito Mode";
+
+"Browsing History" = "Browsing History";
+
+"Cache" = "Cache";
+
+"Cookies" = "Cookies";
+
+"Cookie Cutter Exclusions" = "Cookie Cutter Exclusions";
+
+"Clearing it will sign you out of most sites." = "Clearing it will sign you out of most sites.";
+
+"List of sites you configured to not use Cookie Cutter" = "List of sites you configured to not use Cookie Cutter";
+
+"Clear Selected Data on This Device" = "Clear Selected Data on This Device";
+
+"Manage Neeva Memory" = "Manage Neeva Memory";
+
+"Save to Spaces" = "Save to Spaces";
+
+"View Spaces" = "View Spaces";
+
+"Ad Blocking" = "Ad Blocking";
+
+"Site appears broken? Try deactivating." = "Site appears broken? Try deactivating.";
+
+"Sign up with Apple" = "Sign up with Apple";
+
+"Sign in with %@" = "Sign in with %@";
+
+"Sign up with %@" = "Sign up with %@";
+
+"Password (required)" = "Password (required)";
+
+"Suggested sites" = "Suggested sites";
+
+"Searches" = "Searches";
+
+"From the Neeva Community" = "From the Neeva Community";

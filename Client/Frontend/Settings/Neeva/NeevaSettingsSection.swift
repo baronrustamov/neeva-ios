@@ -103,7 +103,7 @@ struct NeevaSettingsSection: View {
                 dismissVC()
             }
         } else {
-            Button("Sign In or Join Neeva") {
+            Button("Sign in or Join Neeva") {
                 ClientLogger.shared.logCounter(
                     .SettingSignin, attributes: EnvironmentHelper.shared.getFirstRunAttributes())
                 presentIntroViewController()

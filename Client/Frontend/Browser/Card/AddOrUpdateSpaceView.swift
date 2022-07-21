@@ -106,7 +106,7 @@ private struct LegacyInputField: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(title.rawValue)
+            Text(LocalizedStringKey(title.rawValue))
                 .withFont(.headingXSmall)
                 .foregroundColor(.secondaryLabel)
 
@@ -235,7 +235,7 @@ struct AddOrUpdateSpaceView: View {
                 }
                 if shouldShowURL {
                     inputField(
-                        title: .urlField, bodyText: "Add a URL to your new item (optional)",
+                        title: .urlField, bodyText: Strings.AddUrlToNewItem,
                         inputText: $urlText
                     ).modifier(TextFieldBackgroundModifier())
                         .accessibilityIdentifier("addOrUpdateSpaceUrl")

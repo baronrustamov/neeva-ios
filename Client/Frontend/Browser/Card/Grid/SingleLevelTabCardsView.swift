@@ -74,7 +74,7 @@ struct SingleLevelTabCardsView: View {
                                 .padding(.horizontal, -CardGridUX.GridSpacing)
 
                             HStack {
-                                Text(byTime.rawValue)
+                                Text(LocalizedStringKey(byTime.rawValue))
                                     .withFont(.labelLarge)
                                     .foregroundColor(.label)
                                     .padding(.top, 12)

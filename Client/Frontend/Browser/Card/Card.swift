@@ -382,11 +382,7 @@ struct Card<Details>: View where Details: CardDetails {
                         .actionSheet(isPresented: $showingRemoveSpaceWarning) {
                             ActionSheet(
                                 // Compilation fails if we don't concat separate Text views for title
-                                title: Text("Are you sure you want to ")
-                                    + Text(
-                                        details.item?.ACL == .owner
-                                            ? "delete" : "unfollow")
-                                    + Text(" this space?"),
+                                title: Text("Are you sure you want to \(details.item?.ACL == .owner ? "delete" : "unfollow") this space?"),
                                 buttons: [
                                     .destructive(
                                         Text(
