@@ -19,8 +19,9 @@ extension Strings {
             "[Experiment] Another title displayed when user opens the app the first time")
 
     public static let FirstRunWelcomeFirstBullet = NSLocalizedString(
-        "FirstRun.Welcome.FirstBullet", tableName: "NeevaStrings", value: "Ad-Free Search",
+        "FirstRun.Welcome.FirstBullet", tableName: "NeevaStrings",
         bundle: Bundle(for: BundleClass.self),
+        value: "Ad-Free Search",
         comment: "First bullet in the list to promote Neeva's value on welcome screen")
 
     public static let FirstRunWelcomeSecondBullet = NSLocalizedString(
