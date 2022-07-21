@@ -281,7 +281,6 @@
 		4A42C42227E58487003B9826 /* BaseNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6650585B26E68D0900C9CD51 /* BaseNotification.swift */; };
 		4A42C42327E58487003B9826 /* ShareAddedSpaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50DA526FA8C3E00B75AFA /* ShareAddedSpaceView.swift */; };
 		4A42C42427E58487003B9826 /* LocationEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94D409C268CADD4003A6766 /* LocationEditView.swift */; };
-		4A42C42527E58487003B9826 /* PullToRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C18DD326558FF3004710CD /* PullToRefresh.swift */; };
 		4A42C42627E58487003B9826 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9A179A20E69A7E00B12184 /* Theme.swift */; };
 		4A42C42727E58487003B9826 /* HTTPAuthPromptOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EE7D9226CD5F02004BD435 /* HTTPAuthPromptOverlayView.swift */; };
 		4A42C42827E58487003B9826 /* ClientLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C18E6426559B9C004710CD /* ClientLogger.swift */; };
@@ -1184,7 +1183,6 @@
 		C9BED4CB2669451B001D9C77 /* ViewControllerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BED4CA2669451B001D9C77 /* ViewControllerWrapper.swift */; };
 		C9C18DDE26558FF3004710CD /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C18DCC26558FF2004710CD /* Action.swift */; };
 		C9C18DDF26558FF3004710CD /* MutationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C18DCD26558FF2004710CD /* MutationController.swift */; };
-		C9C18DE526558FF3004710CD /* PullToRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C18DD326558FF3004710CD /* PullToRefresh.swift */; };
 		C9C18DEA26558FF3004710CD /* FrontViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C18DD826558FF3004710CD /* FrontViewController.swift */; };
 		C9C18E0826559007004710CD /* SearchSuggestionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C18DFD26559007004710CD /* SearchSuggestionViews.swift */; };
 		C9C18E0926559007004710CD /* Suggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C18DFE26559007004710CD /* Suggestion.swift */; };
@@ -2651,7 +2649,6 @@
 		C9C18DD026558FF2004710CD /* QueryController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueryController.swift; sourceTree = "<group>"; };
 		C9C18DD126558FF2004710CD /* Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		C9C18DD226558FF2004710CD /* DecorativeSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecorativeSection.swift; sourceTree = "<group>"; };
-		C9C18DD326558FF3004710CD /* PullToRefresh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullToRefresh.swift; sourceTree = "<group>"; };
 		C9C18DD426558FF3004710CD /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		C9C18DD526558FF3004710CD /* Symbol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Symbol.swift; sourceTree = "<group>"; };
 		C9C18DD626558FF3004710CD /* ModalPresentationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModalPresentationController.swift; sourceTree = "<group>"; };
@@ -5085,7 +5082,6 @@
 				C9C18DD826558FF3004710CD /* FrontViewController.swift */,
 				C9C18E1C265591A1004710CD /* Icons.swift */,
 				C9C18DCD26558FF2004710CD /* MutationController.swift */,
-				C9C18DD326558FF3004710CD /* PullToRefresh.swift */,
 				C9BED4B82667D5D3001D9C77 /* Roobert.swift */,
 			);
 			path = Utils;
@@ -7064,7 +7060,6 @@
 				4A42C42227E58487003B9826 /* BaseNotification.swift in Sources */,
 				4A42C42327E58487003B9826 /* ShareAddedSpaceView.swift in Sources */,
 				4A42C42427E58487003B9826 /* LocationEditView.swift in Sources */,
-				4A42C42527E58487003B9826 /* PullToRefresh.swift in Sources */,
 				4A42C42627E58487003B9826 /* Theme.swift in Sources */,
 				4A42C42727E58487003B9826 /* HTTPAuthPromptOverlayView.swift in Sources */,
 				4A42C42827E58487003B9826 /* ClientLogger.swift in Sources */,
@@ -7696,7 +7691,6 @@
 				6650585C26E68D0900C9CD51 /* BaseNotification.swift in Sources */,
 				4AB50DA726FA8CC300B75AFA /* ShareAddedSpaceView.swift in Sources */,
 				C94D409D268CADD4003A6766 /* LocationEditView.swift in Sources */,
-				C9C18DE526558FF3004710CD /* PullToRefresh.swift in Sources */,
 				EB9A179D20E69A7F00B12184 /* Theme.swift in Sources */,
 				66EE7D9526CD5F02004BD435 /* HTTPAuthPromptOverlayView.swift in Sources */,
 				C9C18E6626559B9C004710CD /* ClientLogger.swift in Sources */,
