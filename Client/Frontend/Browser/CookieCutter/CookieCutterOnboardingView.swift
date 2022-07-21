@@ -32,16 +32,11 @@ struct CookieCutterOnboardingView: View {
                     spacing: 16
                 ) {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Your Cookie Cutter just declined a ")
-                            + Text("cookie popup ")
-                            .bold()
-                            + Text("and blocked ")
-                            + Text("\(trackingStatsViewModel.numTrackers) trackers.")
-                            .bold()
-
                         Text(
-                            "Cookie Cutter by Neeva stops annoying cookie popups and blocks invasive trackers across the web."
-                        )
+                            String(
+                                format: Strings.CookiePopupOnboardingMessagePart1,
+                                trackingStatsViewModel.numTrackers))
+                        Text(Strings.CookiePopupOnboardingMessagePart2)
                     }
 
                     HStack {
@@ -58,7 +53,7 @@ struct CookieCutterOnboardingView: View {
 
                 VStack(spacing: 23) {
                     Button(action: onOpenMyCookieCutter) {
-                        Text("Open My Cookie Cutter")
+                        Text(Strings.OpenMyCookieCutterButton)
                             .withFont(.labelLarge)
                             .foregroundColor(.brand.white)
                             .frame(maxWidth: .infinity)
@@ -66,7 +61,7 @@ struct CookieCutterOnboardingView: View {
 
                     if FeatureFlag[.cookieCutterRemindMeLater] {
                         Button(action: onRemindMeLater) {
-                            Text("Remind Me Later")
+                            Text(Strings.RemindMeLaterButton)
                                 .withFont(.labelLarge)
                                 .foregroundColor(.ui.adaptive.blue)
 
