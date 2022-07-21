@@ -29,11 +29,19 @@ struct NeevaPremiumView: View {
 
     var body: some View {
         VStack {
-            if !loadingProducts && products.count == 0 {
-                Text("Subscription products not found.")
+            Group {
+                if !loadingProducts && products.count == 0 {
+                    Text("Subscription products not found.")
+                } else {
+                    Text("Choose Your Plan")
+                        .font(.system(size: 28, weight: .bold))
+                }
             }
+            .padding(.top)
 
             productList
+
+            Spacer()
         }
         .navigationTitle("Premium")
         .task {
@@ -65,22 +73,28 @@ struct NeevaPremiumView: View {
     }
 
     private var productList: some View {
-        List(products) { product in
-            Button(action: { purchase(product, reloadUserInfo: !isSubscribedToPlan(product.id)) }) {
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text(product.displayName)
-                        if isSubscribedToPlan(product.id) {
-                            Text("This is your current plan.")
-                                .foregroundColor(Color.secondary)
-                                .font(.system(size: 14))
-                        }
-                    }
-                    Spacer()
-                    Text(product.displayPrice)
+        VStack {
+            ForEach(products) { product in
+                Merchandise(
+                    product: product, isSubscribed: isSubscribedToPlan(product.id),
+                    loading: loadingPurchase || loadingMutation,
+                    plan: planFor(product: product.id)
+                ) {
+                    purchase(product, reloadUserInfo: !isSubscribedToPlan(product.id))
                 }
+                .padding(.bottom)
             }
         }
+        .padding()
+    }
+
+    // NOTE: this assumes we only have two products
+    private func planFor(product id: String) -> SubscriptionPlan {
+        if id == PremiumPlan.annual.rawValue {
+            return .annual
+        }
+
+        return .monthly
     }
 
     private func isSubscribedToPlan(_ productID: String) -> Bool {
@@ -205,5 +219,90 @@ struct NeevaPremiumView: View {
                 break
             }
         }
+    }
+}
+
+@available(iOS 15.0, *)
+private struct Merchandise: View {
+    var product: Product
+    var isSubscribed: Bool
+    var loading: Bool
+    var plan: SubscriptionPlan
+    var action: () -> Void
+
+    var body: some View {
+        VStack {
+            Text(plan == .monthly ? "Premium Monthly Plan" : "Premium Annual Plan")
+                .font(.system(size: 20, weight: .bold))
+                .padding()
+                .frame(maxWidth: .infinity, minHeight: 100)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color.secondary.opacity(0.25))
+                )
+
+            VStack(alignment: .leading) {
+                HStack(alignment: .top) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundColor(Color.blue)
+                        .padding(.top, 2)
+                    Text("Browser + ad blocker")
+                }
+                .padding(.bottom, 5)
+                HStack(alignment: .top) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundColor(Color.blue)
+                        .padding(.top, 2)
+                    Text("Tracking prevention")
+                }
+                .padding(.bottom, 5)
+                HStack(alignment: .top) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundColor(Color.blue)
+                        .padding(.top, 2)
+                    Text("Unlimited ad-free, private search")
+                }
+                .padding(.bottom, 5)
+            }
+            .frame(
+                maxWidth: .infinity,
+                alignment: .topLeading
+            )
+            .padding()
+
+            HStack {
+                Button(action: action) {
+                    Text(
+                        buttonText(
+                            isSubscribed: isSubscribed, plan: plan, price: product.displayPrice)
+                    )
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                }
+                .disabled(loading)
+                .padding()
+                .background(Color.blue)
+                .clipShape(Capsule())
+            }
+            .padding(.horizontal, 20)
+
+            if isSubscribed {
+                Text("This is your current plan.")
+                    .foregroundColor(Color.secondary)
+                    .font(.system(size: 14))
+                    .padding(.top, 5)
+            }
+        }
+        .padding(8)
+        .padding(.bottom, 8)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.secondary.opacity(0.25))
+        )
+    }
+
+    private func buttonText(isSubscribed: Bool, plan: SubscriptionPlan, price: String) -> String {
+        return
+            "\(isSubscribed ? "Manage" : "Get") \(plan == .monthly ? "Monthly" : "Annual") / \(price)"
     }
 }
