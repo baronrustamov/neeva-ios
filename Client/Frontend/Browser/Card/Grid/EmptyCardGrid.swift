@@ -17,8 +17,12 @@ struct EmptyCardGrid: View {
             VStack {
                 Spacer()
                 Image(decorative: isIncognito ? "EmptyTabTrayIncognito" : "EmptyTabTray")
-                Text(isIncognito ? Strings.IncognitoTabSwitcherEmptyTabTitle : Strings.TabSwitcherEmptyTabTitle)
-                    .withFont(.headingXLarge)
+                Text(
+                    isIncognito
+                        ? Strings.IncognitoTabSwitcherEmptyTabTitle
+                        : Strings.TabSwitcherEmptyTabTitle
+                )
+                .withFont(.headingXLarge)
                 Text("Tap + \(isTopBar ? Strings.Above : Strings.Below) to create a new tab")
                     .withFont(.bodyMedium)
                 Spacer()

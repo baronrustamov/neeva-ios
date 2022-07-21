@@ -133,18 +133,21 @@ extension Strings {
 /* Cookie Cutter */
 extension Strings {
     public static let CookiePopupOnboardingMessagePart1 = NSLocalizedString(
-        "CookieCutter.CookiePopup.Onboarding.MessagePart1", tableName: "NeevaStrings", bundle:Bundle(for: BundleClass.self),
+        "CookieCutter.CookiePopup.Onboarding.MessagePart1", tableName: "NeevaStrings",
+        bundle: Bundle(for: BundleClass.self),
         value: "Your Cookie Cutter just declined a **cookie popup** and blocked %@ **trackers**",
         comment: "First part of the message for cookie cutter onboarding modal")
 
-
     public static let CookiePopupOnboardingMessagePart2 = NSLocalizedString(
-        "CookieCutter.CookiePopup.Onboarding.MessagePart2", tableName: "NeevaStrings", bundle:Bundle(for: BundleClass.self),
-        value: "Cookie Cutter by Neeva stops annoying cookie popups and blocks invasive trackers across the web.",
+        "CookieCutter.CookiePopup.Onboarding.MessagePart2", tableName: "NeevaStrings",
+        bundle: Bundle(for: BundleClass.self),
+        value:
+            "Cookie Cutter by Neeva stops annoying cookie popups and blocks invasive trackers across the web.",
         comment: "Second part of the message for cookie cutter onboarding modal")
 
     public static let OpenMyCookieCutterButton = NSLocalizedString(
-        "CookieCutter.CookiePopup.Onboarding.Button", tableName: "NeevaStrings", bundle:Bundle(for: BundleClass.self),
+        "CookieCutter.CookiePopup.Onboarding.Button", tableName: "NeevaStrings",
+        bundle: Bundle(for: BundleClass.self),
         value: "Open My Cookie Cutter",
         comment: "Button to open cookie cutter settings")
 }
@@ -152,22 +155,23 @@ extension Strings {
 /* Incognito */
 extension Strings {
     public static let Above = NSLocalizedString(
-        "ToolbarAbove", tableName: "NeevaStrings", bundle:Bundle(for: BundleClass.self),
+        "ToolbarAbove", tableName: "NeevaStrings", bundle: Bundle(for: BundleClass.self),
         value: "above",
         comment: "specify a button is on the toolbar above")
 
     public static let Below = NSLocalizedString(
-        "ToolbarBelow", tableName: "NeevaStrings", bundle:Bundle(for: BundleClass.self),
+        "ToolbarBelow", tableName: "NeevaStrings", bundle: Bundle(for: BundleClass.self),
         value: "below",
         comment: "specify a button is on the toolbar below")
 
     public static let IncognitoTabSwitcherEmptyTabTitle = NSLocalizedString(
-        "IncognitoTabSwitcher.Title", tableName: "NeevaStrings", bundle:Bundle(for: BundleClass.self),
+        "IncognitoTabSwitcher.Title", tableName: "NeevaStrings",
+        bundle: Bundle(for: BundleClass.self),
         value: "Create and manage incognito tabs",
         comment: "Empty incognito tab switcher title")
 
     public static let TabSwitcherEmptyTabTitle = NSLocalizedString(
-        "TabSwitcher.Title", tableName: "NeevaStrings", bundle:Bundle(for: BundleClass.self),
+        "TabSwitcher.Title", tableName: "NeevaStrings", bundle: Bundle(for: BundleClass.self),
         value: "Create and manage tabs",
         comment: "Empty tab switcher title")
 }
@@ -175,7 +179,7 @@ extension Strings {
 /* Space */
 extension Strings {
     public static let AddUrlToNewItem = NSLocalizedString(
-        "Space.AddUrlToNewItem", tableName: "NeevaStrings", bundle:Bundle(for: BundleClass.self),
+        "Space.AddUrlToNewItem", tableName: "NeevaStrings", bundle: Bundle(for: BundleClass.self),
         value: "Add a URL to your new item (optional)",
         comment: "")
 }

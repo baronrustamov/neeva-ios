@@ -32,7 +32,10 @@ struct CookieCutterOnboardingView: View {
                     spacing: 16
                 ) {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text(String(format: Strings.CookiePopupOnboardingMessagePart1, trackingStatsViewModel.numTrackers))
+                        Text(
+                            String(
+                                format: Strings.CookiePopupOnboardingMessagePart1,
+                                trackingStatsViewModel.numTrackers))
                         Text(Strings.CookiePopupOnboardingMessagePart2)
                     }
 
