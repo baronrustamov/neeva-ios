@@ -88,6 +88,41 @@ class SpaceEntityTests: BaseTestCase {
         XCTAssertTrue(app.staticTexts["Save to Spaces"].exists)
     }
 
+    func testPinViaSwipe() {
+        app.cells["Neeva"].swipeLeft()
+        if !app.buttons["Edit"].exists {
+            app.cells["Neeva"].swipeLeft()
+        }
+        app.buttons["Pin"].tap()
+
+        XCTAssertTrue(
+            app.cells
+                .descendants(matching: .button)
+                .element(boundBy: 1)
+                .firstMatch.label
+                .elementsEqual("Neeva")
+        )
+
+        XCTAssertTrue(app.images["Pin"].exists)
+
+        // Unpin
+        app.cells["Neeva"].swipeLeft()
+        if !app.buttons["Edit"].exists {
+            app.cells["Neeva"].swipeLeft()
+        }
+        app.buttons["Unpin"].tap()
+
+        XCTAssertFalse(
+            app.cells
+                .descendants(matching: .button)
+                .element(boundBy: 1)
+                .firstMatch.label
+                .elementsEqual("Neeva")
+        )
+
+        XCTAssertFalse(app.images["Pin"].exists)
+    }
+
     func testDeleteViaSwipe() {
         XCTAssertTrue(app.buttons["Example"].exists)
         XCTAssertTrue(

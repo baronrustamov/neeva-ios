@@ -86,6 +86,7 @@ public class SpaceServiceMock: SpaceService {
                     title: title,
                     snippet: description,
                     thumbnail: "",
+                    isPinned: false,
                     previewEntity: .newsItem(
                         PreviewEntity.NewsItem(
                             title: title,
@@ -601,6 +602,7 @@ public class SpaceServiceMock: SpaceService {
                     title: title,
                     snippet: snippet,
                     thumbnail: thumbnail,
+                    isPinned: oldData.isPinned,
                     previewEntity: oldData.previewEntity
                 )
                 spaces[spaceID]?.entities.replaceSubrange(
