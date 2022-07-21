@@ -28,46 +28,48 @@ struct NeevaPremiumView: View {
     @State private var loadingMutation = false
 
     var body: some View {
-        VStack {
-            Group {
-                if !loadingProducts && products.count == 0 {
-                    Text("Subscription products not found.")
-                } else {
-                    Text("Choose Your Plan")
-                        .font(.system(size: 28, weight: .bold))
+        ScrollView {
+            VStack {
+                Group {
+                    if !loadingProducts && products.count == 0 {
+                        Text("Subscription products not found.")
+                    } else {
+                        Text("Choose Your Plan")
+                            .font(.system(size: 28, weight: .bold))
+                    }
                 }
+                .padding(.top)
+
+                productList
+
+                Spacer()
             }
-            .padding(.top)
-
-            productList
-
-            Spacer()
-        }
-        .navigationTitle("Premium")
-        .task {
-            ClientLogger.shared.logCounter(
-                .SettingPremiumSubscriptions,
-                attributes: EnvironmentHelper.shared.getAttributes()
-            )
-
-            loadingProducts = true
-            do {
-                products = try await Product.products(for: [
-                    PremiumPlan.monthly.rawValue, PremiumPlan.annual.rawValue,
-                ])
-            } catch {
+            .navigationTitle("Premium")
+            .task {
                 ClientLogger.shared.logCounter(
-                    .SettingPremiumProductsFetchException,
+                    .SettingPremiumSubscriptions,
                     attributes: EnvironmentHelper.shared.getAttributes()
                 )
-            }
-            loadingProducts = false
 
-            if products.count == 0 {
-                ClientLogger.shared.logCounter(
-                    .SettingPremiumNoProductsFound,
-                    attributes: EnvironmentHelper.shared.getAttributes()
-                )
+                loadingProducts = true
+                do {
+                    products = try await Product.products(for: [
+                        PremiumPlan.monthly.rawValue, PremiumPlan.annual.rawValue,
+                    ])
+                } catch {
+                    ClientLogger.shared.logCounter(
+                        .SettingPremiumProductsFetchException,
+                        attributes: EnvironmentHelper.shared.getAttributes()
+                    )
+                }
+                loadingProducts = false
+
+                if products.count == 0 {
+                    ClientLogger.shared.logCounter(
+                        .SettingPremiumNoProductsFound,
+                        attributes: EnvironmentHelper.shared.getAttributes()
+                    )
+                }
             }
         }
     }
