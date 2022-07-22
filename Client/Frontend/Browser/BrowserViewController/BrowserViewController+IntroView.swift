@@ -120,8 +120,6 @@ extension BrowserViewController {
 // MARK: - Default Browser
 extension BrowserViewController {
     func presentDefaultBrowserFirstRun() {
-        let _ = NeevaExperiment.startExperiment(for: .defaultBrowserWelcomeV2)
-        NeevaExperiment.logStartExperiment(for: .defaultBrowserWelcomeV2)
         let interstitialModel = InterstitialViewModel(
             onCloseAction: {
                 self.overlayManager.hideCurrentOverlay()

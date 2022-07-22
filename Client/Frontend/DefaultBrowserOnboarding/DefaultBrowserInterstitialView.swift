@@ -109,7 +109,7 @@ struct DefaultBrowserInterstitialView<Content: View>: View {
             }
             .padding(.horizontal, 32)
             .padding(.bottom, 20)
-            if showLogo && NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) == .welcomeV2 {
+            if showLogo {
                 VStack(spacing: 0) {
                     Spacer()
                     Image("neevaMenuIcon")
