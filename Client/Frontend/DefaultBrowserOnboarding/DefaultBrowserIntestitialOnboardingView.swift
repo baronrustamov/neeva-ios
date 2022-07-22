@@ -108,25 +108,6 @@ struct DefaultBrowserInterstitialOnboardingView: View {
     @State private var showSteps = false
 
     @ViewBuilder
-    var oldHeader: some View {
-        VStack(alignment: .leading) {
-            Text("Make Neeva your Default Browser to")
-                .font(.system(size: 32, weight: .bold))
-                .padding(.bottom, 10)
-
-            ForEach(interstitialModel.onboardingPageBullets(), id: \.self) { bulletText in
-                HStack {
-                    Symbol(decorative: .checkmarkCircleFill, size: 16)
-                        .foregroundColor(Color.ui.adaptive.blue)
-                    Text(bulletText).withFont(unkerned: .bodyLarge).foregroundColor(
-                        Color.ui.gray30)
-                }
-                .padding(.vertical, 5)
-            }
-        }.frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    @ViewBuilder
     var detail: some View {
         VStack(alignment: .leading) {
             Text("Follow these 2 easy steps:")
@@ -136,8 +117,7 @@ struct DefaultBrowserInterstitialOnboardingView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(
-            .horizontal, NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) != .welcomeV2 ? 0 : 45)
+        .padding(.horizontal, 45)
 
         VStack(alignment: .leading) {
             HStack {
@@ -151,9 +131,7 @@ struct DefaultBrowserInterstitialOnboardingView: View {
 
                 Text("1. Tap Default Browser App")
                     .withFont(.bodyXLarge)
-                    .padding(
-                        .leading,
-                        NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) != .welcomeV2 ? 15 : 8)
+                    .padding(.leading, 8)
             }
             Divider()
             HStack {
@@ -168,66 +146,48 @@ struct DefaultBrowserInterstitialOnboardingView: View {
 
                 Text("2. Select Neeva")
                     .withFont(.bodyXLarge)
-                    .padding(
-                        .leading,
-                        NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) != .welcomeV2 ? 15 : 8)
+                    .padding(.leading, 8)
             }
         }
-        .padding(NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) != .welcomeV2 ? 20 : 15)
+        .padding(15)
         .overlay(
             RoundedRectangle(cornerRadius: 16)
                 .stroke(Color(UIColor.systemGray5), lineWidth: 5)
         )
-        .padding(
-            .horizontal, NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) != .welcomeV2 ? -16 : 40
-        )
+        .padding(.horizontal, 40)
         .padding(.bottom, 20)
     }
 
     @ViewBuilder
-    var oldContent: some View {
+    var header: some View {
         VStack(alignment: .leading) {
-            Spacer().repeated(2)
-            oldHeader
-            Spacer()
-            detail
-                .padding(.bottom, 15)
-        }
-    }
-
-    @ViewBuilder
-    var newHeader: some View {
-        VStack(alignment: .leading) {
-            Text("Want to use\nNeeva for all your browsing?")
+            Text("Make Neeva your Default Browser")
                 .font(.system(size: UIConstants.hasHomeButton ? 24 : 36, weight: .bold))
-                .padding(.bottom, 15)
+                .padding(.bottom, 10)
 
-            Text("Make Neeva your default browser.")
-                .font(.system(size: 16, weight: .bold))
+            ForEach(interstitialModel.onboardingPageBullets(), id: \.self) { bulletText in
+                HStack {
+                    Symbol(decorative: .checkmarkCircleFill, size: 16)
+                        .foregroundColor(Color.ui.adaptive.blue)
+                    Text(bulletText).font(.system(size: 16, weight: .bold))
+                }
+                .padding(.vertical, 5)
+            }
         }.frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 45)
     }
 
     @ViewBuilder
-    var newContent: some View {
-        newHeader
+    var content: some View {
+        header
         Spacer()
         detail
             .padding(.bottom, 15)
     }
 
-    @ViewBuilder
-    var content: some View {
-        if NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) != .welcomeV2 {
-            oldContent
-        } else {
-            DefaultBrowserInterstitialBackdrop(content: newContent)
-        }
-    }
-
     var body: some View {
         ZStack {
             DefaultBrowserInterstitialView(
-                content: content,
+                content: DefaultBrowserInterstitialBackdrop(content: content),
                 primaryButton: interstitialModel.openButtonText,
                 secondaryButton: interstitialModel.showRemindButton
                     && notificationPermissionState
@@ -258,24 +218,14 @@ struct DefaultBrowserInterstitialOnboardingView: View {
             )
             if interstitialModel.showCloseButton {
                 VStack {
-                    if NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) == .welcomeV2 {
-                        Spacer().frame(height: UIConstants.hasHomeButton ? 10 : 50)
-                    }
+                    Spacer().frame(height: UIConstants.hasHomeButton ? 10 : 50)
                     HStack {
                         Spacer()
                         CloseButton(action: {
                             interstitialModel.closeAction()
                         })
-                        .padding(
-                            .trailing,
-                            NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) != .welcomeV2
-                                ? 20 : 10
-                        )
-                        .padding(
-                            .top,
-                            NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) != .welcomeV2
-                                ? 20 : 16
-                        )
+                        .padding(.trailing, 10)
+                        .padding(.top, 16)
                         .background(Color.clear)
                     }
                     Spacer()

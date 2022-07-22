@@ -79,11 +79,6 @@ extension NeevaExperiment {
         case control
         case previewSignUp
     }
-
-    public enum DefaultBrowserWelcomeV2: String, ExperimentArms {
-        case control
-        case welcomeV2
-    }
 }
 
 // Experiment Example */
@@ -94,8 +89,4 @@ extension NeevaExperiment {
 extension NeevaExperiment.Experiment
 where Arm == NeevaExperiment.PromoCardTypeAfterFirstRun {
     public static let promoCardTypeAfterFirstRun = Self()
-}
-
-extension NeevaExperiment.Experiment where Arm == NeevaExperiment.DefaultBrowserWelcomeV2 {
-    public static let defaultBrowserWelcomeV2 = Self()
 }

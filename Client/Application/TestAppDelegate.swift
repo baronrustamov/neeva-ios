@@ -174,10 +174,6 @@ class TestAppDelegate: AppDelegate {
         if launchArguments.contains(LaunchArguments.ForceExperimentControlArm) {
             // placeholder: add any control experiment arm here if needed
             NeevaExperiment.forceExperimentArm(
-                experiment: .defaultBrowserWelcomeV2,
-                experimentArm: NeevaExperiment.DefaultBrowserWelcomeV2.control.rawValue)
-
-            NeevaExperiment.forceExperimentArm(
                 experiment: .promoCardTypeAfterFirstRun,
                 experimentArm: NeevaExperiment.PromoCardTypeAfterFirstRun.control.rawValue)
         }
