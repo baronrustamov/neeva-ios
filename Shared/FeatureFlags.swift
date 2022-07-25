@@ -25,7 +25,6 @@ public enum FeatureFlag: String, CaseIterable, RawRepresentable {
     case qrCodeSignIn = "Sign in with QR Code"
     case recommendedSpaces = "Recommended Spaces"
     case restoreAppUI = "Restore App UI"
-    case reverseChronologicalOrdering = "Sort tabs based on reverse chronological ordering"
     case spaceComments = "Comments from space on pages"
     case spacify = "Enable button to turn a page into a Space"
     case swipePlusPlus = "Additional forward and back swipe gestures"

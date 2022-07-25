@@ -765,10 +765,6 @@ class TabGroupCardDetails: CardDropDelegate, ObservableObject {
         self.manager = tabManager
         super.init(tabManager: tabManager)
 
-        if FeatureFlag[.reverseChronologicalOrdering] {
-            allDetails = allDetails.reversed()
-        }
-
         allDetails =
             tabGroup.children
             .sorted(by: { lhs, rhs in

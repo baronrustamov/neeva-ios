@@ -375,10 +375,6 @@ class TabCardModel: CardDropDelegate, CardModel {
     func onDataUpdated() {
         allDetails = manager.activeTabs.map { TabCardDetails(tab: $0, manager: manager) }
 
-        if FeatureFlag[.reverseChronologicalOrdering] {
-            allDetails = allDetails.reversed()
-        }
-
         allTabGroupDetails =
             manager.activeTabGroups.map { id, group in
                 TabGroupCardDetails(tabGroup: group, tabManager: manager)
