@@ -34,7 +34,7 @@ enum NavigationPath {
         case walletConnect(wcURL: WCURL)
     #endif
 
-    init?(bvc: BrowserViewController, url: URL) {
+    init?(url: URL) {
         let urlString = url.absoluteString
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             return nil
@@ -136,7 +136,7 @@ enum NavigationPath {
         }
     }
 
-    static func navigationPath(from url: URL, with bvc: BrowserViewController) -> NavigationPath? {
+    static func navigationPath(from url: URL) -> NavigationPath? {
         guard url.absoluteString.hasPrefix(NeevaConstants.appDeepLinkURL.absoluteString),
             let deepLink = URL(
                 string: "neeva://"
@@ -146,7 +146,7 @@ enum NavigationPath {
             return nil
         }
 
-        return NavigationPath(bvc: bvc, url: deepLink)
+        return NavigationPath(url: deepLink)
     }
 
     private static func handleWidgetKitQuery(

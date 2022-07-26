@@ -112,7 +112,7 @@ struct SpaceDetailList: View {
                                 browserModel.hideGridWithNoAnimation()
                                 let bvc = SceneDelegate.getBVC(with: tabModel.manager.scene)
                                 if let navPath = NavigationPath.navigationPath(
-                                    from: url, with: bvc)
+                                    from: url)
                                 {
                                     NavigationPath.handle(nav: navPath, with: bvc)
                                     return

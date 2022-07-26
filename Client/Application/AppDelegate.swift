@@ -28,7 +28,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     var cleanlyBackgroundedLastTime = true
     weak var application: UIApplication?
-    var launchOptions: [AnyHashable: Any]?
 
     // The profile is initialized during startup below and then remains valid for the
     // lifetime of the app. Expose a non-optional Profile accessor for convenience.
@@ -64,7 +63,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         // Hold references to willFinishLaunching parameters for delayed app launch
         self.application = application
-        self.launchOptions = launchOptions
 
         // Cleanup can be a heavy operation, take it out of the startup path. Instead check after a few seconds.
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
@@ -84,12 +82,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         UNUserNotificationCenter.current().delegate = self
 
-        return startApplication(application, withLaunchOptions: launchOptions)
+        startApplication()
+
+        return true
     }
 
-    func startApplication(
-        _ application: UIApplication, withLaunchOptions launchOptions: [AnyHashable: Any]?
-    ) -> Bool {
+    func startApplication() {
         log.info("startApplication begin")
 
         // set session UUID v2 before any logging event
@@ -140,10 +138,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         if FeatureFlag[.interactiveScrollView] {
             UIScrollView.appearance().keyboardDismissMode = .interactive
         }
-
-        return true
     }
 
+    // periphery:ignore
     func startCrashReporter() -> Bool {
         let config = PLCrashReporterConfig(signalHandlerType: .mach, symbolicationStrategy: [])
         guard let crashReporter = PLCrashReporter(configuration: config) else {
@@ -165,23 +162,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         return true
     }
 
+    /*
+     * "Return false if the app should not perform the application(_:performActionFor:completionHandler:)
+     * method because you’re handling the invocation of a Home screen quick action"
+     * https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623032-application
+     */
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        // Override point for customization after application launch.
-        var shouldPerformAdditionalDelegateHandling = true
-
-        // If a shortcut was launched, display its information and take the appropriate action
-        if let shortcutItem = launchOptions?[UIApplication.LaunchOptionsKey.shortcutItem]
-            as? UIApplicationShortcutItem
-        {
-            QuickActions.sharedInstance.launchedShortcutItem = shortcutItem
-            // This will block "performActionForShortcutItem:completionHandler" from being called.
-            shouldPerformAdditionalDelegateHandling = false
-        }
-
-        return shouldPerformAdditionalDelegateHandling
+        return
+            !(launchOptions?[UIApplication.LaunchOptionsKey.shortcutItem]
+            is UIApplicationShortcutItem)
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
