@@ -35,7 +35,7 @@ struct TransactionFeeView: View {
 
     var body: some View {
         HStack(spacing: 6) {
-            Text("$\(transactionFee)")
+            Text(verbatim: "$\(transactionFee)")
                 .withFont(.labelLarge)
                 .foregroundColor(.label)
                 .opacity(model.updatingGas ? 0 : 1)

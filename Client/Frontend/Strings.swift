@@ -67,28 +67,10 @@ extension Strings {
         "HistoryPanel.ClearHistoryMenuTitle",
         value: "Clearing Recent History will remove history, cookies, and other browser data.",
         comment: "Title for popup action menu to clear recent history.")
-    public static let ClearHistoryMenuOptionTheLastHour = MZLocalizedString(
-        "HistoryPanel.ClearHistoryMenuOptionTheLastHour", value: "The Last Hour",
-        comment: "Button to perform action to clear history for the last hour")
-    public static let ClearHistoryMenuOptionToday = MZLocalizedString(
-        "HistoryPanel.ClearHistoryMenuOptionToday", value: "Today",
-        comment: "Button to perform action to clear history for today only")
-    public static let ClearHistoryMenuOptionTodayAndYesterday = MZLocalizedString(
-        "HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday", value: "Today and Yesterday",
-        comment: "Button to perform action to clear history for yesterday and today")
-    public static let ClearHistoryMenuOptionEverything = MZLocalizedString(
-        "HistoryPanel.ClearHistoryMenuOptionEverything", value: "Everything",
-        comment: "Option title to clear all browsing history.")
 }
 
 // Neeva Logins
 extension Strings {
-    public static let LoginsAndPasswordsTitle = MZLocalizedString(
-        "Settings.LoginsAndPasswordsTitle", value: "Logins & Passwords",
-        comment:
-            "Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long"
-    )
-
     // Prompts
     public static let SaveLoginUsernamePrompt = MZLocalizedString(
         "LoginsHelper.PromptSaveLogin.Title", value: "Save login %@ for %@?",
@@ -220,86 +202,6 @@ extension Strings {
         comment: "See http://mzl.la/1G7uHo7")
 }
 
-// Sent tabs notifications. These are displayed when the app is backgrounded or the device is locked.
-extension Strings {
-    // one or more tabs
-    public static let SentTab_TabArrivingNotification_NoDevice_title = MZLocalizedString(
-        "SentTab_TabArrivingNotification_NoDevice_title", value: "Tab received",
-        comment:
-            "Title of notification shown when the device is sent one or more tabs from an unnamed device."
-    )
-    public static let SentTab_TabArrivingNotification_NoDevice_body = MZLocalizedString(
-        "SentTab_TabArrivingNotification_NoDevice_body",
-        value: "New tab arrived from another device.",
-        comment:
-            "Body of notification shown when the device is sent one or more tabs from an unnamed device."
-    )
-    public static let SentTab_TabArrivingNotification_WithDevice_title = MZLocalizedString(
-        "SentTab_TabArrivingNotification_WithDevice_title", value: "Tab received from %@",
-        comment:
-            "Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device."
-    )
-    public static let SentTab_TabArrivingNotification_WithDevice_body = MZLocalizedString(
-        "SentTab_TabArrivingNotification_WithDevice_body", value: "New tab arrived in %@",
-        comment:
-            "Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name."
-    )
-}
-
-// Additional messages sent via Push from FxA
-extension Strings {
-    public static let FxAPush_DeviceDisconnected_ThisDevice_title = MZLocalizedString(
-        "FxAPush_DeviceDisconnected_ThisDevice_title", value: "Sync Disconnected",
-        comment:
-            "Title of a notification displayed when this device has been disconnected by another device."
-    )
-    public static let FxAPush_DeviceDisconnected_ThisDevice_body = MZLocalizedString(
-        "FxAPush_DeviceDisconnected_ThisDevice_body",
-        value: "This device has been successfully disconnected from Neeva Sync.",
-        comment:
-            "Body of a notification displayed when this device has been disconnected from FxA by another device."
-    )
-    public static let FxAPush_DeviceDisconnected_title = MZLocalizedString(
-        "FxAPush_DeviceDisconnected_title", value: "Sync Disconnected",
-        comment:
-            "Title of a notification displayed when named device has been disconnected from FxA.")
-    public static let FxAPush_DeviceDisconnected_body = MZLocalizedString(
-        "FxAPush_DeviceDisconnected_body", value: "%@ has been successfully disconnected.",
-        comment:
-            "Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device."
-    )
-
-    public static let FxAPush_DeviceDisconnected_UnknownDevice_body = MZLocalizedString(
-        "FxAPush_DeviceDisconnected_UnknownDevice_body",
-        value: "A device has disconnected from Neeva Sync",
-        comment:
-            "Body of a notification displayed when unnamed device has been disconnected from FxA.")
-
-    public static let FxAPush_DeviceConnected_title = MZLocalizedString(
-        "FxAPush_DeviceConnected_title", value: "Sync Connected",
-        comment: "Title of a notification displayed when another device has connected to FxA.")
-    public static let FxAPush_DeviceConnected_body = MZLocalizedString(
-        "FxAPush_DeviceConnected_body", value: "Neeva Sync has connected to %@",
-        comment:
-            "Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device."
-    )
-}
-
-// App menu.
-extension Strings {
-    public static let SendToDeviceTitle = MZLocalizedString(
-        "Send to Device", tableName: "3DTouchActions",
-        comment:
-            "Label for preview action on Tab Tray Tab to send the current tab to another device")
-}
-
-// Settings Home
-extension Strings {
-    public static let SettingsSiriOpenURL = MZLocalizedString(
-        "Settings.Siri.OpenTabShortcut", value: "Open New Tab",
-        comment: "The description of the open new tab siri shortcut")
-}
-
 // Keyboard short cuts
 extension Strings {
     public static let ShowTabTrayFromTabKeyCodeTitle = MZLocalizedString(
@@ -334,13 +236,6 @@ extension String {
             "Neeva shortcuts title when widget enters edit mode. Do not translate the word Neeva.")
 
     // Quick Action - Medium Size Quick Action
-    public static let QuickActionsSubLabel = MZLocalizedString(
-        "TodayWidget.QuickActionsSubLabel", tableName: "Today", value: "Neeva - Quick Actions",
-        comment: "Sub label for medium size quick action widget")
-    public static let NewIncognitoTabButtonLabelV2 = MZLocalizedString(
-        "TodayWidget.NewIncognitoTabButtonLabelV2", tableName: "Today",
-        value: "Search in Incognito Tab",
-        comment: "Open New Incognito Tab button label for medium size action")
     public static let GoToCopiedLinkLabelV2 = MZLocalizedString(
         "TodayWidget.GoToCopiedLinkLabelV2", tableName: "Today", value: "Go to\nCopied Link",
         comment: "Go to copied link")
@@ -371,56 +266,12 @@ extension String {
     public static let CloseIncognitoTabsLabelV2 = MZLocalizedString(
         "TodayWidget.CloseIncognitoTabsLabelV2", tableName: "Today", value: "Close\nIncognito Tabs",
         comment: "Close Incognito Tabs")
-    public static let CloseIncognitoTabsLabelV3 = MZLocalizedString(
-        "TodayWidget.CloseIncognitoTabsLabelV3", tableName: "Today", value: "Close\nPrivate\nTabs",
-        comment: "Close Incognito Tabs")
-    public static let GoToCopiedLinkLabelV4 = MZLocalizedString(
-        "TodayWidget.GoToCopiedLinkLabelV4", tableName: "Today", value: "Go to\nCopied\nLink",
-        comment: "Go to copied link")
 
     // Quick Action - Small Size Widget - Edit Mode
     public static let QuickActionDescription = MZLocalizedString(
         "TodayWidget.QuickActionDescription", tableName: "Today",
         value: "Select a Neeva shortcut to add to your Home screen.",
         comment: "Quick action description when widget enters edit mode")
-    public static let QuickActionDropDownMenu = MZLocalizedString(
-        "TodayWidget.QuickActionDropDownMenu", tableName: "Today", value: "Quick action",
-        comment: "Quick Actions left label text for dropdown menu when widget enters edit mode")
-    public static let DropDownMenuItemNewSearch = MZLocalizedString(
-        "TodayWidget.DropDownMenuItemNewSearch", tableName: "Today", value: "New Search",
-        comment:
-            "Quick Actions drop down menu item for new search when widget enters edit mode and drop down menu expands"
-    )
-    public static let DropDownMenuItemNewPrivateSearch = MZLocalizedString(
-        "TodayWidget.DropDownMenuItemNewPrivateSearch", tableName: "Today",
-        value: "New Private Search",
-        comment:
-            "Quick Actions drop down menu item for new private search when widget enters edit mode and drop down menu expands"
-    )
-    public static let DropDownMenuItemGoToCopiedLink = MZLocalizedString(
-        "TodayWidget.DropDownMenuItemGoToCopiedLink", tableName: "Today",
-        value: "Go to Copied Link",
-        comment:
-            "Quick Actions drop down menu item for Go to Copied Link when widget enters edit mode and drop down menu expands"
-    )
-    public static let DropDownMenuItemClearIncognitoTabs = MZLocalizedString(
-        "TodayWidget.DropDownMenuItemClearIncognitoTabs", tableName: "Today",
-        value: "Clear Incognito Tabs",
-        comment:
-            "Quick Actions drop down menu item for lear Incognito Tabs when widget enters edit mode and drop down menu expands"
-    )
-
-    // Quick Action - Small Size - Gallery View
-    public static let QuickActionGalleryDescription = MZLocalizedString(
-        "TodayWidget.QuickActionGalleryDescription", tableName: "Today",
-        value:
-            "Add a Neeva shortcut to your Home screen. After adding the widget, touch and hold to edit it and select a different shortcut.",
-        comment: "Description for small size widget to add it to home screen")
-
-    // Top Sites - Medium Size Widget
-    public static let TopSitesSubLabel = MZLocalizedString(
-        "TodayWidget.TopSitesSubLabel", tableName: "Today", value: "Neeva - Top Sites",
-        comment: "Sub label for Top Sites widget")
 
     // Top Sites - Medium Size - Gallery View
     public static let TopSitesGalleryTitle = MZLocalizedString(
@@ -430,55 +281,6 @@ extension String {
         "TodayWidget.TopSitesGalleryDescription", tableName: "Today",
         value: "Add shortcuts to frequently and recently visited sites.",
         comment: "Description for top sites widget to add Neeva top sites shotcuts to home screen")
-
-    // Quick View Open Tabs - Medium Size Widget
-    public static let QuickViewOpenTabsSubLabel = MZLocalizedString(
-        "TodayWidget.QuickViewOpenTabsSubLabel", tableName: "Today", value: "Neeva - Open Tabs",
-        comment: "Sub label for Top Sites widget")
-    public static let MoreTabsLabel = MZLocalizedString(
-        "TodayWidget.MoreTabsLabel", tableName: "Today", value: "+%d More…",
-        comment:
-            "%d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget"
-    )
-    public static let OpenNeevaLabel = MZLocalizedString(
-        "TodayWidget.OpenNeevaLabel", tableName: "Today", value: "Open Neeva",
-        comment: "Open Neeva when there are no tabs opened in tab tray i.e. Empty State")
-    public static let NoOpenTabsLabel = MZLocalizedString(
-        "TodayWidget.NoOpenTabsLabel", tableName: "Today", value: "No open tabs.",
-        comment: "Label that is shown when there are no tabs opened in tab tray i.e. Empty State")
-    public static let NoOpenTabsLabelV2 = MZLocalizedString(
-        "TodayWidget.NoOpenTabsLabelV2", tableName: "Today", value: "No Open Tabs",
-        comment: "Label that is shown when there are no tabs opened in tab tray i.e. Empty State")
-
-    // Quick View Open Tabs - Medium Size - Gallery View
-    public static let QuickViewGalleryTitle = MZLocalizedString(
-        "TodayWidget.QuickViewGalleryTitle", tableName: "Today", value: "Quick View",
-        comment: "Title for Quick View widget in Gallery View where user can add it to home screen")
-    public static let QuickViewGalleryDescription = MZLocalizedString(
-        "TodayWidget.QuickViewGalleryDescription", tableName: "Today",
-        value: "Access your open tabs directly on your homescreen.",
-        comment:
-            "Description for Quick View widget in Gallery View where user can add it to home screen"
-    )
-    public static let QuickViewGalleryDescriptionV2 = MZLocalizedString(
-        "TodayWidget.QuickViewGalleryDescriptionV2", tableName: "Today",
-        value: "Add shortcuts to your open tabs.",
-        comment:
-            "Description for Quick View widget in Gallery View where user can add it to home screen"
-    )
-    public static let ViewMore = MZLocalizedString(
-        "TodayWidget.ViewMore", tableName: "Today", value: "View More",
-        comment:
-            "View More for Quick View widget in Gallery View where we don't know how many tabs might be opened"
-    )
-
-    // Quick View Open Tabs - Large Size - Gallery View
-    public static let QuickViewLargeGalleryDescription = MZLocalizedString(
-        "TodayWidget.QuickViewLargeGalleryDescription", tableName: "Today",
-        value: "Add shortcuts to your open tabs.",
-        comment:
-            "Description for Quick View widget in Gallery View where user can add it to home screen"
-    )
 }
 
 // Default Browser

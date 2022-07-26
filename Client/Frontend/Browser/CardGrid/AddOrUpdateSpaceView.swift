@@ -106,7 +106,7 @@ private struct LegacyInputField: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(title.rawValue)
+            Text(LocalizedStringKey(title.rawValue))
                 .withFont(.headingXSmall)
                 .foregroundColor(.secondaryLabel)
 

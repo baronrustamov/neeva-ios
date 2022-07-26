@@ -799,13 +799,13 @@ struct SuggestionView_Previews: PreviewProvider {
         let bvc = SceneDelegate.getBVC(for: nil)
 
         List {
-            Section(header: Text("Query").textCase(nil)) {
+            Section(header: Text(verbatim: "Query").textCase(nil)) {
                 QuerySuggestionView(suggestion: spaceQuery)
                 QuerySuggestionView(suggestion: query)
                 QuerySuggestionView(suggestion: historyQuery)
             }.environmentObject(SuggestionModel(bvc: bvc))
 
-            Section(header: Text("Query — Bang active").textCase(nil)) {
+            Section(header: Text(verbatim: "Query — Bang active").textCase(nil)) {
                 QuerySuggestionView(suggestion: query)
                 QuerySuggestionView(suggestion: historyQuery)
             }.environmentObject(
@@ -814,7 +814,7 @@ struct SuggestionView_Previews: PreviewProvider {
                     previewLensBang: .init(
                         domain: nil, shortcut: "w", description: "Wikipedia", type: .bang)))
 
-            Section(header: Text("Query — Lens active").textCase(nil)) {
+            Section(header: Text(verbatim: "Query — Lens active").textCase(nil)) {
                 QuerySuggestionView(suggestion: query)
                 QuerySuggestionView(suggestion: historyQuery)
             }.environmentObject(
@@ -823,7 +823,7 @@ struct SuggestionView_Previews: PreviewProvider {
                     previewLensBang: .init(
                         domain: nil, shortcut: "w", description: "Wikipedia", type: .lens)))
 
-            Section(header: Text("URL, Bang, and Lens").textCase(nil)) {
+            Section(header: Text(verbatim: "URL, Bang, and Lens").textCase(nil)) {
                 URLSuggestionView(suggestion: url)
                 BangSuggestionView(suggestion: bang)
                 BangSuggestionView(suggestion: noDomainBang)

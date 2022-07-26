@@ -54,8 +54,8 @@ struct DefaultBrowserInterstitialView<Content: View>: View {
     var showSecondaryButton: Bool = true
     var showLogo: Bool = false
     var content: Content
-    var primaryButton: String
-    var secondaryButton: String?
+    var primaryButton: LocalizedStringKey
+    var secondaryButton: LocalizedStringKey?
     var primaryAction: () -> Void
     var secondaryAction: (() -> Void)?
 

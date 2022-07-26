@@ -31,7 +31,7 @@ struct UnlockedThemesView: View {
 
     @ViewBuilder private var content: some View {
         if !unlockedThemes.isEmpty && !hasCredentials {
-            Text("Import credentials to unlock!")
+            Text(verbatim: "Import credentials to unlock!")
                 .withFont(.headingSmall)
                 .gradientForeground()
                 .frame(maxWidth: .infinity, alignment: .center)

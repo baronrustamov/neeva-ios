@@ -69,9 +69,17 @@ struct RecipeView: View {
                                     .font(.system(size: 14))
                                     .padding(.leading, 3)
                                     .padding(.trailing, 10)
-                                Text("\(totalTime) (Total Time)")
+                                Text(
+                                    "\(totalTime) (Total Time)",
+                                    comment:
+                                        "This shows up on a recipe to specify how long it takes to make this dish"
+                                )
                                 if let prepTime = prepTime {
-                                    Text(", \(prepTime) (Prep Time)")
+                                    Text(
+                                        ", \(prepTime) (Prep Time)",
+                                        comment:
+                                            "This shows up on a recipe to specify the prep time for this dish "
+                                    )
                                 }
                             }
                             .withFont(unkerned: .bodyMedium)

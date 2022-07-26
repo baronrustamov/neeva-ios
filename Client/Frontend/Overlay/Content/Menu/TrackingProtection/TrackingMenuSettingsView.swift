@@ -13,7 +13,11 @@ struct TrackingAttribution: View {
         if #available(iOS 15.0, *) {
             Section(
                 footer:
-                    Text("Tracking rules courtesy of [The EasyList Authors](https://easylist.to/)")
+                    // this component is not used currently
+                    Text(
+                        verbatim:
+                            "Tracking rules courtesy of [The EasyList Authors](https://easylist.to/)"
+                    )
             ) {}
         } else {
             Section(
@@ -23,7 +27,8 @@ struct TrackingAttribution: View {
                             openURL(URL(string: "https://easylist.to/pages/about.html")!)
                         },
                         label: {
-                            Text("Tracking rules courtesy of The EasyList Authors")
+                            // this component is not used currently
+                            Text(verbatim: "Tracking rules courtesy of The EasyList Authors")
                         }
                     )
                     .font(.footnote)

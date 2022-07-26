@@ -24,7 +24,7 @@ struct NotificationSettingsView: View {
                         NotificationPermissionHelper.shared.requestPermissionIfNeeded(
                             showChangeInSettingsDialogIfNeeded: true, callSite: .settings)
                     } label: {
-                        Text("Show Notification Auth Prompt")
+                        Text(verbatim: "Show Notification Auth Prompt")
                             .foregroundColor(Color.label)
                     }
                 }
@@ -33,7 +33,7 @@ struct NotificationSettingsView: View {
                     dismissScreen()
                     showNotificationPrompt()
                 } label: {
-                    Text("Show Welcome Tour Notification Prompt")
+                    Text(verbatim: "Show Welcome Tour Notification Prompt")
                         .foregroundColor(Color.label)
                 }
 
@@ -50,13 +50,13 @@ struct NotificationSettingsView: View {
                         }
                     }
                 } label: {
-                    Text("Schedule Default Browser Notification in 10 seconds")
+                    Text(verbatim: "Schedule Default Browser Notification in 10 seconds")
                         .foregroundColor(Color.label)
                 }
 
                 if let token = Defaults[.notificationToken] {
                     HStack {
-                        Text("Notification Token")
+                        Text(verbatim: "Notification Token")
                         Text(token)
                             .withFont(.bodySmall)
                             .contextMenu(

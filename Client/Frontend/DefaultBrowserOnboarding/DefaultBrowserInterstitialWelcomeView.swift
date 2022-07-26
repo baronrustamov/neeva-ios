@@ -23,7 +23,7 @@ struct DefaultBrowserInterstitialWelcomeView: View {
                 HStack {
                     Symbol(decorative: .checkmarkCircleFill, size: 20)
                         .foregroundColor(Color.ui.adaptive.blue)
-                    Text(bulletText).font(.system(size: 16, weight: .bold))
+                    Text(LocalizedStringKey(bulletText)).font(.system(size: 16, weight: .bold))
                 }
                 .padding(.vertical, 5)
             }

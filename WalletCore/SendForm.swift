@@ -22,7 +22,7 @@ public struct SendForm: View {
     public var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                TextField("Recipient Address", text: $sendToAccountAddress)
+                TextField(String("Recipient Address"), text: $sendToAccountAddress)
                 Spacer()
                 Button(action: { showQRScanner = true }) {
                     Symbol(decorative: .qrcodeViewfinder, style: .labelMedium)
@@ -41,13 +41,13 @@ public struct SendForm: View {
             .cornerRadius(12)
 
             HStack {
-                TextField("Amount (ETH)", text: $amount)
+                TextField(String("Amount (ETH)"), text: $amount)
                     .disableAutocorrection(true)
                     .autocapitalization(.none)
                     .keyboardType(.numbersAndPunctuation)
                     .keyboardType(.decimalPad)
                 Spacer()
-                Text("\(TokenType.ether.toUSD(amount.isEmpty ? "0" : amount)) USD")
+                Text(verbatim: "\(TokenType.ether.toUSD(amount.isEmpty ? "0" : amount)) USD")
                     .withFont(.bodyLarge)
                     .foregroundColor(.secondaryLabel)
             }
@@ -62,12 +62,12 @@ public struct SendForm: View {
 
             VStack(spacing: 16) {
                 NeevaWalletLongPressButton(action: sendEth) {
-                    Text("Press and hold to send")
+                    Text(verbatim: "Press and hold to send")
                         .frame(maxWidth: .infinity)
                 }
                 .disabled(amount.isEmpty && sendToAccountAddress.isEmpty)
                 Button(action: { showSendForm = false }) {
-                    Text("Cancel")
+                    Text(verbatim: "Cancel")
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.wallet(.secondary))

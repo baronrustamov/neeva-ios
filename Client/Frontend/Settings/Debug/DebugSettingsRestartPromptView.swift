@@ -11,7 +11,8 @@ struct DebugSettingsRestartPromptView: View {
             HStack {
                 Spacer()
                 Text(
-                    "Quit Neeva from the App Switcher and relaunch for feature flag changes to take effect"
+                    verbatim:
+                        "Quit Neeva from the App Switcher and relaunch for feature flag changes to take effect"
                 )
                 .withFont(.labelLarge)
                 .multilineTextAlignment(.center)

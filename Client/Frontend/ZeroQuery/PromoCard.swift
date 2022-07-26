@@ -58,7 +58,7 @@ enum PromoCardType {
         case .notificationPermission:
             Text("From news to shopping,\nget the best of the web\ndelivered right to you")
         case .walletPromo:
-            Text("Experience Web3,\n with clarity and safety")
+            Text(verbatim: "Experience Web3,\n with clarity and safety")
         }
     }
 
@@ -89,7 +89,7 @@ enum PromoCardType {
         case .notificationPermission:
             Text("Enable Notifications")
         case .walletPromo:
-            Text("Create / Import Wallet")
+            Text(verbatim: "Create / Import Wallet")
         }
     }
 

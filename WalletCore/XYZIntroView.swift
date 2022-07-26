@@ -49,7 +49,7 @@ public struct XYZIntroView: View {
                 .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
                 .tabViewStyle(.page)
                 Button(action: { viewState = .starter }) {
-                    Text("Let's go!")
+                    Text(verbatim: "Let's go!")
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.wallet(.primary))

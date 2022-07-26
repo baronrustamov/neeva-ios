@@ -26,13 +26,14 @@ public struct AdBlockerPromoView: View {
                 Spacer()
             }
             VStack(alignment: .leading, spacing: 0) {
-                Text("Block Intrusive Ads")
+                Text(verbatim: "Block Intrusive Ads")
                     .padding(.top, 50)
                     .font(.system(size: 26, weight: .bold))
                     .foregroundColor(.primary)
 
                 Text(
-                    "Browse with peace of mind. No more distracting video popups or clumsy clicks."
+                    verbatim:
+                        "Browse with peace of mind. No more distracting video popups or clumsy clicks."
                 )
                 .withFont(.bodyLarge)
                 .foregroundColor(.ui.gray30)
@@ -44,7 +45,7 @@ public struct AdBlockerPromoView: View {
                     openSettings(.cookieCutter)
                     hideOverlay()
                 } label: {
-                    Text("Set up Ad Blocker")
+                    Text(verbatim: "Set up Ad Blocker")
                         .withFont(.labelLarge)
                         .padding(13)
                         .frame(maxWidth: .infinity)
@@ -58,7 +59,7 @@ public struct AdBlockerPromoView: View {
                     ClientLogger.shared.logCounter(.AdBlockPromoRemind)
                     hideOverlay()
                 } label: {
-                    Text("Skip")
+                    Text(verbatim: "Skip")
                         .withFont(.labelLarge)
                         .foregroundColor(.ui.adaptive.blue)
                         .padding(13)

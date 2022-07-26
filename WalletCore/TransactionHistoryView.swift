@@ -12,7 +12,7 @@ struct TransactionHistoryView: View {
         ScrollView(.vertical) {
             VStack(alignment: .leading) {
                 if transactionHistory.count > 0 {
-                    Text("Transactions")
+                    Text(verbatim: "Transactions")
                         .withFont(.labelMedium)
                         .padding(.top, 20)
                 }
@@ -30,7 +30,7 @@ struct TransactionHistoryView: View {
                                 Text(history.transactionAction.rawValue)
                                     .withFont(.bodyLarge)
                                 Spacer()
-                                Text("\(history.amountInEther) ETH")
+                                Text(verbatim: "\(history.amountInEther) ETH")
                                     .withFont(.bodyMedium)
                             }
                             ScrollView(.horizontal) {

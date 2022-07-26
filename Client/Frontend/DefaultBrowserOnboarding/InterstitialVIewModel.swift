@@ -8,8 +8,8 @@ import Shared
 import SwiftUI
 
 class InterstitialViewModel: ObservableObject {
-    @Published var openButtonText: String
-    @Published var remindButtonText: String
+    @Published var openButtonText: LocalizedStringKey
+    @Published var remindButtonText: LocalizedStringKey
 
     @Published var shouldHide: Bool = true
 

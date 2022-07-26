@@ -107,13 +107,13 @@ func makeNavigationLink<D: View, S: StringProtocol>(title: S, destination: () ->
 struct NavigationLinkButton_Previews: PreviewProvider {
     static var previews: some View {
         List {
-            NavigationLinkButton("Hello") {}
-            NavigationLinkButton("Hello", style: .modal) {}
+            NavigationLinkButton("Test") {}
+            NavigationLinkButton("Test", style: .modal) {}
             NavigationLinkButton(action: {}) {
-                Label("Hello", systemSymbol: .starFill)
+                Label(String("Test"), systemSymbol: .starFill)
             }
             NavigationLinkButton(action: {}, style: .modal) {
-                Label("Hello", systemSymbol: .starFill)
+                Label(String("Test"), systemSymbol: .starFill)
             }
         }
     }

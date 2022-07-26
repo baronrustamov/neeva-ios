@@ -18,7 +18,7 @@ struct ExperimentSettingsView: View {
                 Button {
                     NeevaExperiment.resetAllExperiments()
                 } label: {
-                    Text("Reset all experiments")
+                    Text(verbatim: "Reset all experiments")
                         .foregroundColor(Color.label)
                 }
 
@@ -79,9 +79,9 @@ private struct OptionalPrefilledStringField<Arm: ExperimentArms>: View {
                     NeevaExperiment.resetExperiment(experiment: experiment)
                 } label: {
                     if value == nil {
-                        Label("nil", systemSymbol: .checkmark)
+                        Label(String("nil"), systemSymbol: .checkmark)
                     } else {
-                        Text("nil")
+                        Text(verbatim: "nil")
                     }
                 }
             } label: {

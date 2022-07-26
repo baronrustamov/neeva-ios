@@ -230,7 +230,7 @@ struct Popover_Previews: PreviewProvider {
                 .presentAsPopover(isPresented: $isPresented) {
                     VStack {
                         ForEach(0..<count, id: \.self) { _ in
-                            Text("Hello, world!")
+                            Text(verbatim: "Hello, world!")
                                 .padding()
                         }
                         Button("+1") { count += 1 }.padding()

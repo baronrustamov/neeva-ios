@@ -73,7 +73,7 @@ public struct DefaultHeader: View {
         switch sequence.type {
         case .personalSign, .signTypedData:
             VStack {
-                Text("Message:")
+                Text(verbatim: "Message:")
                     .withFont(.bodyLarge)
                     .foregroundColor(.label)
                     .fixedSize(horizontal: false, vertical: true)
@@ -93,7 +93,7 @@ public struct DefaultHeader: View {
                 let double = Double(amount)
             {
                 Group {
-                    Text("$" + chainToUse.currency.toUSD(amount))
+                    Text(verbatim: "$" + chainToUse.currency.toUSD(amount))
                         .withFont(.displayMedium)
                         .foregroundColor(.label)
                     Label {
@@ -142,7 +142,7 @@ public struct WalletSequenceMainButtons: View {
                     hideOverlaySheet()
                 },
                 label: {
-                    Text("Cancel")
+                    Text(verbatim: "Cancel")
                         .frame(maxWidth: .infinity)
                 }
             ).buttonStyle(.wallet(.secondary))
@@ -187,12 +187,12 @@ public struct WalletSequenceMainButtons: View {
                 },
                 label: {
                     if case .sessionRequest = sequence.type {
-                        Text("Connect")
+                        Text(verbatim: "Connect")
                             .frame(maxWidth: .infinity)
                     } else {
                         Label(
                             title: {
-                                Text("Confirm")
+                                Text(verbatim: "Confirm")
                             },
                             icon: {
                                 Symbol(decorative: .faceid)
@@ -240,10 +240,11 @@ public struct MaliciousSiteView: View {
                     .withFont(.labelLarge)
                     .foregroundColor(.label)
                 if let trustedDomain = alternativeDomain {
-                    (Text("This site's address is misleadingly similar to a verified site ")
+                    (Text(
+                        verbatim: "This site's address is misleadingly similar to a verified site ")
                         + Text(trustedDomain).bold())
                 } else if case .malicious = trustSignal {
-                    Text("This site has been identified as malicious.")
+                    Text(verbatim: "This site has been identified as malicious.")
                 }
             }
             .withFont(unkerned: .bodyLarge)
@@ -254,7 +255,7 @@ public struct MaliciousSiteView: View {
             .padding(12)
             .background(Color.quaternarySystemFill)
             .cornerRadius(12)
-            Text("To protect your wallet, we will not connect to this site.")
+            Text(verbatim: "To protect your wallet, we will not connect to this site.")
                 .withFont(.bodyXLarge)
                 .foregroundColor(.label)
                 .fixedSize(horizontal: false, vertical: true)
@@ -269,7 +270,7 @@ public struct MaliciousSiteView: View {
                             }
                         },
                         label: {
-                            Text("Navigate to \(trustedDomain)")
+                            Text(verbatim: "Navigate to \(trustedDomain)")
                                 .frame(maxWidth: .infinity)
                         }
                     ).buttonStyle(.wallet(.primary))
@@ -280,7 +281,7 @@ public struct MaliciousSiteView: View {
                         hideOverlaySheet()
                     },
                     label: {
-                        Text("Close Tab")
+                        Text(verbatim: "Close Tab")
                             .frame(maxWidth: .infinity)
                     }
                 ).buttonStyle(.wallet(.secondary))
@@ -312,7 +313,7 @@ public struct ImportCredentialsView: View {
                     .padding(4)
                     .background(Color.background)
                     .clipShape(Circle())
-                Text("Securely import your wallet credentials")
+                Text(verbatim: "Securely import your wallet credentials")
                     .withFont(.headingLarge)
                     .foregroundColor(.label)
                     .fixedSize(horizontal: false, vertical: true)
@@ -322,7 +323,7 @@ public struct ImportCredentialsView: View {
                     HStack(spacing: 4) {
                         Symbol(decorative: .signature, style: .bodyLarge)
                             .frame(minWidth: 32)
-                        Text("Sign into dApps")
+                        Text(verbatim: "Sign into dApps")
                             .withFont(unkerned: .bodyLarge)
                             .foregroundColor(.secondaryLabel)
                     }.frame(maxWidth: .infinity, alignment: .leading)
@@ -330,14 +331,14 @@ public struct ImportCredentialsView: View {
                     HStack(spacing: 4) {
                         Symbol(decorative: .creditcardFill, style: .bodyLarge)
                             .frame(minWidth: 32)
-                        Text("Purchase NFTs")
+                        Text(verbatim: "Purchase NFTs")
                             .withFont(unkerned: .bodyLarge)
                             .foregroundColor(.secondaryLabel)
                     }.frame(maxWidth: .infinity, alignment: .leading)
                     HStack(spacing: 4) {
                         Symbol(decorative: .lockOpenFill, style: .bodyLarge)
                             .frame(minWidth: 32)
-                        Text("Unlock customized experiences")
+                        Text(verbatim: "Unlock customized experiences")
                             .withFont(unkerned: .bodyLarge)
                             .foregroundColor(.secondaryLabel)
                     }.frame(maxWidth: .infinity, alignment: .leading)
@@ -349,7 +350,8 @@ public struct ImportCredentialsView: View {
             .cornerRadius(12)
 
             Text(
-                "You should only enter your these credentials while importing a wallet, never on any other screen"
+                verbatim:
+                    "You should only enter your these credentials while importing a wallet, never on any other screen"
             )
             .withFont(.bodyMedium)
             .foregroundColor(.secondaryLabel)
@@ -364,7 +366,7 @@ public struct ImportCredentialsView: View {
                         }
                     },
                     label: {
-                        Text("Import Wallet Credentials")
+                        Text(verbatim: "Import Wallet Credentials")
                             .frame(maxWidth: .infinity)
                     }
                 ).buttonStyle(.wallet(.primary))
@@ -373,7 +375,7 @@ public struct ImportCredentialsView: View {
                         hideOverlaySheet()
                     },
                     label: {
-                        Text("Ask Again Later")
+                        Text(verbatim: "Ask Again Later")
                             .frame(maxWidth: .infinity)
                     }
                 ).buttonStyle(.wallet(.secondary))
@@ -454,13 +456,11 @@ public struct WalletSequenceBottomInfoPanel: View {
                 })
 
         default:
-            Text(
-                "\(balance ?? " ") \(chainToUse.currency.currency.rawValue)"
-            )
-            .withFont(.labelLarge)
-            .lineLimit(1)
-            .foregroundColor(.label)
-            .frame(maxWidth: 150, alignment: .trailing)
+            Text(verbatim: "\(balance ?? " ") \(chainToUse.currency.currency.rawValue)")
+                .withFont(.labelLarge)
+                .lineLimit(1)
+                .foregroundColor(.label)
+                .frame(maxWidth: 150, alignment: .trailing)
         }
     }
 
@@ -525,14 +525,17 @@ public struct WalletSequenceMessage: View {
     var message: Text {
         switch type {
         case .sessionRequest:
-            return Text(dAppName).bold() + Text(" wants to connect to your wallet")
+            return Text(dAppName).bold()
+                + Text(verbatim: " wants to connect to your wallet")
         case .personalSign:
-            return Text(dAppName).bold() + Text(" wants to confirm your ownership of this wallet.")
+            return Text(dAppName).bold()
+                + Text(verbatim: " wants to confirm your ownership of this wallet.")
         case .signTypedData:
             return Text(dAppName).bold()
-                + Text(" wants to facilitate a transaction on your behalf.")
+                + Text(verbatim: " wants to facilitate a transaction on your behalf.")
         case .sendTransaction:
-            return Text("Confirm this transaction with ") + Text(dAppName).bold() + Text("?")
+            return Text(verbatim: "Confirm this transaction with ")
+                + Text(dAppName).bold() + Text(verbatim: "?")
         }
     }
 

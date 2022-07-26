@@ -160,7 +160,13 @@ struct TrackingMenuFirstRowElement: View {
             .padding(.bottom, 4)
             .padding(.vertical, 10)
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel(Text("\(num) \(Text(label)) blocked"))
+            .accessibilityLabel(
+                Text(
+                    "\(num) \(Text(label)) blocked",
+                    comment:
+                        "accessibility label for how many website trackers are blocked on this page"
+                )
+            )
             .accessibilityIdentifier("TrackingMenu.TrackingMenuFirstRowElement")
         }
     }

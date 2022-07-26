@@ -101,7 +101,7 @@ public struct NeevaWalletLongPressButton<Content: View>: View {
             .animation(unlockActive ? .linear(duration: 4) : nil)
             .clipShape(Capsule())
             .overlay(
-                Text("\(countDown)")
+                Text(verbatim: "\(countDown)")
                     .bold()
                     .foregroundColor(.wallet.primaryLabel)
                     .padding(.leading, 24)

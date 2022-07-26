@@ -30,7 +30,7 @@ struct NeevaUserFlagSettings_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             NeevaUserFlagSettingsView()
-                .navigationTitle("Server User Flags")
+                .navigationTitle(String("Server User Flags"))
                 .navigationBarTitleDisplayMode(.inline)
         }.navigationViewStyle(.stack)
     }

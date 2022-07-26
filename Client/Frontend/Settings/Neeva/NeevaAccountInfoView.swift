@@ -158,8 +158,10 @@ struct NeevaAccountInfoView: View {
                     .cornerRadius(4)
 
                 if userInfo.subscriptionType == .lifetime {
+                    // This should only apply to US as we didn't have referral competition in other countries
                     Text(
-                        "As a winner in Neeva's referral competition, you are a lifetime Premium member of Neeva."
+                        verbatim:
+                            "As a winner in Neeva's referral competition, you are a lifetime Premium member of Neeva."
                     )
                     .withFont(.bodyLarge)
                     .fixedSize(horizontal: false, vertical: true)

@@ -1,23 +1,8 @@
-/* Prompt title when deleting logins */
-"Are you sure?" = "Are you sure?";
-
-/* Prompt option for cancelling out of deletion */
-"Cancel" = "Cancel";
-
 /* Copy password text selection menu item */
 "Copy" = "Copy";
 
-/* Label for the button used to delete the current login. */
-"Delete" = "Delete";
-
-/* Label for the button used to deselect all logins. */
-"Deselect All" = "Deselect All";
-
 /* Hide password text selection menu item */
 "Hide" = "Hide";
-
-/* Label displayed when no logins are found after searching. */
-"No logins found" = "No logins found";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Open & Fill";
@@ -30,9 +15,6 @@
 
 /* Title for the search field at the top of the Logins list screen */
 "Search" = "Search";
-
-/* Label for the button used to select all logins. */
-"Select All" = "Select All";
 
 /* Label displayed above the username row in Login Detail View. */
 "Username" = "Username";
