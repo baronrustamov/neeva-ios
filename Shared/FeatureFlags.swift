@@ -24,7 +24,6 @@ public enum FeatureFlag: String, CaseIterable, RawRepresentable {
     case pinToTopSites = "Pin to Top Sites"
     case qrCodeSignIn = "Sign in with QR Code"
     case recommendedSpaces = "Recommended Spaces"
-    case restoreAppUI = "Restore App UI"
     case spaceComments = "Comments from space on pages"
     case spacify = "Enable button to turn a page into a Space"
     case swipePlusPlus = "Additional forward and back swipe gestures"

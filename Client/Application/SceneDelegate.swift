@@ -60,7 +60,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         updateCurrentVersion()
 
-        if !urlHandledOnLaunch {
+        if !urlHandledOnLaunch && !(AppConstants.IsRunningTest || AppConstants.IsRunningPerfTest) {
             restoreSceneState()
         }
     }
@@ -159,10 +159,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     // MARK: - Scene Setup
     private func setupRootViewController(_ scene: UIScene) {
-        let profile = getAppDelegate().profile
-
-        self.bvc = BrowserViewController(profile: profile, window: window!, scene: scene)
-
+        self.bvc = BrowserViewController(
+            profile: getAppDelegate().profile, window: window!, scene: scene)
         bvc.edgesForExtendedLayout = []
         bvc.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
         bvc.restorationClass = AppDelegate.self
@@ -176,30 +174,28 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             && sceneLastOpenedTime.hoursBetweenDate(toDate: Date()) > 1
 
         // Restoring SceneUIState.
-        if FeatureFlag[.restoreAppUI] {
-            let sceneUIState = SceneUIState(rawValue: scenePreviousUIState)
+        let sceneUIState = SceneUIState(rawValue: scenePreviousUIState)
 
-            switch sceneUIState {
-            case .cardGrid(let switcherState, let isIncognito):
-                switch switcherState {
-                case .tabs:
-                    bvc.browserModel.showGridWithNoAnimation()
+        switch sceneUIState {
+        case .cardGrid(let switcherState, let isIncognito):
+            switch switcherState {
+            case .tabs:
+                bvc.browserModel.showGridWithNoAnimation()
 
-                    // Makes sure the incognito state is correctly set in the CardGrid.
-                    bvc.browserModel.gridModel.switchToTabs(incognito: isIncognito)
-                case .spaces:
-                    if !shouldSetEditingLocationToTrue {
-                        bvc.browserModel.showSpaces()
-                    }
-                }
-            case .spaceDetailView(let id):
+                // Makes sure the incognito state is correctly set in the CardGrid.
+                bvc.browserModel.gridModel.switchToTabs(incognito: isIncognito)
+            case .spaces:
                 if !shouldSetEditingLocationToTrue {
                     bvc.browserModel.showSpaces()
-                    bvc.browserModel.openSpace(spaceId: id, bvc: bvc) {}
                 }
-            case .tab:
-                break
             }
+        case .spaceDetailView(let id):
+            if !shouldSetEditingLocationToTrue {
+                bvc.browserModel.showSpaces()
+                bvc.browserModel.openSpace(spaceId: id, bvc: bvc) {}
+            }
+        case .tab:
+            break
         }
 
         DispatchQueue.main.async { [self] in

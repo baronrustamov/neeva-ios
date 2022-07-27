@@ -56,6 +56,9 @@ class BaseTestCase: XCTestCase {
     }
 
     override func tearDown() {
+        // Reset the previous UI state to create a standard testing environment.
+        UserDefaults.standard.set("tab", forKey: "scenePreviousUIState")
+
         app.terminate()
         super.tearDown()
     }
