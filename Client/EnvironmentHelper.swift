@@ -6,10 +6,10 @@ import Defaults
 import Foundation
 import Shared
 
-public class EnvironmentHelper {
-    public static let shared = EnvironmentHelper()
+class EnvironmentHelper {
+    static let shared = EnvironmentHelper()
 
-    public enum Category: Int, RawRepresentable, Hashable, CaseIterable {
+    enum Category: Int, RawRepresentable, Hashable, CaseIterable {
         case deviceName
         case deviceOrientation
         case deviceScreenSize
@@ -30,9 +30,9 @@ public class EnvironmentHelper {
             .previewQueryCount,
         ]
     }
-    public typealias Categories = Set<Category>
+    typealias Categories = Set<Category>
 
-    public var env: ClientLogEnvironment {
+    var env: ClientLogEnvironment {
         #if DEBUG
             return ClientLogEnvironment(rawValue: "Dev")!
         #else
@@ -40,7 +40,7 @@ public class EnvironmentHelper {
         #endif
     }
 
-    public var themeStyle: String {
+    var themeStyle: String {
         switch UIScreen.main.traitCollection.userInterfaceStyle {
         case .dark:
             return "Dark"
@@ -51,7 +51,7 @@ public class EnvironmentHelper {
         }
     }
 
-    public var orientation: String {
+    var orientation: String {
         switch UIDevice.current.orientation {
         case .unknown:
             return "Unknown"
@@ -72,12 +72,12 @@ public class EnvironmentHelper {
         }
     }
 
-    public var screenSize: String {
+    var screenSize: String {
         return "\(UIScreen.main.bounds.width) x \(UIScreen.main.bounds.height)"
     }
 
     // MARK: - Public Methods
-    public func getAttributes(
+    func getAttributes(
         for categories: Categories = [
             .tabs, .tabGroups, .deviceTheme, .deviceOrientation, .deviceScreenSize, .isUserSignedIn,
             .deviceOS,
@@ -86,11 +86,11 @@ public class EnvironmentHelper {
         categories.flatMap { getAttributes(category: $0) } + [getSessionUUID()]
     }
 
-    public func getFirstRunAttributes() -> [ClientLogCounterAttribute] {
+    func getFirstRunAttributes() -> [ClientLogCounterAttribute] {
         getAttributes(for: Category.firstRun)
     }
 
-    public func getSessionUUID() -> ClientLogCounterAttribute {
+    func getSessionUUID() -> ClientLogCounterAttribute {
         // Rotate session UUID every 30 mins
         if Defaults[.sessionUUIDExpirationTime].minutesFromNow() > 30 {
             Defaults[.sessionUUID] = UUID().uuidString
@@ -100,12 +100,6 @@ public class EnvironmentHelper {
         // session UUID that will rotate every 30 mins
         return ClientLogCounterAttribute(
             key: LogConfig.Attribute.SessionUUID, value: Defaults[.sessionUUID]
-        )
-    }
-
-    public func getSessionUUIDv2() -> ClientLogCounterAttribute {
-        return ClientLogCounterAttribute(
-            key: LogConfig.Attribute.SessionUUIDv2, value: Defaults[.sessionUUIDv2]
         )
     }
 
