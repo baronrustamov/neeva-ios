@@ -227,6 +227,7 @@ struct PlaceView: View {
 
             detailsSection
         }
+        .padding(.horizontal, CheatsheetUX.horizontalPadding)
     }
 
     @ViewBuilder
@@ -643,6 +644,7 @@ struct PlaceListView: View {
                     .cornerRadius(PlaceViewUX.QuickActionButton.cornerRadius)
             )
         }
+        .padding(.horizontal, CheatsheetUX.horizontalPadding)
     }
 
     private struct HeaderView: View {

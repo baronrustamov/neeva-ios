@@ -53,8 +53,8 @@ struct ProductClusterList: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Related Top Reviewed Products").withFont(.headingMedium)
-                .padding(.leading, 12)
+            Text("Related Top Reviewed Products")
+                .withFont(.headingMedium)
             ScrollView(.horizontal) {
                 HStack {
                     ForEach(products, id: \.thumbnailURL) { product in
@@ -69,9 +69,11 @@ struct ProductClusterList: View {
                             }
                     }
                 }
-                .padding([.leading, .bottom], 12)
+                .padding(.horizontal, CheatsheetUX.horizontalPadding)
             }
+            .padding(.horizontal, -1 * CheatsheetUX.horizontalPadding)
         }
+        .padding(.horizontal, CheatsheetUX.horizontalPadding)
         .padding(.bottom, 16)
     }
 }

@@ -19,5 +19,6 @@ struct RelatedSearchesView<T: RandomAccessCollection>: View where T.Element == S
                 QueryButtonView(query: search)
             }
         }
+        .padding(.horizontal, CheatsheetUX.horizontalPadding)
     }
 }

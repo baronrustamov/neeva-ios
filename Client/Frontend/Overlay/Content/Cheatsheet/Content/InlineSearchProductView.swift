@@ -70,6 +70,8 @@ struct InlineSearchProductList: View {
                     InlineSearchProductItem(product: item)
                 }
             }
+            .padding(.horizontal, CheatsheetUX.horizontalPadding)
         }
+        .padding(.horizontal, -1 * CheatsheetUX.horizontalPadding)
     }
 }

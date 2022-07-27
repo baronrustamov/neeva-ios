@@ -7,6 +7,10 @@ import Defaults
 import Shared
 import SwiftUI
 
+enum CheatsheetUX {
+    static let horizontalPadding: CGFloat = 16
+}
+
 public struct CheatsheetMenuView: View {
     @Default(.seenCheatsheetIntro) var seenCheatsheetIntro: Bool
     @Default(.showTryCheatsheetPopover) var defaultShowTryCheatsheetPopover: Bool
@@ -78,10 +82,9 @@ public struct CheatsheetMenuView: View {
             }
 
             Divider()
-                .padding(.horizontal)
+                .padding(.horizontal, CheatsheetUX.horizontalPadding)
             supportSection
         }
-        .padding(.horizontal)
         .selectableIfAvailable(true)
         .background(
             GeometryReader { proxy in
@@ -130,6 +133,7 @@ public struct CheatsheetMenuView: View {
                     }
                 })
         }
+        .padding(.horizontal, CheatsheetUX.horizontalPadding)
     }
 }
 

@@ -112,6 +112,7 @@ struct RecipeView: View {
             }
             .onDisappear(perform: onDisappearCleanup)
         }
+        .padding(.horizontal, CheatsheetUX.horizontalPadding)
     }
 
     @ViewBuilder

@@ -59,5 +59,6 @@ struct PriceHistoryView: View {
                 .withFont(unkerned: .bodyMedium)
             }
         }
+        .padding(.horizontal, CheatsheetUX.horizontalPadding)
     }
 }

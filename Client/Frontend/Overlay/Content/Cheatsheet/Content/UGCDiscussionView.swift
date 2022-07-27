@@ -178,7 +178,8 @@ struct UGCDiscussionView: View {
                 toggleShowAllButton
             }
         }
-        .padding(.vertical, 12)
+        .padding(.bottom, 12)
+        .padding(.horizontal, CheatsheetUX.horizontalPadding)
     }
 
     @ViewBuilder
@@ -211,11 +212,11 @@ struct UGCDiscussionView: View {
 
 private struct RedditDiscussionView: View {
     enum UXConst {
-        static let postVSpacing: CGFloat = 12
+        static let postVSpacing: CGFloat = 4
         static let headerVSpacing: CGFloat = 4
         static let metadataHSpacing: CGFloat = 6
         static let metadataInnerHSpacing: CGFloat = 4
-        static let commentSpacing: CGFloat = 12
+        static let commentSpacing: CGFloat = 16
         static let commentRowMinHeight: CGFloat = 102
     }
     let discussion: RedditDiscussion
@@ -245,11 +246,13 @@ private struct RedditDiscussionView: View {
             case .body(let body):
                 ZStack(alignment: .bottomTrailing) {
                     ReadMoreTextView(
-                        expanded: $expanded, truncated: $truncated, text: body, lineLimit: 3
+                        body, limit: .lines(3), expanded: $expanded, truncated: $truncated
                     )
                     if truncated {
                         Button(expanded ? "Read Less" : "Read More") {
-                            expanded.toggle()
+                            withAnimation {
+                                expanded.toggle()
+                            }
                         }
                         .withFont(unkerned: .bodyMedium)
                         .padding(.leading)
@@ -265,16 +268,19 @@ private struct RedditDiscussionView: View {
                             }
                         }
 
-                        VStack {
-                            Spacer()
-                            MoreCommentsButton(url: discussion.url)
-                            Spacer()
+                        if showMoreCommentsButton {
+                            VStack {
+                                Spacer()
+                                MoreCommentsButton(url: discussion.url)
+                                Spacer()
+                            }
+                            .padding(.vertical, 20)
                         }
-                        .padding(.vertical, 20)
-                        .opacity(showMoreCommentsButton ? 1 : 0)
                     }
+                    .padding(.horizontal, CheatsheetUX.horizontalPadding)
                 }
                 .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, -1 * CheatsheetUX.horizontalPadding)
             }
         }
         .onTapGesture {
@@ -335,12 +341,18 @@ private struct RedditDiscussionView: View {
 
 private struct RedditCommentView: View {
     enum UXConst {
-        static let hPadding: CGFloat = 8
+        static let leadingPadding: CGFloat = 12
         static let vSpacing: CGFloat = 0
         static let metadataHSpacing: CGFloat = 6
         static let metadataInnerHSpacing: CGFloat = 4
         static let totalWidth: CGFloat = 312
+        static let totalHeight: CGFloat = 140
         static let bottomRowHeight: CGFloat = 30
+        static let lineWidth: CGFloat = 2
+
+        static var textCollapsedHeight: CGFloat {
+            totalHeight - bottomRowHeight - UXConst.vSpacing
+        }
     }
 
     @Environment(\.onOpenURLForCheatsheet) var onOpenURLForCheatsheet
@@ -359,7 +371,10 @@ private struct RedditCommentView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: UXConst.vSpacing) {
             ReadMoreTextView(
-                expanded: $expanded, truncated: $truncated, text: comment.body, lineLimit: 4
+                comment.body,
+                limit: .height(UXConst.textCollapsedHeight),
+                expanded: $expanded,
+                truncated: $truncated
             )
 
             HStack {
@@ -371,22 +386,25 @@ private struct RedditCommentView: View {
 
                 if truncated {
                     Button(expanded ? "Read Less" : "Read More") {
-                        expanded.toggle()
+                        withAnimation {
+                            expanded.toggle()
+                        }
                     }
                     .withFont(unkerned: .bodyMedium)
                 }
             }
             .frame(height: UXConst.bottomRowHeight)
-
         }
-        .padding(.horizontal, UXConst.hPadding)
-        .frame(width: UXConst.totalWidth, alignment: .leading)
+        .padding(.leading, UXConst.leadingPadding)
+        .frame(
+            idealWidth: UXConst.totalWidth, minHeight: UXConst.totalHeight, alignment: .topLeading
+        )
         .onTapGesture {
             onOpenURLForCheatsheet(comment.url ?? fallbackURL, String(describing: Self.self))
         }
         .overlay(
             Rectangle()
-                .frame(width: 1, height: nil, alignment: .leading)
+                .frame(width: UXConst.lineWidth, height: nil, alignment: .leading)
                 .foregroundColor(.ui.adaptive.separator),
             alignment: .leading
         )
@@ -445,54 +463,60 @@ private struct MoreCommentsButton: View {
 }
 
 private struct ReadMoreTextView: View {
+    enum Limit {
+        case lines(Int)
+        case height(CGFloat)
+    }
+
     @State private var fullSize: CGFloat = 0
     @State private var limitedSize: CGFloat = 0
 
     @Binding var expanded: Bool
     @Binding var truncated: Bool
 
-    var text: String
-    var lineLimit: Int
-    var font: FontStyle = .bodyMedium
-    var textColor: Color = .label
+    let text: String
+    let limit: Limit
+    let font: FontStyle
+    let textColor: Color
+
+    init(
+        _ text: String,
+        limit: Limit,
+        expanded: Binding<Bool>,
+        truncated: Binding<Bool>,
+        font: FontStyle = .bodyMedium,
+        textColor: Color = .label
+    ) {
+        self.text = text
+        self.limit = limit
+        self._expanded = expanded
+        self._truncated = truncated
+        self.font = font
+        self.textColor = textColor
+
+        if case let .height(height) = limit {
+            self._limitedSize = State(initialValue: height)
+        }
+    }
 
     var body: some View {
-        Text(text)
-            .withFont(font)
-            .multilineTextAlignment(.leading)
+        limitedTextView
             .fixedSize(horizontal: false, vertical: true)
-            .lineLimit(expanded ? nil : lineLimit)
-            .foregroundColor(textColor)
-            .animation(.default, value: expanded)
             .background(
                 ZStack {
-                    // Read size of text when linelimit is applied
-                    Text(text)
-                        .withFont(font)
-                        .lineLimit(lineLimit)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .background(
-                            GeometryReader { proxy in
-                                Color.clear
-                                    .onAppear {
-                                        self.limitedSize = proxy.size.height
-                                    }
-                            }
+                    if case let .lines(lineLimit) = limit {
+                        TextHeightReader(
+                            height: $limitedSize,
+                            content: Text(text),
+                            font: font,
+                            lineLimit: lineLimit
                         )
+                    }
 
                     // read full size of text
-                    Text(text)
-                        .withFont(font)
-                        .lineLimit(nil)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .background(
-                            GeometryReader { proxy in
-                                Color.clear
-                                    .onAppear {
-                                        self.fullSize = proxy.size.height
-                                    }
-                            }
-                        )
+                    TextHeightReader(
+                        height: $fullSize, content: Text(text), font: font, lineLimit: nil
+                    )
                 }
                 .hidden()
             )
@@ -504,7 +528,52 @@ private struct ReadMoreTextView: View {
             }
     }
 
+    @ViewBuilder
+    var limitedTextView: some View {
+        Group {
+            switch limit {
+            case .lines(let lineLimit):
+                textView
+                    .lineLimit(expanded ? nil : lineLimit)
+            case .height(let height):
+                textView
+                    .frame(height: expanded ? fullSize : height, alignment: .topLeading)
+            }
+        }
+    }
+
+    @ViewBuilder
+    var textView: some View {
+        Text(text)
+            .withFont(font)
+            .multilineTextAlignment(.leading)
+            .foregroundColor(textColor)
+            .animation(.default, value: expanded)
+    }
+
     private func updatedTruncated() {
         truncated = limitedSize < fullSize
+    }
+}
+
+private struct TextHeightReader: View {
+    @Binding var height: CGFloat
+    let content: Text
+    let font: FontStyle
+    let lineLimit: Int?
+
+    var body: some View {
+        content
+            .withFont(font)
+            .lineLimit(lineLimit)
+            .fixedSize(horizontal: false, vertical: true)
+            .background(
+                GeometryReader { proxy in
+                    Color.clear
+                        .onAppear {
+                            self.height = proxy.size.height
+                        }
+                }
+            )
     }
 }
