@@ -267,12 +267,10 @@
 		4A42C41427E58487003B9826 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38F02D01C05127100175932 /* Authenticator.swift */; };
 		4A42C41527E58487003B9826 /* WalletDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCAAA0E1276D9C400013223E /* WalletDashboard.swift */; };
 		4A42C41627E58487003B9826 /* TextSizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9299E3A2695EA4B00758795 /* TextSizeView.swift */; };
-		4A42C41727E58487003B9826 /* TabManager+TestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6658712127D00940003B4987 /* TabManager+TestSupport.swift */; };
 		4A42C41827E58487003B9826 /* UserScriptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FCF7F41FE45842004A7995 /* UserScriptManager.swift */; };
 		4A42C41927E58487003B9826 /* ReaderModeUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A960051ABB9C450069AD6F /* ReaderModeUtils.swift */; };
 		4A42C41A27E58487003B9826 /* BottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9F654A27229E3400B7C06E /* BottomSheetView.swift */; };
 		4A42C41B27E58487003B9826 /* BrowserTopBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EA9BF1277644870013DB07 /* BrowserTopBarView.swift */; };
-		4A42C41C27E58487003B9826 /* TabManager+AddTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6658712727D00DFF003B4987 /* TabManager+AddTab.swift */; };
 		4A42C41D27E58487003B9826 /* PanelDataObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68F36971EA694000048CF44 /* PanelDataObservers.swift */; };
 		4A42C41E27E58487003B9826 /* GroupedButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0405D0B25FFCA5100A0A3B2 /* GroupedButtonView.swift */; };
 		4A42C41F27E58487003B9826 /* LocalNotificiations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E34CD92710E83600F30A3D /* LocalNotificiations.swift */; };
@@ -399,8 +397,6 @@
 		4A42C49E27E58487003B9826 /* QueryButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94B7DEA27E4F96B003D8F13 /* QueryButtonView.swift */; };
 		4A42C49F27E58487003B9826 /* ContextMenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BA7E0D1B0E934F00153782 /* ContextMenuHelper.swift */; };
 		4A42C4A027E58487003B9826 /* TabLocationBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93EFEE826716411000396B5 /* TabLocationBarButton.swift */; };
-		4A42C4A227E58487003B9826 /* TabManager+TabStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6658712327D00957003B4987 /* TabManager+TabStorage.swift */; };
-		4A42C4A327E58487003B9826 /* TabManager+WKNavigationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6658711B27D0086B003B4987 /* TabManager+WKNavigationDelegate.swift */; };
 		4A42C4A427E58487003B9826 /* TrackingEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A22DCF926574AA4009BE9FC /* TrackingEntity.swift */; };
 		4A42C4A527E58487003B9826 /* LoginsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B30A1AC0AD1F0052877D /* LoginsHelper.swift */; };
 		4A42C4A627E58487003B9826 /* SavedTab+ConfigureExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA3CE6224EEE83200422BB2 /* SavedTab+ConfigureExtension.swift */; };
@@ -420,7 +416,6 @@
 		4A42C4B527E58487003B9826 /* TourPromptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5C43BE265F407F007E2F61 /* TourPromptViewController.swift */; };
 		4A42C4B627E58487003B9826 /* WebViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DDC11F26B9E24900F293AB /* WebViewContainer.swift */; };
 		4A42C4B727E58487003B9826 /* TrackingMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0102C2E2605240B00B5F884 /* TrackingMenuView.swift */; };
-		4A42C4B827E58487003B9826 /* TabManager+TabEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6658712527D00971003B4987 /* TabManager+TabEventHandler.swift */; };
 		4A42C4B927E58487003B9826 /* OverflowMenuOverlayContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C832BF8226E15B5B00B9A1F8 /* OverflowMenuOverlayContent.swift */; };
 		4A42C4BA27E58487003B9826 /* AppDelegate+UNUserNotificationCenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668DC29826E9B1310072799E /* AppDelegate+UNUserNotificationCenterDelegate.swift */; };
 		4A42C4BB27E58487003B9826 /* DebugSettingsRestartPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9B55A0E26A87C9B00C71F31 /* DebugSettingsRestartPromptView.swift */; };
@@ -428,7 +423,6 @@
 		4A42C4BD27E58487003B9826 /* photon-colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C49854D206173C800893DAE /* photon-colors.swift */; };
 		4A42C4BE27E58487003B9826 /* SimulatedSwipeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6628C8C12797BF6D009A69DB /* SimulatedSwipeModel.swift */; };
 		4A42C4BF27E58487003B9826 /* SpaceContentSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9F653E2702D2CE00B7C06E /* SpaceContentSheet.swift */; };
-		4A42C4C027E58487003B9826 /* TabManager+CreateOrSwitchToTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6658711D27D00878003B4987 /* TabManager+CreateOrSwitchToTab.swift */; };
 		4A42C4C127E58487003B9826 /* SimulatedSwipeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1D054A26642BF400D63333 /* SimulatedSwipeController.swift */; };
 		4A42C4C227E58487003B9826 /* GenericSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A840EC62788E840005F6003 /* GenericSuggestion.swift */; };
 		4A42C4C327E58487003B9826 /* PrintHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C95E0D200FD3B200E4E51C /* PrintHelper.swift */; };
@@ -438,7 +432,6 @@
 		4A42C4C727E58487003B9826 /* ReaderModeColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F97CC726F69381005A26C2 /* ReaderModeColorPicker.swift */; };
 		4A42C4C827E58487003B9826 /* TextSizeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9299E3C2695F94400758795 /* TextSizeModel.swift */; };
 		4A42C4C927E58487003B9826 /* WebUIMessageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5C438C265F2CA0007E2F61 /* WebUIMessageHelper.swift */; };
-		4A42C4CA27E58487003B9826 /* TabManager+CloseTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6658711F27D00890003B4987 /* TabManager+CloseTabs.swift */; };
 		4A42C4CB27E58487003B9826 /* CardsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9655DEC26A09A6900925912 /* CardsContainer.swift */; };
 		4A42C4CC27E58487003B9826 /* BrowserViewController+DownloadQueueDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625CA7208FC47A0081F3B2 /* BrowserViewController+DownloadQueueDelegate.swift */; };
 		4A42C4CD27E58487003B9826 /* SearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF1948C266EC78A007E2C3B /* SearchResults.swift */; };
@@ -807,13 +800,6 @@
 		6650585C26E68D0900C9CD51 /* BaseNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6650585B26E68D0900C9CD51 /* BaseNotification.swift */; };
 		6650586026E68F2F00C9CD51 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6650585F26E68F2F00C9CD51 /* NotificationManager.swift */; };
 		665451DF2759B9B50077CA1F /* SegmentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665451DE2759B9B50077CA1F /* SegmentedPicker.swift */; };
-		6658711C27D0086B003B4987 /* TabManager+WKNavigationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6658711B27D0086B003B4987 /* TabManager+WKNavigationDelegate.swift */; };
-		6658711E27D00878003B4987 /* TabManager+CreateOrSwitchToTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6658711D27D00878003B4987 /* TabManager+CreateOrSwitchToTab.swift */; };
-		6658712027D00890003B4987 /* TabManager+CloseTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6658711F27D00890003B4987 /* TabManager+CloseTabs.swift */; };
-		6658712227D00940003B4987 /* TabManager+TestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6658712127D00940003B4987 /* TabManager+TestSupport.swift */; };
-		6658712427D00957003B4987 /* TabManager+TabStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6658712327D00957003B4987 /* TabManager+TabStorage.swift */; };
-		6658712627D00971003B4987 /* TabManager+TabEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6658712527D00971003B4987 /* TabManager+TabEventHandler.swift */; };
-		6658712827D00DFF003B4987 /* TabManager+AddTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6658712727D00DFF003B4987 /* TabManager+AddTab.swift */; };
 		665A23D42755D8D5006AD997 /* QueryForNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665A23D32755D8D5006AD997 /* QueryForNavigation.swift */; };
 		665CA48626F04FA4006E2F4D /* NotificationBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665CA48526F04FA4006E2F4D /* NotificationBadge.swift */; };
 		665CA48826F054CC006E2F4D /* NotificationRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665CA48726F054CC006E2F4D /* NotificationRow.swift */; };
@@ -2266,13 +2252,6 @@
 		6650585B26E68D0900C9CD51 /* BaseNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNotification.swift; sourceTree = "<group>"; };
 		6650585F26E68F2F00C9CD51 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		665451DE2759B9B50077CA1F /* SegmentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedPicker.swift; sourceTree = "<group>"; };
-		6658711B27D0086B003B4987 /* TabManager+WKNavigationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabManager+WKNavigationDelegate.swift"; sourceTree = "<group>"; };
-		6658711D27D00878003B4987 /* TabManager+CreateOrSwitchToTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabManager+CreateOrSwitchToTab.swift"; sourceTree = "<group>"; };
-		6658711F27D00890003B4987 /* TabManager+CloseTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabManager+CloseTabs.swift"; sourceTree = "<group>"; };
-		6658712127D00940003B4987 /* TabManager+TestSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabManager+TestSupport.swift"; sourceTree = "<group>"; };
-		6658712327D00957003B4987 /* TabManager+TabStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabManager+TabStorage.swift"; sourceTree = "<group>"; };
-		6658712527D00971003B4987 /* TabManager+TabEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabManager+TabEventHandler.swift"; sourceTree = "<group>"; };
-		6658712727D00DFF003B4987 /* TabManager+AddTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabManager+AddTab.swift"; sourceTree = "<group>"; };
 		665A23D32755D8D5006AD997 /* QueryForNavigation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueryForNavigation.swift; sourceTree = "<group>"; };
 		665CA48526F04FA4006E2F4D /* NotificationBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationBadge.swift; sourceTree = "<group>"; };
 		665CA48726F054CC006E2F4D /* NotificationRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRow.swift; sourceTree = "<group>"; };
@@ -3916,13 +3895,6 @@
 			isa = PBXGroup;
 			children = (
 				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
-				6658712727D00DFF003B4987 /* TabManager+AddTab.swift */,
-				6658711F27D00890003B4987 /* TabManager+CloseTabs.swift */,
-				6658711D27D00878003B4987 /* TabManager+CreateOrSwitchToTab.swift */,
-				6658712527D00971003B4987 /* TabManager+TabEventHandler.swift */,
-				6658712327D00957003B4987 /* TabManager+TabStorage.swift */,
-				6658712127D00940003B4987 /* TabManager+TestSupport.swift */,
-				6658711B27D0086B003B4987 /* TabManager+WKNavigationDelegate.swift */,
 				63306D422110B3CD00F25400 /* TabManagerStore.swift */,
 			);
 			path = TabManager;
@@ -7010,12 +6982,10 @@
 				4A42C41427E58487003B9826 /* Authenticator.swift in Sources */,
 				4A42C41527E58487003B9826 /* WalletDashboard.swift in Sources */,
 				4A42C41627E58487003B9826 /* TextSizeView.swift in Sources */,
-				4A42C41727E58487003B9826 /* TabManager+TestSupport.swift in Sources */,
 				4A42C41827E58487003B9826 /* UserScriptManager.swift in Sources */,
 				4A42C41927E58487003B9826 /* ReaderModeUtils.swift in Sources */,
 				4A42C41A27E58487003B9826 /* BottomSheetView.swift in Sources */,
 				4A42C41B27E58487003B9826 /* BrowserTopBarView.swift in Sources */,
-				4A42C41C27E58487003B9826 /* TabManager+AddTab.swift in Sources */,
 				4A42C41D27E58487003B9826 /* PanelDataObservers.swift in Sources */,
 				4A42C41E27E58487003B9826 /* GroupedButtonView.swift in Sources */,
 				4A42C41F27E58487003B9826 /* LocalNotificiations.swift in Sources */,
@@ -7178,8 +7148,6 @@
 				4A42C4A027E58487003B9826 /* TabLocationBarButton.swift in Sources */,
 				E63B18E727FDEBCF001BA0B0 /* BrowserViewController+IntroView.swift in Sources */,
 				E9EC2600283C337F00B9A79B /* CheatsheetUGCIndicatorView.swift in Sources */,
-				4A42C4A227E58487003B9826 /* TabManager+TabStorage.swift in Sources */,
-				4A42C4A327E58487003B9826 /* TabManager+WKNavigationDelegate.swift in Sources */,
 				4A42C4A427E58487003B9826 /* TrackingEntity.swift in Sources */,
 				67724FE22859217B00680F6B /* LoopingPlayer.swift in Sources */,
 				4A42C4A527E58487003B9826 /* LoginsHelper.swift in Sources */,
@@ -7206,7 +7174,6 @@
 				4A42C4B527E58487003B9826 /* TourPromptViewController.swift in Sources */,
 				4A42C4B627E58487003B9826 /* WebViewContainer.swift in Sources */,
 				4A42C4B727E58487003B9826 /* TrackingMenuView.swift in Sources */,
-				4A42C4B827E58487003B9826 /* TabManager+TabEventHandler.swift in Sources */,
 				205267682877AA0D000550A1 /* CardModels.swift in Sources */,
 				20E51A112819D8BB00394720 /* CookieCutterHelper.swift in Sources */,
 				4A42C4B927E58487003B9826 /* OverflowMenuOverlayContent.swift in Sources */,
@@ -7219,7 +7186,6 @@
 				4A42C4BF27E58487003B9826 /* SpaceContentSheet.swift in Sources */,
 				E67B0B45280EFA07008D1CCD /* YourCollectionsView.swift in Sources */,
 				8AB284B7280DE564008027D2 /* ArchivedTabSettings.swift in Sources */,
-				4A42C4C027E58487003B9826 /* TabManager+CreateOrSwitchToTab.swift in Sources */,
 				4A42C4C127E58487003B9826 /* SimulatedSwipeController.swift in Sources */,
 				4A42C4C227E58487003B9826 /* GenericSuggestion.swift in Sources */,
 				E9714993284959F500A6A1FC /* CheatsheetPromoModel.swift in Sources */,
@@ -7230,7 +7196,6 @@
 				4A42C4C727E58487003B9826 /* ReaderModeColorPicker.swift in Sources */,
 				4A42C4C827E58487003B9826 /* TextSizeModel.swift in Sources */,
 				4A42C4C927E58487003B9826 /* WebUIMessageHelper.swift in Sources */,
-				4A42C4CA27E58487003B9826 /* TabManager+CloseTabs.swift in Sources */,
 				4A42C4CB27E58487003B9826 /* CardsContainer.swift in Sources */,
 				20167FCD2824601700223B9E /* FindInCardGridView.swift in Sources */,
 				4A42C4CC27E58487003B9826 /* BrowserViewController+DownloadQueueDelegate.swift in Sources */,
@@ -7639,12 +7604,10 @@
 				C9E5F2C42677F0A600025A7F /* LocationLabel.swift in Sources */,
 				D38F02D11C05127100175932 /* Authenticator.swift in Sources */,
 				C9299E3B2695EA4B00758795 /* TextSizeView.swift in Sources */,
-				6658712227D00940003B4987 /* TabManager+TestSupport.swift in Sources */,
 				D0FCF7F51FE45842004A7995 /* UserScriptManager.swift in Sources */,
 				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
 				4A9F654B27229E3400B7C06E /* BottomSheetView.swift in Sources */,
 				66EA9BF2277644870013DB07 /* BrowserTopBarView.swift in Sources */,
-				6658712827D00DFF003B4987 /* TabManager+AddTab.swift in Sources */,
 				E6EA734927F6101A00845FFB /* SearchEngineExtensions.swift in Sources */,
 				E68F36981EA694000048CF44 /* PanelDataObservers.swift in Sources */,
 				66A187C527A1C4DC006B3295 /* GroupedButtonView.swift in Sources */,
@@ -7796,8 +7759,6 @@
 				E94B7DEB27E4F96B003D8F13 /* QueryButtonView.swift in Sources */,
 				D3BA7E0E1B0E934F00153782 /* ContextMenuHelper.swift in Sources */,
 				C93EFEE926716411000396B5 /* TabLocationBarButton.swift in Sources */,
-				6658712427D00957003B4987 /* TabManager+TabStorage.swift in Sources */,
-				6658711C27D0086B003B4987 /* TabManager+WKNavigationDelegate.swift in Sources */,
 				20167FC72824484800223B9E /* FindInCardGridView.swift in Sources */,
 				4A22DCFA26574AA4009BE9FC /* TrackingEntity.swift in Sources */,
 				0BB5B30B1AC0AD1F0052877D /* LoginsHelper.swift in Sources */,
@@ -7819,7 +7780,6 @@
 				C9DDC12026B9E24900F293AB /* WebViewContainer.swift in Sources */,
 				F0102C2F2605240B00B5F884 /* TrackingMenuView.swift in Sources */,
 				E6EA734B27F6104C00845FFB /* URLExtensions.swift in Sources */,
-				6658712627D00971003B4987 /* TabManager+TabEventHandler.swift in Sources */,
 				C832BF8326E15B5B00B9A1F8 /* OverflowMenuOverlayContent.swift in Sources */,
 				668DC29926E9B1310072799E /* AppDelegate+UNUserNotificationCenterDelegate.swift in Sources */,
 				C9B55A0F26A87C9B00C71F31 /* DebugSettingsRestartPromptView.swift in Sources */,
@@ -7829,7 +7789,6 @@
 				6628C8C22797BF6D009A69DB /* SimulatedSwipeModel.swift in Sources */,
 				4A9F653F2702D2CE00B7C06E /* SpaceContentSheet.swift in Sources */,
 				67B8D76428618A330044D0CF /* AdBlockerPromoView.swift in Sources */,
-				6658711E27D00878003B4987 /* TabManager+CreateOrSwitchToTab.swift in Sources */,
 				E9EC25FF283C337F00B9A79B /* CheatsheetUGCIndicatorView.swift in Sources */,
 				4A1D054B26642BF400D63333 /* SimulatedSwipeController.swift in Sources */,
 				1A840EC72788E840005F6003 /* GenericSuggestion.swift in Sources */,
@@ -7840,7 +7799,6 @@
 				66F97CC826F69381005A26C2 /* ReaderModeColorPicker.swift in Sources */,
 				C9299E3D2695F94400758795 /* TextSizeModel.swift in Sources */,
 				BC5C438D265F2CA0007E2F61 /* WebUIMessageHelper.swift in Sources */,
-				6658712027D00890003B4987 /* TabManager+CloseTabs.swift in Sources */,
 				C9655DED26A09A6900925912 /* CardsContainer.swift in Sources */,
 				3234500727EA73D800F16237 /* IntentHelper.swift in Sources */,
 				D0625CA8208FC47A0081F3B2 /* BrowserViewController+DownloadQueueDelegate.swift in Sources */,
