@@ -58,9 +58,9 @@ class CookieCutterHelper: TabContentScript {
                                 "cookieCutterEnabled":
                                     TrackingPreventionConfig.trackersPreventedFor(
                                         domain, checkCookieCutterState: true),
-                                "marketing": cookieCutterModel.marketingCookiesAllowed,
-                                "analytic": cookieCutterModel.analyticCookiesAllowed,
-                                "social": cookieCutterModel.socialCookiesAllowed,
+                                "analyticAllowed": cookieCutterModel.analyticCookiesAllowed,
+                                "marketingAllowed": cookieCutterModel.marketingCookiesAllowed,
+                                "socialAllowed": cookieCutterModel.socialCookiesAllowed,
                             ]), encoding: .utf8)
                     {
                         currentWebView?.evaluateJavascriptInDefaultContentWorld(

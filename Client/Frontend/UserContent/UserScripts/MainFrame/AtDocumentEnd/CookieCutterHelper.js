@@ -2,14 +2,14 @@
 
 import { CookieCategoryType, CookieEngine } from 'cookie-cutter';
 
-var cookiePreferences = { marketing: false, analytic: false, social: false }; 
+var cookiePreferences = { analyticAllowed: false, marketingAllowed: false, socialAllowed: false }; 
 var isSiteFlagged = false
 
 function setPreference(preferences) {
     if (preferences["cookieCutterEnabled"]) {
-        cookiePreferences["marketing"] = preferences["marketing"];
-        cookiePreferences["analytic"] = preferences["analytic"];
-        cookiePreferences["social"] = preferences["social"];
+        cookiePreferences.analyticAllowed = preferences["analyticAllowed"];
+        cookiePreferences.marketingAllowed = preferences["marketingAllowed"];
+        cookiePreferences.socialAllowed = preferences["socialAllowed"];
     
         runEngine();
     }
@@ -51,15 +51,15 @@ function runEngine() {
 
     CookieEngine.isTypeEnabled(async (type) => {
         switch (type) {
-        case CookieCategoryType.Marketing:
-        case CookieCategoryType.DoNotSell:
-            return cookiePreferences.marketing;
         case CookieCategoryType.Analytics:
         case CookieCategoryType.Preferences:
-            return cookiePreferences.analytic;
+            return cookiePreferences.analyticAllowed;
+        case CookieCategoryType.Marketing:
+        case CookieCategoryType.DoNotSell:
+            return cookiePreferences.marketingAllowed;
         case CookieCategoryType.Social:
         case CookieCategoryType.Unknown:
-            return cookiePreferences.social;
+            return cookiePreferences.socialAllowed;
         default:
             return false;
         }
