@@ -10,7 +10,6 @@ struct ExperimentSettingsView: View {
     @Environment(\.dismissScreen) var dismissScreen
 
     let scrollViewAppearance = UINavigationBar.appearance().scrollEdgeAppearance
-    @State private var valueTextWelcomeV2: String?
     @State private var valueTextPromoCard: String?
 
     var body: some View {
@@ -19,7 +18,7 @@ struct ExperimentSettingsView: View {
                 Button {
                     NeevaExperiment.resetAllExperiments()
                 } label: {
-                    Text("Reset all experiments")
+                    Text(verbatim: "Reset all experiments")
                         .foregroundColor(Color.label)
                 }
 
@@ -34,12 +33,6 @@ struct ExperimentSettingsView: View {
                     "PromoCardTypeAfterFirstRun",
                     value: $valueTextPromoCard,
                     experiment: .promoCardTypeAfterFirstRun
-                )
-
-                OptionalPrefilledStringField<NeevaExperiment.DefaultBrowserWelcomeV2>(
-                    "DefaultBrowserWelcomeV2",
-                    value: $valueTextWelcomeV2,
-                    experiment: .defaultBrowserWelcomeV2
                 )
             }
         }
@@ -86,9 +79,9 @@ private struct OptionalPrefilledStringField<Arm: ExperimentArms>: View {
                     NeevaExperiment.resetExperiment(experiment: experiment)
                 } label: {
                     if value == nil {
-                        Label("nil", systemSymbol: .checkmark)
+                        Label(String("nil"), systemSymbol: .checkmark)
                     } else {
-                        Text("nil")
+                        Text(verbatim: "nil")
                     }
                 }
             } label: {

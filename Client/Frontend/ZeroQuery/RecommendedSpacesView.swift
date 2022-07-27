@@ -40,8 +40,7 @@ struct RecommendedSpacesView: View {
                                 from: URL(
                                     string: NeevaConstants.appDeepLinkURL.absoluteString
                                         + "space?id="
-                                        + url.lastPathComponent)!,
-                                with: viewModel.bvc)
+                                        + url.lastPathComponent)!)
                         {
                             viewModel.bvc.dismissEditingAndHideZeroQuery()
                             NavigationPath.handle(nav: navPath, with: viewModel.bvc)

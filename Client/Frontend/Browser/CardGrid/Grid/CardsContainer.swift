@@ -176,11 +176,8 @@ struct CardsContainer: View {
                 // Spaces
                 CardScrollContainer(columns: columns) { scrollProxy in
                     VStack(alignment: .leading) {
-                        LazyVGrid(columns: columns, spacing: CardGridUX.GridSpacing) {
-                            SpaceCardsView()
-                                .environment(\.columns, columns)
-                        }.animation(nil)
-
+                        SpaceCardsView(spacesModel: spacesModel)
+                            .environment(\.columns, columns)
                         if !NeevaUserInfo.shared.isUserLoggedIn {
                             SpacesIntroOverlayContent()
                         }

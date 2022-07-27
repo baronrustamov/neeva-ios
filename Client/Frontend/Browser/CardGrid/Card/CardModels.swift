@@ -375,10 +375,6 @@ class TabCardModel: CardDropDelegate, CardModel {
     func onDataUpdated() {
         allDetails = manager.activeTabs.map { TabCardDetails(tab: $0, manager: manager) }
 
-        if FeatureFlag[.reverseChronologicalOrdering] {
-            allDetails = allDetails.reversed()
-        }
-
         allTabGroupDetails =
             manager.activeTabGroups.map { id, group in
                 TabGroupCardDetails(tabGroup: group, tabManager: manager)
@@ -545,25 +541,7 @@ class SpaceCardModel: CardModel {
         }
     }
     @Published var updatedItemIDs = [String]()
-    @Published var filterState: SpaceFilterState = .allSpaces
-    var detailsMatchingFilter: [SpaceCardDetails] {
-        var spaces = allDetails.filter {
-            NeevaFeatureFlags[.enableSpaceDigestCard] || $0.id != SpaceStore.dailyDigestID
-        }
-
-        // Put the pinned Spaces first
-        spaces.sort {
-            guard let firstItem = $0.item, let secondItem = $1.item else { return true }
-            return firstItem.isPinned && !secondItem.isPinned
-        }
-
-        switch filterState {
-        case .allSpaces:
-            return spaces
-        case .ownedByMe:
-            return spaces.filter { $0.item?.userACL == .owner }
-        }
-    }
+    var viewModel: SpaceCardViewModel = SpaceCardViewModel()
 
     var thumbnailURLCandidates = [URL: [URL]]()
     private var anyCancellable: AnyCancellable? = nil
@@ -577,7 +555,6 @@ class SpaceCardModel: CardModel {
     init(manager: SpaceStore = SpaceStore.shared, scene: UIScene?) {
         self.manager = manager
         self.scene = scene
-
         manager.spotlightEventDelegate = SpotlightLogger.shared
 
         NeevaUserInfo.shared.$isUserLoggedIn.sink { isLoggedIn in
@@ -588,6 +565,7 @@ class SpaceCardModel: CardModel {
                 self.manager.refresh()
             }
         }.store(in: &detailsSubscriptions)
+        viewModel.subscribe(to: $allDetails)
         listenManagerState()
         listenSpaceMutations()
     }
@@ -600,16 +578,11 @@ class SpaceCardModel: CardModel {
 
             if self.manager.updatedSpacesFromLastRefresh.count == 1,
                 let id = self.manager.updatedSpacesFromLastRefresh.first?.id.id,
-                let indexInStore = self.manager.allSpaces.firstIndex(where: { $0.id.id == id }),
-                let indexInDetails = self.allDetails.firstIndex(where: { $0.id == id })
+                self.allDetails.contains(where: { $0.id == id })
             {
                 // If only one space is updated and it exists inside the current details, then just
                 // update its contents and move it to the right place, instead of resetting all.
-                self.allDetails.first(where: { $0.id == id })?.updateSpace()
-                if indexInStore != indexInDetails {
-                    let indices: IndexSet = [indexInDetails]
-                    self.allDetails.move(fromOffsets: indices, toOffset: indexInStore)
-                }
+                self.viewModel.updateSpace(with: id)
                 return
             }
 
@@ -864,4 +837,54 @@ class SiteCardModel: CardModel {
     }
 
     func onDataUpdated() {}
+}
+
+class SpaceCardViewModel: ObservableObject {
+    @Published var dataSource: [SpaceCardDetails] = []
+    @Published var filterState: SpaceFilterState = .allSpaces
+    @Published var sortType: SpaceSortType = .updatedDate
+    @Published var sortOrder: SpaceSortOrder = .descending
+    @Published private var sorted: [SpaceCardDetails] = []
+
+    private var sortSubscription: AnyCancellable?
+    private var filterSubscription: AnyCancellable?
+
+    func subscribe(to allDetails: Published<[SpaceCardDetails]>.Publisher) {
+        sortSubscription =
+            allDetails
+            .combineLatest($sortType, $sortOrder)
+            .sink { [weak self] (arr, sort, order) in
+                guard let self = self else { return }
+                self.sorted =
+                    arr.filter {
+                        NeevaFeatureFlags[.enableSpaceDigestCard]
+                            || $0.id != SpaceStore.dailyDigestID
+                    }
+                    .sortSpaces(by: sort, order: order)
+            }
+        filterSubscription =
+            $sorted
+            .combineLatest($filterState)
+            .sink(receiveValue: {
+                (arr, filter) in
+                self.dataSource = arr.filterSpaces(by: filter)
+            })
+    }
+
+    func updateSpace(with id: String) {
+        guard let index = dataSource.firstIndex(where: { $0.id == id }) else {
+            return
+        }
+        dataSource[index].updateSpace()
+        if let toIndex = dataSource[index].findIndex(
+            in: dataSource,
+            sortType: sortType,
+            sortOrder: sortOrder)
+        {
+            if toIndex != index {
+                let space = dataSource.remove(at: index)
+                dataSource.insert(space, at: toIndex)
+            }
+        }
+    }
 }

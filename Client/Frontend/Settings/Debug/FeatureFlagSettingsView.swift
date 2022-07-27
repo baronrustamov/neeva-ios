@@ -39,12 +39,12 @@ struct FeatureFlagSettings_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             FeatureFlagSettingsView()
-                .navigationTitle("Feature Flags")
+                .navigationTitle(String("Feature Flags"))
                 .navigationBarTitleDisplayMode(.inline)
         }.navigationViewStyle(.stack)
         NavigationView {
             FeatureFlagSettingsView(needsRestart: true)
-                .navigationTitle("Feature Flags")
+                .navigationTitle(String("Feature Flags"))
                 .navigationBarTitleDisplayMode(.inline)
         }.navigationViewStyle(.stack)
     }

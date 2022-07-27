@@ -1,0 +1,77 @@
+{
+  "identifier" : "1D135AFC",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "EFA616AA",
+      "localizations" : [
+
+      ],
+      "name" : "Premium",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "4.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "5FAAE248",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Monthly Plan",
+              "displayName" : "Monthly (local)",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "monthly202206",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Monthly (local)",
+          "subscriptionGroupID" : "EFA616AA",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "49.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "85FDD3B2",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Yearly Plan",
+              "displayName" : "Annual (local)",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "annual202206",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Annual (local)",
+          "subscriptionGroupID" : "EFA616AA",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 1,
+    "minor" : 2
+  }
+}

@@ -115,7 +115,7 @@ extension Web3Theme {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 32)
-                .accessibilityLabel("Neeva Wallet")
+                .accessibilityLabel(String("Neeva Wallet"))
         case .azuki, .cryptoCoven, .coolCats:
             WebImage(url: asset?.imageURL)
                 .resizable()
@@ -126,7 +126,7 @@ extension Web3Theme {
                     RoundedRectangle(cornerRadius: 16)
                         .stroke(self == .cryptoCoven ? Color.label : Color.white, lineWidth: 2)
                 )
-                .accessibilityLabel("Neeva Wallet")
+                .accessibilityLabel(String("Neeva Wallet"))
         }
     }
 

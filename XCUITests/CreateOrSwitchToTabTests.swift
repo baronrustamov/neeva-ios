@@ -72,4 +72,13 @@ class CreateOrSwitchToTabTests: BaseTestCase {
         let numTabs = getNumberOfTabs()
         XCTAssertEqual(numTabs, 3)
     }
+
+    func testTabGroupNotCreatedWhenSettingParentFromURLBar() {
+        openURL("https://example.com")
+        openURL(path(forTestPage: "test-mozilla-book.html"))
+
+        // Confirm tab group isn't created.
+        goToTabTray()
+        XCTAssertFalse(app.buttons["Tab Group, Example Domain"].exists)
+    }
 }

@@ -44,7 +44,7 @@ struct SpotlightSettingsView: View {
                     },
                     label: {
                         HStack {
-                            Text("Delete all user activities")
+                            Text(verbatim: "Delete all user activities")
                                 .foregroundColor(.red)
                             Spacer()
                             ProgressView()
@@ -68,7 +68,7 @@ struct SpotlightSettingsView: View {
                         },
                         label: {
                             HStack {
-                                Text("Remove All Spaces from Index")
+                                Text(verbatim: "Remove All Spaces from Index")
                                     .foregroundColor(.red)
                                 Spacer()
                                 ProgressView()
@@ -84,7 +84,7 @@ struct SpotlightSettingsView: View {
                         }
                     } label: {
                         HStack {
-                            Text("Remove All Spaces URLs from Index")
+                            Text(verbatim: "Remove All Spaces URLs from Index")
                                 .foregroundColor(.red)
                             Spacer()
                             ProgressView()
@@ -100,7 +100,7 @@ struct SpotlightSettingsView: View {
                         }
                     } label: {
                         HStack {
-                            Text("Clear Space Index")
+                            Text(verbatim: "Clear Space Index")
                                 .foregroundColor(.red)
                             Spacer()
                             ProgressView()

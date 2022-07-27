@@ -16,6 +16,15 @@ query UserInfo {
       stringValue
     }
     authProvider
+    subscription {
+        status
+        canceled
+        plan
+        source
+        apple {
+            uuid
+        }
+    }
     subscriptionType
   }
 }
@@ -177,5 +186,12 @@ query CryptoWallet($query: String!) {
     address
     ens
     ownerName
+  }
+}
+
+mutation RegisterAppleSubscription($input: RegisterAppleSubscriptionInput!)  {
+  registerAppleSubscription(input: $input) {
+    succeeded
+    error
   }
 }

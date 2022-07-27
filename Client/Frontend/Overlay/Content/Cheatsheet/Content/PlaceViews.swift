@@ -276,7 +276,7 @@ struct PlaceView: View {
                             Image(systemSymbol: .phoneFill)
                                 .resizable()
                                 .scaledToFit()
-                            Text("Call")
+                            Text("Call", comment: "Button to make a phone call")
                                 .withFont(.bodyMedium)
                         }
                     }

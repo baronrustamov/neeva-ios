@@ -11,11 +11,35 @@ import SwiftUI
 struct SourcePage {
     let title: String?
     let url: URL
+
+    init?(_ tab: Tab?) {
+        guard let tab = tab,
+            var url = tab.url
+        else {
+            return nil
+        }
+
+        // Unwrap reader mode URLs
+        if url.isReaderModeURL || url.isSyncedReaderModeURL,
+            let unwrapped = url.decodeReaderModeURL
+        {
+            url = unwrapped
+        }
+
+        // unwrap session restore URL
+        if let unwrapped = InternalURL.unwrapSessionRestore(url: url) {
+            url = unwrapped
+        }
+
+        self.title = tab.title
+        self.url = url
+    }
 }
 
 public class CheatsheetMenuViewModel: ObservableObject {
     typealias RichResult = NeevaScopeSearch.SearchController.RichResult
 
+    private let service: CheatsheetDataService
     private weak var tab: Tab?
 
     // Store the data used to initiate the request in case the values changes
@@ -58,18 +82,19 @@ public class CheatsheetMenuViewModel: ObservableObject {
     }
 
     // MARK: - Init
-    init(tab: Tab?) {
+    init(tab: Tab?, service: CheatsheetDataService) {
         self.tab = tab
+        self.service = service
 
         self.cheatsheetDataLoading = false
     }
 
     // MARK: - Load Methods
     func reload() {
-        fetchCheatsheetInfo()
+        load()
     }
 
-    func fetchCheatsheetInfo() {
+    func load() {
         guard !cheatsheetDataLoading else { return }
 
         // TODO: - Check what happens when navigating to another page in this tab
@@ -77,51 +102,54 @@ public class CheatsheetMenuViewModel: ObservableObject {
 
         clearCheatsheetData()
 
-        var unwrappedURL = tab?.url
-        let pageTitle = tab?.title
-
         self.cheatsheetDataLoading = true
 
-        // Unwrap reader mode URLs
-        if (unwrappedURL?.isReaderModeURL ?? false)
-            || (unwrappedURL?.isSyncedReaderModeURL ?? false)
-        {
-            unwrappedURL = unwrappedURL?.decodeReaderModeURL
-        }
-        // unwrap session restore URL
-        if let unwrapped = InternalURL.unwrapSessionRestore(url: unwrappedURL) {
-            unwrappedURL = unwrapped
-        }
-
-        guard let url = unwrappedURL else {
-            self.cheatsheetDataLoading = false
-            return
-        }
-        sourcePage = SourcePage(title: pageTitle, url: url)
-
-        guard ["https", "http"].contains(url.scheme),
-            !NeevaConstants.isInNeevaDomain(url)
+        guard let parsedPage = SourcePage(tab)
         else {
             self.cheatsheetDataLoading = false
             return
         }
 
-        CheatsheetQueryController.getCheatsheetInfo(
-            url: url.absoluteString, title: pageTitle ?? ""
-        ) { [self] result in
+        self.sourcePage = parsedPage
+
+        guard ["https", "http"].contains(parsedPage.url.scheme),
+            !NeevaConstants.isInNeevaDomain(parsedPage.url)
+        else {
+            self.cheatsheetDataLoading = false
+            return
+        }
+
+        fetchCheatsheetInfo(
+            url: parsedPage.url.absoluteString,
+            title: parsedPage.title ?? ""
+        )
+    }
+
+    private func clearCheatsheetData() {
+        results = []
+        sourcePage = nil
+        cheatsheetDataError = nil
+        searchRichResultsError = nil
+    }
+
+    private func fetchCheatsheetInfo(url: String, title: String) {
+        service.getCheatsheetInfo(
+            url: url, title: title
+        ) { [weak self] result in
+            guard let self = self else {
+                return
+            }
             switch result {
-            case .success(let cheatsheetInfo):
-                // when cheatsheet data fetched successfully
-                // fetch other rich result
+            case .success(let infoResult):
+                // when cheatsheet data loads successfully
+                // determine query and load other rich result
                 let query: String
                 let querySource: LogConfig.CheatsheetAttribute.QuerySource
 
-                if let queries = cheatsheetInfo.first?.memorizedQuery,
-                    let firstQuery = queries.first
-                {
+                if let fetchedQuery = infoResult.query {
                     // U2Q
                     querySource = .uToQ
-                    query = firstQuery
+                    query = fetchedQuery
                 } else if let recentQuery = self.tab?.getMostRecentQuery(
                     restrictToCurrentNavigation: true)
                 {
@@ -139,7 +167,7 @@ public class CheatsheetMenuViewModel: ObservableObject {
                     // Second Fallback
                     // use current url as query for fallback
                     querySource = .pageURL
-                    query = url.absoluteString
+                    query = url
                 }
 
                 // Log fallback level
@@ -156,11 +184,8 @@ public class CheatsheetMenuViewModel: ObservableObject {
                 }
 
                 self.query = query
-                if let data = cheatsheetInfo.first {
-                    self.results = self.parseResults(from: data).map {
-                        CheatsheetResult(data: $0)
-                    }
-                }
+                self.results = infoResult.results
+
                 self.getRichResultByQuery(query)
             case .failure(let error):
                 self.cheatsheetDataError = error
@@ -172,29 +197,14 @@ public class CheatsheetMenuViewModel: ObservableObject {
         }
     }
 
-    private func clearCheatsheetData() {
-        results = []
-        cheatsheetDataError = nil
-        searchRichResultsError = nil
-    }
-
-    // MARK: - Data Parsing Methods
     private func getRichResultByQuery(_ query: String) {
-        NeevaScopeSearch.SearchController.getRichResult(query: query) { searchResult in
+        service.getRichResult(query: query) { [weak self] searchResult in
+            guard let self = self else {
+                return
+            }
             switch searchResult {
-            case .success(let richResults):
-                // log if a bad URL was received
-                if richResults.lazy.map({ $0.dataComplete }).contains(false) {
-                    DispatchQueue.main.async {
-                        ClientLogger.shared.logCounter(
-                            .CheatsheetBadURLString,
-                            attributes: EnvironmentHelper.shared.getAttributes()
-                        )
-                    }
-                }
-                self.results += self.parseResults(from: richResults).map {
-                    CheatsheetResult(data: $0)
-                }
+            case .success(let result):
+                self.results += result.results
             case .failure(let error):
                 DispatchQueue.main.async { [self] in
                     self.logFetchError(error, api: .search)
@@ -202,132 +212,23 @@ public class CheatsheetMenuViewModel: ObservableObject {
                 self.searchRichResultsError = error
             }
 
-            self.results.sort {
-                $0.data.order < $1.data.order
-            }
+            self.filterAndSortResults()
             DispatchQueue.main.async { [self] in
                 self.cheatsheetDataLoading = false
             }
         }
     }
 
-    private func parseResults(from cheatsheetInfo: CheatsheetQueryController.CheatsheetInfo)
-        -> [CheatsheetResultData]
-    {
-        var results: [CheatsheetResultData] = []
+    // MARK: - Data Parsing Methods
+    private func filterAndSortResults() {
+        var transformedResults = self.results
 
-        if let recipe = cheatsheetInfo.recipe,
-            let pageURL = sourcePage?.url,
-            DomainAllowList.isRecipeAllowed(url: pageURL),
-            let ingredients = recipe.ingredients,
-            !ingredients.isEmpty,
-            let instructions = recipe.instructions,
-            !instructions.isEmpty
-        {
-            results.append(.recipe(recipe))
+        if let url = tab?.url {
+            transformedResults = results.map { $0.filtered(by: url) }.filter { !$0.isEmpty }
         }
 
-        if let priceHistory = cheatsheetInfo.priceHistory,
-            !priceHistory.Max.Price.isEmpty || !priceHistory.Min.Price.isEmpty
-        {
-            results.append(.priceHistory(priceHistory))
-        }
-
-        if let reviewURLs = cheatsheetInfo.reviewURL?.compactMap({ URL(string: $0) }),
-            !reviewURLs.isEmpty
-        {
-            results.append(.reviewURL(reviewURLs))
-        }
-
-        if let memorizedQuery = cheatsheetInfo.memorizedQuery,
-            !memorizedQuery.isEmpty
-        {
-            results.append(.memorizedQuery(memorizedQuery))
-        }
-
-        if NeevaFeatureFlags[.enableBacklink] {
-            let ugcDiscussion = UGCDiscussion(backlinks: cheatsheetInfo.backlinks)
-            if !ugcDiscussion.isEmpty {
-                results.append(.discussions(ugcDiscussion))
-            } else {
-                if let inputURL = sourcePage?.url,
-                    let canonicalURL = CanonicalURL(
-                        from: inputURL, stripMobile: true, relaxed: true
-                    )?.asString,
-                    BloomFilterManager.shared.contains(canonicalURL) == false
-                {
-                    DispatchQueue.main.async {
-                        ClientLogger.shared.logCounter(
-                            .CheatsheetUGCHitNoRedditData,
-                            attributes: EnvironmentHelper.shared.getAttributes() + [
-                                ClientLogCounterAttribute(
-                                    key: LogConfig.CheatsheetAttribute.currentPageURL,
-                                    value: inputURL.absoluteString
-                                )
-                            ]
-                        )
-                    }
-                }
-            }
-        }
-
-        return results
-    }
-
-    private func parseResults(from richResults: [NeevaScopeSearch.SearchController.RichResult])
-        -> [CheatsheetResultData]
-    {
-        let currentPageURL = tab?.url
-        let urlCompareOptions: [URL.EqualsOption] = [
-            .ignoreFragment, .ignoreLastSlash, .normalizeHost, .ignoreScheme,
-        ]
-
-        return richResults.compactMap { richResult -> CheatsheetResultData? in
-            switch richResult.result {
-            case .ProductCluster(let result):
-                // for each product, we need an actionable URL outside of the current page
-                let filteredResults = result.filter { product in
-                    product.getTargetURL(excluding: currentPageURL, with: urlCompareOptions) != nil
-                }
-                guard !filteredResults.isEmpty else {
-                    return nil
-                }
-                return .productCluster(result: filteredResults)
-            case .Place(let result):
-                return .place(result: result)
-            case .PlaceList(let result):
-                return .placeList(result: result)
-            case .RichEntity(let result):
-                return .richEntity(result: result)
-            case .RecipeBlock(let result):
-                let filteredRecipes = result.filter {
-                    !$0.url.equals(currentPageURL, with: urlCompareOptions)
-                }
-                guard !filteredRecipes.isEmpty else {
-                    return nil
-                }
-                return .recipeBlock(result: filteredRecipes)
-            case .RelatedSearches(let result):
-                return .relatedSearches(result: result)
-            case .WebGroup(let result):
-                let filteredResults = result.filter {
-                    !$0.actionURL.equals(currentPageURL, with: urlCompareOptions)
-                }
-                guard !filteredResults.isEmpty else {
-                    return nil
-                }
-                return .webGroup(result: filteredResults)
-            case .NewsGroup(let result):
-                let filteredNews = result.news.filter {
-                    !$0.url.equals(currentPageURL, with: urlCompareOptions)
-                }
-                guard !filteredNews.isEmpty else {
-                    return nil
-                }
-                var newResult = result
-                newResult.news = filteredNews
-                return .newsGroup(result: newResult)
-            }
+        self.results = transformedResults.sorted {
+            $0.data.order < $1.data.order
         }
     }
 
@@ -390,6 +291,7 @@ public class CheatsheetMenuViewModel: ObservableObject {
     }
 }
 
+// MARK: - Extensions
 extension NeevaScopeSearch.Product {
     fileprivate func getTargetURL(
         excluding url: URL?,
@@ -442,5 +344,84 @@ extension CheatsheetResultData {
         case .memorizedQuery:
             return 11
         }
+    }
+}
+
+extension CheatsheetResult {
+    var isEmpty: Bool {
+        switch data {
+        case .recipe(let recipe):
+            guard let ingredients = recipe.ingredients,
+                let instructions = recipe.instructions
+            else {
+                return true
+            }
+            return ingredients.isEmpty || instructions.isEmpty
+        case .discussions(let discussions):
+            return discussions.isEmpty
+        case .priceHistory(let priceHistory):
+            return priceHistory.Max.Price.isEmpty || priceHistory.Min.Price.isEmpty
+        case .reviewURL(let reviewURLs):
+            return reviewURLs.isEmpty
+        case .memorizedQuery(let memorizedQuery):
+            return memorizedQuery.isEmpty
+        case .productCluster(let result):
+            return result.isEmpty
+        case .recipeBlock(let result):
+            return result.isEmpty
+        case .relatedSearches(let result):
+            return result.isEmpty
+        case .webGroup(let result):
+            return result.isEmpty
+        case .newsGroup(let result):
+            return result.news.isEmpty
+        case .placeList(let result):
+            return result.isEmpty
+        case .place, .richEntity:
+            return false
+        }
+    }
+
+    mutating func filter(by url: URL) {
+        let urlCompareOptions: [URL.EqualsOption] = [
+            .ignoreFragment, .ignoreLastSlash, .normalizeHost, .ignoreScheme,
+        ]
+
+        switch data {
+        case .recipe, .discussions, .priceHistory, .reviewURL, .memorizedQuery:
+            // Data from cheatsheet info is not filtered
+            return
+        case .place, .placeList, .richEntity, .relatedSearches:
+            return
+        case .productCluster(let result):
+            let filteredResults = result.filter { product in
+                product.getTargetURL(excluding: url, with: urlCompareOptions) != nil
+            }
+            self.data = .productCluster(result: filteredResults)
+        case .recipeBlock(let result):
+            let filteredResults = result.filter { recipe in
+                !recipe.url.equals(url, with: urlCompareOptions)
+            }
+            self.data = .recipeBlock(result: filteredResults)
+        case .webGroup(let result):
+            let filteredResults = result.filter {
+                !$0.actionURL.equals(url, with: urlCompareOptions)
+            }
+            self.data = .webGroup(result: filteredResults)
+        case .newsGroup(let result):
+            let filteredResults = result.news.filter { news in
+                !news.url.equals(url, with: urlCompareOptions)
+            }
+
+            var newResult = result
+            newResult.news = filteredResults
+            self.data = .newsGroup(result: newResult)
+        }
+    }
+
+    func filtered(by url: URL) -> Self {
+        var copy = self
+        copy.filter(by: url)
+        return copy
     }
 }

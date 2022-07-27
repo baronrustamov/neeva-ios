@@ -95,6 +95,22 @@ public enum LogConfig {
         case SettingAppIcon
         /// Click sign out in setting
         case SettingSignout
+        /// Click to view premium subscriptions
+        case SettingPremiumSubscriptions
+        /// Exception thrown fetching products
+        case SettingPremiumProductsFetchException
+        /// No products found
+        case SettingPremiumNoProductsFound
+        /// Click to purchase subscription
+        case SettingPremiumPurchase
+        /// Click to cancel purchase
+        case SettingPremiumPurchaseCanceled
+        /// Purchase finalized
+        case SettingPremiumPurchaseComplete
+        /// Purchase pending
+        case SettingPremiumPurchasePending
+        /// Purchase unverified
+        case SettingPremiumPurchaseUnverified
         /// Click Data Management in setting
         case ViewDataManagement
         /// Click Tracking Protection in setting
@@ -352,7 +368,7 @@ public enum LogConfig {
         case CheatsheetBadURLString
         case CheatsheetFetchError
         case CheatsheetUGCStatsForSession
-        case CheatsheetUGCHitNoRedditData
+        case CheatsheetUGCHitNoRedditDataV2
 
         // MARK: tab group
         case tabGroupExpanded
@@ -536,6 +552,14 @@ public enum LogConfig {
         case .SettingTheme: return .Settings
         case .SettingAppIcon: return .Settings
         case .SettingSignout: return .Settings
+        case .SettingPremiumSubscriptions: return .Settings
+        case .SettingPremiumProductsFetchException: return .Settings
+        case .SettingPremiumNoProductsFound: return .Settings
+        case .SettingPremiumPurchase: return .Settings
+        case .SettingPremiumPurchaseCanceled: return .Settings
+        case .SettingPremiumPurchaseComplete: return .Settings
+        case .SettingPremiumPurchasePending: return .Settings
+        case .SettingPremiumPurchaseUnverified: return .Settings
         case .ViewDataManagement: return .Settings
         case .ViewTrackingProtection: return .Settings
         case .ViewPrivacyPolicy: return .Settings
@@ -715,7 +739,7 @@ public enum LogConfig {
         case .CheatsheetBadURLString: return .Cheatsheet
         case .CheatsheetFetchError: return .Cheatsheet
         case .CheatsheetUGCStatsForSession: return .Cheatsheet
-        case .CheatsheetUGCHitNoRedditData: return .Cheatsheet
+        case .CheatsheetUGCHitNoRedditDataV2: return .Cheatsheet
 
         // MARK: - TabGroup
         case .tabGroupExpanded: return .TabGroup
@@ -811,6 +835,9 @@ public enum LogConfig {
         public static let pushNotificationToken = "PushNotificationToken"
 
         public static let pushNotificationTokenEnvironment = "PushNotificationTokenEnvironment"
+
+        /// Premium subscription attributes
+        public static let SubscriptionPlan = "SubscriptionPlan"
     }
 
     public enum UIInteractionAttribute {

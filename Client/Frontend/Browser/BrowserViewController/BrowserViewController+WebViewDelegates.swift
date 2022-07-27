@@ -64,8 +64,6 @@ private func setCookiesForNeeva(webView: WKWebView, isIncognito: Bool) {
         .calculatorSuggestion,
         .recipeCheatsheet,
         .recipeCardNavigate,
-        .enableBacklink,
-        .enableBacklinkSnippet,
     ]
     let intFlags: [NeevaFeatureFlags.IntFlag] = []
     let floatFlags: [NeevaFeatureFlags.FloatFlag] = []

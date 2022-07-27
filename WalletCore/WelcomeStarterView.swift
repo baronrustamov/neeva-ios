@@ -28,13 +28,14 @@ public struct WelcomeStarterView: View {
             CreateWalletIllustration(isCreatingWallet: $isCreatingWallet, completion: completion)
             if publicKey.isEmpty {
                 Button(action: { viewState = .importWallet }) {
-                    Text("Import My Wallet")
+                    Text(verbatim: "Import My Wallet")
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.wallet(.primary))
                 .padding(.vertical, 8)
                 Text(
-                    "Already have one? **Whether you created it on Metamask or elsewhere**, you can access your wallet here."
+                    verbatim:
+                        "Already have one? **Whether you created it on Metamask or elsewhere**, you can access your wallet here."
                 )
                 .withFont(.bodyMedium)
                 .foregroundColor(.secondaryLabel)
@@ -42,32 +43,37 @@ public struct WelcomeStarterView: View {
                 Button(action: {
                     isCreatingWallet = true
                 }) {
-                    Text(isCreatingWallet ? "Creating your wallet... " : "Create a new wallet")
-                        .frame(maxWidth: .infinity)
+                    Text(
+                        verbatim: isCreatingWallet
+                            ? "Creating your wallet... " : "Create a new wallet"
+                    )
+                    .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.wallet(.secondary))
                 .padding(.vertical, 8)
                 Text(
-                    "Remember, this wallet is yours. You own its contents, and **can access it through any wallet app**."
+                    verbatim:
+                        "Remember, this wallet is yours. You own its contents, and **can access it through any wallet app**."
                 )
                 .withFont(.bodyMedium)
                 .foregroundColor(.secondaryLabel)
                 .multilineTextAlignment(.center)
             } else {
                 Button(action: { viewState = .showPhrases }) {
-                    Text("View Secret Recovery Phrase")
+                    Text(verbatim: "View Secret Recovery Phrase")
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.wallet(.secondary))
                 .padding(.vertical, 8)
                 Button(action: { dismiss() }) {
-                    Text("Done")
+                    Text(verbatim: "Done")
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.wallet(.primary))
                 .padding(.vertical, 8)
                 Text(
-                    "REMEMBER: Write down or save your Secret Recovery Phrase somewhere safe. You need it to ensure you can access your wallet forever."
+                    verbatim:
+                        "REMEMBER: Write down or save your Secret Recovery Phrase somewhere safe. You need it to ensure you can access your wallet forever."
                 )
                 .withFont(.bodyLarge)
                 .foregroundColor(.secondaryLabel)
@@ -98,7 +104,7 @@ struct CreateWalletIllustration: View {
                     .scaleEffect(isCreatingWallet ? 1.15 : 1)
                     .animation(isCreatingWallet ? .easeOut(duration: 1).repeatForever() : nil)
             } else {
-                Text("Congratulations! Your wallet is created")
+                Text(verbatim: "Congratulations! Your wallet is created")
                     .withFont(.displayLarge)
                     .foregroundColor(.label)
                     .multilineTextAlignment(.center)

@@ -22,99 +22,6 @@ enum CardUX {
     static let DefaultTabCardRatio: CGFloat = 200 / 164
 }
 
-struct BorderTreatment: ViewModifier {
-    let isSelected: Bool
-    let thumbnailDrawsHeader: Bool
-    let isIncognito: Bool
-    var cornerRadius: CGFloat = CardUX.CornerRadius
-
-    func body(content: Content) -> some View {
-        content
-            .shadow(radius: thumbnailDrawsHeader ? 0 : CardUX.ShadowRadius)
-            .overlay(
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .stroke(
-                        isSelected
-                            ? (isIncognito ? Color.label : Color.ui.adaptive.blue) : Color.clear,
-                        lineWidth: 3)
-            )
-            .accessibilityAddTraits(isSelected ? .isSelected : [])
-    }
-}
-
-struct DragToCloseInteraction: ViewModifier {
-    let action: () -> Void
-    @State private var hasExceededThreshold = false
-
-    @Environment(\.cardSize) private var cardSize
-    @Environment(\.layoutDirection) private var layoutDirection
-
-    @EnvironmentObject private var browserModel: BrowserModel
-
-    @State private var offset = CGFloat.zero
-
-    private var dragToCloseThreshold: CGFloat {
-        // Using `cardSize` here helps this scale properly with different card sizes,
-        // across portrait and landscape modes.
-        cardSize * 0.6
-    }
-
-    private var progress: CGFloat {
-        abs(offset) / (dragToCloseThreshold * 1.5)
-    }
-    private var angle: Angle {
-        .radians(Double(progress * (.pi / 10)).withSign(offset.sign) * layoutDirection.xSign)
-    }
-
-    func body(content: Content) -> some View {
-        content
-            .scaleEffect(1 - (progress / 5))
-            .rotation3DEffect(angle, axis: (x: 0.0, y: 1.0, z: 0.0))
-            .translate(x: offset)
-            .opacity(Double(1 - progress))
-            .highPriorityGesture(
-                DragGesture()
-                    .onChanged { value in
-                        // Workaround for SwiftUI gestures and UIScrollView not playing well
-                        // together. See issue #1378 for details. Only apply an offset if the
-                        // translation is mostly in the horizontal direction to avoid translating
-                        // the card when the UIScrollView is scrolling.
-                        if offset != 0
-                            || abs(value.translation.width) > abs(value.translation.height)
-                        {
-                            offset = value.translation.width
-                            if abs(offset) > dragToCloseThreshold {
-                                if !hasExceededThreshold {
-                                    hasExceededThreshold = true
-                                    Haptics.swipeGesture()
-                                }
-                            } else {
-                                hasExceededThreshold = false
-                            }
-                        }
-                    }
-                    .onEnded { value in
-                        let finalOffset = value.translation.width
-                        withAnimation(.interactiveSpring()) {
-                            if abs(finalOffset) > dragToCloseThreshold {
-                                offset = finalOffset
-                                action()
-
-                                // work around reopening tabs causing the state to not be reset
-                                DispatchQueue.main.asyncAfter(
-                                    deadline: .now() + .milliseconds(500)
-                                ) {
-                                    offset = 0
-                                }
-                            } else {
-                                offset = 0
-                            }
-                        }
-                    }
-            )
-    }
-}
-
 extension EnvironmentValues {
     private struct CardSizeKey: EnvironmentKey {
         static var defaultValue: CGFloat = CardUX.DefaultCardSize
@@ -140,20 +47,6 @@ extension EnvironmentValues {
     public var selectionCompletion: () -> Void {
         get { self[SelectionCompletionKey.self] }
         set { self[SelectionCompletionKey.self] = newValue }
-    }
-}
-
-/// A card that constrains itself to the default height and provided width.
-struct FittedCard<Details>: View where Details: CardDetails {
-    @ObservedObject var details: Details
-    var dragToClose: Bool = FeatureFlag[.swipeToCloseTabs]
-
-    @Environment(\.cardSize) private var cardSize
-    @Environment(\.aspectRatio) private var aspectRatio
-
-    var body: some View {
-        Card(details: details, dragToClose: dragToClose)
-            .frame(width: cardSize, height: cardSize * aspectRatio + CardUX.HeaderSize)
     }
 }
 
@@ -382,11 +275,9 @@ struct Card<Details>: View where Details: CardDetails {
                         .actionSheet(isPresented: $showingRemoveSpaceWarning) {
                             ActionSheet(
                                 // Compilation fails if we don't concat separate Text views for title
-                                title: Text("Are you sure you want to ")
-                                    + Text(
-                                        details.item?.ACL == .owner
-                                            ? "delete" : "unfollow")
-                                    + Text(" this space?"),
+                                title: Text(
+                                    "Are you sure you want to \(details.item?.ACL == .owner ? "delete" : "unfollow") this space?"
+                                ),
                                 buttons: [
                                     .destructive(
                                         Text(

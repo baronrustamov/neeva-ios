@@ -47,7 +47,7 @@ public class NeevaScopeLoadingViewController: UIViewController {
     }
 }
 
-final public class NeevaScopeLoadingController: UIViewControllerRepresentable {
+public struct NeevaScopeLoadingController: UIViewControllerRepresentable {
     public func makeUIViewController(context: Context) -> NeevaScopeLoadingViewController {
         let vc = NeevaScopeLoadingViewController()
         return vc

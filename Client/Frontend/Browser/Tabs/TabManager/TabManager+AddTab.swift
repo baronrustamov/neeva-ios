@@ -66,6 +66,7 @@ extension TabManager {
         configuration: WKWebViewConfiguration? = nil,
         atIndex: Int? = nil,
         afterTab parent: Tab? = nil,
+        keepInParentTabGroup: Bool = true,
         flushToDisk: Bool, zombie: Bool, isIncognito: Bool = false,
         query: String? = nil, suggestedQuery: String? = nil,
         visitType: VisitType? = nil, notify: Bool = true
@@ -80,10 +81,15 @@ extension TabManager {
         let tab = Tab(bvc: bvc, configuration: configuration, isIncognito: isIncognito)
         configureTab(
             tab,
-            request: request, webView: webView,
-            atIndex: atIndex, afterTab: parent,
-            flushToDisk: flushToDisk, zombie: zombie,
-            query: query, suggestedQuery: suggestedQuery,
+            request: request,
+            webView: webView,
+            atIndex: atIndex,
+            afterTab: parent,
+            keepInParentTabGroup: keepInParentTabGroup,
+            flushToDisk: flushToDisk,
+            zombie: zombie,
+            query: query,
+            suggestedQuery: suggestedQuery,
             visitType: visitType,
             notify: notify
         )
@@ -93,7 +99,8 @@ extension TabManager {
 
     func configureTab(
         _ tab: Tab, request: URLRequest?, webView: WKWebView? = nil, atIndex: Int? = nil,
-        afterTab parent: Tab? = nil, flushToDisk: Bool, zombie: Bool, isPopup: Bool = false,
+        afterTab parent: Tab? = nil, keepInParentTabGroup: Bool = true,
+        flushToDisk: Bool, zombie: Bool, isPopup: Bool = false,
         query: String? = nil, suggestedQuery: String? = nil,
         queryLocation: QueryForNavigation.Query.Location = .suggestion,
         visitType: VisitType? = nil, notify: Bool
@@ -104,7 +111,13 @@ extension TabManager {
         // We should set request url in order to show url in url bar even no network
         tab.setURL(request?.url)
 
-        insertTab(tab, atIndex: atIndex, parent: parent, notify: notify)
+        insertTab(
+            tab,
+            atIndex: atIndex,
+            parent: parent,
+            keepInParentTabGroup: keepInParentTabGroup,
+            notify: notify
+        )
 
         if let webView = webView {
             tab.restore(webView)
@@ -139,7 +152,10 @@ extension TabManager {
         }
     }
 
-    private func insertTab(_ tab: Tab, atIndex: Int? = nil, parent: Tab? = nil, notify: Bool) {
+    private func insertTab(
+        _ tab: Tab, atIndex: Int? = nil, parent: Tab? = nil, keepInParentTabGroup: Bool = true,
+        notify: Bool
+    ) {
         if let atIndex = atIndex, atIndex <= tabs.count {
             tabs.insert(tab, at: atIndex)
         } else if parent == nil || parent?.isIncognito != tab.isIncognito {
@@ -172,7 +188,11 @@ extension TabManager {
 
             tab.parent = parent
             tab.parentUUID = parent.tabUUID
-            tab.rootUUID = parent.rootUUID
+
+            if keepInParentTabGroup {
+                tab.rootUUID = parent.rootUUID
+            }
+
             tabs.insert(tab, at: insertIndex)
         }
 

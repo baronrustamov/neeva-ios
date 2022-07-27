@@ -30,12 +30,4 @@ extension Font {
     static func roobert(_ weight: Font.Weight = .regular, size: CGFloat) -> Self {
         custom(weight.roobertName, size: size)
     }
-    static func roobert(
-        _ weight: Font.Weight = .regular, size: CGFloat, relativeTo textStyle: TextStyle
-    ) -> Self {
-        custom(weight.roobertName, size: size, relativeTo: textStyle)
-    }
-    static func roobert(_ weight: Font.Weight = .regular, fixedSize size: CGFloat) -> Self {
-        custom(weight.roobertName, fixedSize: size)
-    }
 }

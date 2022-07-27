@@ -54,8 +54,8 @@ struct DefaultBrowserInterstitialView<Content: View>: View {
     var showSecondaryButton: Bool = true
     var showLogo: Bool = false
     var content: Content
-    var primaryButton: String
-    var secondaryButton: String?
+    var primaryButton: LocalizedStringKey
+    var secondaryButton: LocalizedStringKey?
     var primaryAction: () -> Void
     var secondaryAction: (() -> Void)?
 
@@ -109,7 +109,7 @@ struct DefaultBrowserInterstitialView<Content: View>: View {
             }
             .padding(.horizontal, 32)
             .padding(.bottom, 20)
-            if showLogo && NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) == .welcomeV2 {
+            if showLogo {
                 VStack(spacing: 0) {
                     Spacer()
                     Image("neevaMenuIcon")

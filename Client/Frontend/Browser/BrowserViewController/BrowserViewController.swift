@@ -705,7 +705,9 @@ class BrowserViewController: UIViewController, ModalPresenter {
                 for: url,
                 query: searchQueryModel.value,
                 suggestedQuery: suggestedQuery,
-                visitType: visitType
+                visitType: visitType,
+                from: zeroQueryModel.openedFrom?.openedTab,
+                keepInParentTabGroup: false
             )
         } else if zeroQueryModel.isLazyTab || zeroQueryModel.targetTab == .newTab {
             dismissEditingAndHideZeroQuery()
@@ -1872,7 +1874,7 @@ extension BrowserViewController {
     /// This is consistent with the behaviour of [showModal](x-source-tag://showModal)
     func showCheatSheetOverlay() {
         // Load cheat sheet data
-        tabManager.selectedTab?.cheatsheetModel.fetchCheatsheetInfo()
+        tabManager.selectedTab?.cheatsheetModel.load()
 
         // if on iphone and portrait, present as sheet
         // otherwise, present as popover
@@ -1934,11 +1936,15 @@ extension BrowserViewController {
             overlay: .backForwardList(
                 BackForwardListView(
                     model: BackForwardListModel(
-                        profile: profile, backForwardList: backForwardList),
+                        profile: profile, backForwardList: backForwardList
+                    ),
                     overlayManager: overlayManager,
                     navigationClicked: { navigationListItem in
                         self.tabManager.selectedTab?.goToBackForwardListItem(navigationListItem)
-                    })))
+                    }
+                )
+            )
+        )
     }
 }
 

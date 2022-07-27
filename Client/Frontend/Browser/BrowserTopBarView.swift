@@ -65,16 +65,11 @@ struct BrowserTopBarView: View {
     var topBar: some View {
         content
             .transition(.opacity)
-            .frame(height: chromeModel.topBarHeight)
     }
 
     var body: some View {
         VStack {
-            if UIConstants.enableBottomURLBar {
-                Spacer()
-            }
-
-            if !UIConstants.enableBottomURLBar, chromeModel.inlineToolbar {
+            if chromeModel.inlineToolbar {
                 topBar
                     .background(
                         Group {
@@ -96,10 +91,6 @@ struct BrowserTopBarView: View {
                         }, alignment: .top)
             } else {
                 topBar
-            }
-
-            if !UIConstants.enableBottomURLBar {
-                Spacer()
             }
         }
     }

@@ -28,7 +28,7 @@ public struct ImportWalletView: View {
 
     public var body: some View {
         VStack(spacing: 16) {
-            Text("Import Wallet")
+            Text(verbatim: "Import Wallet")
                 .withFont(.headingXLarge)
                 .foregroundColor(.label)
                 .padding(.top, 60)
@@ -45,7 +45,7 @@ public struct ImportWalletView: View {
                         .frame(maxWidth: .infinity)
                 }
                 Text(
-                    Defaults[.cryptoPublicKey].isEmpty
+                    verbatim: Defaults[.cryptoPublicKey].isEmpty
                         ? "Type or paste your Secret Phrase, public address, or ENS domain"
                         : "Type or paste your Secret Phrase"
                 )
@@ -73,7 +73,7 @@ public struct ImportWalletView: View {
                     label: {
                         HStack(spacing: 4) {
                             Symbol(decorative: .docOnClipboardFill, style: .bodyMedium)
-                            Text("Paste & Import")
+                            Text(verbatim: "Paste & Import")
                         }
                     }
                 )
@@ -82,7 +82,7 @@ public struct ImportWalletView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             } else if !isFocused {
                 Text(
-                    Defaults[.cryptoPublicKey].isEmpty
+                    verbatim: Defaults[.cryptoPublicKey].isEmpty
                         ? "**Not ready to import your wallet?** Start by inputting a public address or ENS domain. You can always import your wallet at another time."
                         : "You should only enter your secret phrase while importing a wallet, never on any other screen"
                 )
@@ -92,7 +92,7 @@ public struct ImportWalletView: View {
             }
             Button(action: onImport) {
                 HStack {
-                    Text(isImporting ? "Importing  " : "Import")
+                    Text(verbatim: isImporting ? "Importing  " : "Import")
                     if isImporting {
                         ProgressView()
                     }
@@ -101,7 +101,7 @@ public struct ImportWalletView: View {
             .buttonStyle(.wallet(.primary))
             .disabled(inputPhrase.isEmpty)
             Button(action: { viewState = .starter }) {
-                Text("Back")
+                Text(verbatim: "Back")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.wallet(.secondary))

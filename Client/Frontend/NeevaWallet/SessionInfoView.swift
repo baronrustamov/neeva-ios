@@ -100,7 +100,7 @@ struct SessionInfoView: View {
                 }) {
                     HStack(spacing: 2) {
                         Symbol(decorative: .arrowUpRight, style: .bodyMedium)
-                        Text("Open Neeva Wallet")
+                        Text(verbatim: "Open Neeva Wallet")
                     }
                 }.buttonStyle(DashboardButtonStyle())
             }

@@ -8,8 +8,8 @@ import Shared
 import SwiftUI
 
 class InterstitialViewModel: ObservableObject {
-    @Published var openButtonText: String
-    @Published var remindButtonText: String
+    @Published var openButtonText: LocalizedStringKey
+    @Published var remindButtonText: LocalizedStringKey
 
     @Published var shouldHide: Bool = true
 
@@ -153,25 +153,17 @@ class InterstitialViewModel: ObservableObject {
     }
 
     func welcomePageBullets() -> [String] {
-        if NeevaExperiment.arm(for: .defaultBrowserWelcomeV2) == .welcomeV2 {
-            return [
-                "Ad-free search results",
-                "Browser without ads or trackers",
-                "Cookie pop-up blocker",
-            ]
-        } else {
-            return [
-                "Ad-Free Search",
-                "Block Ads. Block Trackers",
-                "Block Cookie Pop-ups",
-            ]
-        }
+        return [
+            "Ad-free search results",
+            "Browser without ads or trackers",
+            "Cookie pop-up blocker",
+        ]
     }
 
     func onboardingPageBullets() -> [String] {
         return [
-            "Browse the Web Ad-Free",
-            "Block Trackers, and Pop-ups",
+            "Browse the web ad-free",
+            "Block trackers, and pop-ups",
         ]
     }
 }

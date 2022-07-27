@@ -1,7 +1,6 @@
 // Copyright 2022 Neeva Inc. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-
 import Defaults
 import Shared
 import SwiftUI
@@ -323,10 +322,10 @@ struct TabGroupHeader: View {
                     Text("\(groupDetails.allDetails.count) Tabs")
                 }
 
-                Button(action: {
+                Button {
                     ClientLogger.shared.logCounter(.tabGroupRenameThroughThreeDotMenu)
                     renaming = true
-                }) {
+                } label: {
                     Label("Rename", systemSymbol: .pencil)
                 }
 
@@ -341,10 +340,10 @@ struct TabGroupHeader: View {
                         Label("Close All", systemSymbol: .trash)
                     }
                 } else {
-                    Button(action: {
+                    Button {
                         ClientLogger.shared.logCounter(.tabGroupDeleteThroughThreeDotMenu)
                         deleting = true
-                    }) {
+                    } label: {
                         Label("Close All", systemSymbol: .trash)
                     }
                 }
@@ -362,6 +361,7 @@ struct TabGroupHeader: View {
                 .accessibility(value: Text(groupDetails.title))
 
             Spacer()
+
             if groupDetails.allDetails.count > columns.count {
                 Button {
                     if groupDetails.isExpanded {
@@ -491,6 +491,7 @@ func getLogCounterAttributesForTabGroups(
 
         )
     )
+
     if let expanded = expanded {
         attributes.append(
             ClientLogCounterAttribute(
@@ -502,5 +503,6 @@ func getLogCounterAttributesForTabGroups(
         ClientLogCounterAttribute(
             key: LogConfig.TabGroupAttribute.numTabsInTabGroup, value: String(numTabs))
     )
+
     return attributes
 }

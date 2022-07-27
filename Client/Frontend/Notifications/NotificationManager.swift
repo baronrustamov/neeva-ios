@@ -268,7 +268,7 @@ class NotificationManager: ObservableObject {
 
         if let urlStr = notification.deeplinkUrl,
             let deeplink = URL(string: urlStr),
-            let routerpath = NavigationPath(bvc: bvc, url: deeplink)
+            let routerpath = NavigationPath(url: deeplink)
         {
             NavigationPath.handle(nav: routerpath, with: bvc)
         }
@@ -304,7 +304,7 @@ class NotificationManager: ObservableObject {
         // handle deeplink
         if let urlStr = request.content.userInfo[notificationKey.deeplinkURL] as? String,
             let deeplink = URL(string: urlStr),
-            let routerpath = NavigationPath(bvc: bvc, url: deeplink)
+            let routerpath = NavigationPath(url: deeplink)
         {
             NavigationPath.handle(nav: routerpath, with: bvc)
         }

@@ -91,7 +91,7 @@ struct AccountInfoView: View {
                     label: {
                         HStack(spacing: 4) {
                             Symbol(decorative: .lockShield, style: .bodyMedium)
-                            Text("Import Wallet Credentials")
+                            Text(verbatim: "Import Wallet Credentials")
                         }
                     }
                 )
@@ -137,7 +137,7 @@ struct AccountInfoView: View {
                     .gradientForeground()
                     .lineLimit(1)
                 if let balance = model.balanceFor(.ether) {
-                    Text("\(balance) ETH")
+                    Text(verbatim: "\(balance) ETH")
                         .withFont(.bodySmall)
                         .foregroundColor(.secondaryLabel)
                 }
@@ -167,7 +167,7 @@ struct AccountInfoView: View {
                         Button(
                             action: onExportWallet,
                             label: {
-                                Text("View Secret Recovery Phrase")
+                                Text(verbatim: "View Secret Recovery Phrase")
                                     .frame(maxWidth: .infinity)
                             }
                         ).buttonStyle(.wallet(.secondary))
@@ -177,7 +177,7 @@ struct AccountInfoView: View {
                             showConfirmRemoveWalletAlert = true
                         }
                     ) {
-                        Text("Remove Wallet")
+                        Text(verbatim: "Remove Wallet")
                             .frame(maxWidth: .infinity)
                     }.buttonStyle(.wallet(.secondary))
                     Spacer()
@@ -215,11 +215,11 @@ struct AccountInfoView: View {
     var confirmRemoveWalletSheet: ActionSheet {
         ActionSheet(
             title: Text(
-                "Are you sure you want to remove all keys for your wallet from this device? "
-            ),
+                verbatim:
+                    "Are you sure you want to remove all keys for your wallet from this device? "),
             buttons: [
                 .destructive(
-                    Text("Remove Wallet from device"),
+                    Text(verbatim: "Remove Wallet from device"),
                     action: {
                         showOverflowSheet = false
                         showConfirmRemoveWalletAlert = false

@@ -29,7 +29,7 @@ struct ArchivedTabsPanelView: View {
     let onDismiss: () -> Void
     private let clearAllArchiveButtonTitle = "Are you sure you want to close all archived tabs?"
 
-    var archivedTabsLabel: String {
+    var archivedTabsLabel: LocalizedStringKey {
         switch archivedTabsDuration {
         case .week:
             return "After 7 Days"

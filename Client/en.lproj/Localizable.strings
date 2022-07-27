@@ -1,0 +1,56 @@
+"Add a URL to your new item (optional)" = "Add a URL to your new item (optional)";
+
+/* Specify a button is in the tool bar above */
+"above" = "above";
+
+/* Specify a button is in the tool bar below */
+"below" = "below";
+
+/* Hide full recipe */
+"Hide" = "Hide";
+
+/* Show full recipe */
+"See" = "See";
+
+/* Hides a section */
+"hides" = "hides";
+
+/* Shows a section */
+"shows" = "shows";
+
+/* Expands a section */
+"expands" = "expands";
+
+/* button to unfollow a space */
+"unfollow" = "unfollow";
+
+/* button to delete a space */
+"delete" = "delete";
+
+/* This is unused string, no translation required*/
+"NFT Search from Neevaxyz" = "NFT Search from Neevaxyz";
+
+"Ad-free search results" = "Ad-free search results";
+
+"Browser without ads or trackers" = "Browser without ads or trackers";
+
+"Cookie pop-up blocker" = "Cookie pop-up blocker";
+
+"Browse the Web Ad-Free" = "Browse the Web Ad-Free";
+
+"Block Trackers, and Pop-ups" = "Block Trackers, and Pop-ups";
+
+/* section header to group tabs created today */
+"Today" = "Today";
+
+/* section header to group tabs created yesterday */
+"Yesterday" = "Yesterday";
+
+/* section header to group tabs created in the last 7 days */
+"Past 7 Days" = "Past 7 Days";
+
+/* section header to group tabs created in the last 30 days */
+"Past 30 Days" = "Past 30 Days";
+
+/* section header to group tabs created more than 30 days ago */
+"Older" = "Older";

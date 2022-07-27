@@ -238,7 +238,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         // Almost always one URL
         guard let url = URLContexts.first?.url,
-            let routerpath = NavigationPath(bvc: bvc, url: url)
+            let routerpath = NavigationPath(url: url)
         else {
             log.info(
                 "Failed to unwrap url for context: \(URLContexts.first?.url.absoluteString ?? "")")
@@ -415,7 +415,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         shortcutItem: UIApplicationShortcutItem,
         completionHandler: @escaping (Bool) -> Void = { _ in }
     ) {
-        let handledShortCutItem = QuickActions.sharedInstance.handleShortCutItem(
+        let handledShortCutItem = QuickActions.sharedInstance.handleShortcutItem(
             shortcutItem, withBrowserViewController: bvc)
         completionHandler(handledShortCutItem)
     }
@@ -482,6 +482,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         fatalError("Scene doesn't exist or is nil")
     }
 
+    // periphery:ignore
     static func getCurrentSceneId(for view: UIView?) -> String {
         return getCurrentScene(for: view).session.persistentIdentifier
     }
@@ -531,13 +532,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     // MARK: - Geiger
-    public func startGeigerCounter() {
+    func startGeigerCounter() {
         if let scene = self.scene as? UIWindowScene {
             geigerCounter = KMCGeigerCounter(windowScene: scene)
         }
     }
 
-    public func stopGeigerCounter() {
+    func stopGeigerCounter() {
         geigerCounter?.disable()
         geigerCounter = nil
     }

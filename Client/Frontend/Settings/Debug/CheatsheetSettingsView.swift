@@ -29,7 +29,7 @@ struct CheatsheetSettingsView: View {
             Toggle(String("cheatsheetDebugQuery"), isOn: $cheatsheetDebugQuery)
             Toggle(String("useCheatsheetBloomFilters"), isOn: $useCheatsheetBloomFilters)
 
-            makeNavigationLink(title: "Bloom Filter Settings") {
+            makeNavigationLink(title: String("Bloom Filter Settings")) {
                 BloomFilterSettingsView()
             }
         }
@@ -103,7 +103,7 @@ struct BloomFilterSettingsView: View {
                     },
                     label: {
                         HStack {
-                            Text("Delete this file directory")
+                            Text(verbatim: "Delete this file directory")
                                 .foregroundColor(.red)
                             Spacer()
                             if let state = deletingState {

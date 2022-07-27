@@ -59,4 +59,22 @@ class SuggestionBackButtonTests: BaseTestCase {
         app.buttons["Back"].tap()
         testAddressBarContains(value: "example.com")
     }
+
+    func testReturningToParentTabFromURLBar() {
+        // Open parent tab.
+        goToAddressBar()
+        performSearch()
+
+        // Open tab from parent.
+        goToAddressBar()
+        performSearch(text: path(forTestPage: "test-mozilla-book.html"))
+
+        // Go back to example.com.
+        app.buttons["Back"].tap()
+        waitForExistence(app.buttons["Cancel"])
+        app.buttons["Cancel"].tap()
+
+        // Confirm returned to parent tab.
+        waitForExistence(app.staticTexts["Example Domain"])
+    }
 }

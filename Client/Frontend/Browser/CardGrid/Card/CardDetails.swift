@@ -616,6 +616,28 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
             }
         }.store(in: &subscriptions)
     }
+
+    func findIndex(
+        in collection: [SpaceCardDetails],
+        sortType: SpaceSortType,
+        sortOrder: SpaceSortOrder
+    ) -> Int? {
+        guard let item = item else {
+            return nil
+        }
+        let pinnedItemCount = collection.filter({ $0.item?.isPinned ?? false }).count
+        let filteredCollection = collection.filter({ $0.item?.isPinned == item.isPinned })
+        let firstSortItem = item[keyPath: sortType.keyPath]
+        for index in filteredCollection.indices {
+            guard let secondSortItem = filteredCollection[index].item?[keyPath: sortType.keyPath]
+            else { return nil }
+            if sortOrder.makeComparator()(firstSortItem, secondSortItem) {
+                return item.isPinned ? index : index + pinnedItemCount
+            }
+        }
+        return item.isPinned
+            ? pinnedItemCount - 1 : collection.count - 1
+    }
 }
 
 class SiteCardDetails: CardDetails, AccessingManagerProvider {
@@ -743,10 +765,6 @@ class TabGroupCardDetails: CardDropDelegate, ObservableObject {
         self.manager = tabManager
         super.init(tabManager: tabManager)
 
-        if FeatureFlag[.reverseChronologicalOrdering] {
-            allDetails = allDetails.reversed()
-        }
-
         allDetails =
             tabGroup.children
             .sorted(by: { lhs, rhs in
@@ -790,4 +808,49 @@ class TabGroupCardDetails: CardDropDelegate, ObservableObject {
 
         super.dropEntered(info: info)
     }
+}
+
+extension Array where Element: SpaceCardDetails {
+    func sortSpaces(
+        by sortType: SpaceSortType,
+        order: SpaceSortOrder
+    ) -> Self {
+        var temp = self
+        return temp.sorted(
+            by: {
+                guard let firstItem = $0.item, let secondItem = $1.item else { return true }
+                return firstItem.isPinned && !secondItem.isPinned
+            },
+            {
+                guard let firstItem = $0.item?[keyPath: sortType.keyPath],
+                    let secondItem = $1.item?[keyPath: sortType.keyPath]
+                else {
+                    return true
+                }
+                return order.makeComparator()(firstItem, secondItem)
+            })
+    }
+
+    func filterSpaces(by filterType: SpaceFilterState) -> Self {
+        switch filterType {
+        case .allSpaces:
+            return self
+        case .ownedByMe:
+            return self.filter { $0.item?.userACL == .owner }
+        }
+    }
+
+    mutating private func sorted(
+        by firstPredicate: (Element, Element) -> Bool,
+        _ secondPredicate: (Element, Element) -> Bool
+    ) -> [Self.Element] {
+        sorted(by:) { lhs, rhs in
+            if firstPredicate(lhs, rhs) { return true }
+            if firstPredicate(rhs, lhs) { return false }
+            if secondPredicate(lhs, rhs) { return true }
+            if secondPredicate(rhs, lhs) { return false }
+            return false
+        }
+    }
+
 }

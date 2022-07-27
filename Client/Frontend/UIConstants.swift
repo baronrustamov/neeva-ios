@@ -51,10 +51,6 @@ public struct UIConstants {
     static var hasHomeButton: Bool {
         Self.safeArea.bottom == 0
     }
-
-    static var enableBottomURLBar: Bool {
-        FeatureFlag[.bottomURLBar] && UIDevice.current.userInterfaceIdiom != .pad
-    }
 }
 
 extension UIColor {
