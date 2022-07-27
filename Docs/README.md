@@ -8,3 +8,4 @@ Remember to check out our [Contributor Guidelines](https://github.com/neevaco/ne
 - [Building User Scripts](building-user-scripts.md)
 - [Settings & Preferences](settings-and-preferences.md)
 - [Browser DB](browser-db.md)
+- [Xcode Troubleshooting](xcode-troubleshooting.md)

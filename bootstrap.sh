@@ -15,6 +15,7 @@
 if [ "$1" == "--force" ]; then
     rm -rf ./Carthage/*
     rm -rf ~/Library/Caches/org.carthage.CarthageKit
+    rm -rf ~/Library/Developer/Xcode/DerivedData
 fi
 
 # Build API Config
