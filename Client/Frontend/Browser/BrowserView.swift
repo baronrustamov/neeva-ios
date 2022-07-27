@@ -101,11 +101,12 @@ struct BrowserView: View {
                     BrowserBottomBarView().onHeightOfViewChanged { height in
                         bottomBarHeight = height
                     }
-                }.keyboardListener(adapt: false) { height in
-                    DispatchQueue.main.async {
-                        chromeModel.keyboardShowing = height > 0
+                }.keyboardListener(
+                    adapt: false,
+                    keyboardVisibleStateChanged: { isVisible in
+                        chromeModel.keyboardShowing = isVisible
                     }
-                }.navigationBarHidden(true)
+                ).navigationBarHidden(true)
             }
             .navigationViewStyle(.stack)
             .useEffect(deps: geom.safeAreaInsets, topBarHeight, bottomBarHeight) {

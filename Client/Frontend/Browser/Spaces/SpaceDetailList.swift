@@ -154,16 +154,15 @@ struct SpaceDetailList: View {
                 }
                 .modifier(ListStyleModifier(isDigest: primitive.item?.isDigest ?? false))
                 .edgesIgnoringSafeArea([.top, .bottom])
-                .keyboardListener { height in
-                    guard height > 0 && addingComment else { return }
+                .keyboardListener(keyboardVisibleStateChanged: { isVisible in
+                    guard isVisible && addingComment else { return }
 
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         withAnimation {
                             scrollReader.scrollTo("CommentSection", anchor: .bottom)
                         }
                     }
-                }
-                .useEffect(deps: spaceCommentsModel.addingComment) { addingComment in
+                }).useEffect(deps: spaceCommentsModel.addingComment) { addingComment in
                     self.addingComment = addingComment
                 }
             }
