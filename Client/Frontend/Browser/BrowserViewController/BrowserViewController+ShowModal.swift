@@ -52,8 +52,7 @@ extension BrowserViewController {
         style: OverlayStyle,
         toPosition: OverlaySheetPosition = .middle,
         @ViewBuilder content: @escaping () -> Content,
-        onDismiss: (() -> Void)? = nil,
-        headerButton: OverlayHeaderButton? = nil
+        onDismiss: (() -> Void)? = nil
     ) {
         showAsModalOverlaySheet(
             style: style,

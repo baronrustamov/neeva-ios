@@ -740,8 +740,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         if let request = request {
             if let nav = tab.loadRequest(request), let visitType = visitType {
                 tab.browserViewController?.recordNavigationInTab(
-                    tab, navigation: nav, visitType: visitType
-                )
+                    navigation: nav, visitType: visitType)
             }
         } else if !isPopup {
             let url = InternalURL.baseUrl / "about" / "home"

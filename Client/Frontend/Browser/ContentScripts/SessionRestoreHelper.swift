@@ -6,7 +6,7 @@ import Foundation
 import WebKit
 
 protocol SessionRestoreHelperDelegate: AnyObject {
-    func sessionRestoreHelper(_ helper: SessionRestoreHelper, didRestoreSessionForTab tab: Tab)
+    func sessionRestoreHelper(didRestoreSessionForTab tab: Tab)
 }
 
 class SessionRestoreHelper: TabContentScript {
@@ -28,7 +28,7 @@ class SessionRestoreHelper: TabContentScript {
         if let tab = tab, let params = message.body as? [String: AnyObject] {
             if params["name"] as! String == "didRestoreSession" {
                 DispatchQueue.main.async {
-                    self.delegate?.sessionRestoreHelper(self, didRestoreSessionForTab: tab)
+                    self.delegate?.sessionRestoreHelper(didRestoreSessionForTab: tab)
 
                     if let navigationList = tab.webView?.backForwardList.all {
                         for (index, item) in navigationList.enumerated() {

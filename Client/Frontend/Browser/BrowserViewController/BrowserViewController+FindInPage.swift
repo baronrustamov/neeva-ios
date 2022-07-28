@@ -9,7 +9,6 @@ extension BrowserViewController {
     func updateFindInPageVisibility(visible: Bool, tab: Tab? = nil, query: String? = nil) {
         if visible {
             findInPageModel = FindInPageModel(tab: tab ?? tabManager.selectedTab)
-
             overlayManager.show(
                 overlay:
                     .find(
@@ -38,15 +37,11 @@ extension BrowserViewController {
 }
 
 extension BrowserViewController: FindInPageHelperDelegate {
-    func findInPageHelper(
-        _ findInPageHelper: FindInPageHelper, didUpdateCurrentResult currentResult: Int
-    ) {
+    func findInPageHelper(didUpdateCurrentResult currentResult: Int) {
         findInPageModel?.currentIndex = currentResult
     }
 
-    func findInPageHelper(
-        _ findInPageHelper: FindInPageHelper, didUpdateTotalResults totalResults: Int
-    ) {
+    func findInPageHelper(didUpdateTotalResults totalResults: Int) {
         findInPageModel?.numberOfResults = totalResults
     }
 }

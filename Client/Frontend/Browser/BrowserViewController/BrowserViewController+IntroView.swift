@@ -180,7 +180,6 @@ extension BrowserViewController {
 
     // Default browser onboarding
     func presentDBOnboardingViewController(
-        _ force: Bool = false,
         modalTransitionStyle: UIModalTransitionStyle? = nil,
         triggerFrom: OpenDefaultBrowserOnboardingTrigger
     ) {

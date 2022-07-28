@@ -6,16 +6,7 @@ import Combine
 import WebKit
 
 protocol ContextMenuHelperDelegate: AnyObject {
-    func contextMenuHelper(
-        _ contextMenuHelper: ContextMenuHelper,
-        didLongPressElements elements: ContextMenuHelper.Elements,
-        gestureRecognizer: UIGestureRecognizer)
-    func contextMenuHelper(
-        _ contextMenuHelper: ContextMenuHelper,
-        didLongPressImage elements: ContextMenuHelper.Elements,
-        gestureRecognizer: UIGestureRecognizer)
-    func contextMenuHelper(
-        _ contextMenuHelper: ContextMenuHelper, didCancelGestureRecognizer: UIGestureRecognizer)
+    func contextMenuHelper(didLongPressImage elements: ContextMenuHelper.Elements)
 }
 
 class ContextMenuHelper: NSObject {
@@ -99,8 +90,7 @@ extension ContextMenuHelper: UIGestureRecognizerDelegate, UIScrollViewDelegate {
         }
 
         if let elements = self.elements, elements.link == nil, elements.image != nil && !scrolling {
-            delegate?.contextMenuHelper(
-                self, didLongPressImage: elements, gestureRecognizer: sender)
+            delegate?.contextMenuHelper(didLongPressImage: elements)
             resetGestureTimer?.invalidate()
 
             // This prevents the image from going full screen when the user ends the long press

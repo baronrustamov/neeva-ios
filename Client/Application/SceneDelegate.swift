@@ -159,8 +159,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     // MARK: - Scene Setup
     private func setupRootViewController(_ scene: UIScene) {
-        self.bvc = BrowserViewController(
-            profile: getAppDelegate().profile, window: window!, scene: scene)
+        self.bvc = BrowserViewController(profile: getAppDelegate().profile, scene: scene)
         bvc.edgesForExtendedLayout = []
         bvc.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
         bvc.restorationClass = AppDelegate.self
@@ -192,7 +191,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         case .spaceDetailView(let id):
             if !shouldSetEditingLocationToTrue {
                 bvc.browserModel.showSpaces()
-                bvc.browserModel.openSpace(spaceId: id, bvc: bvc) {}
+                bvc.browserModel.openSpace(spaceId: id)
             }
         case .tab:
             break
@@ -330,8 +329,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                         ]
                 )
 
-                self.bvc.browserModel.openSpace(
-                    spaceId: itemIdentifier, bvc: self.bvc, completion: {})
+                self.bvc.browserModel.openSpace(spaceId: itemIdentifier)
                 self.urlHandledOnLaunch = true
             }
         } else if !continueSiriIntent(continue: userActivity) {

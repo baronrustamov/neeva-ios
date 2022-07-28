@@ -118,8 +118,7 @@ enum NavigationPath {
             NavigationPath.handleSpaceDigest(with: bvc)
         case .space(let spaceId, let updatedItemIds, let isIncognito):
             NavigationPath.handleSpace(
-                spaceId: spaceId, updatedItemIds: updatedItemIds, isIncognito: isIncognito,
-                with: bvc)
+                spaceId: spaceId, updatedItemIds: updatedItemIds, with: bvc)
         case .fastTap(let query, let noDelay):
             NavigationPath.handleFastTap(query: query, with: bvc, noDelay: noDelay)
         case .configNewsProvider(let isIncognito):
@@ -215,7 +214,7 @@ enum NavigationPath {
                 let spaceId = newURL.lastPathComponent
                 if spaceId != "spaces" {
                     NavigationPath.handleSpace(
-                        spaceId: spaceId, updatedItemIds: [], isIncognito: isIncognito, with: bvc
+                        spaceId: spaceId, updatedItemIds: [], with: bvc
                     )
                 } else {
                     bvc.browserModel.showSpaces()
@@ -250,8 +249,7 @@ enum NavigationPath {
     }
 
     private static func handleSpace(
-        spaceId: String, updatedItemIds: [String]?, isIncognito: Bool,
-        with bvc: BrowserViewController
+        spaceId: String, updatedItemIds: [String]?, with bvc: BrowserViewController
     ) {
         // navigate to SpaceId
         let gridModel = bvc.gridModel
@@ -259,8 +257,7 @@ enum NavigationPath {
             gridModel.spaceCardModel.updatedItemIDs = updatedItemIDs
         }
 
-        bvc.browserModel.openSpace(
-            spaceId: spaceId, bvc: bvc, isIncognito: isIncognito, completion: {})
+        bvc.browserModel.openSpace(spaceId: spaceId)
     }
 
     private static func handleFastTap(query: String, with bvc: BrowserViewController, noDelay: Bool)

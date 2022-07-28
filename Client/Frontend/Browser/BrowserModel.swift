@@ -32,7 +32,6 @@ class BrowserModel: ObservableObject {
     let switcherToolbarModel: SwitcherToolbarModel
     let tabManager: TabManager
 
-    let notificationViewManager: NotificationViewManager
     let overlayManager: OverlayManager
     let toastViewManager: ToastViewManager
 
@@ -136,13 +135,7 @@ class BrowserModel: ObservableObject {
         }
     }
 
-    private var followPublicSpaceSubscription: AnyCancellable?
-
-    func openSpace(
-        spaceId: String, bvc: BrowserViewController, isIncognito: Bool = false,
-        completion: @escaping () -> Void
-    ) {
-
+    func openSpace(spaceId: String) {
         let existingSpace = gridModel.spaceCardModel.allDetails.first(where: { $0.id == spaceId })
         DispatchQueue.main.async { [self] in
             if incognitoModel.isIncognito {
@@ -164,32 +157,29 @@ class BrowserModel: ObservableObject {
         }
     }
 
-    func openSpace(spaceID: String?, animate: Bool = true) {
+    func openSpace(spaceID: String?) {
         withAnimation(nil) {
             showSpaces(forceUpdate: false)
         }
 
-        guard let spaceID = spaceID,
+        if let spaceID = spaceID,
             let detail = gridModel.spaceCardModel.allDetails.first(where: { $0.id == spaceID })
-        else {
-            return
+        {
+            gridModel.openSpaceInDetailView(detail)
         }
-
-        gridModel.openSpaceInDetailView(detail)
     }
 
     func openSpaceDigest(bvc: BrowserViewController) {
         bvc.showTabTray()
         gridModel.setSwitcherState(to: .spaces)
 
-        openSpace(spaceId: SpaceStore.dailyDigestID, bvc: bvc) {}
+        openSpace(spaceId: SpaceStore.dailyDigestID)
     }
 
     init(
         gridModel: GridModel, tabManager: TabManager, chromeModel: TabChromeModel,
         incognitoModel: IncognitoModel, switcherToolbarModel: SwitcherToolbarModel,
-        toastViewManager: ToastViewManager, notificationViewManager: NotificationViewManager,
-        overlayManager: OverlayManager
+        toastViewManager: ToastViewManager, overlayManager: OverlayManager
     ) {
         self.cardStripModel = CardStripModel()
         self.cardTransitionModel = CardTransitionModel()
@@ -201,7 +191,6 @@ class BrowserModel: ObservableObject {
         self.switcherToolbarModel = switcherToolbarModel
         self.tabManager = tabManager
 
-        self.notificationViewManager = notificationViewManager
         self.overlayManager = overlayManager
         self.toastViewManager = toastViewManager
     }

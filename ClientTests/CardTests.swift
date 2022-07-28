@@ -63,7 +63,6 @@ class CardTests: XCTestCase {
             gridModel: gridModel, tabManager: manager, chromeModel: .init(),
             incognitoModel: incognitoModel, switcherToolbarModel: switcherToolbarModel,
             toastViewManager: ToastViewManager(overlayManager: OverlayManager()),
-            notificationViewManager: NotificationViewManager(overlayManager: OverlayManager()),
             overlayManager: OverlayManager())
         chromeModel = TabChromeModel()
         archivedTabsPanelModel = ArchivedTabsPanelModel(tabManager: manager)

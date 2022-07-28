@@ -9,9 +9,6 @@ import UIKit
 import WebKit
 
 class BackForwardListModel: ObservableObject {
-    let profile: Profile
-    let backForwardList: WKBackForwardList
-
     @Published var currentItem: WKBackForwardListItem?
     @Published var listItems = [WKBackForwardListItem]()
 
@@ -34,11 +31,8 @@ class BackForwardListModel: ObservableObject {
         }
     }
 
-    init(profile: Profile, backForwardList: WKBackForwardList) {
-        self.profile = profile
-        self.backForwardList = backForwardList
-        self.currentItem = backForwardList.currentItem
-
+    init(backForwardList: WKBackForwardList) {
+        currentItem = backForwardList.currentItem
         populateListItems(backForwardList)
     }
 }

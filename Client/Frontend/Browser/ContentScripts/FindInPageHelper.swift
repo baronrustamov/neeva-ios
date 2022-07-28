@@ -7,10 +7,8 @@ import Shared
 import WebKit
 
 protocol FindInPageHelperDelegate: AnyObject {
-    func findInPageHelper(
-        _ findInPageHelper: FindInPageHelper, didUpdateCurrentResult currentResult: Int)
-    func findInPageHelper(
-        _ findInPageHelper: FindInPageHelper, didUpdateTotalResults totalResults: Int)
+    func findInPageHelper(didUpdateCurrentResult currentResult: Int)
+    func findInPageHelper(didUpdateTotalResults totalResults: Int)
 }
 
 class FindInPageHelper: TabContentScript {
@@ -36,11 +34,11 @@ class FindInPageHelper: TabContentScript {
         let data = message.body as! [String: Int]
 
         if let currentResult = data["currentResult"] {
-            delegate?.findInPageHelper(self, didUpdateCurrentResult: currentResult)
+            delegate?.findInPageHelper(didUpdateCurrentResult: currentResult)
         }
 
         if let totalResults = data["totalResults"] {
-            delegate?.findInPageHelper(self, didUpdateTotalResults: totalResults)
+            delegate?.findInPageHelper(didUpdateTotalResults: totalResults)
         }
     }
 }

@@ -15,8 +15,6 @@ import WebKit
 /// need to invoke the completionHandler passed to us from the WKWebView delegate or else
 /// a runtime exception is thrown.
 class JSPromptAlertController: UIAlertController {
-    var alertInfo: JSAlertInfo?
-
     weak var delegate: JSPromptAlertControllerDelegate?
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -49,7 +47,6 @@ struct MessageAlert: JSAlertInfo {
             UIAlertAction(title: Strings.OKString, style: .default) { _ in
                 self.completionHandler()
             })
-        alertController.alertInfo = self
         return alertController
     }
 
@@ -82,7 +79,6 @@ struct ConfirmPanelAlert: JSAlertInfo {
             UIAlertAction(title: Strings.CancelString, style: .cancel) { _ in
                 self.cancel()
             })
-        alertController.alertInfo = self
         return alertController
     }
 
@@ -96,8 +92,6 @@ struct TextInputAlert: JSAlertInfo {
     let frame: WKFrameInfo
     let completionHandler: (String?) -> Void
     let defaultText: String?
-
-    var input: UITextField!
 
     init(
         message: String, frame: WKFrameInfo, completionHandler: @escaping (String?) -> Void,
@@ -126,7 +120,6 @@ struct TextInputAlert: JSAlertInfo {
             UIAlertAction(title: Strings.CancelString, style: .cancel) { _ in
                 self.cancel()
             })
-        alertController.alertInfo = self
         return alertController
     }
 

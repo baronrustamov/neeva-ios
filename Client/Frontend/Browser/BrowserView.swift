@@ -13,7 +13,6 @@ struct BrowserContentView: View {
     var topBarHeight: CGFloat
 
     @EnvironmentObject private var contentVisibilityModel: ContentVisibilityModel
-    @EnvironmentObject private var gridModel: GridModel
 
     private var tabContainerContent: some View {
         TabContainerContent(
@@ -76,7 +75,6 @@ struct BrowserView: View {
     @State var safeArea = EdgeInsets()
     @State var topBarHeight: CGFloat = .zero
     @State var bottomBarHeight: CGFloat = .zero
-    @State var isSettingsVisible = false
 
     // MARK: - Views
     var mainContent: some View {

@@ -9,9 +9,7 @@ import XCGLogger
 private let log = Logger.browser
 
 extension BrowserViewController: ReaderModeDelegate {
-    func readerMode(
-        _ readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forTab tab: Tab
-    ) {
+    func readerMode(didChangeReaderModeState state: ReaderModeState, forTab tab: Tab) {
         // If this reader mode availability state change is for the tab that we currently show, then update
         // the button. Otherwise do nothing and the button will be updated when the tab is made active.
         if tabManager.selectedTab === tab {
@@ -19,14 +17,12 @@ extension BrowserViewController: ReaderModeDelegate {
         }
     }
 
-    func readerMode(_ readerMode: ReaderMode, didDisplayReaderizedContentForTab tab: Tab) {
+    func readerMode(didDisplayReaderizedContentForTab tab: Tab) {
         tab.showContent(true)
     }
 
-    func readerMode(
-        _ readerMode: ReaderMode, didParseReadabilityResult readabilityResult: ReadabilityResult,
-        forTab tab: Tab
-    ) {
+    func readerMode(didParseReadabilityResult readabilityResult: ReadabilityResult, forTab tab: Tab)
+    {
     }
 
     func readerMode(didConfigureStyle style: ReaderModeStyle, isUsingUserDefinedColor: Bool) {
@@ -83,7 +79,7 @@ extension BrowserViewController {
                     if let nav = webView.load(
                         PrivilegedRequest(url: readerModeURL) as URLRequest)
                     {
-                        self.ignoreNavigationInTab(tab, navigation: nav)
+                        self.ignoreNavigationInTab(navigation: nav)
                         log.info("Navigating to reading mode (READING MODE)")
                     }
                 }
@@ -114,7 +110,7 @@ extension BrowserViewController {
                         webView.go(to: forwardList.first!)
                     } else {
                         if let nav = webView.load(URLRequest(url: originalURL)) {
-                            self.ignoreNavigationInTab(tab, navigation: nav)
+                            self.ignoreNavigationInTab(navigation: nav)
                         }
                     }
                 }

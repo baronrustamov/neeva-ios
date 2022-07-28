@@ -284,7 +284,6 @@
 		4A42C42B27E58487003B9826 /* LoggingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80E03E526B8459600A7800A /* LoggingSettingsView.swift */; };
 		4A42C42C27E58487003B9826 /* NotificationList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6614ACAF26F16F30003E244C /* NotificationList.swift */; };
 		4A42C42D27E58487003B9826 /* FindInPageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B6923E1B9F9A58004B87A4 /* FindInPageHelper.swift */; };
-		4A42C42E27E58487003B9826 /* BrowserViewController+Quests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCF248482670973400ACAD11 /* BrowserViewController+Quests.swift */; };
 		4A42C42F27E58487003B9826 /* PrivacySettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98E405C26585709003AC0E2 /* PrivacySettingsSection.swift */; };
 		4A42C43027E58487003B9826 /* BrowserViewController+ReaderMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1C84B6212EFFBF001489DF /* BrowserViewController+ReaderMode.swift */; };
 		4A42C43127E58487003B9826 /* TabContainerHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4E91A275567A700421040 /* TabContainerHost.swift */; };
@@ -1039,7 +1038,6 @@
 		BCC7737B27443E7F008E7538 /* SignUpOneButtonPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC7737A27443E7F008E7538 /* SignUpOneButtonPromptView.swift */; };
 		BCC7CA4A270401AC004714C0 /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC7CA49270401AC004714C0 /* RecipeView.swift */; };
 		BCF248472670967C00ACAD11 /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCF248462670967C00ACAD11 /* ViewExtensions.swift */; };
-		BCF248492670973400ACAD11 /* BrowserViewController+Quests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCF248482670973400ACAD11 /* BrowserViewController+Quests.swift */; };
 		BCF864C72763FF9400E94B3A /* WebResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCF864C62763FF9400E94B3A /* WebResultView.swift */; };
 		BCF864CB276C328300E94B3A /* InlineSearchProductView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCF864CA276C328300E94B3A /* InlineSearchProductView.swift */; };
 		BCF864CD276C5FDC00E94B3A /* BuyingGuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCF864CC276C5FDC00E94B3A /* BuyingGuideView.swift */; };
@@ -2476,7 +2474,6 @@
 		BCC7737A27443E7F008E7538 /* SignUpOneButtonPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpOneButtonPromptView.swift; sourceTree = "<group>"; };
 		BCC7CA49270401AC004714C0 /* RecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
 		BCF248462670967C00ACAD11 /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
-		BCF248482670973400ACAD11 /* BrowserViewController+Quests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+Quests.swift"; sourceTree = "<group>"; };
 		BCF864C62763FF9400E94B3A /* WebResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebResultView.swift; sourceTree = "<group>"; };
 		BCF864CA276C328300E94B3A /* InlineSearchProductView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InlineSearchProductView.swift; sourceTree = "<group>"; };
 		BCF864CC276C5FDC00E94B3A /* BuyingGuideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyingGuideView.swift; sourceTree = "<group>"; };
@@ -4330,7 +4327,6 @@
 				C8F457A91F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift */,
 				D0C95EF5201A55A800E4E51C /* BrowserViewController+UIDropInteractionDelegate.swift */,
 				C8F457A71F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift */,
-				BCF248482670973400ACAD11 /* BrowserViewController+Quests.swift */,
 				C9299E372694DF5800758795 /* BrowserViewController+TopBarDelegate.swift */,
 				67AA22F126C476F300F33D09 /* BrowserViewController+OverflowMenu.swift */,
 				66B6567526C4667B00D25767 /* BrowserViewController+SKStoreProductViewControllerDelegate.swift */,
@@ -6988,7 +6984,6 @@
 				4A42C42B27E58487003B9826 /* LoggingSettingsView.swift in Sources */,
 				4A42C42C27E58487003B9826 /* NotificationList.swift in Sources */,
 				4A42C42D27E58487003B9826 /* FindInPageHelper.swift in Sources */,
-				4A42C42E27E58487003B9826 /* BrowserViewController+Quests.swift in Sources */,
 				4A42C42F27E58487003B9826 /* PrivacySettingsSection.swift in Sources */,
 				4A42C43027E58487003B9826 /* BrowserViewController+ReaderMode.swift in Sources */,
 				E677D1D12800E88E0060869F /* HistoryPanelViewController.swift in Sources */,
@@ -7611,7 +7606,6 @@
 				C80E03E626B8459600A7800A /* LoggingSettingsView.swift in Sources */,
 				6614ACB026F16F30003E244C /* NotificationList.swift in Sources */,
 				D3B6923F1B9F9A58004B87A4 /* FindInPageHelper.swift in Sources */,
-				BCF248492670973400ACAD11 /* BrowserViewController+Quests.swift in Sources */,
 				20F2889427FD20B4005A8A79 /* HistoryPanelViewController.swift in Sources */,
 				C98E405D26585709003AC0E2 /* PrivacySettingsSection.swift in Sources */,
 				677DFDB52838A9F500E879D3 /* InterstitialVIewModel.swift in Sources */,

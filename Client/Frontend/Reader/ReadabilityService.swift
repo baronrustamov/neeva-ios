@@ -100,16 +100,11 @@ extension ReadabilityOperation: WKNavigationDelegate {
 }
 
 extension ReadabilityOperation: ReaderModeDelegate {
-    func readerMode(
-        _ readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forTab tab: Tab
-    ) {
-    }
-
-    func readerMode(_ readerMode: ReaderMode, didDisplayReaderizedContentForTab tab: Tab) {
-    }
+    func readerMode(didChangeReaderModeState state: ReaderModeState, forTab tab: Tab) {}
+    func readerMode(didDisplayReaderizedContentForTab tab: Tab) {}
 
     func readerMode(
-        _ readerMode: ReaderMode, didParseReadabilityResult readabilityResult: ReadabilityResult,
+        didParseReadabilityResult readabilityResult: ReadabilityResult,
         forTab tab: Tab
     ) {
         guard tab == self.tab else {
@@ -120,9 +115,7 @@ extension ReadabilityOperation: ReaderModeDelegate {
         semaphore.signal()
     }
 
-    func readerMode(didConfigureStyle style: ReaderModeStyle, isUsingUserDefinedColor: Bool) {
-
-    }
+    func readerMode(didConfigureStyle style: ReaderModeStyle, isUsingUserDefinedColor: Bool) {}
 }
 
 class ReadabilityService {

@@ -48,7 +48,7 @@ struct ShareAddedSpaceView: View {
                     Button(
                         action: {
                             browserModel.openSpace(
-                                spaceID: request.targetSpaceID!, animate: false)
+                                spaceID: request.targetSpaceID!)
 
                             let entity: SpaceEntityData? = space?.contentData?.first
                             if let id = entity?.id, let space = space {

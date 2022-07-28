@@ -17,9 +17,6 @@ struct BrowserTopBarView: View {
     @EnvironmentObject var gridModel: GridModel
     @EnvironmentObject var tabContainerModel: TabContainerModel
 
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @Environment(\.verticalSizeClass) private var verticalSizeClass
-
     @ViewBuilder var switcherTopBar: some View {
         if chromeModel.inlineToolbar {
             SwitcherToolbarView(top: true)

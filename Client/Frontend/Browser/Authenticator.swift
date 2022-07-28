@@ -7,15 +7,12 @@ import Shared
 import Storage
 import SwiftUI
 
-private let log = Logger.browser
-
 class Authenticator {
     fileprivate static let MaxAuthenticationAttempts = 3
 
     static func handleAuthRequest(
         _ bvc: BrowserViewController,
-        challenge: URLAuthenticationChallenge,
-        loginsHelper: LoginsHelper?
+        challenge: URLAuthenticationChallenge
     ) -> Deferred<Maybe<LoginRecord>> {
         // If there have already been too many login attempts, we'll just fail.
         if challenge.previousFailureCount >= Authenticator.MaxAuthenticationAttempts {
@@ -39,13 +36,12 @@ class Authenticator {
 
         // No credentials, so show an empty prompt.
         return self.promptForUsernamePassword(
-            bvc, credentials: nil, protectionSpace: challenge.protectionSpace,
+            bvc, protectionSpace: challenge.protectionSpace,
             loginsHelper: nil)
     }
 
     fileprivate static func promptForUsernamePassword(
         _ bvc: BrowserViewController,
-        credentials: URLCredential?,
         protectionSpace: URLProtectionSpace,
         loginsHelper: LoginsHelper?
     ) -> Deferred<Maybe<LoginRecord>> {

@@ -21,8 +21,8 @@ import XCGLogger
     import WalletCore
 #endif
 
-private let ActionSheetTitleMaxLength = 120
-
+// periphery:ignore
+// Used for XYZ
 protocol ModalPresenter {
     func showModal<Content: View>(
         style: OverlayStyle,
@@ -60,8 +60,6 @@ class BrowserViewController: UIViewController, ModalPresenter {
             return Web3Model()
         #endif
     }()
-
-    let walletDetailsModel = WalletDetailsModel()
 
     private(set) lazy var suggestionModel: SuggestionModel = {
         return SuggestionModel(bvc: self, profile: self.profile, queryModel: self.searchQueryModel)
@@ -103,8 +101,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
         BrowserModel(
             gridModel: gridModel, tabManager: tabManager, chromeModel: chromeModel,
             incognitoModel: incognitoModel, switcherToolbarModel: switcherToolbarModel,
-            toastViewManager: toastViewManager, notificationViewManager: notificationViewManager,
-            overlayManager: overlayManager)
+            toastViewManager: toastViewManager, overlayManager: overlayManager)
     }()
 
     private lazy var switcherToolbarModel: SwitcherToolbarModel = {
@@ -180,7 +177,6 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
     // Backdrop used for displaying greyed background for private tabs
     private(set) var webViewContainerBackdrop: UIView!
-    fileprivate var keyboardState: KeyboardState?
 
     // Tracking navigation items to record history types.
     // TODO: weak references?
@@ -218,7 +214,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
     private var subscriptions: Set<AnyCancellable> = []
 
-    init(profile: Profile, window: UIWindow, scene: UIScene) {
+    init(profile: Profile, scene: UIScene) {
         self.profile = profile
         self.tabManager = TabManager(profile: profile, scene: scene, incognitoModel: incognitoModel)
         self.readerModeCache = DiskReaderModeCache.sharedInstance
@@ -323,10 +319,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
             && previousTraitCollection.horizontalSizeClass != .regular
     }
 
-    func updateToolbarStateForTraitCollection(
-        _ newCollection: UITraitCollection,
-        withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator? = nil
-    ) {
+    func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection) {
         let showToolbar = shouldShowFooterForTraitCollection(newCollection)
         chromeModel.inlineToolbar = !showToolbar
 
@@ -343,8 +336,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
         // During split screen launching on iPad, this callback gets fired before viewDidLoad gets a chance to
         // set things up. Make sure to only update the toolbar state if the view is ready for it.
         if isViewLoaded {
-            updateToolbarStateForTraitCollection(
-                newCollection, withTransitionCoordinator: coordinator)
+            updateToolbarStateForTraitCollection(newCollection)
         }
 
         displayedPopoverController?.dismiss(animated: true, completion: nil)
@@ -595,7 +587,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
         super.viewDidDisappear(animated)
     }
 
-    public func showZeroQuery(
+    func showZeroQuery(
         openedFrom: ZeroQueryOpenedLocation? = nil,
         isLazyTab: Bool = false
     ) {
@@ -619,7 +611,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
                 openedFrom))
     }
 
-    public func closeLazyTab() {
+    func closeLazyTab() {
         // Have to be a lazy tab to close a lazy tab
         guard self.zeroQueryModel.isLazyTab else {
             print("Tried to close lazy tab that wasn't a lazy tab")
@@ -651,7 +643,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
         }
     }
 
-    public func dismissEditingAndHideZeroQuery(
+    func dismissEditingAndHideZeroQuery(
         wasCancelled: Bool = false,
         completionHandler: (() -> Void)? = nil
     ) {
@@ -663,7 +655,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
         }
     }
 
-    public func dismissEditingAndHideZeroQuerySync(wasCancelled: Bool = false) {
+    func dismissEditingAndHideZeroQuerySync(wasCancelled: Bool = false) {
         chromeModel.setEditingLocation(to: false)
         hideZeroQuery(wasCancelled: wasCancelled)
     }
@@ -735,10 +727,10 @@ class BrowserViewController: UIViewController, ModalPresenter {
                         return
                     }
 
-                    self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
+                    self.recordNavigationInTab(navigation: nav, visitType: visitType)
                 }
             } else if let nav = tab.loadRequest(URLRequest(url: url)) {
-                recordNavigationInTab(tab, navigation: nav, visitType: visitType)
+                recordNavigationInTab(navigation: nav, visitType: visitType)
             }
         }
 
@@ -990,7 +982,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
         info["url"] = tab.url?.displayURL
         info["title"] = tab.title ?? ""
         if let visitType = visitType?.rawValue
-            ?? self.getVisitTypeForTab(tab, navigation: navigation)?.rawValue
+            ?? self.getVisitTypeForTab(navigation: navigation)?.rawValue
         {
             info["visitType"] = visitType
         }
@@ -1121,16 +1113,16 @@ extension BrowserViewController {
 /// History visit management.
 /// TODO: this should be expanded to track various visit types; see Bug 1166084.
 extension BrowserViewController {
-    func ignoreNavigationInTab(_ tab: Tab, navigation: WKNavigation) {
+    func ignoreNavigationInTab(navigation: WKNavigation) {
         self.ignoredNavigation.insert(navigation)
     }
 
-    func recordNavigationInTab(_ tab: Tab, navigation: WKNavigation, visitType: VisitType) {
+    func recordNavigationInTab(navigation: WKNavigation, visitType: VisitType) {
         self.typedNavigation[navigation] = visitType
     }
 
     /// Untrack and do the right thing.
-    func getVisitTypeForTab(_ tab: Tab, navigation: WKNavigation?) -> VisitType? {
+    func getVisitTypeForTab(navigation: WKNavigation?) -> VisitType? {
         guard let navigation = navigation else {
             // See https://github.com/WebKit/webkit/blob/master/Source/WebKit2/UIProcess/Cocoa/NavigationState.mm#L390
             return VisitType.link
@@ -1408,10 +1400,6 @@ extension BrowserViewController {
 
         updateInZeroQuery(selected?.url as URL?)
     }
-
-    func getSceneDelegate() -> SceneDelegate? {
-        SceneDelegate.getCurrentSceneDelegate(for: self.view)
-    }
 }
 
 // MARK: - UIPopoverPresentationControllerDelegate
@@ -1450,123 +1438,7 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 extension BrowserViewController: ContextMenuHelperDelegate {
     fileprivate static var contextMenuElements: ContextMenuHelper.Elements?
 
-    func contextMenuHelper(
-        _ contextMenuHelper: ContextMenuHelper,
-        didLongPressElements elements: ContextMenuHelper.Elements,
-        gestureRecognizer: UIGestureRecognizer
-    ) {
-        // locationInView can return (0, 0) when the long press is triggered in an invalid page
-        // state (e.g., long pressing a link before the document changes, then releasing after a
-        // different page loads).
-        let touchPoint = gestureRecognizer.location(in: view)
-        guard touchPoint != CGPoint.zero else { return }
-
-        let touchSize = CGSize(width: 0, height: 16)
-
-        let actionSheetController = AlertController(
-            title: nil, message: nil, preferredStyle: .actionSheet)
-        var dialogTitle: String?
-
-        if let url = elements.link, let currentTab = tabManager.selectedTab {
-            dialogTitle = url.absoluteString
-            let isIncognito = incognitoModel.isIncognito
-            screenshotHelper.takeDelayedScreenshot(currentTab)
-
-            let addTab = { (rURL: URL, isIncognito: Bool) in
-                self.openURLInBackground(rURL, isIncognito: isIncognito)
-            }
-
-            if !isIncognito {
-                let openNewTabAction = UIAlertAction(
-                    title: Strings.ContextMenuOpenInNewTab, style: .default
-                ) { _ in
-                    addTab(url, false)
-                }
-                actionSheetController.addAction(
-                    openNewTabAction, accessibilityIdentifier: "linkContextMenu.openInNewTab")
-            }
-
-            let openNewIncognitoTabAction = UIAlertAction(
-                title: Strings.ContextMenuOpenInNewIncognitoTab, style: .default
-            ) { _ in
-                addTab(url, true)
-            }
-            actionSheetController.addAction(
-                openNewIncognitoTabAction,
-                accessibilityIdentifier: "linkContextMenu.openInNewIncognitoTab")
-
-            let downloadAction = UIAlertAction(
-                title: Strings.ContextMenuDownloadLink, style: .default
-            ) { _ in
-                // This checks if download is a blob, if yes, begin blob download process
-                if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
-                    //if not a blob, set pendingDownloadWebView and load the request in the webview, which will trigger the WKWebView navigationResponse delegate function and eventually downloadHelper.open()
-                    self.pendingDownloadWebView = currentTab.webView
-                    let request = URLRequest(url: url)
-                    currentTab.webView?.load(request)
-                }
-            }
-            actionSheetController.addAction(
-                downloadAction, accessibilityIdentifier: "linkContextMenu.download")
-
-            let copyAction = UIAlertAction(title: Strings.ContextMenuCopyLink, style: .default) {
-                _ in
-                UIPasteboard.general.url = url as URL
-            }
-            actionSheetController.addAction(
-                copyAction, accessibilityIdentifier: "linkContextMenu.copyLink")
-
-            let shareAction = UIAlertAction(title: Strings.ContextMenuShareLink, style: .default) {
-                _ in
-                self.presentActivityViewController(
-                    url as URL, sourceView: self.view,
-                    sourceRect: CGRect(origin: touchPoint, size: touchSize), arrowDirection: .any)
-            }
-            actionSheetController.addAction(
-                shareAction, accessibilityIdentifier: "linkContextMenu.share")
-        }
-
-        let setupPopover = { [weak self] in
-            guard let self = self else { return }
-
-            // If we're showing an arrow popup, set the anchor to the long press location.
-            if let popoverPresentationController = actionSheetController
-                .popoverPresentationController
-            {
-                popoverPresentationController.sourceView = self.view
-                popoverPresentationController.sourceRect = CGRect(
-                    origin: touchPoint, size: touchSize)
-                popoverPresentationController.permittedArrowDirections = .any
-                popoverPresentationController.delegate = self
-            }
-        }
-        setupPopover()
-
-        if actionSheetController.popoverPresentationController != nil {
-            displayedPopoverController = actionSheetController
-            updateDisplayedPopoverProperties = setupPopover
-        }
-
-        if let dialogTitle = dialogTitle {
-            if let _ = dialogTitle.asURL {
-                actionSheetController.title = dialogTitle.ellipsize(
-                    maxLength: ActionSheetTitleMaxLength)
-            } else {
-                actionSheetController.title = dialogTitle
-            }
-        }
-
-        let cancelAction = UIAlertAction(
-            title: Strings.CancelString, style: UIAlertAction.Style.cancel, handler: nil)
-        actionSheetController.addAction(cancelAction)
-        self.present(actionSheetController, animated: true, completion: nil)
-    }
-
-    func contextMenuHelper(
-        _ contextMenuHelper: ContextMenuHelper,
-        didLongPressImage elements: ContextMenuHelper.Elements,
-        gestureRecognizer: UIGestureRecognizer
-    ) {
+    func contextMenuHelper(didLongPressImage elements: ContextMenuHelper.Elements) {
         BrowserViewController.contextMenuElements = elements
         let imageContextMenu = ImageContextMenu(elements: elements) { [weak self] action in
             guard let self = self else { return }
@@ -1649,18 +1521,13 @@ extension BrowserViewController: ContextMenuHelperDelegate {
     }
 
     @objc func addToSpaceWithImage() {
-        guard let pageURL = tabManager.selectedTab?.url,
-            let imageURL = BrowserViewController.contextMenuElements?.image,
-            let webView = tabManager.selectedTab?.webView
-        else {
-            return
+        if let pageURL = tabManager.selectedTab?.url, let webView = tabManager.selectedTab?.webView
+        {
+            showAddToSpacesSheet(
+                url: pageURL,
+                title: self.tabManager.selectedTab?.title,
+                webView: webView)
         }
-
-        showAddToSpacesSheet(
-            url: pageURL,
-            title: self.tabManager.selectedTab?.title,
-            thumbnail: imageURL,
-            webView: webView)
     }
 
     fileprivate func getImageData(_ url: URL, success: @escaping (Data) -> Void) {
@@ -1671,14 +1538,6 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 success(data)
             }
         }.resume()
-    }
-
-    func contextMenuHelper(
-        _ contextMenuHelper: ContextMenuHelper, didCancelGestureRecognizer: UIGestureRecognizer
-    ) {
-        displayedPopoverController?.dismiss(animated: true) {
-            self.displayedPopoverController = nil
-        }
     }
 }
 
@@ -1693,32 +1552,26 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(
         _ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState
     ) {
-        keyboardState = state
         updateViewConstraints()
     }
 
     func keyboardHelper(
         _ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState
-    ) {
-
-    }
+    ) {}
 
     func keyboardHelper(
         _ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState
     ) {
-        keyboardState = nil
         updateViewConstraints()
     }
 
     func keyboardHelper(
         _ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState
-    ) {
-
-    }
+    ) {}
 }
 
 extension BrowserViewController: SessionRestoreHelperDelegate {
-    func sessionRestoreHelper(_ helper: SessionRestoreHelper, didRestoreSessionForTab tab: Tab) {
+    func sessionRestoreHelper(didRestoreSessionForTab tab: Tab) {
         tab.restoring = false
 
         if let tab = tabManager.selectedTab, tab.webView === tab.webView {
@@ -1736,8 +1589,7 @@ extension BrowserViewController: JSPromptAlertControllerDelegate {
 extension BrowserViewController {
     func showAddToSpacesSheet(
         url: URL, title: String?, description: String? = nil,
-        thumbnail: URL? = nil, webView: WKWebView,
-        importData: SpaceImportHandler? = nil
+        webView: WKWebView, importData: SpaceImportHandler? = nil
     ) {
         // TODO: Avoid needing to lookup the Tab when we already have the WebView.
         // There should be a better way to do this.
@@ -1936,7 +1788,7 @@ extension BrowserViewController {
             overlay: .backForwardList(
                 BackForwardListView(
                     model: BackForwardListModel(
-                        profile: profile, backForwardList: backForwardList
+                        backForwardList: backForwardList
                     ),
                     overlayManager: overlayManager,
                     navigationClicked: { navigationListItem in
