@@ -280,8 +280,10 @@ public class TabCardDetails: CardDropDelegate, CardDetails, AccessingManagerProv
             }
 
             Button { [self] in
-                manager.toggleTabPinnedState(tab)
-                ToastDefaults().showToastForPinningTab(pinning: isPinned, tabManager: manager)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [self] in
+                    manager.toggleTabPinnedState(tab)
+                    ToastDefaults().showToastForPinningTab(pinning: isPinned, tabManager: manager)
+                }
             } label: {
                 isPinned
                     ? Label("Unpin tab", systemSymbol: .pinSlash)

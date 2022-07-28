@@ -277,7 +277,7 @@ func getLogCounterAttributesForTabs(tab: Tab) -> [ClientLogCounterAttribute] {
     var lastExecutedTime = ""
 
     for time in TimeFilter.allCases {
-        if tab.wasLastExecuted(time) {
+        if tab.isPinnedTodayOrWasLastExecuted(time) {
             lastExecutedTime = time.rawValue
             break
         }

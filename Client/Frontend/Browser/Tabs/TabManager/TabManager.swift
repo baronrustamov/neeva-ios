@@ -942,7 +942,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         // switcher, the normalTabs get filtered to make sure we only select tab in
         // today section.
         let normalTabsToday = normalTabs.filter {
-            $0.wasLastExecuted(.today)
+            $0.isPinnedTodayOrWasLastExecuted(.today)
         }
 
         let index =
@@ -1030,7 +1030,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             tab.isIncognito
             ? incognitoTabs
             : normalTabs.filter {
-                $0.wasLastExecuted(.today)
+                $0.isPinnedTodayOrWasLastExecuted(.today)
             }
         let bvc = SceneDelegate.getBVC(with: scene)
 
@@ -1040,7 +1040,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         }
 
         if closedLastNormalTab || closedLastIncognitoTab
-            || !viableTabs.contains(where: { $0.wasLastExecuted(.today) })
+            || !viableTabs.contains(where: { $0.isPinnedTodayOrWasLastExecuted(.today) })
         {
             DispatchQueue.main.async {
                 self.selectTab(nil, notify: notify)

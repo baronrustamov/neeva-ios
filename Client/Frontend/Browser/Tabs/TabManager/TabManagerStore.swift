@@ -180,7 +180,7 @@ class TabManagerStore {
 
             restoredTabs.append(tab)
 
-            if savedTab.isSelected, tab.wasLastExecuted(.today) {
+            if savedTab.isSelected, tab.isPinnedTodayOrWasLastExecuted(.today) {
                 tabToSelect = tab
             }
         }
@@ -190,7 +190,7 @@ class TabManagerStore {
         if tabToSelect == nil {
             if !tabManager.activeTabs.isEmpty {
                 tabToSelect = tabManager.activeTabs.first(where: {
-                    $0.isIncognito == false && $0.wasLastExecuted(.today)
+                    $0.isIncognito == false && $0.isPinnedTodayOrWasLastExecuted(.today)
                 })
             } else {
                 SceneDelegate.getBVC(with: tabManager.scene).showTabTray()

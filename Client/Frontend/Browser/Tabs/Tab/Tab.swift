@@ -210,13 +210,15 @@ class Tab: NSObject, ObservableObject {
         switch archivedTabsDuration {
         case .week:
             return
-                !(wasLastExecuted(.today) || wasLastExecuted(.yesterday)
-                || wasLastExecuted(.lastWeek))
+                !(isPinnedTodayOrWasLastExecuted(.today)
+                || isPinnedTodayOrWasLastExecuted(.yesterday)
+                || isPinnedTodayOrWasLastExecuted(.lastWeek))
         case .month:
             return
-                !(wasLastExecuted(.today) || wasLastExecuted(.yesterday)
-                || wasLastExecuted(.lastWeek)
-                || wasLastExecuted(.lastMonth))
+                !(isPinnedTodayOrWasLastExecuted(.today)
+                || isPinnedTodayOrWasLastExecuted(.yesterday)
+                || isPinnedTodayOrWasLastExecuted(.lastWeek)
+                || isPinnedTodayOrWasLastExecuted(.lastMonth))
         case .forever:
             return false
         }
@@ -749,10 +751,18 @@ class Tab: NSObject, ObservableObject {
         }
     }
 
-    func wasLastExecuted(_ byTime: TimeFilter) -> Bool {
+    /// Returns a bool on if the tab was last used in the passed `TimeFilter`.
+    /// Tab will also return `true` for `today` if it is pinned.
+    func isPinnedTodayOrWasLastExecuted(_ byTime: TimeFilter) -> Bool {
         // The fallback value won't be used. tab.lastExecutedTime is
         // guaranteed to be non-nil in configureTab()
         let lastExecutedTime = lastExecutedTime ?? Date.nowMilliseconds()
+
+        // If the tab is pinned, keep it in the today section.
+        if isPinned && byTime == .today {
+            return true
+        }
+
         return isLastExecutedTimeInTimeFilter(lastExecutedTime, byTime)
     }
 
