@@ -281,6 +281,10 @@ extension Defaults.Keys {
         "hasLogErrorFromFirstRunEvent", default: false)
     public static let lastFirstRunEventLogError = Defaults.Key<String>(
         "lastFirstRunEventLogError", default: "")
+
+    public static let shouldCollectUsageStats = Defaults.Key<Bool?>(
+        "shouldCollectUsageStats"
+    )
 }
 
 // MARK: - Defaults Extension

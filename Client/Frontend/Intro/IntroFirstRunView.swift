@@ -297,7 +297,7 @@ private struct TermsAndPrivacyLinks: View {
     }
 }
 
-private struct SafariVCLink: View {
+struct SafariVCLink: View {
     let title: LocalizedStringKey
     let url: URL
 

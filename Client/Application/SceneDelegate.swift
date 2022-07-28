@@ -637,6 +637,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             // clear deprecated `Default` values
             Defaults.reset(.appExtensionTelemetryOpenUrl)  // deprecated 2022-05-18
 
+            // Existing users before 1.52.0 (when we introduce logging consent)
+            // should be opted into the usage stats collection
+            if previousVersion.compare("1.52.0", options: .numeric) == .orderedAscending {
+                Defaults[.shouldCollectUsageStats] = true
+                ClientLogger.shared.flushLoggingQueue()
+            }
+
             // migrate the content blocking enabled flag for users upgrading prior to 1.42.0 which is our cookie cutter release
             // TODO: remove this after a couple releases as most of our users should be upgraded
             if previousVersion.compare("1.42.0", options: .numeric) == .orderedAscending {

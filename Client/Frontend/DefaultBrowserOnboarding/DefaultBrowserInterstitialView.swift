@@ -2,7 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import Defaults
 import Foundation
+import SafariServices
 import Shared
 import SwiftUI
 
@@ -48,12 +50,12 @@ struct DefaultBrowserInterstitialBackdrop<Content: View>: View {
     }
 }
 
-struct DefaultBrowserInterstitialView<Content: View>: View {
+struct DefaultBrowserInterstitialView<Content: View, FooterContent: View>: View {
     @EnvironmentObject var interstitialModel: InterstitialViewModel
 
     var showSecondaryButton: Bool = true
-    var showLogo: Bool = false
     var content: Content
+    var footerContent: FooterContent
     var primaryButton: LocalizedStringKey
     var secondaryButton: LocalizedStringKey?
     var primaryAction: () -> Void
@@ -108,15 +110,8 @@ struct DefaultBrowserInterstitialView<Content: View>: View {
                 }
             }
             .padding(.horizontal, 32)
-            .padding(.bottom, 20)
-            if showLogo {
-                VStack(spacing: 0) {
-                    Spacer()
-                    Image("neevaMenuIcon")
-                        .padding(.bottom, 40)
-                        .frame(width: 32, height: 32)
-                }
-            }
+            .padding(.bottom, 50)
+            footerContent
         }
     }
 }

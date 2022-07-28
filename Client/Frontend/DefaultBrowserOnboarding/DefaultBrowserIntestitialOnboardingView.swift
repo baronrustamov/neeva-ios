@@ -188,6 +188,7 @@ struct DefaultBrowserInterstitialOnboardingView: View {
         ZStack {
             DefaultBrowserInterstitialView(
                 content: DefaultBrowserInterstitialBackdrop(content: content),
+                footerContent: EmptyView(),
                 primaryButton: interstitialModel.openButtonText,
                 secondaryButton: interstitialModel.showRemindButton
                     && notificationPermissionState

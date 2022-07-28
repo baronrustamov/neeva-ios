@@ -52,19 +52,24 @@ class CookieCutterHelper: TabContentScript {
                 }
             case .getPreferences:
                 do {
-                    if let domain = domain,
-                        let escapedEncoded = String(
+                    if let domain = domain {
+                        var cookieCutterEnabled = TrackingPreventionConfig.trackersPreventedFor(
+                            domain, checkCookieCutterState: true)
+                        // Don't dismiss the cookie consent on neeva.com
+                        if currentWebView?.url?.isNeevaURL() ?? false {
+                            cookieCutterEnabled = false
+                        }
+                        if let escapedEncoded = String(
                             data: try JSONEncoder().encode([
-                                "cookieCutterEnabled":
-                                    TrackingPreventionConfig.trackersPreventedFor(
-                                        domain, checkCookieCutterState: true),
+                                "cookieCutterEnabled": cookieCutterEnabled,
                                 "analyticAllowed": cookieCutterModel.analyticCookiesAllowed,
                                 "marketingAllowed": cookieCutterModel.marketingCookiesAllowed,
                                 "socialAllowed": cookieCutterModel.socialCookiesAllowed,
                             ]), encoding: .utf8)
-                    {
-                        currentWebView?.evaluateJavascriptInDefaultContentWorld(
-                            "__firefox__.setPreference(\(escapedEncoded))")
+                        {
+                            currentWebView?.evaluateJavascriptInDefaultContentWorld(
+                                "__firefox__.setPreference(\(escapedEncoded))")
+                        }
                     }
                 } catch {
                     print("Error encoding escaped value: \(error)")

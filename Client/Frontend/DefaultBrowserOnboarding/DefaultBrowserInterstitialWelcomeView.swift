@@ -11,6 +11,15 @@ struct DefaultBrowserInterstitialWelcomeView: View {
     @EnvironmentObject var interstitialModel: InterstitialViewModel
 
     @State private var switchToDefaultBrowserScreen = false
+    @State private var collectUsageStatsCheckbox = true
+
+    var termsButton: some View {
+        SafariVCLink("Terms of Service", url: NeevaConstants.appTermsURL)
+    }
+
+    var privacyButton: some View {
+        SafariVCLink("Privacy Policy", url: NeevaConstants.appPrivacyURL)
+    }
 
     @ViewBuilder
     var content: some View {
@@ -30,17 +39,52 @@ struct DefaultBrowserInterstitialWelcomeView: View {
         }.frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 45)
     }
 
+    @ViewBuilder
+    var footerContent: some View {
+        VStack(spacing: 0) {
+            Spacer()
+            HStack {
+                Button(action: {
+                    collectUsageStatsCheckbox.toggle()
+                }) {
+                    collectUsageStatsCheckbox
+                        ? Symbol(decorative: .checkmarkCircleFill, size: 20)
+                            .foregroundColor(Color.blue)
+                        : Symbol(decorative: .circle, size: 20)
+                            .foregroundColor(Color.tertiaryLabel)
+                }
+                Text("Help improve this app by sending usage statistics to Neeva.")
+                    .withFont(.bodyMedium)
+                    .foregroundColor(.primary)
+                    .multilineTextAlignment(.leading)
+            }
+            .padding(.bottom, 18)
+            .padding(.horizontal, 30)
+            HStack {
+                termsButton
+                Text("·").foregroundColor(.secondaryLabel)
+                privacyButton
+            }
+            .withFont(unkerned: .bodySmall)
+            .padding(.bottom, 15)
+        }
+    }
+
     var body: some View {
         if switchToDefaultBrowserScreen {
             DefaultBrowserInterstitialOnboardingView()
         } else {
             DefaultBrowserInterstitialView(
-                showLogo: true,
                 content: DefaultBrowserInterstitialBackdrop(content: content),
+                footerContent: footerContent,
                 primaryButton: "Let's Go",
                 primaryAction: {
                     switchToDefaultBrowserScreen = true
                     ClientLogger.shared.logCounter(.GetStartedInWelcome)
+                    Defaults[.shouldCollectUsageStats] = collectUsageStatsCheckbox
+                    if Defaults[.shouldCollectUsageStats] == true {
+                        ClientLogger.shared.flushLoggingQueue()
+                    }
                 }
             )
             .onAppear {
@@ -50,6 +94,12 @@ struct DefaultBrowserInterstitialWelcomeView: View {
                         attributes: EnvironmentHelper.shared.getFirstRunAttributes())
                     ConversionLogger.log(event: .launchedApp)
                     Defaults[.firstRunImpressionLogged] = true
+                }
+            }
+            .onDisappear {
+                Defaults[.shouldCollectUsageStats] = collectUsageStatsCheckbox
+                if Defaults[.shouldCollectUsageStats] == true {
+                    ClientLogger.shared.flushLoggingQueue()
                 }
             }
         }
