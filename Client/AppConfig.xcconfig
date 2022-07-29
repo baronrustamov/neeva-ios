@@ -5,5 +5,5 @@
 // Configuration settings file format documentation can be found at:
 // https://help.apple.com/xcode/#/dev745c5c974
 
-BROWSER_PROJECT_VERSION = 250
-BROWSER_MARKETING_VERSION = 1.52.0
+BROWSER_PROJECT_VERSION = 251
+BROWSER_MARKETING_VERSION = 1.52.1
