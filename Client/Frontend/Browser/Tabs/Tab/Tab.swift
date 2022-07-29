@@ -96,7 +96,7 @@ class Tab: NSObject, ObservableObject {
     var restoring: Bool = false
     var pendingScreenshot = false
     var needsReloadUponSelect = false
-    var shouldCreateWebViewUponSelect = true
+    var shouldPerformHeavyUpdatesUponSelect = true
 
     @Published private(set) var canGoBack = false
     @Published private(set) var canGoForward = false
@@ -301,8 +301,6 @@ class Tab: NSObject, ObservableObject {
         if !createWebview() && needsReloadUponSelect {
             reload()
         }
-
-        shouldCreateWebViewUponSelect = true
     }
 
     @discardableResult func createWebview() -> Bool {

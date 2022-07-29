@@ -146,7 +146,8 @@ struct SwitcherToolbarView: View {
                 Button {
                     switch gridModel.switcherState {
                     case .tabs:
-                        browserModel.hideGridWithAnimation()
+                        browserModel.hideGridWithAnimation(
+                            tabToBeSelected: tabModel.manager.selectedTab)
                     case .spaces:
                         browserModel.hideGridWithNoAnimation()
                     }

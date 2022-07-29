@@ -21,6 +21,5 @@ struct SpaceCardsView: View {
                     .id(details.id)
             }
         }.animation(nil)
-
     }
 }

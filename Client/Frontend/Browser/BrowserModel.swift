@@ -79,7 +79,7 @@ class BrowserModel: ObservableObject {
         assert(!gridModel.tabCardModel.allDetails.isEmpty)
 
         let tabToBeSelected = tabToBeSelected ?? tabManager.selectedTab
-        tabToBeSelected?.shouldCreateWebViewUponSelect = false
+        tabToBeSelected?.shouldPerformHeavyUpdatesUponSelect = false
 
         if let tabToBeSelected = tabToBeSelected {
             gridModel.switchModeWithoutAnimation = true
@@ -107,7 +107,7 @@ class BrowserModel: ObservableObject {
         gridModel.setSwitcherState(to: .tabs)
         gridModel.closeDetailView()
 
-        tabManager.updateWebViewForSelectedTab(notify: true)
+        tabManager.updateSelectedTabDataPostAnimation()
 
         SceneDelegate.getCurrentSceneDelegate(with: tabManager.scene)?.setSceneUIState(to: .tab)
         gridModel.switchModeWithoutAnimation = false

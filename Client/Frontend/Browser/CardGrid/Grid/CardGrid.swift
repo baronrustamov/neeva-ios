@@ -107,7 +107,7 @@ struct CardGrid: View {
     }
 
     func updateCardSize(width: CGFloat, topToolbar: Bool) {
-        guard gridModel.canResizeGrid else {
+        guard gridModel.canResizeGrid, width > 0 else {
             return
         }
 

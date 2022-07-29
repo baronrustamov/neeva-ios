@@ -88,8 +88,8 @@ struct CollapsedCardGroupView: View {
                                     attributes: getLogCounterAttributesForTabGroups(
                                         TabGroupRowIndex: rowIndex, selectedChildTabIndex: index,
                                         expanded: false, numTabs: groupDetails.allDetails.count))
-
-                                browserModel.hideGridWithAnimation()
+                                browserModel.hideGridWithAnimation(
+                                    tabToBeSelected: childTabDetail.tab)
                             }.visibleStateChanged { isVisible in
                                 let isFirst = index == 0
                                 let isLast = index == groupDetails.allDetails.count - 1
@@ -216,7 +216,7 @@ struct ExpandedCardGroupRowView: View {
                                 attributes: getLogCounterAttributesForTabGroups(
                                     TabGroupRowIndex: rowIndex, selectedChildTabIndex: index + 1,
                                     expanded: true, numTabs: groupDetails.allDetails.count))
-                            browserModel.hideGridWithAnimation()
+                            browserModel.hideGridWithAnimation(tabToBeSelected: childTabDetail.tab)
                         }
                 }
 

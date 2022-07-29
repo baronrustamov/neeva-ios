@@ -272,14 +272,17 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         selectedTab.lastExecutedTime = Date.nowMilliseconds()
         selectedTab.applyTheme()
 
-        // Tab data needs to be updated after the lastExecutedTime is modified.
-        updateAllTabDataAndSendNotifications(notify: notify)
+        if selectedTab.shouldPerformHeavyUpdatesUponSelect {
+            // Don't need to send WebView notifications if they will be sent below.
+            updateWebViewForSelectedTab(notify: !notify)
+
+            // Tab data needs to be updated after the lastExecutedTime is modified.
+            updateAllTabDataAndSendNotifications(notify: notify)
+        }
 
         if notify {
             sendSelectTabNotifications(previous: previous)
             selectedTabWebViewPublisher.send(selectedTab.webView)
-        } else if selectedTab.shouldCreateWebViewUponSelect {
-            updateWebViewForSelectedTab(notify: false)
         }
 
         if let tab = tab, tab.isIncognito, let url = tab.url, NeevaConstants.isAppHost(url.host),
@@ -314,6 +317,14 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         if notify {
             selectedTabWebViewPublisher.send(selectedTab?.webView)
         }
+    }
+
+    func updateSelectedTabDataPostAnimation() {
+        selectedTab?.shouldPerformHeavyUpdatesUponSelect = true
+
+        // Tab data needs to be updated after the lastExecutedTime is modified.
+        updateAllTabDataAndSendNotifications(notify: true)
+        updateWebViewForSelectedTab(notify: true)
     }
 
     // Called by other classes to signal that they are entering/exiting private mode
@@ -451,7 +462,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     func sendSelectTabNotifications(previous: Tab? = nil) {
         selectedTabPublisher.send(selectedTab)
 
-        if selectedTab?.shouldCreateWebViewUponSelect ?? true {
+        if selectedTab?.shouldPerformHeavyUpdatesUponSelect ?? true {
             updateWebViewForSelectedTab(notify: true)
         }
 

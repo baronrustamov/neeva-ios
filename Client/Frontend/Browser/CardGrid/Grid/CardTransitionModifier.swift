@@ -46,8 +46,7 @@ struct CardTransitionModifier<Details: CardDetails>: ViewModifier {
                     .animation(CardTransitionUX.animation)
                     .transition(.identity)
             }
-        }
-        .accessibilityHidden(true)
+        }.accessibilityHidden(true)
     }
 
     @ViewBuilder var overlayCard: some View {
