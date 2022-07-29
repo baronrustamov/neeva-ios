@@ -101,4 +101,47 @@ class FirstRunTests: BaseTestCase {
         // Verify that the modal closed correctly
         XCTAssertTrue(app.staticTexts["Search or enter address"].isHittable)
     }
+
+    func testToggleConsentOptin() throws {
+        waitForExistence(app.buttons["Let's Go"])
+        app.buttons["Let's Go"].tap()
+
+        waitForExistence(app.buttons["close"])
+        app.buttons["close"].tap()
+
+        openURL(websiteExample["url"]!)
+        waitUntilPageLoad()
+
+        goToSettings()
+
+        let value = app.tables.cells.switches[
+            "Help improve Neeva, Automatically send usage statistics to Neeva"
+        ]
+        .firstMatch
+        .value
+        XCTAssertEqual(value as? String, "1")
+    }
+
+    func testToggleConsentOptout() throws {
+        waitForExistence(app.buttons["Help improve this app by sending usage statistics to Neeva."])
+        app.buttons["Help improve this app by sending usage statistics to Neeva."].tap()
+
+        waitForExistence(app.buttons["Let's Go"])
+        app.buttons["Let's Go"].tap()
+
+        waitForExistence(app.buttons["close"])
+        app.buttons["close"].tap()
+
+        openURL(websiteExample["url"]!)
+        waitUntilPageLoad()
+
+        goToSettings()
+
+        let value = app.tables.cells.switches[
+            "Help improve Neeva, Automatically send usage statistics to Neeva"
+        ]
+        .firstMatch
+        .value
+        XCTAssertEqual(value as? String, "0")
+    }
 }

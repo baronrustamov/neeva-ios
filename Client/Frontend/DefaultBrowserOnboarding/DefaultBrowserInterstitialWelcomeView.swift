@@ -52,11 +52,11 @@ struct DefaultBrowserInterstitialWelcomeView: View {
                             .foregroundColor(Color.blue)
                         : Symbol(decorative: .circle, size: 20)
                             .foregroundColor(Color.tertiaryLabel)
+                    Text("Help improve this app by sending usage statistics to Neeva.")
+                        .withFont(.bodyMedium)
+                        .foregroundColor(.primary)
                 }
-                Text("Help improve this app by sending usage statistics to Neeva.")
-                    .withFont(.bodyMedium)
-                    .foregroundColor(.primary)
-                    .multilineTextAlignment(.leading)
+                .buttonStyle(PlainButtonStyle())
             }
             .padding(.bottom, 18)
             .padding(.horizontal, 30)
