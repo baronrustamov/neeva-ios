@@ -21,7 +21,7 @@ class CardStripModel: ObservableObject {
     private var detailCount: Int {
         incognitoModel.isIncognito
             ? tabCardModel.incognitoDetails.count
-            : tabCardModel.allDetails.filter { $0.tab.wasLastExecuted(.today) }.count
+            : tabCardModel.allDetails.filter { $0.tab.isPinnedTodayOrWasLastExecuted(.today) }.count
     }
 
     var showCardStrip: Bool {
