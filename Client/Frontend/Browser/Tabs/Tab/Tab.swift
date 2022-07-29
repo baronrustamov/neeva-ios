@@ -513,10 +513,9 @@ class Tab: NSObject, ObservableObject {
     }
 
     func updateCanGoForward() {
-        if let webView = webView, SceneDelegate.getTabManager(for: webView).selectedTab == self {
+        if let bvc = browserViewController, bvc.tabManager.selectedTab == self {
             canGoForward =
-                webViewCanGoForward
-                || SceneDelegate.getBVC(for: webView).simulateForwardModel.canGoForward()
+                webViewCanGoForward || bvc.simulatedSwipeModel.canGoForward()
         } else {
             canGoForward = webViewCanGoForward
         }
