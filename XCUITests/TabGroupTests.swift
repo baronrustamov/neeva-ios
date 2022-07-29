@@ -16,8 +16,8 @@ class TabGroupTests: BaseTestCase {
     // The NYTimes case is where a URL is opened from say nytimes.com,
     // and a sublink i.e. nytimes.com/article is opened.
     //
-    // Then the user would open up a new tab to the orignal URL (nytimes.com,
-    // which in that case we should create a tab group with the two tabs.
+    // If the user would open up a new tab back to the orignal URL (nytimes.com),
+    // we should create a tab group with the two tabs.
 
     /// Navigates to the test URL and if `andNavigateAway` is true, then it will tap a link
     /// to open the sublink (similar to nytimes.com/article).
@@ -96,6 +96,8 @@ class TabGroupTests: BaseTestCase {
         app.buttons["Add Tab"].press(forDuration: 1)
         waitForExistence(app.buttons["IANA-managed Reserved Domains"])
         app.buttons["IANA-managed Reserved Domains"].tap()
+
+        waitForNoExistence(app.buttons["restore"], timeoutValue: 30)
 
         // This should result in a Tab Group.
         openURL()

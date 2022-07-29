@@ -15,9 +15,11 @@ struct TopBarView: View {
     let newTab: () -> Void
     let onCancel: () -> Void
     let onOverflowMenuAction: (OverflowMenuAction, UIView) -> Void
+    var geom: GeometryProxy
 
     @State private var shouldInsetHorizontally = false
 
+    @EnvironmentObject private var cardStripModel: CardStripModel
     @EnvironmentObject private var chrome: TabChromeModel
     @EnvironmentObject private var location: LocationViewModel
     @EnvironmentObject private var scrollingControlModel: ScrollingControlModel
@@ -98,6 +100,10 @@ struct TopBarView: View {
             .padding(.horizontal, shouldInsetHorizontally ? 12 : 0)
             .padding(.bottom, chrome.estimatedProgress == nil ? 0 : -1)
 
+            if cardStripModel.showCardStrip {
+                CardStripView(containerGeometry: geom.size)
+            }
+
             if !chrome.isEditingLocation {
                 ZStack {
                     if let progress = chrome.estimatedProgress {
@@ -127,8 +133,6 @@ struct TopBarView: View {
         .background(Color.DefaultBackground.ignoresSafeArea())
         .accentColor(.label)
         .accessibilityElement(children: .contain)
-        .offset(
-            y: scrollingControlModel.headerTopOffset
-        )
+        .offset(y: scrollingControlModel.headerTopOffset)
     }
 }

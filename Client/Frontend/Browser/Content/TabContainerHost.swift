@@ -174,17 +174,6 @@ struct TabContainerContent: View {
                         )
                     }
 
-                    if FeatureFlag[.cardStrip] && !FeatureFlag[.topCardStrip]
-                        && UIDevice.current.useTabletInterface
-                    {
-                        GeometryReader { geo in
-                            VStack {
-                                Spacer()
-                                CardStripContent(bvc: bvc, width: geo.size.width)
-                            }
-                        }
-                    }
-
                     if FeatureFlag[.spaceComments] {
                         SpaceContentSheet(
                             model: spaceContentSheetModel!,

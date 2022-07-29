@@ -90,7 +90,7 @@ struct BrowserView: View {
                         .background(Color.background)
 
                         // Top Bar
-                        BrowserTopBarView(bvc: bvc).onHeightOfViewChanged { height in
+                        BrowserTopBarView(bvc: bvc, geom: geom).onHeightOfViewChanged { height in
                             topBarHeight = height
                         }.fixedSize(horizontal: false, vertical: true)
                     }
@@ -110,13 +110,13 @@ struct BrowserView: View {
             .useEffect(deps: geom.safeAreaInsets, topBarHeight, bottomBarHeight) {
                 safeArea, topBarHeight, bottomBarHeight in
                 self.safeArea = safeArea
-                self.chromeModel.bottomBarHeight = bottomBarHeight
 
                 // Add a 3px of extra height to footer to hide
                 // a small bit of view that isn't hidden.
                 browserModel.scrollingControlModel.setHeaderFooterHeight(
                     header: topBarHeight,
-                    footer: bottomBarHeight + safeArea.bottom + 3)
+                    footer: bottomBarHeight + safeArea.bottom + 3
+                )
             }
         }
     }

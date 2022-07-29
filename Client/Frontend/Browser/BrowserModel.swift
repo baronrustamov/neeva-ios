@@ -181,7 +181,11 @@ class BrowserModel: ObservableObject {
         incognitoModel: IncognitoModel, switcherToolbarModel: SwitcherToolbarModel,
         toastViewManager: ToastViewManager, overlayManager: OverlayManager
     ) {
-        self.cardStripModel = CardStripModel()
+        self.cardStripModel = CardStripModel(
+            incognitoModel: incognitoModel,
+            tabCardModel: gridModel.tabCardModel,
+            tabChromeModel: chromeModel
+        )
         self.cardTransitionModel = CardTransitionModel()
         self.contentVisibilityModel = ContentVisibilityModel()
         self.gridModel = gridModel

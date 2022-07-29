@@ -11,6 +11,7 @@ private enum BrowserTopBarViewUX {
 
 struct BrowserTopBarView: View {
     let bvc: BrowserViewController
+    var geom: GeometryProxy
 
     @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var chromeModel: TabChromeModel
@@ -41,6 +42,7 @@ struct BrowserTopBarView: View {
                 chromeModel: bvc.chromeModel,
                 readerModeModel: bvc.readerModeModel,
                 web3Model: bvc.web3Model,
+                geom: geom,
                 newTab: {
                     bvc.openURLInNewTab(nil)
                 },

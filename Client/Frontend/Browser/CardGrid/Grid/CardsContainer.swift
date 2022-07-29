@@ -43,29 +43,17 @@ struct TabGridContainer: View {
     @State var cardStackGeom: CGSize = CGSize.zero
 
     var selectedRowId: TabCardModel.Row.ID? {
-        if isIncognito {
-            if let row = tabModel.getRows(incognito: true).first { row in
-                row.cells.contains(where: \.isSelected)
-            } {
-                if row.index == 2 {
-                    // scroll to today header
-                    return [TabCardModel.todayRowHeaderID]
-                } else {
-                    return row.id
-                }
-            }
-        } else {
-            if let row = tabModel.getRows(incognito: false).first { row in
-                row.cells.contains(where: \.isSelected)
-            } {
-                if row.index == 2 {
-                    // scroll to today header
-                    return [TabCardModel.todayRowHeaderID]
-                } else {
-                    return row.id
-                }
+        if let row = tabModel.getRows(incognito: isIncognito).first(where: { row in
+            row.cells.contains(where: \.isSelected)
+        }) {
+            if row.index == 2 {
+                // scroll to today header
+                return [TabCardModel.todayRowHeaderID]
+            } else {
+                return row.id
             }
         }
+
         return nil
     }
 

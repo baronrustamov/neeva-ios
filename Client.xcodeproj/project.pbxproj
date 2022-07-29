@@ -75,15 +75,30 @@
 		20167FCD2824601700223B9E /* FindInCardGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20167FC62824484800223B9E /* FindInCardGridView.swift */; };
 		20167FCE2824601900223B9E /* FindView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20167FC9282448DB00223B9E /* FindView.swift */; };
 		201B4BFE28452E8900F9594E /* DuplicateTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 201B4BFD28452E8900F9594E /* DuplicateTabTests.swift */; };
+		20217D9F28666523003EF3A7 /* DragToCloseInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20217D9E28666523003EF3A7 /* DragToCloseInteraction.swift */; };
+		20217DA128666575003EF3A7 /* BorderTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20217DA028666575003EF3A7 /* BorderTreatment.swift */; };
 		2026EC1C27F3D2F900817053 /* CookieCutterSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2026EC1B27F3D2F900817053 /* CookieCutterSettings.swift */; };
 		2026EC1F27F3E51400817053 /* CookieCutterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2026EC1E27F3E51400817053 /* CookieCutterModel.swift */; };
 		2026EC2127F4070900817053 /* NonEssentialCookieSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2026EC2027F4070900817053 /* NonEssentialCookieSettings.swift */; };
 		20318F252823786A003B03C1 /* DebounceObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20318F242823786A003B03C1 /* DebounceObject.swift */; };
 		20318F2628237A43003B03C1 /* DebounceObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20318F242823786A003B03C1 /* DebounceObject.swift */; };
+		203203EC28879D7B00405C07 /* CardStripModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2046911D2887825700069C16 /* CardStripModel.swift */; };
+		203203ED28879D7B00405C07 /* CardStripTabGroupCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2046911C2887825700069C16 /* CardStripTabGroupCardView.swift */; };
+		203203EE28879D7B00405C07 /* CardStripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2046911F2887825700069C16 /* CardStripView.swift */; };
+		203203EF28879D7B00405C07 /* CardStripCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2046911E2887825700069C16 /* CardStripCard.swift */; };
 		2034988E2843307C00799544 /* OrientationDependentStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2034988D2843307C00799544 /* OrientationDependentStack.swift */; };
 		203A9381283F1E0E00FA4E73 /* GridPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203A9380283F1E0E00FA4E73 /* GridPicker.swift */; };
-		203A9383283F1E9C00FA4E73 /* CardGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203A9382283F1E9C00FA4E73 /* CardGroupView.swift */; };
 		203A9385283F221900FA4E73 /* GridPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203A9380283F1E0E00FA4E73 /* GridPicker.swift */; };
+		204691202887825700069C16 /* CardStripTabGroupCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2046911C2887825700069C16 /* CardStripTabGroupCardView.swift */; };
+		204691212887825700069C16 /* CardStripModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2046911D2887825700069C16 /* CardStripModel.swift */; };
+		204691222887825700069C16 /* CardStripCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2046911E2887825700069C16 /* CardStripCard.swift */; };
+		204691232887825700069C16 /* CardStripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2046911F2887825700069C16 /* CardStripView.swift */; };
+		20469125288782A400069C16 /* CardDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20469124288782A400069C16 /* CardDropDelegate.swift */; };
+		20469126288782CF00069C16 /* CardDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20469124288782A400069C16 /* CardDropDelegate.swift */; };
+		204691282887833900069C16 /* FittedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204691272887833900069C16 /* FittedCard.swift */; };
+		204691292887833F00069C16 /* FittedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204691272887833900069C16 /* FittedCard.swift */; };
+		2046912B2887836A00069C16 /* DragAndDropModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2046912A2887836A00069C16 /* DragAndDropModifier.swift */; };
+		2046912C2887836A00069C16 /* DragAndDropModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2046912A2887836A00069C16 /* DragAndDropModifier.swift */; };
 		204A9B3D286B85EA00E7E931 /* scripts in Resources */ = {isa = PBXBuildFile; fileRef = 204A9B3C286B85E900E7E931 /* scripts */; };
 		204A9B40286B8A4800E7E931 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 204A9B3F286B8A4800E7E931 /* background.js */; };
 		204A9B41286B8A4800E7E931 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = 204A9B3E286B8A4800E7E931 /* content.js */; };
@@ -93,18 +108,10 @@
 		204BF5D0287792FF00A07AB6 /* RedditPopupBlocker.js in Resources */ = {isa = PBXBuildFile; fileRef = 204BF5CF287792FF00A07AB6 /* RedditPopupBlocker.js */; };
 		205132B128208DB0003AAE96 /* SheetHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205132B028208DB0003AAE96 /* SheetHeader.swift */; };
 		205132B3282093B0003AAE96 /* CookieCutterOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205132B2282093B0003AAE96 /* CookieCutterOnboardingView.swift */; };
-		2052675D28779E6A000550A1 /* BorderTreament.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2052675C28779E6A000550A1 /* BorderTreament.swift */; };
-		2052675F28779F15000550A1 /* DragToCloseInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2052675E28779F15000550A1 /* DragToCloseInteraction.swift */; };
-		2052676128779F3F000550A1 /* FittedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2052676028779F3F000550A1 /* FittedCard.swift */; };
-		205267642877AA07000550A1 /* FittedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2052676028779F3F000550A1 /* FittedCard.swift */; };
-		205267652877AA09000550A1 /* DragToCloseInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2052675E28779F15000550A1 /* DragToCloseInteraction.swift */; };
-		205267662877AA0D000550A1 /* BorderTreament.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2052675C28779E6A000550A1 /* BorderTreament.swift */; };
-		205267672877AA0D000550A1 /* CardListViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9655DEE26A09A8600925912 /* CardListViews.swift */; };
-		205267682877AA0D000550A1 /* CardModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A3D2992268583710082F293 /* CardModels.swift */; };
-		205267692877AA0D000550A1 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88F97626630F39007C203D /* Card.swift */; };
-		2052676A2877AA0D000550A1 /* CardDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88F97426630EFC007C203D /* CardDetails.swift */; };
-		2052676B2877AA0D000550A1 /* CardDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EA89F3286CC54200C432DF /* CardDropDelegate.swift */; };
-		2052676C2877AA0D000550A1 /* CardGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203A9382283F1E9C00FA4E73 /* CardGroupView.swift */; };
+		205267672877AA0D000550A1 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		205267682877AA0D000550A1 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		205267692877AA0D000550A1 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		2052676A2877AA0D000550A1 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		205789762852926D00E6CB6B /* DateGroupedTableData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205789752852926D00E6CB6B /* DateGroupedTableData.swift */; };
 		205789782852931A00E6CB6B /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205789772852931A00E6CB6B /* DateExtensions.swift */; };
 		20587947286F6A0800994E15 /* checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 20587944286F6A0800994E15 /* checkmark.png */; };
@@ -115,6 +122,16 @@
 		206954A827FF449E000360D6 /* RecentlyClosedTabsPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206954A727FF449E000360D6 /* RecentlyClosedTabsPanelView.swift */; };
 		206C58AA28448E2E00216F65 /* OrientationDependentStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2034988D2843307C00799544 /* OrientationDependentStack.swift */; };
 		2089ADBA2876932E00CB3448 /* RecentlyClosedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2089ADB92876932E00CB3448 /* RecentlyClosedTests.swift */; };
+		20978E692874A9590009D346 /* CardDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20978E642874A9590009D346 /* CardDetails.swift */; };
+		20978E6A2874A9590009D346 /* CardModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20978E652874A9590009D346 /* CardModels.swift */; };
+		20978E6B2874A9590009D346 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20978E662874A9590009D346 /* Card.swift */; };
+		20978E6C2874A9590009D346 /* CardListViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20978E672874A9590009D346 /* CardListViews.swift */; };
+		20978E6D2874A9590009D346 /* CardGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20978E682874A9590009D346 /* CardGroupView.swift */; };
+		20978E702874AE6B0009D346 /* CardListViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20978E672874A9590009D346 /* CardListViews.swift */; };
+		20978E712874AE6B0009D346 /* CardModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20978E652874A9590009D346 /* CardModels.swift */; };
+		20978E722874AE6B0009D346 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20978E662874A9590009D346 /* Card.swift */; };
+		20978E732874AE6B0009D346 /* CardDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20978E642874A9590009D346 /* CardDetails.swift */; };
+		20978E742874AE6B0009D346 /* CardGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20978E682874A9590009D346 /* CardGroupView.swift */; };
 		2097EC152835B4EB00A41DD8 /* SceneUIState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2097EC142835B4EB00A41DD8 /* SceneUIState.swift */; };
 		209CD9A327DBF9F20069675C /* TabGroupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209CD9A227DBF9F20069675C /* TabGroupTests.swift */; };
 		20A5D15327F6A43E00DB88FE /* HistoryPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A5D15227F6A43E00DB88FE /* HistoryPanelView.swift */; };
@@ -127,8 +144,9 @@
 		20D21E362820C19800A7C384 /* SheetHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205132B028208DB0003AAE96 /* SheetHeader.swift */; };
 		20D21E372820C1A800A7C384 /* CookieCutterOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205132B2282093B0003AAE96 /* CookieCutterOnboardingView.swift */; };
 		20D297F6281DAA3B0036DDBA /* ZombieTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D297F5281DAA3B0036DDBA /* ZombieTabTests.swift */; };
+		20D86CAF2866E1F2001ED834 /* DragToCloseInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20217D9E28666523003EF3A7 /* DragToCloseInteraction.swift */; };
+		20D86CB02866E207001ED834 /* BorderTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20217DA028666575003EF3A7 /* BorderTreatment.swift */; };
 		20E51A112819D8BB00394720 /* CookieCutterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200976842810EA620055A02B /* CookieCutterHelper.swift */; };
-		20EA89F4286CC54200C432DF /* CardDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EA89F3286CC54200C432DF /* CardDropDelegate.swift */; };
 		20ED47CE27F28235002E3ADF /* BrowserViewController+IntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20ED47CD27F28235002E3ADF /* BrowserViewController+IntroView.swift */; };
 		20F2889227FD1BA9005A8A79 /* HistoryPanelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F2889127FD1BA9005A8A79 /* HistoryPanelModel.swift */; };
 		20F2889427FD20B4005A8A79 /* HistoryPanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F2889327FD20B4005A8A79 /* HistoryPanelViewController.swift */; };
@@ -241,7 +259,6 @@
 		4A15C8B926E1BFAC006CD097 /* SpaceRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A15C8B826E1BFAB006CD097 /* SpaceRequest.swift */; };
 		4A1D054B26642BF400D63333 /* SimulatedSwipeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1D054A26642BF400D63333 /* SimulatedSwipeController.swift */; };
 		4A1D054D266430DA00D63333 /* SimulatedSwipeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1D054C266430DA00D63333 /* SimulatedSwipeAnimator.swift */; };
-		4A1D05502669715B00D63333 /* CardViewControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1D054F2669715B00D63333 /* CardViewControllers.swift */; };
 		4A227BE82758BE5B00A89322 /* SpaceComments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A227BE72758BE5B00A89322 /* SpaceComments.swift */; };
 		4A22DCFA26574AA4009BE9FC /* TrackingEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A22DCF926574AA4009BE9FC /* TrackingEntity.swift */; };
 		4A22DD0826575FD6009BE9FC /* TrackingEntity.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A22DD0726575FD6009BE9FC /* TrackingEntity.xcassets */; };
@@ -251,7 +268,6 @@
 		4A360215268CF74500C56328 /* SuggestionBlocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A360214268CF74500C56328 /* SuggestionBlocks.swift */; };
 		4A39C1DB26CB76D600C999CF /* SpaceContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A39C1DA26CB76D600C999CF /* SpaceContainerView.swift */; };
 		4A3D299126850CB60082F293 /* CardGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A3D299026850CB60082F293 /* CardGrid.swift */; };
-		4A3D2993268583710082F293 /* CardModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A3D2992268583710082F293 /* CardModels.swift */; };
 		4A3D2998268993FE0082F293 /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = 4A3D2997268993FE0082F293 /* ViewInspector */; };
 		4A3D299A2689A0520082F293 /* SuggestionViewsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A3D29992689A0520082F293 /* SuggestionViewsTests.swift */; };
 		4A42C40D27E58487003B9826 /* FrontViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C18DD826558FF3004710CD /* FrontViewController.swift */; };
@@ -447,10 +463,8 @@
 		4A42C4DD27E58487003B9826 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075501E37F6D1006961AC /* UIViewExtensions.swift */; };
 		4A42C4DE27E58487003B9826 /* BrowserViewController+WebViewDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F457A71F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift */; };
 		4A42C4DF27E58487003B9826 /* DebugSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98E406226585F01003AC0E2 /* DebugSettingsSection.swift */; };
-		4A42C4E027E58487003B9826 /* CardViewControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1D054F2669715B00D63333 /* CardViewControllers.swift */; };
 		4A42C4E127E58487003B9826 /* SpaceNoteEntityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F04FB527D7286800DE79ED /* SpaceNoteEntityView.swift */; };
 		4A42C4E227E58487003B9826 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21E51A0910F600AAB793 /* AppDelegate.swift */; };
-		4A42C4E327E58487003B9826 /* CompactCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66634E062735931D0047D336 /* CompactCard.swift */; };
 		4A42C4E427E58487003B9826 /* UIImageViewAligned.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C75DF2207584C300BB8AD0 /* UIImageViewAligned.m */; };
 		4A42C4E527E58487003B9826 /* DebugLocaleSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A840EC22788CEA0005F6003 /* DebugLocaleSetting.swift */; };
 		4A42C4E627E58487003B9826 /* BrowserPrompts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E653422C1C5944F90039DD9E /* BrowserPrompts.swift */; };
@@ -574,7 +588,6 @@
 		4A42C56827E58487003B9826 /* ShareExtensionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3972BF11C22412B00035B87 /* ShareExtensionHelper.swift */; };
 		4A42C56927E58487003B9826 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 6604922726843975002AC35D /* Intents.intentdefinition */; };
 		4A42C56A27E58487003B9826 /* SessionRestoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F35B8D2C1D6383E9008E3D61 /* SessionRestoreHelper.swift */; };
-		4A42C56B27E58487003B9826 /* CardStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88F9722662AEAB007C203D /* CardStrip.swift */; };
 		4A42C56C27E58487003B9826 /* GeometryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E5F2B72673F7F700025A7F /* GeometryExtensions.swift */; };
 		4A42C56E27E58487003B9826 /* NeevaFeatureFlagSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96AC26626A5C9C4001CF78C /* NeevaFeatureFlagSettingsView.swift */; };
 		4A42C57027E58487003B9826 /* OverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EA9BF3277683EE0013DB07 /* OverlayView.swift */; };
@@ -691,9 +704,6 @@
 		4A72AFC2278E42F60057E58B /* MutationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A72AFC1278E42F60057E58B /* MutationRequest.swift */; };
 		4A72D21F27A0969900F5D14B /* EmailVerificationPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A72D21E27A0969900F5D14B /* EmailVerificationPrompt.swift */; };
 		4A7AC46427F27471001EFB8F /* XYZLaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4A7AC46327F27470001EFB8F /* XYZLaunchScreen.xib */; };
-		4A88F9732662AEAB007C203D /* CardStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88F9722662AEAB007C203D /* CardStrip.swift */; };
-		4A88F97526630EFC007C203D /* CardDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88F97426630EFC007C203D /* CardDetails.swift */; };
-		4A88F97726630F39007C203D /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88F97626630F39007C203D /* Card.swift */; };
 		4A8CE5BF27CCA07700735C75 /* WalletCore.docc in Sources */ = {isa = PBXBuildFile; fileRef = 4A8CE5BE27CCA07700735C75 /* WalletCore.docc */; };
 		4A8CE5C527CCA07800735C75 /* WalletCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A8CE5BB27CCA07700735C75 /* WalletCore.framework */; };
 		4A8CE5CC27CCA07800735C75 /* WalletCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8CE5CB27CCA07800735C75 /* WalletCoreTests.swift */; };
@@ -796,7 +806,6 @@
 		665A23D42755D8D5006AD997 /* QueryForNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665A23D32755D8D5006AD997 /* QueryForNavigation.swift */; };
 		665CA48626F04FA4006E2F4D /* NotificationBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665CA48526F04FA4006E2F4D /* NotificationBadge.swift */; };
 		665CA48826F054CC006E2F4D /* NotificationRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665CA48726F054CC006E2F4D /* NotificationRow.swift */; };
-		66634E072735931D0047D336 /* CompactCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66634E062735931D0047D336 /* CompactCard.swift */; };
 		6664890726D9829200A4C493 /* EmptyTabTrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6664890626D9829200A4C493 /* EmptyTabTrayTests.swift */; };
 		666CDFA6278D11E0004A9B1E /* BackForwardListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 666CDFA5278D11E0004A9B1E /* BackForwardListView.swift */; };
 		666CDFA8278D35DB004A9B1E /* DismissBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 666CDFA7278D35DB004A9B1E /* DismissBackgroundView.swift */; };
@@ -1128,7 +1137,6 @@
 		C9655DE926A08FA600925912 /* PressReportingButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9655DE826A08FA600925912 /* PressReportingButtonStyle.swift */; };
 		C9655DEB26A09A2800925912 /* GridModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9655DEA26A09A2800925912 /* GridModel.swift */; };
 		C9655DED26A09A6900925912 /* CardsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9655DEC26A09A6900925912 /* CardsContainer.swift */; };
-		C9655DEF26A09A8600925912 /* CardListViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9655DEE26A09A8600925912 /* CardListViews.swift */; };
 		C9655DF126A09AC900925912 /* CompletionForAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9655DF026A09AC900925912 /* CompletionForAnimation.swift */; };
 		C965BDD2268E71C500F02224 /* AppHostSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C965BDD1268E71C500F02224 /* AppHostSetting.swift */; };
 		C965BDD4268E720400F02224 /* DebugDBSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C965BDD3268E720400F02224 /* DebugDBSettingsSection.swift */; };
@@ -1958,13 +1966,21 @@
 		20167FC9282448DB00223B9E /* FindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindView.swift; sourceTree = "<group>"; };
 		20167FCB28245C8100223B9E /* FindInCardGridTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindInCardGridTests.swift; sourceTree = "<group>"; };
 		201B4BFD28452E8900F9594E /* DuplicateTabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuplicateTabTests.swift; sourceTree = "<group>"; };
+		20217D9E28666523003EF3A7 /* DragToCloseInteraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragToCloseInteraction.swift; sourceTree = "<group>"; };
+		20217DA028666575003EF3A7 /* BorderTreatment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderTreatment.swift; sourceTree = "<group>"; };
 		2026EC1B27F3D2F900817053 /* CookieCutterSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCutterSettings.swift; sourceTree = "<group>"; };
 		2026EC1E27F3E51400817053 /* CookieCutterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCutterModel.swift; sourceTree = "<group>"; };
 		2026EC2027F4070900817053 /* NonEssentialCookieSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonEssentialCookieSettings.swift; sourceTree = "<group>"; };
 		20318F242823786A003B03C1 /* DebounceObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebounceObject.swift; sourceTree = "<group>"; };
 		2034988D2843307C00799544 /* OrientationDependentStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientationDependentStack.swift; sourceTree = "<group>"; };
 		203A9380283F1E0E00FA4E73 /* GridPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridPicker.swift; sourceTree = "<group>"; };
-		203A9382283F1E9C00FA4E73 /* CardGroupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardGroupView.swift; sourceTree = "<group>"; };
+		2046911C2887825700069C16 /* CardStripTabGroupCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardStripTabGroupCardView.swift; sourceTree = "<group>"; };
+		2046911D2887825700069C16 /* CardStripModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardStripModel.swift; sourceTree = "<group>"; };
+		2046911E2887825700069C16 /* CardStripCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardStripCard.swift; sourceTree = "<group>"; };
+		2046911F2887825700069C16 /* CardStripView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardStripView.swift; sourceTree = "<group>"; };
+		20469124288782A400069C16 /* CardDropDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardDropDelegate.swift; sourceTree = "<group>"; };
+		204691272887833900069C16 /* FittedCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FittedCard.swift; sourceTree = "<group>"; };
+		2046912A2887836A00069C16 /* DragAndDropModifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DragAndDropModifier.swift; sourceTree = "<group>"; };
 		204A9B3C286B85E900E7E931 /* scripts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = scripts; sourceTree = "<group>"; };
 		204A9B3E286B8A4800E7E931 /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = content.js; sourceTree = "<group>"; };
 		204A9B3F286B8A4800E7E931 /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = background.js; sourceTree = "<group>"; };
@@ -1973,9 +1989,6 @@
 		204BF5CF287792FF00A07AB6 /* RedditPopupBlocker.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = RedditPopupBlocker.js; sourceTree = "<group>"; };
 		205132B028208DB0003AAE96 /* SheetHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetHeader.swift; sourceTree = "<group>"; };
 		205132B2282093B0003AAE96 /* CookieCutterOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCutterOnboardingView.swift; sourceTree = "<group>"; };
-		2052675C28779E6A000550A1 /* BorderTreament.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderTreament.swift; sourceTree = "<group>"; };
-		2052675E28779F15000550A1 /* DragToCloseInteraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragToCloseInteraction.swift; sourceTree = "<group>"; };
-		2052676028779F3F000550A1 /* FittedCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FittedCard.swift; sourceTree = "<group>"; };
 		205789752852926D00E6CB6B /* DateGroupedTableData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateGroupedTableData.swift; sourceTree = "<group>"; };
 		205789772852931A00E6CB6B /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		20587944286F6A0800994E15 /* checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkmark.png; sourceTree = "<group>"; };
@@ -1985,6 +1998,11 @@
 		206954A527FF425B000360D6 /* SiteRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteRowView.swift; sourceTree = "<group>"; };
 		206954A727FF449E000360D6 /* RecentlyClosedTabsPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyClosedTabsPanelView.swift; sourceTree = "<group>"; };
 		2089ADB92876932E00CB3448 /* RecentlyClosedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyClosedTests.swift; sourceTree = "<group>"; };
+		20978E642874A9590009D346 /* CardDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardDetails.swift; sourceTree = "<group>"; };
+		20978E652874A9590009D346 /* CardModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardModels.swift; sourceTree = "<group>"; };
+		20978E662874A9590009D346 /* Card.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		20978E672874A9590009D346 /* CardListViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardListViews.swift; sourceTree = "<group>"; };
+		20978E682874A9590009D346 /* CardGroupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardGroupView.swift; sourceTree = "<group>"; };
 		2097EC142835B4EB00A41DD8 /* SceneUIState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneUIState.swift; sourceTree = "<group>"; };
 		209CD9A227DBF9F20069675C /* TabGroupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupTests.swift; sourceTree = "<group>"; };
 		20A5D15227F6A43E00DB88FE /* HistoryPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPanelView.swift; sourceTree = "<group>"; };
@@ -1994,7 +2012,6 @@
 		20BB666B2821E0F0001FA7E9 /* ChangeNotificationPreferenceDialogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeNotificationPreferenceDialogView.swift; sourceTree = "<group>"; };
 		20C5B262282D82F400BD35B9 /* CookieCutterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCutterTests.swift; sourceTree = "<group>"; };
 		20D297F5281DAA3B0036DDBA /* ZombieTabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZombieTabTests.swift; sourceTree = "<group>"; };
-		20EA89F3286CC54200C432DF /* CardDropDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDropDelegate.swift; sourceTree = "<group>"; };
 		20ED47CD27F28235002E3ADF /* BrowserViewController+IntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+IntroView.swift"; sourceTree = "<group>"; };
 		20F2889127FD1BA9005A8A79 /* HistoryPanelModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPanelModel.swift; sourceTree = "<group>"; };
 		20F2889327FD20B4005A8A79 /* HistoryPanelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPanelViewController.swift; sourceTree = "<group>"; };
@@ -2125,7 +2142,6 @@
 		4A15C8B826E1BFAB006CD097 /* SpaceRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceRequest.swift; sourceTree = "<group>"; };
 		4A1D054A26642BF400D63333 /* SimulatedSwipeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulatedSwipeController.swift; sourceTree = "<group>"; };
 		4A1D054C266430DA00D63333 /* SimulatedSwipeAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimulatedSwipeAnimator.swift; sourceTree = "<group>"; };
-		4A1D054F2669715B00D63333 /* CardViewControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewControllers.swift; sourceTree = "<group>"; };
 		4A227BE72758BE5B00A89322 /* SpaceComments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceComments.swift; sourceTree = "<group>"; };
 		4A22DCF926574AA4009BE9FC /* TrackingEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingEntity.swift; sourceTree = "<group>"; };
 		4A22DD0726575FD6009BE9FC /* TrackingEntity.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = TrackingEntity.xcassets; sourceTree = "<group>"; };
@@ -2136,7 +2152,6 @@
 		4A360214268CF74500C56328 /* SuggestionBlocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionBlocks.swift; sourceTree = "<group>"; };
 		4A39C1DA26CB76D600C999CF /* SpaceContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceContainerView.swift; sourceTree = "<group>"; };
 		4A3D299026850CB60082F293 /* CardGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardGrid.swift; sourceTree = "<group>"; };
-		4A3D2992268583710082F293 /* CardModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardModels.swift; sourceTree = "<group>"; };
 		4A3D29992689A0520082F293 /* SuggestionViewsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionViewsTests.swift; sourceTree = "<group>"; };
 		4A42C5ED27E58487003B9826 /* XYZClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XYZClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A447A6D27CDC2A200B141F6 /* EIP712.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EIP712.swift; sourceTree = "<group>"; };
@@ -2150,9 +2165,6 @@
 		4A72AFC5278E9E500057E58B /* CommunitySubmissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitySubmissionView.swift; sourceTree = "<group>"; };
 		4A72D21E27A0969900F5D14B /* EmailVerificationPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailVerificationPrompt.swift; sourceTree = "<group>"; };
 		4A7AC46327F27470001EFB8F /* XYZLaunchScreen.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = XYZLaunchScreen.xib; sourceTree = "<group>"; };
-		4A88F9722662AEAB007C203D /* CardStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStrip.swift; sourceTree = "<group>"; };
-		4A88F97426630EFC007C203D /* CardDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetails.swift; sourceTree = "<group>"; };
-		4A88F97626630F39007C203D /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		4A8CE5BB27CCA07700735C75 /* WalletCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WalletCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A8CE5BD27CCA07700735C75 /* WalletCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WalletCore.h; sourceTree = "<group>"; };
 		4A8CE5BE27CCA07700735C75 /* WalletCore.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = WalletCore.docc; sourceTree = "<group>"; };
@@ -2244,7 +2256,6 @@
 		665CA48526F04FA4006E2F4D /* NotificationBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationBadge.swift; sourceTree = "<group>"; };
 		665CA48726F054CC006E2F4D /* NotificationRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRow.swift; sourceTree = "<group>"; };
 		665CE64726DDA7E70069EFDD /* FeedbackRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackRequest.swift; sourceTree = "<group>"; };
-		66634E062735931D0047D336 /* CompactCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactCard.swift; sourceTree = "<group>"; };
 		6664890626D9829200A4C493 /* EmptyTabTrayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyTabTrayTests.swift; sourceTree = "<group>"; };
 		6666D8C626D40278001AD43F /* LazyTabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyTabTests.swift; sourceTree = "<group>"; };
 		666CDFA5278D11E0004A9B1E /* BackForwardListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackForwardListView.swift; sourceTree = "<group>"; };
@@ -2557,7 +2568,6 @@
 		C9655DE826A08FA600925912 /* PressReportingButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PressReportingButtonStyle.swift; sourceTree = "<group>"; };
 		C9655DEA26A09A2800925912 /* GridModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridModel.swift; sourceTree = "<group>"; };
 		C9655DEC26A09A6900925912 /* CardsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsContainer.swift; sourceTree = "<group>"; };
-		C9655DEE26A09A8600925912 /* CardListViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardListViews.swift; sourceTree = "<group>"; };
 		C9655DF026A09AC900925912 /* CompletionForAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionForAnimation.swift; sourceTree = "<group>"; };
 		C965BDD1268E71C500F02224 /* AppHostSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppHostSetting.swift; sourceTree = "<group>"; };
 		C965BDD3268E720400F02224 /* DebugDBSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugDBSettingsSection.swift; sourceTree = "<group>"; };
@@ -3279,6 +3289,23 @@
 			path = FindView;
 			sourceTree = "<group>";
 		};
+		20217D9D286664FD003EF3A7 /* Card */ = {
+			isa = PBXGroup;
+			children = (
+				20217DA028666575003EF3A7 /* BorderTreatment.swift */,
+				20978E662874A9590009D346 /* Card.swift */,
+				20978E642874A9590009D346 /* CardDetails.swift */,
+				20469124288782A400069C16 /* CardDropDelegate.swift */,
+				20978E682874A9590009D346 /* CardGroupView.swift */,
+				20978E672874A9590009D346 /* CardListViews.swift */,
+				20978E652874A9590009D346 /* CardModels.swift */,
+				2046912A2887836A00069C16 /* DragAndDropModifier.swift */,
+				20217D9E28666523003EF3A7 /* DragToCloseInteraction.swift */,
+				204691272887833900069C16 /* FittedCard.swift */,
+			);
+			path = Card;
+			sourceTree = "<group>";
+		};
 		2026EC1A27F3D2C600817053 /* CookieCutter */ = {
 			isa = PBXGroup;
 			children = (
@@ -3315,6 +3342,17 @@
 			path = Grid;
 			sourceTree = "<group>";
 		};
+		2046911B2887825700069C16 /* Strip */ = {
+			isa = PBXGroup;
+			children = (
+				2046911E2887825700069C16 /* CardStripCard.swift */,
+				2046911D2887825700069C16 /* CardStripModel.swift */,
+				2046911C2887825700069C16 /* CardStripTabGroupCardView.swift */,
+				2046911F2887825700069C16 /* CardStripView.swift */,
+			);
+			path = Strip;
+			sourceTree = "<group>";
+		};
 		2052675A28779DFC000550A1 /* ArchivedTabs */ = {
 			isa = PBXGroup;
 			children = (
@@ -3325,22 +3363,6 @@
 				8A35CEF6282891EC00E71CD1 /* ArchivedTabsListSectionView.swift */,
 			);
 			path = ArchivedTabs;
-			sourceTree = "<group>";
-		};
-		2052675B28779E21000550A1 /* Card */ = {
-			isa = PBXGroup;
-			children = (
-				2052675C28779E6A000550A1 /* BorderTreament.swift */,
-				4A88F97626630F39007C203D /* Card.swift */,
-				4A88F97426630EFC007C203D /* CardDetails.swift */,
-				20EA89F3286CC54200C432DF /* CardDropDelegate.swift */,
-				203A9382283F1E9C00FA4E73 /* CardGroupView.swift */,
-				C9655DEE26A09A8600925912 /* CardListViews.swift */,
-				4A3D2992268583710082F293 /* CardModels.swift */,
-				2052675E28779F15000550A1 /* DragToCloseInteraction.swift */,
-				2052676028779F3F000550A1 /* FittedCard.swift */,
-			);
-			path = Card;
 			sourceTree = "<group>";
 		};
 		206954A227FF424D000360D6 /* Site */ = {
@@ -3729,13 +3751,11 @@
 		4A1D054E26696B6D00D63333 /* CardGrid */ = {
 			isa = PBXGroup;
 			children = (
-				2052675B28779E21000550A1 /* Card */,
+				20217D9D286664FD003EF3A7 /* Card */,
 				203A937F283F1E0500FA4E73 /* Grid */,
+				2046911B2887825700069C16 /* Strip */,
 				8A422E9A26E19783005CC814 /* AddOrUpdateSpaceView.swift */,
 				4AB2039F267D4EEC00920F39 /* BrowserPrimitive.swift */,
-				4A88F9722662AEAB007C203D /* CardStrip.swift */,
-				4A1D054F2669715B00D63333 /* CardViewControllers.swift */,
-				66634E062735931D0047D336 /* CompactCard.swift */,
 				C9655DF026A09AC900925912 /* CompletionForAnimation.swift */,
 				4A9F65422710A49000B7C06E /* CustomThumbnails.swift */,
 				4AD771B32734F06800B6769D /* EntityInfoView.swift */,
@@ -6959,7 +6979,8 @@
 				4A42C41127E58487003B9826 /* TemporaryDocument.swift in Sources */,
 				4A42C41227E58487003B9826 /* FaviconView.swift in Sources */,
 				4A42C41327E58487003B9826 /* LocationLabel.swift in Sources */,
-				205267672877AA0D000550A1 /* CardListViews.swift in Sources */,
+				205267672877AA0D000550A1 /* (null) in Sources */,
+				2046912C2887836A00069C16 /* DragAndDropModifier.swift in Sources */,
 				4A42C41427E58487003B9826 /* Authenticator.swift in Sources */,
 				4A42C41527E58487003B9826 /* WalletDashboard.swift in Sources */,
 				4A42C41627E58487003B9826 /* TextSizeView.swift in Sources */,
@@ -6968,6 +6989,7 @@
 				4A42C41A27E58487003B9826 /* BottomSheetView.swift in Sources */,
 				4A42C41B27E58487003B9826 /* BrowserTopBarView.swift in Sources */,
 				4A42C41D27E58487003B9826 /* PanelDataObservers.swift in Sources */,
+				20978E742874AE6B0009D346 /* CardGroupView.swift in Sources */,
 				4A42C41E27E58487003B9826 /* GroupedButtonView.swift in Sources */,
 				4A42C41F27E58487003B9826 /* LocalNotificiations.swift in Sources */,
 				4A42C42027E58487003B9826 /* SceneDelegate.swift in Sources */,
@@ -6979,7 +7001,6 @@
 				4A42C42727E58487003B9826 /* HTTPAuthPromptOverlayView.swift in Sources */,
 				4A42C42827E58487003B9826 /* ClientLogger.swift in Sources */,
 				4A42C42927E58487003B9826 /* IncognitoModel.swift in Sources */,
-				205267662877AA0D000550A1 /* BorderTreament.swift in Sources */,
 				4A42C42A27E58487003B9826 /* Popover.swift in Sources */,
 				4A42C42B27E58487003B9826 /* LoggingSettingsView.swift in Sources */,
 				4A42C42C27E58487003B9826 /* NotificationList.swift in Sources */,
@@ -7000,6 +7021,7 @@
 				4A42C43927E58487003B9826 /* SearchQueryModel.swift in Sources */,
 				4A42C43A27E58487003B9826 /* NotificationViewManager.swift in Sources */,
 				4A42C43B27E58487003B9826 /* KeyboardListener.swift in Sources */,
+				20978E702874AE6B0009D346 /* CardListViews.swift in Sources */,
 				4A42C43C27E58487003B9826 /* RelatedRecipeView.swift in Sources */,
 				4A42C43D27E58487003B9826 /* FaviconResolver.swift in Sources */,
 				E677D1D52800E8C10060869F /* SiteListView.swift in Sources */,
@@ -7031,12 +7053,14 @@
 				4A42C45327E58487003B9826 /* WithPopover.swift in Sources */,
 				4A42C45527E58487003B9826 /* ExperimentSettingsView.swift in Sources */,
 				4A42C45627E58487003B9826 /* QueryForNavigation.swift in Sources */,
+				204691292887833F00069C16 /* FittedCard.swift in Sources */,
 				4A42C45727E58487003B9826 /* SpaceEntityThumbnailView.swift in Sources */,
 				4A42C45827E58487003B9826 /* IntroFirstRunView.swift in Sources */,
 				4A42C45927E58487003B9826 /* DataManagementView.swift in Sources */,
 				4A42C45A27E58487003B9826 /* ZeroQuerySuggestionModels.swift in Sources */,
 				4A42C45B27E58487003B9826 /* SearchBarTourPromptViewController.swift in Sources */,
 				4A42C45C27E58487003B9826 /* CompletionForAnimation.swift in Sources */,
+				203203EF28879D7B00405C07 /* CardStripCard.swift in Sources */,
 				4A42C45D27E58487003B9826 /* LocationTextField.swift in Sources */,
 				4A42C45E27E58487003B9826 /* CardGrid.swift in Sources */,
 				4A42C45F27E58487003B9826 /* BrowserViewController+FindInPage.swift in Sources */,
@@ -7139,6 +7163,7 @@
 				4A42C4AB27E58487003B9826 /* PromoCard.swift in Sources */,
 				4AE5FC6A27ED9492005E6E9A /* ImpressionLoggerModifier.swift in Sources */,
 				4A42C4AC27E58487003B9826 /* NavSuggestion.swift in Sources */,
+				20D86CAF2866E1F2001ED834 /* DragToCloseInteraction.swift in Sources */,
 				4A42C4AE27E58487003B9826 /* RecipeView.swift in Sources */,
 				4A42C4AF27E58487003B9826 /* LogConfig.swift in Sources */,
 				4A42C4B027E58487003B9826 /* OpenInAppOverlayContent.swift in Sources */,
@@ -7152,12 +7177,13 @@
 				4A42C4B527E58487003B9826 /* TourPromptViewController.swift in Sources */,
 				4A42C4B627E58487003B9826 /* WebViewContainer.swift in Sources */,
 				4A42C4B727E58487003B9826 /* TrackingMenuView.swift in Sources */,
+				4A42C4B827E58487003B9826 /* TabManager+TabEventHandler.swift in Sources */,
+				205267682877AA0D000550A1 /* (null) in Sources */,
 				205267682877AA0D000550A1 /* CardModels.swift in Sources */,
 				20E51A112819D8BB00394720 /* CookieCutterHelper.swift in Sources */,
 				4A42C4B927E58487003B9826 /* OverflowMenuOverlayContent.swift in Sources */,
 				4A42C4BA27E58487003B9826 /* AppDelegate+UNUserNotificationCenterDelegate.swift in Sources */,
 				4A42C4BB27E58487003B9826 /* DebugSettingsRestartPromptView.swift in Sources */,
-				205267652877AA09000550A1 /* DragToCloseInteraction.swift in Sources */,
 				4A42C4BC27E58487003B9826 /* SpaceContainerView.swift in Sources */,
 				4A42C4BD27E58487003B9826 /* photon-colors.swift in Sources */,
 				4A42C4BE27E58487003B9826 /* SimulatedSwipeModel.swift in Sources */,
@@ -7179,7 +7205,7 @@
 				4A42C4CC27E58487003B9826 /* BrowserViewController+DownloadQueueDelegate.swift in Sources */,
 				4A42C4CD27E58487003B9826 /* SearchResults.swift in Sources */,
 				4A42C4CE27E58487003B9826 /* AppClipHelper.swift in Sources */,
-				2052676A2877AA0D000550A1 /* CardDetails.swift in Sources */,
+				2052676A2877AA0D000550A1 /* (null) in Sources */,
 				4A42C4CF27E58487003B9826 /* QueuedViewManager.swift in Sources */,
 				4A42C4D027E58487003B9826 /* UserActivityHandler.swift in Sources */,
 				4A42C4D127E58487003B9826 /* CardTransitionModifier.swift in Sources */,
@@ -7202,11 +7228,9 @@
 				4A42C4DE27E58487003B9826 /* BrowserViewController+WebViewDelegates.swift in Sources */,
 				671B91F028384CFF000197C4 /* DefaultBrowserInterstitialView.swift in Sources */,
 				4A42C4DF27E58487003B9826 /* DebugSettingsSection.swift in Sources */,
-				4A42C4E027E58487003B9826 /* CardViewControllers.swift in Sources */,
 				E67B0B352809AF0E008D1CCD /* UnlockedThemesView.swift in Sources */,
 				4A42C4E127E58487003B9826 /* SpaceNoteEntityView.swift in Sources */,
 				4A42C4E227E58487003B9826 /* AppDelegate.swift in Sources */,
-				4A42C4E327E58487003B9826 /* CompactCard.swift in Sources */,
 				4A42C4E427E58487003B9826 /* UIImageViewAligned.m in Sources */,
 				4A42C4E527E58487003B9826 /* DebugLocaleSetting.swift in Sources */,
 				4A42C4E627E58487003B9826 /* BrowserPrompts.swift in Sources */,
@@ -7221,6 +7245,7 @@
 				4A42C4EF27E58487003B9826 /* UIPasteboardExtensions.swift in Sources */,
 				4A42C4F027E58487003B9826 /* NavigationRouter.swift in Sources */,
 				4A42C4F127E58487003B9826 /* FormPostHelper.swift in Sources */,
+				20978E722874AE6B0009D346 /* Card.swift in Sources */,
 				4A42C4F227E58487003B9826 /* TitleActivityItemProvider.swift in Sources */,
 				4A42C4F427E58487003B9826 /* ViewExtensions.swift in Sources */,
 				4A42C4F527E58487003B9826 /* PerformanceLogger.swift in Sources */,
@@ -7231,7 +7256,7 @@
 				4A42C4F927E58487003B9826 /* SuggestedSpaceViews.swift in Sources */,
 				4A42C4FA27E58487003B9826 /* EmptyCardGrid.swift in Sources */,
 				4A42C4FB27E58487003B9826 /* MenuHelper.swift in Sources */,
-				205267692877AA0D000550A1 /* Card.swift in Sources */,
+				205267692877AA0D000550A1 /* (null) in Sources */,
 				4A42C4FD27E58487003B9826 /* NavigationLinkButton.swift in Sources */,
 				4AB8160727EA663A0017203D /* ServerLoggingSettingsView.swift in Sources */,
 				4A42C4FE27E58487003B9826 /* ToastViewManager.swift in Sources */,
@@ -7263,7 +7288,6 @@
 				4A42C51427E58487003B9826 /* TabManagerStore.swift in Sources */,
 				4A42C51527E58487003B9826 /* KMCGeigerCounter.m in Sources */,
 				E9EC2606283ED06300B9A79B /* CheatsheetSettingsView.swift in Sources */,
-				205267642877AA07000550A1 /* FittedCard.swift in Sources */,
 				E9EC2601283C598B00B9A79B /* BloomFilterManager.swift in Sources */,
 				4A42C51727E58487003B9826 /* FaviconHandler.swift in Sources */,
 				4A42C51827E58487003B9826 /* InternalSchemeHandler.swift in Sources */,
@@ -7274,9 +7298,9 @@
 				4A42C51C27E58487003B9826 /* SpotlightSettingsView.swift in Sources */,
 				4A42C51E27E58487003B9826 /* ErrorPageHelper.swift in Sources */,
 				4A42C51F27E58487003B9826 /* ReaderModePopover.swift in Sources */,
-				2052676B2877AA0D000550A1 /* CardDropDelegate.swift in Sources */,
 				E67CD27327F33BC6007BFE58 /* ZeroQueryHeader.swift in Sources */,
 				4A42C52027E58487003B9826 /* WidgetIntents.intentdefinition in Sources */,
+				203203ED28879D7B00405C07 /* CardStripTabGroupCardView.swift in Sources */,
 				4A42C52127E58487003B9826 /* SavedTab.swift in Sources */,
 				4A42C52227E58487003B9826 /* SuggestedSitesViews.swift in Sources */,
 				4A42C52327E58487003B9826 /* SiteArchiver.swift in Sources */,
@@ -7287,6 +7311,7 @@
 				4A42C52727E58487003B9826 /* SpaceComments.swift in Sources */,
 				F8418EE3282B6D6A004F1305 /* SpacesLoginRequiredView.swift in Sources */,
 				4A42C52827E58487003B9826 /* Roobert.swift in Sources */,
+				20469126288782CF00069C16 /* CardDropDelegate.swift in Sources */,
 				E6EA734E27F610B600845FFB /* URLExtensions.swift in Sources */,
 				4A42C52927E58487003B9826 /* NotificationSettingsView.swift in Sources */,
 				677DFDB62838A9F500E879D3 /* InterstitialVIewModel.swift in Sources */,
@@ -7295,6 +7320,7 @@
 				4A42C52B27E58487003B9826 /* SpacesIntro.swift in Sources */,
 				203A9385283F221900FA4E73 /* GridPicker.swift in Sources */,
 				4A42C52C27E58487003B9826 /* Tab+ChangeUserAgent.swift in Sources */,
+				20D86CB02866E207001ED834 /* BorderTreatment.swift in Sources */,
 				4A42C52D27E58487003B9826 /* TabToolbarView.swift in Sources */,
 				4A42C52E27E58487003B9826 /* LocationViewModel.swift in Sources */,
 				4A42C52F27E58487003B9826 /* ScrollingControlModel.swift in Sources */,
@@ -7332,6 +7358,7 @@
 				4A42C54927E58487003B9826 /* HTTPAuthPromptOverlayContent.swift in Sources */,
 				E677D1D22800E89E0060869F /* HistoryPanelView.swift in Sources */,
 				4A42C54A27E58487003B9826 /* URLFixup.swift in Sources */,
+				203203EC28879D7B00405C07 /* CardStripModel.swift in Sources */,
 				E67CD27627F33BD1007BFE58 /* SuggestedXYZSearchesView.swift in Sources */,
 				4A42C54B27E58487003B9826 /* CheatsheetTooltipPopoverView.swift in Sources */,
 				4A42C54C27E58487003B9826 /* ReadabilityService.swift in Sources */,
@@ -7341,6 +7368,7 @@
 				E67B0B48280F0296008D1CCD /* YourCollectionDetailView.swift in Sources */,
 				4A42C55227E58487003B9826 /* BrowserViewController.swift in Sources */,
 				20167FCE2824601900223B9E /* FindView.swift in Sources */,
+				20978E712874AE6B0009D346 /* CardModels.swift in Sources */,
 				4A42C55327E58487003B9826 /* SuggestionsContent.swift in Sources */,
 				4A42C55427E58487003B9826 /* SpacesFilterView.swift in Sources */,
 				4A42C55527E58487003B9826 /* NeevaScopeLoadingKeyFrameView.swift in Sources */,
@@ -7350,6 +7378,7 @@
 				4A42C55927E58487003B9826 /* BrowserViewController+SKStoreProductViewControllerDelegate.swift in Sources */,
 				4A42C55A27E58487003B9826 /* SuggestionBlocks.swift in Sources */,
 				4A42C55C27E58487003B9826 /* OverflowMenuView.swift in Sources */,
+				20978E732874AE6B0009D346 /* CardDetails.swift in Sources */,
 				4A42C55D27E58487003B9826 /* DownloadQueue.swift in Sources */,
 				4A42C55E27E58487003B9826 /* NeevaExperimentExtensions.swift in Sources */,
 				4A42C55F27E58487003B9826 /* BackForwardListView.swift in Sources */,
@@ -7364,7 +7393,6 @@
 				4A42C56827E58487003B9826 /* ShareExtensionHelper.swift in Sources */,
 				4A42C56927E58487003B9826 /* Intents.intentdefinition in Sources */,
 				4A42C56A27E58487003B9826 /* SessionRestoreHelper.swift in Sources */,
-				4A42C56B27E58487003B9826 /* CardStrip.swift in Sources */,
 				4A42C56C27E58487003B9826 /* GeometryExtensions.swift in Sources */,
 				4A42C56E27E58487003B9826 /* NeevaFeatureFlagSettingsView.swift in Sources */,
 				20BB666E28220F11001FA7E9 /* ChangeNotificationPreferenceDialogView.swift in Sources */,
@@ -7389,8 +7417,8 @@
 				4A42C58227E58487003B9826 /* BrowserViewController+KeyCommands.swift in Sources */,
 				E971498A2849382D00A6A1FC /* PriceHistoryView.swift in Sources */,
 				4A42C58327E58487003B9826 /* SearchEngineSettings.swift in Sources */,
-				2052676C2877AA0D000550A1 /* CardGroupView.swift in Sources */,
 				4A42C58427E58487003B9826 /* RatingsCard.swift in Sources */,
+				203203EE28879D7B00405C07 /* CardStripView.swift in Sources */,
 				4A42C58727E58487003B9826 /* WebServer.swift in Sources */,
 				4A42C58927E58487003B9826 /* BrowserViewController+WalletConnectPresenter.swift in Sources */,
 			);
@@ -7633,17 +7661,18 @@
 				4A15C8B526E1815A006CD097 /* ShareSpaceView.swift in Sources */,
 				6628C8C02797BC78009A69DB /* SimulatedSwipeViewRepresentable.swift in Sources */,
 				661F4FB5269CAAE00078238B /* DownloadOverlayView.swift in Sources */,
-				2052675D28779E6A000550A1 /* BorderTreament.swift in Sources */,
 				3FE1BC2727DBB43E004122F8 /* SpaceListContentView.swift in Sources */,
 				4A9FCD4626F1074600725E17 /* SocialShare.swift in Sources */,
 				66F97CC226F68E01005A26C2 /* ReaderModeModel.swift in Sources */,
 				C8FB0C782321523D00031088 /* PageActionMenu.swift in Sources */,
+				20217D9F28666523003EF3A7 /* DragToCloseInteraction.swift in Sources */,
 				D01017F5219CB6BD009CBB5A /* DownloadContentScript.swift in Sources */,
 				3FE1BC2527DB922D004122F8 /* ScapeImageEntityView.swift in Sources */,
 				3FE1BC2327D91DC9004122F8 /* SpaceTopView.swift in Sources */,
 				39F819C61FD70F5D009E31E4 /* TabEventHandlers.swift in Sources */,
 				4A9F654D27233F6F00B7C06E /* SpaceEntityDetailView.swift in Sources */,
 				FA6B2AC21D41F02D00429414 /* Punycode.swift in Sources */,
+				20978E692874A9590009D346 /* CardDetails.swift in Sources */,
 				BC5C442326600F23007E2F61 /* WithPopover.swift in Sources */,
 				67C59950279B261D00660699 /* ExperimentSettingsView.swift in Sources */,
 				20ED47CE27F28235002E3ADF /* BrowserViewController+IntroView.swift in Sources */,
@@ -7669,6 +7698,7 @@
 				C98E405F26585AB3003AC0E2 /* SupportSettingsSection.swift in Sources */,
 				4AA9F66727478DB8005F6F81 /* SpaceDetailList.swift in Sources */,
 				C9ACC464267A45AC009AE182 /* SuggestionsList.swift in Sources */,
+				204691222887825700069C16 /* CardStripCard.swift in Sources */,
 				674439C627BEDFE400749F75 /* UIApplicationExtensions.swift in Sources */,
 				C87AA4A22614C1FC00F1318F /* IncognitoDescriptionView.swift in Sources */,
 				0B62EFD21AD63CD100ACB9CD /* Clearables.swift in Sources */,
@@ -7742,6 +7772,7 @@
 				E4B423BE1AB9FE6A007E66C8 /* ReaderModeCache.swift in Sources */,
 				4ADC5420265DA2CD00A210CE /* PromoCard.swift in Sources */,
 				6751BAB926AA08FB007FC7EA /* NavSuggestion.swift in Sources */,
+				20978E6B2874A9590009D346 /* Card.swift in Sources */,
 				BCC7CA4A270401AC004714C0 /* RecipeView.swift in Sources */,
 				C9C18E6526559B9C004710CD /* LogConfig.swift in Sources */,
 				C832BF5B26E0A7A400B9A1F8 /* OpenInAppOverlayContent.swift in Sources */,
@@ -7757,6 +7788,7 @@
 				C832BF8326E15B5B00B9A1F8 /* OverflowMenuOverlayContent.swift in Sources */,
 				668DC29926E9B1310072799E /* AppDelegate+UNUserNotificationCenterDelegate.swift in Sources */,
 				C9B55A0F26A87C9B00C71F31 /* DebugSettingsRestartPromptView.swift in Sources */,
+				20978E6D2874A9590009D346 /* CardGroupView.swift in Sources */,
 				4A39C1DB26CB76D600C999CF /* SpaceContainerView.swift in Sources */,
 				8A78AA2527ED33C4002E7A86 /* TabGroup.swift in Sources */,
 				2C49854E206173C800893DAE /* photon-colors.swift in Sources */,
@@ -7775,6 +7807,7 @@
 				BC5C438D265F2CA0007E2F61 /* WebUIMessageHelper.swift in Sources */,
 				C9655DED26A09A6900925912 /* CardsContainer.swift in Sources */,
 				3234500727EA73D800F16237 /* IntentHelper.swift in Sources */,
+				20978E6A2874A9590009D346 /* CardModels.swift in Sources */,
 				D0625CA8208FC47A0081F3B2 /* BrowserViewController+DownloadQueueDelegate.swift in Sources */,
 				4AF1948D266EC78A007E2C3B /* SearchResults.swift in Sources */,
 				66B9570E26AF827E004C6117 /* AppClipHelper.swift in Sources */,
@@ -7798,10 +7831,8 @@
 				E65075521E37F6D1006961AC /* UIViewExtensions.swift in Sources */,
 				C8F457A81F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift in Sources */,
 				C98E406326585F01003AC0E2 /* DebugSettingsSection.swift in Sources */,
-				4A1D05502669715B00D63333 /* CardViewControllers.swift in Sources */,
 				66F04FB627D7286900DE79ED /* SpaceNoteEntityView.swift in Sources */,
 				F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */,
-				66634E072735931D0047D336 /* CompactCard.swift in Sources */,
 				8AC5D2BF28468E9200E44B04 /* CardTransitionModel.swift in Sources */,
 				D8C75DF3207584C400BB8AD0 /* UIImageViewAligned.m in Sources */,
 				1A840EC32788CEA0005F6003 /* DebugLocaleSetting.swift in Sources */,
@@ -7812,17 +7843,14 @@
 				BCF864C72763FF9400E94B3A /* WebResultView.swift in Sources */,
 				435222C125882E3800FCA5B6 /* WidgetKitTopSiteModel.swift in Sources */,
 				32CB439E27ECDC8D003E5E55 /* ImpressionLoggerModifier.swift in Sources */,
-				4A88F97526630EFC007C203D /* CardDetails.swift in Sources */,
 				4AD771B027322BCF00B6769D /* SpaceHeaderView.swift in Sources */,
 				C9F49CBD266FDA9500F3408A /* SearchBar.swift in Sources */,
-				C9655DEF26A09A8600925912 /* CardListViews.swift in Sources */,
 				E9529C6527DC96C70009B434 /* NewsResultsView.swift in Sources */,
 				A83E5AB71C1D993D0026D912 /* UIPasteboardExtensions.swift in Sources */,
 				D8EFFA0C1FF5B1FA001D3A09 /* NavigationRouter.swift in Sources */,
 				D0E55C4F1FB4FD23006DC274 /* FormPostHelper.swift in Sources */,
 				2026EC1C27F3D2F900817053 /* CookieCutterSettings.swift in Sources */,
 				D3972BF41C22412B00035B87 /* TitleActivityItemProvider.swift in Sources */,
-				2052676128779F3F000550A1 /* FittedCard.swift in Sources */,
 				E6F64023281B2EB3008B7644 /* SpacesProfileView.swift in Sources */,
 				BC264BC226746098001527B6 /* ViewExtensions.swift in Sources */,
 				2026EC2127F4070900817053 /* NonEssentialCookieSettings.swift in Sources */,
@@ -7833,7 +7861,6 @@
 				C9F49CB7266E5E1800F3408A /* SuggestedSpaceViews.swift in Sources */,
 				666CFD8A26C735DC009ED9CF /* EmptyCardGrid.swift in Sources */,
 				E65075611E37F77D006961AC /* MenuHelper.swift in Sources */,
-				4A3D2993268583710082F293 /* CardModels.swift in Sources */,
 				676685C527E50EAF003CEA6D /* ServerLoggingSettingsView.swift in Sources */,
 				C8A50B8E268E7F7000E1392A /* NavigationLinkButton.swift in Sources */,
 				66C3C770267A8858002B50B1 /* ToastViewManager.swift in Sources */,
@@ -7841,9 +7868,11 @@
 				3BB50E201D627539004B33DF /* ZeroQueryContent.swift in Sources */,
 				66FA64C4270E62A5008BAEAD /* ReaderModeBlocklist.swift in Sources */,
 				663AFC4E26A25B2300E4C492 /* NSItemProviderExtensions.swift in Sources */,
+				2046912B2887836A00069C16 /* DragAndDropModifier.swift in Sources */,
 				39455F771FC83F430088A22C /* TabEventHandler.swift in Sources */,
 				E975C93827F23A3200945FD3 /* PlaceViews.swift in Sources */,
 				C9C18E0826559007004710CD /* SearchSuggestionViews.swift in Sources */,
+				204691282887833900069C16 /* FittedCard.swift in Sources */,
 				C91FA36026B198D000E82841 /* PageProgressBar.swift in Sources */,
 				3FE1BC2B27DFF753004122F8 /* SpaceEntitySummaryView.swift in Sources */,
 				BC07524C26C3B98F008B607A /* CheatsheetMenuView.swift in Sources */,
@@ -7851,6 +7880,7 @@
 				C98E40572658504C003AC0E2 /* NeevaSettingsSection.swift in Sources */,
 				C98E406126585C43003AC0E2 /* AboutSettingsSection.swift in Sources */,
 				66C423E22758652900C7E6EE /* DraggableBannerModifier.swift in Sources */,
+				20978E6C2874A9590009D346 /* CardListViews.swift in Sources */,
 				4AB678B626E874E40078F61B /* CreateSpaceOverlayContent.swift in Sources */,
 				4A9E28FD27E270DF00A70CA9 /* NFTSuggestionResult.swift in Sources */,
 				4A9F65412703CA2B00B7C06E /* SpaceContentSheetModel.swift in Sources */,
@@ -7882,6 +7912,7 @@
 				E942D4342810778300B4A3EC /* KnowledgeCardView.swift in Sources */,
 				4A227BE82758BE5B00A89322 /* SpaceComments.swift in Sources */,
 				C9BED4B92667D5D3001D9C77 /* Roobert.swift in Sources */,
+				20469125288782A400069C16 /* CardDropDelegate.swift in Sources */,
 				67F2A52E27306AE900CAE11A /* NotificationSettingsView.swift in Sources */,
 				E97149862849234200A6A1FC /* CheatsheetResultView.swift in Sources */,
 				BC23D4DB28277B6B00EF5EC2 /* InteractionLogger.swift in Sources */,
@@ -7895,6 +7926,7 @@
 				E64024EA27F2437900D65B63 /* ZeroQueryUX.swift in Sources */,
 				C9C18E1E265591A1004710CD /* Icons.swift in Sources */,
 				C965BDD4268E720400F02224 /* DebugDBSettingsSection.swift in Sources */,
+				204691212887825700069C16 /* CardStripModel.swift in Sources */,
 				EBE26B57220C959D00D1D99A /* BrowserViewController+TabToolbarDelegate.swift in Sources */,
 				C962778F26A21BC80078CDAF /* ArithmeticExtensions.swift in Sources */,
 				EBB89504219398E500EB91A0 /* TrackingProtectionPageStats.swift in Sources */,
@@ -7913,14 +7945,13 @@
 				C832BF8126E1566E00B9A1F8 /* CheatsheetOverlayContent.swift in Sources */,
 				EBB89508219398E500EB91A0 /* ContentBlocker+Safelist.swift in Sources */,
 				C94D40682684CC35003A6766 /* PublisherExtensions.swift in Sources */,
-				2052675F28779F15000550A1 /* DragToCloseInteraction.swift in Sources */,
-				20EA89F4286CC54200C432DF /* CardDropDelegate.swift in Sources */,
 				D3A9949D1A3686BD008AD1AC /* Tab.swift in Sources */,
 				E65075571E37F714006961AC /* FaviconSupport.swift in Sources */,
 				C9299E36268F9CF300758795 /* CloseButton.swift in Sources */,
 				67462B2C27D8363D00141379 /* DefaultBrowserIntestitialOnboardingView.swift in Sources */,
 				C832BF5F26E0A9E400B9A1F8 /* HTTPAuthPromptOverlayContent.swift in Sources */,
 				D3C744CD1A687D6C004CE85D /* URLFixup.swift in Sources */,
+				204691232887825700069C16 /* CardStripView.swift in Sources */,
 				32D95B0427A37C8100447507 /* CheatsheetTooltipPopoverView.swift in Sources */,
 				E4A961181AC041C40069AD6F /* ReadabilityService.swift in Sources */,
 				D3BE7B261B054D4400641031 /* main.swift in Sources */,
@@ -7952,17 +7983,17 @@
 				BCF864CB276C328300E94B3A /* InlineSearchProductView.swift in Sources */,
 				C965BDD6268E729000F02224 /* InternalSettingsView.swift in Sources */,
 				32FAB3DE27B62A5F00FEBDFE /* NeevaScopeLoadingView.swift in Sources */,
+				204691202887825700069C16 /* CardStripTabGroupCardView.swift in Sources */,
 				4AD771B42734F06900B6769D /* EntityInfoView.swift in Sources */,
 				8AA6A4BE2808EC8C00AA4E76 /* ArchivedTabSettings.swift in Sources */,
 				C9BED4C9266824D7001D9C77 /* FadingHorizontalScrollView.swift in Sources */,
 				66EA9BF72776A7B60013DB07 /* OverlayManager.swift in Sources */,
 				D3972BF31C22412B00035B87 /* ShareExtensionHelper.swift in Sources */,
+				20217DA128666575003EF3A7 /* BorderTreatment.swift in Sources */,
 				6604922826843975002AC35D /* Intents.intentdefinition in Sources */,
 				F35B8D2D1D6383E9008E3D61 /* SessionRestoreHelper.swift in Sources */,
-				4A88F9732662AEAB007C203D /* CardStrip.swift in Sources */,
 				C9E5F2B82673F7F700025A7F /* GeometryExtensions.swift in Sources */,
 				20318F252823786A003B03C1 /* DebounceObject.swift in Sources */,
-				203A9383283F1E9C00FA4E73 /* CardGroupView.swift in Sources */,
 				C96AC26726A5C9C4001CF78C /* NeevaFeatureFlagSettingsView.swift in Sources */,
 				66EA9BF4277683EE0013DB07 /* OverlayView.swift in Sources */,
 				66888B1E26E19A5100DDF2D4 /* NotificationPermissionHelper.swift in Sources */,
@@ -7987,7 +8018,6 @@
 				C8F457AA1F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift in Sources */,
 				1A840EC127889E8C005F6003 /* SearchEngineSettings.swift in Sources */,
 				8A2401CB26BB4D75006ABF7D /* RatingsCard.swift in Sources */,
-				4A88F97726630F39007C203D /* Card.swift in Sources */,
 				E40FAB0C1A7ABB77009CB80D /* WebServer.swift in Sources */,
 				E6EA734727F60E0F00845FFB /* NeevaConstantsExtensions.swift in Sources */,
 			);

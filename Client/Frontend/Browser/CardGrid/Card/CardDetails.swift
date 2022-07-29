@@ -694,10 +694,9 @@ class TabGroupCardDetails: CardDropDelegate, ObservableObject {
 
     @Published var manager: TabManager
     @Published var isShowingDetails = false
+    @Published var isSelected: Bool = false
 
-    var isSelected: Bool {
-        manager.selectedTab?.rootUUID == id
-    }
+    private var selectedTabListener: AnyCancellable?
 
     var isExpanded: Bool {
         get {
@@ -788,6 +787,11 @@ class TabGroupCardDetails: CardDropDelegate, ObservableObject {
                     manager: manager,
                     isChild: true)
             })
+
+        setIsSelected(tab: tabManager.selectedTab)
+        selectedTabListener = tabManager.selectedTabPublisher.sink { [weak self] selectedTab in
+            self?.setIsSelected(tab: selectedTab)
+        }
     }
 
     func onSelect() {
@@ -798,6 +802,10 @@ class TabGroupCardDetails: CardDropDelegate, ObservableObject {
         if let item = manager.getTabGroup(for: id) {
             manager.closeTabGroup(item, showToast: showToast)
         }
+    }
+
+    func setIsSelected(tab: Tab?) {
+        self.isSelected = tab?.rootUUID == self.id
     }
 
     public override func dropEntered(info: DropInfo) {

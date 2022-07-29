@@ -87,6 +87,18 @@ extension View {
             )
     }
 
+    func onWidthOfViewChanged(perform updater: @escaping (CGFloat) -> Void) -> some View {
+        self
+            .background(
+                GeometryReader { geom in
+                    Color.clear
+                        .useEffect(deps: geom.size.width) { width in
+                            updater(width)
+                        }
+                }
+            )
+    }
+
     func onSizeOfViewChanged(perform updater: @escaping (CGSize) -> Void) -> some View {
         self
             .background(

@@ -32,6 +32,7 @@ struct TopBarContent: View {
     let chromeModel: TabChromeModel
     let readerModeModel: ReaderModeModel
     var web3Model: Web3Model
+    var geom: GeometryProxy
 
     let newTab: () -> Void
     let onCancel: () -> Void
@@ -106,7 +107,8 @@ struct TopBarContent: View {
                 onMenuAction: onMenuAction,
                 newTab: newTab,
                 onCancel: onCancel,
-                onOverflowMenuAction: onOverflowMenuAction
+                onOverflowMenuAction: onOverflowMenuAction,
+                geom: geom
             )
         #else
             TopBarView(
@@ -117,7 +119,8 @@ struct TopBarContent: View {
                 onMenuAction: onMenuAction,
                 newTab: newTab,
                 onCancel: onCancel,
-                onOverflowMenuAction: onOverflowMenuAction
+                onOverflowMenuAction: onOverflowMenuAction,
+                geom: geom
             )
         #endif
     }
