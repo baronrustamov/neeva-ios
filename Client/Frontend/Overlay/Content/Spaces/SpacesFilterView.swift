@@ -10,6 +10,15 @@ enum SpaceFilterState: String, CaseIterable, Identifiable {
     case ownedByMe = "Owned by me"
 
     var id: RawValue { rawValue }
+
+    var localizedString: LocalizedStringKey {
+        switch self {
+        case .allSpaces:
+            return "All Spaces"
+        case .ownedByMe:
+            return "Can edit"
+        }
+    }
 }
 
 public enum SpaceSortType: String, CaseIterable, Identifiable {
@@ -22,6 +31,15 @@ public enum SpaceSortType: String, CaseIterable, Identifiable {
         switch self {
         case .updatedDate: return \Space.timestamp.anyComparable
         case .name: return \Space.name.anyComparable
+        }
+    }
+
+    var localizedString: LocalizedStringKey {
+        switch self {
+        case .updatedDate:
+            return "Last Updated"
+        case .name:
+            return "Name"
         }
     }
 }
@@ -77,7 +95,7 @@ struct SpacesFilterView: View {
                 ForEach(SpaceFilterState.allCases) {
                     data in
                     GroupedRowButtonView(
-                        label: LocalizedStringKey(data.rawValue),
+                        label: data.localizedString,
                         symbol: spaceCardModel.viewModel.filterState == data
                             ? .checkmark : nil
                     ) {
@@ -105,7 +123,7 @@ struct SpacesFilterView: View {
             VStack(spacing: 0) {
                 ForEach(SpaceSortType.allCases) { data in
                     GroupedRowButtonView(
-                        label: LocalizedStringKey(data.rawValue),
+                        label: data.localizedString,
                         nicon: spaceCardModel.viewModel.sortType == data
                             ? spaceCardModel.viewModel.sortOrder.symbol : nil
                     ) {

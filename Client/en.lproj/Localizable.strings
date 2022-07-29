@@ -54,3 +54,9 @@
 
 /* section header to group tabs created more than 30 days ago */
 "Older" = "Older";
+
+/* the delete action to delete an item from a space */
+"delete from" = "delete from";
+
+/* the save action to save an item to a space */
+"save to" = "save to";

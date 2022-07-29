@@ -56,7 +56,7 @@ struct SessionActionsModifier: ViewModifier {
                             },
                             label: {
                                 Label(
-                                    title: { Text("Switch") },
+                                    title: { Text(verbatim: "Switch") },
                                     icon: {
                                         switch switchToNode {
                                         case .Polygon:

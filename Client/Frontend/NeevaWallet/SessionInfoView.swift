@@ -74,7 +74,7 @@ struct SessionInfoView: View {
                     }) {
                         HStack(spacing: 4) {
                             Symbol(decorative: .wifiSlash, style: .bodyMedium)
-                            Text("Disconnect")
+                            Text(verbatim: "Disconnect")
                         }
                     }.buttonStyle(DashboardButtonStyle())
                     let nodeToSwitchTo =
@@ -90,7 +90,7 @@ struct SessionInfoView: View {
                             default:
                                 TokenType.matic.polygonLogo
                             }
-                            Text("Switch Chain")
+                            Text(verbatim: "Switch Chain")
                         }
                     }.buttonStyle(DashboardButtonStyle())
                 }
