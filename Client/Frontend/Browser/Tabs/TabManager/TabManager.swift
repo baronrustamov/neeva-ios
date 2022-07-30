@@ -1016,6 +1016,12 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         tabs.remove(at: removalIndex)
         tab.closeWebView()
 
+        tabs.forEach {
+            if $0.parent == tab {
+                $0.parent = nil
+            }
+        }
+
         if tab.isIncognito && incognitoTabs.count < 1 {
             incognitoConfiguration = TabManager.makeWebViewConfig(isIncognito: true)
         }

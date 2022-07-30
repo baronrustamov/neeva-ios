@@ -6,7 +6,9 @@ import XCTest
 
 class SuggestionBackButtonTests: BaseTestCase {
     override func setUp() {
-        if testName == "testSuggestionBackButtonEnabledFromCardGrid" {
+        if testName == "testSuggestionBackButtonEnabledFromCardGrid"
+            || testName == "testTabNotRemovedAfterParentIsDeleted"
+        {
             launchArguments.append(LaunchArguments.DontAddTabOnLaunch)
         }
 
@@ -76,5 +78,35 @@ class SuggestionBackButtonTests: BaseTestCase {
 
         // Confirm returned to parent tab.
         waitForExistence(app.staticTexts["Example Domain"])
+    }
+
+    func testTabNotRemovedAfterParentIsDeleted() {
+        // Open parent tab.
+        app.buttons["Add Tab"].tap()
+        waitForExistence(app.buttons["Cancel"])
+        performSearch()
+
+        // Open tab from parent.
+        goToAddressBar()
+        performSearch(text: path(forTestPage: "test-mozilla-book.html"))
+
+        // Delete parent.
+        goToTabTray()
+        waitForExistence(app.buttons["Example Domain, Tab"])
+        app.buttons["Example Domain, Tab"].tap(force: true)
+
+        waitForExistence(app.buttons["Show Tabs"])
+        app.buttons["Show Tabs"].press(forDuration: 1)
+
+        waitForExistence(app.buttons["Close Tab"])
+        app.buttons["Close Tab"].tap()
+
+        // Try to navigate back to deleted parent.
+        app.buttons["Back"].tap()
+        waitForExistence(app.buttons["Cancel"])
+        app.buttons["Cancel"].tap()
+
+        // Confirm user is still on the child tab.
+        waitForExistence(app.otherElements["The Book of Mozilla"])
     }
 }
