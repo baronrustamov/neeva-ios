@@ -770,9 +770,11 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     ) {
         if let atIndex = atIndex, atIndex <= tabs.count {
             tabs.insert(tab, at: atIndex)
-        } else if parent == nil || parent?.isIncognito != tab.isIncognito {
+        } else {
             var insertIndex: Int? = nil
 
+            // Add tab to be root of a tab group if it follows the rule for the nytimes case.
+            // See TabGroupTests.swift for example.
             for possibleChildTab in isIncognito ? incognitoTabs : normalTabs {
                 if addTabToTabGroupIfNeeded(newTab: tab, possibleChildTab: possibleChildTab) {
                     guard let childTabIndex = tabs.firstIndex(of: possibleChildTab) else {
@@ -782,7 +784,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
                     // Insert the tab where the child tab is so it appears
                     // before it in the Tab Group.
                     insertIndex = childTabIndex
-
                     break
                 }
             }
@@ -790,22 +791,29 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             if let insertIndex = insertIndex {
                 tabs.insert(tab, at: insertIndex)
             } else {
-                tabs.append(tab)
-            }
-        } else if let parent = parent, var insertIndex = tabs.firstIndex(of: parent) {
-            insertIndex += 1
-            while insertIndex < tabs.count && tabs[insertIndex].isDescendentOf(parent) {
-                insertIndex += 1
+                // If the tab wasn't made a parent of a tab group, move
+                // it next to its parent if it has one.
+                if let parent = parent, var insertIndex = tabs.firstIndex(of: parent) {
+                    insertIndex += 1
+                    while insertIndex < tabs.count && tabs[insertIndex].isDescendentOf(parent) {
+                        insertIndex += 1
+                    }
+
+                    if keepInParentTabGroup {
+                        tab.rootUUID = parent.rootUUID
+                    }
+
+                    tabs.insert(tab, at: insertIndex)
+                } else {
+                    // Else just add it to the end of the tabs.
+                    tabs.append(tab)
+                }
             }
 
-            tab.parent = parent
-            tab.parentUUID = parent.tabUUID
-
-            if keepInParentTabGroup {
-                tab.rootUUID = parent.rootUUID
+            if let parent = parent {
+                tab.parent = parent
+                tab.parentUUID = parent.tabUUID
             }
-
-            tabs.insert(tab, at: insertIndex)
         }
 
         if notify {

@@ -49,6 +49,17 @@ class TabGroupTests: BaseTestCase {
         confirmOneTabGroupExists()
     }
 
+    func testNYTimesCaseCreatesTabGroupFromAddressBar() {
+        openURL()
+        waitForExistence(app.links["More information..."], timeout: 30)
+        app.links["More information..."].tap()
+
+        openURL()
+
+        goToTabTray()
+        confirmOneTabGroupExists()
+    }
+
     /// Tests the case above, with multiple tabs.
     func testNYTimesCaseCreatesTabGroupRepeated() {
         openTestURLInNewTab()
@@ -90,7 +101,8 @@ class TabGroupTests: BaseTestCase {
 
         goToTabTray()
 
-        app.buttons["Close"].firstMatch.tap()
+        waitForExistence(app.buttons["Close"].firstMatch)
+        app.buttons["Close"].firstMatch.tap(force: true)
 
         // Restore the closed tab.
         app.buttons["Add Tab"].press(forDuration: 1)
@@ -112,7 +124,8 @@ class TabGroupTests: BaseTestCase {
 
         goToTabTray()
 
-        app.buttons["Close"].firstMatch.tap()
+        waitForExistence(app.buttons["Close"])
+        app.buttons["Close"].firstMatch.tap(force: true)
 
         // Restore the closed tab.
         waitForExistence(app.buttons["restore"])
