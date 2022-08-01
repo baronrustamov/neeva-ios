@@ -105,7 +105,9 @@ class SimulatedSwipeModel: ObservableObject {
             return
         }
 
-        hidden = !tab.canGoBack
+        // Keep the SimulatedSwipeController hidden if the WebView can go back.
+        // WebView back swipe takes priority over our simulated swipe.
+        hidden = !tab.canGoBack || (tab.webView?.canGoBack ?? false)
 
         if tab.backNavigationSuggestionQuery() == nil, let parent = tab.parent {
             coordinator?.setPreviewImage(parent.screenshot)
