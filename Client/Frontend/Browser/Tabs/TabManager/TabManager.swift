@@ -920,12 +920,27 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             self.selectTab(selectedSavedTab, notify: true)
         }
 
-        // remove restored tabs from recently closed
-        if let index = recentlyClosedTabs.firstIndex(of: savedTabs) {
-            recentlyClosedTabs.remove(at: index)
+        for savedTab in savedTabs {
+            // Find the group that contains the SavedTab.
+            guard let groupIndex = recentlyClosedTabs.firstIndex(where: { $0.contains(savedTab) })
+            else {
+                continue
+            }
+
+            // Remove the SavedTab from the group.
+            var group = recentlyClosedTabs[groupIndex]
+            group.removeAll { $0 == savedTab }
+
+            // Reinsert or delete the group
+            if group.count > 0 {
+                recentlyClosedTabs[groupIndex] = group
+            } else {
+                recentlyClosedTabs.remove(at: groupIndex)
+            }
         }
 
         closedTabsToShowToastFor.removeAll { savedTabs.contains($0) }
+        updateAllTabDataAndSendNotifications(notify: true)
 
         return selectedSavedTab
     }

@@ -184,11 +184,10 @@ class ContextMenuActionsBuilder {
     struct RecentlyClosedTabsAction: View {
         let tabManager: TabManager
         let fromTab: Bool
+        var recentlyClosedTabsFlattened: [SavedTab]
 
         var content: some View {
-            ForEach(
-                tabManager.recentlyClosedTabsFlattened, id: \.self
-            ) { tab in
+            ForEach(recentlyClosedTabsFlattened, id: \.self) { tab in
                 Button {
                     _ = tabManager.restoreSavedTabs([tab], overrideSelectedTab: fromTab)
                 } label: {
@@ -282,7 +281,8 @@ class MenuBuilder {
             return content.contextMenu {
                 if tabManager.recentlyClosedTabsFlattened.count > 0 {
                     ContextMenuActionsBuilder.RecentlyClosedTabsAction(
-                        tabManager: tabManager, fromTab: true)
+                        tabManager: tabManager, fromTab: true,
+                        recentlyClosedTabsFlattened: tabManager.recentlyClosedTabsFlattened)
                 }
 
                 ContextMenuActionsBuilder.ToggleIncognitoStateAction(tabManager: tabManager)

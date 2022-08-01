@@ -133,7 +133,8 @@ struct SwitcherToolbarView: View {
                 .contextMenu {
                     if bvc.tabManager.recentlyClosedTabsFlattened.count > 0 {
                         ContextMenuActionsBuilder.RecentlyClosedTabsAction(
-                            tabManager: bvc.tabManager, fromTab: false)
+                            tabManager: bvc.tabManager, fromTab: false,
+                            recentlyClosedTabsFlattened: bvc.tabManager.recentlyClosedTabsFlattened)
                     }
                 }
                 .disabled(gridModel.switcherState != .tabs && !NeevaUserInfo.shared.isUserLoggedIn)
