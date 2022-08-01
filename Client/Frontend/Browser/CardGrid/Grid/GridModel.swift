@@ -66,7 +66,7 @@ class GridModel: ObservableObject {
         needsScrollToSelectedTab += 1
     }
 
-    public func setSwitcherState(to state: SwitcherView) {
+    func setSwitcherState(to state: SwitcherView) {
         gridCanAnimate = true
 
         if state != switcherState {

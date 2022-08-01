@@ -6,10 +6,8 @@ import Combine
 import Shared
 import SwiftUI
 
-public enum CardControllerUX {
-    static let BottomPadding: CGFloat = 50
+enum CardControllerUX {
     static let Height: CGFloat = 75
-    static let HandleWidth: CGFloat = 50
 }
 
 struct CardStripContent: View {

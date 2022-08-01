@@ -25,7 +25,6 @@ class ContextMenuHelper: NSObject {
     var resetGestureTimer: Timer?
     var scrolling = false
 
-    fileprivate var nativeHighlightLongPressRecognizer: UILongPressGestureRecognizer?
     fileprivate(set) var elements: Elements?
 
     required init(tab: Tab) {
@@ -55,12 +54,6 @@ extension ContextMenuHelper: UIGestureRecognizerDelegate, UIScrollViewDelegate {
     }
 
     private func replaceWebViewLongPress() {
-        // WebKit installs gesture handlers async. If `replaceWebViewLongPress` is called after a wkwebview in most cases a small delay is sufficient
-        // See also https://bugs.webkit.org/show_bug.cgi?id=193366
-        nativeHighlightLongPressRecognizer =
-            gestureRecognizerWithDescriptionFragment("ContextMenuHelper")
-            as? UILongPressGestureRecognizer
-
         let imageLongPressGestureRecognizer = UILongPressGestureRecognizer(
             target: self, action: #selector(self.handleImageLongPress))
         tab?.webView?.scrollView.addGestureRecognizer(imageLongPressGestureRecognizer)
@@ -135,10 +128,7 @@ extension ContextMenuHelper: TabContentScript {
         return "contextMenuMessageHandler"
     }
 
-    func userContentController(
-        _ userContentController: WKUserContentController,
-        didReceiveScriptMessage message: WKScriptMessage
-    ) {
+    func userContentController(didReceiveScriptMessage message: WKScriptMessage) {
         guard let data = message.body as? [String: AnyObject] else {
             return
         }

@@ -26,9 +26,7 @@ func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
 protocol TabContentScript {
     static func name() -> String
     func scriptMessageHandlerName() -> String?
-    func userContentController(
-        _ userContentController: WKUserContentController,
-        didReceiveScriptMessage message: WKScriptMessage)
+    func userContentController(didReceiveScriptMessage message: WKScriptMessage)
 }
 
 @objc
@@ -859,8 +857,7 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
             if let scriptMessageHandlerName = helper.scriptMessageHandlerName(),
                 scriptMessageHandlerName == message.name
             {
-                helper.userContentController(
-                    userContentController, didReceiveScriptMessage: message)
+                helper.userContentController(didReceiveScriptMessage: message)
                 return
             }
         }

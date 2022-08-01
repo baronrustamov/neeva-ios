@@ -23,7 +23,6 @@ class ZeroQueryTests: XCTestCase {
     var suggestionsModel: SuggestionModel!
     var tabManager: TabManager!
     var tabContainerModel: TabContainerModel!
-    var tabContainerHost: TabContainerHost!
 
     override func setUp() {
         super.setUp()
@@ -33,109 +32,11 @@ class ZeroQueryTests: XCTestCase {
         self.zQM = bvc.zeroQueryModel
         self.tabManager = TabManager(profile: profile, imageStore: nil)
         self.tabContainerModel = TabContainerModel(bvc: bvc)
-        self.tabContainerHost = TabContainerHost(model: self.tabContainerModel, bvc: bvc)
     }
 
     override func tearDown() {
         self.profile._shutdown()
         super.tearDown()
-    }
-
-    func testZeroQueryInsideContentHost() throws {
-        try skipTest(issue: 2522, "fails with new content layout, disabling until that stabilizes")
-        let tab = tabManager.addTab()
-        tab.loadRequest(URLRequest(url: .aboutBlank))
-        tabManager.selectTab(tab, notify: true)
-        waitForCondition(condition: {
-            switch tabContainerModel.currentContentUI {
-            case .webPage:
-                return true
-            default:
-                return false
-            }
-        })
-        try assertTabContentOnlyContainsWebContainer()
-
-        tabContainerModel.updateContent(
-            .showZeroQuery(isIncognito: false, isLazyTab: true, .tabTray))
-        try assertTabContentOnlyContainsZeroQuery()
-
-        tabContainerModel.updateContent(.hideZeroQuery)
-        try assertTabContentOnlyContainsWebContainer()
-    }
-
-    func testLazyTabCancel() throws {
-        try skipTest(issue: 2522, "fails with new content layout, disabling until that stabilizes")
-        let tab = tabManager.addTab()
-        tab.loadRequest(URLRequest(url: .aboutBlank))
-        tabManager.selectTab(tab, notify: true)
-        waitForCondition(condition: {
-            switch tabContainerModel.currentContentUI {
-            case .webPage:
-                return true
-            default:
-                return false
-            }
-        })
-        try assertTabContentOnlyContainsWebContainer()
-
-        tabContainerModel.updateContent(
-            .showZeroQuery(isIncognito: false, isLazyTab: true, .tabTray))
-        try assertTabContentOnlyContainsZeroQuery()
-
-        tabContainerModel.updateContent(.hideZeroQuery)
-        try assertTabContentOnlyContainsWebContainer()
-    }
-
-    func testSuggestionUI() throws {
-        try skipTest(issue: 2522, "fails with new content layout, disabling until that stabilizes")
-        let tab = tabManager.addTab()
-        tab.loadRequest(URLRequest(url: .aboutBlank))
-        tabManager.selectTab(tab, notify: true)
-        waitForCondition(condition: {
-            switch tabContainerModel.currentContentUI {
-            case .webPage:
-                return true
-            default:
-                return false
-            }
-        })
-        try assertTabContentOnlyContainsWebContainer()
-
-        tabContainerModel.updateContent(.showSuggestions)
-        try assertTabContentOnlyContainsWebContainer()
-
-        tabContainerModel.updateContent(
-            .showZeroQuery(isIncognito: false, isLazyTab: true, .tabTray))
-        try assertTabContentOnlyContainsZeroQuery()
-
-        tabContainerModel.updateContent(.showSuggestions)
-        try assertTabContentOnlyContainsSuggestions()
-
-        tabContainerModel.updateContent(.hideSuggestions)
-        try assertTabContentOnlyContainsZeroQuery()
-
-        tabContainerModel.updateContent(.hideZeroQuery)
-        try assertTabContentOnlyContainsWebContainer()
-    }
-
-    func assertTabContentOnlyContainsZeroQuery() throws {
-        let group = try tabContainerHost.rootView.inspect().find(ViewType.Group.self)
-        let content = try group.view(ZeroQueryContent.self, 0).actualView()
-        XCTAssertNotNil(content)
-        XCTAssertEqual(group.count, 1)
-    }
-
-    func assertTabContentOnlyContainsSuggestions() throws {
-        let group = try tabContainerHost.rootView.inspect().find(ViewType.Group.self)
-        let content = try group.view(SuggestionsContent.self, 0).actualView()
-        XCTAssertNotNil(content)
-        XCTAssertEqual(group.count, 1)
-    }
-
-    func assertTabContentOnlyContainsWebContainer() throws {
-        let group = try tabContainerHost.rootView.inspect().find(ViewType.Group.self)
-        XCTAssertEqual(group.count, 1)
     }
 
     func testDeletionOfAllDefaultSites() {

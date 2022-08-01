@@ -340,35 +340,6 @@ class SpaceEntityThumbnail: CardDetails, AccessingManagerProvider {
         return data.url?.isImage ?? false
     }
 
-    var richEntityPreviewURL: URL? {
-        guard case .richEntity(let richEntity) = data.previewEntity else {
-            return nil
-        }
-        let spaceURL = NeevaConstants.appSpacesURL.appendingPathComponent(spaceID).absoluteString
-        return URL(string: "\(spaceURL)#kg-entity-\(richEntity.id)")
-
-    }
-
-    var productPreviewURL: URL? {
-        guard case .retailProduct(let product) = data.previewEntity else {
-            return nil
-        }
-        let spaceURL = NeevaConstants.appSpacesURL.appendingPathComponent(spaceID).absoluteString
-        return URL(string: "\(spaceURL)#retail-widget-\(product.id)")
-    }
-
-    var techDocURL: URL? {
-        guard case .techDoc(let techDoc) = data.previewEntity else {
-            return nil
-        }
-        let spaceURL = NeevaConstants.appSpacesURL.appendingPathComponent(spaceID).absoluteString
-        return URL(string: "\(spaceURL)#techdoc-\(techDoc.id)-\(techDoc.id)")
-    }
-
-    var previewURL: URL? {
-        techDocURL ?? productPreviewURL ?? richEntityPreviewURL
-    }
-
     init(data: SpaceEntityData, spaceID: String, space: Space? = nil) {
         self.spaceID = spaceID
         self.data = data
@@ -652,6 +623,7 @@ class SiteCardDetails: CardDetails, AccessingManagerProvider {
     typealias Manager = SiteFetcher
 
     @Published var manager: SiteFetcher
+    // periphery:ignore
     var anyCancellable: AnyCancellable? = nil
     var id: String
     var item: Site? { manager.get(for: id) }
@@ -672,14 +644,6 @@ class SiteCardDetails: CardDetails, AccessingManagerProvider {
         }
 
         fetcher.load(url: url, profile: tabManager.profile)
-    }
-
-    func thumbnail(size: CGFloat) -> some View {
-        return WebImage(
-            url:
-                URL(string: manager.get(for: id)?.pageMetadata?.mediaURL ?? "")
-        )
-        .resizable().aspectRatio(contentMode: .fill)
     }
 
     func onSelect() {
@@ -753,19 +717,6 @@ class TabGroupCardDetails: CardDropDelegate, ObservableObject {
 
     @Published var allDetails: [TabCardDetails] = []
 
-    var thumbnailDrawsHeader: Bool {
-        false
-    }
-
-    var accessibilityLabel: String {
-        "\(title), Tab Group"
-    }
-
-    var defaultIcon: String? {
-        id == manager.getTabGroup(for: id)?.children.first?.parentSpaceID
-            ? "bookmark.fill" : "square.grid.2x2.fill"
-    }
-
     init(tabGroup: TabGroup, tabManager: TabManager) {
         self.id = tabGroup.id
         self.manager = tabManager
@@ -799,10 +750,6 @@ class TabGroupCardDetails: CardDropDelegate, ObservableObject {
         }
     }
 
-    func onSelect() {
-        isShowingDetails = true
-    }
-
     func onClose(showToast: Bool) {
         if let item = manager.getTabGroup(for: id) {
             manager.closeTabGroup(item, showToast: showToast)
@@ -813,7 +760,7 @@ class TabGroupCardDetails: CardDropDelegate, ObservableObject {
         self.isSelected = tab?.rootUUID == self.id
     }
 
-    public override func dropEntered(info: DropInfo) {
+    override func dropEntered(info: DropInfo) {
         guard let draggingDetail = CardDropDelegate.draggingDetail else {
             return
         }

@@ -243,10 +243,7 @@ class ReaderMode: TabContentScript {
         delegate?.readerMode(didParseReadabilityResult: readabilityResult, forTab: tab)
     }
 
-    func userContentController(
-        _ userContentController: WKUserContentController,
-        didReceiveScriptMessage message: WKScriptMessage
-    ) {
+    func userContentController(didReceiveScriptMessage message: WKScriptMessage) {
         guard let msg = message.body as? [String: Any], let type = msg["Type"] as? String,
             let messageType = ReaderModeMessageType(rawValue: type)
         else { return }

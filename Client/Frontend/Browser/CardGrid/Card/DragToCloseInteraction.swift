@@ -13,8 +13,6 @@ struct DragToCloseInteraction: ViewModifier {
     @Environment(\.cardSize) private var cardSize
     @Environment(\.layoutDirection) private var layoutDirection
 
-    @EnvironmentObject private var browserModel: BrowserModel
-
     @State private var offset = CGFloat.zero
 
     private var dragToCloseThreshold: CGFloat {

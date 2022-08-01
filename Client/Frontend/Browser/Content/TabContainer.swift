@@ -39,6 +39,7 @@ class TabContainerModel: ObservableObject {
     /// Current content UI that is showing
     @Published private(set) var currentContentUI: ContentUIType
 
+    // periphery:ignore
     private var subscription: AnyCancellable? = nil
 
     private let zeroQueryModel: ZeroQueryModel
@@ -112,7 +113,6 @@ struct TabContainerContent: View {
     let spaceContentSheetModel: SpaceContentSheetModel?
 
     @EnvironmentObject private var chromeModel: TabChromeModel
-    @EnvironmentObject private var incognitoModel: IncognitoModel
     @EnvironmentObject private var scrollingControlModel: ScrollingControlModel
     @EnvironmentObject private var simulatedSwipeModel: SimulatedSwipeModel
 
@@ -233,26 +233,5 @@ struct TabContainerContent: View {
                 forceTopSites: true)
             self.zeroQueryModel.updateSuggestedSites()
         }.animation(.spring(), value: model.currentContentUI)
-    }
-}
-
-// TODO: This class is only used by tests. We should be able to remove it.
-class TabContainerHost: UIHostingController<TabContainerContent> {
-    init(model: TabContainerModel, bvc: BrowserViewController) {
-        super.init(
-            rootView: TabContainerContent(
-                model: model,
-                bvc: bvc,
-                zeroQueryModel: bvc.zeroQueryModel,
-                suggestionModel: bvc.suggestionModel,
-                spaceContentSheetModel: FeatureFlag[.spaceComments]
-                    ? SpaceContentSheetModel(
-                        tabManager: bvc.tabManager,
-                        spaceModel: bvc.gridModel.spaceCardModel) : nil)
-        )
-    }
-
-    @objc required dynamic init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }

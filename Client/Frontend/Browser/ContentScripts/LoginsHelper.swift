@@ -91,10 +91,7 @@ class LoginsHelper: TabContentScript {
         return LoginRecord(fromJSONDict: dict)
     }
 
-    func userContentController(
-        _ userContentController: WKUserContentController,
-        didReceiveScriptMessage message: WKScriptMessage
-    ) {
+    func userContentController(didReceiveScriptMessage message: WKScriptMessage) {
         guard let res = message.body as? [String: Any],
             let type = res["type"] as? String
         else {

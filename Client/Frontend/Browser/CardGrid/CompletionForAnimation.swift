@@ -48,6 +48,7 @@ where Value: VectorArithmetic {
     }
 }
 
+// periphery:ignore
 extension View {
     /// Calls the completion handler whenever an animation on the given value completes.
     /// - Parameters:

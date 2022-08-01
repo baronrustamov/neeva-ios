@@ -329,10 +329,7 @@ extension ErrorPageHelper: TabContentScript {
         return "errorPageHelperMessageManager"
     }
 
-    func userContentController(
-        _ userContentController: WKUserContentController,
-        didReceiveScriptMessage message: WKScriptMessage
-    ) {
+    func userContentController(didReceiveScriptMessage message: WKScriptMessage) {
         guard let errorURL = message.frameInfo.request.url,
             let internalUrl = InternalURL(errorURL),
             internalUrl.isErrorPage,

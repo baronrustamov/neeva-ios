@@ -42,10 +42,7 @@ class DownloadContentScript: TabContentScript {
         return true
     }
 
-    func userContentController(
-        _ userContentController: WKUserContentController,
-        didReceiveScriptMessage message: WKScriptMessage
-    ) {
+    func userContentController(didReceiveScriptMessage message: WKScriptMessage) {
         guard let browserViewController = tab?.browserViewController,
             let dictionary = message.body as? [String: Any?],
             let url = dictionary["url"] as? String,

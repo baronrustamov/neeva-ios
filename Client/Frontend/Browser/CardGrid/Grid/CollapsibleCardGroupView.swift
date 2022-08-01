@@ -15,13 +15,10 @@ struct CollapsedCardGroupView: View {
     let previousCell: TabCell?
     let nextCell: TabCell?
 
-    @Environment(\.aspectRatio) private var aspectRatio
-    @Environment(\.cardSize) private var size
     @Environment(\.columns) private var columns
     @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject private var gridModel: GridModel
 
-    @State private var frame = CGRect.zero
     @State private var isFirstVisible = true
     @State private var isLastVisible = false
 
@@ -158,7 +155,6 @@ struct ExpandedCardGroupRowView: View {
     let nextCell: TabCell?
     var singleLined: Bool = false
 
-    @Environment(\.aspectRatio) private var aspectRatio
     @Environment(\.cardSize) private var size
     @EnvironmentObject var browserModel: BrowserModel
 
@@ -306,11 +302,6 @@ struct TabGroupHeader: View {
                 }
             }
         }
-    }
-
-    var groupFromSpace: Bool {
-        return groupDetails.id
-            == groupDetails.manager.getTabGroup(for: groupDetails.id)?.children.first?.parentSpaceID
     }
 
     var body: some View {

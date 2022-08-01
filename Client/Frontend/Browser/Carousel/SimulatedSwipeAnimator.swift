@@ -28,9 +28,9 @@ private let DefaultParameters =
         cancelAnimationDuration: 0.3)
 
 protocol SimulateForwardAnimatorDelegate: AnyObject {
-    func simulateForwardAnimatorStartedSwipe(_ animator: SimulatedSwipeAnimator)
-    func simulateForwardAnimatorCancelledSwipe(_ animator: SimulatedSwipeAnimator)
-    func simulateForwardAnimatorFinishedSwipe(_ animator: SimulatedSwipeAnimator)
+    func simulateForwardAnimatorStartedSwipe()
+    func simulateForwardAnimatorCancelledSwipe()
+    func simulateForwardAnimatorFinishedSwipe()
 }
 
 class SimulatedSwipeAnimator: NSObject {
@@ -86,10 +86,10 @@ extension SimulatedSwipeAnimator {
                     self.animatingView?.transform = .identity
                 },
                 completion: { _ in
-                    self.delegate?.simulateForwardAnimatorCancelledSwipe(self)
+                    self.delegate?.simulateForwardAnimatorCancelledSwipe()
                 })
         } else {
-            self.delegate?.simulateForwardAnimatorFinishedSwipe(self)
+            self.delegate?.simulateForwardAnimatorFinishedSwipe()
             self.contentView?.transform = .identity
             UIView.animate(
                 withDuration: params.recenterAnimationDuration,
@@ -129,15 +129,6 @@ extension SimulatedSwipeAnimator {
             }
         }
     }
-
-    fileprivate func transformForTranslation(_ translation: CGFloat) -> CGAffineTransform {
-        return CGAffineTransform(translationX: translation, y: 0)
-    }
-
-    fileprivate func alphaForDistanceFromCenter(_ distance: CGFloat) -> CGFloat {
-        let swipeWidth = animatingView?.frame.size.width ?? 1
-        return 1 - (distance / swipeWidth) * (1 - params.totalAlpha)
-    }
 }
 
 //MARK: Selectors
@@ -148,7 +139,7 @@ extension SimulatedSwipeAnimator {
         switch recognizer.state {
         case .began:
             prevOffset = containerCenter
-            self.delegate?.simulateForwardAnimatorStartedSwipe(self)
+            self.delegate?.simulateForwardAnimatorStartedSwipe()
         case .changed:
             withAnimation {
                 model?.overlayOffset = translation.x

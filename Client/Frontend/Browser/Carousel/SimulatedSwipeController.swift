@@ -11,7 +11,7 @@ enum SwipeDirection {
     case forward, back
 }
 
-public enum SwipeUX {
+enum SwipeUX {
     static let EdgeWidth: CGFloat = 30
 }
 
@@ -20,7 +20,6 @@ class SimulatedSwipeController:
 {
     var model: SimulatedSwipeModel
     var animator: SimulatedSwipeAnimator!
-    var superview: UIView!
     let blankView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemBackground
@@ -34,9 +33,8 @@ class SimulatedSwipeController:
     }()
     var progressView: UIHostingController<CarouselProgressView>!
 
-    init(model: SimulatedSwipeModel, superview: UIView!) {
+    init(model: SimulatedSwipeModel) {
         self.model = model
-        self.superview = superview
         super.init(nibName: nil, bundle: nil)
 
         self.animator = SimulatedSwipeAnimator(
@@ -87,21 +85,21 @@ class SimulatedSwipeController:
         }
     }
 
-    func simulateForwardAnimatorStartedSwipe(_ animator: SimulatedSwipeAnimator) {
+    func simulateForwardAnimatorStartedSwipe() {
         targetPreviewView.isHidden = false
         if model.swipeDirection == .forward {
             model.goForward()
         }
     }
 
-    func simulateForwardAnimatorFinishedSwipe(_ animator: SimulatedSwipeAnimator) {
+    func simulateForwardAnimatorFinishedSwipe() {
         targetPreviewView.isHidden = true
         if model.swipeDirection == .back {
             model.goBack()
         }
     }
 
-    func simulateForwardAnimatorCancelledSwipe(_ animator: SimulatedSwipeAnimator) {
+    func simulateForwardAnimatorCancelledSwipe() {
         targetPreviewView.isHidden = true
     }
 }

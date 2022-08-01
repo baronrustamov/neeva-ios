@@ -31,15 +31,8 @@ struct TabGridContainer: View {
 
     @EnvironmentObject private var tabModel: TabCardModel
     @EnvironmentObject private var gridModel: GridModel
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @Environment(\.verticalSizeClass) private var verticalSizeClass
     @Environment(\.safeArea) private var safeArea
 
-    var landscapeMode: Bool {
-        verticalSizeClass == .compact || horizontalSizeClass == .regular
-    }
-
-    @Environment(\.columns) private var columns
     @State var cardStackGeom: CGSize = CGSize.zero
 
     var selectedRowId: TabCardModel.Row.ID? {

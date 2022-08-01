@@ -17,7 +17,6 @@ class SimulatedSwipeModel: ObservableObject {
     @Published var contentOffset: CGFloat = 0
 
     let tabManager: TabManager
-    let chromeModel: TabChromeModel
     let swipeDirection: SwipeDirection
     var forwardUrlMap = [String: [URL]?]()
     var progressModel = CarouselProgressModel(urls: [], index: 0)
@@ -27,9 +26,8 @@ class SimulatedSwipeModel: ObservableObject {
 
     private var subscriptions = Set<AnyCancellable>()
 
-    init(tabManager: TabManager, chromeModel: TabChromeModel, swipeDirection: SwipeDirection) {
+    init(tabManager: TabManager, swipeDirection: SwipeDirection) {
         self.tabManager = tabManager
-        self.chromeModel = chromeModel
         self.swipeDirection = swipeDirection
 
         register(self, forTabEvents: .didChangeURL)

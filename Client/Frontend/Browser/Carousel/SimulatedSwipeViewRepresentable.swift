@@ -6,7 +6,6 @@ import SwiftUI
 
 struct SimulatedSwipeViewRepresentable: UIViewControllerRepresentable {
     @ObservedObject var model: SimulatedSwipeModel
-    @ObservedObject var progressModel: CarouselProgressModel
     let superview: UIView!
 
     class Coordinator: NSObject {
@@ -52,18 +51,12 @@ struct SimulatedSwipeViewRepresentable: UIViewControllerRepresentable {
         }
     }
 
-    init(model: SimulatedSwipeModel, superview: UIView!) {
-        self.model = model
-        self.progressModel = model.progressModel
-        self.superview = superview
-    }
-
     func makeCoordinator() -> Coordinator {
         Coordinator()
     }
 
     func makeUIViewController(context: Context) -> SimulatedSwipeController {
-        let simulatedSwipeController = SimulatedSwipeController(model: model, superview: superview)
+        let simulatedSwipeController = SimulatedSwipeController(model: model)
         model.coordinator = context.coordinator
         context.coordinator.vc = simulatedSwipeController
 

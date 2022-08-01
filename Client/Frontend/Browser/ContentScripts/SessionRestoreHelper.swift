@@ -21,10 +21,7 @@ class SessionRestoreHelper: TabContentScript {
         return "sessionRestoreHelper"
     }
 
-    func userContentController(
-        _ userContentController: WKUserContentController,
-        didReceiveScriptMessage message: WKScriptMessage
-    ) {
+    func userContentController(didReceiveScriptMessage message: WKScriptMessage) {
         if let tab = tab, let params = message.body as? [String: AnyObject] {
             if params["name"] as! String == "didRestoreSession" {
                 DispatchQueue.main.async {

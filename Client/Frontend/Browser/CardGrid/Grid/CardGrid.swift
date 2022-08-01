@@ -11,7 +11,6 @@ enum SwitcherView: String, CaseIterable {
 }
 
 enum CardGridUX {
-    static let PickerPadding: CGFloat = 20
     static let GridSpacing: CGFloat = 20
 }
 
@@ -20,8 +19,6 @@ enum CardGridUX {
 struct CardGridBackground: View {
     @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var cardTransitionModel: CardTransitionModel
-    @EnvironmentObject var gridModel: GridModel
-    @EnvironmentObject var tabModel: TabCardModel
 
     var color: some View {
         cardTransitionModel.state == .hidden

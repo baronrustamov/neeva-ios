@@ -18,7 +18,6 @@ enum CardUX {
     static let FaviconSize: CGFloat = 18
     static let CloseButtonSize: CGFloat = 24
     static let HeaderSize: CGFloat = ButtonSize + 1
-    static let CardHeight: CGFloat = 174
     static let DefaultTabCardRatio: CGFloat = 200 / 164
 }
 
@@ -60,20 +59,6 @@ struct Card<Details>: View where Details: CardDetails {
 
     var tabCardDetail: TabCardDetails? {
         details as? TabCardDetails
-    }
-
-    var tabGroupCardDetail: TabGroupCardDetails? {
-        details as? TabGroupCardDetails
-    }
-
-    var titleInMainGrid: String {
-        if let rootUUID = tabCardDetail?.tab.rootUUID,
-            Defaults[.tabGroupNames][rootUUID] != nil
-        {
-            return Defaults[.tabGroupNames][rootUUID]!
-        } else {
-            return details.title
-        }
     }
 
     @Environment(\.selectionCompletion) private var selectionCompletion

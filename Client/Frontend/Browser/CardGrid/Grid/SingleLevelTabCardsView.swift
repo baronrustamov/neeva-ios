@@ -16,14 +16,6 @@ enum SingleLevelTabCardsViewUX {
 struct SingleLevelTabCardsView: View {
     @EnvironmentObject var tabModel: TabCardModel
     @EnvironmentObject private var browserModel: BrowserModel
-    @Environment(\.columns) private var columns
-
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @Environment(\.verticalSizeClass) private var verticalSizeClass
-
-    var landscapeMode: Bool {
-        verticalSizeClass == .compact || horizontalSizeClass == .regular
-    }
 
     let containerGeometry: GeometryProxy
     let incognito: Bool

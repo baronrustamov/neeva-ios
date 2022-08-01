@@ -113,8 +113,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
                     CreateSpaceOverlayContent()
                         .environmentObject(self.gridModel.spaceCardModel)
                 }
-            },
-            onMenuAction: { self.perform(overflowMenuAction: $0, targetButtonView: nil) }
+            }
         )
     }()
 
@@ -128,13 +127,13 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
     private(set) lazy var simulateForwardModel: SimulatedSwipeModel = {
         SimulatedSwipeModel(
-            tabManager: tabManager, chromeModel: chromeModel, swipeDirection: .forward
+            tabManager: tabManager, swipeDirection: .forward
         )
     }()
 
     private(set) lazy var simulatedSwipeModel: SimulatedSwipeModel = {
         SimulatedSwipeModel(
-            tabManager: tabManager, chromeModel: chromeModel, swipeDirection: .back
+            tabManager: tabManager, swipeDirection: .back
         )
     }()
 

@@ -41,10 +41,7 @@ class WebUIMessageHelper: TabContentScript {
         return messageHandlerName
     }
 
-    func userContentController(
-        _ userContentController: WKUserContentController,
-        didReceiveScriptMessage message: WKScriptMessage
-    ) {
+    func userContentController(didReceiveScriptMessage message: WKScriptMessage) {
         let frameOrigin = message.frameInfo.securityOrigin
 
         if frameOrigin.host != NeevaConstants.appHost {

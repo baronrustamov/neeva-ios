@@ -18,7 +18,6 @@ struct CompactCard<Details>: View where Details: TabCardDetails {
 
     private let isTop = FeatureFlag[.topCardStrip]
     private let minimumContentWidthRequirement: CGFloat = 115
-    private let squareSize = CardUX.FaviconSize + 1
 
     var preferredWidth: CGFloat {
         return
@@ -111,18 +110,6 @@ struct CompactCard<Details>: View where Details: TabCardDetails {
                         cornerRadius: CardUX.CompactCornerRadius
                     )
                 )
-        }
-    }
-
-    private struct ActionsModifier: ViewModifier {
-        let close: (() -> Void)?
-
-        func body(content: Content) -> some View {
-            if let close = close {
-                content.accessibilityAction(named: "Close", close)
-            } else {
-                content
-            }
         }
     }
 }

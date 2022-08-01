@@ -28,20 +28,6 @@ struct SpaceDetailList: View {
         primitive.ACL >= .edit && !(primitive.item?.isDigest ?? false)
     }
 
-    func descriptionForNote(_ details: SpaceEntityThumbnail) -> String? {
-        if let snippet = details.data.snippet, snippet.contains("](@") {
-            let index = snippet.firstIndex(of: "@")
-            var substring = snippet.suffix(from: index!)
-            if let endIndex = substring.firstIndex(of: ")") {
-                substring = substring[..<endIndex]
-                return snippet.replacingOccurrences(
-                    of: substring,
-                    with: SearchEngine.current.searchURLForQuery(String(substring))!.absoluteString)
-            }
-        }
-        return details.data.snippet
-    }
-
     var body: some View {
         VStack(spacing: 0) {
             if primitive.refreshSpaceSubscription != nil {
@@ -258,26 +244,6 @@ struct ListSeparatorModifier: ViewModifier {
                         bottom: 0,
                         trailing: 0)
                 )
-        }
-    }
-}
-
-struct CompactSeparatorModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        if #available(iOS 15.0, *) {
-            content
-                .listSectionSeparator(Visibility.hidden)
-                .listRowSeparator(Visibility.hidden)
-        } else {
-            content
-                .listRowInsets(
-                    EdgeInsets.init(
-                        top: 0,
-                        leading: 0,
-                        bottom: 0,
-                        trailing: 0)
-                )
-                .padding(.horizontal, 16)
         }
     }
 }

@@ -13,10 +13,6 @@ struct SpaceHeaderView: View {
     // This fixes iPad auto pop problem
     var onShowProfileUI: () -> Void
 
-    var owner: Space.Acl? {
-        space.acls.first(where: { $0.acl == .owner })
-    }
-
     var displayTitle: String {
         if space.isDigest {
             // This removes the count from the end of title.

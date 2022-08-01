@@ -10,19 +10,16 @@ class SwitcherToolbarModel: ObservableObject {
     let tabManager: TabManager
     let openLazyTab: () -> Void
     let createNewSpace: () -> Void
-    private let onMenuAction: (OverflowMenuAction) -> Void
     @Published var dragOffset: CGFloat? = nil
 
     init(
         tabManager: TabManager,
         openLazyTab: @escaping () -> Void,
-        createNewSpace: @escaping () -> Void,
-        onMenuAction: @escaping (OverflowMenuAction) -> Void
+        createNewSpace: @escaping () -> Void
     ) {
         self.tabManager = tabManager
         self.openLazyTab = openLazyTab
         self.createNewSpace = createNewSpace
-        self.onMenuAction = onMenuAction
     }
 
     func onToggleIncognito() {
@@ -40,7 +37,6 @@ struct SwitcherToolbarView: View {
     @EnvironmentObject var toolbarModel: SwitcherToolbarModel
 
     @State var presentingMenu: Bool = false
-    @State private var action: OverflowMenuAction? = nil
 
     @Default(.currentTheme) var currentTheme
 

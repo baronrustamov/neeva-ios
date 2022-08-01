@@ -31,10 +31,7 @@ class CookieCutterHelper: TabContentScript {
         "cookieCutterHandler"
     }
 
-    func userContentController(
-        _ userContentController: WKUserContentController,
-        didReceiveScriptMessage message: WKScriptMessage
-    ) {
+    func userContentController(didReceiveScriptMessage message: WKScriptMessage) {
         guard
             let data = message.body as? [String: Any], let update = data["update"] as? String
         else {

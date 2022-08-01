@@ -58,7 +58,7 @@ class CardTests: XCTestCase {
         gridModel = GridModel(tabManager: manager, tabCardModel: tabCardModel)
         incognitoModel = IncognitoModel(isIncognito: false)
         switcherToolbarModel = SwitcherToolbarModel(
-            tabManager: manager, openLazyTab: {}, createNewSpace: {}, onMenuAction: { _ in })
+            tabManager: manager, openLazyTab: {}, createNewSpace: {})
         browserModel = BrowserModel(
             gridModel: gridModel, tabManager: manager, chromeModel: .init(),
             incognitoModel: incognitoModel, switcherToolbarModel: switcherToolbarModel,
