@@ -1589,7 +1589,7 @@ extension BrowserViewController: JSPromptAlertControllerDelegate {
 extension BrowserViewController {
     func showAddToSpacesSheet(
         url: URL, title: String?, description: String? = nil,
-        webView: WKWebView, importData: SpaceImportHandler? = nil
+        webView: WKWebView?, importData: SpaceImportHandler? = nil
     ) {
         // TODO: Avoid needing to lookup the Tab when we already have the WebView.
         // There should be a better way to do this.
@@ -1598,37 +1598,61 @@ extension BrowserViewController {
             return tabManager.tabs.filter({ $0.webView?.url == url }).first
         }
 
-        // TODO: Inject this as a ContentScript to avoid the delay here.
-        webView.evaluateJavaScript(SpaceImportHandler.descriptionImageScript) {
-            [weak self]
-            (result, error) in
+        weak var model = self.gridModel.spaceCardModel
 
-            guard let self = self else { return }
+        // Look at mediaURL from page metadata and large images within the page and dedupe
+        // across URLs
+        var set = Set<String>()
+        var thumbnailUrls = [URL]()
+        if let mediaURL =
+            URL(string: getTab(tabManager: self.tabManager, url)?.pageMetadata?.mediaURL ?? "")
+        {
+            thumbnailUrls.append(mediaURL)
+            set.insert(mediaURL.absoluteString)
+        }
 
-            let output = result as? [[String]]
+        if let webView = webView {
+            // TODO: Inject this as a ContentScript to avoid the delay here.
+            webView.evaluateJavaScript(SpaceImportHandler.descriptionImageScript) {
+                [weak self]
+                (result, error) in
 
-            // Look at mediaURL from page metadata and large images within the page and dedupe
-            // across URLs
-            var set = Set<String>()
-            var thumbnailUrls = [URL]()
-            if let mediaURL =
-                URL(string: getTab(tabManager: self.tabManager, url)?.pageMetadata?.mediaURL ?? "")
-            {
-                thumbnailUrls.append(mediaURL)
-                set.insert(mediaURL.absoluteString)
+                guard let self = self else { return }
+                let output = result as? [[String]]
+
+                if let imageUrls = output?[1]
+                    .filter({ set.update(with: $0) == nil })
+                    .compactMap({ $0.asURL })
+                {
+                    thumbnailUrls.append(contentsOf: imageUrls)
+                }
+
+                let updater = SocialInfoUpdater.from(
+                    url: url, ogInfo: output?.last, title: title ?? ""
+                ) {
+                    range, data, id in
+                    if let details = model?.detailedSpace {
+                        details.allDetails.replaceSubrange(
+                            range, with: [SpaceEntityThumbnail(data: data, spaceID: id.id)])
+                    }
+                }
+
+                model?.thumbnailURLCandidates[url] = thumbnailUrls
+
+                let thumbnailUrl = thumbnailUrls.first(where: {
+                    $0.isImage
+                })?.absoluteString
+
+                self.showAddToSpacesSheet(
+                    url: url,
+                    title: updater?.title ?? title,
+                    description: description ?? updater?.description ?? output?.first?.first,
+                    thumbnail: thumbnailUrl,
+                    importData: importData,
+                    updater: updater)
             }
-
-            if let imageUrls = output?[1]
-                .filter({ set.update(with: $0) == nil })
-                .compactMap({ $0.asURL })
-            {
-                thumbnailUrls.append(contentsOf: imageUrls)
-            }
-
-            var updater: SocialInfoUpdater? = nil
-            weak var model = self.gridModel.spaceCardModel
-
-            updater = SocialInfoUpdater.from(url: url, ogInfo: output?.last, title: title ?? "") {
+        } else {
+            let updater = SocialInfoUpdater.from(url: url, ogInfo: nil, title: title ?? "") {
                 range, data, id in
                 if let details = model?.detailedSpace {
                     details.allDetails.replaceSubrange(
@@ -1644,8 +1668,8 @@ extension BrowserViewController {
 
             self.showAddToSpacesSheet(
                 url: url,
-                title: updater?.title ?? title,
-                description: description ?? updater?.description ?? output?.first?.first,
+                title: title,
+                description: description,
                 thumbnail: thumbnailUrl,
                 importData: importData,
                 updater: updater)

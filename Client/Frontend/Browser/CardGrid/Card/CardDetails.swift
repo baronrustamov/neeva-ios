@@ -238,6 +238,8 @@ public class TabCardDetails: CardDropDelegate, CardDetails, AccessingManagerProv
     }
 
     @ViewBuilder func contextMenu() -> some View {
+        let bvc = SceneDelegate.getBVC(with: manager.scene)
+
         if !tab.isIncognito {
             Button { [self] in
                 manager.duplicateTab(tab, incognito: tab.isIncognito)
@@ -257,17 +259,20 @@ public class TabCardDetails: CardDropDelegate, CardDetails, AccessingManagerProv
                 Label("Save to Spaces", systemSymbol: .bookmark)
             }.disabled(url == nil)
 
-            if tab.canonicalURL?.displayURL != nil, let bvc = tab.browserViewController {
+            if tab.canonicalURL?.displayURL != nil {
                 Button {
                     bvc.share(tab: self.tab, from: bvc.view, presentableVC: bvc)
                 } label: {
                     Label("Share", systemSymbol: .squareAndArrowUp)
                 }
-            } else {
+            }
+
+            if let url = tab.url?.absoluteString {
                 Button {
+                    copySuggestion(value: url, scene: self.manager.scene)
                 } label: {
-                    Label("Share", systemSymbol: .squareAndArrowUp)
-                }.disabled(true)
+                    Label("Copy Link", systemSymbol: .link)
+                }
             }
 
             if isChild {

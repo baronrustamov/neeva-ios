@@ -725,10 +725,10 @@ class Tab: NSObject, ObservableObject {
 
     func showAddToSpacesSheet() {
         guard let url = canonicalURL?.displayURL else { return }
-        guard let webView = webView else { return }
 
         if FeatureFlag[.spacify],
-            let domain = SpaceImportDomain(rawValue: self.url?.baseDomain ?? "")
+            let domain = SpaceImportDomain(rawValue: self.url?.baseDomain ?? ""),
+            let webView = webView
         {
             webView.evaluateJavaScript(domain.script) {
                 [weak browserViewController, weak self] (result, error) in
