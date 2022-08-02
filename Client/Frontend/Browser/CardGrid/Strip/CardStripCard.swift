@@ -71,12 +71,11 @@ struct CardStripCard<Details>: View where Details: TabCardDetails {
                         .accessibilityLabel("Close \(details.title)")
                 }
             }
-        }
+        }.animation(nil)
     }
 
     var card: some View {
         Button {
-            selectionCompletion()
             details.onSelect()
         } label: {
             if details.isPinned {
@@ -85,7 +84,6 @@ struct CardStripCard<Details>: View where Details: TabCardDetails {
             } else {
                 buttonContent
                     .frame(minWidth: details.isSelected ? preferredWidth : CardUX.FaviconSize + 12)
-
             }
         }
         .padding(.horizontal)
@@ -96,6 +94,8 @@ struct CardStripCard<Details>: View where Details: TabCardDetails {
 
     var body: some View {
         card
+            .transition(.identity)
+            .animation(CardTransitionUX.animation)
             .contextMenu(menuItems: details.contextMenu)
             .if(!details.isPinned) { view in
                 view

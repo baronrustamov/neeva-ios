@@ -98,10 +98,14 @@ struct TopBarView: View {
             }
             .opacity(scrollingControlModel.controlOpacity)
             .padding(.horizontal, shouldInsetHorizontally ? 12 : 0)
-            .padding(.bottom, chrome.estimatedProgress == nil ? 0 : -1)
+            .if(!cardStripModel.showCardStrip) {
+                $0.padding(.bottom, chrome.estimatedProgress == nil ? 0 : -1)
+            }
 
             if cardStripModel.showCardStrip {
                 CardStripView(containerGeometry: geom.size)
+                    .transition(.opacity.combined(with: .scale))
+                    .padding(.bottom, chrome.estimatedProgress == nil ? 0 : -1)
             }
 
             if !chrome.isEditingLocation {

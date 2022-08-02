@@ -63,20 +63,23 @@ private struct CollapsedCardStripTabGroupCardView: View {
             }
 
             Spacer()
-        }
+        }.animation(nil)
     }
 
     var body: some View {
         Button {
-            browserModel.tabManager.select(groupDetails.allDetails[0].tab)
+            groupDetails.allDetails[0].onSelect()
         } label: {
             content
         }
         .padding(.horizontal)
-        .background(Color.groupedBackground)
         .onWidthOfViewChanged { width in
             self.width = width
         }
+        .transition(.identity)
+        .animation(CardTransitionUX.animation)
+        .background(Color.groupedBackground)
+        .onDrop(of: ["public.url", "public.text"], delegate: groupDetails)
     }
 
     func calculateFaviconOpacity(index: Int) -> Double {
