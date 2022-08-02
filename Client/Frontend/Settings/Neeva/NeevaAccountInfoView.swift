@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import Shared
+import StoreKit
 import SwiftUI
 
 struct NeevaAccountInfoView: View {
@@ -41,9 +42,10 @@ struct NeevaAccountInfoView: View {
             Section(header: Text("Membership Status"), footer: membershipStatusFooterText) {
                 membershipStatusBody
 
-                // Only show for iOS 15 users who are not Lifetime and have not paid through another source
+                // Only show for iOS 15 users who are in a country where Premium is offered
+                // and are not Lifetime and have not paid through another source.
                 if #available(iOS 15, *) {
-                    if userInfo.subscriptionType != .lifetime
+                    if premiumOfferedInCountry() && userInfo.subscriptionType != .lifetime
                         && (userInfo.subscription?.source == SubscriptionSource.none
                             || userInfo.subscription?.source == SubscriptionSource.apple)
                     {
@@ -96,6 +98,21 @@ struct NeevaAccountInfoView: View {
         }
         .listStyle(.insetGrouped)
         .navigationTitle(userInfo.displayName ?? "Neeva Account")
+    }
+
+    // TODO: Refactor this out to a `SubscriptionStore/Model`.
+    func premiumOfferedInCountry() -> Bool {
+        if let storefront = SKPaymentQueue.default().storefront {
+            // NOTE: currently only the U.S. but as we expand we'll maintain a list of valid country codes
+            // https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
+            if storefront.countryCode == "USA" {
+                return true
+            }
+
+            return false
+        }
+
+        return false
     }
 
     private var currentPlan: String {
