@@ -6,12 +6,13 @@ import Shared
 import SwiftUI
 
 struct NeevaAccountInfoView: View {
-    @ObservedObject var userInfo: NeevaUserInfo
-    @Binding var isPresented: Bool
-
+    @EnvironmentObject var browserModel: BrowserModel
     @Environment(\.onOpenURL) var openURL
 
     @State var signingOut = false
+    @Binding var isPresented: Bool
+    @ObservedObject var userInfo: NeevaUserInfo
+    @State var showingPremium = false
 
     var body: some View {
         List {
@@ -37,88 +38,31 @@ struct NeevaAccountInfoView: View {
                 )
             }.accessibilityElement(children: .combine)
 
-            switch userInfo.subscriptionType {
-            case .basic:
-                Section(
-                    header: Text("Membership Status"),
-                    footer: Text(
-                        "To upgrade your membership, please sign in to Neeva from your computer."
-                    )
-                ) {
-                    VStack(alignment: .leading) {
-                        Text(SubscriptionType.basic.displayName)
-                            .withFont(.headingMedium)
-                            .padding(4)
-                            .padding(.horizontal, 4)
-                            .foregroundColor(.brand.charcoal)
-                            .background(SubscriptionType.basic.color)
-                            .cornerRadius(4)
+            Section(header: Text("Membership Status"), footer: membershipStatusFooterText) {
+                membershipStatusBody
 
-                        Text(
-                            "Neeva’s Free Basic membership gives you access to all Neeva search and personalization features."
-                        )
-                        .withFont(.bodyLarge)
-                        .fixedSize(horizontal: false, vertical: true)
-                    }
-                    .padding(.vertical, 5)
-                    .accessibilityElement(children: .combine)
-
-                    NavigationLinkButton("Learn more about Premium membership") {
-                        openURL(NeevaConstants.appMembershipURL)
-                    }
-                    .padding(.vertical, 5)
-                }
-            case .premium, .lifetime:
-                Section(
-                    header: Text("Membership Status"),
-                    footer: Group {
-                        if userInfo.subscriptionType != .lifetime {
-                            Text(
-                                "Please sign in to Neeva from your computer to manage your membership."
-                            )
+                // Only show for iOS 15 users who are not Lifetime and have not paid through another source
+                if #available(iOS 15, *) {
+                    if userInfo.subscriptionType != .lifetime
+                        && (userInfo.subscription?.source == SubscriptionSource.none
+                            || userInfo.subscription?.source == SubscriptionSource.apple)
+                    {
+                        NavigationLink(
+                            destination: NeevaPremiumView(userInfo: userInfo),
+                            isActive: $showingPremium
+                        ) {
+                            HStack {
+                                Text("Your Subscription")
+                                Spacer()
+                                Text("\(currentPlan)")
+                            }
                         }
                     }
-                ) {
-                    VStack(alignment: .leading) {
-                        Text(SubscriptionType.premium.displayName)
-                            .withFont(.headingMedium)
-                            .padding(4)
-                            .padding(.horizontal, 4)
-                            .foregroundColor(.brand.charcoal)
-                            .background(SubscriptionType.premium.color)
-                            .cornerRadius(4)
-
-                        if userInfo.subscriptionType == .lifetime {
-                            Text(
-                                "As a winner in Neeva's referral competition, you are a lifetime Premium member of Neeva."
-                            )
-                            .withFont(.bodyLarge)
-                            .fixedSize(horizontal: false, vertical: true)
-                        }
-
-                        Text(
-                            "If you have any questions or need assistance with your Premium membership, please reach out to premium@neeva.co."
-                        )
-                        .withFont(.bodyLarge)
-                        .fixedSize(horizontal: false, vertical: true)
-                    }
-                    .padding(.vertical, 5)
-                    .accessibilityElement(children: .combine)
-
-                    NavigationLinkButton("View Benefits") {
-                        openURL(NeevaConstants.appMembershipURL)
-                    }
-                }
-
-            default:
-                Section(
-                    header: Text(
-                        "\(Image(systemSymbol: .exclamationmarkTriangleFill)) Membership Status Unavailable"
-                    )
-                ) {
-                    Button("Learn More on the Neeva Website") {
-                        openURL(NeevaConstants.appMembershipURL)
-                    }
+                } else {
+                    /*
+                     TODO: if a user is paying and payment source is apple, but
+                     running an older OS, should we add a message to the user?
+                     */
                 }
             }
 
@@ -132,12 +76,16 @@ struct NeevaAccountInfoView: View {
                                     ClientLogger.shared.logCounter(
                                         .SettingSignout,
                                         attributes: EnvironmentHelper.shared.getAttributes())
+
                                     if userInfo.hasLoginCookie() {
                                         NotificationPermissionHelper.shared
                                             .deleteDeviceTokenFromServer()
+
                                         userInfo.clearCache()
                                         userInfo.deleteLoginCookie()
                                         userInfo.didLogOut()
+                                        browserModel.tabManager.clearNeevaTabs()
+
                                         isPresented = false
                                     }
                                 },
@@ -149,17 +97,106 @@ struct NeevaAccountInfoView: View {
         .listStyle(.insetGrouped)
         .navigationTitle(userInfo.displayName ?? "Neeva Account")
     }
+
+    private var currentPlan: String {
+        switch userInfo.subscription?.plan {
+        case .monthly:
+            return "Monthly"
+        case .annual:
+            return "Annual"
+        default:
+            return "None"
+        }
+    }
+
+    @ViewBuilder
+    private var membershipStatusFooterText: some View {
+        switch userInfo.subscriptionType {
+        case .basic:
+            EmptyView()
+        case .lifetime:
+            EmptyView()
+        case .premium:
+            // TODO: When we support Google Pay for Android, we should be more precise with this messaging.
+            if userInfo.subscription?.source != .apple {
+                Text("Please sign in to Neeva from your computer to manage your subscription.")
+            } else {
+                EmptyView()
+            }
+        default:
+            EmptyView()
+        }
+    }
+
+    @ViewBuilder
+    private var membershipStatusBody: some View {
+        switch userInfo.subscriptionType {
+        case .basic:
+            VStack(alignment: .leading) {
+                Text(SubscriptionType.basic.displayName)
+                    .withFont(.headingMedium)
+                    .padding(4)
+                    .padding(.horizontal, 4)
+                    .foregroundColor(.brand.charcoal)
+                    .background(SubscriptionType.basic.color)
+                    .cornerRadius(4)
+
+                Text(
+                    "Neeva’s Free Basic membership gives you access to all Neeva search and personalization features."
+                )
+                .withFont(.bodyLarge)
+                .fixedSize(horizontal: false, vertical: true)
+            }
+        case .premium, .lifetime:
+            VStack(alignment: .leading) {
+                Text(SubscriptionType.premium.displayName)
+                    .withFont(.headingMedium)
+                    .padding(4)
+                    .padding(.horizontal, 4)
+                    .foregroundColor(.brand.charcoal)
+                    .background(SubscriptionType.premium.color)
+                    .cornerRadius(4)
+
+                if userInfo.subscriptionType == .lifetime {
+                    // This should only apply to US as we didn't have referral competition in other countries
+                    Text(
+                        verbatim:
+                            "As a winner in Neeva's referral competition, you are a lifetime Premium member of Neeva."
+                    )
+                    .withFont(.bodyLarge)
+                    .fixedSize(horizontal: false, vertical: true)
+                }
+
+                Text(
+                    "If you have any questions or need assistance with your Premium membership, please reach out to premium@neeva.co."
+                )
+                .withFont(.bodyLarge)
+                .fixedSize(horizontal: false, vertical: true)
+            }
+
+            NavigationLinkButton("View Benefits") {
+                openURL(NeevaConstants.appMembershipURL)
+            }
+        default:
+            VStack {
+                Button("Learn More on the Neeva Website") {
+                    openURL(NeevaConstants.appMembershipURL)
+                }
+            }
+        }
+    }
 }
 
 struct NeevaAccountInfoView_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(SSOProvider.allCases, id: \.self) { authProvider in
             NeevaAccountInfoView(
+                isPresented: .constant(true),
                 userInfo: NeevaUserInfo(
                     previewDisplayName: "First Last", email: "name@example.com",
                     pictureUrl:
                         "https://pbs.twimg.com/profile_images/1273823608297500672/MBtG7NMI_400x400.jpg",
-                    authProvider: authProvider), isPresented: .constant(true))
+                    authProvider: authProvider))
         }.previewLayout(.fixed(width: 375, height: 150))
     }
 }

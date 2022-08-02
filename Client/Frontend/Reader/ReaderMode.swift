@@ -185,11 +185,10 @@ struct ReadabilityResult {
 
 /// Delegate that contains callbacks that we have added on top of the built-in WKWebViewDelegate
 protocol ReaderModeDelegate {
+    func readerMode(didChangeReaderModeState state: ReaderModeState, forTab tab: Tab)
+    func readerMode(didDisplayReaderizedContentForTab tab: Tab)
     func readerMode(
-        _ readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forTab tab: Tab)
-    func readerMode(_ readerMode: ReaderMode, didDisplayReaderizedContentForTab tab: Tab)
-    func readerMode(
-        _ readerMode: ReaderMode, didParseReadabilityResult readabilityResult: ReadabilityResult,
+        didParseReadabilityResult readabilityResult: ReadabilityResult,
         forTab tab: Tab)
     func readerMode(
         didConfigureStyle style: ReaderModeStyle,
@@ -224,7 +223,7 @@ class ReaderMode: TabContentScript {
         switch readerPageEvent {
         case .pageShow:
             if let tab = tab {
-                delegate?.readerMode(self, didDisplayReaderizedContentForTab: tab)
+                delegate?.readerMode(didDisplayReaderizedContentForTab: tab)
             }
         }
     }
@@ -234,20 +233,17 @@ class ReaderMode: TabContentScript {
         guard let tab = tab else {
             return
         }
-        delegate?.readerMode(self, didChangeReaderModeState: state, forTab: tab)
+        delegate?.readerMode(didChangeReaderModeState: state, forTab: tab)
     }
 
     fileprivate func handleReaderContentParsed(_ readabilityResult: ReadabilityResult) {
         guard let tab = tab else {
             return
         }
-        delegate?.readerMode(self, didParseReadabilityResult: readabilityResult, forTab: tab)
+        delegate?.readerMode(didParseReadabilityResult: readabilityResult, forTab: tab)
     }
 
-    func userContentController(
-        _ userContentController: WKUserContentController,
-        didReceiveScriptMessage message: WKScriptMessage
-    ) {
+    func userContentController(didReceiveScriptMessage message: WKScriptMessage) {
         guard let msg = message.body as? [String: Any], let type = msg["Type"] as? String,
             let messageType = ReaderModeMessageType(rawValue: type)
         else { return }

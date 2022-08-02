@@ -7,6 +7,7 @@ import Shared
 import SwiftUI
 
 class BrowserModel: ObservableObject {
+    // MARK: - Properties
     @Published var showGrid = false {
         didSet {
             if showGrid {
@@ -21,29 +22,25 @@ class BrowserModel: ObservableObject {
         }
     }
 
+    let cardStripModel: CardStripModel
+    let cardTransitionModel: CardTransitionModel
+    let contentVisibilityModel: ContentVisibilityModel
+    let cookieCutterModel = CookieCutterModel()
     let gridModel: GridModel
     let incognitoModel: IncognitoModel
+    let scrollingControlModel: ScrollingControlModel
+    let switcherToolbarModel: SwitcherToolbarModel
     let tabManager: TabManager
 
-    var cardTransitionModel: CardTransitionModel
-    var contentVisibilityModel: ContentVisibilityModel
-    var scrollingControlModel: ScrollingControlModel
-    let switcherToolbarModel: SwitcherToolbarModel
-    let cookieCutterModel = CookieCutterModel()
-
     let overlayManager: OverlayManager
-    var toastViewManager: ToastViewManager
-    var notificationViewManager: NotificationViewManager
+    let toastViewManager: ToastViewManager
 
+    // MARK: - Methods
     func showGridWithAnimation() {
+        gridModel.setSwitcherState(to: .tabs)
         gridModel.switchModeWithoutAnimation = true
+        gridModel.tabCardModel.updateIfNeeded()
 
-        if gridModel.switcherState != .tabs {
-            gridModel.switcherState = .tabs
-        }
-        if FeatureFlag[.enableTimeBasedSwitcher] {
-            gridModel.tabCardModel.updateIfNeeded()
-        }
         if tabManager.selectedTab?.isIncognito != incognitoModel.isIncognito {
             showGridWithNoAnimation()
         } else {
@@ -70,10 +67,8 @@ class BrowserModel: ObservableObject {
     }
 
     func showSpaces(forceUpdate: Bool = true) {
-        cardTransitionModel.update(to: .hidden)
-        contentVisibilityModel.update(showContent: false)
-        showGrid = true
-        gridModel.switcherState = .spaces
+        showGridWithNoAnimation()
+        gridModel.setSwitcherState(to: .spaces)
 
         if forceUpdate {
             updateSpaces()
@@ -84,7 +79,7 @@ class BrowserModel: ObservableObject {
         assert(!gridModel.tabCardModel.allDetails.isEmpty)
 
         let tabToBeSelected = tabToBeSelected ?? tabManager.selectedTab
-        tabToBeSelected?.shouldCreateWebViewUponSelect = false
+        tabToBeSelected?.shouldPerformHeavyUpdatesUponSelect = false
 
         if let tabToBeSelected = tabToBeSelected {
             gridModel.switchModeWithoutAnimation = true
@@ -109,10 +104,12 @@ class BrowserModel: ObservableObject {
         overlayManager.hideCurrentOverlay(ofPriority: .modal)
         contentVisibilityModel.update(showContent: true)
 
-        gridModel.switcherState = .tabs
+        gridModel.setSwitcherState(to: .tabs)
         gridModel.closeDetailView()
 
-        tabManager.updateWebViewForSelectedTab(notify: true)
+        tabManager.updateSelectedTabDataPostAnimation()
+
+        SceneDelegate.getCurrentSceneDelegate(with: tabManager.scene)?.setSceneUIState(to: .tab)
         gridModel.switchModeWithoutAnimation = false
         gridModel.tabCardModel.isSearchingForTabs = false
     }
@@ -123,6 +120,9 @@ class BrowserModel: ObservableObject {
         if showGrid, cardTransitionModel.state == .visibleForTrayShow {
             cardTransitionModel.update(to: .hidden)
             gridModel.switchModeWithoutAnimation = false
+
+            SceneDelegate.getCurrentSceneDelegate(with: tabManager.scene)?.setSceneUIState(
+                to: .cardGrid(gridModel.switcherState, tabManager.isIncognito))
         } else {
             hideGridWithNoAnimation()
         }
@@ -135,13 +135,7 @@ class BrowserModel: ObservableObject {
         }
     }
 
-    private var followPublicSpaceSubscription: AnyCancellable?
-
-    func openSpace(
-        spaceId: String, bvc: BrowserViewController, isIncognito: Bool = false,
-        completion: @escaping () -> Void
-    ) {
-
+    func openSpace(spaceId: String) {
         let existingSpace = gridModel.spaceCardModel.allDetails.first(where: { $0.id == spaceId })
         DispatchQueue.main.async { [self] in
             if incognitoModel.isIncognito {
@@ -150,7 +144,12 @@ class BrowserModel: ObservableObject {
 
             if let existingSpace = existingSpace {
                 openSpace(spaceID: existingSpace.id)
-                existingSpace.refresh()
+                existingSpace.refresh { wasSuccessful in
+                    if !wasSuccessful {
+                        self.gridModel.spaceFailedToOpen()
+                    }
+                }
+
                 return
             }
 
@@ -158,44 +157,45 @@ class BrowserModel: ObservableObject {
         }
     }
 
-    func openSpace(spaceID: String?, animate: Bool = true) {
+    func openSpace(spaceID: String?) {
         withAnimation(nil) {
             showSpaces(forceUpdate: false)
         }
 
-        guard let spaceID = spaceID,
+        if let spaceID = spaceID,
             let detail = gridModel.spaceCardModel.allDetails.first(where: { $0.id == spaceID })
-        else {
-            return
+        {
+            gridModel.openSpaceInDetailView(detail)
         }
-
-        gridModel.openSpaceInDetailView(detail)
     }
 
     func openSpaceDigest(bvc: BrowserViewController) {
         bvc.showTabTray()
-        gridModel.switcherState = .spaces
+        gridModel.setSwitcherState(to: .spaces)
 
-        openSpace(spaceId: SpaceStore.dailyDigestID, bvc: bvc) {}
+        openSpace(spaceId: SpaceStore.dailyDigestID)
     }
 
     init(
         gridModel: GridModel, tabManager: TabManager, chromeModel: TabChromeModel,
         incognitoModel: IncognitoModel, switcherToolbarModel: SwitcherToolbarModel,
-        toastViewManager: ToastViewManager, notificationViewManager: NotificationViewManager,
-        overlayManager: OverlayManager
+        toastViewManager: ToastViewManager, overlayManager: OverlayManager
     ) {
-        self.gridModel = gridModel
-        self.tabManager = tabManager
-        self.incognitoModel = incognitoModel
+        self.cardStripModel = CardStripModel(
+            incognitoModel: incognitoModel,
+            tabCardModel: gridModel.tabCardModel,
+            tabChromeModel: chromeModel
+        )
         self.cardTransitionModel = CardTransitionModel()
         self.contentVisibilityModel = ContentVisibilityModel()
+        self.gridModel = gridModel
+        self.incognitoModel = incognitoModel
         self.scrollingControlModel = ScrollingControlModel(
             tabManager: tabManager, chromeModel: chromeModel)
         self.switcherToolbarModel = switcherToolbarModel
+        self.tabManager = tabManager
 
-        self.toastViewManager = toastViewManager
-        self.notificationViewManager = notificationViewManager
         self.overlayManager = overlayManager
+        self.toastViewManager = toastViewManager
     }
 }

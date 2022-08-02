@@ -23,7 +23,7 @@ struct FindView: View {
                 }
             }
             .padding(.horizontal)
-            .padding(.top, 4)
+            .padding(.top, 7)
 
             Spacer()
         }
@@ -31,6 +31,7 @@ struct FindView: View {
         .background(
             Color(UIColor.systemGroupedBackground.elevated)
                 .cornerRadius(12, corners: .top)
+                .ignoresSafeArea()
         )
     }
 }

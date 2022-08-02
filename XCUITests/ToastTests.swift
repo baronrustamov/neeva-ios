@@ -58,6 +58,6 @@ class ToastTests: BaseTestCase {
     func testClosedTabToastTabRestored() {
         showCloseTabToast()
         waitForExistence(app.buttons["restore"])
-        app.buttons["restore"].forceTapElement()
+        app.buttons["restore"].tap(force: true)
     }
 }

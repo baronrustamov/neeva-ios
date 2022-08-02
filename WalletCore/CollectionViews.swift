@@ -25,7 +25,7 @@ struct CollectionStatView: View {
                         .foregroundColor(.label)
                         .scaledToFit()
                         .frame(width: 15, height: 15)
-                    Text("\(statAmount)")
+                    Text(verbatim: "\(statAmount)")
                         .withFont(.labelLarge)
                         .foregroundColor(.label)
                 }

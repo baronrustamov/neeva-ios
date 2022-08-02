@@ -7,10 +7,8 @@ import Shared
 import SwiftUI
 
 struct ExperimentSettingsView: View {
-    @Environment(\.dismissScreen) var dismissScreen
 
     let scrollViewAppearance = UINavigationBar.appearance().scrollEdgeAppearance
-    @State private var valueTextDefaultBrowser: String?
     @State private var valueTextPromoCard: String?
 
     var body: some View {
@@ -19,7 +17,7 @@ struct ExperimentSettingsView: View {
                 Button {
                     NeevaExperiment.resetAllExperiments()
                 } label: {
-                    Text("Reset all experiments")
+                    Text(verbatim: "Reset all experiments")
                         .foregroundColor(Color.label)
                 }
 
@@ -29,18 +27,6 @@ struct ExperimentSettingsView: View {
                 //    value: $valueText,
                 //    experiment: .defaultBrowserPromptV2
                 //)
-
-                OptionalPrefilledStringField<NeevaExperiment.PromoCardTypeAfterFirstRun>(
-                    "PromoCardTypeAfterFirstRun",
-                    value: $valueTextPromoCard,
-                    experiment: .promoCardTypeAfterFirstRun
-                )
-
-                OptionalPrefilledStringField<NeevaExperiment.DefaultBrowserWelcomeScreen>(
-                    "DefaultBrowserWelcomeScreen",
-                    value: $valueTextPromoCard,
-                    experiment: .defaultBrowserWelcomeScreen
-                )
             }
         }
         .listStyle(.insetGrouped)
@@ -86,9 +72,9 @@ private struct OptionalPrefilledStringField<Arm: ExperimentArms>: View {
                     NeevaExperiment.resetExperiment(experiment: experiment)
                 } label: {
                     if value == nil {
-                        Label("nil", systemSymbol: .checkmark)
+                        Label(String("nil"), systemSymbol: .checkmark)
                     } else {
-                        Text("nil")
+                        Text(verbatim: "nil")
                     }
                 }
             } label: {

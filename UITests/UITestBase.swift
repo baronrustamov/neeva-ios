@@ -32,10 +32,7 @@ class UITestBase: KIFTestCase {
     ])
 
     func resetToHome() {
-        if (try? tester().tryFindingTappableView(withAccessibilityLabel: "Cancel")) != nil {
-            tester().tapView(withAccessibilityLabel: "Cancel")
-        }
-
+        SceneDelegate.getBVC(for: nil).popToBVC()
         closeAllTabs()
     }
 
@@ -43,18 +40,16 @@ class UITestBase: KIFTestCase {
         SceneDelegate.getTabManagerOrNil()?.tabs.count ?? 0
     }
 
-    func isiPad() -> Bool {
-        return UIDevice.current.userInterfaceIdiom == .pad
+    func isSelectedTabIncognito() -> Bool {
+        SceneDelegate.getTabManagerOrNil()?.selectedTab?.isIncognito ?? false
     }
 
-    func addHistoryEntry(_ title: String, url: URL) {
-        let info: [AnyHashable: Any] = [
-            "url": url,
-            "title": title,
-            "visitType": VisitType.link.rawValue,
-        ]
+    func isIncognito() -> Bool {
+        SceneDelegate.getBVCOrNil()?.incognitoModel.isIncognito ?? false
+    }
 
-        NotificationCenter.default.post(name: .OnLocationChange, object: self, userInfo: info)
+    func isiPad() -> Bool {
+        return UIDevice.current.userInterfaceIdiom == .pad
     }
 
     func ensureAutocompletionResult(textField: UITextField, prefix: String, completion: String) {
@@ -74,11 +69,7 @@ class UITestBase: KIFTestCase {
     }
 
     override func setUp() {
-        if tester().viewExistsWithLabel("Done") && getNumberOfTabs() == 0 {
-            tester().tapView(withAccessibilityLabel: "Add Tab")
-            openURL()
-        }
-
+        openURL()
         tester().waitForAnimationsToFinish()
     }
 

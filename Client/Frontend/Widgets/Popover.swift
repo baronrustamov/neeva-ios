@@ -24,6 +24,8 @@ extension View {
     func presentAsPopover<Content: View>(
         isPresented: Binding<Bool>,
         backgroundColor: UIColor? = nil,
+        useDimmingBackground: Bool = true,
+        useAlternativeShadow: Bool = false,
         arrowDirections: UIPopoverArrowDirection? = nil,
         dismissOnTransition: Bool = false,
         onDismiss: (() -> Void)? = nil,
@@ -34,6 +36,8 @@ extension View {
                 isPresented: isPresented,
                 arrowDirections: arrowDirections,
                 backgroundColor: backgroundColor,
+                useDimmingBackground: useDimmingBackground,
+                useAlternativeShadow: useAlternativeShadow,
                 dismissOnTransition: dismissOnTransition,
                 onDismiss: onDismiss
             ) {
@@ -51,6 +55,8 @@ struct Popover<Content: View>: UIViewControllerRepresentable {
     @Binding var isPresented: Bool
     let arrowDirections: UIPopoverArrowDirection?
     let backgroundColor: UIColor?
+    let useDimmingBackground: Bool
+    let useAlternativeShadow: Bool
     let dismissOnTransition: Bool
     let onDismiss: (() -> Void)?
     let content: () -> Content
@@ -105,6 +111,8 @@ struct Popover<Content: View>: UIViewControllerRepresentable {
     /// This hosting controller is displayed inside the popover, and renders the user-specified content.
     class Host: UIHostingController<Content>, UIPopoverPresentationControllerDelegate {
         @Binding var isPresented: Bool
+        var useDimmingBackground: Bool = true
+        var useAlternativeShadow: Bool = false
         var onDismiss: (() -> Void)?
 
         init(rootView: Content, isPresented: Binding<Bool>) {
@@ -121,9 +129,22 @@ struct Popover<Content: View>: UIViewControllerRepresentable {
             guard let controller = presentationController else { return }
             // The two subviews of the container view at this point are _UIPopoverDimmingView and _UICutoutShadowView.
             // Apply a custom background color here because — at least on iPhone — the default is `UIColor.clear`.
-            controller.containerView?.subviews.first(where: {
-                String(cString: object_getClassName($0)).lowercased().contains("dimming")
-            })?.backgroundColor = .ui.backdrop
+            if useDimmingBackground {
+                controller.containerView?.subviews.first(where: {
+                    String(cString: object_getClassName($0)).lowercased().contains("dimming")
+                })?.backgroundColor = .ui.backdrop
+            }
+
+            if useAlternativeShadow {
+                controller.containerView?.subviews.first(where: {
+                    String(cString: object_getClassName($0)).lowercased().contains("shadowview")
+                })?.layer.opacity = 0
+                controller.containerView?.layer.shadowColor =
+                    UIColor(red: 0, green: 0, blue: 0, alpha: 0.08).cgColor
+                controller.containerView?.layer.shadowOffset = CGSize(width: 0, height: 1)
+                controller.containerView?.layer.shadowOpacity = 1
+                controller.containerView?.layer.shadowRadius = 6
+            }
         }
 
         override func viewDidDisappear(_ animated: Bool) {
@@ -183,6 +204,8 @@ struct Popover<Content: View>: UIViewControllerRepresentable {
                 in: presentee.view.intrinsicContentSize)
             presentee.view.backgroundColor = backgroundColor
             presentee.onDismiss = onDismiss
+            presentee.useDimmingBackground = useDimmingBackground
+            presentee.useAlternativeShadow = useAlternativeShadow
         }
     }
 }
@@ -207,7 +230,7 @@ struct Popover_Previews: PreviewProvider {
                 .presentAsPopover(isPresented: $isPresented) {
                     VStack {
                         ForEach(0..<count, id: \.self) { _ in
-                            Text("Hello, world!")
+                            Text(verbatim: "Hello, world!")
                                 .padding()
                         }
                         Button("+1") { count += 1 }.padding()

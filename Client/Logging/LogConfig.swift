@@ -7,7 +7,7 @@ import Defaults
 import Foundation
 import Shared
 
-public struct LogConfig {
+public enum LogConfig {
     // MARK: - Interactions
     public enum Interaction: String {
         /// Open tracking shield
@@ -43,6 +43,8 @@ public struct LogConfig {
         case ClickBack
         /// Click forward button to navigate to next page
         case ClickForward
+        /// Click close button to close current tab
+        case ClickClose
         /// Tap and Hold forward button to show navigation stack
         case LongPressForward
 
@@ -93,6 +95,22 @@ public struct LogConfig {
         case SettingAppIcon
         /// Click sign out in setting
         case SettingSignout
+        /// Click to view premium subscriptions
+        case SettingPremiumSubscriptions
+        /// Exception thrown fetching products
+        case SettingPremiumProductsFetchException
+        /// No products found
+        case SettingPremiumNoProductsFound
+        /// Click to purchase subscription
+        case SettingPremiumPurchase
+        /// Click to cancel purchase
+        case SettingPremiumPurchaseCanceled
+        /// Purchase finalized
+        case SettingPremiumPurchaseComplete
+        /// Purchase pending
+        case SettingPremiumPurchasePending
+        /// Purchase unverified
+        case SettingPremiumPurchaseUnverified
         /// Click Data Management in setting
         case ViewDataManagement
         /// Click Tracking Protection in setting
@@ -198,11 +216,6 @@ public struct LogConfig {
         case StartExperiment
         /// Tap on Get started in welcome screen
         case GetStartedInWelcome
-        /// Resolved AdService attributionToken (if one exists)
-        case ResolvedAttributionToken
-        /// Request AttributionToken error
-        case ResolvedAttributionTokenError
-        case ResolvedAttributionTokenRetryError
         /// Log first navigation
         case FirstNavigation
         /// Log interstitial logging error
@@ -224,10 +237,20 @@ public struct LogConfig {
         /// Close preview sign up card
         case ClosePreviewSignUpPromo
         case DefaultBrowserOnboardingInterstitialSkip
+        case DefaultBrowserOnboardingInterstitialContinueToNeeva
         case DefaultBrowserOnboardingInterstitialRemind
         case DefaultBrowserOnboardingInterstitialOpen
+        case DefaultBrowserOnboardingInterstitialOpenAgain
+        case DefaultBrowserOnboardingInterstitialContinue
+        case DefaultBrowserOnboardingInterstitialVideo
+        case DefaultBrowserOnboardingInterstitialScreenTime
         /// Promo card impression (without 2 second)
         case DefaultBrowserPromoCardImp
+        case AdBlockPromoImp
+        case AdBlockPromoClose
+        case AdBlockPromoRemind
+        case AdBlockPromoSetup
+        case AdBlockEnabled
 
         // MARK: selected suggestion
         case QuerySuggestion
@@ -278,6 +301,7 @@ public struct LogConfig {
         case ViewSpacesFromSheet
         case SpaceFilterClicked
         case OpenSuggestedSpace
+        case SpaceFailedToOpen
 
         // MARK: ratings card
         case RatingsRateExperience
@@ -306,6 +330,8 @@ public struct LogConfig {
         case PromoEnableNotification
         /// Close enable notification promo card
         case CloseEnableNotificationPromo
+        /// Register a push notification token
+        case RegisterNotificationToken
 
         // MARK: Spotlight
         // when url is opened from a user activity
@@ -325,6 +351,7 @@ public struct LogConfig {
 
         // MARK: Cheatsheet(NeevaScope)
         case CheatsheetPopoverImpression
+        case CheatsheetPopoverReachedLimit
         case CheatsheetUGCIndicatorImpression
         case OpenCheatsheet
         case CheatsheetEducationImpressionOnSRP
@@ -340,6 +367,8 @@ public struct LogConfig {
         case OpenCheatsheetSupport
         case CheatsheetBadURLString
         case CheatsheetFetchError
+        case CheatsheetUGCStatsForSession
+        case CheatsheetUGCHitNoRedditDataV2
 
         // MARK: tab group
         case tabGroupExpanded
@@ -373,6 +402,9 @@ public struct LogConfig {
 
         // MARK: Cookie Cutter
         case CookieNoticeHandled
+
+        // MARK: Archived Tabs
+        case clearArchivedTabs
     }
 
     /// Specify a comma separated string with these values to
@@ -399,22 +431,27 @@ public struct LogConfig {
         case DebugMode = "DebugMode"
         case Web3 = "Web3"
         case CookieCutter = "CookieCutter"
+        case ArchiveTab = "ArchiveTab"
     }
 
     public static var enabledLoggingCategories: Set<InteractionCategory>?
 
     private static var flagsObserver: AnyCancellable?
 
+    static let alwaysEnabledCategories: Set<InteractionCategory> = [
+        .FirstRun,
+        .Notification,
+        .Suggestions,
+        .Stability,
+        .DebugMode,
+        .PromoCard,
+        .Web3,
+        .CookieCutter,
+        .UI,
+        .OverflowMenu,
+    ]
     public static func featureFlagEnabled(for category: InteractionCategory) -> Bool {
-        if category == .FirstRun
-            || category == .Notification
-            || category == .Suggestions
-            || category == .Stability
-            || category == .DebugMode
-            || category == .PromoCard
-            || category == .Web3
-            || category == .CookieCutter
-        {
+        if alwaysEnabledCategories.contains(category) {
             return true
         }
 
@@ -432,34 +469,37 @@ public struct LogConfig {
     }
 
     private static func updateLoggingCategory() {
-        enabledLoggingCategories?.removeAll()
-        NeevaFeatureFlags.latestValue(.loggingCategories)
-            .components(separatedBy: ",").forEach { token in
-                if let category = InteractionCategory(
-                    rawValue: token.stringByTrimmingLeadingCharactersInSet(.whitespaces)
-                ) {
-                    enabledLoggingCategories?.insert(category)
+        enabledLoggingCategories = Set(
+            NeevaFeatureFlags.latestValue(.loggingCategories)
+                .components(separatedBy: ",")
+                .compactMap { token in
+                    InteractionCategory(
+                        rawValue: token.stringByTrimmingLeadingCharactersInSet(.whitespaces)
+                    )
                 }
-            }
+        )
     }
 
     public static func shouldAddSessionID(
         for path: LogConfig.Interaction
     ) -> Bool {
         let category = LogConfig.category(for: path)
-        let validCategory =
-            category == .FirstRun
-            || category == .Stability
-            || category == .PromoCard
-            || category == .Web3
-            || category == .Notification
-            || category == .Cheatsheet
-            || category == .CookieCutter
+        let validCategories: Set<LogConfig.InteractionCategory> = [
+            .FirstRun,
+            .Stability,
+            .PromoCard,
+            .Web3,
+            .Notification,
+            .Cheatsheet,
+            .CookieCutter,
+            .UI,
+            .OverflowMenu,
+        ]
 
         let validInteraction =
             path == .SpacesLoginRequired || path == .SpacesRecommendedDetailUIVisited
 
-        return validCategory || validInteraction
+        return validCategories.contains(category) || validInteraction
     }
 
     // MARK: - Category
@@ -479,6 +519,7 @@ public struct LogConfig {
         case .TurnOffIncognitoMode: return .UI
         case .ClickBack: return .UI
         case .ClickForward: return .UI
+        case .ClickClose: return .UI
         case .LongPressForward: return .UI
         case .PreviewPreferredProviderSignIn: return .UI
         case .TurnOnBlockTracking: return .UI
@@ -511,6 +552,14 @@ public struct LogConfig {
         case .SettingTheme: return .Settings
         case .SettingAppIcon: return .Settings
         case .SettingSignout: return .Settings
+        case .SettingPremiumSubscriptions: return .Settings
+        case .SettingPremiumProductsFetchException: return .Settings
+        case .SettingPremiumNoProductsFound: return .Settings
+        case .SettingPremiumPurchase: return .Settings
+        case .SettingPremiumPurchaseCanceled: return .Settings
+        case .SettingPremiumPurchaseComplete: return .Settings
+        case .SettingPremiumPurchasePending: return .Settings
+        case .SettingPremiumPurchaseUnverified: return .Settings
         case .ViewDataManagement: return .Settings
         case .ViewTrackingProtection: return .Settings
         case .ViewPrivacyPolicy: return .Settings
@@ -559,19 +608,22 @@ public struct LogConfig {
         case .PreviewTapFakeSearchInput: return .FirstRun
         case .PreviewHomeSignin: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialSkip: return .FirstRun
+        case .DefaultBrowserOnboardingInterstitialContinueToNeeva: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialRemind: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialOpen: return .FirstRun
+        case .DefaultBrowserOnboardingInterstitialOpenAgain: return .FirstRun
+        case .DefaultBrowserOnboardingInterstitialContinue: return .FirstRun
+        case .DefaultBrowserOnboardingInterstitialVideo: return .FirstRun
+        case .DefaultBrowserOnboardingInterstitialScreenTime: return .FirstRun
         case .DefaultBrowserInterstitialImp: return .FirstRun
         case .OpenDefaultBrowserURL: return .FirstRun
         case .StartExperiment: return .FirstRun
         case .GetStartedInWelcome: return .FirstRun
-        case .ResolvedAttributionToken: return .FirstRun
-        case .ResolvedAttributionTokenError: return .FirstRun
-        case .ResolvedAttributionTokenRetryError: return .FirstRun
         case .FirstNavigation: return .FirstRun
         case .LogErrorForInterstitialEvents: return .FirstRun
         case .NeevaAttributionRequestError: return .FirstRun
         case .DefaultBrowserInterstitialRestoreImp: return .FirstRun
+        case .SpacesRecommendedDetailUIVisited: return .FirstRun
 
         // MARK: - PromoCard
         case .PromoCardAppear: return .PromoCard
@@ -581,6 +633,11 @@ public struct LogConfig {
         case .GoToSysAppSettings: return .PromoCard
         case .DefaultBrowserPromoCardImp: return .PromoCard
         case .DismissDefaultBrowserOnboardingScreen: return .PromoCard
+        case .AdBlockPromoImp: return .PromoCard
+        case .AdBlockPromoClose: return .PromoCard
+        case .AdBlockPromoRemind: return .PromoCard
+        case .AdBlockPromoSetup: return .PromoCard
+        case .AdBlockEnabled: return .PromoCard
 
         // MARK: - Suggestions
         case .QuerySuggestion: return .Suggestions
@@ -615,7 +672,6 @@ public struct LogConfig {
         case .SpacesDetailEntityClicked: return .Spaces
         case .SpacesDetailEditButtonClicked: return .Spaces
         case .SpacesDetailShareButtonClicked: return .Spaces
-        case .SpacesRecommendedDetailUIVisited: return .Spaces
         case .SpacesLoginRequired: return .Spaces
         case .OwnerSharedSpace: return .Spaces
         case .FollowerSharedSpace: return .Spaces
@@ -625,6 +681,7 @@ public struct LogConfig {
         case .ViewSpacesFromSheet: return .Spaces
         case .SpaceFilterClicked: return .Spaces
         case .OpenSuggestedSpace: return .Spaces
+        case .SpaceFailedToOpen: return .Spaces
 
         // MARK: - RatingsCard
         case .RatingsRateExperience: return .RatingsCard
@@ -649,6 +706,7 @@ public struct LogConfig {
         case .OpenNotification: return .Notification
         case .PromoEnableNotification: return .Notification
         case .CloseEnableNotificationPromo: return .Notification
+        case .RegisterNotificationToken: return .Notification
 
         // MARK: - Spotlight
         case .openURLFromUserActivity: return .Spotlight
@@ -664,6 +722,7 @@ public struct LogConfig {
         case .RecipeCheatsheetShowMoreRecipe: return .RecipeCheatsheet
 
         case .CheatsheetPopoverImpression: return .Cheatsheet
+        case .CheatsheetPopoverReachedLimit: return .Cheatsheet
         case .CheatsheetUGCIndicatorImpression: return .Cheatsheet
         case .OpenCheatsheet: return .Cheatsheet
         case .CheatsheetEducationImpressionOnSRP: return .Cheatsheet
@@ -679,6 +738,8 @@ public struct LogConfig {
         case .OpenCheatsheetSupport: return .Cheatsheet
         case .CheatsheetBadURLString: return .Cheatsheet
         case .CheatsheetFetchError: return .Cheatsheet
+        case .CheatsheetUGCStatsForSession: return .Cheatsheet
+        case .CheatsheetUGCHitNoRedditDataV2: return .Cheatsheet
 
         // MARK: - TabGroup
         case .tabGroupExpanded: return .TabGroup
@@ -712,10 +773,12 @@ public struct LogConfig {
 
         // MARK: Cookie Cutter
         case .CookieNoticeHandled: return .CookieCutter
+        // MARK: Archived Tabs
+        case .clearArchivedTabs: return .ArchiveTab
         }
     }
 
-    public struct Attribute {
+    public enum Attribute {
         /// Is selected tab in private mode
         public static let IsInPrivateMode = "IsInPrivateMode"
         /// Number of all tabs (normal + incognito) opened
@@ -724,6 +787,8 @@ public struct LogConfig {
         public static let NormalTabsOpened = "NormalTabsOpened"
         /// Number of incognito tabs opened
         public static let IncognitoTabsOpened = "PrivateTabsOpened"
+        /// Number of archived tabs
+        public static let NumberOfArchivedTabsTotal = "NumberOfArchivedTabsTotal"
         /// Number of zombie tabs opened
         public static let NumberOfZombieTabs = "NumberOfZombieTabs"
         /// Number of tab groups in total
@@ -740,6 +805,8 @@ public struct LogConfig {
         public static let isUserSignedIn = "IsUserSignedIn"
         /// Device name
         public static let DeviceName = "DeviceName"
+        /// Device OS
+        public static let DeviceOS = "DeviceOS"
         /// Session UUID
         public static let SessionUUID = "SessionUUID"
         /// First run search path and query
@@ -752,29 +819,35 @@ public struct LogConfig {
         public static let PreviewModeQueryCount = "PreviewModeQueryCount"
         /// Session UUID v2
         public static let SessionUUIDv2 = "SessionUUIDv2"
+        /// Attribution Token Error Message
+        public static let AttributionTokenErrorToken = "AttributionTokenErrorToken"
         /// Attribution Token Error Type
         public static let AttributionTokenErrorType = "AttributionTokenErrorType"
-        /// Attribution Token Error Message
-        public static let AttributionTokenErrorMessage = "AttributionTokenErrorMessage"
-        public static let AttributionTokenErrorToken = "AttributionTokenErrorToken"
-        public static let AttributionTokenErrorDataStr = "AttributionTokenErrorDataStr"
-        public static let AttributionTokenErrorResponseCode = "AttributionTokenErrorResponseCode"
 
         /// The name of the Cookie Cutter provider that was used.
         public static let CookieCutterProviderUsed = "CookieCutterProviderUsed"
 
         /// First Run Logging Error
         public static let FirstRunLogErrorMessage = "FirstRunLogErrorMessage"
+
+        public static let InterstitialTimeSpent = "InterstitialTimeSpent"
+
+        public static let pushNotificationToken = "PushNotificationToken"
+
+        public static let pushNotificationTokenEnvironment = "PushNotificationTokenEnvironment"
+
+        /// Premium subscription attributes
+        public static let SubscriptionPlan = "SubscriptionPlan"
     }
 
-    public struct UIInteractionAttribute {
+    public enum UIInteractionAttribute {
         /// View from which an UI Interaction is triggered
         public static let fromActionType = "fromActionType"
         public static let openSysSettingSourceView = "openSysSettingSourceView"
         public static let openSysSettingTriggerFrom = "openSysSettingTriggerFrom"
     }
 
-    public struct SuggestionAttribute {
+    public enum SuggestionAttribute {
         /// suggestion position
         public static let suggestionPosition = "suggestionPosition"
         /// number of characters typed in url bar
@@ -805,7 +878,7 @@ public struct LogConfig {
         public static let timeToSelectSuggestion = "TimeToSelectSuggestion"
     }
 
-    public struct SpacesAttribute {
+    public enum SpacesAttribute {
         public static let spaceID = "space_id"
         public static let spaceEntityID = "SpaceEntityID"
         public static let isShared = "isShared"
@@ -814,17 +887,17 @@ public struct LogConfig {
         public static let socialShareApp = "ShareAppName"
     }
 
-    public struct PromoCardAttribute {
+    public enum PromoCardAttribute {
         public static let promoCardType = "promoCardType"
         public static let defaultBrowserInterstitialTrigger = "defaultBrowserInterstitialTrigger"
     }
 
-    public struct ExperimentAttribute {
+    public enum ExperimentAttribute {
         public static let experiment = "Experiment"
         public static let experimentArm = "ExperimentArm"
     }
 
-    public struct CheatsheetAttribute {
+    public enum CheatsheetAttribute {
         public static let currentCheatsheetQuery = "currentCheatsheetQuery"
         public static let currentPageURL = "currentCheatsheetPageURL"
         public static let cheatsheetQuerySource = "cheatsheetQuerySource"
@@ -842,14 +915,24 @@ public struct LogConfig {
             case getInfo
             case search
         }
+
+        public enum UGCStat: String {
+            case filterHealth
+            case ugcTest
+            case ugcTestNoResult
+            case ugcHit
+            case ugcClear
+            case ugcCanonicalError
+        }
     }
 
-    public struct TabsAttribute {
+    public enum TabsAttribute {
+        public static let selectedTabSection = "SelectedTabSection"
         public static let selectedTabIndex = "SelectedTabIndex"
         public static let selectedTabRow = "SelectedTabRow"
     }
 
-    public struct NotificationAttribute {
+    public enum NotificationAttribute {
         public static let notificationPromptCallSite = "NotificationPromptCallSite"
         public static let notificationAuthorizationCallSite = "notificationAuthorizationCallSite"
 
@@ -859,7 +942,7 @@ public struct LogConfig {
         public static let notificationCampaignId = "NotificationCampaignId"
     }
 
-    public struct SpotlightAttribute {
+    public enum SpotlightAttribute {
         public static let urlPayload = "urlPayload"
         public static let spaceIdPayload = "spaceIdPayload"
         public static let addActivityToSpotlight = "addActivityToSpotlight"
@@ -890,26 +973,26 @@ public struct LogConfig {
         }
     }
 
-    public struct PerformanceAttribute {
+    public enum PerformanceAttribute {
         public static let memoryUsage = "MemoryUsage"
     }
 
-    public struct TabGroupAttribute {
+    public enum TabGroupAttribute {
         public static let numTabsInTabGroup = "NumTabsInTabGroup"
         public static let TabGroupRowIndex = "SelectedTabGroupRowIndex"
         public static let isExpanded = "IsExpanded"
         public static let selectedChildTabIndex = "SelectedChildTabIndex"
     }
 
-    public struct DeeplinkAttribute {
+    public enum DeeplinkAttribute {
         public static let searchRedirect = "SearchRedirect"
     }
 
-    public struct TrackingProtectionAttribute {
+    public enum TrackingProtectionAttribute {
         public static let toggleProtectionForURL = "ToggleProtectionForURL"
     }
 
-    public struct Web3Attribute {
+    public enum Web3Attribute {
         public static let walletAddress = "WalletAddress"
         public static let connectedSite = "ConnectedSite"
         public static let partnerCollection = "PartnerCollection"

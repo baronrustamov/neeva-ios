@@ -18,6 +18,7 @@ public class NeevaUserInfo: ObservableObject {
     @Published public private(set) var pictureUrl: String?
     @Published public private(set) var pictureData: Data?
     @Published public private(set) var authProvider: SSOProvider?
+    @Published public private(set) var subscription: UserInfoQuery.Data.User.Subscription?
     @Published public private(set) var subscriptionType: SubscriptionType?
     @Published public private(set) var isLoading = false
     @Published public private(set) var isVerified = false
@@ -164,18 +165,6 @@ public class NeevaUserInfo: ObservableObject {
             && (NeevaConstants.appURL.scheme != "https" || cookie.isSecure)
     }
 
-    public func loadUserInfoFromDefaults() {
-        let userInfoDict = Defaults[.neevaUserInfo]
-
-        self.id = userInfoDict["userId"]
-        self.displayName = userInfoDict["userDisplayName"]
-        self.email = userInfoDict["userEmail"]
-        self.pictureUrl = userInfoDict["userPictureUrl"]
-        self.authProvider = userInfoDict["userAuthProvider"].flatMap(SSOProvider.init(rawValue:))
-        self.subscriptionType = userInfoDict["userSubscriptionType"].flatMap(
-            SubscriptionType.init(rawValue:))
-    }
-
     private func fetchUserPicture() {
         guard let url = URL(string: pictureUrl ?? "") else {
             return
@@ -213,6 +202,11 @@ public class NeevaUserInfo: ObservableObject {
             "userEmail": userInfo.email,
             "userPictureUrl": userInfo.pictureUrl,
             "userAuthProvider": userInfo.authProvider,
+            "userSubscriptionStatus": userInfo.subscription?.status?.rawValue,
+            "userSubscriptionCanceled": userInfo.subscription?.canceled?.description,
+            "userSubscriptionPlan": userInfo.subscription?.plan?.rawValue,
+            "userSubscriptionSource": userInfo.subscription?.source?.rawValue,
+            "userSubscriptionAppleUUID": userInfo.subscription?.apple?.uuid,
             "userSubscriptionType": userInfo.subscriptionType?.rawValue,
         ].compactMapValues { $0 }
 
@@ -220,7 +214,29 @@ public class NeevaUserInfo: ObservableObject {
         email = userInfo.email
         pictureUrl = userInfo.pictureUrl
         authProvider = userInfo.authProvider.flatMap(SSOProvider.init(rawValue:))
+        subscription = userInfo.subscription
         subscriptionType = userInfo.subscriptionType
+    }
+
+    public func loadUserInfoFromDefaults() {
+        let userInfoDict = Defaults[.neevaUserInfo]
+
+        self.id = userInfoDict["userId"]
+        self.displayName = userInfoDict["userDisplayName"]
+        self.email = userInfoDict["userEmail"]
+        self.pictureUrl = userInfoDict["userPictureUrl"]
+        self.authProvider = userInfoDict["userAuthProvider"].flatMap(SSOProvider.init(rawValue:))
+        self.subscription = UserInfoQuery.Data.User.Subscription(
+            status: SubscriptionStatus.init(rawValue: userInfoDict["userSubscriptionStatus"] ?? "")
+                ?? nil,
+            canceled: Bool.init(userInfoDict["userSubscriptionCanceled"] ?? ""),
+            plan: SubscriptionPlan.init(rawValue: userInfoDict["userSubscriptionPlan"] ?? ""),
+            source: SubscriptionSource.init(rawValue: userInfoDict["userSubscriptionSource"] ?? ""),
+            apple: UserInfoQuery.Data.User.Subscription.Apple(
+                uuid: userInfoDict["userSubscriptionAppleUUID"])
+        )
+        self.subscriptionType = userInfoDict["userSubscriptionType"].flatMap(
+            SubscriptionType.init(rawValue:))
     }
 
     private func clearUserInfoCache() {

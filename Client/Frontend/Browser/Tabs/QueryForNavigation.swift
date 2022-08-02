@@ -37,6 +37,7 @@ class QueryForNavigation {
         }?.value
     }
 
+    /// Recommended to call this only via `Tab.attachCurrentSearchQueryToCurrentNavigation`.
     func attachCurrentSearchQueryToCurrentNavigation(webView: WKWebView) {
         // attach current suggested query?
         guard let navigation = webView.backForwardList.currentItem else { return }

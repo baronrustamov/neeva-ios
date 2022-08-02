@@ -71,9 +71,9 @@ private struct BoolFlagView: View {
                 updateState()
             } label: {
                 if flagValue && isOverridden {
-                    Label("True", systemSymbol: .checkmark)
+                    Label(String("True"), systemSymbol: .checkmark)
                 } else {
-                    Text("True")
+                    Text(verbatim: "True")
                 }
             }
             Button {
@@ -81,9 +81,9 @@ private struct BoolFlagView: View {
                 updateState()
             } label: {
                 if !flagValue && isOverridden {
-                    Label("False", systemSymbol: .checkmark)
+                    Label(String("False"), systemSymbol: .checkmark)
                 } else {
-                    Text("False")
+                    Text(verbatim: "False")
                 }
             }
             Button {
@@ -91,9 +91,9 @@ private struct BoolFlagView: View {
                 updateState()
             } label: {
                 if isOverridden {
-                    Text("Default")
+                    Text(verbatim: "Default")
                 } else {
-                    Label("Default", systemSymbol: .checkmark)
+                    Label(String("Default"), systemSymbol: .checkmark)
                 }
             }
         } label: {
@@ -140,9 +140,9 @@ private struct TextFlagView: View {
                     updateState()
                 } label: {
                     if isOverridden {
-                        Text("Restore Default")
+                        Text(verbatim: "Restore Default")
                     } else {
-                        Label("Default", systemSymbol: .checkmark)
+                        Label(String("Default"), systemSymbol: .checkmark)
                     }
                 }
             } label: {
@@ -190,9 +190,9 @@ private struct IntFlagView: View {
                     updateState()
                 } label: {
                     if isOverridden {
-                        Text("Restore Default")
+                        Text(verbatim: "Restore Default")
                     } else {
-                        Label("Default", systemSymbol: .checkmark)
+                        Label(String("Default"), systemSymbol: .checkmark)
                     }
                 }
             } label: {
@@ -214,7 +214,7 @@ struct NeevaFeatureFlagSettings_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             NeevaFeatureFlagSettingsView()
-                .navigationTitle("Server Feature Flags")
+                .navigationTitle(String("Server Feature Flags"))
                 .navigationBarTitleDisplayMode(.inline)
         }.navigationViewStyle(.stack)
     }

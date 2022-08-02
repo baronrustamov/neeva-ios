@@ -7,7 +7,6 @@ import Shared
 import SwiftUI
 
 class SpacesProfileViewModel: ObservableObject {
-
     @Published var spaceCards: [SpaceCardDetails] = []
     @Published var owner: Space.Owner?
     @Published var isLoading: Bool = false
@@ -19,7 +18,7 @@ class SpacesProfileViewModel: ObservableObject {
             case .success(let arr):
                 self.spaceCards = arr.map({
                     let spaceCardDetails = SpaceCardDetails(
-                        space: $0, manager: SpaceStore.shared)
+                        space: $0, manager: SpaceStore.shared, isPinnable: false)
                     return spaceCardDetails
                 })
                 self.owner = arr.first?.owner
@@ -42,7 +41,6 @@ struct SpacesProfileView: View {
     @State private var cardSize: CGFloat = CardUX.DefaultCardSize
     @State private var columnCount: Int = 2
     @State private var selectedSpace: String?
-
     @Environment(\.onOpenURLForSpace) var onOpenURLForSpace
     @Environment(\.shareURL) var shareURL
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass

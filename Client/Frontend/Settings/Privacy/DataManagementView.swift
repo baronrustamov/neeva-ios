@@ -9,6 +9,7 @@ import SwiftUI
 // known issue: removing an entry from this enum will cause the user’s settings to be cleared
 enum ClearableDataType: String, Identifiable, Codable, CaseIterable {
     case history = "Browsing History"
+    case archivedTabs = "Archived Tabs"
     case cache = "Cache"
     case cookies = "Cookies"
     case cookieCutterExclusions = "Cookie Cutter Exclusions"
@@ -23,6 +24,7 @@ enum ClearableDataType: String, Identifiable, Codable, CaseIterable {
     var label: LocalizedStringKey {
         switch self {
         case .history: return "Browsing History"
+        case .archivedTabs: return "Archived Tabs"
         case .cache: return "Cache"
         case .cookies: return "Cookies"
         case .cookieCutterExclusions: return "Cookie Cutter Exclusions"
@@ -47,6 +49,8 @@ enum ClearableDataType: String, Identifiable, Codable, CaseIterable {
         switch self {
         case .history:
             return HistoryClearable(profile: profile)
+        case .archivedTabs:
+            return ArchivedTabsClearable()
         case .cache:
             return CacheClearable()
         case .cookies:

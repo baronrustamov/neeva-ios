@@ -128,7 +128,10 @@ extension Date {
     public static var yesterday: Date { return Date().dayBefore }
     public static var tomorrow: Date { return Date().dayAfter }
     public var lastWeek: Date {
-        return Calendar.current.date(byAdding: .day, value: -8, to: noon) ?? Date()
+        return Calendar.current.date(byAdding: .day, value: -7, to: noon) ?? Date()
+    }
+    public var lastMonth: Date {
+        return Calendar.current.date(byAdding: .month, value: -1, to: noon) ?? Date()
     }
     public var older: Date {
         return Calendar.current.date(byAdding: .day, value: -20, to: noon) ?? Date()
@@ -153,6 +156,10 @@ extension Date {
 
     public func isWithinLast7Days() -> Bool {
         return (Date().lastWeek...Date()).contains(self)
+    }
+
+    public func isWithinLastMonth() -> Bool {
+        return (Date().lastMonth...Date()).contains(self)
     }
 
     public func daysFromToday() -> Double {

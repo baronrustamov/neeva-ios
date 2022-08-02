@@ -78,6 +78,7 @@ class OverlayManager: ObservableObject {
     @Published var offsetForBottomBar = false
     @Published var hideBottomBar = false
     @Published var isPresentedViewControllerVisible = false
+    @Published var backgroundOpacityLevel = 5
 
     /// Used to control full screen/popover sheets
     @Published var showFullScreenPopoverSheet = false
@@ -87,12 +88,15 @@ class OverlayManager: ObservableObject {
     var queuedOverlays = [(OverlayType, Bool, (() -> Void)?)]()
 
     public func presentFullScreenModal(
-        content: AnyView, animate: Bool = true, completion: (() -> Void)? = nil
+        content: AnyView, animate: Bool = true, ignoreSafeArea: Bool = true,
+        completion: (() -> Void)? = nil
     ) {
         let content = AnyView(
             content
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .ignoresSafeArea()
+                .if(ignoreSafeArea) { view in
+                    view.ignoresSafeArea()
+                }
         )
 
         show(overlay: .fullScreenModal(content), animate: animate, completion: completion)

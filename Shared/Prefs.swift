@@ -139,6 +139,10 @@ extension Defaults.Keys {
 
     // MARK: - cheatsheet
     public static let seenCheatsheetIntro = Defaults.BoolKey("cheatsheetIntroSeen")
+    public static let tryCheatsheetPopoverCount = Defaults.Key<Int>(
+        "tryCheatsheetPopoverCount",
+        default: 5
+    )
     public static let showTryCheatsheetPopover = Defaults.BoolKey("showTryCheatsheetPopover")
     public static let seenTryCheatsheetPopoverOnRecipe = Defaults.BoolKey(
         "seenTryCheatsheetPopoverOnRecipe")
@@ -146,8 +150,16 @@ extension Defaults.Keys {
     public static let showNeevaMenuWillMove = Defaults.BoolKey(
         "showNeevaMenuWillMove", default: true)
     public static let useCheatsheetBloomFilters = Defaults.BoolKey(
-        "useCheatsheetBloomFilters", default: false
+        "useCheatsheetBloomFilters", default: true
     )
+    public static let numOfUGCCanonicalError = Defaults.Key<Int>(
+        "numOfUGCCanonicalError", default: 0
+    )
+    public static let numOfUGCTests = Defaults.Key<Int>("numOfUGCTests", default: 0)
+    public static let numOfUGCNoResult = Defaults.Key<Int>("numOfUGCNoResult", default: 0)
+    public static let numOfUGCHits = Defaults.Key<Int>("numOfUGCHits", default: 0)
+    public static let numOfUGCClears = Defaults.Key<Int>("numOfUGCClears", default: 0)
+    public static let redditFilterHealth = Defaults.Key<String>("redditFilterHealth", default: "")
 
     // MARK: - notification
     public static let lastScheduledNeevaPromoID = Defaults.Key<String?>("lastScheduledNeevaPromoID")
@@ -233,6 +245,9 @@ extension Defaults.Keys {
     public static let didDismissDefaultBrowserInterstitial = Defaults.Key<Bool?>(
         "didDismissDefaultBrowserInterstitial")
 
+    public static let didShowAdBlockerPromo = Defaults.BoolKey(
+        "didShowAdBlockerPromo")
+
     // MARK: - Spotlight Search
     public static let createUserActivities = Defaults.BoolKey("createUserActivities", default: true)
     public static let makeActivityAvailForSearch = Defaults.BoolKey(
@@ -266,6 +281,10 @@ extension Defaults.Keys {
         "hasLogErrorFromFirstRunEvent", default: false)
     public static let lastFirstRunEventLogError = Defaults.Key<String>(
         "lastFirstRunEventLogError", default: "")
+
+    public static let shouldCollectUsageStats = Defaults.Key<Bool?>(
+        "shouldCollectUsageStats"
+    )
 }
 
 // MARK: - Defaults Extension

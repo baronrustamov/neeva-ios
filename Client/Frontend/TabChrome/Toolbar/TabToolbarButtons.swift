@@ -54,7 +54,7 @@ enum TabToolbarButtons {
                 action: onBack,
                 longPressAction: onLongPress
             )
-            .disabled(!model.canGoBack && !model.canReturnToSuggestions)
+            .disabled(!model.canGoBack)
             .accessibilityAction(named: "Show Recent Pages", onLongPress)
         }
 
@@ -162,8 +162,8 @@ enum TabToolbarButtons {
 
     struct Neeva: View {
         let iconWidth: CGFloat
-        let action: () -> Void
 
+        @EnvironmentObject private var chromeModel: TabChromeModel
         @EnvironmentObject private var promoModel: CheatsheetPromoModel
         @EnvironmentObject private var incognitoModel: IncognitoModel
         @Environment(\.isEnabled) private var isEnabled
@@ -175,11 +175,24 @@ enum TabToolbarButtons {
         var body: some View {
             TabToolbarButton(
                 label: icon,
-                action: action
+                action: {
+                    ClientLogger.shared.logCounter(
+                        .OpenCheatsheet,
+                        attributes: EnvironmentHelper.shared.getAttributes()
+                    )
+                    promoModel.openSheet(
+                        on: chromeModel.topBarDelegate?.tabManager.selectedTab?.url
+                    )
+                    if let bvc = chromeModel.topBarDelegate as? BrowserViewController {
+                        bvc.showCheatSheetOverlay()
+                    }
+                }
             )
             .presentAsPopover(
                 isPresented: $promoModel.showPromo,
                 backgroundColor: promoModel.getPopoverBackgroundColor(),
+                useDimmingBackground: promoModel.popoverDimBackground,
+                useAlternativeShadow: promoModel.popoverUseAlternativeShadow,
                 dismissOnTransition: true
             ) {
                 promoModel.getPopoverContent()
@@ -248,6 +261,22 @@ enum TabToolbarButtons {
         }
     #endif
 
+    struct CloseTab: View {
+        let action: () -> Void
+
+        @EnvironmentObject private var model: TabChromeModel
+
+        var body: some View {
+            TabToolbarButton(
+                label: Symbol(
+                    .trash,
+                    size: 20, weight: .medium, label: "Close Tab Shortcut"),
+                action: action
+            )
+            .disabled(!model.isPage || model.isErrorPage)
+        }
+    }
+
     struct AddToSpace: View {
         let weight: NiconFont
         let action: () -> Void
@@ -268,32 +297,38 @@ enum TabToolbarButtons {
     }
 
     struct ShowTabs: View {
-        let weight: UIImage.SymbolWeight
+        let weight: Font.Weight
         let action: () -> Void
-        let buildMenu: (_ sourceView: UIView) -> UIMenu?
         @Default(.currentTheme) var currentTheme
+
+        @EnvironmentObject var browserModel: BrowserModel
+        @EnvironmentObject var gridModel: GridModel
 
         @ViewBuilder
         var body: some View {
             #if XYZ
-                SecondaryMenuButton(action: action) { button in
-                    button.setImage(
-                        Web3Theme(with: currentTheme).tabsImage, for: .normal)
-                    button.tintColor = .label
-                    button.setDynamicMenu {
-                        buildMenu(button)
-                    }
-                    button.accessibilityLabel = "Show Tabs"
-                }
+                TabToolbarButton(
+                    label: Web3Theme(with: currentTheme).tabsImage,
+                    action: action
+                )
+                .modifier(MenuBuilder.ShowTabsButtonMenu(tabManager: browserModel.tabManager))
+                .modifier(
+                    MenuBuilder.ConfirmCloseAllTabsConfirmationDialog(
+                        showMenu: $gridModel.showConfirmCloseAllTabs,
+                        tabManager: browserModel.tabManager)
+                )
+                .accessibilityLabel(Text("Show Tabs"))
             #else
-                SecondaryMenuButton(action: action) { button in
-                    button.setImage(
-                        Symbol.uiImage(.squareOnSquare, size: 20, weight: weight), for: .normal)
-                    button.setDynamicMenu {
-                        buildMenu(button)
-                    }
-                    button.accessibilityLabel = "Show Tabs"
-                }
+                TabToolbarButton(
+                    label: Symbol(
+                        .squareOnSquare, size: 20, weight: weight, label: "Show Tabs"),
+                    action: action
+                )
+                .modifier(MenuBuilder.ShowTabsButtonMenu(tabManager: browserModel.tabManager))
+                .modifier(
+                    MenuBuilder.ConfirmCloseAllTabsConfirmationDialog(
+                        showMenu: $gridModel.showConfirmCloseAllTabs,
+                        tabManager: browserModel.tabManager))
             #endif
         }
     }

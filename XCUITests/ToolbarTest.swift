@@ -16,7 +16,10 @@ let PDFWebsite = ["url": "http://www.pdf995.com/samples/pdf.pdf"]
 class ToolbarTests: BaseTestCase {
     override func setUp() {
         super.setUp()
-        XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
+
+        if testName.contains("Landscape") {
+            XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
+        }
     }
 
     override func tearDown() {
@@ -106,35 +109,62 @@ class ToolbarTests: BaseTestCase {
         XCTAssertEqual(value as? String, "", "The url has not been removed correctly")
     }
 
-    // Check that after scrolling on a page, the URL bar is hidden. Tapping one on the status bar will reveal the URL bar, tapping again on the status will scroll to the top
-    func testRevealToolbarWhenTappingOnStatusbar() throws {
-        guard !iPad() else {
-            throw XCTSkip("Does not work on iPad")
-        }
+    func testToolbarsHideOnScroll() {
+        openURL(website1["url"]!)
 
-        try skipTest(issue: 2661, "Became flaky after changes to how bars are shown+hidden")
+        // Confirm toolbars are visible.
+        XCTAssert(app.buttons["Address Bar"].isHittable)
+        XCTAssert(app.buttons["Back"].isHittable)
 
-        openURL(path(forTestPage: "test-mozilla-org.html"))
-        waitUntilPageLoad()
-        waitForExistence(app.buttons["Show Tabs"], timeout: 15)
+        // Different elemets that are used for dragging.
+        let iOS = app.webViews.links["iOS"].firstMatch
+        let firefox = app.webViews.links["Firefox"].firstMatch
+        let requirments = app.webViews.links["requirements"].firstMatch
+        let firefoxPrivacyNotice = app.webViews.links["Firefox Privacy Notice"].firstMatch
 
-        // Workaround when testing on iPhone. If the orientation is in landscape on iPhone the tests will fail.
-        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
-        waitForExistence(app.otherElements.matching(identifier: "TabToolbar").firstMatch)
+        // Scroll down to hide toolbars.
+        iOS.press(forDuration: 0.1, thenDragTo: firefox)
 
-        let shareButton = app.buttons["Share"]
+        // Confirm toolbars are hidden.
+        XCTAssertFalse(app.buttons["Address Bar"].isHittable)
+        XCTAssertFalse(app.buttons["Back"].isHittable)
+
+        // Scroll back up to show toolbars.
+        requirments.press(forDuration: 0.1, thenDragTo: firefoxPrivacyNotice)
+        iOS.press(forDuration: 0.1, thenDragTo: requirments)
+
+        // Confirm toolbars are visible.
+        XCTAssert(app.buttons["Address Bar"].isHittable)
+        XCTAssert(app.buttons["Back"].isHittable)
+    }
+
+    func testRevealToolbarWhenTappingOnStatusbar() {
+        openURL(website1["url"]!)
+
+        // Confirm toolbars are visible.
+        XCTAssert(app.buttons["Address Bar"].isHittable)
+        XCTAssert(app.buttons["Back"].isHittable)
+
+        // Different elemets that are used for dragging.
+        let iOS = app.webViews.links["iOS"].firstMatch
+        let firefox = app.webViews.links["Firefox"].firstMatch
+
+        // Scroll down to hide toolbars.
+        iOS.press(forDuration: 0.1, thenDragTo: firefox)
+
+        // Confirm toolbars are hidden.
+        XCTAssertFalse(app.buttons["Address Bar"].isHittable)
+        XCTAssertFalse(app.buttons["Back"].isHittable)
+
+        // Tap status bar to show toolbars.
         let statusbarElement: XCUIElement = {
             return XCUIApplication(bundleIdentifier: "com.apple.springboard").statusBars.firstMatch
         }()
-
         sleep(1)
-
-        app.swipeUp()
-        waitFor(shareButton, with: "isHittable == false")
-
         statusbarElement.tap(force: true)
 
-        waitForExistence(shareButton)
-        XCTAssertTrue(shareButton.isHittable)
+        // Confirm toolbars are visible.
+        XCTAssert(app.buttons["Address Bar"].isHittable)
+        XCTAssert(app.buttons["Back"].isHittable)
     }
 }

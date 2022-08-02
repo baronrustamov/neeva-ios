@@ -13,13 +13,18 @@ import StoreKit
 private let log = Logger.browser
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-    var window: UIWindow?
-    private var scene: UIScene?
+    private static var activeSceneCount: Int = 0
 
+    var scene: UIScene?
+    var window: UIWindow?
     var bvc: BrowserViewController!
     private var geigerCounter: KMCGeigerCounter?
 
-    private static var activeSceneCount: Int = 0
+    @Default(.sceneLastOpenedTime) private var sceneLastOpenedTime
+    private var urlHandledOnLaunch = false
+
+    @Default(.scenePreviousUIState) private var scenePreviousUIState
+    private let backgroundProcessor = BackgroundTaskProcessor(label: "SceneDelegate")
 
     // MARK: - Scene state
     func scene(
@@ -27,6 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         self.scene = scene
+
         guard let scene = (scene as? UIWindowScene) else { return }
 
         window = .init(windowScene: scene)
@@ -53,19 +59,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
 
         updateCurrentVersion()
-    }
 
-    private func setupRootViewController(_ scene: UIScene) {
-        let profile = getAppDelegate().profile
-
-        self.bvc = BrowserViewController(profile: profile, window: window!, scene: scene)
-
-        bvc.edgesForExtendedLayout = []
-        bvc.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
-        bvc.restorationClass = AppDelegate.self
-
-        window!.rootViewController = bvc
-        bvc.tabManager.selectedTab?.reload()
+        if !urlHandledOnLaunch && !(AppConstants.IsRunningTest || AppConstants.IsRunningPerfTest) {
+            restoreSceneState()
+        }
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
@@ -95,6 +92,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         getAppDelegate().setUpWebServer(getAppDelegate().profile)
 
         NotificationPermissionHelper.shared.updatePermissionState()
+
+        // Continue playing the video if there is a player
+        if let interstitialViewModel = bvc.interstitialViewModel {
+            interstitialViewModel.player?.play()
+        }
     }
 
     func sceneWillEnterForeground(_ scene: UIScene) {
@@ -108,13 +110,33 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         bvc.tabManager.removeBlankTabs()
         bvc.downloadQueue.resumeAll()
 
+        var attributes = EnvironmentHelper.shared.getAttributes()
+        if !NeevaUserInfo.shared.hasLoginCookie(),
+            let token = Defaults[.notificationToken]
+        {
+            attributes.append(
+                ClientLogCounterAttribute(
+                    key: LogConfig.Attribute.pushNotificationToken,
+                    value: token
+                )
+            )
+            attributes.append(
+                ClientLogCounterAttribute(
+                    key: LogConfig.Attribute.pushNotificationTokenEnvironment,
+                    value: NotificationPermissionHelper.pushTokenEnvironment
+                )
+            )
+        }
+
         ClientLogger.shared.logCounter(
             .AppEnterForeground,
-            attributes: EnvironmentHelper.shared.getAttributes()
+            attributes: attributes
         )
 
         // send number of spotlight index events from the last session
         sendAggregatedSpotlightLogs()
+        // send number of cheatsheet stats from the last session
+        sendAggregatedCheatsheetLogs()
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
@@ -135,6 +157,65 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         bvc.downloadQueue.pauseAll()
     }
 
+    // MARK: - Scene Setup
+    private func setupRootViewController(_ scene: UIScene) {
+        self.bvc = BrowserViewController(profile: getAppDelegate().profile, scene: scene)
+        bvc.edgesForExtendedLayout = []
+        bvc.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
+        bvc.restorationClass = AppDelegate.self
+
+        window!.rootViewController = bvc
+    }
+
+    private func restoreSceneState() {
+        let shouldSetEditingLocationToTrue =
+            FeatureFlag[.openZeroQueryAfterLongDuration]
+            && sceneLastOpenedTime.hoursBetweenDate(toDate: Date()) > 1
+
+        // Restoring SceneUIState.
+        let sceneUIState = SceneUIState(rawValue: scenePreviousUIState)
+
+        switch sceneUIState {
+        case .cardGrid(let switcherState, let isIncognito):
+            switch switcherState {
+            case .tabs:
+                bvc.browserModel.showGridWithNoAnimation()
+
+                // Makes sure the incognito state is correctly set in the CardGrid.
+                bvc.browserModel.gridModel.switchToTabs(incognito: isIncognito)
+            case .spaces:
+                if !shouldSetEditingLocationToTrue {
+                    bvc.browserModel.showSpaces()
+                }
+            }
+        case .spaceDetailView(let id):
+            if !shouldSetEditingLocationToTrue {
+                bvc.browserModel.showSpaces()
+                bvc.browserModel.openSpace(spaceId: id)
+            }
+        case .tab:
+            break
+        }
+
+        DispatchQueue.main.async { [self] in
+            // Show the ZeroQuery UI if the user hasn't opened the app within the hour.
+            if shouldSetEditingLocationToTrue {
+                bvc.chromeModel.setEditingLocation(to: true)
+            }
+
+            self.sceneLastOpenedTime = Date()
+        }
+    }
+
+    func setSceneUIState(to state: SceneUIState) {
+        // This ensures that the state is correctly saved.
+        backgroundProcessor.performTask {
+            DispatchQueue.main.sync {
+                self.scenePreviousUIState = state.rawValue
+            }
+        }
+    }
+
     static func handleThemePreference(for option: AppearanceThemeOption) {
         getAllSceneDelegates().forEach { scene in
             switch option {
@@ -148,11 +229,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
 
-    // MARK: - URL managment
+    // MARK: - URL Handling
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
-        // almost always one URL
+        // Almost always one URL
         guard let url = URLContexts.first?.url,
-            let routerpath = NavigationPath(bvc: bvc, url: url)
+            let routerpath = NavigationPath(url: url)
         else {
             log.info(
                 "Failed to unwrap url for context: \(URLContexts.first?.url.absoluteString ?? "")")
@@ -174,6 +255,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                         value: "1"
                     )
                 )
+
+                urlHandledOnLaunch = true
             }
             ClientLogger.shared.logCounter(.OpenDefaultBrowserURL, attributes: attributes)
             ConversionLogger.log(event: .handledNavigationAsDefaultBrowser)
@@ -185,6 +268,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             if !self.checkForSignInToken(in: url) {
                 log.info("Passing URL to router path: \(routerpath)")
                 NavigationPath.handle(nav: routerpath, with: self.bvc)
+                self.urlHandledOnLaunch = true
             }
         }
     }
@@ -206,6 +290,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 let url = URL(string: urlString)
             {
                 self.bvc.switchToTabForURLOrOpen(url)
+                self.urlHandledOnLaunch = true
             }
         } else if userActivity.activityType == CSSearchableItemActionType,
             let itemIdentifier = userActivity.userInfo?[CSSearchableItemActivityIdentifier]
@@ -229,6 +314,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 )
 
                 self.bvc.switchToTabForURLOrOpen(url)
+                self.urlHandledOnLaunch = true
             } else {
                 // this itemIdentifier is the spaces id
                 ClientLogger.shared.logCounter(
@@ -243,21 +329,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                         ]
                 )
 
-                self.bvc.browserModel.openSpace(
-                    spaceId: itemIdentifier, bvc: self.bvc, completion: {})
+                self.bvc.browserModel.openSpace(spaceId: itemIdentifier)
+                self.urlHandledOnLaunch = true
             }
         } else if !continueSiriIntent(continue: userActivity) {
             _ = checkForUniversalURL(continue: userActivity)
         }
     }
 
-    func continueSiriIntent(continue userActivity: NSUserActivity) -> Bool {
+    private func continueSiriIntent(continue userActivity: NSUserActivity) -> Bool {
         var attributes = [
             EnvironmentHelper.shared.getSessionUUID()
         ]
+
         if let intent = userActivity.interaction?.intent as? OpenURLIntent {
             self.bvc.openURLInNewTab(intent.url)
             ClientLogger.shared.logCounter(.openURLShortcut, attributes: attributes)
+            self.urlHandledOnLaunch = true
+
             return true
         }
 
@@ -280,14 +369,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     )
                 }
             }
+
             ClientLogger.shared.logCounter(.searchShortcut, attributes: attributes)
+            self.urlHandledOnLaunch = true
+
             return true
         }
 
         return false
     }
 
-    func checkForUniversalURL(continue userActivity: NSUserActivity) -> Bool {
+    private func checkForUniversalURL(continue userActivity: NSUserActivity) -> Bool {
         // Get URL components from the incoming user activity.
         guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
             let incomingURL = userActivity.webpageURL
@@ -299,6 +391,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         if !self.checkForSignInToken(in: incomingURL) {
             self.bvc.openURLInNewTab(incomingURL)
+            self.urlHandledOnLaunch = true
         }
 
         return true
@@ -316,7 +409,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         shortcutItem: UIApplicationShortcutItem,
         completionHandler: @escaping (Bool) -> Void = { _ in }
     ) {
-        let handledShortCutItem = QuickActions.sharedInstance.handleShortCutItem(
+        let handledShortCutItem = QuickActions.sharedInstance.handleShortcutItem(
             shortcutItem, withBrowserViewController: bvc)
         completionHandler(handledShortCutItem)
     }
@@ -383,6 +476,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         fatalError("Scene doesn't exist or is nil")
     }
 
+    // periphery:ignore
     static func getCurrentSceneId(for view: UIView?) -> String {
         return getCurrentScene(for: view).session.persistentIdentifier
     }
@@ -432,13 +526,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     // MARK: - Geiger
-    public func startGeigerCounter() {
+    func startGeigerCounter() {
         if let scene = self.scene as? UIWindowScene {
             geigerCounter = KMCGeigerCounter(windowScene: scene)
         }
     }
 
-    public func stopGeigerCounter() {
+    func stopGeigerCounter() {
         geigerCounter?.disable()
         geigerCounter = nil
     }
@@ -543,6 +637,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             // clear deprecated `Default` values
             Defaults.reset(.appExtensionTelemetryOpenUrl)  // deprecated 2022-05-18
 
+            // Existing users before 1.52.0 (when we introduce logging consent)
+            // should be opted into the usage stats collection
+            if previousVersion.compare("1.52.0", options: .numeric) == .orderedAscending {
+                Defaults[.shouldCollectUsageStats] = true
+                ClientLogger.shared.flushLoggingQueue()
+            }
+
             // migrate the content blocking enabled flag for users upgrading prior to 1.42.0 which is our cookie cutter release
             // TODO: remove this after a couple releases as most of our users should be upgraded
             if previousVersion.compare("1.42.0", options: .numeric) == .orderedAscending {
@@ -551,6 +652,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
             if previousVersion.compare("1.43.0", options: .numeric) == .orderedAscending {
                 Defaults[.contentBlockingStrength] = BlockingStrength.easyPrivacyStrict.rawValue
+            }
+
+            if previousVersion.compare("1.46.0", options: .numeric) == .orderedAscending {
+                // Only enable ad block for iOS 15+
+                if #available(iOS 15.0, *) {
+                    if (!NeevaUserInfo.shared.hasLoginCookie()
+                        || Defaults[.notificationPermissionState]
+                            != NotificationPermissionStatus.authorized.rawValue)
+                        && (!Defaults[.didSetDefaultBrowser] && !Defaults[.adBlockEnabled]
+                            && !Defaults[.didShowAdBlockerPromo])
+                    {
+                        Defaults[.didShowAdBlockerPromo] = true
+                        if bvc != nil {
+                            bvc.shouldShowAdBlockPromo = true
+                        }
+                    }
+                }
             }
 
             return true
@@ -586,5 +704,43 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         Defaults[.numOfThumbnailsForUserActivity] = 0
         Defaults[.numOfWillIndexEvents] = 0
         Defaults[.numOfDidIndexEvents] = 0
+    }
+
+    func sendAggregatedCheatsheetLogs() {
+        ClientLogger.shared.logCounter(
+            .CheatsheetUGCStatsForSession,
+            attributes: EnvironmentHelper.shared.getAttributes() + [
+                ClientLogCounterAttribute(
+                    key: LogConfig.CheatsheetAttribute.UGCStat.filterHealth.rawValue,
+                    value: Defaults[.redditFilterHealth]
+                ),
+                ClientLogCounterAttribute(
+                    key: LogConfig.CheatsheetAttribute.UGCStat.ugcTest.rawValue,
+                    value: String(Defaults[.numOfUGCTests])
+                ),
+                ClientLogCounterAttribute(
+                    key: LogConfig.CheatsheetAttribute.UGCStat.ugcCanonicalError.rawValue,
+                    value: String(Defaults[.numOfUGCCanonicalError])
+                ),
+                ClientLogCounterAttribute(
+                    key: LogConfig.CheatsheetAttribute.UGCStat.ugcTestNoResult.rawValue,
+                    value: String(Defaults[.numOfUGCNoResult])
+                ),
+                ClientLogCounterAttribute(
+                    key: LogConfig.CheatsheetAttribute.UGCStat.ugcHit.rawValue,
+                    value: String(Defaults[.numOfUGCHits])
+                ),
+                ClientLogCounterAttribute(
+                    key: LogConfig.CheatsheetAttribute.UGCStat.ugcClear.rawValue,
+                    value: String(Defaults[.numOfUGCClears])
+                ),
+            ]
+        )
+        Defaults[.numOfUGCTests] = 0
+        Defaults[.numOfUGCCanonicalError] = 0
+        Defaults[.numOfUGCNoResult] = 0
+        Defaults[.numOfUGCHits] = 0
+        Defaults[.numOfUGCClears] = 0
+        Defaults[.redditFilterHealth] = ""
     }
 }

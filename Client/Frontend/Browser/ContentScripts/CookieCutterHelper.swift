@@ -31,10 +31,7 @@ class CookieCutterHelper: TabContentScript {
         "cookieCutterHandler"
     }
 
-    func userContentController(
-        _ userContentController: WKUserContentController,
-        didReceiveScriptMessage message: WKScriptMessage
-    ) {
+    func userContentController(didReceiveScriptMessage message: WKScriptMessage) {
         guard
             let data = message.body as? [String: Any], let update = data["update"] as? String
         else {
@@ -52,19 +49,24 @@ class CookieCutterHelper: TabContentScript {
                 }
             case .getPreferences:
                 do {
-                    if let domain = domain,
-                        let escapedEncoded = String(
+                    if let domain = domain {
+                        var cookieCutterEnabled = TrackingPreventionConfig.trackersPreventedFor(
+                            domain, checkCookieCutterState: true)
+                        // Don't dismiss the cookie consent on neeva.com
+                        if currentWebView?.url?.isNeevaURL() ?? false {
+                            cookieCutterEnabled = false
+                        }
+                        if let escapedEncoded = String(
                             data: try JSONEncoder().encode([
-                                "cookieCutterEnabled":
-                                    TrackingPreventionConfig.trackersPreventedFor(
-                                        domain, checkCookieCutterState: true),
-                                "marketing": !cookieCutterModel.marketingCookiesAllowed,
-                                "analytic": !cookieCutterModel.analyticCookiesAllowed,
-                                "social": !cookieCutterModel.socialCookiesAllowed,
+                                "cookieCutterEnabled": cookieCutterEnabled,
+                                "analyticAllowed": cookieCutterModel.analyticCookiesAllowed,
+                                "marketingAllowed": cookieCutterModel.marketingCookiesAllowed,
+                                "socialAllowed": cookieCutterModel.socialCookiesAllowed,
                             ]), encoding: .utf8)
-                    {
-                        currentWebView?.evaluateJavascriptInDefaultContentWorld(
-                            "__firefox__.setPreference(\(escapedEncoded))")
+                        {
+                            currentWebView?.evaluateJavascriptInDefaultContentWorld(
+                                "__firefox__.setPreference(\(escapedEncoded))")
+                        }
                     }
                 } catch {
                     print("Error encoding escaped value: \(error)")

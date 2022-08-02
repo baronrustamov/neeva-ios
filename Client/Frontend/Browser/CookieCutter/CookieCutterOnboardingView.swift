@@ -32,12 +32,9 @@ struct CookieCutterOnboardingView: View {
                     spacing: 16
                 ) {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Your Cookie Cutter just declined a ")
-                            + Text("cookie popup ")
-                            .bold()
-                            + Text("and blocked ")
-                            + Text("\(trackingStatsViewModel.numTrackers) trackers.")
-                            .bold()
+                        Text(
+                            "Your Cookie Cutter just declined a **cookie popup** and blocked \(trackingStatsViewModel.numTrackers) **trackers**"
+                        )
 
                         Text(
                             "Cookie Cutter by Neeva stops annoying cookie popups and blocks invasive trackers across the web."

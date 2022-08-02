@@ -232,11 +232,14 @@ struct KnowledgeCardView: View {
                         SocialButton(social: social)
                     }
                 }
+                .padding(.horizontal, CheatsheetUX.horizontalPadding)
             }
+            .padding(.horizontal, -1 * CheatsheetUX.horizontalPadding)
 
             ReadMoreDescriptionView(text: richEntity.description, lineLimit: 4)
 
             Divider()
         }
+        .padding(.horizontal, CheatsheetUX.horizontalPadding)
     }
 }

@@ -26,6 +26,7 @@ enum NavigationPath {
     case closeIncogntioTabs
     case space(String, [String]?, Bool)
     case spaceDigest
+    case openSetting(SettingsPage?)
     case fastTap(String, Bool)
     case configNewsProvider(isIncognito: Bool)
     case openDefaultBrowserEducation
@@ -33,7 +34,7 @@ enum NavigationPath {
         case walletConnect(wcURL: WCURL)
     #endif
 
-    init?(bvc: BrowserViewController, url: URL) {
+    init?(url: URL) {
         let urlString = url.absoluteString
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             return nil
@@ -95,6 +96,11 @@ enum NavigationPath {
 
         } else if urlString.starts(with: "\(scheme)://open-default-browser-education") {
             self = .openDefaultBrowserEducation
+        } else if urlString.starts(with: "\(scheme)://open-setting"),
+            let pageParam = components.valueForQuery("page"),
+            let page = SettingsPage(rawValue: pageParam)
+        {
+            self = .openSetting(page)
         } else {
             return nil
         }
@@ -112,8 +118,7 @@ enum NavigationPath {
             NavigationPath.handleSpaceDigest(with: bvc)
         case .space(let spaceId, let updatedItemIds, let isIncognito):
             NavigationPath.handleSpace(
-                spaceId: spaceId, updatedItemIds: updatedItemIds, isIncognito: isIncognito,
-                with: bvc)
+                spaceId: spaceId, updatedItemIds: updatedItemIds, with: bvc)
         case .fastTap(let query, let noDelay):
             NavigationPath.handleFastTap(query: query, with: bvc, noDelay: noDelay)
         case .configNewsProvider(let isIncognito):
@@ -125,10 +130,12 @@ enum NavigationPath {
             case .walletConnect(let wcURL):
                 bvc.connectWallet(to: wcURL)
         #endif
+        case .openSetting(let page):
+            NavigationPath.handleOpenSetting(page: page, with: bvc)
         }
     }
 
-    static func navigationPath(from url: URL, with bvc: BrowserViewController) -> NavigationPath? {
+    static func navigationPath(from url: URL) -> NavigationPath? {
         guard url.absoluteString.hasPrefix(NeevaConstants.appDeepLinkURL.absoluteString),
             let deepLink = URL(
                 string: "neeva://"
@@ -138,7 +145,7 @@ enum NavigationPath {
             return nil
         }
 
-        return NavigationPath(bvc: bvc, url: deepLink)
+        return NavigationPath(url: deepLink)
     }
 
     private static func handleWidgetKitQuery(
@@ -207,7 +214,7 @@ enum NavigationPath {
                 let spaceId = newURL.lastPathComponent
                 if spaceId != "spaces" {
                     NavigationPath.handleSpace(
-                        spaceId: spaceId, updatedItemIds: [], isIncognito: isIncognito, with: bvc
+                        spaceId: spaceId, updatedItemIds: [], with: bvc
                     )
                 } else {
                     bvc.browserModel.showSpaces()
@@ -227,7 +234,8 @@ enum NavigationPath {
             bvc.switchToTabForWidgetURLOrOpen(newURL, uuid: uuid, isIncognito: false)
         } else {
             bvc.openLazyTab(
-                openedFrom: .openTab(bvc.tabManager.selectedTab), switchToIncognitoMode: false)
+                openedFrom: .openTab(bvc.tabManager.selectedTab), switchToIncognitoMode: false
+            )
         }
     }
 
@@ -241,8 +249,7 @@ enum NavigationPath {
     }
 
     private static func handleSpace(
-        spaceId: String, updatedItemIds: [String]?, isIncognito: Bool,
-        with bvc: BrowserViewController
+        spaceId: String, updatedItemIds: [String]?, with bvc: BrowserViewController
     ) {
         // navigate to SpaceId
         let gridModel = bvc.gridModel
@@ -250,8 +257,7 @@ enum NavigationPath {
             gridModel.spaceCardModel.updatedItemIDs = updatedItemIDs
         }
 
-        bvc.browserModel.openSpace(
-            spaceId: spaceId, bvc: bvc, isIncognito: isIncognito, completion: {})
+        bvc.browserModel.openSpace(spaceId: spaceId)
     }
 
     private static func handleFastTap(query: String, with bvc: BrowserViewController, noDelay: Bool)
@@ -261,6 +267,17 @@ enum NavigationPath {
             bvc.searchQueryModel.value = query
         }
     }
+
+    private static func handleOpenSetting(page: SettingsPage?, with bvc: BrowserViewController) {
+        guard let page = page else {
+            return
+        }
+        // TODO: look for a better solution to make sure the app state is set up properly before handling the notification deep link
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            bvc.openSettings(openPage: page)
+        }
+    }
+
 }
 
 extension NavigationPath: Equatable {}

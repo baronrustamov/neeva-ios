@@ -115,7 +115,7 @@ extension Web3Theme {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 32)
-                .accessibilityLabel("Neeva Wallet")
+                .accessibilityLabel(String("Neeva Wallet"))
         case .azuki, .cryptoCoven, .coolCats:
             WebImage(url: asset?.imageURL)
                 .resizable()
@@ -126,7 +126,7 @@ extension Web3Theme {
                     RoundedRectangle(cornerRadius: 16)
                         .stroke(self == .cryptoCoven ? Color.label : Color.white, lineWidth: 2)
                 )
-                .accessibilityLabel("Neeva Wallet")
+                .accessibilityLabel(String("Neeva Wallet"))
         }
     }
 
@@ -185,20 +185,20 @@ extension Web3Theme {
         }
     }
 
-    public var tabsImage: UIImage? {
-        switch self {
-        case .azuki, .coolCats, .default:
-            return Symbol.uiImage(
-                .squareOnSquare,
-                size: 20,
-                weight: .medium
-            )
-        case .cryptoCoven:
-            return UIImage(named: "cryptocoven_tabs")?
-                .scalePreservingAspectRatio(
-                    targetSize: CGSize(width: 36, height: 36)
+    public var tabsImage: some View {
+        Group {
+            switch self {
+            case .azuki, .coolCats, .default:
+                Symbol(
+                    decorative: .squareOnSquare,
+                    size: 20,
+                    weight: .medium
                 )
-                .withRenderingMode(.alwaysTemplate)
+            case .cryptoCoven:
+                Image("cryptocoven_tabs")
+                    .renderingMode(.template)
+                    .font(.system(size: 20, weight: .medium, design: .default))
+            }
         }
     }
 
@@ -242,7 +242,6 @@ extension UIImage {
     fileprivate func scalePreservingAspectRatio(targetSize: CGSize) -> UIImage {
         let widthRatio = targetSize.width / size.width
         let heightRatio = targetSize.height / size.height
-
         let scaleFactor = min(widthRatio, heightRatio)
 
         let scaledImageSize = CGSize(

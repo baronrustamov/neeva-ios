@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script type="module" src="content.js"></script>
+    <script type="module" src="popup.js"></script>
+
+    <link rel="stylesheet" href="picker.css">
+    <link rel="stylesheet" href="popup.css">
+    <link rel="stylesheet" href="switch.css">
+</head>
+<body>
+    <section>
+        <div class="sectionContent">
+            <div class="toggle">
+                <p class="toggleTitle">Make Neeva default search</p>
+
+                <label class="switch">
+                    <input type="checkbox" id="neevaRedirectToggle"/>
+                        <span class="slider round"/>
+                </label>
+            </div>
+        </div>
+    </section>
+    
+    <section>
+        <div class="sectionContent">
+            <div class="toggle">
+                <p class="toggleTitle">Cookie Cutter</p>
+
+                <label class="switch">
+                    <input type="checkbox" id="cookieCutterToggle"/>
+                        <span class="slider round"/>
+                </label>
+            </div>
+        </div>
+    </section>
+
+    <section id="cookieCutterSettings" style="display: none;">
+        <div class="sectionHeader">COOKIE POPUPS</p>
+        <div class="sectionContent">
+            <div class="picker" id="declineCookiesSection">
+                <p class="pickerTitle">Decline Non-essential Cookies</p>
+
+                <label class="pickerCheckmark">
+                    <input type="checkbox" id="declineCookiesPicker"/>
+                        <span class="checkmark"/>
+                </label>
+            </label>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="sectionContent">
+            <div class="picker" id="acceptCookiesSection">
+                <p class="pickerTitle">Accept Non-essential Cookies</p>
+
+                <label class="pickerCheckmark">
+                    <input type="checkbox" id="acceptCookiesPicker"/>
+                        <span class="checkmark"/>
+                </label>
+            </label>
+        </div>
+
+        <div class="sectionFooter">
+            Essential cookies are used by sites to remember things like your login information and preferences.
+            These cookies cannot be blocked by the extension.
+            <br>
+            <a href="https://help.neeva.com/hc/en-us/articles/4486326606355" target="_blank">Learn More</a>
+        </div>
+    </section>  
+
+    <button id="navigateToNeevaButton">Go to Neeva home</button>
+</body>
+</html>

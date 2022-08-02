@@ -91,6 +91,7 @@ class EmptyTabTrayTests: BaseTestCase {
         waitForExistence(app.buttons["Open in New Tab"])
         app.buttons["Open in New Tab"].tap()
 
+        waitForNoExistence(app.buttons["Switch"], timeoutValue: 30)
         setIncognitoMode(enabled: true)
         openURLInNewTab("https://test.example/")
         goToTabTray()

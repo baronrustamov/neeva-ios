@@ -65,27 +65,6 @@ struct LocationViewTrackingButton: View {
     }
 }
 
-struct LocationViewReloadButton: View {
-    let buildMenu: () -> UIMenu?
-    let state: TabChromeModel.ReloadButtonState
-    let onTap: () -> Void
-
-    var body: some View {
-        // TODO: when dropping support for iOS 14, change this to a Menu view with a primaryAction
-        SecondaryMenuButton(action: onTap) {
-            $0.tintColor = .label
-            $0.setImage(
-                Symbol.uiImage(state == .reload ? .arrowClockwise : .xmark, weight: .medium),
-                for: .normal)
-            $0.accessibilityLabel =
-                state == .reload
-                ? .TabToolbarReloadAccessibilityLabel : .TabToolbarStopAccessibilityLabel
-            $0.setDynamicMenu(buildMenu)
-        }
-        .frame(width: TabLocationViewUX.height, height: TabLocationViewUX.height)
-    }
-}
-
 /// see also `TopBarShareButton`
 struct LocationViewShareButton: View {
     let url: URL?
@@ -111,13 +90,7 @@ struct TabLocationBarButton_Previews: PreviewProvider {
             LocationViewTrackingButton(currentDomain: "neeva.com")
                 .environmentObject(IncognitoModel(isIncognito: true))
         }.previewLayout(.sizeThatFits)
-        HStack {
-            LocationViewReloadButton(
-                buildMenu: { UIMenu(children: [UIAction(title: "Hello, world!") { _ in }]) },
-                state: .reload
-            ) {}
-            LocationViewReloadButton(buildMenu: { nil }, state: .stop) {}
-        }.previewLayout(.sizeThatFits)
+
         HStack {
             LocationViewShareButton(url: nil, onTap: { _ in })
             LocationViewShareButton(url: "https://neeva.com/", onTap: { _ in })

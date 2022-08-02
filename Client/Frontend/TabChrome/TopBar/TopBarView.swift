@@ -8,21 +8,22 @@ import SwiftUI
 
 struct TopBarView: View {
     let performTabToolbarAction: (ToolbarAction) -> Void
-    let buildTabsMenu: (_ sourceView: UIView) -> UIMenu?
     let onReload: () -> Void
     let onSubmit: (String) -> Void
     let onShare: (UIView) -> Void
-    let buildReloadMenu: () -> UIMenu?
     let onMenuAction: (OverflowMenuAction) -> Void
     let newTab: () -> Void
     let onCancel: () -> Void
     let onOverflowMenuAction: (OverflowMenuAction, UIView) -> Void
+    var geom: GeometryProxy
 
     @State private var shouldInsetHorizontally = false
 
+    @EnvironmentObject private var cardStripModel: CardStripModel
     @EnvironmentObject private var chrome: TabChromeModel
     @EnvironmentObject private var location: LocationViewModel
     @EnvironmentObject private var scrollingControlModel: ScrollingControlModel
+    @EnvironmentObject private var incognitoModel: IncognitoModel
 
     private var separator: some View {
         Color.ui.adaptive.separator.frame(height: 0.5).ignoresSafeArea()
@@ -30,10 +31,6 @@ struct TopBarView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            if UIConstants.enableBottomURLBar {
-                separator.padding(.bottom, chrome.inlineToolbar ? 0 : 3)
-            }
-
             HStack(spacing: chrome.inlineToolbar ? 12 : 0) {
                 if Defaults[.didFirstNavigation] && chrome.inlineToolbar
                     && !chrome.isEditingLocation
@@ -66,8 +63,7 @@ struct TopBarView: View {
                 }
 
                 TabLocationView(
-                    onReload: onReload, onSubmit: onSubmit, onShare: onShare,
-                    buildReloadMenu: buildReloadMenu, onCancel: onCancel
+                    onReload: onReload, onSubmit: onSubmit, onShare: onShare, onCancel: onCancel
                 )
                 .padding(.horizontal, chrome.inlineToolbar ? 0 : 8)
                 .padding(.top, chrome.inlineToolbar ? 8 : 3)
@@ -82,14 +78,19 @@ struct TopBarView: View {
                     Group {
                         TopBarNeevaButton(onMenuAction: onMenuAction)
 
-                        TabToolbarButtons.AddToSpace(
-                            weight: .regular, action: { performTabToolbarAction(.addToSpace) }
-                        )
-                        .tapTargetFrame()
+                        if incognitoModel.isIncognito && FeatureFlag[.incognitoQuickClose] {
+                            TabToolbarButtons.CloseTab(
+                                action: { performTabToolbarAction(.closeTab) })
+                                .tapTargetFrame()
+                        } else {
+                            TabToolbarButtons.AddToSpace(
+                                weight: .regular, action: { performTabToolbarAction(.addToSpace) }
+                            )
+                            .tapTargetFrame()
+                        }
 
                         TabToolbarButtons.ShowTabs(
-                            weight: .regular, action: { performTabToolbarAction(.showTabs) },
-                            buildMenu: buildTabsMenu
+                            weight: .regular, action: { performTabToolbarAction(.showTabs) }
                         )
                         .tapTargetFrame()
                     }.transition(.offset(x: 300, y: 0).combined(with: .opacity))
@@ -97,14 +98,14 @@ struct TopBarView: View {
             }
             .opacity(scrollingControlModel.controlOpacity)
             .padding(.horizontal, shouldInsetHorizontally ? 12 : 0)
-            .padding(.bottom, chrome.estimatedProgress == nil ? 0 : -1)
+            .if(!cardStripModel.showCardStrip) {
+                $0.padding(.bottom, chrome.estimatedProgress == nil ? 0 : -1)
+            }
 
-            if chrome.showTopCardStrip {
-                GeometryReader { geo in
-                    CardStripContent(
-                        bvc: SceneDelegate.getBVC(with: chrome.topBarDelegate?.tabManager.scene),
-                        width: geo.size.width)
-                }
+            if cardStripModel.showCardStrip {
+                CardStripView(containerGeometry: geom.size)
+                    .transition(.opacity.combined(with: .scale))
+                    .padding(.bottom, chrome.estimatedProgress == nil ? 0 : -1)
             }
 
             if !chrome.isEditingLocation {
@@ -122,9 +123,7 @@ struct TopBarView: View {
                 .animation(.spring(), value: chrome.estimatedProgress)
             }
 
-            if !UIConstants.enableBottomURLBar {
-                separator
-            }
+            separator
         }
         .background(
             GeometryReader { geom in
@@ -138,9 +137,6 @@ struct TopBarView: View {
         .background(Color.DefaultBackground.ignoresSafeArea())
         .accentColor(.label)
         .accessibilityElement(children: .contain)
-        .offset(
-            y: scrollingControlModel.headerTopOffset
-                * (UIConstants.enableBottomURLBar ? -1 : 1)
-        )
+        .offset(y: scrollingControlModel.headerTopOffset)
     }
 }

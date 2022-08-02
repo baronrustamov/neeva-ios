@@ -81,16 +81,4 @@ class NeevaTabContentBlocker: TabContentBlocker, TabContentScript {
             TabEvent.post(.didChangeContentBlocking, for: tab)
         }
     }
-
-    override func notifyContentBlockingChanged() {
-        guard let tab = tab as? Tab else { return }
-        TabEvent.post(.didChangeContentBlocking, for: tab)
-    }
-}
-
-// Static methods to access user prefs for tracking protection
-extension NeevaTabContentBlocker {
-    static func isTrackingProtectionEnabled() -> Bool {
-        Defaults[.cookieCutterEnabled]
-    }
 }

@@ -12,110 +12,38 @@ enum ShortcutType: String {
     case newIncognitoTab = "NewIncognitoTab"
 
     init?(fullType: String) {
+        // The full type looks like this: co.neeva.app.ios.browser[-dev].NewTab
         guard let last = fullType.components(separatedBy: ".").last else { return nil }
 
         self.init(rawValue: last)
     }
-
-    var type: String {
-        return Bundle.main.bundleIdentifier! + ".\(self.rawValue)"
-    }
 }
 
-class QuickActions: NSObject {
-
-    fileprivate let log = Logger.browser
-
-    static let Version = "1.0"
-    static let VersionKey = "dynamicQuickActionsVersion"
-
-    static let TabURLKey = "url"
-    static let TabTitleKey = "title"
-
-    static var sharedInstance = QuickActions()
-
-    var launchedShortcutItem: UIApplicationShortcutItem?
-
-    // MARK: Administering Quick Actions
-    func addDynamicApplicationShortcutItemOfType(
-        _ type: ShortcutType, fromShareItem shareItem: ShareItem,
-        toApplication application: UIApplication
-    ) {
-        var userData = [QuickActions.TabURLKey: shareItem.url]
-        if let title = shareItem.title {
-            userData[QuickActions.TabTitleKey] = title
-        }
-        QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(
-            type, withUserData: userData, toApplication: application)
-    }
-
-    @discardableResult func addDynamicApplicationShortcutItemOfType(
-        _ type: ShortcutType, withUserData userData: [String: String] = [String: String](),
-        toApplication application: UIApplication
-    ) -> Bool {
-        // add the quick actions version so that it is always in the user info
-        var userData: [String: String] = userData
-        userData[QuickActions.VersionKey] = QuickActions.Version
-
-        let dynamicShortcutItems = application.shortcutItems ?? [UIApplicationShortcutItem]()
-        application.shortcutItems = dynamicShortcutItems
-
-        return true
-    }
-
-    func removeDynamicApplicationShortcutItemOfType(
-        _ type: ShortcutType, fromApplication application: UIApplication
-    ) {
-        guard var dynamicShortcutItems = application.shortcutItems,
-            let index = (dynamicShortcutItems.firstIndex { $0.type == type.type })
-        else { return }
-
-        dynamicShortcutItems.remove(at: index)
-        application.shortcutItems = dynamicShortcutItems
-    }
+class QuickActions {
+    static let sharedInstance = QuickActions()
 
     // MARK: Handling Quick Actions
-    @discardableResult func handleShortCutItem(
+    func handleShortcutItem(
         _ shortcutItem: UIApplicationShortcutItem,
         withBrowserViewController bvc: BrowserViewController?
     ) -> Bool {
-        guard let bvc = bvc else {
+        guard let bvc = bvc, let shortcutType = ShortcutType(fullType: shortcutItem.type) else {
             return false
         }
 
-        // Verify that the provided `shortcutItem`'s `type` is one handled by the application.
-        guard let shortCutType = ShortcutType(fullType: shortcutItem.type) else { return false }
-
-        DispatchQueue.main.async {
-            self.handleShortCutItemOfType(
-                shortCutType, userData: shortcutItem.userInfo, browserViewController: bvc)
+        DispatchQueue.main.async { [self] in
+            handleOpenNewTab(
+                withBrowserViewController: bvc, isIncognito: shortcutType == .newIncognitoTab)
         }
 
         return true
     }
 
-    fileprivate func handleShortCutItemOfType(
-        _ type: ShortcutType, userData: [String: NSSecureCoding]?,
-        browserViewController: BrowserViewController
-    ) {
-        switch type {
-        case .newTab:
-            handleOpenNewTab(withBrowserViewController: browserViewController, isIncognito: false)
-        case .newIncognitoTab:
-            handleOpenNewTab(withBrowserViewController: browserViewController, isIncognito: true)
-        }
-    }
-
-    fileprivate func handleOpenNewTab(
+    func handleOpenNewTab(
         withBrowserViewController bvc: BrowserViewController, isIncognito: Bool
     ) {
-        // Wait for animations that run when returning to foreground to finish
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            let isEmpty =
-                isIncognito
-                ? bvc.tabManager.incognitoTabs.count == 0 : bvc.tabManager.normalTabs.count == 0
-            bvc.openLazyTab(
-                openedFrom: isEmpty ? .tabTray : .openTab(nil), switchToIncognitoMode: isIncognito)
-        }
+        bvc.openLazyTab(
+            openedFrom: bvc.browserModel.showGrid ? .tabTray : .newTabButton,
+            switchToIncognitoMode: isIncognito)
     }
 }

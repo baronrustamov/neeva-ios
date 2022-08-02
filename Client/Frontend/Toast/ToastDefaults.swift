@@ -28,6 +28,12 @@ class ToastDefaults: NSObject {
         }
 
         var toastText: LocalizedStringKey = "Tab Closed"
+        let keyboardShortcutDescription = {
+            AnyView(
+                (Text("\(Image(systemName: "shift"))")
+                    + Text("\(Image(systemName: "command"))") + Text("T to restore"))
+                    .withFont(.bodyXSmall).foregroundColor(.secondaryLabel))
+        }
 
         if savedTabs.count > 0 {
             if savedTabs.count > 1 {
@@ -36,11 +42,17 @@ class ToastDefaults: NSObject {
 
             let toastContent = ToastViewContent(
                 normalContent: ToastStateContent(
-                    text: toastText, buttonText: "restore",
+                    text: toastText,
+                    description: UIDevice.current.useTabletInterface
+                        ? keyboardShortcutDescription : nil,
+                    buttonText: "restore",
                     buttonAction: {
                         let bvc = SceneDelegate.getBVC(with: tabManager.scene)
-                        _ = bvc.tabManager.restoreSavedTabs(savedTabs)
-                    }))
+                        bvc.tabManager.restoreSavedTabs(savedTabs)
+                    },
+                    keyboardShortcut: KeyboardShortcut("t", modifiers: [.command, .shift])
+                )
+            )
 
             let toastViewManager = SceneDelegate.getBVC(with: tabManager.scene).toastViewManager
             toast = toastViewManager.makeToast(content: toastContent)
@@ -181,7 +193,7 @@ class ToastDefaults: NSObject {
     }
 
     func showToastForFeedback(request: FeedbackRequest, toastViewManager: ToastViewManager) {
-        let normalContent = ToastStateContent(text: "Feedback Submitted!")
+        let normalContent = ToastStateContent(text: "Sent. Thanks for your feedback!")
         let toastContent = ToastViewContent(
             normalContent: normalContent)
 

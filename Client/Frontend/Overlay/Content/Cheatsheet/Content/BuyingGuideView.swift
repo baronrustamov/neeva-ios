@@ -87,7 +87,9 @@ struct BuyingGuideListView: View {
                     BuyingGuideListItem(guide: item, index: index, total: buyingGuides.count)
                 }
             }
+            .padding(.horizontal, CheatsheetUX.horizontalPadding)
         }
+        .padding(.horizontal, -1 * CheatsheetUX.horizontalPadding)
     }
 }
 
@@ -139,5 +141,6 @@ struct BuyingGuideView: View {
                 ReviewURLButton(url: url)
             }
         }
+        .padding(.horizontal, CheatsheetUX.horizontalPadding)
     }
 }

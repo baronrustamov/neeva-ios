@@ -26,7 +26,7 @@ class ZombieTabTests: XCTestCase {
 
         // Restore the tab.
         let savedTab = manager.recentlyClosedTabsFlattened[0]
-        _ = manager.restoreSavedTabs([savedTab])
+        manager.restoreSavedTabs([savedTab])
 
         // Check that the restored tab has the correct data.
         let restoredTab = manager.tabs[0]

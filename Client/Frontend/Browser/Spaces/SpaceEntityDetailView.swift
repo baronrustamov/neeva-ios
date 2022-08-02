@@ -14,7 +14,7 @@ struct SpaceEntityDetailView: View {
     let details: SpaceEntityThumbnail
     let onSelected: () -> Void
     let onDelete: (Int) -> Void
-    let addToAnotherSpace: (URL, String?, String?) -> Void
+    let addToAnotherSpace: (URL, String?, String?, String?) -> Void
     let editSpaceItem: () -> Void
     let index: Int
     var canEdit: Bool
@@ -98,7 +98,7 @@ struct SpaceActionsModifier: ViewModifier {
     let details: SpaceEntityThumbnail
     let keepNewsItem: () -> Void
     let onDelete: () -> Void
-    let addToAnotherSpace: (URL, String?, String?) -> Void
+    let addToAnotherSpace: (URL, String?, String?, String?) -> Void
     let editSpaceItem: () -> Void
 
     var isNewsItem: Bool {
@@ -110,28 +110,8 @@ struct SpaceActionsModifier: ViewModifier {
         }
     }
 
-    var editAddToSpaceButtons: some View {
-        VStack {
-            if details.ACL >= .edit {
-                Button {
-                    editSpaceItem()
-                } label: {
-                    Label("Edit item", systemSymbol: .squareAndPencil)
-                }
-            }
-
-            Button {
-                addToAnotherSpace(
-                    (details.data.url)!,
-                    details.title, details.description)
-            } label: {
-                Label("Add to another Space", systemSymbol: .docOnDoc)
-            }
-        }
-    }
-
     func body(content: Content) -> some View {
-        if #available(iOS 15.0, *), !UIDevice.current.useTabletInterface {
+        if #available(iOS 15.0, *) {
             content
                 .swipeActions(edge: .trailing) {
                     Button(role: .destructive) {
@@ -150,7 +130,8 @@ struct SpaceActionsModifier: ViewModifier {
                         Button {
                             addToAnotherSpace(
                                 (details.data.url)!,
-                                details.title, details.description)
+                                details.title, details.description,
+                                details.data.thumbnail)
                         } label: {
                             Label("Add To", systemImage: "")
                         }.tint(.gray)
@@ -163,27 +144,29 @@ struct SpaceActionsModifier: ViewModifier {
                     }
                 }
         } else {
-            if #available(iOS 15.0, *) {
-                content
-                    .contextMenu(
-                        ContextMenu {
-                            editAddToSpaceButtons
-
-                            Button(role: .destructive) {
-                                onDelete()
-                            } label: {
-                                Label("Delete", systemSymbol: .trash)
-                            }
+            content
+                .contextMenu(
+                    ContextMenu(menuItems: {
+                        if details.ACL >= .edit {
+                            Button(
+                                action: {
+                                    editSpaceItem()
+                                },
+                                label: {
+                                    Label("Edit item", systemSymbol: .squareAndPencil)
+                                })
                         }
-                    )
-            } else {
-                content
-                    .contextMenu(
-                        ContextMenu {
-                            editAddToSpaceButtons
-                        }
-                    )
-            }
+                        Button(
+                            action: {
+                                addToAnotherSpace(
+                                    (details.data.url)!,
+                                    details.title, details.description, details.data.thumbnail)
+                            },
+                            label: {
+                                Label("Add to another Space", systemSymbol: .docOnDoc)
+                            })
+                    })
+                )
         }
     }
 }

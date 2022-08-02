@@ -96,7 +96,7 @@ open class DiskImageStore {
     }
 
     /// Stores a single image.
-    private func updateOne(key: String, image: UIImage) {
+    open func updateOne(key: String, image: UIImage) {
         // If the key is already known, then we assume the image file exists and
         // there is no need to do anymore work.
         if keys.contains(key) {

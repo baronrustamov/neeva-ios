@@ -38,6 +38,16 @@ extension String {
         NSRange(self.startIndex..., in: self)
     }
 
+    fileprivate func replacingFirstOccurance<S: StringProtocol>(
+        of element: S,
+        with replacement: S
+    ) -> String {
+        guard let range = self.range(of: element) else {
+            return self
+        }
+        return self.replacingCharacters(in: range, with: replacement)
+    }
+
     fileprivate func lowercasedEscapingPercentEncoding() -> String {
         var currIdx = startIndex
         var resultString = ""
@@ -81,24 +91,56 @@ public struct CanonicalURL {
 
     public var asString: String? { data.string }
 
-    public init?(from components: URLComponents) {
-        self.data = Self.canonicalize(components) ?? components
+    public init?(from components: URLComponents, stripMobile: Bool = false, relaxed: Bool = false) {
+        var components = components
+        if stripMobile,
+            let stripped = Self.stripMobile(url: components)
+        {
+            components = stripped
+        }
+
+        components = Self.canonicalize(components) ?? components
+
+        if relaxed {
+            Self.relax(url: &components)
+        }
+        self.data = components
     }
 
-    public init?(from urlString: String) {
+    public init?(from urlString: String, stripMobile: Bool = false, relaxed: Bool = false) {
         guard let components = URLComponents(string: urlString) else {
             return nil
         }
 
-        self.init(from: components)
+        self.init(from: components, stripMobile: stripMobile, relaxed: relaxed)
     }
 
-    public init?(from url: URL) {
+    public init?(from url: URL, stripMobile: Bool = false, relaxed: Bool = false) {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
             return nil
         }
 
-        self.init(from: components)
+        self.init(from: components, stripMobile: stripMobile, relaxed: relaxed)
+    }
+
+    public static func stripMobile(url: URLComponents) -> URLComponents? {
+        guard let string = url.string else {
+            return nil
+        }
+
+        if string.contains("//m.") {
+            return URLComponents(string: string.replacingFirstOccurance(of: "//m.", with: "//www."))
+        } else if string.contains("//mobile.") {
+            return URLComponents(
+                string: string.replacingFirstOccurance(of: "//mobile.", with: "//www.")
+            )
+        } else if string.contains(".m.wiki") {
+            return URLComponents(
+                string: string.replacingFirstOccurance(of: ".m.wiki", with: ".wiki")
+            )
+        }
+
+        return url
     }
 
     /// Port of CanonicalURLV3
@@ -117,7 +159,7 @@ public struct CanonicalURL {
         let inputString = urlComponents.string
 
         var components = urlComponents
-        wirecutterToNYTimes(url: &components)
+        canonicalizeWirecutter(url: &components)
 
         components.percentEncodedHost = components.percentEncodedHost?.lowercased()
         components.fragment = nil
@@ -344,7 +386,31 @@ public struct CanonicalURL {
         return components
     }
 
-    static func wirecutterToNYTimes(url components: inout URLComponents) {
+    private static func relax(url components: inout URLComponents) {
+        components.percentEncodedHost = components.percentEncodedHost?.trimmingPrefix("www.")
+        components.percentEncodedHost = components.percentEncodedHost?.trimmingPrefix("www1.")
+        components.percentEncodedPath = components.percentEncodedPath
+            .lowercasedEscapingPercentEncoding()
+
+        canonicalizeGolangPackages(url: &components)
+
+        // url.Query().Encode() sorts the query params
+        components.percentEncodedQueryItems = components.percentEncodedQueryItems?.sorted(by: {
+            $0.name < $1.name
+        })
+    }
+
+    /// Named `canonicalizeGolangPackages` in Go
+    private static func canonicalizeGolangPackages(url components: inout URLComponents) {
+        guard ["golang.org", "godoc.org"].contains(components.host) else {
+            return
+        }
+        components.host = "pkg.go.dev"
+        components.percentEncodedPath = components.percentEncodedPath.trimmingPrefix("/pkg")
+    }
+
+    /// Named `wirecutterToNYTimes` in Go
+    private static func canonicalizeWirecutter(url components: inout URLComponents) {
         let prefixes: Set<String> = [
             "wirecutter.com", "www.wirecutter.com", "thewirecutter.com", "www.thewirecutter.com",
         ]
@@ -360,7 +426,7 @@ public struct CanonicalURL {
         return
     }
 
-    static func strippingQueryParam(from components: URLComponents) -> URLComponents {
+    private static func strippingQueryParam(from components: URLComponents) -> URLComponents {
         guard let host = components.host,
             let queryParamSet = domainToKeepQueryParam[host.trimmingPrefix("www.")]
         else {
@@ -379,13 +445,13 @@ public struct CanonicalURL {
         return result
     }
 
-    static let domainToNotStripSlash: Set<String> = [
+    private static let domainToNotStripSlash: Set<String> = [
         "asos.com",
         "revolve.com",
         "westelmn.com",
     ]
 
-    static let domainToKeepQueryParam: [String: Set<String>] = [
+    private static let domainToKeepQueryParam: [String: Set<String>] = [
         "abt.com": [],
         "apple.com": ["device1", "device2", "device3", "modelList"],
         "ashleyfurniture.com": [],
@@ -445,7 +511,7 @@ public struct CanonicalURL {
         "ysl.com": [],
     ]
 
-    static let stackExchangeHosts: Set<String> = [
+    private static let stackExchangeHosts: Set<String> = [
         "3dprinting.stackexchange.com",
         "academia.stackexchange.com",
         "ai.stackexchange.com",
@@ -621,7 +687,7 @@ public struct CanonicalURL {
         "writers.stackexchange.com",
     ]
 
-    static let domainToStripWWW: Set<String> = [
+    private static let domainToStripWWW: Set<String> = [
         "0x65.dev",
         "1040.com",
         "3480-3590-data-conversion.com",
@@ -1485,7 +1551,7 @@ public struct CanonicalURL {
         "zvon.org",
     ]
 
-    static let domainToLowerPath: Set<String> = [
+    private static let domainToLowerPath: Set<String> = [
         "247sports.com",
         "3cx.com",
         "8notes.com",

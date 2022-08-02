@@ -3,8 +3,10 @@
 export EXPORT_BUILD=false
 export CREATE_BRANCH=false
 export SKIP_PROMPT=true
+export BROWSER_PLATFORM=ios
 
-SCRIPTS_DIR=$(dirname $0)
+IOS_SCRIPTS_DIR=$(dirname $0)
+SCRIPTS_DIR=$NEEVA_REPO/client/browser/scripts/
 
 . $SCRIPTS_DIR/git-util.sh
 . $SCRIPTS_DIR/version-util.sh
@@ -42,7 +44,7 @@ if $EXPORT_BUILD; then
   xcodebuild clean archive -scheme Client -workspace Neeva.xcworkspace -configuration Release
 
   # Open Xcode Organizer
-  osascript Scripts/open-organizer.as > /dev/null
+  osascript $IOS_SCRIPTS_DIR/open-organizer.as > /dev/null
 else
   if [ -z ${APP_STORE_USERNAME} ] || [ -z ${APP_STORE_TOKEN} ]; then
     echo "APP_STORE_USERNAME or APP_STORE_TOKEN not defined for upload. Abort"
@@ -69,17 +71,17 @@ else
     exit 1
   fi
 
-  $SCRIPTS_DIR/upload-release.sh $NEEVA_ARCHIVE_PATH/$ARCHIVE_FILENAME
+  $IOS_SCRIPTS_DIR/upload-release.sh $NEEVA_ARCHIVE_PATH/$ARCHIVE_FILENAME
   if [ ! $? -eq 0 ]; then
     exit 1
   fi
 fi
 
 # Confirm uploading build to app store
-Scripts/confirm-upload-binary.sh
+$SCRIPTS_DIR/confirm-upload-binary.sh
 
 # Generate tag for build
-Scripts/tag-release.sh
+$SCRIPTS_DIR/tag-release.sh
 
 if $CREATE_BRANCH; then
   $SCRIPTS_DIR/branch-release.sh

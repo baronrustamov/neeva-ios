@@ -41,8 +41,15 @@ where Query: GraphQLQuery {
 
     /// Called by subclasses to perform their query, updating the `state` property to reflect its progress
     /// - Parameter query: the query to perform
-    @discardableResult open func perform(query: Query) -> Combine.Cancellable {
-        Self.perform(query: query) { result in
+    /// - Parameter queue: A dispatch queue on which the result handler will be called. Should default to the main queue.
+    @discardableResult open func perform(
+        query: Query,
+        on queue: DispatchQueue = DispatchQueue.main
+    ) -> Combine.Cancellable {
+        Self.perform(
+            query: query,
+            on: queue
+        ) { result in
             self.withOptionalAnimation {
                 switch result {
                 case .failure(let error):
@@ -98,9 +105,10 @@ where Query: GraphQLQuery {
     /// on your controller class to run queries outside of the SwiftUI data flow.
     @discardableResult open class func perform(
         query: Query,
+        on queue: DispatchQueue = DispatchQueue.main,
         completion: @escaping (Result<Data, Error>) -> Void
     ) -> Combine.Cancellable {
-        query.fetch { result in
+        query.fetch(on: queue) { result in
             switch result {
             case .success(let data):
                 completion(.success(processData(data, for: query)))

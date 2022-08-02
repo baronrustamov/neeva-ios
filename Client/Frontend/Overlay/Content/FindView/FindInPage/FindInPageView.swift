@@ -6,7 +6,7 @@ import Shared
 import SwiftUI
 
 struct FindInPageViewUX {
-    static let height: CGFloat = 75
+    static let height: CGFloat = 80
 }
 
 struct FindInPageView: View {

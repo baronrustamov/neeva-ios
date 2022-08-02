@@ -39,9 +39,13 @@ enum BlocklistFileName: String, CaseIterable {
         case .easyPrivacy:
             fileList.append(.easyPrivacy)
         case .easyPrivacyStrict:
+            fileList.append(.easyPrivacy)
             fileList.append(.easyPrivacyStrict)
-            if Defaults[.adBlockEnabled] {
-                fileList.append(.easyListAdBlock)
+            // Only support ad blocker on iOS 15+
+            if #available(iOS 15.0, *) {
+                if Defaults[.adBlockEnabled] {
+                    fileList.append(.easyListAdBlock)
+                }
             }
         }
         return fileList
@@ -228,11 +232,14 @@ extension ContentBlocker {
     }
 
     func compileListsNotInStore(completion: @escaping () -> Void) {
-        //let blocklists = BlocklistFileName.allCases.map { $0.filename }
         var blocklists = [String]()
-        blocklists = NeevaConstants.currentTarget == .xyz
-            ? [BlocklistFileName.easyPrivacyStrict.filename]
-            : BlocklistFileName.allCases.map { $0.filename }
+        if NeevaConstants.currentTarget == .xyz {
+            blocklists = [BlocklistFileName.easyPrivacyStrict.filename]
+        } else if #available(iOS 15.0, *) {
+            blocklists = BlocklistFileName.allCases.map { $0.filename }
+        } else {
+            blocklists = [BlocklistFileName.easyPrivacy.filename, BlocklistFileName.easyPrivacyStrict.filename]
+        }
         let deferreds: [Deferred<Void>] = blocklists.map { filename in
             let result = Deferred<Void>()
             ruleStore.lookUpContentRuleList(forIdentifier: filename) { contentRuleList, error in

@@ -413,4 +413,82 @@ class TabManagerTests: XCTestCase {
             XCTAssertEqual(tabs.last??.parent, tabs.first)
         }
     }
+
+    // MARK: - CreateOrSwitchToTab tests
+    func testCoSSwitchToExistingTab() throws {
+        let testURL = try XCTUnwrap(URL(string: "example.com"))
+        manager.addTab(URLRequest(url: testURL))
+        let result = manager.createOrSwitchToTab(for: testURL)
+        guard case .switchedToExistingTab = result else {
+            XCTFail("Did not switch to existing tab")
+            return
+        }
+        XCTAssertEqual(manager.tabs.count, 1)
+    }
+
+    func testCoSCreateNewTab() throws {
+        let tab1 = manager.addTab(URLRequest(url: try XCTUnwrap(URL(string: "tab1"))))
+
+        let result = manager.createOrSwitchToTab(for: try XCTUnwrap(URL(string: "tab2")))
+        guard case .createdNewTab = result else {
+            XCTFail("Did not create new tab")
+            return
+        }
+        XCTAssertEqual(manager.tabs.count, 2)
+
+        // find the newly created tab
+        let tab2 = try XCTUnwrap(manager.selectedTab)
+        XCTAssertNotEqual(tab1, tab2)
+    }
+
+    func testCoSSelectExistingTab() throws {
+        try (0..<10).forEach {
+            let urlString = "tab\($0)"
+            manager.addTab(URLRequest(url: try XCTUnwrap(URL(string: urlString))))
+        }
+        manager.selectTab(manager.tabs.last, notify: true)
+        let selectedTab = try XCTUnwrap(manager.selectedTab)
+
+        let result = manager.createOrSwitchToTab(for: try XCTUnwrap(URL(string: "tab3")))
+        guard case .switchedToExistingTab = result else {
+            XCTFail("Did not switch to existing tab")
+            return
+        }
+
+        let newSelectedTab = try XCTUnwrap(manager.selectedTab)
+        XCTAssertNotEqual(selectedTab, newSelectedTab)
+    }
+
+    func testCoSNewTabHasParent() throws {
+        let tab1 = manager.addTab()
+        let result = manager.createOrSwitchToTab(for: try XCTUnwrap(URL(string: "url")), from: tab1)
+        guard case .createdNewTab = result else {
+            XCTFail("Did not create new tab")
+            return
+        }
+        // find the newly created tab
+        let tab2 = try XCTUnwrap(manager.selectedTab)
+        XCTAssertNotEqual(tab1, tab2)
+        XCTAssertEqual(tab1, try XCTUnwrap(tab2.parent))
+    }
+
+    func testCoSSwitchOnSameParent() throws {
+        let tab1 = manager.addTab()
+
+        let testURL = try XCTUnwrap(URL(string: "testURL"))
+        let _ = manager.addTab(URLRequest(url: testURL))
+        let tab3 = manager.addTab(URLRequest(url: testURL), afterTab: tab1)
+
+        // select tab1
+        manager.selectTab(tab1, notify: true)
+        XCTAssertEqual(manager.selectedTab, tab1)
+
+        // test switch to tab3
+        let result = manager.createOrSwitchToTab(for: testURL, from: tab1)
+        guard case .switchedToExistingTab = result else {
+            XCTFail("Did not switch to existing tab")
+            return
+        }
+        XCTAssertEqual(manager.selectedTab, tab3)
+    }
 }

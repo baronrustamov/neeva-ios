@@ -36,7 +36,7 @@ public struct ScannerView: View {
                 codeTypes: [.qr], simulatedData: "address placeholder", completion: onScan
             )
             .frame(maxHeight: 300)
-            Text("Scan QR code")
+            Text(verbatim: "Scan QR code")
             Spacer()
         }
         .padding()

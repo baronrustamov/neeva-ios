@@ -7,46 +7,6 @@ import UIKit
 
 extension UIView {
     // MARK: - Screenshot
-    /// Takes a screenshot of the view with the given size.
-    func screenshot(_ size: CGSize, offset: CGPoint? = nil, quality: CGFloat = 1) -> UIImage? {
-        assert(0...1 ~= quality)
-
-        let offset = offset ?? .zero
-
-        UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale * quality)
-        drawHierarchy(in: CGRect(origin: offset, size: frame.size), afterScreenUpdates: false)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-
-        return image
-    }
-
-    /// Takes a screenshot of the view with the given aspect ratio.
-    ///
-    /// An aspect ratio of 0 means to capture the entire view.
-    func screenshot(_ aspectRatio: CGFloat = 0, offset: CGPoint? = nil, quality: CGFloat = 1)
-        -> UIImage?
-    {
-        assert(aspectRatio >= 0)
-
-        var size: CGSize
-        if aspectRatio > 0 {
-            size = CGSize()
-            let viewAspectRatio = frame.width / frame.height
-            if viewAspectRatio > aspectRatio {
-                size.height = frame.height
-                size.width = size.height * aspectRatio
-            } else {
-                size.width = frame.width
-                size.height = size.width / aspectRatio
-            }
-        } else {
-            size = frame.size
-        }
-
-        return screenshot(size, offset: offset, quality: quality)
-    }
-
     /// Screenshot of entire UIView
     ///
     /// This method draws the entire view by rendering the layer into a CGContext
@@ -175,31 +135,22 @@ extension UIView {
     }
 
     // Height
-    func makeHeight(equalTo view: UIView?, withOffset offset: CGFloat = 0) {
-        guard let view = view else {
-            return
-        }
-
-        self.translatesAutoresizingMaskIntoConstraints = false
-        self.heightAnchor.constraint(equalTo: view.heightAnchor, constant: offset).isActive = true
-    }
-
     func makeHeight(equalToConstant value: CGFloat) {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.heightAnchor.constraint(equalToConstant: value).isActive = true
     }
 
     // Centering
-    func makeCenter(equalTo view: UIView?, withOffset offset: CGFloat = 0) {
+    func makeCenter(equalTo view: UIView?) {
         guard let view = view else {
             return
         }
 
-        makeCenterX(equalTo: view, withOffset: offset)
-        makeCenterY(equalTo: view, withOffset: offset)
+        makeCenterX(equalTo: view)
+        makeCenterY(equalTo: view)
     }
 
-    func makeCenterX(equalTo view: UIView?, withOffset offset: CGFloat = 0) {
+    func makeCenterX(equalTo view: UIView?) {
         guard let view = view else {
             return
         }
@@ -208,7 +159,7 @@ extension UIView {
         self.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
 
-    func makeCenterY(equalTo view: UIView?, withOffset offset: CGFloat = 0) {
+    func makeCenterY(equalTo view: UIView?) {
         guard let view = view else {
             return
         }

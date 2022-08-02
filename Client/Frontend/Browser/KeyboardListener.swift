@@ -12,14 +12,33 @@ struct KeyboardListener: ViewModifier {
             keyboardHeightChanged(currentHeight)
         }
     }
+    @State var keyboardVisible: Bool = false {
+        didSet {
+            keyboardVisibleStateChanged(keyboardVisible)
+        }
+    }
+
     let adapt: Bool
     var keyboardHeightChanged: (CGFloat) -> Void
+    var keyboardVisibleStateChanged: (Bool) -> Void
 
     func body(content: Content) -> some View {
         GeometryReader { geometry in
             content
                 .offset(y: adapt ? -1 : 0)
-                .onAppear(perform: {
+                .onReceive(
+                    NotificationCenter.default.publisher(
+                        for: UIResponder.keyboardWillShowNotification)
+                ) { _ in
+                    keyboardVisible = true
+                }
+                .onReceive(
+                    NotificationCenter.default.publisher(
+                        for: UIResponder.keyboardDidHideNotification)
+                ) { _ in
+                    keyboardVisible = false
+                }
+                .onAppear {
                     NotificationCenter.Publisher(
                         center: NotificationCenter.default,
                         name: UIResponder.keyboardWillShowNotification
@@ -52,7 +71,7 @@ struct KeyboardListener: ViewModifier {
                         CGFloat.zero
                     }
                     .subscribe(Subscribers.Assign(object: self, keyPath: \.currentHeight))
-                })
+                }
         }
     }
 }
@@ -60,10 +79,15 @@ struct KeyboardListener: ViewModifier {
 extension View {
     /// - Parameters:
     ///   - adapts: If `true`, adjust the view to move with the keyboard
-    func keyboardListener(adapt: Bool = true, keyboardHeightChanged: @escaping (CGFloat) -> Void)
+    func keyboardListener(
+        adapt: Bool = true, keyboardHeightChanged: @escaping (CGFloat) -> Void = { _ in },
+        keyboardVisibleStateChanged: @escaping (Bool) -> Void = { _ in }
+    )
         -> some View
     {
         return modifier(
-            KeyboardListener(adapt: adapt, keyboardHeightChanged: keyboardHeightChanged))
+            KeyboardListener(
+                adapt: adapt, keyboardHeightChanged: keyboardHeightChanged,
+                keyboardVisibleStateChanged: keyboardVisibleStateChanged))
     }
 }

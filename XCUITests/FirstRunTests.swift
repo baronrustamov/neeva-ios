@@ -17,8 +17,8 @@ class FirstRunTests: BaseTestCase {
     }
 
     func openNeevaSettings() {
-        waitForExistence(app.buttons["Get Started"])
-        app.buttons["Get Started"].tap()
+        waitForExistence(app.buttons["Let's Go"])
+        app.buttons["Let's Go"].tap()
 
         waitForExistence(app.buttons["Open Neeva Settings"])
 
@@ -45,16 +45,16 @@ class FirstRunTests: BaseTestCase {
     func testOpenNeevaSettingsAndRemind() throws {
         openNeevaSettings()
 
-        waitForExistence(app.buttons["Remind Me Later"])
-        app.buttons["Remind Me Later"].tap()
+        waitForExistence(app.buttons["Continue to Neeva"])
+        app.buttons["Continue to Neeva"].tap()
 
         openURL(websiteExample["url"]!)
         waitUntilPageLoad()
     }
 
     func testRemindMeLater() throws {
-        waitForExistence(app.buttons["Get Started"])
-        app.buttons["Get Started"].tap()
+        waitForExistence(app.buttons["Let's Go"])
+        app.buttons["Let's Go"].tap()
 
         waitForExistence(app.buttons["Remind Me Later"])
         app.buttons["Remind Me Later"].tap()
@@ -64,8 +64,8 @@ class FirstRunTests: BaseTestCase {
     }
 
     func testDirectClose() throws {
-        waitForExistence(app.buttons["Get Started"])
-        app.buttons["Get Started"].tap()
+        waitForExistence(app.buttons["Let's Go"])
+        app.buttons["Let's Go"].tap()
 
         waitForExistence(app.buttons["close"])
         app.buttons["close"].tap()
@@ -76,8 +76,8 @@ class FirstRunTests: BaseTestCase {
 
     func testTriggerSignInModalAndClose() throws {
         try skipTest(issue: 3696, "Disabled as this test is flaky")
-        waitForExistence(app.buttons["Get Started"])
-        app.buttons["Get Started"].tap()
+        waitForExistence(app.buttons["Let's Go"])
+        app.buttons["Let's Go"].tap()
 
         waitForExistence(app.buttons["close"])
         app.buttons["close"].tap()
@@ -100,5 +100,48 @@ class FirstRunTests: BaseTestCase {
 
         // Verify that the modal closed correctly
         XCTAssertTrue(app.staticTexts["Search or enter address"].isHittable)
+    }
+
+    func testToggleConsentOptin() throws {
+        waitForExistence(app.buttons["Let's Go"])
+        app.buttons["Let's Go"].tap()
+
+        waitForExistence(app.buttons["close"])
+        app.buttons["close"].tap()
+
+        openURL(websiteExample["url"]!)
+        waitUntilPageLoad()
+
+        goToSettings()
+
+        let value = app.tables.cells.switches[
+            "Help improve Neeva, Automatically send usage statistics to Neeva"
+        ]
+        .firstMatch
+        .value
+        XCTAssertEqual(value as? String, "1")
+    }
+
+    func testToggleConsentOptout() throws {
+        waitForExistence(app.buttons["Help improve this app by sending usage statistics to Neeva."])
+        app.buttons["Help improve this app by sending usage statistics to Neeva."].tap()
+
+        waitForExistence(app.buttons["Let's Go"])
+        app.buttons["Let's Go"].tap()
+
+        waitForExistence(app.buttons["close"])
+        app.buttons["close"].tap()
+
+        openURL(websiteExample["url"]!)
+        waitUntilPageLoad()
+
+        goToSettings()
+
+        let value = app.tables.cells.switches[
+            "Help improve Neeva, Automatically send usage statistics to Neeva"
+        ]
+        .firstMatch
+        .value
+        XCTAssertEqual(value as? String, "0")
     }
 }

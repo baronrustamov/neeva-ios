@@ -6,16 +6,7 @@ import Combine
 import WebKit
 
 protocol ContextMenuHelperDelegate: AnyObject {
-    func contextMenuHelper(
-        _ contextMenuHelper: ContextMenuHelper,
-        didLongPressElements elements: ContextMenuHelper.Elements,
-        gestureRecognizer: UIGestureRecognizer)
-    func contextMenuHelper(
-        _ contextMenuHelper: ContextMenuHelper,
-        didLongPressImage elements: ContextMenuHelper.Elements,
-        gestureRecognizer: UIGestureRecognizer)
-    func contextMenuHelper(
-        _ contextMenuHelper: ContextMenuHelper, didCancelGestureRecognizer: UIGestureRecognizer)
+    func contextMenuHelper(didLongPressImage elements: ContextMenuHelper.Elements)
 }
 
 class ContextMenuHelper: NSObject {
@@ -34,7 +25,6 @@ class ContextMenuHelper: NSObject {
     var resetGestureTimer: Timer?
     var scrolling = false
 
-    fileprivate var nativeHighlightLongPressRecognizer: UILongPressGestureRecognizer?
     fileprivate(set) var elements: Elements?
 
     required init(tab: Tab) {
@@ -64,12 +54,6 @@ extension ContextMenuHelper: UIGestureRecognizerDelegate, UIScrollViewDelegate {
     }
 
     private func replaceWebViewLongPress() {
-        // WebKit installs gesture handlers async. If `replaceWebViewLongPress` is called after a wkwebview in most cases a small delay is sufficient
-        // See also https://bugs.webkit.org/show_bug.cgi?id=193366
-        nativeHighlightLongPressRecognizer =
-            gestureRecognizerWithDescriptionFragment(
-                "action=_highlightLongPressRecognized:") as? UILongPressGestureRecognizer
-
         let imageLongPressGestureRecognizer = UILongPressGestureRecognizer(
             target: self, action: #selector(self.handleImageLongPress))
         tab?.webView?.scrollView.addGestureRecognizer(imageLongPressGestureRecognizer)
@@ -78,11 +62,19 @@ extension ContextMenuHelper: UIGestureRecognizerDelegate, UIScrollViewDelegate {
     private func gestureRecognizerWithDescriptionFragment(_ descriptionFragment: String)
         -> UIGestureRecognizer?
     {
-        let result = tab?.webView?.scrollView.subviews.compactMap({ $0.gestureRecognizers })
-            .joined().first(where: {
+        if let scrollView = tab?.webView?.scrollView {
+            let scrollViewGestures: [UIGestureRecognizer] = scrollView.gestureRecognizers ?? []
+            let subViewGestures: [UIGestureRecognizer] = Array(
+                (scrollView.subviews.compactMap({ $0.gestureRecognizers }).joined()))
+            let allGestures: [UIGestureRecognizer] = scrollViewGestures + subViewGestures
+            let result = allGestures.first {
                 $0.description.contains(descriptionFragment)
-            })
-        return result
+            }
+
+            return result
+        }
+
+        return nil
     }
 
     @objc func handleImageLongPress(_ sender: UIGestureRecognizer) {
@@ -91,8 +83,7 @@ extension ContextMenuHelper: UIGestureRecognizerDelegate, UIScrollViewDelegate {
         }
 
         if let elements = self.elements, elements.link == nil, elements.image != nil && !scrolling {
-            delegate?.contextMenuHelper(
-                self, didLongPressImage: elements, gestureRecognizer: sender)
+            delegate?.contextMenuHelper(didLongPressImage: elements)
             resetGestureTimer?.invalidate()
 
             // This prevents the image from going full screen when the user ends the long press
@@ -137,10 +128,7 @@ extension ContextMenuHelper: TabContentScript {
         return "contextMenuMessageHandler"
     }
 
-    func userContentController(
-        _ userContentController: WKUserContentController,
-        didReceiveScriptMessage message: WKScriptMessage
-    ) {
+    func userContentController(didReceiveScriptMessage message: WKScriptMessage) {
         guard let data = message.body as? [String: AnyObject] else {
             return
         }

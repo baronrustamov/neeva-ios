@@ -61,7 +61,7 @@ struct GasFeeView: View {
                     RoundedRectangle(cornerRadius: 18)
                         .stroke(gasFeeModel.gasFeeState.tintColor, lineWidth: 2)
                 )
-            Text("Current Gas Fee")
+            Text(verbatim: "Current Gas Fee")
                 .foregroundColor(gasFeeModel.gasFeeState.tintColor)
                 .withFont(.bodyLarge)
             Spacer()
@@ -73,7 +73,7 @@ struct GasFeeView: View {
 
     private var notifyCell: some View {
         HStack {
-            Text("Notify me at")
+            Text(verbatim: "Notify me at")
             Spacer()
             Picker(
                 "",
@@ -95,7 +95,7 @@ struct GasFeeView: View {
 
     private var showInToolbarCell: some View {
         HStack {
-            Text("Show in toolbar")
+            Text(verbatim: "Show in toolbar")
             Toggle("", isOn: $showGasFeeInToolbar)
                 .toggleStyle(SwitchToggleStyle(tint: Color.ui.adaptive.blue))
         }

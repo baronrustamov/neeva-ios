@@ -102,7 +102,10 @@ struct RelatedRecipeList: View {
                         RelatedRecipeItem(recipe: recipe)
                     }
                 }
+                .padding(.horizontal, CheatsheetUX.horizontalPadding)
             }
+            .padding(.horizontal, -1 * CheatsheetUX.horizontalPadding)
         }
+        .padding(.horizontal, CheatsheetUX.horizontalPadding)
     }
 }

@@ -35,6 +35,7 @@ struct SpaceListItem: View {
                         .compactMap { $0 }
                         .joined(separator: ", ")
                 )
+                .accessibilityIdentifier("spaceListItemName")
             if !space.isPublic {
                 Symbol(decorative: .lock, style: .labelMedium)
                     .foregroundColor(.secondaryLabel)

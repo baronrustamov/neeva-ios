@@ -24,11 +24,8 @@ You should also turn on "Automatically trim trailing whitespace" and "Including 
 
 ## Periphery
 
-Periphery scans the project (currently just the `Client` code) for unused variables, constants, functions, structs, and classes.
-To use Periphery, first install it using [Homebrew](https://brew.sh):
+We use [Periphery](https://github.com/peripheryapp/periphery) to scan our project for unused code.
 
-```sh
-brew tap peripheryapp/periphery && brew install periphery
-```
+Periphery can be installed using Homebrew: `brew install peripheryapp/periphery/periphery`. See the project's README for more information.
 
-Then switch to the Periphery target in Xcode and build (⌘B). You‘ll get a large number of warnings as a result. Note that many of the warnings are either false positives (i.e. the constant is actually used somewhere in the project) or are due to parameters passed in iOS’s standard delegate pattern.
+Occasionally this tool will report false positives, due to it having incomplete information. The responsibility is on you (and your reviewer) to verify that the code you are removing is truly unused.

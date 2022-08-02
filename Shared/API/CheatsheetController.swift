@@ -91,6 +91,21 @@ public struct RelatedRecipe {
 public class CheatsheetQueryController:
     QueryController<CheatsheetInfoQuery, [CheatsheetQueryController.CheatsheetInfo]>
 {
+    /// Parses date in format like `2019-10-08 03:07:19 +0000 UTC`
+    static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z v"
+        return formatter
+    }()
+
+    private static let queue = DispatchQueue(
+        label: "co.neeva.app.ios.shared.CheatsheetQueryController",
+        qos: .userInitiated,
+        attributes: [],
+        autoreleaseFrequency: .inherit,
+        target: nil
+    )
+
     public struct PriceHistory {
         public var InStock: Bool
         public var Max: PriceDate
@@ -104,12 +119,99 @@ public class CheatsheetQueryController:
         public var Price: String
     }
 
+    public struct Backlink {
+        public struct Comment {
+            public let body: String
+            public let url: URL?
+            public let score: Int?
+            public let date: Date?
+
+            init?(
+                from comment: CheatsheetInfoQuery.Data.GetCheatsheetInfo.BacklinkUrl.Forum.Comment
+            ) {
+                guard let body = comment.body,
+                    !body.isEmptyOrWhitespace()
+                else {
+                    return nil
+                }
+                self.body = body
+                self.url = {
+                    guard let urlString = comment.url else {
+                        return nil
+                    }
+                    return URL(string: urlString)
+                }()
+                self.score = comment.score
+                self.date = {
+                    guard let date = comment.date else {
+                        return nil
+                    }
+                    return CheatsheetQueryController.dateFormatter.date(from: date)
+                }()
+            }
+        }
+
+        public let title: String
+        public let url: URL
+        public let domain: String?
+        public let snippet: String?
+        public let score: Int?
+        public let date: Date?
+        public let numComments: Int?
+        public let comments: [Comment]?
+
+        init?(from backlink: CheatsheetInfoQuery.Data.GetCheatsheetInfo.BacklinkUrl) {
+            guard let title = backlink.title,
+                let urlString = backlink.url,
+                let url = URL(string: urlString),
+                let snippet = backlink.snippet
+            else {
+                return nil
+            }
+
+            self.title = title
+            self.url = url
+            self.domain = backlink.domain
+            self.snippet = snippet
+
+            self.score = nil
+            self.date = nil
+            self.numComments = nil
+            self.comments = nil
+        }
+
+        init?(from forum: CheatsheetInfoQuery.Data.GetCheatsheetInfo.BacklinkUrl.Forum) {
+            guard let title = forum.title,
+                let urlString = forum.url ?? forum.source,
+                let url = URL(string: urlString)
+            else {
+                return nil
+            }
+
+            self.title = title
+            self.url = url
+            self.domain = forum.domain
+            self.snippet = forum.body
+            self.score = forum.score
+            self.date = {
+                guard let date = forum.date else {
+                    return nil
+                }
+                return CheatsheetQueryController.dateFormatter.date(from: date)
+            }()
+            self.numComments = forum.numComments
+            self.comments = forum.comments?.compactMap({
+                Comment(from: $0)
+            })
+        }
+    }
+
     public struct CheatsheetInfo {
         public var reviewURL: [String]?
         public var priceHistory: PriceHistory?
         public var memorizedQuery: [String]?
         public var recipe: Recipe?
-        public var backlinkURL: [CheatsheetInfoQuery.Data.GetCheatsheetInfo.BacklinkUrl]?
+        public var backlinks: [Backlink]?
     }
 
     private var url: URL
@@ -119,8 +221,9 @@ public class CheatsheetQueryController:
         super.init()
     }
 
+    @available(*, unavailable)
     public override func reload() {
-        self.perform(query: CheatsheetInfoQuery(input: url.absoluteString))
+        fatalError("reload() has not been implemented")
     }
 
     public override class func processData(_ data: CheatsheetInfoQuery.Data) -> [CheatsheetInfo] {
@@ -206,8 +309,14 @@ public class CheatsheetQueryController:
         }
 
         if let backlinks = data.getCheatsheetInfo?.backlinkUrl {
-            // remove empty string
-            result.backlinkURL = backlinks
+            result.backlinks = backlinks.compactMap { backlink in
+                guard let forum = backlink.forum,
+                    let result = Backlink(from: forum)
+                else {
+                    return Backlink(from: backlink)
+                }
+                return result
+            }
         }
 
         return [result]
@@ -216,6 +325,10 @@ public class CheatsheetQueryController:
     @discardableResult public static func getCheatsheetInfo(
         url: String, title: String, completion: @escaping (Result<[CheatsheetInfo], Error>) -> Void
     ) -> Combine.Cancellable {
-        Self.perform(query: CheatsheetInfoQuery(input: url, title: title), completion: completion)
+        Self.perform(
+            query: CheatsheetInfoQuery(input: url, title: title),
+            on: queue,
+            completion: completion
+        )
     }
 }

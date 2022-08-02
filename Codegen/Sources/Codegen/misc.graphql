@@ -16,6 +16,15 @@ query UserInfo {
       stringValue
     }
     authProvider
+    subscription {
+        status
+        canceled
+        plan
+        source
+        apple {
+            uuid
+        }
+    }
     subscriptionType
   }
 }
@@ -75,6 +84,23 @@ query CheatsheetInfo($input: String!, $title: String) {
         Title
         Domain
         Snippet
+        Forum {
+            url
+            source
+            domain
+            score
+            date
+            title
+            body
+            percentUpvoted
+            numComments
+            comments {
+                url
+                score
+                date
+                body
+            }
+        }
     }
   }
 }
@@ -160,5 +186,12 @@ query CryptoWallet($query: String!) {
     address
     ens
     ownerName
+  }
+}
+
+mutation RegisterAppleSubscription($input: RegisterAppleSubscriptionInput!)  {
+  registerAppleSubscription(input: $input) {
+    succeeded
+    error
   }
 }

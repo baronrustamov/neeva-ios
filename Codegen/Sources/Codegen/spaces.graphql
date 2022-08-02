@@ -169,6 +169,7 @@ query ListSpaces($kind: ListSpacesKind = All) {
         }
         resultCount
         isDefaultSpace
+        isPinned
       }
     }
   }
@@ -301,4 +302,8 @@ mutation ClaimGeneratedItem($input: ClaimGeneratedItemInput!) {
   claimGeneratedItem(input: $input) {
         applied
     }
+}
+
+mutation PinSpace($input: PinSpaceInput!) {
+    pinSpace(input: $input)
 }

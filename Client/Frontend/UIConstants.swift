@@ -27,7 +27,7 @@ public struct UIConstants {
     static let TextFieldHeight: CGFloat = 42
 
     // Landscape and tablet mode:
-    static let TopToolbarHeightWithToolbarButtonsShowing: CGFloat = TextFieldHeight + 13
+    static let TopToolbarHeightWithToolbarButtonsShowing: CGFloat = TextFieldHeight + 8
 
     // Bottom bar when in portrait mode on a phone:
     static var ToolbarHeight: CGFloat = 55
@@ -35,6 +35,9 @@ public struct UIConstants {
     static var BottomToolbarHeight: CGFloat {
         return ToolbarHeight + safeArea.bottom
     }
+
+    // ArchivedTab View
+    static let ArchivedTabsViewHeight: CGFloat = 80
 
     /// JPEG compression quality for persisted screenshots. Must be between 0-1.
     static let ScreenshotQuality: Float = 0.3
@@ -47,10 +50,6 @@ public struct UIConstants {
 
     static var hasHomeButton: Bool {
         Self.safeArea.bottom == 0
-    }
-
-    static var enableBottomURLBar: Bool {
-        FeatureFlag[.bottomURLBar] && UIDevice.current.userInterfaceIdiom != .pad
     }
 }
 

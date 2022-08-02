@@ -75,6 +75,7 @@ class CookieCutterTests: BaseTestCase {
         goToTrackingProtectionMenu()
         app.buttons["Cookie Cutter Settings"].tap()
 
+        app.swipeUp()
         waitForExistence(app.tables["cookieCutterSettingsPage"])
     }
 

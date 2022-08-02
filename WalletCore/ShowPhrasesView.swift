@@ -23,12 +23,13 @@ public struct ShowPhrasesView: View {
 
     public var body: some View {
         VStack(spacing: 16) {
-            Text("Secret Recovery Phrase")
+            Text(verbatim: "Secret Recovery Phrase")
                 .withFont(.headingXLarge)
                 .foregroundColor(.label)
                 .padding(.top, 60)
             Text(
-                "Write down or save your Secret Recovery Phrase somewhere safe. You need it to ensure you can access your wallet forever."
+                verbatim:
+                    "Write down or save your Secret Recovery Phrase somewhere safe. You need it to ensure you can access your wallet forever."
             )
             .withFont(.bodyLarge)
             .foregroundColor(.secondaryLabel)
@@ -41,7 +42,7 @@ public struct ShowPhrasesView: View {
                         ForEach(0...5, id: \.self) { index in
                             let phrase = secretPhrases.split(separator: " ").map { String($0) }[
                                 index]
-                            Text("\(index + 1). \(phrase)")
+                            Text(verbatim: "\(index + 1). \(phrase)")
                                 .withFont(.bodyLarge)
                                 .foregroundColor(.label)
                         }
@@ -50,7 +51,7 @@ public struct ShowPhrasesView: View {
                         ForEach(6...11, id: \.self) { index in
                             let phrase = secretPhrases.split(separator: " ").map { String($0) }[
                                 index]
-                            Text("\(index + 1). \(phrase)")
+                            Text(verbatim: "\(index + 1). \(phrase)")
                                 .withFont(.bodyLarge)
                                 .foregroundColor(.label)
                         }
@@ -60,7 +61,8 @@ public struct ShowPhrasesView: View {
                     .animation(.easeInOut)
                 VStack(spacing: 16) {
                     Text(
-                        "Anyone with this private key can fully control your wallet, including transferring away your funds. DO NOT let it get compromised!"
+                        verbatim:
+                            "Anyone with this private key can fully control your wallet, including transferring away your funds. DO NOT let it get compromised!"
                     )
                     .withFont(.bodyLarge)
                     .foregroundColor(labelColor)
@@ -68,7 +70,7 @@ public struct ShowPhrasesView: View {
                     Button(
                         action: { showPhrases = true },
                         label: {
-                            Text("View")
+                            Text(verbatim: "View")
                                 .withFont(.bodyLarge)
                                 .foregroundColor(labelColor)
                                 .padding(.vertical, 12)
@@ -110,7 +112,7 @@ public struct ShowPhrasesView: View {
             Button(action: {
                 dismiss()
             }) {
-                Text("Done")
+                Text(verbatim: "Done")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.wallet(.primary))

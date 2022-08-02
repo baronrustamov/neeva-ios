@@ -136,6 +136,7 @@ struct WebResultList: View {
             }
         }
         .padding(.bottom, 18)
+        .padding(.horizontal, CheatsheetUX.horizontalPadding)
     }
 
     func onClick() {

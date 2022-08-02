@@ -141,7 +141,10 @@ struct ShareSpaceView: View {
                 .lineLimit(1)
                 .foregroundColor(Color.label)
                 .padding(.vertical, 10)
-                ACLView(selectedACL: $selectedACL).padding(10)
+
+                ACLView(selectedACL: $selectedACL)
+                    .padding(10)
+                    .animation(nil)
             }.frame(height: 22)
         }.padding(20)
             .background(Color.DefaultBackground)
@@ -346,9 +349,8 @@ struct ShareSpaceView: View {
                                     ? ""
                                     : String(
                                         nameText.dropFirst(index!.utf16Offset(in: nameText) + 1))
-                                let _ =
-                                    SpaceServiceProvider.shared.updateProfile(
-                                        firstName: firstName, lastName: lastName)
+                                SpaceServiceProvider.shared.updateProfile(
+                                    firstName: firstName, lastName: lastName)
                             }
                         }
                     }

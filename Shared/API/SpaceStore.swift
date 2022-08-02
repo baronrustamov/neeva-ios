@@ -8,6 +8,8 @@ import CoreSpotlight
 import Defaults
 import Foundation
 
+let dateParser = ISO8601DateFormatter()
+
 public struct SpaceID: Hashable, Identifiable {
     let value: String
 
@@ -80,13 +82,15 @@ public class Space: Hashable, Identifiable {
     public let notifications: [Notification]?
     public var isDigest = false
     public var owner: Owner?
+    public var timestamp: TimeInterval
+    @Published public var isPinned: Bool
 
     init(
         id: SpaceID, name: String, description: String? = nil, followers: Int? = nil,
         views: Int? = nil, lastModifiedTs: String, thumbnail: String?,
         resultCount: Int, isDefaultSpace: Bool, isShared: Bool, isPublic: Bool,
         userACL: SpaceACLLevel, acls: [Acl] = [], notifications: [Notification]? = nil,
-        owner: Owner? = nil
+        owner: Owner? = nil, isPinned: Bool = false
     ) {
         self.id = id
         self.name = name
@@ -103,6 +107,8 @@ public class Space: Hashable, Identifiable {
         self.acls = acls
         self.notifications = notifications
         self.owner = owner
+        self.isPinned = isPinned
+        self.timestamp = dateParser.date(from: lastModifiedTs)?.timeIntervalSince1970 ?? 0
     }
 
     init(from model: SpacesDataQueryController.Space) {
@@ -122,6 +128,8 @@ public class Space: Hashable, Identifiable {
         self.acls = []
         self.notifications = nil
         self.contentData = model.entities
+        self.isPinned = false
+        self.timestamp = dateParser.date(from: lastModifiedTs)?.timeIntervalSince1970 ?? 0
     }
 
     public var url: URL {
@@ -166,7 +174,7 @@ public class Space: Hashable, Identifiable {
 public class SpaceStore: ObservableObject {
     public static var shared = SpaceStore()
     public static var suggested = SpaceStore(
-        suggestedID: "RMB2VXVA5vvSSw1tvVG2ShtnkRZE2CqJmzlgqzYb")
+        suggestedID: SpaceConstants.suggestedSpaceId)
 
     public static var promotionalSpaceId = "-ysvXOiH2HWXsXeN_QaVFzwWEF_ASvtOW_yylJEM"
     public static let dailyDigestID = "spaceDailyDigest"
@@ -190,6 +198,7 @@ public class SpaceStore: ObservableObject {
     public enum State {
         case ready
         case refreshing
+        case mutatingLocally
         case failed(Error)
     }
 
@@ -204,6 +213,7 @@ public class SpaceStore: ObservableObject {
     }
 
     @Published public var allProfiles: [Set<String>: [Space]] = [:]
+    public var spaceLocalMutation = PassthroughSubject<Space?, Never>()
 
     private var disableRefresh = false
 
@@ -354,37 +364,44 @@ public class SpaceStore: ObservableObject {
         }
     }
 
-    private func openSpaceWithNoFollow(
-        spaceId: String, completion: @escaping (Space) -> Void
+    private func getSpacesData(
+        spaceId: String,
+        completion: @escaping (Space) -> Void
     ) {
-        GraphQLAPI.shared.isAnonymous = true
         state = .refreshing
         SpaceServiceProvider.shared.getSpacesData(spaceIds: [spaceId]) { result in
             switch result {
-            case .success(let data):
-                if let model = data.first {
-                    let space = Space(from: model)
-                    space.contentData = model.entities
-                    completion(space)
-                    self.state = .ready
-                }
+            case .success(let arr):
+                guard let model = arr.first else { return }
+                let space = Space(from: model)
+                completion(space)
+                self.updatedSpacesFromLastRefresh = [space]
+                self.state = .ready
             case .failure(let error):
                 Logger.browser.error(error.localizedDescription)
                 self.state = .failed(error)
             }
         }
+    }
+
+    private func openSpaceWithNoFollow(
+        spaceId: String,
+        completion: @escaping (Space) -> Void
+    ) {
+        GraphQLAPI.shared.isAnonymous = true
+        getSpacesData(spaceId: spaceId, completion: completion)
         GraphQLAPI.shared.isAnonymous = false
     }
 
-    public static func followSpace(spaceId: String, completion: @escaping () -> Void) {
-        SpaceServiceProvider.shared.getSpacesData(spaceIds: [spaceId]) { result in
-            switch result {
-            case .success:
-                Logger.browser.info("Space followed")
-                completion()
-            case .failure(let error):
-                Logger.browser.error(error.localizedDescription)
-            }
+    public func followSpace(
+        spaceId: String,
+        completion: ((Space) -> Void)? = nil
+    ) {
+        getSpacesData(spaceId: spaceId) { space in
+            self.allSpaces.append(space)
+            self.spaceLocalMutation.send(space)
+            completion?(space)
+            Logger.browser.info("Space followed")
         }
     }
 
@@ -431,7 +448,8 @@ public class SpaceStore: ObservableObject {
                     notifications: space.notifications,
                     owner: SpacesMetadata.Owner(
                         displayName: space.owner?.displayName ?? "",
-                        pictureUrl: space.owner?.pictureUrl ?? "")
+                        pictureUrl: space.owner?.pictureUrl ?? ""),
+                    isPinned: space.isPinned ?? false
                 )
 
                 /// Note, we avoid parsing `lastModifiedTs` here and instead just use it as
@@ -715,11 +733,48 @@ public class SpaceStore: ObservableObject {
         }
     }
 
-    public func deleteSpace(spaceId: String) -> DeleteSpaceRequest? {
+    public func sendDeleteSpaceRequest(spaceId: String) -> DeleteSpaceRequest? {
         return SpaceServiceProvider.shared.deleteSpace(spaceID: spaceId)
     }
 
-    public func unfollowSpace(spaceId: String) -> UnfollowSpaceRequest? {
+    public func sendUnfollowSpaceRequest(spaceId: String) -> UnfollowSpaceRequest? {
         return SpaceServiceProvider.shared.unfollowSpace(spaceID: spaceId)
     }
+
+    public func sendRemoveItemFromSpaceRequest(
+        spaceId: String, url: String,
+        completion: @escaping (Result<DeleteSpaceResultByUrlMutation.Data, Error>) -> Void
+    ) -> Combine.Cancellable? {
+        return SpaceServiceProvider.shared.deleteSpaceResultByUrlMutation(
+            spaceId: spaceId, url: url, completion: completion)
+    }
+
+    // When we pass `isPinned` to SpaceServiceProvider, what we're really conveying is
+    // whether the Space *should* be pinned or not. This parameter's name is arguably
+    // pretty poor, but it is left this way to be consistent with the back end.
+    public func sendPinSpaceRequest(spaceId: String) -> PinSpaceRequest? {
+        let isPinned = allSpaces.first { $0.id.value == spaceId }?.isPinned ?? true
+        return SpaceServiceProvider.shared.pinSpace(spaceId: spaceId, isPinned: !isPinned)
+    }
+}
+
+extension SpaceStore {
+    public func deleteSpace(with id: String) {
+        if let index = allSpaces.firstIndex(where: { $0.id.id == id }) {
+            state = .mutatingLocally
+            allSpaces.remove(at: index)
+            updatedSpacesFromLastRefresh = allSpaces
+            state = .ready
+        }
+    }
+
+    public func togglePinSpace(with id: String) {
+        if let item = allSpaces.first(where: { $0.id.id == id }) {
+            state = .mutatingLocally
+            item.isPinned.toggle()
+            updatedSpacesFromLastRefresh = [item]
+            state = .ready
+        }
+    }
+
 }

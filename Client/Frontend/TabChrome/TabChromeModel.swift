@@ -8,40 +8,31 @@ import Shared
 import SwiftUI
 
 class TabChromeModel: ObservableObject {
-    @Published var canGoBack: Bool
-    @Published var canGoForward: Bool
-    var canReturnToSuggestions: Bool {
-        guard let selectedTab = topBarDelegate?.tabManager.selectedTab,
-            let currentItem = selectedTab.webView?.backForwardList.currentItem
-        else {
-            return false
-        }
-
-        guard let query = selectedTab.queryForNavigation.findQueryFor(navigation: currentItem)
-        else {
-            return false
-        }
-        return query.location == .suggestion
+    enum ReloadButtonState: String {
+        case reload = "Reload"
+        case stop = "Stop"
     }
 
     /// True when the toolbar is inline with the location view
     /// (when in landscape or on iPad)
     @Published var inlineToolbar: Bool
-
+    @Published var canGoBack = false
+    @Published var canGoForward = false
     @Published private(set) var isPage: Bool
     @Published private(set) var isErrorPage: Bool = false
     @Published private(set) var urlInSpace: Bool = false
+    @Published var estimatedProgress: Double?
+    @Published private(set) var isEditingLocation = false
+    @Published var showNeevaMenuTourPrompt = false
+    @Published var keyboardShowing = false
+    @Published var bottomBarHeight: CGFloat = 0
+
+    private var appActiveRefreshSubscription: AnyCancellable? = nil
+    private var navigationSubscriptions: Set<AnyCancellable> = []
     private var spaceRefreshSubscription: AnyCancellable?
-
-    var showTopCardStrip: Bool {
-        FeatureFlag[.cardStrip] && FeatureFlag[.topCardStrip] && inlineToolbar
-            && !isEditingLocation
-    }
-
-    var appActiveRefreshSubscription: AnyCancellable? = nil
     private var subscriptions: Set<AnyCancellable> = []
-
     private var urlSubscription: AnyCancellable?
+
     weak var topBarDelegate: TopBarDelegate? {
         didSet {
             $isEditingLocation
@@ -71,47 +62,19 @@ class TabChromeModel: ObservableObject {
                     }
                 }
                 .store(in: &subscriptions)
+
             setupURLObserver()
         }
     }
     weak var toolbarDelegate: ToolbarDelegate?
 
-    enum ReloadButtonState: String {
-        case reload = "Reload"
-        case stop = "Stop"
-    }
     var reloadButton: ReloadButtonState {
         estimatedProgress == 1 || estimatedProgress == nil ? .reload : .stop
     }
-    @Published var estimatedProgress: Double?
-
-    @Published private(set) var isEditingLocation = false
-
-    @Published var showNeevaMenuTourPrompt = false
-
-    private var inlineToolbarHeight: CGFloat {
-        return UIConstants.TopToolbarHeightWithToolbarButtonsShowing
-            + (showTopCardStrip ? CardControllerUX.Height : 0)
-    }
-
-    private var portraitHeight: CGFloat {
-        return UIConstants.PortraitToolbarHeight
-            + (showTopCardStrip ? CardControllerUX.Height : 0)
-    }
-
-    var topBarHeight: CGFloat {
-        return inlineToolbar ? inlineToolbarHeight : portraitHeight
-    }
-
-    @Published var keyboardShowing = false
-    @Published var bottomBarHeight: CGFloat = 0
 
     init(
-        canGoBack: Bool = false, canGoForward: Bool = false, isPage: Bool = false,
-        inlineToolbar: Bool = false, estimatedProgress: Double? = nil
+        isPage: Bool = false, inlineToolbar: Bool = false, estimatedProgress: Double? = nil
     ) {
-        self.canGoBack = canGoBack
-        self.canGoForward = canGoForward
         self.isPage = isPage
         self.inlineToolbar = inlineToolbar
         self.estimatedProgress = estimatedProgress
@@ -129,7 +92,8 @@ class TabChromeModel: ObservableObject {
     }
 
     func hideZeroQuery() {
-        SceneDelegate.getBVC(with: topBarDelegate?.tabManager.scene).hideZeroQuery()
+        SceneDelegate.getBVC(with: topBarDelegate?.tabManager.scene)
+            .dismissEditingAndHideZeroQuery()
     }
 
     private func setupURLObserver() {
@@ -148,8 +112,20 @@ class TabChromeModel: ObservableObject {
                 return
             }
 
-            self.isPage = url?.displayURL?.isWebPage() ?? false
-            self.isErrorPage = InternalURL(url)?.isErrorPage ?? false
+            self.isPage = Self.isPage(url: url)
+            self.isErrorPage = Self.isErrorPage(url: url)
+
+            self.navigationSubscriptions = []
+            self.canGoBack = tab?.canGoBack ?? false
+            self.canGoForward = tab?.canGoForward ?? false
+
+            tab?.$canGoBack
+                .assign(to: \.canGoBack, on: self)
+                .store(in: &self.navigationSubscriptions)
+
+            tab?.$canGoForward
+                .assign(to: \.canGoForward, on: self)
+                .store(in: &self.navigationSubscriptions)
         }
 
         spaceRefreshSubscription = Publishers.CombineLatest(
@@ -171,9 +147,21 @@ class TabChromeModel: ObservableObject {
                 self?.urlInSpace = result
             }
         }
+    }
 
-        CheatsheetMenuViewModel.promoModel.subscribe(
-            to: tabManager.selectedTabURLPublisher.eraseToAnyPublisher()
-        )
+    class func isPage(url: URL?) -> Bool {
+        guard let url = url?.displayURL else {
+            return false
+        }
+        return url.isWebPage()
+    }
+
+    class func isErrorPage(url: URL?) -> Bool {
+        guard let url = url,
+            let internalURL = InternalURL(url)
+        else {
+            return false
+        }
+        return internalURL.isErrorPage
     }
 }

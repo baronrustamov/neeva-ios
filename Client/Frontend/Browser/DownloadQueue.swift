@@ -205,13 +205,7 @@ class BlobDownload: Download {
 }
 
 protocol DownloadQueueDelegate {
-    func downloadQueue(_ downloadQueue: DownloadQueue, didStartDownload download: Download)
-    func downloadQueue(
-        _ downloadQueue: DownloadQueue, didDownloadCombinedBytes combinedBytesDownloaded: Int64,
-        combinedTotalBytesExpected: Int64?)
-    func downloadQueue(
-        _ downloadQueue: DownloadQueue, download: Download, didFinishDownloadingTo location: URL)
-    func downloadQueue(_ downloadQueue: DownloadQueue, didCompleteWithError error: Error?)
+    func downloadQueue(didStartDownload download: Download)
 }
 
 class DownloadQueue {
@@ -249,7 +243,7 @@ class DownloadQueue {
         }
 
         download.resume()
-        delegate?.downloadQueue(self, didStartDownload: download)
+        delegate?.downloadQueue(didStartDownload: download)
     }
 
     func cancelAll() {
@@ -279,17 +273,10 @@ extension DownloadQueue: DownloadDelegate {
 
         lastDownloadError = error
         downloads.remove(at: index)
-
-        if downloads.isEmpty {
-            delegate?.downloadQueue(self, didCompleteWithError: lastDownloadError)
-        }
     }
 
     func download(_ download: Download, didDownloadBytes bytesDownloaded: Int64) {
         combinedBytesDownloaded += bytesDownloaded
-        delegate?.downloadQueue(
-            self, didDownloadCombinedBytes: combinedBytesDownloaded,
-            combinedTotalBytesExpected: combinedTotalBytesExpected)
     }
 
     func download(_ download: Download, didFinishDownloadingTo location: URL) {
@@ -298,13 +285,8 @@ extension DownloadQueue: DownloadDelegate {
         }
 
         downloads.remove(at: index)
-        delegate?.downloadQueue(self, download: download, didFinishDownloadingTo: location)
 
         NotificationCenter.default.post(name: .FileDidDownload, object: location)
-
-        if downloads.isEmpty {
-            delegate?.downloadQueue(self, didCompleteWithError: lastDownloadError)
-        }
     }
 }
 

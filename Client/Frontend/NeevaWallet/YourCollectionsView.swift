@@ -38,7 +38,7 @@ struct YourCollectionsView: View {
                                 assetStore: assetStore,
                                 onOpenUrl: {
                                     self.bvc.dismissCurrentOverlay()
-                                    self.bvc.hideZeroQuery()
+                                    self.bvc.dismissEditingAndHideZeroQuery()
                                 },
                                 onBackButtonTap: {
                                     self.selectedCollection = nil

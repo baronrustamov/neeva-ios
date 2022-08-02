@@ -201,10 +201,8 @@ class OpenQLPreviewHelper: NSObject, OpenInHelper, QLPreviewControllerDataSource
 
     func open() {
         self.previewController.dataSource = self
-        ensureMainThread {
-            self.browserViewController.present(
-                self.previewController, animated: true, completion: nil)
-        }
+        browserViewController.present(
+            previewController, animated: true, completion: nil)
     }
 
     func numberOfPreviewItems(in controller: QLPreviewController) -> Int {

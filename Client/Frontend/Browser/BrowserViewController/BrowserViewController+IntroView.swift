@@ -120,13 +120,12 @@ extension BrowserViewController {
 // MARK: - Default Browser
 extension BrowserViewController {
     func presentDefaultBrowserFirstRun() {
-        let welcomeScreenArm = NeevaExperiment.startExperiment(for: .defaultBrowserWelcomeScreen)
-        NeevaExperiment.logStartExperiment(for: .defaultBrowserWelcomeScreen)
         let interstitialModel = InterstitialViewModel(
             onCloseAction: {
                 self.overlayManager.hideCurrentOverlay()
             }
         )
+        self.interstitialViewModel = interstitialModel
         overlayManager.presentFullScreenModal(
             content: AnyView(
                 DefaultBrowserInterstitialWelcomeView()
@@ -137,7 +136,8 @@ extension BrowserViewController {
                         AppDelegate.setRotationLock(to: .all)
                     }
                     .environmentObject(interstitialModel)
-            )
+            ),
+            ignoreSafeArea: false
         ) {
             Defaults[.didShowDefaultBrowserInterstitialFromSkipToBrowser] = true
             Defaults[.introSeen] = true
@@ -152,6 +152,8 @@ extension BrowserViewController {
 
     func restoreDefaultBrowserFirstRun() {
         let interstitialModel = InterstitialViewModel(
+            restoreFromBackground: true,
+            onboardingState: .openedSettingsState,
             onCloseAction: {
                 self.overlayManager.hideCurrentOverlay()
             }
@@ -167,7 +169,8 @@ extension BrowserViewController {
                     }
                     .environmentObject(interstitialModel)
             ),
-            animate: false
+            animate: false,
+            ignoreSafeArea: false
         ) {
             ClientLogger.shared.logCounter(
                 .DefaultBrowserInterstitialRestoreImp
@@ -177,7 +180,6 @@ extension BrowserViewController {
 
     // Default browser onboarding
     func presentDBOnboardingViewController(
-        _ force: Bool = false,
         modalTransitionStyle: UIModalTransitionStyle? = nil,
         triggerFrom: OpenDefaultBrowserOnboardingTrigger
     ) {

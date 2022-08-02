@@ -110,7 +110,9 @@ struct OverlayView: View {
         GeometryReader { geom in
             ZStack {
                 if addDismissableBackground {
-                    DismissBackgroundView(opacity: overlayManager.opacity / 5) {
+                    DismissBackgroundView(
+                        opacity: overlayManager.opacity / overlayManager.backgroundOpacityLevel
+                    ) {
                         overlayManager.hideCurrentOverlay(ofPriority: .sheet)
                     }
                 }

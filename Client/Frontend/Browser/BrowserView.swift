@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import Foundation
 import Shared
 import SwiftUI
 
@@ -11,6 +10,7 @@ import SwiftUI
 struct BrowserContentView: View {
     let bvc: BrowserViewController
     let cardGrid: CardGrid
+    var topBarHeight: CGFloat
 
     @EnvironmentObject private var contentVisibilityModel: ContentVisibilityModel
 
@@ -57,7 +57,7 @@ struct BrowserContentView: View {
             tabContainerContent
                 .opacity(contentVisibilityModel.showContent ? 1 : 0)
                 .accessibilityHidden(!contentVisibilityModel.showContent)
-        }
+        }.padding(.top, topBarHeight)
     }
 }
 
@@ -70,52 +70,53 @@ struct BrowserView: View {
     // conditionalize SwiftUI View generation on these.
     let browserModel: BrowserModel
     let chromeModel: TabChromeModel
+    let cheatsheetPromoModel: CheatsheetPromoModel
 
     @State var safeArea = EdgeInsets()
     @State var topBarHeight: CGFloat = .zero
-    @State var isSettingsVisible = false
+    @State var bottomBarHeight: CGFloat = .zero
 
     // MARK: - Views
     var mainContent: some View {
         GeometryReader { geom in
             NavigationView {
                 VStack(spacing: 0) {
-                    ZStack {
+                    ZStack(alignment: .top) {
                         // Tab content or CardGrid
-                        BrowserContentView(bvc: bvc, cardGrid: CardGrid(geom: geom))
-                            .environment(\.shareURL, bvc.shareURL(url:view:))
-                            .padding(
-                                UIConstants.enableBottomURLBar ? .bottom : .top,
-                                topBarHeight
-                            )
-                            .background(Color.background)
+                        BrowserContentView(
+                            bvc: bvc, cardGrid: CardGrid(geom: geom), topBarHeight: topBarHeight
+                        )
+                        .environment(\.shareURL, bvc.shareURL(url:view:))
+                        .background(Color.background)
 
                         // Top Bar
-                        BrowserTopBarView(bvc: bvc)
+                        BrowserTopBarView(bvc: bvc, geom: geom).onHeightOfViewChanged { height in
+                            topBarHeight = height
+                        }.fixedSize(horizontal: false, vertical: true)
                     }
 
                     // Bottom Bar
-                    BrowserBottomBarView(bvc: bvc)
-                }.useEffect(deps: chromeModel.topBarHeight) { _ in
-                    topBarHeight = chromeModel.topBarHeight
-                    browserModel.scrollingControlModel.setHeaderFooterHeight(
-                        header: chromeModel.topBarHeight,
-                        footer: UIConstants.ToolbarHeight
-                            + safeArea.bottom)
-                }.keyboardListener(adapt: false) { height in
-                    DispatchQueue.main.async {
-                        chromeModel.keyboardShowing = height > 0
+                    BrowserBottomBarView().onHeightOfViewChanged { height in
+                        bottomBarHeight = height
                     }
-                }.navigationBarHidden(true)
+                }.keyboardListener(
+                    adapt: false,
+                    keyboardVisibleStateChanged: { isVisible in
+                        chromeModel.keyboardShowing = isVisible
+                    }
+                ).navigationBarHidden(true)
             }
             .navigationViewStyle(.stack)
-            .useEffect(deps: geom.safeAreaInsets) { safeArea in
+            .useEffect(deps: geom.safeAreaInsets, topBarHeight, bottomBarHeight) {
+                safeArea, topBarHeight, bottomBarHeight in
                 self.safeArea = safeArea
 
+                // Add a 3px of extra height to footer to hide
+                // a small bit of view that isn't hidden.
                 browserModel.scrollingControlModel.setHeaderFooterHeight(
-                    header: chromeModel.topBarHeight,
-                    footer: UIConstants.ToolbarHeight
-                        + safeArea.bottom)
+                    header: topBarHeight,
+                    footer: bottomBarHeight + safeArea.bottom + 3
+                )
             }
         }
     }
@@ -140,14 +141,14 @@ struct BrowserView: View {
             }
         )
         .environmentObject(browserModel)
-        .environmentObject(browserModel.incognitoModel)
+        .environmentObject(browserModel.cardStripModel)
         .environmentObject(browserModel.cardTransitionModel)
         .environmentObject(browserModel.contentVisibilityModel)
+        .environmentObject(browserModel.cookieCutterModel)
+        .environmentObject(browserModel.incognitoModel)
         .environmentObject(browserModel.scrollingControlModel)
         .environmentObject(browserModel.switcherToolbarModel)
         .environmentObject(browserModel.toastViewManager)
-        .environmentObject(browserModel.cookieCutterModel)
-        .environmentObject(chromeModel)
         .environmentObject(bvc.gridModel)
         .environmentObject(bvc.gridModel.spaceCardModel)
         .environmentObject(bvc.gridModel.tabCardModel)
@@ -156,6 +157,8 @@ struct BrowserView: View {
         .environmentObject(bvc.tabContainerModel)
         .environmentObject(bvc.web3Model)
         .environmentObject(bvc.web3Model.walletDetailsModel)
+        .environmentObject(cheatsheetPromoModel)
+        .environmentObject(chromeModel)
     }
 
     // MARK: - Init
@@ -163,5 +166,6 @@ struct BrowserView: View {
         self.bvc = bvc
         self.browserModel = bvc.browserModel
         self.chromeModel = bvc.chromeModel
+        self.cheatsheetPromoModel = bvc.cheatsheetPromoModel
     }
 }

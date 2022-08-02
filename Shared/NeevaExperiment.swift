@@ -75,28 +75,9 @@ extension NeevaExperiment {
     //    }
 
     /* Experiment Example */
-    public enum PromoCardTypeAfterFirstRun: String, ExperimentArms {
-        case control
-        case previewSignUp
-    }
-
-    public enum DefaultBrowserWelcomeScreen: String, ExperimentArms {
-        case control
-        case trackingMsg
-        case privacyMsg
-    }
 }
 
 // Experiment Example */
 //extension NeevaExperiment.Experiment where Arm == NeevaExperiment.DefaultBrowserV2 {
 //public static let defaultBrowserPromptV2 = Self()
 //}
-
-extension NeevaExperiment.Experiment
-where Arm == NeevaExperiment.PromoCardTypeAfterFirstRun {
-    public static let promoCardTypeAfterFirstRun = Self()
-}
-
-extension NeevaExperiment.Experiment where Arm == NeevaExperiment.DefaultBrowserWelcomeScreen {
-    public static let defaultBrowserWelcomeScreen = Self()
-}

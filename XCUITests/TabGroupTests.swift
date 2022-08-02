@@ -5,12 +5,19 @@
 import XCTest
 
 class TabGroupTests: BaseTestCase {
+    override func setUp() {
+        launchArguments.append(LaunchArguments.DontAddTabOnLaunch)
+        launchArguments.append(LaunchArguments.DisableCheatsheetBloomFilters)
+
+        super.setUp()
+    }
+
     // MARK: - NYTimes Test Case
     // The NYTimes case is where a URL is opened from say nytimes.com,
     // and a sublink i.e. nytimes.com/article is opened.
     //
-    // Then the user would open up a new tab to the orignal URL (nytimes.com,
-    // which in that case we should create a tab group with the two tabs.
+    // If the user would open up a new tab back to the orignal URL (nytimes.com),
+    // we should create a tab group with the two tabs.
 
     /// Navigates to the test URL and if `andNavigateAway` is true, then it will tap a link
     /// to open the sublink (similar to nytimes.com/article).
@@ -42,10 +49,19 @@ class TabGroupTests: BaseTestCase {
         confirmOneTabGroupExists()
     }
 
+    func testNYTimesCaseCreatesTabGroupFromAddressBar() {
+        openURL()
+        waitForExistence(app.links["More information..."], timeout: 30)
+        app.links["More information..."].tap()
+
+        openURL()
+
+        goToTabTray()
+        confirmOneTabGroupExists()
+    }
+
     /// Tests the case above, with multiple tabs.
     func testNYTimesCaseCreatesTabGroupRepeated() {
-        closeAllTabs(createNewTab: false)
-
         openTestURLInNewTab()
         openTestURLInNewTab()
         openTestURLInNewTab()
@@ -71,8 +87,6 @@ class TabGroupTests: BaseTestCase {
     }
 
     func testNYTimesCaseIssue3088() {
-        closeAllTabs(createNewTab: false)
-
         openTestURLInNewTab(andNavigateAway: true)
         openTestURLInNewTab(andNavigateAway: true)
         openTestURLInNewTab()
@@ -82,20 +96,20 @@ class TabGroupTests: BaseTestCase {
     }
 
     func testNYTimesCaseAfterTabRestore() {
-        closeAllTabs(createNewTab: false)
-
         openTestURLInNewTab(andNavigateAway: true)
         openURL(path(forTestPage: "test-mozilla-book.html"))
 
         goToTabTray()
 
-        app.buttons["Close"].firstMatch.tap()
+        waitForExistence(app.buttons["Close"].firstMatch)
+        app.buttons["Close"].firstMatch.tap(force: true)
 
         // Restore the closed tab.
-        app.buttons["Add Tab"].press(forDuration: 2.0)
-        waitForExistence(app.collectionViews.firstMatch)
+        app.buttons["Add Tab"].press(forDuration: 1)
+        waitForExistence(app.buttons["IANA-managed Reserved Domains"])
+        app.buttons["IANA-managed Reserved Domains"].tap()
 
-        app.collectionViews.firstMatch.buttons.firstMatch.tap()
+        waitForNoExistence(app.buttons["restore"], timeoutValue: 30)
 
         // This should result in a Tab Group.
         openURL()
@@ -105,23 +119,20 @@ class TabGroupTests: BaseTestCase {
     }
 
     func testUniqueSearchQueriesAfterTabRestore() {
-        closeAllTabs(createNewTab: false)
-
-        openURL(path(forTestPage: "test-example.html?q=1"))  // Simulate a search query
+        openURL(path(forTestPage: "test-example.html?q=1"))
         openURL(path(forTestPage: "test-mozilla-book.html"))
 
         goToTabTray()
 
-        app.buttons["Close"].firstMatch.tap()
+        waitForExistence(app.buttons["Close"])
+        app.buttons["Close"].firstMatch.tap(force: true)
 
         // Restore the closed tab.
-        app.buttons["Add Tab"].press(forDuration: 2.0)
-        waitForExistence(app.collectionViews.firstMatch)
-
-        app.collectionViews.firstMatch.buttons.firstMatch.tap()
+        waitForExistence(app.buttons["restore"])
+        app.buttons["restore"].tap(force: true)
 
         // This should not result in a tab group.
-        openURL(path(forTestPage: "test-example.html?q=2"))  // Simulate a search query
+        openURL(path(forTestPage: "test-example.html?q=2"))
 
         goToTabTray()
         XCTAssertFalse(app.buttons["Tab Group, Example Domain"].exists)

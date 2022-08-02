@@ -19,11 +19,9 @@ struct SpaceTopView: View {
     @State private var showConfirmDeleteAlert = false
     @ObservedObject var primitive: SpaceCardDetails
     @Binding var headerVisible: Bool
-    let addToAnotherSpace: (URL, String?, String?) -> Void
+    let addToAnotherSpace: (URL, String?, String?, String?) -> Void
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    var space: Space? {
-        primitive.manager.get(for: primitive.id)
-    }
+    var space: Space?
 
     var canEdit: Bool {
         primitive.ACL >= .edit
@@ -212,28 +210,47 @@ struct SpaceTopView: View {
         }
     }
 
-    @ViewBuilder var deleteButton: some View {
-        if let space = space {
-            Button {
+    @ViewBuilder var followButton: some View {
+        Button {
+            if !primitive.isFollowing, let spaceId = space?.id.id {
+                SpaceStore.shared.followSpace(spaceId: spaceId)
+            } else {
                 showConfirmDeleteAlert = true
-            } label: {
-                Label(
-                    title: {
-                        Text(space.ACL == .owner ? "Delete Space" : "Unfollow")
-                            .withFont(.labelMedium)
-                            .lineLimit(1)
-                            .foregroundColor(Color.secondaryLabel)
-                    },
-                    icon: { Image(systemName: "trash") }
-                )
             }
+        } label: {
+            Label(
+                title: {
+                    Text(primitive.isFollowing ? "Unfollow" : "Follow")
+                        .withFont(.labelMedium)
+                        .lineLimit(1)
+                        .foregroundColor(Color.secondaryLabel)
+                },
+                icon: { Image(systemName: primitive.isFollowing ? "trash" : "plus") }
+            )
+        }
+    }
+
+    @ViewBuilder var deleteButton: some View {
+        Button {
+            showConfirmDeleteAlert = true
+        } label: {
+            Label(
+                title: {
+                    Text("Delete Space")
+                        .withFont(.labelMedium)
+                        .lineLimit(1)
+                        .foregroundColor(Color.secondaryLabel)
+                },
+                icon: { Image(systemName: "trash") }
+            )
         }
     }
 
     @ViewBuilder var addToAnotherSpaceButton: some View {
         if let space = space {
             Button {
-                self.addToAnotherSpace(space.url, space.displayTitle, space.description)
+                self.addToAnotherSpace(
+                    space.url, space.displayTitle, space.description, space.thumbnail)
             } label: {
                 Label("Add to another Space", systemSymbol: .docOnDoc)
             }
@@ -266,7 +283,11 @@ struct SpaceTopView: View {
         Menu(
             content: {
                 if let space = space, !space.isDefaultSpace {
-                    deleteButton
+                    if space.ACL == .owner {
+                        deleteButton
+                    } else {
+                        followButton
+                    }
                     addToAnotherSpaceButton
                 }
 
@@ -281,7 +302,7 @@ struct SpaceTopView: View {
                 }
             },
             label: {
-                Symbol(decorative: .ellipsis, style: .labelMedium)
+                Symbol(.ellipsis, style: .labelMedium, label: "Overflow Menu")
                     .foregroundColor(Color.label)
                     .tapTargetFrame()
             }
@@ -294,8 +315,9 @@ struct SpaceTopView: View {
                     .destructive(
                         Text(space?.ACL == .owner ? "Delete Space" : "Unfollow Space"),
                         action: {
-                            gridModel.closeDetailView()
-
+                            if space?.ACL == .owner {
+                                presentationMode.wrappedValue.dismiss()
+                            }
                             guard
                                 let index = spacesModel.allDetails.firstIndex(where: {
                                     primitive.id == $0.id

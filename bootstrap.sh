@@ -15,6 +15,7 @@
 if [ "$1" == "--force" ]; then
     rm -rf ./Carthage/*
     rm -rf ~/Library/Caches/org.carthage.CarthageKit
+    rm -rf ~/Library/Developer/Xcode/DerivedData
 fi
 
 # Build API Config
@@ -26,6 +27,9 @@ fi
 # Install Node.js dependencies and build user scripts
 yarn install
 yarn build
+
+# Build Node.js dependencies and build user scripts for NeevaForSafari
+./NeevaForSafari/NeevaForSafariExtension/Scripts/config.sh
 
 # swift-format
 git submodule update --init --recursive

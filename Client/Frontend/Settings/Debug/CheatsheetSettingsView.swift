@@ -10,6 +10,7 @@ struct CheatsheetSettingsView: View {
     @Default(.seenCheatsheetIntro) var seenCheatsheetIntro
     @Default(.showTryCheatsheetPopover) var showTryCheatsheetPopover
     @Default(.seenTryCheatsheetPopoverOnRecipe) var seenTryCheatsheetPopoverOnRecipe
+    @Default(.tryCheatsheetPopoverCount) var tryCheatsheetPopoverCount
     @Default(.cheatsheetDebugQuery) var cheatsheetDebugQuery
     @Default(.useCheatsheetBloomFilters) var useCheatsheetBloomFilters
 
@@ -19,11 +20,16 @@ struct CheatsheetSettingsView: View {
             Toggle(String("showTryCheatsheetPopover"), isOn: $showTryCheatsheetPopover)
             Toggle(
                 String("seenTryCheatsheetPopoverOnRecipe"),
-                isOn: $seenTryCheatsheetPopoverOnRecipe)
+                isOn: $seenTryCheatsheetPopoverOnRecipe
+            )
+            NumberField(
+                String("tryCheatsheetPopoverCount"),
+                number: $tryCheatsheetPopoverCount
+            )
             Toggle(String("cheatsheetDebugQuery"), isOn: $cheatsheetDebugQuery)
             Toggle(String("useCheatsheetBloomFilters"), isOn: $useCheatsheetBloomFilters)
 
-            makeNavigationLink(title: "Bloom Filter Settings") {
+            makeNavigationLink(title: String("Bloom Filter Settings")) {
                 BloomFilterSettingsView()
             }
         }
@@ -97,7 +103,7 @@ struct BloomFilterSettingsView: View {
                     },
                     label: {
                         HStack {
-                            Text("Delete this file directory")
+                            Text(verbatim: "Delete this file directory")
                                 .foregroundColor(.red)
                             Spacer()
                             if let state = deletingState {

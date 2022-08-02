@@ -6,6 +6,9 @@ import Apollo
 import Defaults
 import Foundation
 import Shared
+import XCGLogger
+
+private let log = Logger.browser
 
 enum ClientLoggerStatus {
     case enabled
@@ -23,6 +26,8 @@ public class ClientLogger {
 
     public static let shared = ClientLogger()
     @Published public var debugLoggerHistory = [DebugLog]()
+
+    public var loggingQueue = [ClientLog]()
 
     public init() {
         self.env = ClientLogEnvironment.init(rawValue: "Prod")!
@@ -59,11 +64,6 @@ public class ClientLogger {
             )
         }
 
-        let clientLogBase = ClientLogBase(
-            id: NeevaConstants.currentTarget == .xyz
-                ? "xyz.neeva.app.ios.browser" : "co.neeva.app.ios.browser",
-            version: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")
-                as! String, environment: self.env)
         let clientLogCounter = ClientLogCounter(path: path.rawValue, attributes: loggingAttributes)
         let clientLog = ClientLog(counter: clientLogCounter)
 
@@ -82,34 +82,48 @@ public class ClientLogger {
             }
         #endif
 
-        LogMutation(
-            input: ClientLogInput(
-                base: clientLogBase,
-                log: [clientLog]
-            )
-        ).perform { result in
-            switch result {
-            case .failure(let error):
-                if path == .FirstRunImpression
-                    || path == .GetStartedInWelcome
-                {
-                    Defaults[.hasLogErrorFromFirstRunEvent] = true
-                    Defaults[.lastFirstRunEventLogError] = error.localizedDescription
+        if let shouldCollectUsageStats = Defaults[.shouldCollectUsageStats] {
+            if shouldCollectUsageStats {
+                performLogMutation(clientLog)
+            }
+        } else {
+            // Queue up events in the case user hasn't decided to opt in usage collection
+            loggingQueue.append(clientLog)
+        }
+    }
+
+    public func flushLoggingQueue() {
+        for clientLog in loggingQueue {
+            performLogMutation(clientLog)
+        }
+        loggingQueue.removeAll()
+    }
+
+    private func performLogMutation(_ clientLog: ClientLog) {
+        if Defaults[.shouldCollectUsageStats] ?? false {
+            let clientLogBase = ClientLogBase(
+                id: NeevaConstants.currentTarget == .xyz
+                    ? "xyz.neeva.app.ios.browser" : "co.neeva.app.ios.browser",
+                version: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")
+                    as! String, environment: self.env)
+
+            LogMutation(
+                input: ClientLogInput(
+                    base: clientLogBase,
+                    log: [clientLog]
+                )
+            ).perform { result in
+                switch result {
+                case .failure(let error):
+                    print("LogMutation Error: \(error)")
+                case .success:
+                    if let counter = clientLog.counter,
+                        let path = counter?.path
+                    {
+                        log.info("logging sent for counter_path: \(path)")
+                    }
                 }
-            case .success:
-                if Defaults[.hasLogErrorFromFirstRunEvent] {
-                    Defaults[.hasLogErrorFromFirstRunEvent] = false
-                    ClientLogger.shared.logCounter(
-                        .LogErrorForInterstitialEvents,
-                        attributes: [
-                            ClientLogCounterAttribute(
-                                key: LogConfig.Attribute.FirstRunLogErrorMessage,
-                                value: Defaults[.lastFirstRunEventLogError])
-                        ])
-                }
-                break
             }
         }
-
     }
 }

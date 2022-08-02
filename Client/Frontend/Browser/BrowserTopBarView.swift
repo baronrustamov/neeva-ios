@@ -11,14 +11,12 @@ private enum BrowserTopBarViewUX {
 
 struct BrowserTopBarView: View {
     let bvc: BrowserViewController
+    var geom: GeometryProxy
 
     @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var chromeModel: TabChromeModel
     @EnvironmentObject var gridModel: GridModel
     @EnvironmentObject var tabContainerModel: TabContainerModel
-
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @Environment(\.verticalSizeClass) private var verticalSizeClass
 
     @ViewBuilder var switcherTopBar: some View {
         if chromeModel.inlineToolbar {
@@ -44,6 +42,7 @@ struct BrowserTopBarView: View {
                 chromeModel: bvc.chromeModel,
                 readerModeModel: bvc.readerModeModel,
                 web3Model: bvc.web3Model,
+                geom: geom,
                 newTab: {
                     bvc.openURLInNewTab(nil)
                 },
@@ -55,7 +54,7 @@ struct BrowserTopBarView: View {
                             bvc.closeLazyTab()
                         }
                     } else {
-                        bvc.hideZeroQuery(wasCancelled: true)
+                        bvc.dismissEditingAndHideZeroQuery(wasCancelled: true)
                     }
                 }
             )
@@ -65,16 +64,11 @@ struct BrowserTopBarView: View {
     var topBar: some View {
         content
             .transition(.opacity)
-            .frame(height: chromeModel.topBarHeight)
     }
 
     var body: some View {
         VStack {
-            if UIConstants.enableBottomURLBar {
-                Spacer()
-            }
-
-            if !UIConstants.enableBottomURLBar, chromeModel.inlineToolbar {
+            if chromeModel.inlineToolbar {
                 topBar
                     .background(
                         Group {
@@ -96,10 +90,6 @@ struct BrowserTopBarView: View {
                         }, alignment: .top)
             } else {
                 topBar
-            }
-
-            if !UIConstants.enableBottomURLBar {
-                Spacer()
             }
         }
     }

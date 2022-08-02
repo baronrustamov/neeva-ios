@@ -20,26 +20,12 @@ struct SpaceDetailList: View {
     @Binding var isVerifiedProfile: Bool
     var onShowProfileUI: () -> Void
     let onShowAnotherSpace: (String) -> Void
-    let addToAnotherSpace: (URL, String?, String?) -> Void
+    let addToAnotherSpace: (URL, String?, String?, String?) -> Void
     @State var addingComment = false
     @StateObject var spaceCommentsModel = SpaceCommentsModel()
 
     var canEdit: Bool {
         primitive.ACL >= .edit && !(primitive.item?.isDigest ?? false)
-    }
-
-    func descriptionForNote(_ details: SpaceEntityThumbnail) -> String? {
-        if let snippet = details.data.snippet, snippet.contains("](@") {
-            let index = snippet.firstIndex(of: "@")
-            var substring = snippet.suffix(from: index!)
-            if let endIndex = substring.firstIndex(of: ")") {
-                substring = substring[..<endIndex]
-                return snippet.replacingOccurrences(
-                    of: substring,
-                    with: SearchEngine.current.searchURLForQuery(String(substring))!.absoluteString)
-            }
-        }
-        return details.data.snippet
     }
 
     var body: some View {
@@ -57,7 +43,6 @@ struct SpaceDetailList: View {
                             onShowProfileUI: onShowProfileUI
                         )
                         .modifier(ListSeparatorModifier())
-                        .iPadOnlyID()
                         .onAppear {
                             headerVisible = UIDevice.current.userInterfaceIdiom != .pad
                         }
@@ -113,7 +98,7 @@ struct SpaceDetailList: View {
                                 browserModel.hideGridWithNoAnimation()
                                 let bvc = SceneDelegate.getBVC(with: tabModel.manager.scene)
                                 if let navPath = NavigationPath.navigationPath(
-                                    from: url, with: bvc)
+                                    from: url)
                                 {
                                     NavigationPath.handle(nav: navPath, with: bvc)
                                     return
@@ -135,7 +120,6 @@ struct SpaceDetailList: View {
                         .onDrag {
                             NSItemProvider(id: details.id)
                         }
-                        .iPadOnlyID()
                     }
                     .onDelete(perform: canEdit ? onDelete : nil)
                     .onMove(perform: canEdit ? onMove : nil)
@@ -156,16 +140,15 @@ struct SpaceDetailList: View {
                 }
                 .modifier(ListStyleModifier(isDigest: primitive.item?.isDigest ?? false))
                 .edgesIgnoringSafeArea([.top, .bottom])
-                .keyboardListener { height in
-                    guard height > 0 && addingComment else { return }
+                .keyboardListener(keyboardVisibleStateChanged: { isVisible in
+                    guard isVisible && addingComment else { return }
 
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         withAnimation {
                             scrollReader.scrollTo("CommentSection", anchor: .bottom)
                         }
                     }
-                }
-                .useEffect(deps: spaceCommentsModel.addingComment) { addingComment in
+                }).useEffect(deps: spaceCommentsModel.addingComment) { addingComment in
                     self.addingComment = addingComment
                 }
             }
@@ -265,26 +248,6 @@ struct ListSeparatorModifier: ViewModifier {
     }
 }
 
-struct CompactSeparatorModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        if #available(iOS 15.0, *) {
-            content
-                .listSectionSeparator(Visibility.hidden)
-                .listRowSeparator(Visibility.hidden)
-        } else {
-            content
-                .listRowInsets(
-                    EdgeInsets.init(
-                        top: 0,
-                        leading: 0,
-                        bottom: 0,
-                        trailing: 0)
-                )
-                .padding(.horizontal, 16)
-        }
-    }
-}
-
 struct ListStyleModifier: ViewModifier {
     @Environment(\.onOpenURLForSpace) var openURLForSpace
     @EnvironmentObject var browserModel: BrowserModel
@@ -316,28 +279,6 @@ struct ListStyleModifier: ViewModifier {
                 }
         } else {
             content
-        }
-    }
-}
-
-struct iPadOnlyStackNavigation: ViewModifier {
-    func body(content: Content) -> some View {
-        if UIDevice.current.useTabletInterface {
-            content
-                .navigationViewStyle(.stack)
-        } else {
-            content
-                .navigationViewStyle(.automatic)
-        }
-    }
-}
-
-extension View {
-    @ViewBuilder func iPadOnlyID() -> some View {
-        if UIDevice.current.useTabletInterface {
-            self.id(UUID())
-        } else {
-            self
         }
     }
 }

@@ -73,7 +73,6 @@ public class NeevaFeatureFlags {
         case disableLocalNotification = 57492
         case enableSpaceDigestDeeplink = 63826
         case enableSpaceDigestCard = 63834
-        case enableBacklink = 67388
 
         public var name: String {
             switch self {
@@ -99,7 +98,6 @@ public class NeevaFeatureFlags {
             case .disableLocalNotification: return "ios.disable_local_notification"
             case .enableSpaceDigestDeeplink: return "ios.enable_space_digest_deep_link"
             case .enableSpaceDigestCard: return "ios.enable_space_digest_card"
-            case .enableBacklink: return "backend.enable_backlinks_cheatsheet"
             }
         }
     }

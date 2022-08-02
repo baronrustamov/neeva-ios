@@ -23,29 +23,12 @@ extension UIPasteboard {
         return (isGIF ? kUTTypeGIF : kUTTypePNG) as String
     }
 
-    private var syncURL: URL? {
-        return UIPasteboard.general.string.flatMap {
-            guard let url = URL(string: $0), url.isWebPage() else { return nil }
-            return url
-        }
-    }
-
     /// Preferred method to get strings out of the clipboard.
     /// When iCloud pasteboards are enabled, the usually fast, synchronous calls
     /// become slow and synchronous causing very slow start up times.
     func asyncString() -> Deferred<Maybe<String?>> {
         return fetchAsync {
             return UIPasteboard.general.string
-        }
-    }
-
-    /// Preferred method to get URLs out of the clipboard.
-    /// We use Deferred<Maybe<T?>> to fit in to the rest of the Deferred<Maybe> tools
-    /// we already use; but use optionals instead of errorTypes, because not having a URL
-    /// on the clipboard isn't an error.
-    func asyncURL() -> Deferred<Maybe<URL?>> {
-        return fetchAsync {
-            return self.syncURL
         }
     }
 

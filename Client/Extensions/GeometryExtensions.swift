@@ -16,12 +16,6 @@ extension CGRect {
     }
 }
 
-extension UIEdgeInsets {
-    init(equalInset inset: CGFloat) {
-        self.init(top: inset, left: inset, bottom: inset, right: inset)
-    }
-}
-
 extension GeometryProxy {
     var widthIncludingSafeArea: CGFloat {
         size.width + safeAreaInsets.leading + safeAreaInsets.trailing

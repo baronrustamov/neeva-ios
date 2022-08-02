@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import Combine
+import Defaults
 import Foundation
 import Shared
 
@@ -36,17 +37,27 @@ private enum BloomFilterLoader {
 
     static private let fileManager = FileManager.default
 
-    static private var session: URLSession = {
-        // Put callbacks on utility level
+    static private var downloadQueue: OperationQueue = {
+        // Use utility-level serial queue for download operations
         let queue = OperationQueue()
+        queue.name = "co.neeva.app.ios.browser.BloomFilterLoader"
         queue.qualityOfService = .utility
+        queue.maxConcurrentOperationCount = 1
+        return queue
+    }()
+
+    static private var defaultSession: URLSession = {
+        return URLSession(configuration: .default, delegate: nil, delegateQueue: downloadQueue)
+    }()
+
+    static private var restrictedSession: URLSession = {
         // Disable downloading over cellular and restricted networks
         let config = URLSessionConfiguration.default
         config.allowsCellularAccess = false
         config.allowsExpensiveNetworkAccess = false
         config.allowsConstrainedNetworkAccess = false
         config.waitsForConnectivity = true
-        return URLSession(configuration: config, delegate: nil, delegateQueue: queue)
+        return URLSession(configuration: config, delegate: nil, delegateQueue: downloadQueue)
     }()
 
     static func loadFilter(
@@ -62,7 +73,7 @@ private enum BloomFilterLoader {
         }
 
         // get new checksum file from network
-        session.downloadTask(with: locations.checksumURL) { tempURL, response, error in
+        defaultSession.downloadTask(with: locations.checksumURL) { tempURL, response, error in
             if let error = error {
                 completion(.failure(error))
                 return
@@ -98,7 +109,7 @@ private enum BloomFilterLoader {
             }
 
             // Cannot return from current local file. Acquire new one
-            session.downloadTask(with: locations.binUrl) {
+            restrictedSession.downloadTask(with: locations.binUrl) {
                 tempFilterURL, filterResponse, filterError in
                 if let error = filterError {
                     completion(.failure(error))
@@ -193,15 +204,52 @@ private enum BloomFilterLoader {
 
 // MARK: - FilterResource
 private class FilterResource {
-    enum State {
+    struct Configuration {
+        let identifier: String
+        let filterURL: URL
+        let checksumURL: URL
+        var localURL: URL
+
+        static let reddit = Configuration(
+            identifier: "reddit",
+            filterURL: URL(string: "https://s.neeva.co/web/neevascope/v1/reddit.bin")!,
+            checksumURL: URL(string: "https://s.neeva.co/web/neevascope/v1/reddit_latest.json")!,
+            localURL: URL(fileURLWithPath: "")
+        )
+    }
+
+    enum State: CustomStringConvertible {
         case notInitialized
         case loading
         case ready(BloomFilter)
         case error(Error)
+
+        var description: String {
+            switch self {
+            case .notInitialized:
+                return "notInitialized"
+            case .loading:
+                return "loading"
+            case .ready:
+                return "ready"
+            case .error(let error):
+                return "Error: \(error)"
+            }
+        }
     }
 
     // MARK: - Private Properteis
-    private var state: State = .notInitialized
+    private let identifier: String
+    private var state: State = .notInitialized {
+        didSet {
+            switch state {
+            case .ready, .error:
+                Defaults[.redditFilterHealth] = state.description
+            default:
+                break
+            }
+        }
+    }
 
     private let queue = DispatchQueue(
         label: "co.neeva.app.ios.browser.BloomFilterResource",
@@ -211,9 +259,9 @@ private class FilterResource {
         target: nil
     )
 
-    private var filterURL: URL
-    private var checksumURL: URL
-    private var saveToPath: URL
+    private let filterURL: URL
+    private let checksumURL: URL
+    private let saveToPath: URL
 
     var filter: BloomFilter? {
         precondition(!Thread.isMainThread)
@@ -225,10 +273,11 @@ private class FilterResource {
         }
     }
 
-    init(url: URL, checksumURL: URL, saveTo localURL: URL) {
-        self.filterURL = url
-        self.checksumURL = checksumURL
-        self.saveToPath = localURL
+    init(_ configuration: Configuration) {
+        self.identifier = configuration.identifier
+        self.filterURL = configuration.filterURL
+        self.checksumURL = configuration.checksumURL
+        self.saveToPath = configuration.localURL
     }
 
     func load() {
@@ -277,28 +326,25 @@ private class FilterResource {
 }
 
 class BloomFilterManager {
+    static let shared = BloomFilterManager()
     static let subFolderName = "BloomFilter"
 
     private var redditFiler: FilterResource?
 
     init() {
-        if let url = URL(string: "https://s.neeva.co/web/neevascope/v1/reddit.bin"),
-            let checksumURL = URL(string: "https://s.neeva.co/web/neevascope/v1/reddit_latest.json")
-        {
-            let localPath = Self.getSaveToDirectory()?
-                .appendingPathComponent(url.lastPathComponent)
-            redditFiler = FilterResource(
-                url: url,
-                checksumURL: checksumURL,
-                saveTo: localPath ?? URL(fileURLWithPath: "")
+        var redditConfig = FilterResource.Configuration.reddit
+        if let saveToDirectory = Self.getSaveToDirectory() {
+            redditConfig.localURL = saveToDirectory.appendingPathComponent(
+                redditConfig.filterURL.lastPathComponent
             )
         }
+        redditFiler = FilterResource(redditConfig)
     }
 
-    func contains(_ key: String) -> Bool {
+    func contains(_ key: String) -> Bool? {
         guard let filter = redditFiler?.filter else {
             redditFiler?.load()
-            return false
+            return nil
         }
 
         return filter.mayContain(key: key)

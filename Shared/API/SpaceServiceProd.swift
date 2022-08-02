@@ -69,6 +69,18 @@ public class SpaceServiceProd: SpaceService {
         return DeleteSpaceItemsRequest(spaceID: spaceID, ids: ids)
     }
 
+    public func deleteSpaceResultByUrlMutation(
+        spaceId: String, url: String,
+        completion: @escaping (Result<DeleteSpaceResultByUrlMutation.Data, Error>) -> Void
+    ) -> Cancellable? {
+        return DeleteSpaceResultByUrlMutation(
+            input: DeleteSpaceResultByURLInput(
+                spaceId: spaceId,
+                url: url
+            )
+        ).perform(resultHandler: completion)
+    }
+
     public func getRelatedSpacesCountData(
         spaceID: String,
         completion: @escaping (Result<Int, Error>) -> Void
@@ -99,6 +111,10 @@ public class SpaceServiceProd: SpaceService {
 
     public func reorderSpace(spaceID: String, ids: [String]) -> ReorderSpaceRequest? {
         return ReorderSpaceRequest(spaceID: spaceID, ids: ids)
+    }
+
+    public func pinSpace(spaceId: String, isPinned: Bool) -> PinSpaceRequest? {
+        return PinSpaceRequest(spaceId: spaceId, isPinned: isPinned)
     }
 
     public func updateSpaceEntity(

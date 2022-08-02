@@ -17,29 +17,31 @@ struct LoggingSettingsView: View {
 
     var body: some View {
         List {
-            Section(header: Text("Categories")) {
+            Section(header: Text(verbatim: "Categories")) {
                 Group {
-                    Toggle("auth", isOn: $enableAuthLogging)
-                    Toggle("browser", isOn: $enableBrowserLogging)
-                    Toggle("network", isOn: $enableNetworkLogging)
-                    Toggle("storage", isOn: $enableStorageLogging)
+                    Toggle(String("auth"), isOn: $enableAuthLogging)
+                    Toggle(String("browser"), isOn: $enableBrowserLogging)
+                    Toggle(String("network"), isOn: $enableNetworkLogging)
+                    Toggle(String("storage"), isOn: $enableStorageLogging)
                 }.font(.system(.body, design: .monospaced))
             }
-            Section(header: Text("Options")) {
-                Toggle("Include JS console output (browser)", isOn: $enableWebKitConsoleLogging)
-                Toggle("Log to console", isOn: $enableLogToConsole)
-                Toggle("Log to file", isOn: $enableLogToFile)
+            Section(header: Text(verbatim: "Options")) {
+                Toggle(
+                    String("Include JS console output (browser)"), isOn: $enableWebKitConsoleLogging
+                )
+                Toggle(String("Log to console"), isOn: $enableLogToConsole)
+                Toggle(String("Log to file"), isOn: $enableLogToFile)
             }
             DecorativeSection {
-                Button("Roll Log Files") {
+                Button(String("Roll Log Files")) {
                     Logger.rollLogs()
                 }
-                Button("Snapshot Log Files") {
+                Button(String("Snapshot Log Files")) {
                     Logger.copyPreviousLogsToDocuments()
                 }
             }
             DecorativeSection {
-                Button("Delete Log Files") {
+                Button(String("Delete Log Files")) {
                     Logger.deleteLogs()
                 }.accentColor(.red)
             }

@@ -2,6 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import Combine
+import Shared
+import SwiftUI
 import UIKit
 
 class SimulatedSwipeModel: ObservableObject {
@@ -14,37 +17,57 @@ class SimulatedSwipeModel: ObservableObject {
     @Published var contentOffset: CGFloat = 0
 
     let tabManager: TabManager
-    let chromeModel: TabChromeModel
     let swipeDirection: SwipeDirection
     var forwardUrlMap = [String: [URL]?]()
     var progressModel = CarouselProgressModel(urls: [], index: 0)
 
-    func canGoBack() -> Bool {
-        return swipeDirection == .back && !hidden
+    weak var coordinator: SimulatedSwipeViewRepresentable.Coordinator?
+    private var isActive: Bool { coordinator != nil }
+
+    private var subscriptions = Set<AnyCancellable>()
+
+    init(tabManager: TabManager, swipeDirection: SwipeDirection) {
+        self.tabManager = tabManager
+        self.swipeDirection = swipeDirection
+
+        register(self, forTabEvents: .didChangeURL)
+
+        // this pipeline must be created ahead of time and optionally skipped
+        // with `isActive` to avoid conflicting assignments between forward and
+        // backward models. If pipeline is created during a `TabChromeModel` managed
+        // animation, it can cause simultaneous access error when assigning to
+        // `TabChromeModel` property due to timing issues.
+        tabManager.selectedTabPublisher
+            .sink { [weak self] in
+                self?.selectedTabChanged(selected: $0)
+            }
+            .store(in: &subscriptions)
+    }
+
+    // MARK: - Back Forward Methods
+    private func canGoBack() -> Bool {
+        return isActive && swipeDirection == .back && !hidden
     }
 
     func canGoForward() -> Bool {
-        return swipeDirection == .forward && !hidden
+        return isActive && swipeDirection == .forward && !hidden
     }
 
-    @discardableResult func goBack() -> Bool {
-        guard canGoBack(), swipeDirection == .back, let tab = tabManager.selectedTab else {
-            return false
+    func goBack() {
+        guard canGoBack(),
+            swipeDirection == .back,
+            let tab = tabManager.selectedTab
+        else {
+            return
         }
 
-        if let _ = tab.parent {
-            tabManager.removeTab(tab, showToast: false)
-        } else if let id = tab.parentSpaceID {
-            SceneDelegate.getBVC(with: tabManager.scene).browserModel.openSpace(spaceID: id)
-        } else {
-            return false
-        }
-
-        return true
+        tab.goBack()
     }
 
     @discardableResult func goForward() -> Bool {
-        guard canGoForward(), swipeDirection == .forward, let tab = tabManager.selectedTab,
+        guard canGoForward(),
+            swipeDirection == .forward,
+            let tab = tabManager.selectedTab,
             let urls = forwardUrlMap[tab.tabUUID]!
         else {
             return false
@@ -55,9 +78,98 @@ class SimulatedSwipeModel: ObservableObject {
         return true
     }
 
-    init(tabManager: TabManager, chromeModel: TabChromeModel, swipeDirection: SwipeDirection) {
-        self.tabManager = tabManager
-        self.chromeModel = chromeModel
-        self.swipeDirection = swipeDirection
+    // MARK: - Tab Observation Methods
+    private func selectedTabChanged(selected: Tab?) {
+        guard isActive,
+            let tabUUID = selected?.tabUUID
+        else {
+            return
+        }
+
+        switch swipeDirection {
+        case .forward:
+            updateForwardVisibility(id: tabUUID, results: forwardUrlMap[tabUUID, default: nil])
+            selected?.updateCanGoForward()
+        case .back:
+            updateBackVisibility(tab: selected)
+        }
+    }
+
+    private func updateBackVisibility(tab: Tab?) {
+        coordinator?.setPreviewImage(nil)
+
+        guard let tab = tab else {
+            hidden = true
+            return
+        }
+
+        // Keep the SimulatedSwipeController hidden if the WebView can go back.
+        // WebView back swipe takes priority over our simulated swipe.
+        hidden = !tab.canGoBack || (tab.webView?.canGoBack ?? false)
+
+        if tab.backNavigationSuggestionQuery() == nil, let parent = tab.parent {
+            coordinator?.setPreviewImage(parent.screenshot)
+        }
+    }
+
+    private func updateForwardVisibility(id: String, results: [URL]?, index: Int = -1) {
+        forwardUrlMap[id] = results
+        hidden = results == nil
+
+        guard let results = results else {
+            coordinator?.removeProgressViewFromHierarchy()
+            progressModel.urls = []
+            progressModel.index = 0
+            return
+        }
+
+        let bvc = SceneDelegate.getBVC(for: coordinator?.vc?.view)
+        coordinator?.addProgressView(to: bvc)
+        progressModel.urls = results
+        progressModel.index = index
+
+        coordinator?.makeProgressViewConstraints()
+    }
+}
+
+extension SimulatedSwipeModel: TabEventHandler {
+    func tab(_ tab: Tab, didChangeURL url: URL) {
+        guard isActive,
+            let url = tab.webView?.url,
+            tab == tabManager.selectedTab
+        else {
+            return
+        }
+
+        switch swipeDirection {
+        case .forward:
+            if let query = SearchEngine.current.queryForSearchURL(url),
+                !query.isEmpty
+            {
+                forwardUrlMap[tab.tabUUID] = []
+                SearchResultsController.getSearchResults(for: query) { result in
+                    switch result {
+                    case .failure(let error):
+                        let _ = error as NSError
+                        self.updateForwardVisibility(id: tab.tabUUID, results: nil)
+                    case .success(let results):
+                        self.updateForwardVisibility(id: tab.tabUUID, results: results)
+                    }
+                }
+            }
+
+            guard let urls = forwardUrlMap[tab.tabUUID] else {
+                return
+            }
+
+            guard let index = urls?.firstIndex(of: url), index < (urls?.count ?? 0) - 1 else {
+                self.updateForwardVisibility(id: tab.tabUUID, results: nil)
+                return
+            }
+
+            progressModel.index = index
+        case .back:
+            updateBackVisibility(tab: tab)
+        }
     }
 }

@@ -691,7 +691,7 @@ class SuggestionModel: ObservableObject {
         }
 
         if hideZeroQuery {
-            bvc.hideZeroQuery()
+            bvc.dismissEditingAndHideZeroQuery()
         }
     }
 

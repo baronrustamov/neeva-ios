@@ -11,39 +11,62 @@ struct DefaultBrowserInterstitialWelcomeView: View {
     @EnvironmentObject var interstitialModel: InterstitialViewModel
 
     @State private var switchToDefaultBrowserScreen = false
+    @State private var collectUsageStatsCheckbox = true
 
-    @ViewBuilder
-    var header: some View {
-        if interstitialModel.isInWelcomeScreenExperimentArms() {
-            Image(interstitialModel.imageForWelcomeExperiment(), bundle: .main).resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(maxWidth: 475)
-                .border(Color.tertiaryLabel, width: 1).padding(.horizontal, -32)
-        } else {
-            Text("Welcome to Neeva")
-                .font(.system(size: 32, weight: .light))
-                .padding(.bottom, 5)
-            Text("The first ad-free, private search engine")
-                .withFont(.bodyLarge)
-        }
+    var termsButton: some View {
+        SafariVCLink("Terms of Service", url: NeevaConstants.appTermsURL)
+    }
+
+    var privacyButton: some View {
+        SafariVCLink("Privacy Policy", url: NeevaConstants.appPrivacyURL)
     }
 
     @ViewBuilder
-    var detail: some View {
-        if interstitialModel.isInWelcomeScreenExperimentArms() {
-            VStack(alignment: .leading) {
-                Text(interstitialModel.titleForFirstScreenWelcomeExperiment())
-                    .font(.system(size: 32, weight: .bold))
-                    .padding(.bottom, 5)
-                Text(interstitialModel.bodyForFirstScreenWelcomeExperiment())
-                    .foregroundColor(Color.secondaryLabel)
-                    .withFont(.bodyXLarge)
+    var content: some View {
+        VStack(alignment: .leading) {
+            Text("Neeva puts you in charge of\nyour life online.")
+                .font(.system(size: UIConstants.hasHomeButton ? 24 : 36, weight: .bold))
+                .padding(.bottom, 15)
+            ForEach(interstitialModel.welcomePageBullets(), id: \.self) {
+                bulletText in
+                HStack {
+                    Symbol(decorative: .checkmarkCircleFill, size: 20)
+                        .foregroundColor(Color.ui.adaptive.blue)
+                    Text(LocalizedStringKey(bulletText)).font(.system(size: 16, weight: .bold))
+                }
+                .padding(.vertical, 5)
             }
-        } else {
-            Image("default-browser-prompt", bundle: .main)
-                .resizable()
-                .frame(width: 300, height: 205)
-                .padding(.bottom, 32)
+        }.frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 45)
+    }
+
+    @ViewBuilder
+    var footerContent: some View {
+        VStack(spacing: 0) {
+            Spacer()
+            HStack {
+                Button(action: {
+                    collectUsageStatsCheckbox.toggle()
+                }) {
+                    collectUsageStatsCheckbox
+                        ? Symbol(decorative: .checkmarkCircleFill, size: 20)
+                            .foregroundColor(Color.blue)
+                        : Symbol(decorative: .circle, size: 20)
+                            .foregroundColor(Color.tertiaryLabel)
+                    Text("Help improve this app by sending usage statistics to Neeva.")
+                        .withFont(.bodyMedium)
+                        .foregroundColor(.primary)
+                }
+                .buttonStyle(PlainButtonStyle())
+            }
+            .padding(.bottom, 18)
+            .padding(.horizontal, 30)
+            HStack {
+                termsButton
+                Text("·").foregroundColor(.secondaryLabel)
+                privacyButton
+            }
+            .withFont(unkerned: .bodySmall)
+            .padding(.bottom, 15)
         }
     }
 
@@ -52,13 +75,16 @@ struct DefaultBrowserInterstitialWelcomeView: View {
             DefaultBrowserInterstitialOnboardingView()
         } else {
             DefaultBrowserInterstitialView(
-                detail: detail,
-                header: header,
-                primaryButton: interstitialModel.isInWelcomeScreenExperimentArms()
-                    ? "Let's go" : "Get Started",
+                content: DefaultBrowserInterstitialBackdrop(content: content),
+                footerContent: footerContent,
+                primaryButton: "Let's Go",
                 primaryAction: {
                     switchToDefaultBrowserScreen = true
                     ClientLogger.shared.logCounter(.GetStartedInWelcome)
+                    Defaults[.shouldCollectUsageStats] = collectUsageStatsCheckbox
+                    if Defaults[.shouldCollectUsageStats] == true {
+                        ClientLogger.shared.flushLoggingQueue()
+                    }
                 }
             )
             .onAppear {
@@ -70,6 +96,18 @@ struct DefaultBrowserInterstitialWelcomeView: View {
                     Defaults[.firstRunImpressionLogged] = true
                 }
             }
+            .onDisappear {
+                Defaults[.shouldCollectUsageStats] = collectUsageStatsCheckbox
+                if Defaults[.shouldCollectUsageStats] == true {
+                    ClientLogger.shared.flushLoggingQueue()
+                }
+            }
         }
+    }
+}
+
+struct DefaultBrowserInterstitialWelcomeView_Previews: PreviewProvider {
+    static var previews: some View {
+        DefaultBrowserInterstitialWelcomeView()
     }
 }

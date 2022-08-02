@@ -27,16 +27,15 @@ class TrackingStatsViewModel: ObservableObject {
     @Published private(set) var whosTrackingYouDomains = [WhosTrackingYouDomain]()
     @Published var preventTrackersForCurrentPage: Bool {
         didSet {
-            ClientLogger.shared.logCounter(
-                preventTrackersForCurrentPage ? .TurnOnBlockTracking : .TurnOffBlockTracking,
-                attributes: EnvironmentHelper.shared.getAttributes() + [
-                    ClientLogCounterAttribute(
-                        key: LogConfig.TrackingProtectionAttribute.toggleProtectionForURL,
-                        value: selectedTab?.currentURL()?.absoluteString)
-                ]
-            )
+            var url = selectedTabURL
+            // extract url query param for internal pages
+            if let internalUrl = InternalURL(url),
+                let extractedUrl = internalUrl.extractedUrlParam
+            {
+                url = extractedUrl
+            }
 
-            guard let domain = selectedTabURL?.host, Defaults[.cookieCutterEnabled] else {
+            guard let domain = url?.host, Defaults[.cookieCutterEnabled] else {
                 return
             }
 
@@ -161,7 +160,13 @@ struct TrackingMenuFirstRowElement: View {
             .padding(.bottom, 4)
             .padding(.vertical, 10)
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel(Text("\(num) \(Text(label)) blocked"))
+            .accessibilityLabel(
+                Text(
+                    "\(num) \(Text(label)) blocked",
+                    comment:
+                        "accessibility label for how many website trackers are blocked on this page"
+                )
+            )
             .accessibilityIdentifier("TrackingMenu.TrackingMenuFirstRowElement")
         }
     }

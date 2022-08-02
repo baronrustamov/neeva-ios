@@ -17,7 +17,7 @@ private enum MetaTag: String {
             self = .description
         case "title", "og:title":
             self = .title
-        case "og:image":
+        case "image", "og:image":
             self = .image
         default:
             return nil
@@ -80,7 +80,11 @@ class ShareToViewModel: NSObject, ObservableObject {
     }
 
     private func processsMetatag(_ xmlElement: XMLElement) {
-        guard let metaTag = MetaTag(rawValue: xmlElement["property"] ?? "") else { return }
+        guard let property = xmlElement["property"],
+            let metaTag = MetaTag(property)
+        else {
+            return
+        }
         let content = xmlElement["content"]
         switch metaTag {
         case .description:

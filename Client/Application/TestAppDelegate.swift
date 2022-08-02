@@ -33,6 +33,7 @@ class MockUserInfoProvider: UserInfoProvider {
                     authProvider: SSOProvider.okta.rawValue,
                     featureFlags: [],
                     userFlags: [],
+                    subscription: nil,
                     subscriptionType: nil,
                     isVerified: true
                 )
@@ -172,13 +173,6 @@ class TestAppDelegate: AppDelegate {
 
         if launchArguments.contains(LaunchArguments.ForceExperimentControlArm) {
             // placeholder: add any control experiment arm here if needed
-            NeevaExperiment.forceExperimentArm(
-                experiment: .defaultBrowserWelcomeScreen,
-                experimentArm: NeevaExperiment.DefaultBrowserWelcomeScreen.control.rawValue)
-
-            NeevaExperiment.forceExperimentArm(
-                experiment: .promoCardTypeAfterFirstRun,
-                experimentArm: NeevaExperiment.PromoCardTypeAfterFirstRun.control.rawValue)
         }
 
         // Set signInOnce
@@ -197,6 +191,10 @@ class TestAppDelegate: AppDelegate {
 
         if launchArguments.contains(LaunchArguments.EnableMockSpaces) {
             SpaceServiceProvider.shared = SpaceServiceMock()
+        }
+
+        if launchArguments.contains(LaunchArguments.DisableCheatsheetBloomFilters) {
+            Defaults[.useCheatsheetBloomFilters] = false
         }
 
         // Deferred to here in case the ClearProfile argument was set.

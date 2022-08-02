@@ -11,6 +11,10 @@ struct PrivacySettingsSection: View {
 
     @Default(.closeIncognitoTabs) var closeIncognitoTabs
 
+    // Can't directly use Defaults because it's optional type and Toggle doesn't like it
+    @State var usageCollectionCheckbox =
+        Defaults[.shouldCollectUsageStats] != nil ? Defaults[.shouldCollectUsageStats]! : false
+
     @Environment(\.onOpenURL) var openURL
     @EnvironmentObject var cookieCutterModel: CookieCutterModel
 
@@ -35,12 +39,20 @@ struct PrivacySettingsSection: View {
             CookieCutterSettings(cookieCutterEnabled: cookieCutterModel.cookieCutterEnabled)
         } label: {
             Text("Cookie Cutter")
-        }
+        }.id("cookie-cutter-setting")
 
         NavigationLinkButton("Privacy Policy") {
             ClientLogger.shared.logCounter(
                 .ViewPrivacyPolicy, attributes: EnvironmentHelper.shared.getAttributes())
             openURL(NeevaConstants.appPrivacyURL)
+        }
+
+        Toggle(isOn: $usageCollectionCheckbox) {
+            DetailedSettingsLabel(
+                title: "Help improve Neeva",
+                description: "Automatically send usage statistics to Neeva")
+        }.onChange(of: usageCollectionCheckbox) { value in
+            Defaults[.shouldCollectUsageStats] = value
         }
     }
 }

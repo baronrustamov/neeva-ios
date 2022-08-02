@@ -227,6 +227,7 @@ struct PlaceView: View {
 
             detailsSection
         }
+        .padding(.horizontal, CheatsheetUX.horizontalPadding)
     }
 
     @ViewBuilder
@@ -276,7 +277,7 @@ struct PlaceView: View {
                             Image(systemSymbol: .phoneFill)
                                 .resizable()
                                 .scaledToFit()
-                            Text("Call")
+                            Text("Call", comment: "Button to make a phone call")
                                 .withFont(.bodyMedium)
                         }
                     }
@@ -643,6 +644,7 @@ struct PlaceListView: View {
                     .cornerRadius(PlaceViewUX.QuickActionButton.cornerRadius)
             )
         }
+        .padding(.horizontal, CheatsheetUX.horizontalPadding)
     }
 
     private struct HeaderView: View {

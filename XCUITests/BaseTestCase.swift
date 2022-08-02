@@ -27,7 +27,7 @@ class BaseTestCase: XCTestCase {
         LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SetSignInOnce,
         LaunchArguments.SetDidFirstNavigation, LaunchArguments.SkipWhatsNew,
         LaunchArguments.SkipETPCoverSheet, LaunchArguments.DeviceName,
-        "\(LaunchArguments.ServerPort)\(serverPort)",
+        "\(LaunchArguments.ServerPort)\(serverPort)", LaunchArguments.DisableCheatsheetBloomFilters,
     ]
 
     var testName: String {
@@ -36,7 +36,7 @@ class BaseTestCase: XCTestCase {
     }
 
     func setUpApp() {
-        if !launchArguments.contains("FIREFOX_PERFORMANCE_TEST") {
+        if !launchArguments.contains("NEEVA_PERFORMANCE_TEST") {
             app.launchArguments = [LaunchArguments.Test] + launchArguments
         } else {
             app.launchArguments = [LaunchArguments.PerformanceTest] + launchArguments
@@ -56,6 +56,9 @@ class BaseTestCase: XCTestCase {
     }
 
     override func tearDown() {
+        // Reset the previous UI state to create a standard testing environment.
+        UserDefaults.standard.set("tab", forKey: "scenePreviousUIState")
+
         app.terminate()
         super.tearDown()
     }
@@ -136,13 +139,16 @@ class BaseTestCase: XCTestCase {
         waitForNoExistence(progressIndicator, timeoutValue: 20.0)
     }
 
-    public func openURL(_ url: String = "example.com", waitForPageLoad: Bool = true) {
+    public func openURL(
+        _ url: String = "example.com", fromTabTray: Bool = false, waitForPageLoad: Bool = true
+    ) {
         // If the tab tray is visible, then start a new tab.
-        if app.buttons["Add Tab"].exists {
+        if app.buttons["Add Tab"].exists || fromTabTray {
             app.buttons["Add Tab"].tap()
+            waitForExistence(app.buttons["Cancel"])
         }
 
-        if !app.buttons["Cancel"].exists {
+        if !app.buttons["Cancel"].exists && !fromTabTray {
             goToAddressBar()
         }
 
@@ -179,18 +185,17 @@ class BaseTestCase: XCTestCase {
     }
 
     public func closeAllTabs(fromTabSwitcher: Bool = false, createNewTab: Bool = true) {
-        if fromTabSwitcher {
-            waitForExistence(app.buttons["Done"], timeout: 3)
-            app.buttons["Done"].press(forDuration: 1)
-        } else {
+        if !fromTabSwitcher {
             waitForExistence(app.buttons["Show Tabs"], timeout: 3)
-            app.buttons["Show Tabs"].press(forDuration: 1)
+            app.buttons["Show Tabs"].tap()
         }
+
+        waitForExistence(app.buttons["Done"], timeout: 3)
+        app.buttons["Done"].press(forDuration: 1)
 
         let closeAllTabButton = app.buttons["Close All Tabs"]
         if closeAllTabButton.exists {
             closeAllTabButton.tap()
-
             waitForExistence(app.buttons["Confirm Close All Tabs"], timeout: 3)
             app.buttons["Confirm Close All Tabs"].tap()
         } else {
@@ -262,13 +267,20 @@ extension BaseTestCase {
 }
 
 extension XCUIElement {
+    /*
+     * Tap the element, regardless of whether it is "hittable" or not.
+     * We deliberately avoid checking `isHittable`, which is sometimes problematic.
+     * See this SO comment and related discussion:
+     *
+     * "In this case, checking self.isHittable as suggested was causing an infinite loop.
+     * Skipping that if clause and directly calling coordinate.tap() fixed the issue."
+     * https://stackoverflow.com/a/33534187
+     */
     func tap(force: Bool = true) {
-        // There appears to be a bug with tapping elements sometimes, despite them being on-screen and tappable, due to hittable being false.
-        // See: http://stackoverflow.com/a/33534187/1248491
-        if isHittable {
-            tap()
-        } else if force {
+        if force {
             coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        } else {
+            tap()
         }
     }
 }

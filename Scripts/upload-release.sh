@@ -1,5 +1,7 @@
 #!/bin/sh
 
+IOS_SCRIPTS_DIR=$(dirname $0)
+
 if [ -z $1 ]; then
   echo "Please specify the xcarchive filename. Abort"
   exit 1
@@ -13,7 +15,7 @@ fi
 APP_VERSION=$(/usr/libexec/PlistBuddy -c 'print ":ApplicationProperties:CFBundleShortVersionString"' $1/Info.plist)
 
 # convert xcarchive to ipa
-xcodebuild -exportArchive -archivePath $1 -exportPath /tmp -exportOptionsPlist Scripts/ExportOptions.plist
+xcodebuild -exportArchive -archivePath $1 -exportPath /tmp -exportOptionsPlist $IOS_SCRIPTS_DIR/ExportOptions.plist
 
 echo "Uploading build $APP_VERSION to Testflight..."
 

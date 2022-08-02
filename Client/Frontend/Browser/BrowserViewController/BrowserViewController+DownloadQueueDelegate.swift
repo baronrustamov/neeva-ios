@@ -6,23 +6,7 @@ import Foundation
 import Shared
 
 extension BrowserViewController: DownloadQueueDelegate {
-    func downloadQueue(_ downloadQueue: DownloadQueue, didStartDownload download: Download) {
+    func downloadQueue(didStartDownload download: Download) {
         ToastDefaults().showToastForDownload(download: download, toastViewManager: toastViewManager)
-    }
-
-    func downloadQueue(
-        _ downloadQueue: DownloadQueue, didDownloadCombinedBytes combinedBytesDownloaded: Int64,
-        combinedTotalBytesExpected: Int64?
-    ) {
-
-    }
-
-    func downloadQueue(
-        _ downloadQueue: DownloadQueue, download: Download, didFinishDownloadingTo location: URL
-    ) {
-        print("didFinishDownloadingTo(): \(location)")
-    }
-
-    func downloadQueue(_ downloadQueue: DownloadQueue, didCompleteWithError error: Error?) {
     }
 }

@@ -26,21 +26,9 @@ struct TopBarNeevaButton: View {
 
     @ViewBuilder
     private var neevaButton: some View {
-        TabToolbarButtons.Neeva(iconWidth: Self.neevaIconWidth) {
-            ClientLogger.shared.logCounter(
-                .OpenCheatsheet,
-                attributes: EnvironmentHelper.shared.getAttributes()
-            )
-            CheatsheetMenuViewModel.promoModel.openSheet(
-                on: chromeModel.topBarDelegate?.tabManager.selectedTab?.url
-            )
-            if let bvc = chromeModel.topBarDelegate as? BrowserViewController {
-                bvc.showCheatSheetOverlay()
-            }
-        }
-        .tapTargetFrame()
-        .environmentObject(CheatsheetMenuViewModel.promoModel)
-        .disabled(!chromeModel.isPage || chromeModel.isErrorPage)
+        TabToolbarButtons.Neeva(iconWidth: Self.neevaIconWidth)
+            .tapTargetFrame()
+            .disabled(!chromeModel.isPage || chromeModel.isErrorPage)
     }
 }
 
@@ -135,11 +123,10 @@ struct TopBarSpaceFilterButton: View {
                 presenting = false
             }
         ) {
-            VerticalScrollViewIfNeeded {
-                SpacesFilterView()
-                    .topBarPopoverPadding()
-                    .environmentObject(spaceCardModel)
-            }.frame(minWidth: 325, minHeight: 128)
+            SpacesFilterView()
+                .topBarPopoverPadding()
+                .environmentObject(spaceCardModel)
+                .frame(minWidth: 325)
         }
     }
 }

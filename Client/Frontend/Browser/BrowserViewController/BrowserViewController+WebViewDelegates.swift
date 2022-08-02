@@ -64,7 +64,6 @@ private func setCookiesForNeeva(webView: WKWebView, isIncognito: Bool) {
         .calculatorSuggestion,
         .recipeCheatsheet,
         .recipeCardNavigate,
-        .enableBacklink,
     ]
     let intFlags: [NeevaFeatureFlags.IntFlag] = []
     let floatFlags: [NeevaFeatureFlags.FloatFlag] = []
@@ -917,7 +916,7 @@ extension BrowserViewController: WKNavigationDelegate {
         tabManager.selectTab(tab, notify: true)
 
         let loginsHelper = tab.getContentScript(name: LoginsHelper.name()) as? LoginsHelper
-        Authenticator.handleAuthRequest(self, challenge: challenge, loginsHelper: loginsHelper)
+        Authenticator.handleAuthRequest(self, challenge: challenge)
             .uponQueue(.main) { res in
                 if let credentials = res.successValue {
                     completionHandler(.useCredential, credentials.credentials)
@@ -976,7 +975,7 @@ extension BrowserViewController: WKNavigationDelegate {
             updateUIForReaderHomeStateForTab(tab)
         }
 
-        tab.queryForNavigation.attachCurrentSearchQueryToCurrentNavigation(webView: webView)
+        tab.attachCurrentSearchQueryToCurrentNavigation()
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {

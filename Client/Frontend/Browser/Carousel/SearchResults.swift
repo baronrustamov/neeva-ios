@@ -5,8 +5,8 @@
 import Combine
 import Shared
 
-public class SearchResultsController: QueryController<SearchResultsQuery, [URL]> {
-    public override class func processData(_ data: SearchResultsQuery.Data) -> [URL] {
+class SearchResultsController: QueryController<SearchResultsQuery, [URL]> {
+    override class func processData(_ data: SearchResultsQuery.Data) -> [URL] {
         var results = [URL]()
         for group in data.search?.resultGroup ?? [] {
             for result in group?.result ?? [] {
@@ -18,7 +18,7 @@ public class SearchResultsController: QueryController<SearchResultsQuery, [URL]>
         return results
     }
 
-    @discardableResult public static func getSearchResults(
+    @discardableResult static func getSearchResults(
         for query: String,
         completion: @escaping (Result<[URL], Error>) -> Void
     ) -> Cancellable {

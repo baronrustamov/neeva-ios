@@ -16,11 +16,11 @@ protocol ZeroQueryPanelDelegate: AnyObject {
 }
 
 enum ZeroQueryOpenedLocation: Equatable {
-    case tabTray
-    case openTab(Tab?)
-    case createdTab
     case backButton
+    case createdTab
     case newTabButton
+    case openTab(Tab?)
+    case tabTray
 
     var openedTab: Tab? {
         switch self {
@@ -50,7 +50,6 @@ enum PromoCardTrigger {
     case shouldTriggerWalletOrSignupPromo
     case shouldTriggerReferralPromo
     case shouldTriggerSignInPromo
-    case shouldTriggerDefaultPromo
 }
 
 class ZeroQueryModel: ObservableObject {
@@ -91,7 +90,6 @@ class ZeroQueryModel: ObservableObject {
         .shouldTriggerWalletOrSignupPromo,
         .shouldTriggerReferralPromo,
         .shouldTriggerSignInPromo,
-        .shouldTriggerDefaultPromo,
     ]
 
     init(
@@ -109,7 +107,7 @@ class ZeroQueryModel: ObservableObject {
         self.bvc.presentIntroViewController(
             true,
             completion: {
-                self.bvc.hideZeroQuery()
+                self.bvc.dismissEditingAndHideZeroQuery()
             })
     }
 
@@ -122,12 +120,9 @@ class ZeroQueryModel: ObservableObject {
     }
 
     func shouldDisplayPromoCard(_ promocard: PromoCardTrigger) -> Bool {
-        let promoCardTypeArm = NeevaExperiment.arm(for: .promoCardTypeAfterFirstRun)
-
         switch promocard {
         case .shouldTriggerArmDefaultPromo:
-            return (promoCardTypeArm == .control || promoCardTypeArm == nil)
-                && shouldShowDefaultBrowserPromoCard()
+            return shouldShowDefaultBrowserPromoCard()
         case .shouldTriggerWalletOrSignupPromo:
             return !Defaults[.signedInOnce] && !Defaults[.didDismissPreviewSignUpCard]
         case .shouldTriggerReferralPromo:
@@ -135,14 +130,12 @@ class ZeroQueryModel: ObservableObject {
         case .shouldTriggerSignInPromo:
             return !NeevaUserInfo.shared.hasLoginCookie()
                 && (Defaults[.signedInOnce] || !Defaults[.didDismissPreviewSignUpCard])
-        case .shouldTriggerDefaultPromo:
-            return promoCardTypeArm == .previewSignUp && shouldShowDefaultBrowserPromoCard()
         }
     }
 
     func setDisplayPromoCard(_ promocard: PromoCardTrigger) {
         switch promocard {
-        case .shouldTriggerArmDefaultPromo, .shouldTriggerDefaultPromo:
+        case .shouldTriggerArmDefaultPromo:
             promoCard = .defaultBrowser {
                 self.handlePromoCard(interaction: .PromoDefaultBrowser)
                 self.bvc.presentDBOnboardingViewController(triggerFrom: .defaultBrowserPromoCard)
@@ -231,30 +224,15 @@ class ZeroQueryModel: ObservableObject {
         }
     }
 
-    func satisfyDefaultBrowserPromoFreqRule() -> Bool {
-        return Defaults[.numOfDailyZeroQueryImpression] != 0
-            && (Defaults[.introSeenDate] == nil
-                || Defaults[.introSeenDate]?.hoursBetweenDate(toDate: Date()) ?? 0
-                    >= DefaultBrowserPromoRules.hoursAfterInterstitialForPromoCard)
-            && Defaults[.numOfDailyZeroQueryImpression]
-                % DefaultBrowserPromoRules.nthZeroQueryImpression == 0
-            && Defaults[.numOfDailyZeroQueryImpression]
-                <= DefaultBrowserPromoRules.nthZeroQueryImpression
-                * DefaultBrowserPromoRules.maxDailyPromoImpression
-    }
-
     func shouldShowDefaultBrowserPromoCard() -> Bool {
-        let notSeenInterstitial =
-            !Defaults[.didShowDefaultBrowserInterstitial]
-            && !Defaults[.didShowDefaultBrowserInterstitialFromSkipToBrowser]
+        let introSeenDuration = Defaults[.introSeenDate]?.hoursBetweenDate(toDate: Date()) ?? 0
 
-        return NeevaConstants.currentTarget == .client && !Defaults[.didDismissDefaultBrowserCard]
+        // Show default browser promo if the user is not a default browser user for the first three days
+        return NeevaConstants.currentTarget == .client
+            && !Defaults[.didDismissDefaultBrowserCard]
             && !Defaults[.didSetDefaultBrowser]
             && Defaults[.didFirstNavigation]
-            && (notSeenInterstitial
-                || satisfyDefaultBrowserPromoFreqRule()
-                || DefaultBrowserInterstitialChoice(
-                    rawValue: Defaults[.lastDefaultBrowserInterstitialChoice]) == .skipForNow)
+            && introSeenDuration <= DefaultBrowserPromoRules.hoursAfterInterstitialForPromoCard
     }
 
     func updateSuggestedSites() {
@@ -299,7 +277,7 @@ class ZeroQueryModel: ObservableObject {
         // This can occur if a taps back and the Suggestion UI is shown.
         // If the user cancels out of that UI, we should navigate the tab back, like a complete undo.
         if let bvc = bvc, openedFrom == .backButton, wasCancelled {
-            bvc.tabManager.selectedTab?.webView?.goBack()
+            bvc.tabManager.selectedTab?.goBack(checkBackNavigationSuggestionQuery: false)
         }
 
         isLazyTab = false

@@ -11,10 +11,7 @@ class LocalRequestHelper: TabContentScript {
         return "localRequestHelper"
     }
 
-    func userContentController(
-        _ userContentController: WKUserContentController,
-        didReceiveScriptMessage message: WKScriptMessage
-    ) {
+    func userContentController(didReceiveScriptMessage message: WKScriptMessage) {
         guard let requestUrl = message.frameInfo.request.url,
             let internalUrl = InternalURL(requestUrl)
         else { return }

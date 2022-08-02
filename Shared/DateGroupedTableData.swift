@@ -1,57 +1,89 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 
-private func getDate(dayOffset: Int) -> Date {
-    let calendar = Calendar(identifier: .gregorian)
-    let components = calendar.dateComponents([.year, .month, .day], from: Date())
-    let today = calendar.date(from: components)!
-    return calendar.date(byAdding: .day, value: dayOffset, to: today)!
+private let defaultFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "EEEE, MMMM d"
+    return formatter
+}()
+
+public enum DateGroupedTableDataSection: String, CaseIterable {
+    case today = "Today"
+    case yesterday = "Yesterday"
+    case older = "Older"
+
+    /// The order in which the section is displayed in the `HistoryPanelView`.
+    public var index: Int {
+        // When adding a new case, must implment a method in `numberOfItemsForSection`.
+        switch self {
+        case .today:
+            return 0
+        case .yesterday:
+            return 1
+        case .older:
+            return 2
+        }
+    }
 }
 
 public struct DateGroupedTableData<T: Equatable> {
-    let todayTimestamp = getDate(dayOffset: 0).timeIntervalSince1970
-    let yesterdayTimestamp = getDate(dayOffset: -1).timeIntervalSince1970
-    let lastWeekTimestamp = getDate(dayOffset: -7).timeIntervalSince1970
+    public struct Section: Hashable {
+        private let id = UUID()
+        public let dateString: String
+        public let data: [T]
 
-    var today: [(T, TimeInterval)] = []
-    var yesterday: [(T, TimeInterval)] = []
-    var lastWeek: [(T, TimeInterval)] = []
-    var older: [(T, TimeInterval)] = []
+        init(dateString: String, data: [T]) {
+            self.dateString = dateString
+            self.data = data
+        }
+
+        public func hash(into hasher: inout Hasher) {
+            hasher.combine(id.uuidString)
+        }
+    }
+
+    var today: [T] = []
+    var yesterday: [T] = []
+    var older: [String: [T]] = [:]
 
     public var isEmpty: Bool {
-        return today.isEmpty && yesterday.isEmpty && lastWeek.isEmpty && older.isEmpty
+        return today.isEmpty && yesterday.isEmpty && older.isEmpty
     }
 
     public init() {}
 
     @discardableResult mutating public func add(_ item: T, timestamp: TimeInterval) -> IndexPath {
-        if timestamp > todayTimestamp {
-            today.append((item, timestamp))
+        let date = Date(timeIntervalSince1970: timestamp)
+
+        if date.isToday() {
+            today.append(item)
             return IndexPath(row: today.count - 1, section: 0)
-        } else if timestamp > yesterdayTimestamp {
-            yesterday.append((item, timestamp))
+        } else if date.isYesterday() {
+            yesterday.append(item)
             return IndexPath(row: yesterday.count - 1, section: 1)
-        } else if timestamp > lastWeekTimestamp {
-            lastWeek.append((item, timestamp))
-            return IndexPath(row: lastWeek.count - 1, section: 2)
         } else {
-            older.append((item, timestamp))
-            return IndexPath(row: older.count - 1, section: 3)
+            let date = date.formatToString(formatter: defaultFormatter)
+            older[date, default: []].append(item)
+
+            return IndexPath(row: older.count - 1, section: 2)
         }
     }
 
     mutating public func remove(_ item: T) {
-        if let index = today.firstIndex(where: { item == $0.0 }) {
+        if let index = today.firstIndex(where: { item == $0 }) {
             today.remove(at: index)
-        } else if let index = yesterday.firstIndex(where: { item == $0.0 }) {
+        } else if let index = yesterday.firstIndex(where: { item == $0 }) {
             yesterday.remove(at: index)
-        } else if let index = lastWeek.firstIndex(where: { item == $0.0 }) {
-            lastWeek.remove(at: index)
-        } else if let index = older.firstIndex(where: { item == $0.0 }) {
-            older.remove(at: index)
+        } else {
+            for key in older.keys {
+                if let index = older[key]?.firstIndex(of: item) {
+                    older[key]?.remove(at: index)
+                    break
+                }
+            }
         }
     }
 
@@ -61,23 +93,35 @@ public struct DateGroupedTableData<T: Equatable> {
             return today.count
         case 1:
             return yesterday.count
-        case 2:
-            return lastWeek.count
         default:
-            return older.count
+            return older.values.map {
+                $0.count
+            }.reduce(0, +)
         }
     }
 
-    public func itemsForSection(_ section: Int) -> [T] {
+    public func itemsForSection(_ section: DateGroupedTableDataSection) -> [Section] {
         switch section {
-        case 0:
-            return today.map({ $0.0 })
-        case 1:
-            return yesterday.map({ $0.0 })
-        case 2:
-            return lastWeek.map({ $0.0 })
-        default:
-            return older.map({ $0.0 })
+        case .today:
+            return [
+                Section(
+                    dateString: Date.getDate(dayOffset: 0).formatToString(
+                        formatter: defaultFormatter), data: today.map({ $0 })
+                )
+            ]
+        case .yesterday:
+            return [
+                Section(
+                    dateString: Date.getDate(dayOffset: -1).formatToString(
+                        formatter: defaultFormatter),
+                    data: yesterday.map({ $0 }))
+            ]
+        case .older:
+            let other = older.sorted {
+                Date.getDate(from: $0.key, formatter: defaultFormatter)! > Date.getDate(
+                    from: $1.key, formatter: defaultFormatter)!
+            }
+            return other.map { Section(dateString: $0.key, data: $0.value) }
         }
     }
 }

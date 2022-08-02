@@ -28,7 +28,12 @@ struct ReaderModePopover: View {
                                     model.changeTheme(to: theme)
                                 }
                             )
-                            .accessibilityLabel(Text("Light Theme"))
+                            .accessibilityLabel(
+                                Text(
+                                    "Light Theme",
+                                    comment:
+                                        "accessibility label for one type of themes for reader mode feature"
+                                ))
 
                             Spacer()
 
@@ -38,7 +43,12 @@ struct ReaderModePopover: View {
                                     model.changeTheme(to: theme)
                                 }
                             )
-                            .accessibilityLabel(Text("Sepia Theme"))
+                            .accessibilityLabel(
+                                Text(
+                                    "Sepia Theme",
+                                    comment:
+                                        "accessibility label for one type of themes for reader mode feature"
+                                ))
 
                             Spacer()
 
@@ -48,7 +58,12 @@ struct ReaderModePopover: View {
                                     model.changeTheme(to: theme)
                                 }
                             )
-                            .accessibilityLabel(Text("Dark Theme"))
+                            .accessibilityLabel(
+                                Text(
+                                    "Dark Theme",
+                                    comment:
+                                        "accessibility label for one type of themes for reader mode feature"
+                                ))
                         }
                     }.accessibilityLabel(Text("Reading Mode Theme"))
 

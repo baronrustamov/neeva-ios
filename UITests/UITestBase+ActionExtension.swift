@@ -14,21 +14,25 @@ extension UITestBase {
     }
 
     func openNewTab(to url: String = "example.com ") {
-        tester().waitForView(withAccessibilityLabel: "Show Tabs")
-        tester().longPressView(withAccessibilityLabel: "Show Tabs", duration: 1)
-
-        if tester().viewExistsWithLabel("New Tab") {
-            tester().tapView(withAccessibilityLabel: "New Tab")
+        if tester().viewExistsWithLabel("Done") {
+            tester().tapView(withAccessibilityLabel: "Add Tab")
         } else {
-            tester().tapView(withAccessibilityLabel: "New Incognito Tab")
+            tester().waitForView(withAccessibilityLabel: "Show Tabs")
+            tester().longPressView(withAccessibilityLabel: "Show Tabs", duration: 1)
+
+            if tester().viewExistsWithLabel("New Tab") {
+                tester().tapView(withAccessibilityLabel: "New Tab")
+            } else {
+                tester().tapView(withAccessibilityLabel: "New Incognito Tab")
+            }
         }
 
         tester().waitForAnimationsToFinish()
         openURL(url)
     }
 
-    func openURL(_ url: String = "example.com ") {
-        if !tester().viewExistsWithLabel("Cancel") {
+    func openURL(_ url: String = "example.com ", forceSkipAddressBar: Bool = false) {
+        if !tester().viewExistsWithLabel("Cancel") && !forceSkipAddressBar {
             goToAddressBar()
         }
 

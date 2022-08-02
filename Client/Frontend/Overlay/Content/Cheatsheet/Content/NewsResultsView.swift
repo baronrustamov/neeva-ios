@@ -41,14 +41,18 @@ struct NewsResultsView: View {
                         .frame(width: 18, height: 18, alignment: .center)
                 }
             }
+
             ScrollView(.horizontal) {
                 HStack {
                     ForEach(newsResults.news, id: \.url) { news in
                         NewsResultItemView(newsItem: news)
                     }
                 }
+                .padding(.horizontal, CheatsheetUX.horizontalPadding)
             }
+            .padding(.horizontal, -1 * CheatsheetUX.horizontalPadding)
         }
+        .padding(.horizontal, CheatsheetUX.horizontalPadding)
     }
 }
 

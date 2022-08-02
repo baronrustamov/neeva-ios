@@ -52,6 +52,7 @@ struct InternalSettingsView: View {
     @Default(.lastReportedConversionEvent) var lastReportedConversionEvent
     @Default(.lastDefaultBrowserInterstitialChoice) var lastDefaultBrowserInterstitialChoice
     @Default(.introSeenDate) var introSeenDate
+    @Default(.shouldCollectUsageStats) var shouldCollectUsageStats
 
     var body: some View {
         List {
@@ -184,6 +185,7 @@ struct InternalSettingsView: View {
                     .disabled(!saveLogins)
 
                 OptionalStringField("lastVersionNumber", text: $lastVersionNumber)
+                OptionalBooleanField("shouldCollectUsageStats", value: $shouldCollectUsageStats)
             }
 
             Section(header: Text(verbatim: "Top Sites Cache")) {
