@@ -97,6 +97,10 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         return activeTabs.filter { !$0.isIncognito }
     }
 
+    var todaysTabs: [Tab] {
+        return activeNormalTabs.filter { $0.wasLastExecuted(.today) }
+    }
+
     var count: Int {
         assert(Thread.isMainThread)
 
@@ -873,7 +877,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     }
 
     // MARK: Restore Tabs
-    func restoreSavedTabs(
+    @discardableResult func restoreSavedTabs(
         _ savedTabs: [SavedTab], isIncognito: Bool = false, shouldSelectTab: Bool = true,
         overrideSelectedTab: Bool = false
     ) -> Tab? {
@@ -946,7 +950,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     }
 
     func restoreAllClosedTabs() {
-        _ = restoreSavedTabs(Array(recentlyClosedTabs.joined()))
+        restoreSavedTabs(Array(recentlyClosedTabs.joined()))
     }
 
     func resolveParentRef(for restoredTabs: [Tab], restrictToActiveTabs: Bool = false) {

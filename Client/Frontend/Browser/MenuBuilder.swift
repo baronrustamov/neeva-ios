@@ -189,7 +189,7 @@ class ContextMenuActionsBuilder {
         var content: some View {
             ForEach(recentlyClosedTabsFlattened, id: \.self) { tab in
                 Button {
-                    _ = tabManager.restoreSavedTabs([tab], overrideSelectedTab: fromTab)
+                    tabManager.restoreSavedTabs([tab], overrideSelectedTab: fromTab)
                 } label: {
                     Text(tab.title ?? tab.url?.absoluteString ?? "Untitled")
                 }

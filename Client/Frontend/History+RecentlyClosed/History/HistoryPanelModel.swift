@@ -133,7 +133,7 @@ class HistoryPanelModel: ObservableObject {
 
     // Recently Closed Tabs
     func restoreTab(at index: Int) {
-        _ = tabManager.restoreSavedTabs([recentlyClosedTabs[index]])
+        tabManager.restoreSavedTabs([recentlyClosedTabs[index]])
     }
 
     func deleteRecentlyClosedTabs() {

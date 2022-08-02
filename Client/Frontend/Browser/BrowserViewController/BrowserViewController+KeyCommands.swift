@@ -89,20 +89,22 @@ extension BrowserViewController {
     }
 
     @objc func restoreTabKeyCommand() {
-        _ = tabManager.restoreSavedTabs(tabManager.recentlyClosedTabs[0])
+        if tabManager.recentlyClosedTabs.count > 0 {
+            tabManager.restoreSavedTabs(tabManager.recentlyClosedTabs[0])
+        }
     }
 
     @objc func closeAllTabsCommand() {
         if incognitoModel.isIncognito {
             tabManager.toggleIncognitoMode()
 
-            // wait for tabManager to switch to normal mode before closing private tabs
+            // Wait for tabManager to switch to normal mode before closing private tabs
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
                 tabManager.removeTabs(
                     tabManager.incognitoTabs, showToast: false)
             }
         } else {
-            tabManager.removeTabs(tabManager.activeNormalTabs, showToast: false)
+            tabManager.removeTabs(tabManager.todaysTabs, showToast: true)
         }
     }
 

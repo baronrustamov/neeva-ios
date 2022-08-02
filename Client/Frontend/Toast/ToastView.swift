@@ -15,8 +15,10 @@ public enum ToastViewUX {
 
 struct ToastStateContent {
     var text: LocalizedStringKey?
+    var description: (() -> AnyView)? = nil
     var buttonText: LocalizedStringKey?
     var buttonAction: (() -> Void)?
+    var keyboardShortcut: KeyboardShortcut?
 }
 
 class ToastViewContent: ObservableObject {
@@ -105,30 +107,32 @@ struct ToastView: View {
                         .environmentObject(toastProgressViewModel)
                     }
 
-                    Text(content.currentToastStateContent.text ?? "")
-                        .withFont(.bodyMedium)
-                        .lineLimit(3)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(.vertical)
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text(content.currentToastStateContent.text ?? "")
+                            .withFont(.bodyMedium)
+                            .lineLimit(3)
+
+                        if let description = content.currentToastStateContent.description {
+                            description()
+                        }
+                    }.padding(.vertical).fixedSize(horizontal: false, vertical: true)
 
                     if let buttonText = content.currentToastStateContent.buttonText {
                         Spacer()
 
-                        Button(
-                            action: {
-                                if let buttonAction = content.currentToastStateContent.buttonAction
-                                {
-                                    buttonAction()
-                                }
+                        Button {
+                            if let buttonAction = content.currentToastStateContent.buttonAction {
+                                buttonAction()
+                            }
 
-                                viewDelegate?.dismiss()
-                            },
-                            label: {
-                                Text(buttonText)
-                                    .withFont(.labelLarge)
-                                    .foregroundColor(Color.ui.aqua)
-
-                            })
+                            viewDelegate?.dismiss()
+                        } label: {
+                            Text(buttonText)
+                                .withFont(.labelLarge)
+                                .foregroundColor(Color.ui.aqua)
+                        }.if(content.currentToastStateContent.keyboardShortcut != nil) {
+                            $0.keyboardShortcut(content.currentToastStateContent.keyboardShortcut!)
+                        }
                     }
                 }.padding(.horizontal, 16).colorScheme(.dark)
             }.frame(height: 53).padding(.horizontal)

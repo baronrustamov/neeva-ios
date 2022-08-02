@@ -750,6 +750,13 @@ class Tab: NSObject, ObservableObject {
         }
     }
 
+    func wasLastExecuted(_ byTime: TimeFilter) -> Bool {
+        // The fallback value won't be used. tab.lastExecutedTime is
+        // guaranteed to be non-nil in configureTab()
+        let lastExecutedTime = lastExecutedTime ?? Date.nowMilliseconds()
+        return isLastExecutedTimeInTimeFilter(lastExecutedTime, byTime)
+    }
+
     /// Returns a bool on if the tab was last used in the passed `TimeFilter`.
     /// Tab will also return `true` for `today` if it is pinned.
     func isPinnedTodayOrWasLastExecuted(_ byTime: TimeFilter) -> Bool {
