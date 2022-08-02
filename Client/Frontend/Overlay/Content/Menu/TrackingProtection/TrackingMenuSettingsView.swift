@@ -73,14 +73,18 @@ struct TrackingSettingsSectionBlock: View {
             .padding(.horizontal, -10)
         }
 
-        Section {
-            Toggle("Ad Blocking", isOn: $adBlockEnabled)
-                .onChange(of: adBlockEnabled) { value in
-                    if adBlockEnabled {
-                        ClientLogger.shared.logCounter(.AdBlockEnabled)
+        // Only enable ad blocking on iOS 15+
+        if #available(iOS 15.0, *) {
+            Section {
+                Toggle("Ad Blocking", isOn: $adBlockEnabled)
+                    .onChange(of: adBlockEnabled) { value in
+                        if adBlockEnabled {
+                            ClientLogger.shared.logCounter(.AdBlockEnabled)
+                        }
                     }
-                }
-                .disabled(contentBlockingStrength != BlockingStrength.easyPrivacyStrict.rawValue)
+                    .disabled(
+                        contentBlockingStrength != BlockingStrength.easyPrivacyStrict.rawValue)
+            }
         }
     }
 }
