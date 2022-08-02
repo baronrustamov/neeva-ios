@@ -7,7 +7,6 @@ import Shared
 import SwiftUI
 
 struct ExperimentSettingsView: View {
-    @Environment(\.dismissScreen) var dismissScreen
 
     let scrollViewAppearance = UINavigationBar.appearance().scrollEdgeAppearance
     @State private var valueTextPromoCard: String?
@@ -28,12 +27,6 @@ struct ExperimentSettingsView: View {
                 //    value: $valueText,
                 //    experiment: .defaultBrowserPromptV2
                 //)
-
-                OptionalPrefilledStringField<NeevaExperiment.PromoCardTypeAfterFirstRun>(
-                    "PromoCardTypeAfterFirstRun",
-                    value: $valueTextPromoCard,
-                    experiment: .promoCardTypeAfterFirstRun
-                )
             }
         }
         .listStyle(.insetGrouped)

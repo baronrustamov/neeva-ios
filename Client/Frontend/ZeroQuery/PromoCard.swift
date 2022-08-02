@@ -8,7 +8,7 @@ import SwiftUI
 enum DefaultBrowserPromoRules {
     static let nthZeroQueryImpression = 4
     static let maxDailyPromoImpression = 3
-    static let hoursAfterInterstitialForPromoCard = 48
+    static let hoursAfterInterstitialForPromoCard = 72
 }
 
 enum AppRatingPromoCardRule {
