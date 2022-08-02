@@ -655,15 +655,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
 
             if previousVersion.compare("1.46.0", options: .numeric) == .orderedAscending {
-                if (!NeevaUserInfo.shared.hasLoginCookie()
-                    || Defaults[.notificationPermissionState]
-                        != NotificationPermissionStatus.authorized.rawValue)
-                    && (!Defaults[.didSetDefaultBrowser] && !Defaults[.adBlockEnabled]
-                        && !Defaults[.didShowAdBlockerPromo])
-                {
-                    Defaults[.didShowAdBlockerPromo] = true
-                    if bvc != nil {
-                        bvc.shouldShowAdBlockPromo = true
+                // Only enable ad block for iOS 15+
+                if #available(iOS 15.0, *) {
+                    if (!NeevaUserInfo.shared.hasLoginCookie()
+                        || Defaults[.notificationPermissionState]
+                            != NotificationPermissionStatus.authorized.rawValue)
+                        && (!Defaults[.didSetDefaultBrowser] && !Defaults[.adBlockEnabled]
+                            && !Defaults[.didShowAdBlockerPromo])
+                    {
+                        Defaults[.didShowAdBlockerPromo] = true
+                        if bvc != nil {
+                            bvc.shouldShowAdBlockPromo = true
+                        }
                     }
                 }
             }
