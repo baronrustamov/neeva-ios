@@ -20,7 +20,9 @@ class HistoryPanelViewController: UIHostingController<AnyView> {
                     bvc.tabManager.createOrSwitchToTab(for: $0)
                     bvc.browserModel.hideGridWithNoAnimation()
                 }
-            )
+            ).environment(\.openInNewTab) { url, isIncognito in
+                bvc.openURLInNewTab(url, isIncognito: isIncognito)
+            }
             .environmentObject(bvc.browserModel)
             .environmentObject(bvc.browserModel.scrollingControlModel)
             .environmentObject(bvc.chromeModel)
