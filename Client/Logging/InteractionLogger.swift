@@ -45,12 +45,13 @@ public class InteractionLogger {
             loggingContexts: nil, action: interactionActionInput, requestEventId: requestEventID)
         let clientLog = ClientLog(interactionV3Event: interactionEvent)
 
-        LogMutation(
+        let mutation = LogMutation(
             input: ClientLogInput(
                 base: logBase,
                 log: [clientLog]
             )
-        ).perform { result in
+        )
+        GraphQLAPI.shared.perform(mutation: mutation) { result in
             switch result {
             case .failure(let error):
                 log.info("Error sending interaction log: \(error)")

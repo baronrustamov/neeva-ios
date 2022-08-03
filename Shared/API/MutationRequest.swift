@@ -23,7 +23,7 @@ open class MutationRequest<Mutation: GraphQLMutation>: ObservableObject {
 
         assert(subcription == nil)
 
-        self.subcription = mutation.perform { result in
+        self.subcription = GraphQLAPI.shared.perform(mutation: mutation) { result in
             self.subcription = nil
             switch result {
             case .failure(let error):

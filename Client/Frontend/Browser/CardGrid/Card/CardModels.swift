@@ -535,7 +535,7 @@ class SpaceCardModel: CardModel {
                         to: .spaceDetailView(id))
                 }
             } else if let id = spaceNeedsRefresh {
-                manager.refreshSpace(spaceID: id)
+                manager.refreshSpace(spaceID: id, anonymous: false)
                 spaceNeedsRefresh = nil
 
             }

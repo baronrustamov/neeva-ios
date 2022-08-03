@@ -70,9 +70,11 @@ public class UserFlagStore: ObservableObject {
 
         self.state = .sending
 
-        UpdateUserFlagMutation(
-            input: .init(flagId: flag.rawValue, flagValue: true)
-        ).perform { result in
+        GraphQLAPI.shared.perform(
+            mutation: UpdateUserFlagMutation(
+                input: .init(flagId: flag.rawValue, flagValue: true)
+            )
+        ) { result in
             self.state = .ready
             switch result {
             case .success:

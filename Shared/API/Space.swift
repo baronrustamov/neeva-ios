@@ -131,9 +131,10 @@ public class SpacesDataQueryController: QueryController<
 
     @discardableResult static func getSpacesData(
         spaceIds: [String],
+        using api: GraphQLAPI,
         completion: @escaping (Result<[SpacesDataQueryController.Space], Error>) -> Void
     ) -> Combine.Cancellable {
-        Self.perform(query: GetSpacesDataQuery(ids: spaceIds), completion: completion)
+        Self.perform(query: GetSpacesDataQuery(ids: spaceIds), using: api, completion: completion)
     }
 }
 

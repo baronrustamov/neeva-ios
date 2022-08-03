@@ -300,7 +300,9 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
                     return
                 }
 
-                StartIncognitoMutation(url: url).perform { result in
+                GraphQLAPI.shared.perform(
+                    mutation: StartIncognitoMutation(url: url)
+                ) { result in
                     guard
                         case .success(let data) = result,
                         let url = URL(string: data.startIncognito)

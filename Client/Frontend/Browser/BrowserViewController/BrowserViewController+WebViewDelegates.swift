@@ -665,7 +665,9 @@ extension BrowserViewController: WKNavigationDelegate {
                         NeevaConstants.isAppHost($0.domain) && $0.name == "httpd~incognito"
                             && $0.isSecure
                     }) {
-                        StartIncognitoMutation(url: url).perform { result in
+                        GraphQLAPI.shared.perform(
+                            mutation: StartIncognitoMutation(url: url)
+                        ) { result in
                             decisionHandler(.cancel)
                             switch result {
                             case .failure(let error):

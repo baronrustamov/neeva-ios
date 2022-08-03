@@ -84,33 +84,34 @@ public final class CheatsheetServiceProvider: CheatsheetDataService {
             return
         }
 
-        NeevaScopeSearch.SearchController.getRichResult(query: query) { [weak self] result in
-            switch result {
-            case .success(let richResults):
-                if richResults.lazy.map({ $0.dataComplete }).contains(false) {
-                    DispatchQueue.main.async {
-                        ClientLogger.shared.logCounter(
-                            .CheatsheetBadURLString,
-                            attributes: EnvironmentHelper.shared.getAttributes()
-                                + [
-                                    ClientLogCounterAttribute(
-                                        key: LogConfig.CheatsheetAttribute.currentCheatsheetQuery,
-                                        value: query
-                                    )
-                                ]
+        DispatchQueue.main.async {
+            NeevaScopeSearch.SearchController.getRichResult(query: query) { [weak self] result in
+                switch result {
+                case .success(let richResults):
+                    if richResults.lazy.map({ $0.dataComplete }).contains(false) {
+                        let attribute = ClientLogCounterAttribute(
+                            key: LogConfig.CheatsheetAttribute.currentCheatsheetQuery,
+                            value: query
                         )
+                        DispatchQueue.main.async {
+                            ClientLogger.shared.logCounter(
+                                .CheatsheetBadURLString,
+                                attributes: EnvironmentHelper.shared.getAttributes()
+                                    + [attribute]
+                            )
+                        }
                     }
-                }
 
-                let result = SearchResult(
-                    results: Self.parseResults(from: richResults).map {
-                        CheatsheetResult(data: $0)
-                    }
-                )
-                self?.store.insertRichResult(result, query: query)
-                completion(.success(result))
-            case .failure(let error):
-                completion(.failure(error))
+                    let result = SearchResult(
+                        results: Self.parseResults(from: richResults).map {
+                            CheatsheetResult(data: $0)
+                        }
+                    )
+                    self?.store.insertRichResult(result, query: query)
+                    completion(.success(result))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
             }
         }
     }

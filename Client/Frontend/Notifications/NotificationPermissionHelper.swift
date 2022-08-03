@@ -171,12 +171,15 @@ class NotificationPermissionHelper {
             return
         }
 
-        AddDeviceTokenIosMutation(
-            input: DeviceTokenInput(
-                deviceToken: deviceToken,
-                deviceId: UIDevice.current.identifierForVendor?.uuidString ?? "",
-                environment: NotificationPermissionHelper.pushTokenEnvironment)
-        ).perform { result in
+        GraphQLAPI.shared.perform(
+            mutation: AddDeviceTokenIosMutation(
+                input: DeviceTokenInput(
+                    deviceToken: deviceToken,
+                    deviceId: UIDevice.current.identifierForVendor?.uuidString ?? "",
+                    environment: NotificationPermissionHelper.pushTokenEnvironment
+                )
+            )
+        ) { result in
             switch result {
             case .success:
                 break
@@ -189,11 +192,13 @@ class NotificationPermissionHelper {
 
     func deleteDeviceTokenFromServer() {
         if let vendorID = UIDevice.current.identifierForVendor?.uuidString {
-            DeleteDeviceTokenIosMutation(
-                input: DeleteDeviceTokenInput(
-                    deviceId: vendorID
+            GraphQLAPI.shared.perform(
+                mutation: DeleteDeviceTokenIosMutation(
+                    input: DeleteDeviceTokenInput(
+                        deviceId: vendorID
+                    )
                 )
-            ).perform { result in
+            ) { result in
                 switch result {
                 case .success:
                     break

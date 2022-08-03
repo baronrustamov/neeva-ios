@@ -369,7 +369,6 @@
 		4A42C47527E58487003B9826 /* ToastDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6643042F267C19D200674549 /* ToastDefaults.swift */; };
 		4A42C47627E58487003B9826 /* FocusHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F4C1092045DB2E00746155 /* FocusHelper.swift */; };
 		4A42C47727E58487003B9826 /* BrowserPrimitive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB2039F267D4EEC00920F39 /* BrowserPrimitive.swift */; };
-		4A42C47827E58487003B9826 /* MutationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C18DCD26558FF2004710CD /* MutationController.swift */; };
 		4A42C47927E58487003B9826 /* TabLocationAligner.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93EFEE6267163C7000396B5 /* TabLocationAligner.swift */; };
 		4A42C47A27E58487003B9826 /* SessionRestoreHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC4869C2195F58300CDA48D /* SessionRestoreHandler.swift */; };
 		4A42C47B27E58487003B9826 /* UIMenuHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F056695F25EAD8F70082BB61 /* UIMenuHelpers.swift */; };
@@ -1169,7 +1168,6 @@
 		C9BED4C9266824D7001D9C77 /* FadingHorizontalScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BED4C8266824D7001D9C77 /* FadingHorizontalScrollView.swift */; };
 		C9BED4CB2669451B001D9C77 /* ViewControllerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BED4CA2669451B001D9C77 /* ViewControllerWrapper.swift */; };
 		C9C18DDE26558FF3004710CD /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C18DCC26558FF2004710CD /* Action.swift */; };
-		C9C18DDF26558FF3004710CD /* MutationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C18DCD26558FF2004710CD /* MutationController.swift */; };
 		C9C18DEA26558FF3004710CD /* FrontViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C18DD826558FF3004710CD /* FrontViewController.swift */; };
 		C9C18E0826559007004710CD /* SearchSuggestionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C18DFD26559007004710CD /* SearchSuggestionViews.swift */; };
 		C9C18E0926559007004710CD /* Suggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C18DFE26559007004710CD /* Suggestion.swift */; };
@@ -1517,6 +1515,7 @@
 		E975C93827F23A3200945FD3 /* PlaceViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E975C93727F23A3200945FD3 /* PlaceViews.swift */; };
 		E975C93A27F3BABE00945FD3 /* PlaceViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E975C93927F3BABE00945FD3 /* PlaceViewModels.swift */; };
 		E97D7E842834A91100944EF5 /* BloomFilterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97D7E832834A91100944EF5 /* BloomFilterManager.swift */; };
+		E9BB1DAF289307C800B0F969 /* MutationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C18DCD26558FF2004710CD /* MutationController.swift */; };
 		E9D7BD7D282C7EF60033CBAD /* Hashes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D7BD7C282C7EF60033CBAD /* Hashes.swift */; };
 		E9D7BD7F282F4E6A0033CBAD /* BloomFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D7BD7E282F4E6A0033CBAD /* BloomFilter.swift */; };
 		E9EC25FF283C337F00B9A79B /* CheatsheetUGCIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EC25FE283C337F00B9A79B /* CheatsheetUGCIndicatorView.swift */; };
@@ -4574,6 +4573,7 @@
 				12224FAF26081FCF007E8705 /* NeevaUserInfo.swift */,
 				C9C18DD126558FF2004710CD /* Network.swift */,
 				C9C18DD026558FF2004710CD /* QueryController.swift */,
+				C9C18DCD26558FF2004710CD /* MutationController.swift */,
 				C9C18E30265594DE004710CD /* Space.swift */,
 				4A15C8B826E1BFAB006CD097 /* SpaceRequest.swift */,
 				4A72AFC1278E42F60057E58B /* MutationRequest.swift */,
@@ -5027,7 +5027,6 @@
 				C9C18E6726559DCF004710CD /* FormatDateTime.swift */,
 				C9C18DD826558FF3004710CD /* FrontViewController.swift */,
 				C9C18E1C265591A1004710CD /* Icons.swift */,
-				C9C18DCD26558FF2004710CD /* MutationController.swift */,
 				C9BED4B82667D5D3001D9C77 /* Roobert.swift */,
 			);
 			path = Utils;
@@ -6755,6 +6754,7 @@
 				E65075B11E37F7AB006961AC /* FSUtils.m in Sources */,
 				CE7F11941F3CEEC800ABFC0B /* RemoteDevices.swift in Sources */,
 				C9C18E3F26559504004710CD /* API.swift in Sources */,
+				E9BB1DAF289307C800B0F969 /* MutationController.swift in Sources */,
 				BC07524626C324A3008B607A /* CheatsheetController.swift in Sources */,
 				D3A14C221CB3145E00253BC6 /* Strings.swift in Sources */,
 				C9F49CC6266FFB8200F3408A /* Environment.swift in Sources */,
@@ -7091,7 +7091,6 @@
 				4A42C47527E58487003B9826 /* ToastDefaults.swift in Sources */,
 				4A42C47627E58487003B9826 /* FocusHelper.swift in Sources */,
 				4A42C47727E58487003B9826 /* BrowserPrimitive.swift in Sources */,
-				4A42C47827E58487003B9826 /* MutationController.swift in Sources */,
 				4A42C47927E58487003B9826 /* TabLocationAligner.swift in Sources */,
 				4A42C47A27E58487003B9826 /* SessionRestoreHandler.swift in Sources */,
 				E677D1D42800E8B00060869F /* RecentlyClosedTabsPanelView.swift in Sources */,
@@ -7715,7 +7714,6 @@
 				39F4C10A2045DB2E00746155 /* FocusHelper.swift in Sources */,
 				4AB203A0267D4EEC00920F39 /* BrowserPrimitive.swift in Sources */,
 				206954A827FF449E000360D6 /* RecentlyClosedTabsPanelView.swift in Sources */,
-				C9C18DDF26558FF3004710CD /* MutationController.swift in Sources */,
 				2034988E2843307C00799544 /* OrientationDependentStack.swift in Sources */,
 				C93EFEE7267163C7000396B5 /* TabLocationAligner.swift in Sources */,
 				EBC4869F2195F58300CDA48D /* SessionRestoreHandler.swift in Sources */,

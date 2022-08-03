@@ -471,6 +471,7 @@ public class SpaceServiceMock: SpaceService {
     }
 
     public func getSpacesData(
+        anonymous: Bool,
         spaceIds: [String],
         completion: @escaping (Result<[SpaceDataApollo], Error>) -> Void
     ) -> Combine.Cancellable? {

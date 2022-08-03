@@ -4,7 +4,6 @@
 
 import Apollo
 import Combine
-import Shared
 import SwiftUI
 
 /// An abstract class that provides useful tools for executing mutations inside of a view.
@@ -34,8 +33,8 @@ where Mutation: GraphQLMutation {
 
     /// Called by subclasses to perform their mutation while updating relevant state
     /// - Parameter mutation: the mutation to perform
-    public func execute(mutation: Mutation) {
-        cancellable = mutation.perform { result in
+    public func execute(mutation: Mutation, using api: GraphQLAPI) {
+        cancellable = api.perform(mutation: mutation) { result in
             self.withOptionalAnimation {
                 self.cancellable = nil
                 switch result {

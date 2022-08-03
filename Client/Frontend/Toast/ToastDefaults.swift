@@ -113,7 +113,9 @@ class ToastDefaults: NSObject {
             } else {
                 self.toastProgressViewModel?.status = .success
                 if let spaceID = request.targetSpaceID {
-                    SpaceStore.shared.refreshSpace(spaceID: spaceID, url: request.url)
+                    SpaceStore.shared.refreshSpace(
+                        spaceID: spaceID, url: request.url, anonymous: false
+                    )
                 }
             }
         }

@@ -39,6 +39,7 @@ where Query: GraphQLQuery {
         self.reload()
     }
 
+    // MARK: - Instance Methods
     /// Called by subclasses to perform their query, updating the `state` property to reflect its progress
     /// - Parameter query: the query to perform
     /// - Parameter queue: A dispatch queue on which the result handler will be called. Should default to the main queue.
@@ -85,6 +86,7 @@ where Query: GraphQLQuery {
         self.reload()
     }
 
+    // MARK: - Class Methods
     /// Implement this function to convert the raw result of the query into a value that’s useful to your views.
     /// If you just want the query data, the extension at the bottom of the file should handle that for you if
     /// your code is structured like this:
@@ -105,10 +107,11 @@ where Query: GraphQLQuery {
     /// on your controller class to run queries outside of the SwiftUI data flow.
     @discardableResult open class func perform(
         query: Query,
+        using api: GraphQLAPI = .shared,
         on queue: DispatchQueue = DispatchQueue.main,
         completion: @escaping (Result<Data, Error>) -> Void
     ) -> Combine.Cancellable {
-        query.fetch(on: queue) { result in
+        api.fetch(query: query, queue: queue) { result in
             switch result {
             case .success(let data):
                 completion(.success(processData(data, for: query)))

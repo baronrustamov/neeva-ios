@@ -62,7 +62,7 @@ open class UserInfoProvider {
     }
 
     open func fetch(completion: @escaping (UserInfoResult) -> Void) {
-        UserInfoQuery().fetch { result in
+        GraphQLAPI.shared.fetch(query: UserInfoQuery()) { result in
             var userInfoResult: UserInfoResult
             switch result {
             case .success(let data):

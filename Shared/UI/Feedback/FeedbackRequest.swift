@@ -21,7 +21,9 @@ public class FeedbackRequest: ObservableObject {
     public func sendFeedback() {
         Defaults[.feedbackBeingSent] = true
 
-        feedback.perform { [weak self] result in
+        GraphQLAPI.shared.perform(
+            mutation: feedback
+        ) { [weak self] result in
             Defaults[.feedbackBeingSent] = false
 
             guard let self = self else { return }

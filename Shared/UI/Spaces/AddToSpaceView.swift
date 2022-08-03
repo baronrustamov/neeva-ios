@@ -94,9 +94,9 @@ public class AddToSpaceRequest: ObservableObject {
         // Note: This creates a reference cycle between self and the mutation.
         // This means even if all other references are dropped to self, then
         // the mutation will attempt to run to completion.
-        self.cancellable = CreateSpaceMutation(
-            name: spaceName
-        ).perform { result in
+        self.cancellable = GraphQLAPI.shared.perform(
+            mutation: CreateSpaceMutation(name: spaceName)
+        ) { [self] result in
             self.cancellable = nil
             switch result {
             case .success(let data):

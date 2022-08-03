@@ -132,7 +132,7 @@ struct NeevaPremiumView: View {
                 case .verified(let transaction):
                     loadingMutation = true
                     // TODO: Refactor this out to a `SubscriptionStore/Model`.
-                    RegisterAppleSubscriptionMutation(
+                    let mutation = RegisterAppleSubscriptionMutation(
                         input: RegisterAppleSubscriptionInput(
                             originalTransactionId: transaction.originalID.description,
                             userUuid: appleUUID.uuidString,
@@ -142,7 +142,8 @@ struct NeevaPremiumView: View {
                             expiration: dateFormatter.string(
                                 from: transaction.expirationDate ?? Date.now)
                         )
-                    ).perform(resultHandler: { result in
+                    )
+                    GraphQLAPI.shared.perform(mutation: mutation) { result in
                         switch result {
                         case .failure(_):
                             // TODO: What should we do in this case? The user has paid, but our API call failed.
@@ -156,7 +157,7 @@ struct NeevaPremiumView: View {
                         }
 
                         loadingMutation = false
-                    })
+                    }
 
                     await transaction.finish()
 

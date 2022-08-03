@@ -480,7 +480,7 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
         guard !(self.item?.isDigest ?? false) else { return }
 
         if isFollowing {
-            manager.refreshSpace(spaceID: self.id)
+            manager.refreshSpace(spaceID: self.id, anonymous: false)
         }
 
         refreshSpaceSubscription = manager.$state.sink { state in
