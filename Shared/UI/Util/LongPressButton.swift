@@ -22,20 +22,28 @@ public struct LongPressButton<Label: View>: View {
     }
 
     public var body: some View {
-        Button(action: {
+        Button {
             if !didLongPress {
                 action()
             }
+
             didLongPress = false
-        }) {
+        } label: {
             label()
-        }
-        .simultaneousGesture(
-            LongPressGesture().onEnded { _ in
+        }.simultaneousGesture(
+            LongPressGesture(minimumDuration: 0.3).onEnded { _ in
                 if let longPressAction = longPressAction {
                     longPressAction()
                     Haptics.longPress()
-                    didLongPress = true
+                }
+
+                didLongPress = true
+
+                // Give a small buffer to allow the gesture to reset.
+                // Set `didLongPress` to false so the user can perform
+                // the regular tap action.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                    self.didLongPress = false
                 }
             }
         )

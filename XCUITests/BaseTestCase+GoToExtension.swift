@@ -46,7 +46,7 @@ extension BaseTestCase {
         showAppNavigationMenu(for: "Settings")
         app.buttons["Settings"].tap(force: true)
 
-        waitForExistence(app.tables.cells["Show Search Suggestions"])
+        waitForExistence(app.switches["Show Search Suggestions"], timeout: 30)
     }
 
     /// Lauches from tab page

@@ -9,7 +9,7 @@ private let firstWebsite = (
     tabName: "Internet for people, not profit — Mozilla, Tab"
 )
 private let secondWebsite = (
-    url: path(forTestPage: "test-mozilla-book.html"), tabName: "The Book of Mozilla"
+    url: path(forTestPage: "test-mozilla-book.html"), tabName: "The Book of Mozilla, Tab"
 )
 
 class TabMenuTests: BaseTestCase {
@@ -121,10 +121,10 @@ class TabMenuTests: BaseTestCase {
         openURL(firstWebsite.url)
         goToTabTray()
 
-        waitForExistence(app.buttons[firstWebsite.tabName], timeout: 3)
+        waitForExistence(app.buttons[firstWebsite.tabName], timeout: 30)
         app.buttons[firstWebsite.tabName].press(forDuration: 1)
 
-        waitForExistence(app.buttons["Pin tab"], timeout: 3)
+        waitForExistence(app.buttons["Pin tab"], timeout: 30)
         app.buttons["Pin tab"].tap()
 
         app.buttons[firstWebsite.tabName].press(forDuration: 1)

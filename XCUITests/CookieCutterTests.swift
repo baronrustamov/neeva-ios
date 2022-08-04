@@ -11,16 +11,26 @@ class CookieCutterTests: BaseTestCase {
         "Social Cookies, Personalization and social media features from third party providers",
     ]
 
+    private func dismissPopover() {
+        // For some reason tapping the screen stopped working on the tests.
+        // Open settings and close it to exit the menu.
+        app.buttons["Cookie Cutter Settings"].tap()
+        waitForExistence(app.buttons["Settings"])
+        app.buttons["Settings"].tap()
+        app.buttons["Done"].tap()
+    }
+
     // MARK: - Logic
     func testCookieCutterGlobalDisable() {
         openURL()
         openURLInNewTab(path(forTestPage: "test-mozilla-book.html"))
 
         goToSettings()
+        app.swipeUp()
         app.buttons["Cookie Cutter"].tap()
 
-        waitForExistence(app.switches["Cookie Cutter"])
-        app.switches["Cookie Cutter"].firstMatch.tap()
+        waitForExistence(app.switches["CookieCutterGlobalToggle"])
+        app.switches["CookieCutterGlobalToggle"].firstMatch.tap()
 
         app.buttons["Settings"].tap()
         app.buttons["Done"].tap()
@@ -28,8 +38,7 @@ class CookieCutterTests: BaseTestCase {
         goToTrackingProtectionMenu()
         waitForNoExistence(app.staticTexts["Cookie Popups"])
 
-        // Dismiss popover
-        app.tap()
+        dismissPopover()
 
         // Switch tab
         goToTabTray()
@@ -47,8 +56,7 @@ class CookieCutterTests: BaseTestCase {
         app.switches["TrackingMenu.TrackingMenuProtectionRow"].tap()
         waitForNoExistence(app.staticTexts["Cookie Popups"])
 
-        // Dismiss popover
-        app.tap()
+        dismissPopover()
 
         // Switch tab, make sure Cookie Cutter is still enabled
         goToTabTray()
@@ -57,8 +65,7 @@ class CookieCutterTests: BaseTestCase {
         goToTrackingProtectionMenu()
         waitForExistence(app.staticTexts["Cookie Popups"])
 
-        // Dismiss popover
-        app.tap()
+        dismissPopover()
 
         // Switch back, make sure Cookie Cutter is still disabled
         goToTabTray()
@@ -74,13 +81,12 @@ class CookieCutterTests: BaseTestCase {
 
         goToTrackingProtectionMenu()
         app.buttons["Cookie Cutter Settings"].tap()
-
-        app.swipeUp()
-        waitForExistence(app.tables["cookieCutterSettingsPage"])
+        waitForExistence(app.switches["Ad Blocking"])
     }
 
     func testCheckReloadToastShowsDisablingAllCookies() {
         goToSettings()
+        app.swipeUp()
         app.buttons["Cookie Cutter"].tap()
 
         waitForExistence(app.staticTexts["Accept Non-essential Cookies"])

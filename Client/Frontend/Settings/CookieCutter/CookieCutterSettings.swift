@@ -24,7 +24,9 @@ struct CookieCutterSettings: View {
                 Toggle("Cookie Cutter", isOn: $cookieCutterEnabled)
                     .onChange(of: cookieCutterEnabled) { newValue in
                         cookieCutterModel.cookieCutterEnabled = newValue
-                    }.accessibilityLabel(Text("Cookie Cutter"))
+                    }
+                    .accessibilityLabel(Text("Cookie Cutter"))
+                    .accessibilityIdentifier("CookieCutterGlobalToggle")
             }
 
             if cookieCutterEnabled {
