@@ -52,10 +52,6 @@ class CookieCutterHelper: TabContentScript {
                     if let domain = domain {
                         var cookieCutterEnabled = TrackingPreventionConfig.trackersPreventedFor(
                             domain, checkCookieCutterState: true)
-                        // Don't dismiss the cookie consent on neeva.com
-                        if currentWebView?.url?.isNeevaURL() ?? false {
-                            cookieCutterEnabled = false
-                        }
                         if let escapedEncoded = String(
                             data: try JSONEncoder().encode([
                                 "cookieCutterEnabled": cookieCutterEnabled,

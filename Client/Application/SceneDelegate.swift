@@ -622,6 +622,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 lastVersionActiveOn != version
             {
                 onAppUpdate(previousVersion: lastVersionActiveOn, currentVersion: version)
+            } else {
+                TrackingPreventionConfig.whiteListNeevaDomain()
             }
 
             Defaults[.lastVersionActiveOn] = version
@@ -642,6 +644,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             if previousVersion.compare("1.52.0", options: .numeric) == .orderedAscending {
                 Defaults[.shouldCollectUsageStats] = true
                 ClientLogger.shared.flushLoggingQueue()
+                TrackingPreventionConfig.whiteListNeevaDomain()
             }
 
             // migrate the content blocking enabled flag for users upgrading prior to 1.42.0 which is our cookie cutter release

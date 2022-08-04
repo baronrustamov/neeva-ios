@@ -5,6 +5,7 @@
 import Foundation
 import os
 import Defaults
+import Shared
 
 struct TrackingPreventionConfig {
     static var unblockedDomainsRegex: [String] {
@@ -55,5 +56,9 @@ struct TrackingPreventionConfig {
                 completionWithUpdateRequired?(true)
             }
         }
+    }
+
+    static func whiteListNeevaDomain() {
+        Defaults[.unblockedDomains].insert(NeevaConstants.appURL.host ?? "neeva.com")
     }
 }

@@ -4,16 +4,15 @@
 
 import WebKit
 import Defaults
-import Shared
 
 extension ContentBlocker {
     // Get the safelist domain array as a JSON fragment that can be inserted at the end of a blocklist.
     func safelistAsJSON() -> String {
-        // Note that * is added to the front of domains, so foo.com becomes *foo.com
-        var list = "'*\(NeevaConstants.appHomeURL.host ?? "neeva.com")'"
-        if !Defaults[.unblockedDomains].isEmpty {
-            list += ",'*" + Defaults[.unblockedDomains].joined(separator: "','*") + "'"
+        if Defaults[.unblockedDomains].isEmpty {
+            return ""
         }
+        // Note that * is added to the front of domains, so foo.com becomes *foo.com
+        let list = "'*" + Defaults[.unblockedDomains].joined(separator: "','*") + "'"
         return ", {'action': { 'type': 'ignore-previous-rules' }, 'trigger': { 'url-filter': '.*', 'if-domain': [\(list)] }}".replacingOccurrences(of: "'", with: "\"")
     }
 
