@@ -152,7 +152,6 @@ struct SwitcherToolbarView: View {
                     Text("Done")
                         .font(.system(size: 16, weight: .semibold, design: .default))
                 }
-                .tapTargetFrame()
                 .accentColor(tabModel.manager.selectedTab == nil ? .secondaryLabel : .label)
                 .disabled(tabModel.manager.selectedTab == nil)
                 .accessibilityIdentifier("TabTrayController.doneButton")

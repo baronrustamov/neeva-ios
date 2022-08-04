@@ -52,14 +52,14 @@ struct RecentlyClosedTabsPanelView: View {
                                 Text("Delete All")
                             }
                         } message: {
-                            Text("Are you sure you want to delete all recently close tabs?")
+                            Text("Are you sure you want to delete all recently closed tabs?")
                         }
                 } else {
                     listContent
                         .actionSheet(isPresented: $showDeleteAllConfirmation) {
                             ActionSheet(
                                 title: Text(
-                                    "Are you sure you want to delete all recently close tabs?"),
+                                    "Are you sure you want to delete all recently closed tabs?"),
                                 buttons: [
                                     .destructive(Text("Delete All")) {
                                         model.deleteRecentlyClosedTabs()

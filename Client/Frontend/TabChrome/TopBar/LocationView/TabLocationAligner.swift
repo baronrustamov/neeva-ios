@@ -179,7 +179,7 @@ struct TabLocationAligner_Previews: PreviewProvider {
         }.previewStyle()
 
         TabLocationAligner(transitionToEditing: true, debug: true) {
-            Text("editing")
+            Text(verbatim: "editing")
         } labelOverlay: { _ in
         } leading: {
             TabLocationBarButton(label: Image("tracking-protection").renderingMode(.template)) {}

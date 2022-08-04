@@ -11,7 +11,7 @@ import UIKit
 
 /// A multi-line text field.
 struct MultilineTextField: View {
-    private let placeholder: String
+    private let placeholder: LocalizedStringKey
     private let onCommit: (() -> Void)?
     private let customize: (UITextView) -> Void
 
@@ -38,7 +38,7 @@ struct MultilineTextField: View {
     ///   - onCommit: if non-nil, the user will not be able to manually enter multiple lines (although text can still wrap)
     ///     and pressing the return key will cause `onCommit` to be called.
     init(
-        _ placeholder: String = "", text: Binding<String>, focusTextField: Bool,
+        _ placeholder: LocalizedStringKey = "", text: Binding<String>, focusTextField: Bool,
         onCommit: (() -> Void)? = nil,
         customize: @escaping (UITextView) -> Void = { _ in }
     ) {

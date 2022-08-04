@@ -50,7 +50,7 @@ struct OpenSessionsView: View {
                             .withFont(.bodyMedium)
                             .lineLimit(1)
                             .foregroundColor(.label)
-                        Text(domain)
+                        Text(verbatim: domain)
                             .withFont(.bodySmall)
                             .foregroundColor(.secondaryLabel)
                     }
@@ -88,11 +88,12 @@ struct OpenSessionsView: View {
     var confirmDisconnectSheet: ActionSheet {
         ActionSheet(
             title: Text(
-                "Are you sure you want to disconnect from \(sessionToDisconnect?.dAppInfo.peerMeta.url.baseDomain ?? "")?"
+                verbatim:
+                    "Are you sure you want to disconnect from \(sessionToDisconnect?.dAppInfo.peerMeta.url.baseDomain ?? "")?"
             ),
             buttons: [
                 .destructive(
-                    Text("Disconnect"),
+                    Text(verbatim: "Disconnect"),
                     action: {
                         let session = sessionToDisconnect!
                         DispatchQueue.global(qos: .userInitiated).async {

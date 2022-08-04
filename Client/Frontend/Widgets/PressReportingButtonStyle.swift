@@ -35,9 +35,9 @@ struct PressReportingButtonStyle_Previews: PreviewProvider {
 
         var body: some View {
             VStack(spacing: 30) {
-                Label("Pressed?", systemSymbol: isPressed ? .checkmarkSquare : .square)
+                Label(String("Pressed?"), systemSymbol: isPressed ? .checkmarkSquare : .square)
 
-                Button("Press Here!") {}
+                Button(String("Press Here!")) {}
                     .padding()
                     .background(Capsule().fill(Color.systemFill))
                     .buttonStyle(.reportsPresses(to: $isPressed))

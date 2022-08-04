@@ -65,7 +65,7 @@ struct GasFeeView: View {
                 .foregroundColor(gasFeeModel.gasFeeState.tintColor)
                 .withFont(.bodyLarge)
             Spacer()
-            Text(gasFeeString)
+            Text(verbatim: gasFeeString)
                 .foregroundColor(gasFeeModel.gasFeeState.tintColor)
                 .withFont(.bodyLarge)
         }
