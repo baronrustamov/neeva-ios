@@ -734,6 +734,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     key: LogConfig.CheatsheetAttribute.UGCStat.ugcClear.rawValue,
                     value: String(Defaults[.numOfUGCClears])
                 ),
+                ClientLogCounterAttribute(
+                    key: LogConfig.CheatsheetAttribute.UGCStat.isEnabled.rawValue,
+                    value: String(Defaults[.useCheatsheetBloomFilters])
+                ),
             ]
         )
         Defaults[.numOfUGCTests] = 0

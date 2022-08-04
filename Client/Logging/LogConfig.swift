@@ -923,6 +923,7 @@ public enum LogConfig {
             case ugcHit
             case ugcClear
             case ugcCanonicalError
+            case isEnabled
         }
     }
 
