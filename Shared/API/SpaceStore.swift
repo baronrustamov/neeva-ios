@@ -72,7 +72,7 @@ public class Space: Hashable, Identifiable {
     public var thumbnail: String?
     public var followers: Int?
     public var views: Int?
-    public let lastModifiedTs: String
+    public var lastModifiedTs: String
     public let resultCount: Int
     public let isDefaultSpace: Bool
     public var isShared: Bool
@@ -353,7 +353,8 @@ public class SpaceStore: ObservableObject {
     }
 
     public func getSpaceDetails(
-        spaceId: String, completion: @escaping (Space) -> Void
+        spaceId: String,
+        completion: @escaping (Space) -> Void
     ) {
         if let space = allSpaces.first(where: { $0.id.id == spaceId }) {
             completion(space)
@@ -474,7 +475,8 @@ public class SpaceStore: ObservableObject {
                         urls: contentURLs,
                         data: contentData,
                         comments: comments,
-                        generators: generators)
+                        generators: generators,
+                        lastModifiedTs: newSpace.lastModifiedTs)
                 } else {
                     spacesToFetch.append(newSpace)
                 }
@@ -544,7 +546,8 @@ public class SpaceStore: ObservableObject {
                             }),
                         data: space.entities,
                         comments: space.comments,
-                        generators: space.generators
+                        generators: space.generators,
+                        lastModifiedTs: space.lastModifiedTs
                     )
                 }
 
@@ -566,7 +569,7 @@ public class SpaceStore: ObservableObject {
     private func onUpdateSpaceURLs(
         space: Space, description: String?, followers: Int?, views: Int?,
         urls: Set<URL>, data: [SpaceEntityData], comments: [SpaceCommentData],
-        generators: [SpaceGeneratorData]
+        generators: [SpaceGeneratorData], lastModifiedTs: String?
     ) {
         space.contentURLs = urls
         space.contentData = data
@@ -575,6 +578,10 @@ public class SpaceStore: ObservableObject {
         space.description = description
         space.followers = followers
         space.views = views
+        if let lastModifiedTs = lastModifiedTs {
+            space.lastModifiedTs = lastModifiedTs
+            space.timestamp = dateParser.date(from: lastModifiedTs)?.timeIntervalSince1970 ?? 0
+        }
         for url in urls {
             var spaces = urlToSpacesMap[url] ?? []
             spaces.append(space)

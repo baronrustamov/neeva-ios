@@ -132,4 +132,55 @@ class SpaceEntityTests: BaseTestCase {
 
         XCTAssertTrue(buttons.firstIndex(of: "Yahoo")! < buttons.firstIndex(of: "Example")!)
     }
+
+    func testNewEntityThenReorder() throws {
+        // The iPad UI is a bit different, and testing for that platform
+        // offers us little benefit.
+        specificForPlatform = .phone
+        try skipIfNeeded()
+
+        waitForExistence(app.buttons["Example"])
+
+        // Delete one of the entities so the reordering doesn't break --
+        // otherwise the driver will swipe too low and go to the home screen.
+        app.cells["Cnn"].swipeLeft()
+        if !app.buttons["Edit"].exists {
+            app.cells["Cnn"].swipeLeft()
+        }
+        app.buttons["Delete"].tap()
+
+        // Add an entity
+        app.buttons["Add"].firstMatch.tap()
+
+        app.textFields["addOrUpdateSpaceTitle"].tap(force: true)
+        app.textFields["addOrUpdateSpaceTitle"].tap(force: true)
+        app.typeText("AAA")
+
+        app.textFields["addOrUpdateSpaceUrl"].tap()
+        app.textFields["addOrUpdateSpaceUrl"].tap()
+        app.typeText("aaa.com")
+
+        app.buttons["Save"].tap(force: true)
+
+        // Move the new entity to the top of the Space
+        waitForExistence(app.buttons["AAA"])
+        app.buttons["AAA"]
+            .press(
+                forDuration: 0.5,
+                thenDragTo: app.staticTexts["Only visible to you and people you shared with"]
+            )
+        waitForExistence(app.buttons["Example"])
+
+        // Go back to the Space grid
+        app.buttons["Return to all Spaces view"].tap()
+
+        // Go to the Space detail page again
+        waitForExistence(app.buttons["\(spaceName), Space"])
+        app.buttons["\(spaceName), Space"].tap()
+        waitForExistence(app.buttons["Example"])
+
+        // Verify that the new entity is at the top of the Space again
+        let buttons = app.descendants(matching: .button).allElementsBoundByIndex.map { $0.label }
+        XCTAssertTrue(buttons.firstIndex(of: "AAA")! < buttons.firstIndex(of: "Example")!)
+    }
 }

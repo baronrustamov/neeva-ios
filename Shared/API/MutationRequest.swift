@@ -18,8 +18,9 @@ open class MutationRequest<Mutation: GraphQLMutation>: ObservableObject {
     @Published public var error: Error?
 
     public init(mutation: Mutation, testMode: Bool = false) {
-        // Do nothing in test mode
-        guard !testMode else { return }
+        guard !testMode else {
+            return
+        }
 
         assert(subcription == nil)
 
@@ -29,7 +30,6 @@ open class MutationRequest<Mutation: GraphQLMutation>: ObservableObject {
             case .failure(let error):
                 self.error = error
                 self.state = .failure
-                break
             case .success(_):
                 self.state = .success
             }

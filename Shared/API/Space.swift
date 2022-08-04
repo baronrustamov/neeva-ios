@@ -42,6 +42,7 @@ public class SpacesDataQueryController: QueryController<
         var followers: Int?
         var views: Int?
         var owner: SpacesMetadata.Owner?
+        var lastModifiedTs: String?
         var entities: [SpaceEntityData]
         var comments: [SpaceCommentData]
         var generators: [SpaceGeneratorData]
@@ -121,6 +122,7 @@ public class SpacesDataQueryController: QueryController<
                             id: id, name: name, description: space.space?.description,
                             followers: space.stats?.followers, views: space.stats?.views,
                             owner: space.space?.fragments.spacesMetadata.owner,
+                            lastModifiedTs: space.space?.fragments.spacesMetadata.lastModifiedTs,
                             entities: spaceEntities, comments: spaceComments,
                             generators: spaceGenerators))
                 }

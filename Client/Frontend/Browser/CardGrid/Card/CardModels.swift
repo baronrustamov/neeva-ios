@@ -575,8 +575,8 @@ class SpaceCardModel: CardModel {
     private var anyCancellable: AnyCancellable? = nil
     private var recommendationSubscription: AnyCancellable? = nil
     private var editingSubscription: AnyCancellable? = nil
-    private var mutationSubscription: AnyCancellable? = nil
     private var detailsSubscriptions: Set<AnyCancellable> = Set()
+    private var mutationSubscriptions: Set<AnyCancellable> = Set()
     private var spaceNeedsRefresh: String? = nil
     private var scene: UIScene?
 
@@ -650,14 +650,14 @@ class SpaceCardModel: CardModel {
     }
 
     private func listenSpaceMutations() {
-        mutationSubscription = manager.spaceLocalMutation.sink { [weak self] space in
+        manager.spaceLocalMutation.sink { [weak self] space in
             guard let self = self else { return }
             if let space = space {
                 let details = SpaceCardDetails(space: space, manager: self.manager)
                 self.allDetails.append(details)
                 self.subscribeToShowingDetails(for: details)
             }
-        }
+        }.store(in: &mutationSubscriptions)
 
     }
 
@@ -669,13 +669,18 @@ class SpaceCardModel: CardModel {
         listenForShowingDetails()
     }
 
-    func add(spaceID: String, url: String, title: String, description: String? = nil) {
+    func add(
+        spaceID: String, url: String, title: String, description: String? = nil
+    ) {
         DispatchQueue.main.async {
             let request = SpaceServiceProvider.shared.addToSpaceWithURL(
                 spaceID: spaceID, url: url, title: title, description: description)
+
             request?.$state.sink { state in
-                self.spaceNeedsRefresh = spaceID
-            }.cancel()
+                if case .success = state {
+                    SpaceStore.shared.refreshSpace(spaceID: spaceID)
+                }
+            }.store(in: &self.mutationSubscriptions)
         }
     }
 
@@ -686,9 +691,11 @@ class SpaceCardModel: CardModel {
             let request = SpaceServiceProvider.shared.updateSpaceEntity(
                 spaceID: spaceID, entityID: entityID, title: title, snippet: snippet,
                 thumbnail: thumbnail)
-            request?.$state.sink { state in
-                self.spaceNeedsRefresh = spaceID
-            }.cancel()
+            request?.$state.sink { [weak self] state in
+                if case .success = state {
+                    self?.spaceNeedsRefresh = spaceID
+                }
+            }.store(in: &self.mutationSubscriptions)
         }
     }
 
@@ -696,22 +703,26 @@ class SpaceCardModel: CardModel {
         DispatchQueue.main.async {
             let request = SpaceServiceProvider.shared.claimGeneratedItem(
                 spaceID: spaceID, entityID: entityID)
-            request?.$state.sink { state in
-                self.spaceNeedsRefresh = spaceID
-            }.cancel()
+            request?.$state.sink { [weak self] state in
+                if case .success = state {
+                    self?.spaceNeedsRefresh = spaceID
+                }
+            }.store(in: &self.mutationSubscriptions)
         }
     }
 
     func delete(
-        space spaceID: String, entities: [SpaceEntityThumbnail], from scene: UIScene,
+        space spaceID: String, entities: [SpaceEntityData], from scene: UIScene,
         undoDeletion: @escaping () -> Void
     ) {
         DispatchQueue.main.async {
             let request = SpaceServiceProvider.shared.deleteSpaceItems(
                 spaceID: spaceID, ids: entities.map { $0.id })
-            request?.$state.sink { state in
-                self.spaceNeedsRefresh = spaceID
-            }.cancel()
+            request?.$state.sink { [weak self] state in
+                if case .success = state {
+                    self?.spaceNeedsRefresh = spaceID
+                }
+            }.store(in: &self.mutationSubscriptions)
 
             ToastDefaults().showToastForRemoveFromSpace(
                 bvc: SceneDelegate.getBVC(with: scene), request: request!
@@ -721,8 +732,8 @@ class SpaceCardModel: CardModel {
                 // Undo deletion of Space item
                 entities.forEach { entity in
                     self.add(
-                        spaceID: spaceID, url: entity.data.url?.absoluteString ?? "",
-                        title: entity.title, description: entity.description)
+                        spaceID: spaceID, url: entity.url?.absoluteString ?? "",
+                        title: entity.title ?? "", description: entity.pageMetadata?.description)
                 }
             } retryDeletion: { [weak self] in
                 guard let self = self else { return }
@@ -735,9 +746,11 @@ class SpaceCardModel: CardModel {
     func reorder(space spaceID: String, entities: [String]) {
         DispatchQueue.main.async {
             let request = SpaceServiceProvider.shared.reorderSpace(spaceID: spaceID, ids: entities)
-            request?.$state.sink { state in
-                self.spaceNeedsRefresh = spaceID
-            }.cancel()
+            request?.$state.sink { [weak self] state in
+                if case .success = state {
+                    self?.spaceNeedsRefresh = spaceID
+                }
+            }.store(in: &self.mutationSubscriptions)
         }
     }
 
@@ -745,18 +758,22 @@ class SpaceCardModel: CardModel {
         DispatchQueue.main.async {
             if add {
                 let request = SpaceServiceProvider.shared.addPublicACL(spaceID: space.id.id)
-                request?.$state.sink { state in
-                    self.spaceNeedsRefresh = space.id.id
-                    space.isPublic = true
-                    self.objectWillChange.send()
-                }.cancel()
+                request?.$state.sink { [weak self] state in
+                    if case .success = state {
+                        self?.spaceNeedsRefresh = space.id.id
+                        space.isPublic = true
+                        self?.objectWillChange.send()
+                    }
+                }.store(in: &self.mutationSubscriptions)
             } else {
                 let request = SpaceServiceProvider.shared.deletePublicACL(spaceID: space.id.id)
-                request?.$state.sink { state in
-                    self.spaceNeedsRefresh = space.id.id
-                    space.isPublic = false
-                    self.objectWillChange.send()
-                }.cancel()
+                request?.$state.sink { [weak self] state in
+                    if case .success = state {
+                        self?.spaceNeedsRefresh = space.id.id
+                        space.isPublic = false
+                        self?.objectWillChange.send()
+                    }
+                }.store(in: &self.mutationSubscriptions)
             }
         }
     }
@@ -765,11 +782,13 @@ class SpaceCardModel: CardModel {
         DispatchQueue.main.async {
             let request = SpaceServiceProvider.shared.addSoloACLs(
                 spaceID: space.id.id, emails: emails, acl: acl, note: note)
-            request?.$state.sink { state in
-                self.spaceNeedsRefresh = space.id.id
-                space.isShared = true
-                self.objectWillChange.send()
-            }.cancel()
+            request?.$state.sink { [weak self] state in
+                if case .success = state {
+                    self?.spaceNeedsRefresh = space.id.id
+                    space.isShared = true
+                    self?.objectWillChange.send()
+                }
+            }.store(in: &self.mutationSubscriptions)
         }
     }
 
@@ -781,13 +800,15 @@ class SpaceCardModel: CardModel {
             let request = SpaceServiceProvider.shared.updateSpace(
                 spaceID: space.id.id, title: title,
                 description: description, thumbnail: thumbnail)
-            request?.$state.sink { state in
-                self.spaceNeedsRefresh = space.id.id
-                space.name = title
-                space.description = description
-                space.thumbnail = thumbnail
-                self.objectWillChange.send()
-            }.cancel()
+            request?.$state.sink { [weak self] state in
+                if case .success = state {
+                    self?.spaceNeedsRefresh = space.id.id
+                    space.name = title
+                    space.description = description
+                    space.thumbnail = thumbnail
+                    self?.objectWillChange.send()
+                }
+            }.store(in: &self.mutationSubscriptions)
         }
     }
 
@@ -795,9 +816,11 @@ class SpaceCardModel: CardModel {
         DispatchQueue.main.async {
             let request = SpaceServiceProvider.shared.deleteGenerator(
                 spaceID: spaceID, generatorID: generatorID)
-            request?.$state.sink { state in
-                self.spaceNeedsRefresh = spaceID
-            }.cancel()
+            request?.$state.sink { [weak self] state in
+                if case .success = state {
+                    self?.spaceNeedsRefresh = spaceID
+                }
+            }.store(in: &self.mutationSubscriptions)
         }
     }
 
