@@ -1360,6 +1360,32 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         store.clearArchive(for: SceneDelegate.getCurrentScene(for: nil))
     }
 
+    // MARK: - TabStats
+    struct TabStats {
+        let numberOfActiveNonZombieTabs: Int
+        let numberOfActiveZombieTabs: Int
+        let numberOfArchivedTabs: Int
+
+        fileprivate init(
+            numberOfActiveNonZombieTabs: Int, numberOfActiveZombieTabs: Int,
+            numberOfArchivedTabs: Int
+        ) {
+            self.numberOfActiveNonZombieTabs = numberOfActiveNonZombieTabs
+            self.numberOfActiveZombieTabs = numberOfActiveZombieTabs
+            self.numberOfArchivedTabs = numberOfArchivedTabs
+        }
+    }
+
+    func getTabStats() -> TabStats {
+        let numberOfZombieTabs = activeTabs.filter({ $0.webView == nil }).count
+
+        return TabStats(
+            numberOfActiveNonZombieTabs: activeTabs.count - numberOfZombieTabs,
+            numberOfActiveZombieTabs: numberOfZombieTabs,
+            numberOfArchivedTabs: archivedTabs.count
+        )
+    }
+
     // MARK: - WKNavigationDelegate
     // Note the main frame JSContext (i.e. document, window) is not available yet.
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {

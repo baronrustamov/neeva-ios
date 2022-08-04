@@ -13,6 +13,8 @@ private func crash() {
 
 struct DebugSettingsSection: View {
     @Environment(\.onOpenURL) var openURL
+    @EnvironmentObject var browserModel: BrowserModel
+
     @Default(.enableGeigerCounter) var enableGeigerCounter
 
     var body: some View {
@@ -67,6 +69,19 @@ struct DebugSettingsSection: View {
             DebugDBSettingsSection()
 
             Section(header: Text(verbatim: "Performance")) {
+                let tabStats = browserModel.tabManager.getTabStats()
+                Text("Active Tabs (excluding zombies): \(tabStats.numberOfActiveNonZombieTabs)")
+                    .bold()
+                    .foregroundColor(.red)
+
+                Text("Zombie Tabs: \(tabStats.numberOfActiveZombieTabs)")
+                    .bold()
+                    .foregroundColor(.red)
+
+                Text("Archived Tabs: \(tabStats.numberOfArchivedTabs)")
+                    .bold()
+                    .foregroundColor(.red)
+
                 Button(String("Make all tabs zombies (excluding selected)")) {
                     guard let tabManager = SceneDelegate.getTabManagerOrNil() else {
                         return
@@ -115,13 +130,5 @@ struct DebugSettingsSection: View {
             }.accentColor(.red)
         }
         .listRowBackground(Color.red.opacity(0.2).ignoresSafeArea())
-    }
-}
-
-struct DebugSettingsSection_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingPreviewWrapper {
-            DebugSettingsSection()
-        }
     }
 }

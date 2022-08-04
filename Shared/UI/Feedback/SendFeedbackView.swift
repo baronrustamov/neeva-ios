@@ -13,6 +13,7 @@ public struct SendFeedbackView: View {
     let onDismiss: (() -> Void)?
     let screenshot: UIImage?
     let query: String?
+    let debugInfo: String?
     let onFeedbackSend: (FeedbackRequest) -> Void
 
     /// - Parameters:
@@ -22,10 +23,11 @@ public struct SendFeedbackView: View {
     ///   - requestId: A request ID to send along with the user-provided feedback
     ///   - geoLocationStatus: passed along to the API
     ///   - initialText: Text to pre-fill the feedback input with. If non-empty, the user can submit feedback without entering any additional text.
+    ///   - debugInfo: A String appended to the end of the feedback with any info that could be useful in fixing issues (i.e. TabStats).
     public init(
         screenshot: UIImage?, url: URL?, onDismiss: (() -> Void)? = nil, requestId: String? = nil,
         query: String? = nil, geoLocationStatus: String? = nil, initialText: String = "",
-        onFeedbackSend: @escaping (FeedbackRequest) -> Void
+        debugInfo: String? = nil, onFeedbackSend: @escaping (FeedbackRequest) -> Void
     ) {
         self.screenshot = screenshot
         self._url = .init(initialValue: url)
@@ -36,6 +38,7 @@ public struct SendFeedbackView: View {
         self.initialText = initialText
         self._editedScreenshot = .init(initialValue: screenshot ?? UIImage())
         self.query = query
+        self.debugInfo = debugInfo
         self.onFeedbackSend = onFeedbackSend
     }
 
@@ -314,7 +317,7 @@ public struct SendFeedbackView: View {
     }
 
     private func sendFeedbackHandler() {
-        let feedbackText: String
+        var feedbackText: String
 
         if let url = url, shareURL,
             query == nil || requestId == nil || !NeevaFeatureFlags[.feedbackQuery]
@@ -322,6 +325,10 @@ public struct SendFeedbackView: View {
             feedbackText = self.feedbackText + "\n\nCurrent URL: \(url.absoluteString)"
         } else {
             feedbackText = self.feedbackText
+        }
+
+        if let debugInfo = debugInfo {
+            feedbackText += debugInfo
         }
 
         let shareResults = NeevaFeatureFlags[.feedbackQuery] ? shareQuery && query != nil : false

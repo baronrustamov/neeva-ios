@@ -13,7 +13,11 @@ func showFeedbackPanel(
     getSearchRequestID(bvc: bvc) { requestId in
         bvc.present(
             SendFeedbackPanel(
-                requestId: requestId, screenshot: screenshot, url: url, query: query,
+                requestId: requestId,
+                screenshot: screenshot,
+                url: url,
+                query: query,
+                tabStats: bvc.tabManager.getTabStats(),
                 onOpenURL: {
                     bvc.dismiss(animated: true, completion: nil)
                     bvc.openURLInNewTab($0)

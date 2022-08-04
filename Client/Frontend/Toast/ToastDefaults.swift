@@ -194,7 +194,7 @@ class ToastDefaults: NSObject {
             autoDismiss: false)
     }
 
-    func showToastForFeedback(request: FeedbackRequest, toastViewManager: ToastViewManager) {
+    func showToastForFeedback(toastViewManager: ToastViewManager) {
         let normalContent = ToastStateContent(text: "Sent. Thanks for your feedback!")
         let toastContent = ToastViewContent(
             normalContent: normalContent)
