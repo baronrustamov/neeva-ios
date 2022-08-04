@@ -349,7 +349,8 @@ public class CheatsheetPromoModel: ObservableObject {
     private func cancelUGCIndicatorDismissTimer() {
         precondition(
             Thread.isMainThread,
-            "Timer must be invalidated from the same thread on which it was installed.")
+            "Timer must be invalidated from the same thread on which it was installed."
+        )
         ugcIndicatorDismissTimer?.invalidate()
         ugcIndicatorDismissTimer = nil
     }
@@ -395,6 +396,9 @@ extension CheatsheetPromoModel {
                     }
             case .UGC:
                 CheatsheetUGCIndicatorView()
+                    .onTapGesture {
+                        self.ugcIndicatorDismissTimer?.fire()
+                    }
                     .onDisappear {
                         self.ugcIndicatorDismissTimer?.fire()
                     }
