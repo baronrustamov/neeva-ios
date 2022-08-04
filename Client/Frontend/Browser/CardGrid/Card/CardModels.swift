@@ -678,7 +678,7 @@ class SpaceCardModel: CardModel {
 
             request?.$state.sink { state in
                 if case .success = state {
-                    SpaceStore.shared.refreshSpace(spaceID: spaceID)
+                    SpaceStore.shared.refreshSpace(spaceID: spaceID, anonymous: false)
                 }
             }.store(in: &self.mutationSubscriptions)
         }
