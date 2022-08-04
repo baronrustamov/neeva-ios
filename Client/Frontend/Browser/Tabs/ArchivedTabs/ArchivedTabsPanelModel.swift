@@ -35,11 +35,11 @@ class ArchivedTabsPanelModel: ObservableObject {
         archivedTabGroups = tabManager.archivedTabGroups
 
         groupedSites.sites[.lastMonth] = archivedTabs.filter {
-            return $0.isPinnedTodayOrWasLastExecuted(.lastMonth)
+            return $0.isIncluded(in: .lastMonth)
         }
 
         groupedSites.sites[.overAMonth] = archivedTabs.filter {
-            return $0.isPinnedTodayOrWasLastExecuted(.overAMonth)
+            return $0.isIncluded(in: .overAMonth)
         }
     }
 

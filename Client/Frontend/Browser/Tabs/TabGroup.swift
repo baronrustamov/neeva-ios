@@ -30,7 +30,7 @@ struct TabGroup {
         inferredTitle ?? "\(children.count) Tabs"
     }
 
-    func wasLastExecuted(_ byTime: TimeFilter) -> Bool {
-        return isLastExecutedTimeInTimeFilter(lastExecutedTime, byTime)
+    func isIncluded(in tabSection: TabSection) -> Bool {
+        return wasLastExecuted(in: tabSection, isPinned: false, lastExecutedTime: lastExecutedTime)
     }
 }

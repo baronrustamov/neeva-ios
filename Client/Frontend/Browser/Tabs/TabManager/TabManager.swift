@@ -98,7 +98,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     }
 
     var todaysTabs: [Tab] {
-        return activeNormalTabs.filter { $0.wasLastExecuted(.today) }
+        return activeNormalTabs.filter { $0.isIncluded(in: .today) }
     }
 
     var count: Int {
@@ -542,6 +542,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             }
 
         cleanUpTabGroupNames()
+
         if notify {
             tabsUpdatedPublisher.send()
         }
@@ -551,7 +552,9 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         tab.pinnedTime =
             (tab.isPinned ? nil : Date().timeIntervalSinceReferenceDate)
         tab.isPinned.toggle()
+
         tabsUpdatedPublisher.send()
+        storeChanges()
     }
 
     // Tab Group related functions
@@ -982,7 +985,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         // switcher, the normalTabs get filtered to make sure we only select tab in
         // today section.
         let normalTabsToday = normalTabs.filter {
-            $0.isPinnedTodayOrWasLastExecuted(.today)
+            $0.isIncluded(in: .today)
         }
 
         let index =
@@ -1076,7 +1079,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             tab.isIncognito
             ? incognitoTabs
             : normalTabs.filter {
-                $0.isPinnedTodayOrWasLastExecuted(.today)
+                $0.isIncluded(in: .today)
             }
         let bvc = SceneDelegate.getBVC(with: scene)
 
@@ -1086,7 +1089,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         }
 
         if closedLastNormalTab || closedLastIncognitoTab
-            || !viableTabs.contains(where: { $0.isPinnedTodayOrWasLastExecuted(.today) })
+            || !viableTabs.contains(where: { $0.isIncluded(in: .today) })
         {
             DispatchQueue.main.async {
                 self.selectTab(nil, notify: notify)

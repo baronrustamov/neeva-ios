@@ -29,9 +29,9 @@ class TabCardModel: CardDropDelegate, CardModel {
 
     private(set) var manager: TabManager
     private(set) var normalRows: [Row] = []
-    private(set) var timeBasedNormalRows: [TimeFilter: [Row]] = [:]
+    private(set) var timeBasedNormalRows: [TabSection: [Row]] = [:]
     private(set) var incognitoRows: [Row] = []
-    private(set) var timeBasedIncognitoRows: [TimeFilter: [Row]] = [:]
+    private(set) var timeBasedIncognitoRows: [TabSection: [Row]] = [:]
     private(set) var allDetails: [TabCardDetails] = []
     private(set) var allDetailsWithExclusionList: [TabCardDetails] = []  // Unused
     var columnCount: Int = 2 {
@@ -47,6 +47,8 @@ class TabCardModel: CardDropDelegate, CardModel {
     @Default(.tabGroupExpanded) private var tabGroupExpanded: Set<String>
     @Default(.archivedTabsDuration) var archivedTabsDuration
     var needsUpdateRows: Bool = false
+
+    static let pinnedRowHeaderID: String = "pinned-header"
     static let todayRowHeaderID: String = "today-header"
     static let yesterdayRowHeaderID: String = "yesterday-header"
     static let lastweekRowHeaderID: String = "lastWeek-header"
@@ -71,18 +73,23 @@ class TabCardModel: CardDropDelegate, CardModel {
     private(set) var tabsDidChange = false
 
     private func updateRows() {
-        timeBasedNormalRows[.today] = buildRows(incognito: false, byTime: .today)
-        timeBasedNormalRows[.yesterday] = buildRows(incognito: false, byTime: .yesterday)
-        timeBasedNormalRows[.lastWeek] = buildRows(
-            incognito: false, byTime: .lastWeek)
-        // TODO: in the future, we might apply time-based treatments to incognito mode.
-        incognitoRows = buildRows(incognito: true)
-        if archivedTabsDuration == .month {
-            timeBasedNormalRows[.lastMonth] = buildRows(incognito: false, byTime: .lastMonth)
-        } else if archivedTabsDuration == .forever {
-            timeBasedNormalRows[.lastMonth] = buildRows(incognito: false, byTime: .lastMonth)
-            timeBasedNormalRows[.overAMonth] = buildRows(incognito: false, byTime: .overAMonth)
+        if FeatureFlag[.pinnnedTabSection] {
+            timeBasedNormalRows[.pinned] = buildRows(incognito: false, for: .pinned)
         }
+
+        timeBasedNormalRows[.today] = buildRows(incognito: false, for: .today)
+        timeBasedNormalRows[.yesterday] = buildRows(incognito: false, for: .yesterday)
+        timeBasedNormalRows[.lastWeek] = buildRows(incognito: false, for: .lastWeek)
+
+        if archivedTabsDuration == .month {
+            timeBasedNormalRows[.lastMonth] = buildRows(incognito: false, for: .lastMonth)
+        } else if archivedTabsDuration == .forever {
+            timeBasedNormalRows[.lastMonth] = buildRows(incognito: false, for: .lastMonth)
+            timeBasedNormalRows[.overAMonth] = buildRows(incognito: false, for: .overAMonth)
+        }
+
+        // TODO: in the future, we might apply time-based treatments to incognito mode.
+        incognitoRows = buildRows(incognito: true, for: .all)
 
         // Defer signaling until after we have finished updating. This way our state is
         // completely consistent with TabManager prior to accessing allDetails, etc.
@@ -103,6 +110,7 @@ class TabCardModel: CardDropDelegate, CardModel {
             if archivedTabsDuration == .month {
                 return (timeBasedNormalRows[.lastMonth] ?? [])
             }
+
             if archivedTabsDuration == .forever {
                 return (timeBasedNormalRows[.lastMonth] ?? [])
                     + (timeBasedNormalRows[.overAMonth] ?? [])
@@ -115,9 +123,14 @@ class TabCardModel: CardDropDelegate, CardModel {
                 // TODO: in the future, we might apply time-based treatments to incognito mode.
                 incognitoRows
         } else {
+            let pinnedAndToday: [Row] =
+                (timeBasedNormalRows[.pinned] ?? []) + (timeBasedNormalRows[.today] ?? [])
+            let yesterdayAndLastWeek: [Row] =
+                (timeBasedNormalRows[.yesterday] ?? []) + (timeBasedNormalRows[.lastWeek] ?? [])
+
             returnValue =
-                (timeBasedNormalRows[.today] ?? []) + (timeBasedNormalRows[.yesterday] ?? [])
-                + (timeBasedNormalRows[.lastWeek] ?? [])
+                pinnedAndToday
+                + yesterdayAndLastWeek
                 + getOlderRows()
         }
 
@@ -163,7 +176,7 @@ class TabCardModel: CardDropDelegate, CardModel {
             case tab(TabCardDetails)
             case tabGroupInline(TabGroupCardDetails)
             case tabGroupGridRow(TabGroupCardDetails, Range<Int>)
-            case sectionHeader(TimeFilter)
+            case sectionHeader(TabSection)
 
             var id: String {
                 switch self {
@@ -175,6 +188,12 @@ class TabCardModel: CardDropDelegate, CardModel {
                     return details.allDetails[range].reduce("") { $0 + $1.id + ":" }
                 case .sectionHeader(let timeFilter):
                     switch timeFilter {
+                    case .all:
+                        // No id for all.
+                        return ""
+                    case .pinned:
+                        return FeatureFlag[.pinnnedTabSection]
+                            ? TabCardModel.pinnedRowHeaderID : TabCardModel.todayRowHeaderID
                     case .today:
                         return TabCardModel.todayRowHeaderID
                     case .yesterday:
@@ -229,20 +248,29 @@ class TabCardModel: CardDropDelegate, CardModel {
         var multipleCellTypes: Bool = false
     }
 
-    func buildRows(incognito: Bool, byTime: TimeFilter? = nil) -> [Row] {
+    func buildRows(incognito: Bool, for section: TabSection) -> [Row] {
         var rows: [Row] = []
 
         // Get list of all top-level tabs and the first tab of each group.
         var allDetailsFiltered = allDetails.filter { tabCard in
             let tab = tabCard.tab
-            let tabGroup = manager.getTabGroup(for: tab)
-            return (tabGroup == nil || isRepresentativeTab(tab, in: tabGroup!))
-                && tab.isIncognito == incognito
-                && (!incognito
-                    ? (tabGroup != nil
-                        ? tabGroup!.wasLastExecuted(byTime!)
-                        : tab.isPinnedTodayOrWasLastExecuted(byTime!)) : true)
-                && tabIncludedInSearch(tabCard)
+            let incognitoMatches = tab.isIncognito == incognito
+            let includedInSection = tab.isIncluded(in: section)
+            let includedInSearch = tabIncludedInSearch(tabCard)
+
+            guard incognitoMatches, includedInSection, includedInSearch else {
+                return false
+            }
+
+            // Check to see if the detail is in a TabGroup.
+            if let tabGroup = manager.getTabGroup(for: tab) {
+                // Make sure the tabCard is the first in the TabGroup.
+                let isRepresentativeTab = isRepresentativeTab(tab, in: tabGroup)
+                let tabGroupIncludedInSection = tabGroup.isIncluded(in: section)
+                return isRepresentativeTab && tabGroupIncludedInSection
+            }
+
+            return true
         }
 
         modifyAllDetailsFilteredPromotingPinnedTabs(&allDetailsFiltered)
@@ -366,8 +394,8 @@ class TabCardModel: CardDropDelegate, CardModel {
             !$0.cells.isEmpty
         }
 
-        if !rows.isEmpty, let byTime = byTime {
-            rows.insert(Row(cells: [Row.Cell.sectionHeader(byTime)]), at: 0)
+        if !rows.isEmpty, section != .all {
+            rows.insert(Row(cells: [Row.Cell.sectionHeader(section)]), at: 0)
         }
 
         return rows
@@ -433,9 +461,8 @@ class TabCardModel: CardDropDelegate, CardModel {
     }
 
     func buildRowsForTesting() -> [Row] {
-        timeBasedNormalRows[.today] = buildRows(incognito: false, byTime: .today)
-        timeBasedNormalRows[.lastWeek] = buildRows(
-            incognito: false, byTime: .lastWeek)
+        timeBasedNormalRows[.today] = buildRows(incognito: false, for: .today)
+        timeBasedNormalRows[.lastWeek] = buildRows(incognito: false, for: .lastWeek)
         return getRows(incognito: false)
     }
 
