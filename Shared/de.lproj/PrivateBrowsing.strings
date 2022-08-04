@@ -1,0 +1,18 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Inkognito-Tabs schließen";
+
+/* Context menu option for opening a link in a new Incognito Tab */
+"ContextMenu.OpenInNewIncognitoTabButtonTitle" = "In neuem Inkognito-Tab öffnen";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Mehr erfahren";
+
+/* Toggled ON accessibility value */
+"On" = "An";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Privates Surfen";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Privatmodus";
+

@@ -1,0 +1,33 @@
+/* (No Comment) */
+"1Password Fill Browser Action" = "1Password Fill Browser Action";
+
+/* Bundle display name */
+"CFBundleDisplayName" = "Neeva";
+
+/* Bundle name */
+"CFBundleName" = "Neeva";
+
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "This lets you take and upload photos.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Neeva requires Face ID to access your saved logins.";
+
+/* Privacy - Location When In Use Usage Description */
+"NSLocationWhenInUseUsageDescription" = "Tap allow for better local results.";
+
+/* (No Comment) */
+"NSMicrophoneUsageDescription" = "This lets you take and upload videos.";
+
+/* (No Comment) */
+"NSPhotoLibraryAddUsageDescription" = "This lets you save photos.";
+
+/* (No Comment) */
+"ShortcutItemTitleNewIncognitoTab" = "New Incognito Tab";
+
+/* (No Comment) */
+"ShortcutItemTitleNewTab" = "New Tab";
+
+/* (No Comment) */
+"ShortcutItemTitleQRCode" = "Scan QR Code";
+

@@ -1,0 +1,36 @@
+/* Close Incognito Tabs */
+"TodayWidget.CloseIncognitoTabsLabelV2" = "Fermer les onglets de navigation privée";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "Accéder au lien copié";
+
+/* Go To Copied Link text pasted on the clipboard but this string doesn't have new line character */
+"TodayWidget.GoToCopiedLinkLabelV3" = "Accéder au lien copié";
+
+/* Quick action description when widget enters edit mode */
+"TodayWidget.QuickActionDescription" = "Sélectionnez un raccourci Neeva à ajouter à votre écran d'accueil.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Actions rapides";
+
+/* Neeva shortcuts title when widget enters edit mode. Do not translate the word Neeva. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "Raccourcis de Neeva";
+
+/* Search in Incognito Tab */
+"TodayWidget.SearchInIncognitoTabLabelV2" = "Rechercher dans un onglet de navigation privée";
+
+/* Title for small size widget which allows users to search in Neeva. Do not translate the word Neeva. */
+"TodayWidget.SearchInNeevaTitle" = "Rechercher dans Neeva";
+
+/* Search in Neeva. Do not translate the word Neeva */
+"TodayWidget.SearchInNeevaV2" = "Rechercher dans Neeva";
+
+/* Description for medium size widget to add Neeva Shortcut to home screen */
+"TodayWidget.ShortcutGalleryDescription" = "Ajoutez des raccourcis Neeva à votre écran d'accueil.";
+
+/* Description for top sites widget to add Neeva top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "Ajoutez des raccourcis vers les sites visités récemment et fréquemment.";
+
+/* Title for top sites widget to add Neeva top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "Meilleurs sites";
+

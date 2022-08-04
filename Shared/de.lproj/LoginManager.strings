@@ -1,0 +1,24 @@
+/* Copy password text selection menu item */
+"Copy" = "Kopieren";
+
+/* Hide password text selection menu item */
+"Hide" = "Ausblenden";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Öffnen und Füllen";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Passwort";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Anzeigen";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Suche";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Benutzername";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Website";
+

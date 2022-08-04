@@ -1,0 +1,1644 @@
+/* No comment provided by engineer. */
+" " = " ";
+
+/* No comment provided by engineer. */
+" · " = " · ";
+
+/* No comment provided by engineer. */
+" %@" = " %@";
+
+/* No comment provided by engineer. */
+" %@ Followers" = " %@ Follower";
+
+/* No comment provided by engineer. */
+" %lld" = " %lld";
+
+/* No comment provided by engineer. */
+" %lld Followers" = " %lld Follower";
+
+/* No comment provided by engineer. */
+" and" = " und";
+
+/* No comment provided by engineer. */
+" and " = " und ";
+
+/* No comment provided by engineer. */
+" by inviting friends to join Neeva" = " indem Sie Freunde zu Neeva einladen";
+
+/* No comment provided by engineer. */
+" u{10025E} " = " u{10025E} ";
+
+/* No comment provided by engineer. */
+" 􀉞 " = " 􀉞 ";
+
+/* This shows up on a recipe to specify the prep time for this dish */
+", %@ (Prep Time)" = ", %@ (Vorbereitungszeit)";
+
+/* No comment provided by engineer. */
+"!%@" = "!%@";
+
+/* No comment provided by engineer. */
+"·" = "·";
+
+/* No comment provided by engineer. */
+"“%@“" = "“%@“";
+
+/* No comment provided by engineer. */
+"“%@”" = "“%@”";
+
+/* No comment provided by engineer. */
+"(" = "(";
+
+/* No comment provided by engineer. */
+"(%@)" = "(%@)";
+
+/* No comment provided by engineer. */
+"(%lld)" = "(%lld)";
+
+/* No comment provided by engineer. */
+")" = ")";
+
+/* No comment provided by engineer. */
+"@%@" = "@%@";
+
+/* No comment provided by engineer. */
+"%@" = "%@";
+
+/* No comment provided by engineer. */
+"%@\n%@" = "%1$@\n%2$@";
+
+/* No comment provided by engineer. */
+"%@ - %@" = "%1$@ – %2$ @";
+
+/* This shows up on a recipe to specify how long it takes to make this dish */
+"%@ (Total Time)" = "%@ (Gesamtzeit)";
+
+/* No comment provided by engineer. */
+"%@ %@" = "%1$@ %2$@";
+
+/* accessibility label for how many website trackers are blocked on this page */
+"%@ %@ blocked" = "%1$@ %2$@ blockiert";
+
+/* No comment provided by engineer. */
+"%@ Full Recipe" = "%@ Vollständiges Rezept";
+
+/* No comment provided by engineer. */
+"%@ OF %@" = "%1$@ VON %2$@";
+
+/* No comment provided by engineer. */
+"%@ Reviews" = "%@ Bewertungen";
+
+/* No comment provided by engineer. */
+"%@ site%@" = "%1$@ Website%2$@";
+
+/* No comment provided by engineer. */
+"%@ tabs" = "%@ Tabs";
+
+/* No comment provided by engineer. */
+"%@ Tabs" = "%@ Tabs";
+
+/* No comment provided by engineer. */
+"%@ tabs from “%@”" = "%1$@ Tabs von “%2$@”";
+
+/* No comment provided by engineer. */
+"%@ this section" = "%@ dieser Abschnitt";
+
+/* No comment provided by engineer. */
+"%@, %@" = "%@, %@";
+
+/* No comment provided by engineer. */
+"%@: %@" = "%1$@: %2$@";
+
+/* No comment provided by engineer. */
+"%@. " = "%@. ";
+
+/* No comment provided by engineer. */
+"%@/5" = "%@/5";
+
+/* No comment provided by engineer. */
+"%lf\n%lf" = "%lf\n%lf";
+
+/* No comment provided by engineer. */
+"%lld" = "%lld";
+
+/* accessibility label for how many website trackers are blocked on this page */
+"%lld %@ blocked" = "%lld %@ blockiert";
+
+/* No comment provided by engineer. */
+"%lld of %@" = "%lld von %@";
+
+/* No comment provided by engineer. */
+"%lld OF %lld" = "%lld VON %lld";
+
+/* No comment provided by engineer. */
+"%lld Reviews" = "%lld Bewertungen";
+
+/* No comment provided by engineer. */
+"%lld tabs" = "%lld Tabs";
+
+/* No comment provided by engineer. */
+"%lld Tabs" = "%lld Tabs";
+
+/* No comment provided by engineer. */
+"%lld Tabs Closed" = "%lld Tabs geschlossen";
+
+/* No comment provided by engineer. */
+"%lld tabs from “%@”" = "%lld Tabs von “%@”";
+
+/* No comment provided by engineer. */
+"%lld Trackers Blocked" = "%lld Tracker blockiert";
+
+/* No comment provided by engineer. */
+"%lld trackers blocked from %@" = "%lld Tracker von %@ blockiert";
+
+/* No comment provided by engineer. */
+"%lld. " = "%lld. ";
+
+/* No comment provided by engineer. */
+"+%@" = "+%@";
+
+/* No comment provided by engineer. */
+"+%lld" = "+%lld";
+
+/* No comment provided by engineer. */
+"+1" = "+1";
+
+/* No comment provided by engineer. */
+"✍️" = "✍️";
+
+/* No comment provided by engineer. */
+"😍" = "😍";
+
+/* No comment provided by engineer. */
+"😕" = "😕";
+
+/* No comment provided by engineer. */
+"$" = "$";
+
+/* No comment provided by engineer. */
+"$%.2f" = "$%.2f";
+
+/* No comment provided by engineer. */
+"$%@" = "$%@";
+
+/* No comment provided by engineer. */
+"$5000" = "$5000";
+
+/* No comment provided by engineer. */
+"0" = "0";
+
+/* No comment provided by engineer. */
+"1 Tracker Blocked" = "1 Tracker blockiert";
+
+/* No comment provided by engineer. */
+"1. Tap Default Browser App" = "1. Tippen Sie auf Standard-Browser-App";
+
+/* No comment provided by engineer. */
+"2. Select Neeva" = "2. Wählen Sie Neeva";
+
+/* No comment provided by engineer. */
+"7 Days" = "7 Tage";
+
+/* No comment provided by engineer. */
+"30 Days" = "30 Tage";
+
+/* No comment provided by engineer. */
+"About" = "Über die App";
+
+/* No comment provided by engineer. */
+"About — Debug enabled" = "About — Debug enabled";
+
+/* Specify a button is in the tool bar above */
+"above" = "über";
+
+/* No comment provided by engineer. */
+"Accept Non-essential Cookies" = "Nicht notwendige Cookies akzeptieren";
+
+/* No comment provided by engineer. */
+"access and to see results for" = "zugreifen und Ergebnisse sehen für";
+
+/* No comment provided by engineer. */
+"Account Settings" = "Kontoeinstellungen";
+
+/* No comment provided by engineer. */
+"acknowledge Neeva’s " = "akzeptieren Sie Neevas ";
+
+/* No comment provided by engineer. */
+"Ad Blocking" = "Werbeblocker";
+
+/* (No Comment) */
+"Ad-free search results" = "Werbefreie Suchergebnisse";
+
+/* No comment provided by engineer. */
+"Add" = "Hinzufügen";
+
+/* No comment provided by engineer. */
+"Add a note!" = "Eine Notiz hinzufügen!";
+
+/* (No Comment) */
+"Add a URL to your new item (optional)" = "Fügen Sie Ihrem neuen Element eine URL hinzu (optional)";
+
+/* No comment provided by engineer. */
+"Add item" = "Element hinzufügen";
+
+/* No comment provided by engineer. */
+"Add Item" = "Element hinzufügen";
+
+/* No comment provided by engineer. */
+"Add To" = "Hinzufügen zu";
+
+/* No comment provided by engineer. */
+"Add to another Space" = "Zu einem anderen Bereich hinzufügen";
+
+/* No comment provided by engineer. */
+"Address" = "Adresse";
+
+/* No comment provided by engineer. */
+"Adjust the size of this pop-up window" = "Passen Sie die Größe dieses Popup-Fensters an";
+
+/* No comment provided by engineer. */
+"After 7 Days" = "Nach 7 Tagen";
+
+/* No comment provided by engineer. */
+"After 30 Days" = "Nach 30 Tagen";
+
+/* No comment provided by engineer. */
+"Already have an account? " = "Sie haben bereits ein Konto? ";
+
+/* No comment provided by engineer. */
+"Analytics Cookies" = "Analytics-Cookies";
+
+/* No comment provided by engineer. */
+"Anyone with the link can view" = "Jeder mit dem Link kann dies anzeigen";
+
+/* No comment provided by engineer. */
+"App Icon" = "App-Symbol";
+
+/* No comment provided by engineer. */
+"Appearance" = "Erscheinungsbild";
+
+/* No comment provided by engineer. */
+"Archive tabs" = "Tabs archivieren";
+
+/* No comment provided by engineer. */
+"Archive Tabs" = "Tabs archivieren";
+
+/* No comment provided by engineer. */
+"Archived Tabs" = "Archivierte Tabs";
+
+/* No comment provided by engineer. */
+"Are you sure you want to %@ this space?" = "Möchten Sie diesen Bereich wirklich %@?";
+
+/* No comment provided by engineer. */
+"Are you sure you want to close all open %@tabs?" = "Möchten Sie wirklich alle geöffneten %@ Tabs schließen?";
+
+/* No comment provided by engineer. */
+"Are you sure you want to delete all recently close tabs?" = "Möchten Sie wirklich alle zuletzt geschlossenen Tabs löschen?";
+
+/* No comment provided by engineer. */
+"Are you sure you want to disconnect from %@?" = "Möchten Sie die Verbindung zu %@ wirklich trennen?";
+
+/* No comment provided by engineer. */
+"arrows" = "Pfeile";
+
+/* No comment provided by engineer. */
+"Automatically send usage statistics to Neeva" = "Automatisch Nutzungsstatistiken an Neeva senden";
+
+/* No comment provided by engineer. */
+"Average: " = "Durchschnitt: ";
+
+/* No comment provided by engineer. */
+"Back" = "Zurück";
+
+/* No comment provided by engineer. */
+"Back to Settings" = "Zurück zu den Einstellungen";
+
+/* No comment provided by engineer. */
+"Back/Forward List" = "Liste Vor/Zurück";
+
+/* Specify a button is in the tool bar below */
+"below" = "unter";
+
+/* No comment provided by engineer. */
+"Block Pop-up Windows" = "Popup-Fenster blockieren";
+
+/* (No Comment) */
+"Block Trackers, and Pop-ups" = "Tracker und Popups blockieren";
+
+/* No comment provided by engineer. */
+"Blocks many ads and trackers. Minimizes disruption to ads and other functionality." = "Blockiert viele Anzeigen und Tracker. Minimiert die Unterbrechung von Anzeigen und anderen Funktionen.";
+
+/* No comment provided by engineer. */
+"Blocks more ads and trackers. May break ads and other functionality on some sites." = "Blockiert mehr Anzeigen und Tracker. Kann Werbung und andere Funktionen auf einigen Websites beeinträchtigen.";
+
+/* (No Comment) */
+"Browse the Web Ad-Free" = "Werbefrei im Web surfen";
+
+/* No comment provided by engineer. */
+"Browse Web3" = "Web3 durchsuchen";
+
+/* No comment provided by engineer. */
+"Browser + ad blocker" = "Browser + Werbeblocker";
+
+/* (No Comment) */
+"Browser without ads or trackers" = "Browser ohne Werbung oder Tracker";
+
+/* No comment provided by engineer. */
+"Browsing History" = "Browserverlauf";
+
+/* No comment provided by engineer. */
+"Buying Guide" = "Kaufratgeber";
+
+/* No comment provided by engineer. */
+"By creating your Neeva account you" = "Indem Sie Ihr Neeva-Konto erstellen,";
+
+/* No comment provided by engineer. */
+"By creating your Neeva account you acknowledge" = "Mit der Erstellung Ihres Neeva-Kontos akzeptieren Sie";
+
+/* No comment provided by engineer. */
+"By creating your Neeva account you acknowledge Neeva’s" = "Indem Sie Ihr Neeva-Konto erstellen, akzeptieren Sie Neevas";
+
+/* No comment provided by engineer. */
+"Cache" = "Cache";
+
+/* Button to make a phone call */
+"Call" = "anrufen";
+
+/* No comment provided by engineer. */
+"Can comment" = "Kann kommentieren";
+
+/* No comment provided by engineer. */
+"Can edit" = "Kann bearbeiten";
+
+/* No comment provided by engineer. */
+"Can view" = "Kann anzeigen";
+
+/* No comment provided by engineer. */
+"cancel" = "Abbrechen";
+
+/* No comment provided by engineer. */
+"Cancel" = "Abbrechen";
+
+/* No comment provided by engineer. */
+"Choose Your Plan" = "Wählen Sie Ihren Tarif";
+
+/* No comment provided by engineer. */
+"Clear" = "Löschen";
+
+/* No comment provided by engineer. */
+"Clear All Archived Tabs" = "Alle archivierten Tabs löschen";
+
+/* No comment provided by engineer. */
+"Clear All Website Data" = "Alle Website-Daten löschen";
+
+/* No comment provided by engineer. */
+"Clear Browsing Data" = "Browserdaten löschen";
+
+/* No comment provided by engineer. */
+"Clear Data" = "Daten löschen";
+
+/* No comment provided by engineer. */
+"Clear Selected Data on This Device" = "Ausgewählte Daten auf diesem Gerät löschen";
+
+/* No comment provided by engineer. */
+"Clearing it will sign you out of most sites." = "Wenn Sie dies löschen, werden Sie von den meisten Websites abgemeldet.";
+
+/* No comment provided by engineer. */
+"Click to add description" = "Klicken Sie hier, um eine Beschreibung hinzuzufügen";
+
+/* No comment provided by engineer. */
+"Close" = "Schließen";
+
+/* No comment provided by engineer. */
+"Close %@" = "%@ schließen";
+
+/* No comment provided by engineer. */
+"Close %@ %@%@" = "%1$@ %2$@%3$@ schließen";
+
+/* No comment provided by engineer. */
+"Close %lld %@%@" = "%lld %@%@ schließen";
+
+/* No comment provided by engineer. */
+"Close All" = "Alle schließen";
+
+/* No comment provided by engineer. */
+"Close all %@ tabs from “%@”?" = "Alle %1$@ Tabs von „%2$@“ schließen?";
+
+/* No comment provided by engineer. */
+"Close All %@Tabs" = "Alle %@ Tabs schließen";
+
+/* No comment provided by engineer. */
+"Close all %lld tabs from “%@”?" = "Alle %lld Tabs von “%@\" schließen?\"";
+
+/* No comment provided by engineer. */
+"Close All Tabs" = "Alle Tabs schließen";
+
+/* No comment provided by engineer. */
+"Close Incognito Tabs" = "Inkognito-Tabs schließen";
+
+/* No comment provided by engineer. */
+"Close Reading Mode" = "Lesemodus schließen";
+
+/* No comment provided by engineer. */
+"Close Tab" = "Tab schließen";
+
+/* No comment provided by engineer. */
+"Close these %@ tabs?" = "Diese %@ Tabs schließen?";
+
+/* No comment provided by engineer. */
+"Close these %lld tabs?" = "Diese %lld Tabs schließen?";
+
+/* No comment provided by engineer. */
+"Closed" = "Geschlossen";
+
+/* No comment provided by engineer. */
+"Collapse" = "Ausblenden";
+
+/* No comment provided by engineer. */
+"Collapsed" = "Ausgeblendet";
+
+/* No comment provided by engineer. */
+"Collects information about your visits and actions on a site" = "Erfasst Informationen über Ihre Besuche und Aktionen auf einer Website";
+
+/* No comment provided by engineer. */
+"Comments" = "Kommentare";
+
+/* No comment provided by engineer. */
+"Confirm Close All Tabs" = "Schließen aller Tabs bestätigen";
+
+/* No comment provided by engineer. */
+"Connected Apps" = "Verbundene Apps";
+
+/* No comment provided by engineer. */
+"Contact us via Support %@" = "Kontaktieren Sie uns über den Support %@";
+
+/* No comment provided by engineer. */
+"Continue" = "Weiter";
+
+/* No comment provided by engineer. */
+"Continue to Neeva" = "Weiter zu Neeva";
+
+/* No comment provided by engineer. */
+"Cookie Cutter" = "Cookie Cutter";
+
+/* No comment provided by engineer. */
+"Cookie Cutter by Neeva stops annoying cookie popups and blocks invasive trackers across the web." = "Cookie Cutter von Neeva stoppt lästige Cookie-Popups und blockiert aufdringliche Tracker im Internet.";
+
+/* No comment provided by engineer. */
+"Cookie Cutter Exclusions" = "Cookie-Cutter-Ausnahmen";
+
+/* No comment provided by engineer. */
+"Cookie Cutter Settings" = "Cookie-Cutter-Einstellungen";
+
+/* (No Comment) */
+"Cookie pop-up blocker" = "Cookie-Popup-Blocker";
+
+/* No comment provided by engineer. */
+"Cookie Popup Declined" = "Cookie-Popup abgelehnt";
+
+/* No comment provided by engineer. */
+"Cookie Popups" = "Cookie-Pop-ups";
+
+/* No comment provided by engineer. */
+"COOKIE POPUPS" = "Cookie-Pop-ups";
+
+/* No comment provided by engineer. */
+"Cookies" = "Cookies";
+
+/* No comment provided by engineer. */
+"Copied to clipboard" = "In die Zwischenablage kopiert";
+
+/* No comment provided by engineer. */
+"Copy" = "Kopieren";
+
+/* No comment provided by engineer. */
+"Copy Address" = "Adresse kopieren";
+
+/* No comment provided by engineer. */
+"Copy link" = "Link kopieren";
+
+/* No comment provided by engineer. */
+"Copy to clipboard" = "In Zwischenablage kopieren";
+
+/* No comment provided by engineer. */
+"Copy Version information" = "Versionsinformationen kopieren";
+
+/* No comment provided by engineer. */
+"Create a Space" = "Bereich erstellen";
+
+/* No comment provided by engineer. */
+"Create and manage incognito tabs" = "Inkognito-Tabs erstellen und verwalten";
+
+/* No comment provided by engineer. */
+"Create and manage tabs" = "Tabs erstellen und verwalten";
+
+/* No comment provided by engineer. */
+"Create Neeva account" = "Neeva-Konto erstellen";
+
+/* No comment provided by engineer. */
+"Create your account for continued" = "Erstellen Sie Ihr Konto für ununterbrochenen";
+
+/* No comment provided by engineer. */
+"Create your free Neeva account" = "Erstellen Sie Ihr kostenloses Neeva-Konto";
+
+/* No comment provided by engineer. */
+"Create your Neeva account." = "Erstellen Sie Ihr Neeva-Konto.";
+
+/* accessibility label for one type of themes for reader mode feature */
+"Dark Theme" = "Dunkles Design";
+
+/* No comment provided by engineer. */
+"Data in Neeva Memory" = "Daten im Neeva-Speicher";
+
+/* No comment provided by engineer. */
+"Data on This Device" = "Daten auf diesem Gerät";
+
+/* No comment provided by engineer. */
+"Deactivated. Activate in Settings." = "Deaktiviert. Aktivierung in den Einstellungen.";
+
+/* No comment provided by engineer. */
+"Decline Non-essential Cookies" = "Nicht notwendige Cookies ablehnen";
+
+/* No comment provided by engineer. */
+"Default" = "Standard";
+
+/* No comment provided by engineer. */
+"Default Browser" = "Standard-Browser";
+
+/* button to delete a space */
+"delete" = "Löschen";
+
+/* No comment provided by engineer. */
+"Delete" = "Löschen";
+
+/* No comment provided by engineer. */
+"Delete All" = "Alle löschen";
+
+/* No comment provided by engineer. */
+"Delete Space" = "Bereich löschen";
+
+/* No comment provided by engineer. */
+"Directions" = "Wegbeschreibung";
+
+/* No comment provided by engineer. */
+"Disabled" = "Deaktiviert";
+
+/* No comment provided by engineer. */
+"Disconnect" = "Verbindung trennen";
+
+/* No comment provided by engineer. */
+"Discussions" = "Diskussionen";
+
+/* No comment provided by engineer. */
+"Dismiss" = "Ablehnen";
+
+/* No comment provided by engineer. */
+"Dismiss pop-up window" = "Popup-Fenster verwerfen";
+
+/* No comment provided by engineer. */
+"Dismiss tour" = "Tour verwerfen";
+
+/* No comment provided by engineer. */
+"Do you have knowledge of this site? Help keep the community safe and contribute below." = "Kennst du diese Website? Hilf mit, die Community zu schützen und leiste unten einen Beitrag dazu.";
+
+/* No comment provided by engineer. */
+"Don't have an account? " = "Sie haben kein Konto? ";
+
+/* No comment provided by engineer. */
+"Done" = "Fertig";
+
+/* No comment provided by engineer. */
+"Download" = "Download";
+
+/* No comment provided by engineer. */
+"Download (%@)" = "Download (%@)";
+
+/* No comment provided by engineer. */
+"Download Failed" = "Download fehlgeschlagen";
+
+/* No comment provided by engineer. */
+"Download Page" = "Seite herunterladen";
+
+/* No comment provided by engineer. */
+"Downloaded" = "Heruntergeladen";
+
+/* No comment provided by engineer. */
+"Downloading" = "Herunterladen von";
+
+/* No comment provided by engineer. */
+"Downloads" = "Downloads";
+
+/* No comment provided by engineer. */
+"Duplicate Tab" = "Tab duplizieren";
+
+/* No comment provided by engineer. */
+"Edit" = "Bearbeiten";
+
+/* No comment provided by engineer. */
+"Edit current address" = "Aktuelle Adresse bearbeiten";
+
+/* No comment provided by engineer. */
+"Edit current search" = "Aktuelle Suche bearbeiten";
+
+/* No comment provided by engineer. */
+"Edit item" = "Element bearbeiten";
+
+/* No comment provided by engineer. */
+"Edit Item" = "Element bearbeiten";
+
+/* No comment provided by engineer. */
+"Edit Name" = "Name bearbeiten";
+
+/* No comment provided by engineer. */
+"Edit Space" = "Bereich bearbeiten";
+
+/* No comment provided by engineer. */
+"editing" = "editing";
+
+/* No comment provided by engineer. */
+"ellipsis" = "Ellipse";
+
+/* No comment provided by engineer. */
+"Empty Card Grid" = "Leeres Kartengitter";
+
+/* No comment provided by engineer. */
+"Empty Card Grid (Incognito)" = "Leeres Kartengitter (Inkognito)";
+
+/* No comment provided by engineer. */
+"Enable in Settings" = "In den Einstellungen aktivieren";
+
+/* No comment provided by engineer. */
+"Enable notifications" = "Benachrichtigungen aktivieren";
+
+/* No comment provided by engineer. */
+"Enable Notifications" = "Aktivieren von Benachrichtigungen";
+
+/* No comment provided by engineer. */
+"Enable shareable link" = "Teilbaren Link aktivieren";
+
+/* No comment provided by engineer. */
+"Enabled" = "Aktiviert";
+
+/* No comment provided by engineer. */
+"Enter a profile name" = "Geben Sie einen Profilnamen ein";
+
+/* No comment provided by engineer. */
+"Enter email address" = "E-Mail-Adresse eingeben";
+
+/* No comment provided by engineer. */
+"Error" = "Fehler";
+
+/* No comment provided by engineer. */
+"Essential cookies are used by sites to remember things like your login information and preferences. These cookies cannot be blocked by the extension." = "Notwendige Cookies werden von Websites verwendet, um Dinge wie Ihre Anmeldeinformationen und Einstellungen zu speichern. Diese Cookies können von der Erweiterung nicht blockiert werden.";
+
+/* No comment provided by engineer. */
+"Expand" = "Erweitern";
+
+/* No comment provided by engineer. */
+"Expanded" = "Erweitert";
+
+/* Expands a section */
+"expands" = "erweitert";
+
+/* No comment provided by engineer. */
+"Facebook" = "Facebook";
+
+/* No comment provided by engineer. */
+"Failed to %@ \"%@\"" = "%@ „%@“ fehlgeschlagen";
+
+/* No comment provided by engineer. */
+"Failed to remove item from Space" = "Element konnte nicht aus Bereich entfernt werden";
+
+/* No comment provided by engineer. */
+"Failed to save preference" = "Einstellung konnte nicht gespeichert werden";
+
+/* No comment provided by engineer. */
+"false" = "falsch";
+
+/* No comment provided by engineer. */
+"Filter" = "Filter";
+
+/* No comment provided by engineer. */
+"Find on Page" = "Auf Seite suchen";
+
+/* No comment provided by engineer. */
+"Find on this page" = "Auf dieser Seite suchen";
+
+/* No comment provided by engineer. */
+"Follow" = "Folgen";
+
+/* No comment provided by engineer. */
+"Follow these 2 easy steps:" = "Folgen Sie diesen 3 einfachen Schritten:";
+
+/* No comment provided by engineer. */
+"Forward" = "Weiter";
+
+/* No comment provided by engineer. */
+"From news to shopping,\nget the best of the web\ndelivered right to you" = "Von Nachrichten bis hin zum Shoppen –\nholen Sie sich das Beste aus dem Internet\ndirekt zu Ihnen nach Hause";
+
+/* No comment provided by engineer. */
+"From news to shopping, we bring the best of the web to you!" = "Von Nachrichten bis zum Shoppen – wir bringen Ihnen das Beste aus dem Internet!";
+
+/* No comment provided by engineer. */
+"From related content to reviews, NeevaScope is your guide to the web!" = "Von verwandten Inhalten bis hin zu Bewertungen – NeevaScope ist Ihr Wegweiser durch das Internet!";
+
+/* No comment provided by engineer. */
+"From the Neeva Community" = "Aus der Neeva-Community";
+
+/* No comment provided by engineer. */
+"Full screen" = "Vollbild";
+
+/* No comment provided by engineer. */
+"Fullscreen" = "Vollbild";
+
+/* No comment provided by engineer. */
+"General" = "Allgemein";
+
+/* No comment provided by engineer. */
+"Get safer, richer and better\nsearch when you sign in" = "Sicherere, umfassendere und bessere Suche,\nwenn Sie sich anmelden";
+
+/* No comment provided by engineer. */
+"Get the most out of Neeva's private search and browsing." = "Holen Sie das Beste aus der privaten Suche und dem Browsen in Neeva heraus.";
+
+/* No comment provided by engineer. */
+"Got it" = "Verstanden";
+
+/* No comment provided by engineer. */
+"Half screen" = "Halber Bildschirm";
+
+/* No comment provided by engineer. */
+"Have questions or feedback for NeevaScope?" = "Haben Sie Fragen oder Feedback zu NeevaScope?";
+
+/* No comment provided by engineer. */
+"Header" = "Header";
+
+/* No comment provided by engineer. */
+"Header Button" = "Header-Button";
+
+/* No comment provided by engineer. */
+"Help Center" = "Hilfe-Center";
+
+/* No comment provided by engineer. */
+"Help improve Neeva" = "Helfen Sie mit, Neeva zu verbessern";
+
+/* No comment provided by engineer. */
+"Help improve this app by sending usage statistics to Neeva." = "Helfen Sie mit, diese App zu verbessern, indem Sie Nutzungsstatistiken an Neeva senden.";
+
+/* Hide full recipe */
+"Hide" = "Ausblenden";
+
+/* Hides a section */
+"hides" = "ausblenden";
+
+/* No comment provided by engineer. */
+"Highest: " = "Höchste: ";
+
+/* No comment provided by engineer. */
+"History" = "Verlauf";
+
+/* No comment provided by engineer. */
+"History List" = "Verlaufsliste";
+
+/* No comment provided by engineer. */
+"History List Empty" = "Verlaufsliste leer";
+
+/* No comment provided by engineer. */
+"History Search TextField" = "Verlaufssuche TextField";
+
+/* No comment provided by engineer. */
+"Hold to verify" = "Halten zum Verifizieren";
+
+/* No comment provided by engineer. */
+"Hours" = "Stunden";
+
+/* No comment provided by engineer. */
+"How's your Neeva experience?" = "Wie ist Ihre Erfahrung mit Neeva?";
+
+/* No comment provided by engineer. */
+"HTTP Sign In" = "HTTP-Anmeldung";
+
+/* No comment provided by engineer. */
+"If a site does not support selecting these options individually, then all non-essential cookies for the site will be accepted." = "Wenn eine Website die individuelle Auswahl dieser Optionen nicht unterstützt, werden alle nicht notwendigen Cookies für die Website akzeptiert.";
+
+/* No comment provided by engineer. */
+"If this persists, let us know what happened, and we'll fix it soon." = "Sollte dies weiterhin auftreten, teilen Sie uns bitte mit, was passiert ist und wir werden uns schnellstmöglich darum kümmern.";
+
+/* No comment provided by engineer. */
+"If you have any questions or need assistance with your Premium membership, please reach out to premium@neeva.co." = "Wenn Sie Fragen zu Ihrer Premium-Mitgliedschaft haben oder Unterstützung benötigen, wenden Sie sich bitte an premium@neeva.co.";
+
+/* No comment provided by engineer. */
+"Incognito Tabs" = "Inkognito-Tabs";
+
+/* No comment provided by engineer. */
+"Ingredients" = "Zutaten";
+
+/* No comment provided by engineer. */
+"Instructions" = "Anweisungen";
+
+/* No comment provided by engineer. */
+"Invalid QR Code" = "Ungültiger QR-Code";
+
+/* No comment provided by engineer. */
+"Invite" = "Einladen";
+
+/* No comment provided by engineer. */
+"Invite someone" = "Jemanden einladen";
+
+/* No comment provided by engineer. */
+"Invite your friends!" = "Laden Sie Ihre Freunde ein!";
+
+/* No comment provided by engineer. */
+"Item removed from Space" = "Element aus dem Bereich entfernt";
+
+/* No comment provided by engineer. */
+"Join Neeva" = "Neeva beitreten";
+
+/* No comment provided by engineer. */
+"Keep" = "Behalten";
+
+/* No comment provided by engineer. */
+"Keep Tabs" = "Tabs behalten";
+
+/* No comment provided by engineer. */
+"Kill the clutter" = "Schluss mit dem Durcheinander";
+
+/* No comment provided by engineer. */
+"Learn More" = "Mehr erfahren";
+
+/* No comment provided by engineer. */
+"Learn More About Spaces" = "Mehr über Bereiche erfahren";
+
+/* No comment provided by engineer. */
+"Learn More on the Neeva Website" = "Erfahren Sie mehr auf der Neeva-Website";
+
+/* No comment provided by engineer. */
+"Leave Incognito Mode" = "Inkognito-Modus verlassen";
+
+/* No comment provided by engineer. */
+"Let's do it!" = "Los geht’s";
+
+/* No comment provided by engineer. */
+"Let's Go" = "Auf geht's";
+
+/* No comment provided by engineer. */
+"Licenses" = "Lizenzen";
+
+/* accessibility label for one type of themes for reader mode feature */
+"Light Theme" = "Helles Theme";
+
+/* No comment provided by engineer. */
+"Linkedin" = "Linkedin";
+
+/* No comment provided by engineer. */
+"List of sites you configured to not use Cookie Cutter" = "Liste der Websites, die Sie so konfiguriert haben, dass sie Cookie Cutter nicht verwenden";
+
+/* No comment provided by engineer. */
+"Loading account info…" = "Kontoinformationen werden geladen …";
+
+/* No comment provided by engineer. */
+"Loving it!" = "Liebe es!";
+
+/* No comment provided by engineer. */
+"Lowest: " = "Niedrigste: ";
+
+/* No comment provided by engineer. */
+"Make Neeva your Default Browser" = "Machen Sie Neeva zu Ihrem Standardbrowser";
+
+/* No comment provided by engineer. */
+"Manage Neeva Memory" = "Neeva-Speicher verwalten";
+
+/* No comment provided by engineer. */
+"Marketing Cookies" = "Marketing-Cookies";
+
+/* No comment provided by engineer. */
+"Maybe later" = "Vielleicht später";
+
+/* No comment provided by engineer. */
+"Membership Status" = "Mitgliedschaftsstatus";
+
+/* No comment provided by engineer. */
+"More" = "mehr";
+
+/* No comment provided by engineer. */
+"More Comments" = "Weitere Kommentare";
+
+/* No comment provided by engineer. */
+"Needs work" = "Erfordert Überarbeitung";
+
+/* No comment provided by engineer. */
+"Neeva" = "Neeva";
+
+/* No comment provided by engineer. */
+"Neeva — Fetching status" = "Neeva – Status wird abgerufen";
+
+/* No comment provided by engineer. */
+"Neeva — Logged in" = "Neeva – Eingeloggt";
+
+/* No comment provided by engineer. */
+"Neeva — Logged out" = "Neeva – Ausgeloggt";
+
+/* Copiable text showing the version on the settings screen */
+"Neeva Browser %@ (%@)" = "Neeva Browser %1$@ (%2$@)";
+
+/* No comment provided by engineer. */
+"Neeva puts you in charge of\nyour life online." = "Mit Neeva erlangen Sie die Kontrolle über\nIhr Online-Leben.";
+
+/* No comment provided by engineer. */
+"Neeva Search" = "Neeva-Suche";
+
+/* No comment provided by engineer. */
+"Neeva's " = "Neevas ";
+
+/* No comment provided by engineer. */
+"Neeva’s " = "Neevas ";
+
+/* No comment provided by engineer. */
+"Neeva’s Free Basic membership gives you access to all Neeva search and personalization features." = "Die Free-Basic-Mitgliedschaft für Neeva bietet Ihnen Zugang zu allen Such- und Personalisierungsfunktionen von Neeva.";
+
+/* No comment provided by engineer. */
+"NeevaScope" = "NeevaScope";
+
+/* No comment provided by engineer. */
+"Never" = "Niemals";
+
+/* No comment provided by engineer. */
+"New Incognito Tab" = "Neuer Inkognito-Tab";
+
+/* No comment provided by engineer. */
+"New Incognito Tab opened" = "Neuer Inkognito-Tab geöffnet";
+
+/* No comment provided by engineer. */
+"New Tab" = "Neuer Tab";
+
+/* No comment provided by engineer. */
+"New Tab opened" = "Neuer Tab geöffnet";
+
+/* No comment provided by engineer. */
+"News alerts" = "Nachrichtenbenachrichtigungen";
+
+/* This is unused string, no translation required */
+"NFT Search from Neevaxyz" = "NFT-Suche von Neevaxyz";
+
+/* No comment provided by engineer. */
+"nil" = "null";
+
+/* No comment provided by engineer. */
+"No Data" = "Keine Daten";
+
+/* No comment provided by engineer. */
+"No Matches" = "Keine Übereinstimmungen";
+
+/* No comment provided by engineer. */
+"Non-essential Cookies" = "Nicht notwendige Cookies";
+
+/* No comment provided by engineer. */
+"Non-essential cookies will be set to decline." = "Nicht wesentliche Cookies werden abgelehnt.";
+
+/* No comment provided by engineer. */
+"Not now" = "Nicht jetzt";
+
+/* No comment provided by engineer. */
+"Now" = "Aktuell";
+
+/* No comment provided by engineer. */
+"OK" = "OK";
+
+/* section header to group tabs created more than 30 days ago */
+"Older" = "Älter";
+
+/* No comment provided by engineer. */
+"on a search result or website to add to your Space" = "in einem Suchergebnis oder auf einer Website, um sie Ihrem Bereich hinzuzufügen";
+
+/* No comment provided by engineer. */
+"Only visible to you and people you shared with" = "Nur für Sie und Personen, mit denen Sie die Inhalte geteilt haben, sichtbar.";
+
+/* No comment provided by engineer. */
+"open" = "Geöffnet";
+
+/* No comment provided by engineer. */
+"Open" = "Geöffnet";
+
+/* No comment provided by engineer. */
+"Open all Space links" = "Alle Bereichs-Links öffnen";
+
+/* No comment provided by engineer. */
+"Open in Incognito" = "In Inkognito öffnen";
+
+/* No comment provided by engineer. */
+"Open in new incognito tab" = "In neuem Inkognito-Tab öffnen";
+
+/* No comment provided by engineer. */
+"Open in new tab" = "In neuem Tab öffnen";
+
+/* No comment provided by engineer. */
+"Open in New Tab" = "In neuem Tab öffnen";
+
+/* No comment provided by engineer. */
+"Open Incognito Mode" = "Inkognito-Modus öffnen";
+
+/* No comment provided by engineer. */
+"Open link in external app?" = "Link in externer App öffnen?";
+
+/* No comment provided by engineer. */
+"Open My Cookie Cutter" = "Mein Cookie Cutter öffnen";
+
+/* No comment provided by engineer. */
+"Open Neeva Settings" = "Neeva-Einstellungen öffnen";
+
+/* No comment provided by engineer. */
+"open space" = "Bereich öffnen";
+
+/* No comment provided by engineer. */
+"Open Space" = "Bereich öffnen";
+
+/* No comment provided by engineer. */
+"OR" = "oder";
+
+/* No comment provided by engineer. */
+"Other search engines" = "Andere Suchmaschinen";
+
+/* No comment provided by engineer. */
+"Other sign up options" = "Andere Registrierungsoptionen";
+
+/* No comment provided by engineer. */
+"Page is in a Space" = "Seite befindet sich in einem Bereich";
+
+/* No comment provided by engineer. */
+"Page Loading" = "Seite wird geladen";
+
+/* No comment provided by engineer. */
+"Password" = "Passwort";
+
+/* No comment provided by engineer. */
+"Password (required)" = "Passwort (erforderlich)";
+
+/* section header to group tabs created in the last 7 days */
+"Past 7 Days" = "Letzte 7 Tage";
+
+/* section header to group tabs created in the last 30 days */
+"Past 30 Days" = "Letzte 30 Tage";
+
+/* No comment provided by engineer. */
+"Peeking from the bottom" = "Peeking from the bottom";
+
+/* No comment provided by engineer. */
+"Permanently remove %@ from Suggested Sites?" = "%@ dauerhaft von vorgeschlagenen Websites entfernen?";
+
+/* No comment provided by engineer. */
+"Personalization and social media features from third party providers" = "Personalisierungs- und Social-Media-Funktionen von Drittanbietern";
+
+/* No comment provided by engineer. */
+"Phone" = "Telefon";
+
+/* No comment provided by engineer. */
+"Pin" = "Anheften";
+
+/* No comment provided by engineer. */
+"Pin tab" = "Tab anheften";
+
+/* No comment provided by engineer. */
+"Pin/unpin not yet implemented" = "Anheften/Anheften aufheben noch nicht implementiert";
+
+/* No comment provided by engineer. */
+"Pinned To Top Sites" = "In Top-Websites angeheftet";
+
+/* No comment provided by engineer. */
+"Please sign in" = "Bitte melden Sie sich an";
+
+/* No comment provided by engineer. */
+"Please sign in to Neeva from your computer to manage your subscription." = "Bitte melden Sie sich von Ihrem Computer aus bei Neeva an, um Ihr Abonnement zu verwalten.";
+
+/* No comment provided by engineer. */
+"Pop-up controller" = "Popup-Controller";
+
+/* No comment provided by engineer. */
+"Popover" = "Popover";
+
+/* No comment provided by engineer. */
+"Preference saved!" = "Einstellung gespeichert!";
+
+/* No comment provided by engineer. */
+"Premium" = "Premium";
+
+/* No comment provided by engineer. */
+"Premium Annual Plan" = "Premium – Jahresplan";
+
+/* No comment provided by engineer. */
+"Premium Monthly Plan" = "Premium – Monatsplan";
+
+/* No comment provided by engineer. */
+"Price History" = "Preishistorie";
+
+/* No comment provided by engineer. */
+"Privacy" = "Datenschutz";
+
+/* No comment provided by engineer. */
+"Privacy Policy" = "Datenschutzrichtlinie";
+
+/* No comment provided by engineer. */
+"Protection Mode" = "Schutzmodus";
+
+/* No comment provided by engineer. */
+"QR Code: %@" = "QR-Code: %@";
+
+/* No comment provided by engineer. */
+"Query string: nil" = "Abfrage-String: nil";
+
+/* No comment provided by engineer. */
+"Read Less" = "Weniger lesen";
+
+/* No comment provided by engineer. */
+"Read More" = "Mehr lesen";
+
+/* No comment provided by engineer. */
+"Reader Mode" = "Lesemodus";
+
+/* No comment provided by engineer. */
+"Reading Mode Settings" = "Lesemodus – Einstellungen";
+
+/* No comment provided by engineer. */
+"Reading Mode Theme" = "Lesemodus – Theme";
+
+/* No comment provided by engineer. */
+"Recently Closed List Empty" = "Kürzlich geschlossene Liste leer";
+
+/* No comment provided by engineer. */
+"Recently Closed Tabs" = "Kürzlich geschlossene Tabs";
+
+/* No comment provided by engineer. */
+"Recommended" = "Empfohlen";
+
+/* No comment provided by engineer. */
+"Related News" = "Verwandte Nachrichten";
+
+/* No comment provided by engineer. */
+"Related Recipes" = "Verwandte Rezepte";
+
+/* No comment provided by engineer. */
+"Related Top Reviewed Products" = "Verwandte am besten bewertete Produkte";
+
+/* No comment provided by engineer. */
+"Reload" = "Neu laden";
+
+/* No comment provided by engineer. */
+"Remind Me Later" = "Später erinnern";
+
+/* No comment provided by engineer. */
+"Remove" = "Entfernen";
+
+/* No comment provided by engineer. */
+"Remove from group" = "Aus Gruppe entfernen";
+
+/* No comment provided by engineer. */
+"Removed From Top Sites" = "Aus Top-Websites entfernt";
+
+/* No comment provided by engineer. */
+"Removing item from Space" = "Objekt aus dem Bereich entfernen";
+
+/* No comment provided by engineer. */
+"Rename" = "Umbenennen";
+
+/* No comment provided by engineer. */
+"Report as scam" = "Als Betrug melden";
+
+/* No comment provided by engineer. */
+"Request Desktop Site" = "Desktop-Website anfordern";
+
+/* No comment provided by engineer. */
+"Request Mobile Site" = "Mobile Website anfordern";
+
+/* No comment provided by engineer. */
+"Require Confirmation" = "Bestätigung erforderlich";
+
+/* No comment provided by engineer. */
+"Reset" = "Zurücksetzen";
+
+/* No comment provided by engineer. */
+"restore" = "wiederherstellen";
+
+/* No comment provided by engineer. */
+"S" = "S";
+
+/* No comment provided by engineer. */
+"Save" = "Speichern";
+
+/* No comment provided by engineer. */
+"Save and share instantly. Stay organized by adding images, websites, documents to a Space today" = "Speichern und sofort teilen. Bleiben Sie gut organisiert: Fügen Sie noch heute Bilder, Websites und Dokumente zu einem Bereich hinzu.";
+
+/* No comment provided by engineer. */
+"Save to Spaces" = "In Bereichen speichern";
+
+/* No comment provided by engineer. */
+"Saving preference" = "Speichern der Einstellung";
+
+/* No comment provided by engineer. */
+"Scan" = "Scan";
+
+/* No comment provided by engineer. */
+"Search Engine" = "Suchmaschine";
+
+/* No comment provided by engineer. */
+"Search on %@" = "Suche auf %@";
+
+/* No comment provided by engineer. */
+"Search or enter address" = "Adresse suchen oder eingeben";
+
+/* No comment provided by engineer. */
+"Search Page" = "Suchseite";
+
+/* No comment provided by engineer. */
+"Search Tabs" = "Tabs durchsuchen";
+
+/* No comment provided by engineer. */
+"Search your history" = "Suche in Ihrem Verlauf";
+
+/* No comment provided by engineer. */
+"Searches" = "Suchen";
+
+/* Show full recipe */
+"See" = "Anzeigen";
+
+/* No comment provided by engineer. */
+"See results for" = "Ergebnisse anzeigen für";
+
+/* No comment provided by engineer. */
+"See what people have said about this page" = "Sehen Sie, was andere über diese Seite gesagt haben";
+
+/* No comment provided by engineer. */
+"Selected data cleared successfully" = "Ausgewählte Daten erfolgreich gelöscht";
+
+/* No comment provided by engineer. */
+"Send" = "Senden";
+
+/* No comment provided by engineer. */
+"Send me product & privacy tips" = "Ich möchte Produkt- und Datenschutztipps erhalten";
+
+/* No comment provided by engineer. */
+"Sent. Thanks for your feedback!" = "Gesendet. Vielen Dank für Ihr Feedback!";
+
+/* accessibility label for one type of themes for reader mode feature */
+"Sepia Theme" = "Thema: Sepia";
+
+/* No comment provided by engineer. */
+"Set as Default Browser" = "Als Standardbrowser festlegen";
+
+/* No comment provided by engineer. */
+"Settings" = "Einstellungen";
+
+/* No comment provided by engineer. */
+"Share" = "Teilen";
+
+/* No comment provided by engineer. */
+"Share Space" = "Bereich teilen";
+
+/* No comment provided by engineer. */
+"Share Space to the web" = "Bereich im Web teilen";
+
+/* No comment provided by engineer. */
+"Show Descriptions" = "Beschreibungen anzeigen";
+
+/* No comment provided by engineer. */
+"Show Link Previews" = "Link-Vorschauen anzeigen";
+
+/* No comment provided by engineer. */
+"Show More" = "Mehr anzeigen";
+
+/* No comment provided by engineer. */
+"Show More Discussions" = "Weitere Diskussionen anzeigen";
+
+/* No comment provided by engineer. */
+"Show Recent Pages" = "Zuletzt verwendete Seiten anzeigen";
+
+/* No comment provided by engineer. */
+"Show Search Suggestions" = "Suchvorschläge anzeigen";
+
+/* No comment provided by engineer. */
+"Show Tabs" = "Tabs anzeigen";
+
+/* No comment provided by engineer. */
+"Show Tour" = "Tour anzeigen";
+
+/* Shows a section */
+"shows" = "anzeigen";
+
+/* No comment provided by engineer. */
+"Sign In" = "Anmelden";
+
+/* No comment provided by engineer. */
+"Sign in or Join Neeva" = "Anmelden oder bei Neeva registrieren";
+
+/* No comment provided by engineer. */
+"Sign in to:" = "Anmelden bei:";
+
+/* No comment provided by engineer. */
+"Sign in with %@" = "Mit %@ anmelden";
+
+/* No comment provided by engineer. */
+"Sign in with QR Code" = "Mit QR-Code anmelden";
+
+/* No comment provided by engineer. */
+"Sign Out" = "Abmelden";
+
+/* No comment provided by engineer. */
+"Sign out of Neeva?" = "Aus Neeva abmelden?";
+
+/* No comment provided by engineer. */
+"Sign Up" = "Registrieren";
+
+/* No comment provided by engineer. */
+"Sign Up To Get Started" = "Registrieren Sie sich, um loszulegen";
+
+/* No comment provided by engineer. */
+"Sign up with %@" = "Registrierung mit %@";
+
+/* No comment provided by engineer. */
+"Sign up with Apple" = "Registrierung mit Apple";
+
+/* No comment provided by engineer. */
+"Signed in to Neeva with" = "Bei Neeva angemeldet mit";
+
+/* No comment provided by engineer. */
+"Site appears broken? Try deactivating." = "Website scheint defekt zu sein? Versuchen Sie es mit der Deaktivierung.";
+
+/* No comment provided by engineer. */
+"Skip for now" = "Vorerst überspringen";
+
+/* No comment provided by engineer. */
+"Social Cookies" = "Social-Media-Cookies";
+
+/* No comment provided by engineer. */
+"Sorry, we couldn't find any results related to your search" = "Leider konnten wir keine Ergebnisse für Ihre Suche finden.";
+
+/* No comment provided by engineer. */
+"Sort" = "Sortieren";
+
+/* No comment provided by engineer. */
+"Space Item" = "Bereichselement";
+
+/* No comment provided by engineer. */
+"Spaces" = "Bereiche";
+
+/* No comment provided by engineer. */
+"Spread the cheer on the App Store? Your review will help Neeva grow." = "Begeisterung mit anderen im App Store teilen? Ihre Bewertung wird Neeva helfen zu wachsen.";
+
+/* No comment provided by engineer. */
+"Start Searching" = "Suche starten";
+
+/* No comment provided by engineer. */
+"Stay in the know" = "Bleiben Sie auf dem Laufenden";
+
+/* No comment provided by engineer. */
+"Stay organized by adding images, websites, documents to a Space today" = "Bleiben Sie gut organisiert: Fügen Sie noch heute Bilder, Websites und Dokumente zu einem Bereich hinzu.";
+
+/* No comment provided by engineer. */
+"Stop" = "Stopp";
+
+/* No comment provided by engineer. */
+"Submit" = "Einreichen";
+
+/* No comment provided by engineer. */
+"Subscription products not found." = "Abonnementprodukte nicht gefunden.";
+
+/* No comment provided by engineer. */
+"Success! Space shared with %lld people" = "Erfolg! Bereich mit %lld Personen geteilt";
+
+/* No comment provided by engineer. */
+"Success! Space shared with 1 person" = "Erfolg! Bereich mit einer Person geteilt";
+
+/* No comment provided by engineer. */
+"Suggested sites" = "Vorgeschlagene Websites";
+
+/* No comment provided by engineer. */
+"Support" = "Support";
+
+/* No comment provided by engineer. */
+"Switch" = "Wechseln";
+
+/* No comment provided by engineer. */
+"Tab Closed" = "Tab geschlossen";
+
+/* No comment provided by engineer. */
+"Tab Group, %@" = "Tab-Gruppe, %@";
+
+/* No comment provided by engineer. */
+"Tabs" = "Tabs";
+
+/* No comment provided by engineer. */
+"Tap" = "Tippen Sie auf";
+
+/* No comment provided by engineer. */
+"Tap + %@ to create a new tab" = "Tippen Sie auf + %@, um einen neuen Tab zu erstellen";
+
+/* No comment provided by engineer. */
+"Tap on the Neeva logo to scope out related content, reviews, and more." = "Tippen Sie auf das Neeva-Logo, um verwandte Inhalte, Rezensionen und mehr zu finden.";
+
+/* No comment provided by engineer. */
+"Tap on the Neeva logo to see information related to the website you're visiting." = "Tippen Sie auf das Neeva-Logo, um Informationen zu der von Ihnen besuchten Website anzuzeigen.";
+
+/* No comment provided by engineer. */
+"Tap to pan and zoom" = "Zum Schwenken und Zoomen tippen";
+
+/* No comment provided by engineer. */
+"Tell me more" = "Erzählen Sie uns mehr";
+
+/* No comment provided by engineer. */
+"Terms" = "Bedingungen";
+
+/* No comment provided by engineer. */
+"Terms of Service" = "Nutzungsbedingungen";
+
+/* No comment provided by engineer. */
+"Test" = "Test";
+
+/* No comment provided by engineer. */
+"Text Size" = "Textgröße";
+
+/* No comment provided by engineer. */
+"Thank you for trying Neeva!" = "Danke, dass Sie Neeva ausprobiert haben!";
+
+/* No comment provided by engineer. */
+"The first ad-free, private search engine" = "die erste werbefreie, private Suchmaschine";
+
+/* No comment provided by engineer. */
+"Theme" = "Design";
+
+/* No comment provided by engineer. */
+"This action will clear all of your private data. It cannot be undone." = "Diese Aktion löscht alle Ihre privaten Daten. Sie kann nicht rückgängig gemacht werden.";
+
+/* No comment provided by engineer. */
+"This is your current plan." = "Dies ist Ihr aktueller Plan.";
+
+/* No comment provided by engineer. */
+"Thumbnails" = "Vorschaubilder";
+
+/* section header to group tabs created today */
+"Today" = "Heute";
+
+/* No comment provided by engineer. */
+"Toolbar" = "Symbolleiste";
+
+/* No comment provided by engineer. */
+"Trackers" = "Tracker";
+
+/* No comment provided by engineer. */
+"TRACKERS" = "Tracker";
+
+/* No comment provided by engineer. */
+"Tracking prevention" = "Verhindern von Tracking";
+
+/* No comment provided by engineer. */
+"Tracking Protection" = "Tracking-Schutz";
+
+/* No comment provided by engineer. */
+"Tracking Protection, Incognito" = "Tracking-Schutz, Inkognito";
+
+/* No comment provided by engineer. */
+"Tracks your online activity for advertising purposes" = "Verfolgt Ihre Online-Aktivitäten zu Werbezwecken";
+
+/* No comment provided by engineer. */
+"true" = "wahr";
+
+/* No comment provided by engineer. */
+"try again" = "Erneut versuchen";
+
+/* No comment provided by engineer. */
+"Try NeevaScope!" = "Testen Sie NeevaScope!";
+
+/* No comment provided by engineer. */
+"Twitter" = "Twitter";
+
+/* No comment provided by engineer. */
+"undo" = "Rückgängig machen";
+
+/* button to unfollow a space */
+"unfollow" = "Entfolgen";
+
+/* No comment provided by engineer. */
+"Unfollow" = "Entfolgen";
+
+/* No comment provided by engineer. */
+"Unfollow Space" = "Bereich nicht mehr folgen";
+
+/* No comment provided by engineer. */
+"Unknown" = "Unbekannt";
+
+/* No comment provided by engineer. */
+"Unlimited ad-free, private search" = "Unbegrenzte werbefreie, private Suche";
+
+/* No comment provided by engineer. */
+"Unpin" = "Nicht mehr anheften";
+
+/* No comment provided by engineer. */
+"Unpin tab" = "Anheften des Tabs aufheben";
+
+/* No comment provided by engineer. */
+"Untitled" = "Unbenannt";
+
+/* No comment provided by engineer. */
+"Update" = "Aktualisieren";
+
+/* No comment provided by engineer. */
+"Update Space" = "Bereich aktualisieren";
+
+/* No comment provided by engineer. */
+"URL copied to clipboard" = "URL in Zwischenablage kopiert";
+
+/* No comment provided by engineer. */
+"Use bookmark icon on a search result or website to add to your Space" = "Verwenden Sie das Lesezeichen-Symbol auf einem Suchergebnis oder einer Website, um es zu Ihrem Bereich hinzuzufügen.";
+
+/* No comment provided by engineer. */
+"Username" = "Benutzername";
+
+/* No comment provided by engineer. */
+"View Account" = "Konto anzeigen";
+
+/* No comment provided by engineer. */
+"View Benefits" = "Vorteile anzeigen";
+
+/* No comment provided by engineer. */
+"View Query" = "Abfrage anzeigen";
+
+/* No comment provided by engineer. */
+"View Spaces" = "Bereiche anzeigen";
+
+/* No comment provided by engineer. */
+"We hear you. Send feedback to help us make Neeva better for you!" = "Wir verstehen Sie. Senden Sie uns Feedback, damit wir Neeva für Sie besser machen können!";
+
+/* No comment provided by engineer. */
+"We're building out community trust flags for sites like this one." = "Wir erstellen Community-Trust-Flags für Websites wie diese.";
+
+/* No comment provided by engineer. */
+"Website" = "Website";
+
+/* No comment provided by engineer. */
+"Website Data" = "Website-Daten";
+
+/* No comment provided by engineer. */
+"Websites you've closed\nrecently will show up here." = "Hier werden Websites angezeigt,\ndie Sie kürzlich geschlossen haben.";
+
+/* No comment provided by engineer. */
+"Websites you've visted\nrecently will show up here." = "Hier werden Websites angezeigt,\ndie Sie kürzlich besucht haben.";
+
+/* No comment provided by engineer. */
+"Welcome To Neeva" = "Willkommen bei Neeva";
+
+/* No comment provided by engineer. */
+"Welcome Tours" = "Willkommenstouren";
+
+/* No comment provided by engineer. */
+"What's on your mind?" = "Was beschäftigt Sie?";
+
+/* No comment provided by engineer. */
+"When Closing All Tabs" = "Beim Schließen aller Registerkarten";
+
+/* No comment provided by engineer. */
+"When disabled, turns off Cookie Cutter on all sites. Changing this will reload your tabs." = "Wenn diese Option deaktiviert ist, wird Cookie-Cutter auf allen Websites deaktiviert. Wenn Sie dies ändern, werden Ihre Tabs neu geladen.";
+
+/* No comment provided by engineer. */
+"When Leaving Incognito Mode" = "Beim Verlassen des Inkognito-Modus";
+
+/* No comment provided by engineer. */
+"When Long-pressing Links" = "Wenn Links länger gedrückt werden";
+
+/* No comment provided by engineer. */
+"Who has access" = "Wer hat Zugriff";
+
+/* No comment provided by engineer. */
+"Who's Tracking You" = "Wer Sie trackt";
+
+/* No comment provided by engineer. */
+"Win " = "Win ";
+
+/* No comment provided by engineer. */
+"Yelp" = "Yelp";
+
+/* No comment provided by engineer. */
+"Yes! Share my Space publicly" = "Ja! Meinen Bereich öffentlich teilen";
+
+/* section header to group tabs created yesterday */
+"Yesterday" = "Gestern";
+
+/* No comment provided by engineer. */
+"You can opt out in settings anytime." = "Sie können sich jederzeit in den Einstellungen abmelden.";
+
+/* No comment provided by engineer. */
+"You'll be shown as the owner of the Space" = "Sie werden als Eigentümer des Bereichs angezeigt.";
+
+/* No comment provided by engineer. */
+"You've disabled notifications, would you like to enable them in settings?" = "Sie haben die Benachrichtigungen deaktiviert. Möchten Sie sie in den Einstellungen aktivieren?";
+
+/* No comment provided by engineer. */
+"Your Cookie Cutter just declined a **cookie popup** and blocked %@ **trackers**" = "Ihr Cookie Cutter hat gerade ein **Cookie Popup** abgelehnt und %@ **Tracker** blockiert";
+
+/* No comment provided by engineer. */
+"Your Cookie Cutter just declined a **cookie popup** and blocked %lld **trackers**" = "Ihr Cookie Cutter hat gerade ein **Cookie Popup** abgelehnt und %lld **Tracker** blockiert";
+
+/* No comment provided by engineer. */
+"Your NeevaScope is coming into focus..." = "Ihr NeevaScope rückt in den Fokus ...";
+
+/* No comment provided by engineer. */
+"Your Space will be public as anyone with the link can view your Space. Ready to share?" = "Ihr Bereich ist öffentlich, wodurch alle Nutzer mit dem Link Ihren Bereich sehen können. Bereit zum Teilen?";
+
+/* No comment provided by engineer. */
+"Your Subscription" = "Ihr Abonnement";
+
