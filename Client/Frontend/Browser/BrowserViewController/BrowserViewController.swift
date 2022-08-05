@@ -300,6 +300,12 @@ class BrowserViewController: UIViewController, ModalPresenter {
             self?.selectedTabChanged(selected: $0.1, previous: $0.0)
         }.store(in: &subscriptions)
 
+        tabManager.selectedTabWebViewPublisher.sink { [weak self] webView in
+            if let webView = webView {
+                self?.locationModel.updateSecureListener(with: webView)
+            }
+        }.store(in: &subscriptions)
+
         tabManager.addNavigationDelegate(self)
         downloadQueue.delegate = self
     }
