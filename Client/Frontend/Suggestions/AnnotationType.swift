@@ -36,12 +36,3 @@ extension AnnotationType {
         }
     }
 }
-
-extension SuggestionsQuery.Data.Suggest.QuerySuggestion {
-    func hasSupportedAnnotationType() -> Bool {
-        return AnnotationType(annotation: annotation) == .calculator
-            || AnnotationType(annotation: annotation) == .stock
-            || AnnotationType(annotation: annotation) == .wikipedia
-            || AnnotationType(annotation: annotation) == .dictionary
-    }
-}

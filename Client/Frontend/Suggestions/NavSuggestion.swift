@@ -8,6 +8,7 @@ import Storage
 public struct NavSuggestion {
     let url: URL
     let title: String?
+    // PR #4122; periphery:ignore
     let subtitle: String?
     let isMemorizedNav: Bool
     let isAutocomplete: Bool

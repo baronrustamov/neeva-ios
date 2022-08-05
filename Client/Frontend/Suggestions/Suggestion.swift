@@ -6,13 +6,6 @@ import Combine
 import SFSafeSymbols
 import Shared
 
-public struct DictionaryInfo {
-    var shortDefinition: String
-    var phoneticSpelling: String
-    var lexicalCategory: String
-    var word: String
-}
-
 /// A type that wraps both query and URL suggestions
 public enum Suggestion {
     case query(SuggestionsQuery.Data.Suggest.QuerySuggestion)
@@ -101,16 +94,11 @@ extension Suggestion: Identifiable, Equatable {
 }
 
 public typealias ActiveLensBangInfo = SuggestionsQuery.Data.Suggest.ActiveLensBangInfo
-public typealias SuggestionsQueryResult = (
+typealias SuggestionsQueryResult = (
     [Suggestion], [Suggestion], [Suggestion], ActiveLensBangInfo?,
     [String: String], [String: Int]
 )
 extension ActiveLensBangInfo: Equatable {
-    static let previewBang = ActiveLensBangInfo(
-        domain: "google.com", shortcut: "g", description: "Google", type: .bang)
-    static let previewLens = ActiveLensBangInfo(
-        shortcut: "my", description: "Search my connections", type: .lens)
-
     public static func == (lhs: ActiveLensBangInfo, rhs: ActiveLensBangInfo) -> Bool {
         lhs.description == rhs.description && lhs.domain == rhs.domain
             && lhs.shortcut == rhs.shortcut && lhs.type == rhs.type
@@ -146,11 +134,10 @@ extension SuggestionsQuery.Data.Suggest.QuerySuggestion {
 }
 
 /// Fetches query and URL suggestions for a given query
-public class SuggestionsController: QueryController<SuggestionsQuery, SuggestionsQueryResult> {
+class SuggestionsController: QueryController<SuggestionsQuery, SuggestionsQueryResult> {
     fileprivate static let querySuggestionsCap = 3
 
-    public override class func processData(_ data: SuggestionsQuery.Data) -> SuggestionsQueryResult
-    {
+    override class func processData(_ data: SuggestionsQuery.Data) -> SuggestionsQueryResult {
         let querySuggestions = data.suggest?.querySuggestion ?? []
         // Split queries into standard queries that doesnt have annotations and everything else.
         let standardQuerySuggestions =
@@ -231,7 +218,7 @@ public class SuggestionsController: QueryController<SuggestionsQuery, Suggestion
         )
     }
 
-    @discardableResult public static func getSuggestions(
+    @discardableResult static func getSuggestions(
         for query: String,
         completion: @escaping (Result<SuggestionsQueryResult, Error>) -> Void
     ) -> Cancellable {
