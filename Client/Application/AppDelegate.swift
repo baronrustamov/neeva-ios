@@ -312,7 +312,9 @@ extension AppDelegate {
             )
         }
 
-        let tabs = SceneDelegate.getTabManagerOrNil()?.tabs ?? []
+        let tabs =
+            (SceneDelegate.getTabManagerOrNil()?.activeTabs ?? [])
+            + (SceneDelegate.getTabManagerOrNil()?.archivedTabs ?? [])
         let numberOfZombieTabs: Int = {
             tabs.filter { $0.webView == nil }.count
         }()

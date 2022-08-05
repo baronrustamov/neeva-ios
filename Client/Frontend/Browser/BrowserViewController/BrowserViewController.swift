@@ -459,7 +459,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
         setNeedsStatusBarAppearanceUpdate()
 
-        for tab in tabManager.tabs {
+        for tab in tabManager.activeTabs {
             // Update the `background-color` of any blank webviews.
             (tab.webView as? TabWebView)?.applyTheme()
         }
@@ -510,14 +510,6 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
         let didSelectTabOnStartup = tabManager.restoreTabs()
 
-        // Handle the case of an existing user upgrading to a version of the app
-        // that supports preview mode. They will have tabs already, so we don't
-        // want to show them the preview home experience.
-        // TODO: This is flawed as an existing user may have closed their tabs.
-        if !tabManager.tabs.isEmpty {
-            Defaults[.didFirstNavigation] = true
-        }
-
         DispatchQueue.main.async {
             if Self.createNewTabOnStartForTesting {
                 self.tabManager.select(self.tabManager.addTab())
@@ -557,8 +549,6 @@ class BrowserViewController: UIViewController, ModalPresenter {
             self.showAdBlockerPromo()
         }
 
-        screenshotHelper.viewIsVisible = true
-        screenshotHelper.takePendingScreenshots(tabManager.tabs)
         tabManager.selectedTab?.lastExecutedTime = Date.nowMilliseconds()
 
         super.viewDidAppear(animated)
@@ -575,7 +565,6 @@ class BrowserViewController: UIViewController, ModalPresenter {
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        screenshotHelper.viewIsVisible = false
         super.viewWillDisappear(animated)
     }
 
@@ -1282,7 +1271,7 @@ extension BrowserViewController: TabDelegate {
     func tab(_ tab: Tab, didSelectAddToSpaceForSelection selection: String) {
         showAddToSpacesSheet(
             url: tab.url!,
-            title: tab.displayTitle, description: selection, webView: tab.webView!)
+            title: tab.displayTitle, description: selection, webView: tab.webView!, tab: tab)
     }
 
     func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String) {
@@ -1297,7 +1286,8 @@ extension BrowserViewController: TabDelegate {
 extension BrowserViewController: ZeroQueryPanelDelegate {
     func zeroQueryPanelDidRequestToSaveToSpace(_ url: URL, title: String?, description: String?) {
         chromeModel.setEditingLocation(to: false)
-        showAddToSpacesSheet(url: url, title: title, description: description)
+        // Pass a nil WKWebView to disambiguate the function call.
+        showAddToSpacesSheet(url: url, title: title, description: description, webView: nil)
     }
 
     func zeroQueryPanel(didSelectURL url: URL, visitType: VisitType) {
@@ -1511,7 +1501,8 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
         showAddToSpacesSheet(
             url: url,
-            title: BrowserViewController.contextMenuElements?.title, webView: webView)
+            title: BrowserViewController.contextMenuElements?.title, webView: webView,
+            tab: tabManager.selectedTab)
 
         BrowserViewController.contextMenuElements = nil
     }
@@ -1522,7 +1513,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             showAddToSpacesSheet(
                 url: pageURL,
                 title: self.tabManager.selectedTab?.title,
-                webView: webView)
+                webView: webView, tab: tabManager.selectedTab)
         }
     }
 
@@ -1585,15 +1576,8 @@ extension BrowserViewController: JSPromptAlertControllerDelegate {
 extension BrowserViewController {
     func showAddToSpacesSheet(
         url: URL, title: String?, description: String? = nil,
-        webView: WKWebView?, importData: SpaceImportHandler? = nil
+        webView: WKWebView?, importData: SpaceImportHandler? = nil, tab: Tab? = nil
     ) {
-        // TODO: Avoid needing to lookup the Tab when we already have the WebView.
-        // There should be a better way to do this.
-        func getTab(tabManager: TabManager, _ url: URL) -> Tab? {
-            assert(Thread.isMainThread)
-            return tabManager.tabs.filter({ $0.webView?.url == url }).first
-        }
-
         weak var model = self.gridModel.spaceCardModel
 
         // Look at mediaURL from page metadata and large images within the page and dedupe
@@ -1601,7 +1585,7 @@ extension BrowserViewController {
         var set = Set<String>()
         var thumbnailUrls = [URL]()
         if let mediaURL =
-            URL(string: getTab(tabManager: self.tabManager, url)?.pageMetadata?.mediaURL ?? "")
+            URL(string: tab?.pageMetadata?.mediaURL ?? "")
         {
             thumbnailUrls.append(mediaURL)
             set.insert(mediaURL.absoluteString)

@@ -167,9 +167,6 @@ class TabManagerStore {
             savedTabs = savedTabs.filter { !$0.isIncognito }
         }
 
-        // TODO(darin): Ideally we'd pass `notify: false` to `addTab` here and instead
-        // do notifications after all of the mutations to `TabManager.tabs` are done.
-
         var tabToSelect: Tab?
         var restoredTabs = [Tab]()
         restoredTabs.reserveCapacity(savedTabs.count)

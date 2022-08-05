@@ -37,7 +37,7 @@ class UITestBase: KIFTestCase {
     }
 
     func getNumberOfTabs() -> Int {
-        SceneDelegate.getTabManagerOrNil()?.tabs.count ?? 0
+        SceneDelegate.getTabManagerOrNil()?.activeTabs.count ?? 0
     }
 
     func isSelectedTabIncognito() -> Bool {

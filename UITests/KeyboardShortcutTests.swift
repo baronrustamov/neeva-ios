@@ -109,7 +109,7 @@ class KeyboardShortcutTests: UITestBase {
         previousTab(tester: tester())
         bvc.nextTabKeyCommand()
 
-        XCTAssert(bvc.tabManager.selectedTab == bvc.tabManager.tabs[1])
+        XCTAssert(bvc.tabManager.selectedTab == bvc.tabManager.activeTabs[1])
     }
 
     func testPreviousTabCommand() throws {
@@ -119,7 +119,7 @@ class KeyboardShortcutTests: UITestBase {
 
         previousTab(tester: tester())
 
-        XCTAssert(bvc.tabManager.selectedTab == bvc.tabManager.tabs[0])
+        XCTAssert(bvc.tabManager.selectedTab == bvc.tabManager.activeTabs[0])
     }
 
     // MARK: - Close Tabs
@@ -161,6 +161,6 @@ class KeyboardShortcutTests: UITestBase {
         closeAllTabs()
         bvc.restoreTabKeyCommand()
 
-        XCTAssert(bvc.tabManager.tabs.count > 1)
+        XCTAssert(bvc.tabManager.activeTabs.count > 1)
     }
 }
