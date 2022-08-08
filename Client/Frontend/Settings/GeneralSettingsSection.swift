@@ -68,7 +68,7 @@ struct GeneralSettingsSection: View {
         NavigationLink(isActive: $showArchivedTabsSettings) {
             ArchivedTabSettings()
         } label: {
-            Text("Keep Tabs")
+            Text("Archive Tabs")
         }.id("archived-tabs-setting")
     }
 }

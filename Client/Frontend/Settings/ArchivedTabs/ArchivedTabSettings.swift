@@ -24,8 +24,8 @@ struct ArchivedTabSettings: View {
         List {
             Section {
                 Picker("", selection: $archivedTabsDuration) {
-                    Text("7 Days").tag(ArchivedTabsDuration.week)
-                    Text("30 Days").tag(ArchivedTabsDuration.month)
+                    Text("After 7 Days").tag(ArchivedTabsDuration.week)
+                    Text("After 30 Days").tag(ArchivedTabsDuration.month)
                     Text("Never").tag(ArchivedTabsDuration.forever)
                 }.labelsHidden()
             }
