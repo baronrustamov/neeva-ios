@@ -383,7 +383,7 @@ class CardTests: XCTestCase {
         manager.addTab()
         manager.addTab()
         manager.addTab()
-        waitForCondition(condition: { manager.tabs.count == 3 })
+        waitForCondition(condition: { manager.activeTabs.count == 3 })
 
         let cardContainer = CardsContainer(
             columns: Array(repeating: GridItem(.fixed(100), spacing: 20), count: 2)
@@ -402,9 +402,9 @@ class CardTests: XCTestCase {
 
         manager.addTab()
         manager.addTab()
-        waitForCondition(condition: { manager.tabs.count == 5 })
+        waitForCondition(condition: { manager.activeTabs.count == 5 })
 
-        XCTAssertEqual(manager.tabs.count, 5)
+        XCTAssertEqual(manager.activeTabs.count, 5)
         XCTAssertEqual(tabCardModel.allDetails.count, 5)
     }
 
@@ -412,7 +412,7 @@ class CardTests: XCTestCase {
         manager.addTab()
         manager.addTab()
         manager.addTab()
-        waitForCondition(condition: { manager.tabs.count == 3 })
+        waitForCondition(condition: { manager.activeTabs.count == 3 })
 
         gridModel.setSwitcherState(to: .spaces)
         spaceCardModel.onDataUpdated()

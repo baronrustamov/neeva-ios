@@ -35,14 +35,14 @@ enum SuggestionState {
 }
 
 /// Renders a provided suggestion
-public struct SearchSuggestionView: View {
+struct SearchSuggestionView: View {
     let suggestion: Suggestion
 
-    public init(_ suggestion: Suggestion) {
+    init(_ suggestion: Suggestion) {
         self.suggestion = suggestion
     }
 
-    @ViewBuilder public var body: some View {
+    @ViewBuilder var body: some View {
         switch suggestion {
         case .query(let suggestion):
             QuerySuggestionView(suggestion: suggestion)
@@ -124,7 +124,7 @@ struct SuggestionView<Icon: View, Label: View, SecondaryLabel: View, Detail: Vie
     let suggestion: Suggestion?
 
     @State var suggestionState: SuggestionState = .normal
-    @EnvironmentObject public var suggestionModel: SuggestionModel
+    @EnvironmentObject var suggestionModel: SuggestionModel
     @Environment(\.suggestionConfig) private var config
 
     var body: some View {
@@ -176,7 +176,7 @@ struct QuerySuggestionView: View {
         suggestion.annotation?.isChangeInStockPricePositive() ?? false
     }
 
-    @EnvironmentObject public var model: SuggestionModel
+    @EnvironmentObject var model: SuggestionModel
     @Environment(\.setSearchInput) private var setInput
 
     @ViewBuilder
@@ -391,7 +391,7 @@ struct QuerySuggestionView: View {
 struct URLSuggestionView: View {
     let suggestion: SuggestionsQuery.Data.Suggest.UrlSuggestion
 
-    @EnvironmentObject public var model: SuggestionModel
+    @EnvironmentObject var model: SuggestionModel
 
     @ViewBuilder
     var icon: some View {
@@ -459,7 +459,7 @@ struct URLSuggestionView: View {
 private struct BangSuggestionView: View {
     let suggestion: Suggestion.Bang
 
-    @EnvironmentObject public var model: SuggestionModel
+    @EnvironmentObject var model: SuggestionModel
 
     var body: some View {
         SuggestionView(
@@ -477,7 +477,7 @@ private struct BangSuggestionView: View {
 private struct LensSuggestionView: View {
     let suggestion: Suggestion.Lens
 
-    @EnvironmentObject public var model: SuggestionModel
+    @EnvironmentObject var model: SuggestionModel
 
     var body: some View {
         SuggestionView(
@@ -495,7 +495,7 @@ private struct LensSuggestionView: View {
 private struct TabSuggestionView: View {
     let suggestion: TabCardDetails
 
-    @EnvironmentObject public var model: SuggestionModel
+    @EnvironmentObject var model: SuggestionModel
 
     @ViewBuilder
     var icon: some View {
@@ -529,7 +529,7 @@ private struct TabSuggestionView: View {
 }
 
 private struct EditCurrentURLSuggestionView: View {
-    @EnvironmentObject public var model: SuggestionModel
+    @EnvironmentObject var model: SuggestionModel
     let suggestion: TabCardDetails
 
     var url: URL? {
@@ -625,7 +625,7 @@ private struct EditCurrentURLSuggestionView: View {
 private struct EditCurrentQuerySuggestionView: View {
     let suggestion: (String, URL)
 
-    @EnvironmentObject public var model: SuggestionModel
+    @EnvironmentObject var model: SuggestionModel
 
     var favicon: some View {
         Image("neevaMenuIcon")
@@ -662,7 +662,7 @@ private struct FindInPageSuggestionView: View {
     let query: String
 
     @State var focused: Bool = false
-    @EnvironmentObject public var model: SuggestionModel
+    @EnvironmentObject var model: SuggestionModel
 
     var label: some View {
         Text("Find on Page")
@@ -694,7 +694,7 @@ private struct XYZQueryView: View {
     let suggestion: NFTSuggestion
 
     @State var focused: Bool = false
-    @EnvironmentObject public var model: SuggestionModel
+    @EnvironmentObject var model: SuggestionModel
 
     private var label: some View {
         Text(suggestion.displayText)
@@ -776,12 +776,6 @@ struct SuggestionView_Previews: PreviewProvider {
         shortcut: "w",
         description: "Wikipedia",
         domain: "wikipedia.org"
-    )
-
-    static let logoBang = Suggestion.Bang(
-        shortcut: "imdb",
-        description: "IMDb",
-        domain: "imdb.com"
     )
 
     static let noDomainBang = Suggestion.Bang(

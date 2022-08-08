@@ -28,7 +28,8 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
 
     static var all = WeakList<TabManager>()
 
-    var tabs = [Tab]()
+    // External classes should only be able to access this through `activeTabs` and `archivedTabs`.
+    private var tabs = [Tab]()
     var tabsUpdatedPublisher = PassthroughSubject<Void, Never>()
 
     // Tab Group related variables
@@ -520,11 +521,10 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             return $0.isArchived
         }
 
-        activeTabGroups = getAll()
+        activeTabGroups =
+            activeTabs
             .reduce(into: [String: [Tab]]()) { dict, tab in
-                if !tab.isArchived {
-                    dict[tab.rootUUID, default: []].append(tab)
-                }
+                dict[tab.rootUUID, default: []].append(tab)
             }.filter { $0.value.count > 1 }.reduce(into: [String: TabGroup]()) { dict, element in
                 dict[element.key] = TabGroup(children: element.value, id: element.key)
             }
@@ -532,9 +532,10 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         // In archivedTabsPanelView, there are special UI treatments for a child tab,
         // even if it's the only arcvhied tab in a group. Those tabs won't be filtered
         // out (see activeTabGroups for comparison).
-        archivedTabGroups = getAll()
+        archivedTabGroups =
+            archivedTabs
             .reduce(into: [String: [Tab]]()) { dict, tab in
-                if tabGroupDict[tab.rootUUID] != nil && tab.isArchived {
+                if tabGroupDict[tab.rootUUID] != nil {
                     dict[tab.rootUUID, default: []].append(tab)
                 }
             }.reduce(into: [String: TabGroup]()) { dict, element in
@@ -1340,6 +1341,8 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         return store.getStartupTabs(for: SceneDelegate.getCurrentScene(for: nil)).count
     }
 
+    // TODO(jon): Find a way to test the prod version of this function
+    // (`restoreTabs(_:) instead.
     func testRestoreTabs() {
         assert(AppConstants.IsRunningTest)
         let _ = store.restoreStartupTabs(
@@ -1347,6 +1350,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             clearIncognitoTabs: false,
             tabManager: self
         )
+        updateAllTabDataAndSendNotifications(notify: true)
     }
 
     func testClearArchive() {

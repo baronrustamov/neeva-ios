@@ -20,8 +20,13 @@ struct LocationLabel: View {
         )
         .lineLimit(1)
         .frame(height: TabLocationViewUX.height)
-        .allowsHitTesting(false)
+        .if(isSecure != nil) {
+            $0.accessibilityIdentifier(
+                isSecure! ? "locationLabelSiteSecure" : "locationLabelSiteNotSecure"
+            )
+        }
         .accessibilityHidden(true)
+        .allowsHitTesting(false)
     }
 }
 

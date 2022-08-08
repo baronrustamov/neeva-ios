@@ -12,7 +12,7 @@ import UIKit
 struct SuggestionPositionInfo {
     let positionIndex: Int
 
-    public func loggingAttributes() -> [ClientLogCounterAttribute] {
+    func loggingAttributes() -> [ClientLogCounterAttribute] {
         var clientLogAttributes = [ClientLogCounterAttribute]()
 
         clientLogAttributes.append(

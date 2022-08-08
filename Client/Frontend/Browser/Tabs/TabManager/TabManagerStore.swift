@@ -122,16 +122,18 @@ class TabManagerStore {
     func saveTabsToPath(path: String, savedTabs: [SavedTab]) {
         log.info("Saving to \(path), number of tabs: \(savedTabs.count)")
 
-        let data: Data
-        do {
-            data = try NSKeyedArchiver.archivedData(
-                withRootObject: savedTabs, requiringSecureCoding: false)
-        } catch {
-            log.error("Failed to create data archive for tabs: \(error.localizedDescription)")
-            return
-        }
-
-        backgroundFileWriter(for: path).writeData(data: data)
+        // Generate archive off the main thread since it can be a bit expensive if the
+        // user has a lot of tabs. Possible given that `SavedTab` is safe to read from
+        // a background thread.
+        backgroundFileWriter(for: path).writeData(from: {
+            do {
+                return try NSKeyedArchiver.archivedData(
+                    withRootObject: savedTabs, requiringSecureCoding: false)
+            } catch {
+                log.error("Failed to create data archive for tabs: \(error.localizedDescription)")
+                return nil
+            }
+        })
     }
 
     func restoreStartupTabs(for scene: UIScene, clearIncognitoTabs: Bool, tabManager: TabManager)
@@ -164,9 +166,6 @@ class TabManagerStore {
         if clearIncognitoTabs {
             savedTabs = savedTabs.filter { !$0.isIncognito }
         }
-
-        // TODO(darin): Ideally we'd pass `notify: false` to `addTab` here and instead
-        // do notifications after all of the mutations to `TabManager.tabs` are done.
 
         var tabToSelect: Tab?
         var restoredTabs = [Tab]()

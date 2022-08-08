@@ -10,7 +10,6 @@ import Storage
 import SwiftyJSON
 import WebKit
 
-private var debugTabCount = 0
 private let log = Logger.browser
 
 func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
@@ -94,7 +93,6 @@ class Tab: NSObject, ObservableObject {
     var sessionData: SessionData?
     fileprivate var lastRequest: URLRequest?
     var restoring: Bool = false
-    var pendingScreenshot = false
     var needsReloadUponSelect = false
     var shouldPerformHeavyUpdatesUponSelect = true
 
@@ -262,8 +260,6 @@ class Tab: NSObject, ObservableObject {
         self.tabDelegate = bvc
         self.isIncognito = isIncognito
         super.init()
-
-        debugTabCount += 1
     }
 
     class func toRemoteTab(_ tab: Tab) -> RemoteTab? {
@@ -426,27 +422,6 @@ class Tab: NSObject, ObservableObject {
                 "creating webview with no lastRequest and no session data: \(self.url?.description ?? "nil")"
             )
         }
-    }
-
-    deinit {
-        debugTabCount -= 1
-
-        #if DEBUG___DISABLED
-            guard let appDelegate = UIApplication.shared.bvc as? AppDelegate else { return }
-            func checkTabCount(failures: Int) {
-                // Need delay for pool to drain.
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    if appDelegate.tabManager.tabs.count == debugTabCount {
-                        return
-                    }
-
-                    // If this assert has false positives, remove it and just log an error.
-                    assert(failures < 3, "Tab init/deinit imbalance, possible memory leak.")
-                    checkTabCount(failures: failures + 1)
-                }
-            }
-            checkTabCount(failures: 0)
-        #endif
     }
 
     func closeWebView() {

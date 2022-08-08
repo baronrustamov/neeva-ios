@@ -45,7 +45,7 @@ class ArchivedTabsPanelModel: ObservableObject {
 
     func clearArchivedTabs() {
         tabManager.removeTabs(
-            tabManager.tabs.filter { archivedTabs.contains($0) }, updateSelectedTab: false,
+            tabManager.archivedTabs, updateSelectedTab: false,
             dontAddToRecentlyClosed: true, notify: false)
         loadData()
         self.objectWillChange.send()

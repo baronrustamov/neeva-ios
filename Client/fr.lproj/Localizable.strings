@@ -323,7 +323,7 @@
 "Block Pop-up Windows" = "Bloquer les fenêtres contextuelles";
 
 /* (No Comment) */
-"Block Trackers, and Pop-ups" = "Bloquer les traqueurs et les fenêtres contextuelles";
+"Block trackers, and pop-ups" = "Bloquer les traqueurs et les fenêtres contextuelles";
 
 /* No comment provided by engineer. */
 "Blocks many ads and trackers. Minimizes disruption to ads and other functionality." = "Bloque de multiples publicités et traqueurs. Minimise les perturbations au niveau des publicités et de la fonctionnalité des sites.";
@@ -332,7 +332,7 @@
 "Blocks more ads and trackers. May break ads and other functionality on some sites." = "Bloque davantage de publicités et traqueurs. Peut bloquer des publicités et d'autres fonctionnalités sur certains sites.";
 
 /* (No Comment) */
-"Browse the Web Ad-Free" = "Naviguez sur le Web sans publicité";
+"Browse the web ad-free" = "Naviguez sur le Web sans publicité";
 
 /* No comment provided by engineer. */
 "Browse Web3" = "Parcourir Web3";
@@ -1642,3 +1642,23 @@
 /* No comment provided by engineer. */
 "Your Subscription" = "Votre abonnement";
 
+/* No comment provided by engineer. */
+"Oops, this page is a little shy" = "Oups, cette page est un peu timide";
+
+/* No comment provided by engineer. */
+"Please sign in to Neeva to view this page" = "Veuillez vous connecter à Neeva pour voir cette page";
+
+/* No comment provided by engineer. */
+"Need help or want instant answers to FAQs?" = "Vous avez besoin d'aide ou souhaitez obtenir des réponses instantanées aux questions fréquentes ?";
+
+/* No comment provided by engineer. */
+"Description" = "Description";
+
+/* No comment provided by engineer. */
+"Visit our Help Center!" = "Accédez à notre centre d'aide !";
+
+/* No comment provided by engineer. */
+"Email" = "E-mail";
+
+/* No comment provided by engineer. */
+"Share URL" = "Partager l'URL";

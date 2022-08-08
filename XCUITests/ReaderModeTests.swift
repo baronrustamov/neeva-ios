@@ -39,4 +39,31 @@ class ReaderModeTests: BaseTestCase {
             XCTAssertEqual("/test-fixture/test-mozilla-org.html", url.path)
         }
     }
+
+    func testSecureSiteIconShowsCorrectState() {
+        openURL("badssl.com")
+        waitForExistence(app.staticTexts["locationLabelSiteSecure"])
+
+        goToReaderModeSite()
+        app.buttons["Reader Mode"].tap()
+        waitUntilPageLoad()
+
+        // Make sure the site still shows as secure.
+        goToTabTray()
+        app.buttons["badssl.com, Tab"].tap()
+        waitForExistence(app.staticTexts["locationLabelSiteSecure"])
+
+        // Try an unsecure site.
+        app.links["expired"].firstMatch.tap()
+        waitForExistence(app.staticTexts["locationLabelSiteNotSecure"])
+
+        goToReaderModeSite()
+        app.buttons["Reader Mode"].tap()
+        waitUntilPageLoad()
+
+        // Make sure the site still shows as not secure.
+        goToTabTray()
+        app.buttons["This connection is not trusted, Tab"].tap()
+        waitForExistence(app.staticTexts["locationLabelSiteNotSecure"])
+    }
 }

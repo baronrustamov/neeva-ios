@@ -36,9 +36,9 @@
 
 "Cookie pop-up blocker" = "Cookie pop-up blocker";
 
-"Browse the Web Ad-Free" = "Browse the Web Ad-Free";
+"Browse the web ad-free" = "Browse the Web Ad-Free";
 
-"Block Trackers, and Pop-ups" = "Block Trackers, and Pop-ups";
+"Block trackers, and pop-ups" = "Block trackers, and pop-ups";
 
 /* section header to group tabs created today */
 "Today" = "Today";
@@ -60,3 +60,36 @@
 
 /* the save action to save an item to a space */
 "save to" = "save to";
+
+/* No comment provided by engineer. */
+"Oops, this page is a little shy" = "Oops, this page is a little shy";
+
+/* No comment provided by engineer. */
+"Please sign in to Neeva to view this page" = "Please sign in to Neeva to view this page";
+
+/* No comment provided by engineer. */
+"Need help or want instant answers to FAQs?" = "Need help or want instant answers to FAQs?";
+
+/* No comment provided by engineer. */
+"Description" = "Description";
+
+/* No comment provided by engineer. */
+"Visit our Help Center!" = "Visit our Help Centre!";
+
+/* No comment provided by engineer. */
+"Email" = "Email";
+
+/* No comment provided by engineer. */
+"Share URL" = "Share URL";
+
+/* Show all the spaces */
+"All Spaces" = "All Spaces";
+
+/* Show spaces owned by the user */
+"Owned by me" = "Owned by me";
+
+/* Sort by last updated space */
+"Last Updated" = "Last Updated";
+
+/* Sort by Space name */
+"Name" = "Name";

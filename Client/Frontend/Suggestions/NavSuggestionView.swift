@@ -10,7 +10,7 @@ import SwiftUI
 struct NavSuggestionView: View {
     let suggestion: NavSuggestion
 
-    @EnvironmentObject public var model: SuggestionModel
+    @EnvironmentObject var model: SuggestionModel
 
     @ViewBuilder
     var icon: some View {

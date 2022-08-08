@@ -214,12 +214,12 @@ public class TabCardDetails: CardDropDelegate, CardDetails, AccessingManagerProv
         }
 
         let fromIndex =
-            manager.tabs.firstIndex {
+            manager.activeTabs.firstIndex {
                 $0.tabUUID == draggingDetail.id
             } ?? 0
 
         let toIndex =
-            manager.tabs.firstIndex {
+            manager.activeTabs.firstIndex {
                 $0.tabUUID == self.id
             } ?? 0
 

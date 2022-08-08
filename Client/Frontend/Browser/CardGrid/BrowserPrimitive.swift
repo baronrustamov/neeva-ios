@@ -130,7 +130,7 @@ extension TabManager: ClosingManager, SelectingManager, AccessingManager {
     }
 
     func getAll() -> [Tab] {
-        return tabs
+        return activeTabs
     }
 }
 

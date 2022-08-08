@@ -27,9 +27,7 @@ class TabContainerModel: ObservableObject {
     @Published private(set) var webContainerType: ContentUIType {
         didSet {
             switch currentContentUI {
-            case .webPage:
-                currentContentUI = webContainerType
-            case .blank:
+            case .blank, .webPage:
                 currentContentUI = webContainerType
             default:
                 return
@@ -186,8 +184,6 @@ struct TabContainerContent: View {
                         )
                     }
                 }
-            case .blank:
-                ZeroQueryContent(model: zeroQueryModel)
             default:
                 Color.clear
             }

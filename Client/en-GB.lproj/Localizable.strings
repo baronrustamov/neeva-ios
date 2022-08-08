@@ -323,7 +323,7 @@
 "Block Pop-up Windows" = "Block Pop-up Windows";
 
 /* (No Comment) */
-"Block Trackers, and Pop-ups" = "Block Trackers, and Pop-ups";
+"Block trackers, and pop-ups" = "Block Trackers, and Pop-ups";
 
 /* No comment provided by engineer. */
 "Blocks many ads and trackers. Minimizes disruption to ads and other functionality." = "Blocks many ads and trackers. Minimises disruption to ads and other functionality.";
@@ -332,7 +332,7 @@
 "Blocks more ads and trackers. May break ads and other functionality on some sites." = "Blocks more ads and trackers. May break ads and other functionality on some sites.";
 
 /* (No Comment) */
-"Browse the Web Ad-Free" = "Browse the Web Ad-Free";
+"Browse the web ad-free" = "Browse the web ad-free";
 
 /* No comment provided by engineer. */
 "Browse Web3" = "Browse Web3";
@@ -1642,3 +1642,20 @@
 /* No comment provided by engineer. */
 "Your Subscription" = "Your Subscription";
 
+/* No comment provided by engineer. */
+"Oops, this page is a little shy" = "Oops, this page is a little shy";
+
+/* No comment provided by engineer. */
+"Please sign in to Neeva to view this page" = "Please sign in to Neeva to view this page";
+
+/* No comment provided by engineer. */
+"Need help or want instant answers to FAQs?" = "Need help or want instant answers to FAQs?";
+
+/* No comment provided by engineer. */
+"Description" = "Description";
+
+/* No comment provided by engineer. */
+"Email" = "Email";
+
+/* No comment provided by engineer. */
+"Share URL" = "Share URL";
