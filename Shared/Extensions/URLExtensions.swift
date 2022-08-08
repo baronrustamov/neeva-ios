@@ -501,7 +501,7 @@ public struct InternalURL {
     public let url: URL
 
     private let sessionRestoreHistoryItemBaseUrl =
-        "\(InternalURL.baseUrl)/\(InternalURL.Path.sessionrestore.rawValue)?url="
+        "\(InternalURL.baseUrl)/\(InternalURL.Path.sessionrestore.rawValue)?"
 
     public static func isValid(url: URL?) -> Bool {
         guard let url = url else {

@@ -1357,7 +1357,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         assert(AppConstants.IsRunningTest)
         store.clearArchive(for: SceneDelegate.getCurrentScene(for: nil))
     }
-    
+
     // MARK: - Pinned Tabs
     func toggleTabPinnedState(_ tab: Tab) {
         tab.pinnedTime =
@@ -1372,23 +1372,25 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         guard FeatureFlag[.pinnedTabImprovments] else {
             return
         }
-        
+
         let tabIndex = tabs.firstIndex(of: tab)
-        
+
         // Create a new placeholder tab to represent the pinned tab.
         // Should be a zombie with the same session data as
         // the original pinned tab before it navigated.
         let newPinnedTab = addTab(atIndex: tabIndex, flushToDisk: true, zombie: true)
         let savedTab = tab.saveSessionDataAndCreateSavedTab(isSelected: false, tabIndex: tabIndex)
         savedTab.configureTab(newPinnedTab, imageStore: store.imageStore)
-        
+
         // Reset the navigated tab (the original pinned tabs) data.
         tab.tabUUID = UUID().uuidString
         tab.parent = newPinnedTab
         tab.parentUUID = newPinnedTab.tabUUID
         tab.rootUUID = newPinnedTab.rootUUID
         tab.parentSpaceID = ""
-        
+        tab.pinnedTime = nil
+        tab.isPinned = false
+
         updateAllTabDataAndSendNotifications(notify: true)
     }
 
