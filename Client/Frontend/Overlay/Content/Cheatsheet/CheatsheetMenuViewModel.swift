@@ -8,6 +8,7 @@ import Foundation
 import Shared
 import SwiftUI
 
+// MARK: - Source Page Declaration
 struct SourcePage {
     let title: String?
     let url: URL
@@ -36,15 +37,17 @@ struct SourcePage {
     }
 }
 
+// MARK: - CheatsheetMenuViewModel Declaration
 public class CheatsheetMenuViewModel: ObservableObject {
     typealias RichResult = NeevaScopeSearch.SearchController.RichResult
 
+    // Data sources
     private let service: CheatsheetDataService
     private weak var tab: Tab?
-
     // Store the data used to initiate the request in case the values changes
     private(set) var sourcePage: SourcePage?
 
+    // States
     @Published private(set) var cheatsheetDataLoading: Bool
     private(set) var query: String?
     private(set) var results: [CheatsheetResult] = []
@@ -52,11 +55,43 @@ public class CheatsheetMenuViewModel: ObservableObject {
     private(set) var searchRichResultsError: Error?
     var cheatSheetIsEmpty: Bool { results.isEmpty }
 
-    private var cheatsheetLoggerSubscription: AnyCancellable?
+    // Logging Attributes
     // Workaround to indicate to SwiftUI view if it should log empty cheatsheet
-    var hasFetchedOnce = false
+    private var hasFetchedOnce = false
+    /// - Warning: Do not access this directly. Use MainActor `journeyID` instead
+    private var _journeyID: UUID? = nil
+    private var journeyID: UUID? {
+        get {
+            precondition(Thread.isMainThread)
+            return _journeyID
+        }
+        set {
+            precondition(Thread.isMainThread)
+            _journeyID = newValue
+        }
+    }
+    private var loggerAttributes: [ClientLogCounterAttribute] {
+        [
+            ClientLogCounterAttribute(
+                key: LogConfig.CheatsheetAttribute.tabID,
+                value: tab?.tabUUID ?? "nil"
+            ),
+            ClientLogCounterAttribute(
+                key: LogConfig.CheatsheetAttribute.journeyID,
+                value: journeyID?.uuidString ?? "nil"
+            ),
+            ClientLogCounterAttribute(
+                key: LogConfig.CheatsheetAttribute.currentPageURL,
+                value: sourcePage?.url.absoluteString ?? "nil"
+            ),
+            ClientLogCounterAttribute(
+                key: LogConfig.CheatsheetAttribute.currentCheatsheetQuery,
+                value: query ?? "nil"
+            ),
+        ]
+    }
 
-    /// Debug dispaly URL for Neeva Search URL from query
+    /// Turn query into a neeva search URL for debugging and navigation purposes
     /// this property is not used in the network request
     var currentQueryAsURL: URL? {
         guard let query = query,
@@ -66,19 +101,6 @@ public class CheatsheetMenuViewModel: ObservableObject {
             return nil
         }
         return URL(string: "\(NeevaConstants.appSearchURL)?q=\(encodedQuery)")
-    }
-
-    var loggerAttributes: [ClientLogCounterAttribute] {
-        [
-            ClientLogCounterAttribute(
-                key: LogConfig.CheatsheetAttribute.currentPageURL,
-                value: sourcePage?.url.absoluteString
-            ),
-            ClientLogCounterAttribute(
-                key: LogConfig.CheatsheetAttribute.currentCheatsheetQuery,
-                value: query
-            ),
-        ]
     }
 
     // MARK: - Init
@@ -96,9 +118,6 @@ public class CheatsheetMenuViewModel: ObservableObject {
 
     func load() {
         guard !cheatsheetDataLoading else { return }
-
-        // TODO: - Check what happens when navigating to another page in this tab
-        hasFetchedOnce = true
 
         clearCheatsheetData()
 
@@ -133,11 +152,25 @@ public class CheatsheetMenuViewModel: ObservableObject {
     }
 
     private func fetchCheatsheetInfo(url: String, title: String) {
+        self.log(
+            .LoadCheatsheet,
+            attributes: [
+                ClientLogCounterAttribute(
+                    key: LogConfig.CheatsheetAttribute.currentPageURL,
+                    value: url
+                )
+            ]
+        )
+
         service.getCheatsheetInfo(
             url: url, title: title
         ) { [weak self] result in
             guard let self = self else {
                 return
+            }
+            DispatchQueue.main.async {
+                // TODO: - Check what happens when navigating to another page in this tab
+                self.hasFetchedOnce = true
             }
             switch result {
             case .success(let infoResult):
@@ -171,10 +204,10 @@ public class CheatsheetMenuViewModel: ObservableObject {
                 }
 
                 // Log fallback level
-                DispatchQueue.main.async {
-                    ClientLogger.shared.logCounter(
+                DispatchQueue.main.async { [self] in
+                    self.log(
                         .CheatsheetQueryFallback,
-                        attributes: EnvironmentHelper.shared.getAttributes() + [
+                        attributes: [
                             ClientLogCounterAttribute(
                                 key: LogConfig.CheatsheetAttribute.cheatsheetQuerySource,
                                 value: querySource.rawValue
@@ -187,6 +220,17 @@ public class CheatsheetMenuViewModel: ObservableObject {
                 self.results = infoResult.results
 
                 self.getRichResultByQuery(query)
+
+                // Log UGC
+                let hasUGCData = infoResult.results.contains { result in
+                    switch result.data {
+                    case .discussions:
+                        return true
+                    default:
+                        return false
+                    }
+                }
+                self.logUGCStatOnLoadAsync(url: url, hasUGCData: hasUGCData)
             case .failure(let error):
                 self.cheatsheetDataError = error
                 DispatchQueue.main.async { [self] in
@@ -242,17 +286,29 @@ public class CheatsheetMenuViewModel: ObservableObject {
         )
     }
 
-    private func logFetchError(_ error: Error, api: LogConfig.CheatsheetAttribute.API) {
+    // MARK: - Logging Methods
+    /// Wrapper around Client Logger that attaches additional information to identify the current journey
+    func log(
+        _ path: LogConfig.Interaction,
+        attributes: [ClientLogCounterAttribute] = []
+    ) {
+        let envAttributes = EnvironmentHelper.shared.getAttributes(
+            for: [.deviceTheme, .deviceOrientation, .deviceScreenSize, .isUserSignedIn, .deviceOS]
+        )
+
         ClientLogger.shared.logCounter(
+            path,
+            attributes: envAttributes + loggerAttributes + attributes
+        )
+    }
+
+    private func logFetchError(_ error: Error, api: LogConfig.CheatsheetAttribute.API) {
+        self.log(
             .CheatsheetFetchError,
-            attributes: EnvironmentHelper.shared.getAttributes() + [
+            attributes: [
                 ClientLogCounterAttribute(
-                    key: LogConfig.CheatsheetAttribute.currentPageURL,
-                    value: sourcePage?.url.absoluteString ?? "nil"
-                ),
-                ClientLogCounterAttribute(
-                    key: LogConfig.CheatsheetAttribute.currentCheatsheetQuery,
-                    value: query ?? "nil"
+                    key: LogConfig.CheatsheetAttribute.api,
+                    value: api.rawValue
                 ),
                 ClientLogCounterAttribute(
                     key: "error",
@@ -262,32 +318,70 @@ public class CheatsheetMenuViewModel: ObservableObject {
         )
     }
 
-    private func setupCheatsheetLoaderLogger() {
-        guard cheatsheetLoggerSubscription == nil else { return }
-        cheatsheetLoggerSubscription =
-            $cheatsheetDataLoading
-            .withPrevious()
-            .sink { [weak self] (prev, next) in
-                // only process cases where loading changed to false from a true
-                // which indicates that a loading activity has finished
-                guard prev, !next, let self = self else { return }
-                if self.cheatSheetIsEmpty {
-                    let errorString =
-                        self.cheatsheetDataError?.localizedDescription
-                        ?? self.searchRichResultsError?.localizedDescription
-                    ClientLogger.shared.logCounter(
-                        .CheatsheetEmpty,
-                        attributes: EnvironmentHelper.shared.getAttributes()
-                            + self.loggerAttributes
-                            + [
-                                ClientLogCounterAttribute(
-                                    key: "Error",
-                                    value: errorString
-                                )
-                            ]
-                    )
-                }
+    private func logUGCStatOnLoadAsync(url: String, hasUGCData: Bool) {
+        guard !Thread.isMainThread else {
+            DispatchQueue.global(qos: .utility).async { [self] in
+                self.logUGCStatOnLoadAsync(url: url, hasUGCData: hasUGCData)
             }
+            return
+        }
+
+        var ugcHit = false
+        if let canonicalURL = CanonicalURL(
+            from: url, stripMobile: true, relaxed: true
+        )?.asString,
+            BloomFilterManager.shared.contains(canonicalURL) == true
+        {
+            ugcHit = true
+        }
+
+        DispatchQueue.main.async { [self] in
+            self.log(
+                .CheatsheetUGCStatsForPage,
+                attributes: [
+                    ClientLogCounterAttribute(
+                        key: LogConfig.CheatsheetAttribute.UGCStat.ugcHit.rawValue,
+                        value: String(ugcHit)
+                    ),
+                    ClientLogCounterAttribute(
+                        key: LogConfig.CheatsheetAttribute.UGCStat.hasUGCData.rawValue,
+                        value: String(hasUGCData)
+                    ),
+                    ClientLogCounterAttribute(
+                        key: LogConfig.CheatsheetAttribute.currentPageURL,
+                        value: url
+                    ),
+                ]
+            )
+        }
+
+    }
+
+    // MARK: - UI Lifecycle Methods
+    func onOverlayPresented() {
+        self.startJourney()
+        self.log(.OpenCheatsheet)
+    }
+
+    func onOverlayDismissed() {
+        self.endJourney()
+    }
+
+    func onNoResultViewAppear() {
+        // TODO: reset this var for a tab so that consecutive events may be captured
+        guard hasFetchedOnce else {
+            return
+        }
+
+        self.log(.CheatsheetEmpty)
+    }
+
+    private func startJourney() {
+        journeyID = UUID()
+    }
+
+    private func endJourney() {
+        journeyID = nil
     }
 }
 

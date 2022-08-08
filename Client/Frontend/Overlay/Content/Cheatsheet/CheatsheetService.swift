@@ -160,26 +160,6 @@ public final class CheatsheetServiceProvider: CheatsheetDataService {
         let ugcDiscussion = UGCDiscussion(backlinks: cheatsheetInfo.backlinks)
         if !ugcDiscussion.isEmpty {
             results.append(.discussions(ugcDiscussion))
-        } else {
-            // If no UGC results are returned, check bloom filter
-            if let canonicalURL = CanonicalURL(
-                from: inputURL, stripMobile: true, relaxed: true
-            )?.asString,
-                BloomFilterManager.shared.contains(canonicalURL) == true
-            {
-                // Log false positive if bloom filter is true
-                DispatchQueue.main.async {
-                    ClientLogger.shared.logCounter(
-                        .CheatsheetUGCHitNoRedditDataV2,
-                        attributes: EnvironmentHelper.shared.getAttributes() + [
-                            ClientLogCounterAttribute(
-                                key: LogConfig.CheatsheetAttribute.currentPageURL,
-                                value: inputURL
-                            )
-                        ]
-                    )
-                }
-            }
         }
 
         return results

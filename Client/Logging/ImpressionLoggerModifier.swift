@@ -12,8 +12,8 @@ struct ImpressionLoggerModifier: ViewModifier {
     @State var impressionTimer: Timer? = nil
 
     let timeInterval: TimeInterval
-    let path: LogConfig.Interaction
-    let attributes: [ClientLogCounterAttribute]
+
+    let makeLog: () -> Void
 
     init(
         timeInterval: TimeInterval = defaultTimeInterval,
@@ -21,8 +21,18 @@ struct ImpressionLoggerModifier: ViewModifier {
         attributes: [ClientLogCounterAttribute] = []
     ) {
         self.timeInterval = timeInterval
-        self.path = path
-        self.attributes = attributes
+
+        self.makeLog = {
+            ClientLogger.shared.logCounter(path, attributes: attributes)
+        }
+    }
+
+    init(
+        timeInterval: TimeInterval = defaultTimeInterval,
+        makeLog: @escaping () -> Void
+    ) {
+        self.timeInterval = timeInterval
+        self.makeLog = makeLog
     }
 
     func startImpressionTimer() {
@@ -31,7 +41,7 @@ struct ImpressionLoggerModifier: ViewModifier {
             withTimeInterval: timeInterval,
             repeats: false
         ) { _ in
-            ClientLogger.shared.logCounter(path, attributes: attributes)
+            makeLog()
         }
     }
 

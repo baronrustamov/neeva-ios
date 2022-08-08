@@ -1735,9 +1735,6 @@ extension BrowserViewController {
     /// Cheatsheat is presented as sheet on iPhone in portrait; otherwise, it is presented as popover
     /// This is consistent with the behaviour of [showModal](x-source-tag://showModal)
     func showCheatSheetOverlay() {
-        // Load cheat sheet data
-        tabManager.selectedTab?.cheatsheetModel.load()
-
         // if on iphone and portrait, present as sheet
         // otherwise, present as popover
         showModal(style: .cheatsheet) {

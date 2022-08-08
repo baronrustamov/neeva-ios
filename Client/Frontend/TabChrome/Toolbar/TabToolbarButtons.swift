@@ -176,10 +176,6 @@ enum TabToolbarButtons {
             TabToolbarButton(
                 label: icon,
                 action: {
-                    ClientLogger.shared.logCounter(
-                        .OpenCheatsheet,
-                        attributes: EnvironmentHelper.shared.getAttributes()
-                    )
                     promoModel.openSheet(
                         on: chromeModel.topBarDelegate?.tabManager.selectedTab?.url
                     )
