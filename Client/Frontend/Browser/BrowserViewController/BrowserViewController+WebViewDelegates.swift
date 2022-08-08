@@ -436,7 +436,7 @@ extension BrowserViewController: WKNavigationDelegate {
         guard let selectedTab = tabManager.selectedTab, selectedTab.webView === webView else {
             return
         }
-        
+
         if selectedTab.isPinned {
             // Handle special pinned tab logic.
             tabManager.handleNavigationFromPinnedTab(selectedTab)
