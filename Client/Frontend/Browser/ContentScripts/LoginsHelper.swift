@@ -115,6 +115,10 @@ class LoginsHelper: TabContentScript {
             }
         }
     }
+    
+    func connectedTabChanged(_ tab: Tab) {
+        self.tab = tab
+    }
 
     class func replace(_ base: String, keys: [String], replacements: [String])
         -> NSMutableAttributedString

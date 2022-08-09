@@ -439,13 +439,6 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        if selectedTab.isPinned,
-            !(InternalURL(selectedTab.url)?.isSessionRestore ?? false),
-            !(InternalURL(url)?.isSessionRestore ?? false)
-        {
-            tabManager.handleNavigationFromPinnedTab(selectedTab)
-        }
-
         logJSConsoleOutputIfEnabled(for: webView)
 
         locationModel.resetSecureListener()

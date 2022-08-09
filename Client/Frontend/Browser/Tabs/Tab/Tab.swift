@@ -26,6 +26,7 @@ protocol TabContentScript {
     static func name() -> String
     func scriptMessageHandlerName() -> String?
     func userContentController(didReceiveScriptMessage message: WKScriptMessage)
+    func connectedTabChanged(_ tab: Tab)
 }
 
 @objc
@@ -496,6 +497,11 @@ class Tab: NSObject, ObservableObject {
     }
 
     func updateCanGoForward() {
+        if FeatureFlag[.pinnedTabImprovments] && isPinned {
+            canGoForward = false
+            return
+        }
+        
         if let bvc = browserViewController, bvc.tabManager.selectedTab == self {
             canGoForward =
                 webViewCanGoForward || bvc.simulatedSwipeModel.canGoForward()
@@ -505,11 +511,42 @@ class Tab: NSObject, ObservableObject {
     }
 
     func goBack(checkBackNavigationSuggestionQuery: Bool = true) {
-        // If the user opened this tab from FastTap, return to FastTap.
+        let currentPage = webView?.backForwardList.currentNavigationIndex ?? sessionData?.currentPage ?? 0
+        let currentIndex = (webView?.backForwardList.all.count ?? sessionData?.urls.count ?? 1) - currentPage
+        let parentCurrentPage = parent.webView?.backForwardList.currentNavigationIndex ?? parent.sessionData?.currentPage ?? 0
+        let parentIndex = (parent?.webView?.backForwardList.all.count ?? parent?.sessionData?.urls.count ?? 1) - parentCurrentPage
+        
+        print(">>> parent info:", parent, parent?.isPinned)
+        print(">>> parentNavIndex:", parent?.webView?.backForwardList.currentNavigationIndex ?? parent?.sessionData?.currentPage)
+        print(">>> currentPage:", currentPage)
+        
+        // If the parent tab is pinned, and back nav would put the child tab at the same navigation index,
+        // then return to the parent and pass the WebView if needed.
+        // Else if the user opened this tab from FastTap, return to FastTap.
         // Else if the user opened this tab from another one, close this one to return to the parent.
         // Else if the user opened this tab from a space, return to the SpaceDetailView.
         // Else just perform a regular back navigation.
-        if checkBackNavigationSuggestionQuery,
+        if FeatureFlag[.pinnedTabImprovments],
+           let parent = parent, parent.isPinned,
+           parentIndex == currentIndex
+        {
+            /* if parent.webView == nil, let webView = webView {
+                print(">>> set webView")
+                
+                webView.goBack()
+                parent.webView = webView
+                parent.updateCanGoBackForward()
+                
+                // TODO: Update the content scripts
+                
+                self.webView = nil
+            }
+            
+            
+            browserViewController?.tabManager.removeTab(self, showToast: false) */
+            
+            print(">>> Go back to pinned tab")
+        } else if checkBackNavigationSuggestionQuery,
             let searchQuery = backNavigationSuggestionQuery(),
             let bvc = browserViewController
         {
@@ -535,6 +572,8 @@ class Tab: NSObject, ObservableObject {
         } else {
             webView?.goBack()
         }
+        
+        print(">>>>>>>>>>>>> \n")
     }
 
     func goForward() {
@@ -754,7 +793,7 @@ class Tab: NSObject, ObservableObject {
             // Here we create the SessionData for the tab and pass that to the SavedTab.
             let navigationList = webView?.backForwardList.all ?? []
             let urls = navigationList.compactMap { $0.url }
-            let currentPage = -(webView?.backForwardList.forwardList ?? []).count
+            let currentPage = webView?.backForwardList.currentNavigationIndex ?? 0
             let queries = navigationList.map {
                 queryForNavigation.findQueryFor(navigation: $0)
             }

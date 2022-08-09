@@ -84,4 +84,8 @@ class DownloadContentScript: TabContentScript {
         let download = BlobDownload(filename: filename, mimeType: mimeType, size: size, data: data)
         tab?.browserViewController?.downloadQueue.enqueue(download)
     }
+    
+    func connectedTabChanged(_ tab: Tab) {
+        self.tab = tab
+    }
 }

@@ -67,9 +67,14 @@ class SessionData: NSObject, NSCoding {
     }
 
     var currentUrl: URL? {
-        // TODO: We should probably unwrap this if it is a session restore internal URL.
         let index = urls.count - 1 + currentPage
-        return 0..<urls.count ~= index ? urls[index] : nil
+        let url = 0..<urls.count ~= index ? urls[index] : nil
+        
+        if let nestedUrl = InternalURL.unwrapSessionRestore(url: url) {
+            return nestedUrl
+        }
+
+        return url
     }
 
     var initialUrl: URL? {
@@ -101,7 +106,7 @@ class SessionData: NSObject, NSCoding {
         self.lastUsedTime = lastUsedTime
 
         assert(urls.count > 0, "Session has at least one entry")
-        assert(currentPage > -urls.count && currentPage <= 0, "Session index is valid")
+        assert(currentPage < urls.count && currentPage >= 0, "Session index is valid")
         assert(urls.count == queries.count, "The number of queries should match the number of URLs")
     }
 

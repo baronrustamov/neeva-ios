@@ -1381,6 +1381,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         let newPinnedTab = addTab(atIndex: tabIndex, flushToDisk: true, zombie: true)
         let savedTab = tab.saveSessionDataAndCreateSavedTab(isSelected: false, tabIndex: tabIndex)
         savedTab.configureTab(newPinnedTab, imageStore: store.imageStore)
+        newPinnedTab.updateCanGoBackForward()
 
         // Reset the navigated tab (the original pinned tabs) data.
         tab.tabUUID = UUID().uuidString
@@ -1390,6 +1391,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         tab.parentSpaceID = ""
         tab.pinnedTime = nil
         tab.isPinned = false
+        tab.updateCanGoBackForward()
 
         updateAllTabDataAndSendNotifications(notify: true)
     }

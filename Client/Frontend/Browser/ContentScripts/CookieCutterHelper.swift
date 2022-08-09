@@ -112,6 +112,8 @@ class CookieCutterHelper: TabContentScript {
 
         log.info("Cookie Cutter script updated: \(update)")
     }
+    
+    func connectedTabChanged(_ tab: Tab) {}
 
     // MARK: - init
     init(cookieCutterModel: CookieCutterModel) {

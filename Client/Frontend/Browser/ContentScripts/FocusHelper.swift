@@ -43,4 +43,8 @@ class FocusHelper: TabContentScript {
             return log.error("FocusHelper.js sent unhandled eventType")
         }
     }
+    
+    func connectedTabChanged(_ tab: Tab) {
+        self.tab = tab
+    }
 }
