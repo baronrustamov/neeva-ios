@@ -1393,6 +1393,13 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         tab.isPinned = false
         tab.updateCanGoBackForward()
 
+        // Update the other children with the new parent.
+        tabs.forEach {
+            if $0.parentUUID ?? "" == newPinnedTab.tabUUID {
+                $0.parent = newPinnedTab
+            }
+        }
+
         updateAllTabDataAndSendNotifications(notify: true)
     }
 
