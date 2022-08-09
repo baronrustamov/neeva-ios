@@ -81,7 +81,7 @@ class NeevaTabContentBlocker: TabContentBlocker, TabContentScript {
             TabEvent.post(.didChangeContentBlocking, for: tab)
         }
     }
-    
+
     func connectedTabChanged(_ tab: Tab) {
         self.updateTab(tab)
     }

@@ -265,7 +265,7 @@ class ReaderMode: TabContentScript {
             }
         }
     }
-    
+
     func connectedTabChanged(_ tab: Tab) {
         self.tab = tab
     }

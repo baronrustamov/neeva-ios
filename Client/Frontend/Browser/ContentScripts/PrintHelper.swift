@@ -28,7 +28,7 @@ class PrintHelper: TabContentScript {
             printController.present(animated: true, completionHandler: nil)
         }
     }
-    
+
     func connectedTabChanged(_ tab: Tab) {
         self.tab = tab
     }

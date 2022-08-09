@@ -71,7 +71,7 @@ class SessionData: NSObject, NSCoding {
     var currentUrl: URL? {
         let index = urls.count - 1 + currentPage
         let url = 0..<urls.count ~= index ? urls[index] : nil
-        
+
         if let nestedUrl = InternalURL.unwrapSessionRestore(url: url) {
             return nestedUrl
         }

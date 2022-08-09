@@ -38,7 +38,7 @@ class FindInPageHelper: TabContentScript {
             delegate?.findInPageHelper(didUpdateTotalResults: totalResults)
         }
     }
-    
+
     func connectedTabChanged(_ tab: Tab) {
         self.tab = tab
     }

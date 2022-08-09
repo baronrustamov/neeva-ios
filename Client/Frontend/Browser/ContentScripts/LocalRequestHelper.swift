@@ -40,6 +40,6 @@ class LocalRequestHelper: TabContentScript {
     class func name() -> String {
         return "LocalRequestHelper"
     }
-    
+
     func connectedTabChanged(_ tab: Tab) {}
 }

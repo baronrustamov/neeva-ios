@@ -100,7 +100,7 @@ class FormPostHelper: TabContentScript {
 
         return request
     }
-    
+
     func connectedTabChanged(_ tab: Tab) {
         self.tab = tab
     }

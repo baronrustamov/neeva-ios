@@ -1184,16 +1184,16 @@ extension BrowserViewController: TabDelegate {
                 let options: [URL.EqualsOption] = [
                     .normalizeHost, .ignoreFragment, .ignoreLastSlash, .ignoreScheme,
                 ]
-                
+
                 if let selectedTab = tabManager.selectedTab,
-                   selectedTab.isPinned,
+                    selectedTab.isPinned,
                     !(selectedTab.url?.equals(url, with: options) ?? false),
                     !(InternalURL(selectedTab.url)?.isSessionRestore ?? false),
                     !(InternalURL(url)?.isSessionRestore ?? false)
                 {
                     tabManager.handleNavigationFromPinnedTab(selectedTab)
                 }
-                
+
                 tab.setURL(url)
 
                 if tab === tabManager.selectedTab && !tab.restoring {
@@ -1278,7 +1278,7 @@ extension BrowserViewController: TabDelegate {
             tabManager: tabManager)
         tab.addContentScript(webuiMessageHelper, name: WebUIMessageHelper.name())
     }
-    
+
     func tab(_ tab: Tab, willUpdateWebView webView: WKWebView) {
         self.subscribe(to: webView, for: tab)
     }
