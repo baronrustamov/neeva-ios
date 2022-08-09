@@ -14,6 +14,10 @@ struct TabGroup {
             ?? Date.nowMilliseconds()
     }
 
+    var hasPinnedChild: Bool {
+        children.contains { $0.isPinned }
+    }
+
     var inferredTitle: String? {
         if let spaceID = children.first?.parentSpaceID, spaceID == children.first?.rootUUID {
             if let spaceTitle = SpaceStore.shared.get(for: spaceID)?.displayTitle {
@@ -31,6 +35,7 @@ struct TabGroup {
     }
 
     func isIncluded(in tabSection: TabSection) -> Bool {
-        return wasLastExecuted(in: tabSection, isPinned: false, lastExecutedTime: lastExecutedTime)
+        return wasLastExecuted(
+            in: tabSection, isPinned: hasPinnedChild, lastExecutedTime: lastExecutedTime)
     }
 }
