@@ -82,7 +82,7 @@ extension WKBackForwardList {
         return (backList + [currentItem] + forwardList).compactMap { $0 }
     }
     
-    public var currentNavigationIndex: Int {
-        -forwardList.count
+    public var navigationStackIndex: Int {
+        backList.count
     }
 }

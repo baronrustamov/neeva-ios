@@ -1229,8 +1229,6 @@ extension BrowserViewController: TabDelegate {
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {
         webView.uiDelegate = self
 
-        self.subscribe(to: webView, for: tab)
-
         let formPostHelper = FormPostHelper(tab: tab)
         tab.addContentScript(formPostHelper, name: FormPostHelper.name())
 
@@ -1279,6 +1277,10 @@ extension BrowserViewController: TabDelegate {
             webView: webView,
             tabManager: tabManager)
         tab.addContentScript(webuiMessageHelper, name: WebUIMessageHelper.name())
+    }
+    
+    func tab(_ tab: Tab, willUpdateWebView webView: WKWebView) {
+        self.subscribe(to: webView, for: tab)
     }
 
     // Cleans up a tab when it is to be removed.

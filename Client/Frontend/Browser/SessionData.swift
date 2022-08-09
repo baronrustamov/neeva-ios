@@ -47,6 +47,7 @@ private func migrate(urls: [URL]) -> [URL] {
 
 class SessionData: NSObject, NSCoding {
     let currentPage: Int
+    let navigationStackIndex: Int
     let urls: [URL]
 
     /// For each URL there is a corresponding query or nil.
@@ -59,6 +60,7 @@ class SessionData: NSObject, NSCoding {
     var jsonDictionary: [String: Any] {
         return [
             "currentPage": String(self.currentPage),
+            "navigationStackIndex": navigationStackIndex,
             "urls": urls.map { $0.absoluteString },
             "queries": typedQueries,
             "suggestedQueries": suggestedQueries,
@@ -93,12 +95,16 @@ class SessionData: NSObject, NSCoding {
     ///   - urls: The sequence of URLs in this tab's session history.
     ///   - lastUsedTime: The last time this tab was modified.
     init(
-        currentPage: Int, urls: [URL],
-        queries: [String?], suggestedQueries: [String?],
+        currentPage: Int,
+        navigationStackIndex: Int,
+        urls: [URL],
+        queries: [String?],
+        suggestedQueries: [String?],
         queryLocations: [QueryForNavigation.Query.Location?],
         lastUsedTime: Timestamp
     ) {
         self.currentPage = currentPage
+        self.navigationStackIndex = navigationStackIndex
         self.urls = migrate(urls: urls)
         self.typedQueries = queries
         self.suggestedQueries = suggestedQueries
@@ -106,12 +112,13 @@ class SessionData: NSObject, NSCoding {
         self.lastUsedTime = lastUsedTime
 
         assert(urls.count > 0, "Session has at least one entry")
-        assert(currentPage < urls.count && currentPage >= 0, "Session index is valid")
+        assert(currentPage > -urls.count && currentPage <= 0, "Session index is valid")
         assert(urls.count == queries.count, "The number of queries should match the number of URLs")
     }
 
     required init?(coder: NSCoder) {
         self.currentPage = coder.decodeInteger(forKey: "currentPage")
+        self.navigationStackIndex = coder.decodeInteger(forKey: "navigationStackIndex")
         self.urls = migrate(urls: coder.decodeObject(forKey: "urls") as? [URL] ?? [URL]())
         let queries = coder.decodeObject(forKey: "queries") as? [String?] ?? [String]()
         self.typedQueries = queries
@@ -127,6 +134,7 @@ class SessionData: NSObject, NSCoding {
 
     func encode(with coder: NSCoder) {
         coder.encode(currentPage, forKey: "currentPage")
+        coder.encode(navigationStackIndex, forKey: "navigationStackIndex")
         coder.encode(migrate(urls: urls), forKey: "urls")
         coder.encode(typedQueries, forKey: "queries")
         coder.encode(suggestedQueries, forKey: "suggestedQueries")
