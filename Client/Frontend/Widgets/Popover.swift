@@ -38,7 +38,6 @@ extension View {
                 backgroundColor: backgroundColor,
                 useDimmingBackground: useDimmingBackground,
                 useAlternativeShadow: useAlternativeShadow,
-                dismissOnTransition: dismissOnTransition,
                 onDismiss: onDismiss
             ) {
                 content()
@@ -57,14 +56,11 @@ struct Popover<Content: View>: UIViewControllerRepresentable {
     let backgroundColor: UIColor?
     let useDimmingBackground: Bool
     let useAlternativeShadow: Bool
-    let dismissOnTransition: Bool
     let onDismiss: (() -> Void)?
     let content: () -> Content
 
     /// This view controller is invisible, and it displays the popover pointing at its bounds..
     class ViewController: UIViewController {
-        var dismissOnTransition = false
-
         /// The currently presented view controller. Set to `nil` to dismiss.
         var presentee: Host? {
             didSet {
@@ -176,7 +172,6 @@ struct Popover<Content: View>: UIViewControllerRepresentable {
     }
 
     func updateUIViewController(_ vc: ViewController, context: Context) {
-        vc.dismissOnTransition = dismissOnTransition
         if let presentee = vc.presentee {
             // If the popover is visible, update its content
             presentee.rootView = content()

@@ -10,7 +10,6 @@ public enum ToastViewUX {
     static let defaultDisplayTime = 4.5
     static let height: CGFloat = 53
     static let threshold: CGFloat = 15
-    static let ToastDefaultColor = UIColor.Photon.Grey60
 }
 
 struct ToastStateContent {
@@ -75,7 +74,7 @@ struct ToastView: View {
 
             ZStack(alignment: .leading) {
                 RoundedRectangle(cornerRadius: 16)
-                    .foregroundColor(Color(ToastViewUX.ToastDefaultColor))
+                    .foregroundColor(Color.ToastBackground)
                     .shadow(
                         color: Color(red: 0, green: 0, blue: 0, opacity: 0.40), radius: 48, x: 0,
                         y: 16
@@ -89,7 +88,7 @@ struct ToastView: View {
                                 .foregroundColor(.white)
 
                             Symbol(decorative: .checkmark, size: 10)
-                                .foregroundColor(Color(ToastViewUX.ToastDefaultColor))
+                                .foregroundColor(Color.ToastBackground)
                         }
                         .frame(width: 18, height: 18)
                     } else if let toastProgressViewModel = toastProgressViewModel {

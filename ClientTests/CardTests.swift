@@ -473,6 +473,31 @@ class CardTests: XCTestCase {
         XCTAssertEqual(tabCardModel.timeBasedNormalRows[.yesterday]?[1].cells[0].id, tab2.id)
     }
 
+    /// Tests that TabGroups correctly appear in different sections of the CardGrid.
+    func testTabGroupInTimeSection() {
+        let startOfOneDayAgo = Calendar.current.date(
+            byAdding: .day, value: -1, to: Date())
+        guard let startOfOneDayAgo = startOfOneDayAgo else { return }
+
+        let tab1 = manager.addTab()
+        let tab1Child = manager.addTab(afterTab: tab1)
+
+        let tab2 = manager.addTab()
+        let tab2Child = manager.addTab(afterTab: tab2)
+
+        tab2.lastExecutedTime = UInt64(startOfOneDayAgo.timeIntervalSince1970) * 1000
+        tab2Child.lastExecutedTime = UInt64(startOfOneDayAgo.timeIntervalSince1970) * 1000
+        manager.updateAllTabDataAndSendNotifications(notify: true)
+
+        XCTAssertEqual(tabCardModel.timeBasedNormalRows[.today]?.count, 2)
+        let todayRow = tabCardModel.timeBasedNormalRows[.today]?[1] as! TabCardModel.Row
+        XCTAssertEqual(todayRow.cells[0].numTabs, 2)
+
+        XCTAssertEqual(tabCardModel.timeBasedNormalRows[.yesterday]?.count, 2)
+        let yesterdayRow = tabCardModel.timeBasedNormalRows[.yesterday]?[1] as! TabCardModel.Row
+        XCTAssertEqual(yesterdayRow.cells[0].numTabs, 2)
+    }
+
     /// Add a tab last used over a week ago, check if it shows up in the archives.
     /// Default time threshold to archive a tab is 7 days.
     func testTabsInArchivedSection() {

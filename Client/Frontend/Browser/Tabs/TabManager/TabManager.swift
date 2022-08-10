@@ -191,7 +191,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         ]
 
         log.info(
-            "Looking for matching tab, url: \(url) under parent tab: \(String(describing: tab))"
+            "Looking for matching tab, url: \(url) under parent tab: \(String(describing: parent))"
         )
 
         let incognito = self.isIncognito

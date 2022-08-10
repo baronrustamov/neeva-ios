@@ -994,6 +994,10 @@ public func wasLastExecuted(in tabSection: TabSection, isPinned: Bool, lastExecu
     let lastExecutedTimeSeconds = lastExecutedTime / 1000
     let dateLastExecutedTime = Date(timeIntervalSince1970: TimeInterval(lastExecutedTimeSeconds))
 
+    // If someone sets their device clock forward and then
+    // back, this prevents them from losing tabs.
+    let isExecutedTimeAFutureDate = dateLastExecutedTime.daysFromToday() < 0
+
     if isPinned {
         switch tabSection {
         case .all:
@@ -1002,7 +1006,7 @@ public func wasLastExecuted(in tabSection: TabSection, isPinned: Bool, lastExecu
             return FeatureFlag[.pinnnedTabSection]
         case .today:
             // If the tab is pinned, and pinnnedTabSection isn't enabled, keep it in the today section.
-            return FeatureFlag[.pinnnedTabSection] ? false : dateLastExecutedTime.isToday()
+            return !FeatureFlag[.pinnnedTabSection]
         default:
             return false
         }
@@ -1013,7 +1017,7 @@ public func wasLastExecuted(in tabSection: TabSection, isPinned: Bool, lastExecu
         case .pinned:
             return false
         case .today:
-            return dateLastExecutedTime.isToday()
+            return dateLastExecutedTime.isToday() || isExecutedTimeAFutureDate
         case .yesterday:
             return dateLastExecutedTime.isYesterday()
         case .lastWeek:

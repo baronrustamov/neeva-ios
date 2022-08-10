@@ -29,20 +29,24 @@ struct CheatsheetOverlayContent: View {
         .background(Color.DefaultBackground)
         .overlayIsFixedHeight(isFixedHeight: false)
         .environmentObject(model)
+        .onAppear {
+            model.onOverlayPresented()
+            model.load()
+        }
+        .onDisappear {
+            model.onOverlayDismissed()
+        }
         .environment(\.onOpenURLForCheatsheet) { url, source in
             hideOverlay()
-            ClientLogger.shared.logCounter(
+            model.log(
                 .OpenLinkFromCheatsheet,
-                attributes:
-                    EnvironmentHelper.shared.getAttributes()
-                    + model.loggerAttributes
-                    + [
-                        ClientLogCounterAttribute(
-                            key: LogConfig.CheatsheetAttribute.openLinkSource,
-                            value: source
-                        ),
-                        ClientLogCounterAttribute(key: "url", value: url.absoluteString),
-                    ]
+                attributes: [
+                    ClientLogCounterAttribute(
+                        key: LogConfig.CheatsheetAttribute.openLinkSource,
+                        value: source
+                    ),
+                    ClientLogCounterAttribute(key: "url", value: url.absoluteString),
+                ]
             )
             self.tabManager.createOrSwitchToTab(for: url, from: self.tabManager.selectedTab)
         }

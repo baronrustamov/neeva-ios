@@ -16,11 +16,6 @@ class LoginsHelper: TabContentScript {
     fileprivate weak var tab: Tab?
     fileprivate let profile: Profile
 
-    // Exposed for mocking purposes
-    var logins: RustLogins {
-        return profile.logins
-    }
-
     class func name() -> String {
         return "LoginsHelper"
     }
@@ -118,37 +113,6 @@ class LoginsHelper: TabContentScript {
 
     func connectedTabChanged(_ tab: Tab) {
         self.tab = tab
-    }
-
-    class func replace(_ base: String, keys: [String], replacements: [String])
-        -> NSMutableAttributedString
-    {
-        var ranges = [NSRange]()
-        var string = base
-        for (index, key) in keys.enumerated() {
-            let replace = replacements[index]
-            let range = string.range(
-                of: key,
-                options: .literal,
-                range: nil,
-                locale: nil)!
-            string.replaceSubrange(range, with: replace)
-            let nsRange = NSRange(
-                location: string.distance(from: string.startIndex, to: range.lowerBound),
-                length: replace.count)
-            ranges.append(nsRange)
-        }
-
-        var attributes = [NSAttributedString.Key: AnyObject]()
-        attributes[NSAttributedString.Key.font] = UIFont.systemFont(
-            ofSize: 13, weight: UIFont.Weight.regular)
-        attributes[NSAttributedString.Key.foregroundColor] = UIColor.Photon.Grey60
-        let attr = NSMutableAttributedString(string: string, attributes: attributes)
-        let font = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.medium)
-        for range in ranges {
-            attr.addAttribute(NSAttributedString.Key.font, value: font, range: range)
-        }
-        return attr
     }
 
     func setCredentials(_ login: LoginRecord) {

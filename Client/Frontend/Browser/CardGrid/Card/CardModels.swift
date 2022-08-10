@@ -251,26 +251,35 @@ class TabCardModel: CardDropDelegate, CardModel {
     func buildRows(incognito: Bool, for section: TabSection) -> [Row] {
         var rows: [Row] = []
 
-        // Get list of all top-level tabs and the first tab of each group.
+        // Get all the tabs matching the section,
+        // incognito state, and search filter (if active).
         var allDetailsFiltered = allDetails.filter { tabCard in
             let tab = tabCard.tab
             let incognitoMatches = tab.isIncognito == incognito
             let includedInSection = tab.isIncluded(in: section)
             let includedInSearch = tabIncludedInSearch(tabCard)
 
-            guard incognitoMatches, includedInSection, includedInSearch else {
+            guard incognitoMatches, includedInSearch else {
                 return false
             }
 
             // Check to see if the detail is in a TabGroup.
             if let tabGroup = manager.getTabGroup(for: tab) {
-                // Make sure the tabCard is the first in the TabGroup.
+                /* Prevents the TabGroup from being added multiple times to the grid
+                 * by only adding the first or "representative" tab to the filtered list. */
                 let isRepresentativeTab = isRepresentativeTab(tab, in: tabGroup)
+
+                /* Check if the most recently used tab in TabGroup is
+                 * a part of the section. Or if a tab in the TabGroup is pinned.
+                 * This can differ from tabCard since it may not be the
+                 * most recently used tab in the TabGroup. */
                 let tabGroupIncludedInSection = tabGroup.isIncluded(in: section)
+
                 return isRepresentativeTab && tabGroupIncludedInSection
             }
 
-            return true
+            // If tabCard isn't a TabGroup, can just check if it is included in the section.
+            return includedInSection
         }
 
         modifyAllDetailsFilteredPromotingPinnedTabs(&allDetailsFiltered)

@@ -8,7 +8,6 @@ import Storage
 import SwiftUI
 
 private enum SuggestedSiteUX {
-    static let FaviconSize: CGFloat = 28
     static let HomeIconSize: CGFloat = 20
     static let IconSize: CGFloat = 40
     static let PinIconSize: CGFloat = 12

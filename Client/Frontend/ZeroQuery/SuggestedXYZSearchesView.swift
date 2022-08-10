@@ -20,15 +20,15 @@ enum ZeroQuerySuggestion: Hashable {
     }
 }
 
-public struct SuggestedXYZSearchesView: View {
+struct SuggestedXYZSearchesView: View {
     @Environment(\.onOpenURL) private var openURL
     let suggestionList: [ZeroQuerySuggestion] = [
         .com("Web3 news"), .com("Best Web3 Sites"), .com("Web3 updates"),
     ]
 
-    public init() {}
+    init() {}
 
-    public var body: some View {
+    var body: some View {
         VStack(spacing: 0) {
             ForEach(suggestionList, id: \.self) { suggestion in
                 Button(action: { onClick(input: suggestion) }) {
