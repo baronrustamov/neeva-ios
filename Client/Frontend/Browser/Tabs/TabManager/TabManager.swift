@@ -213,9 +213,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             } else if let sessionUrl = tab.sessionData?.currentUrl {  // Match zombie tabs
                 log.info("Checking sessionUrl: \(sessionUrl)")
 
-                if url.equals(sessionUrl, with: options)
-                    || url.equals(InternalURL.unwrapSessionRestore(url: sessionUrl), with: options)
-                {
+                if url.equals(sessionUrl, with: options) {
                     if let parent = parent {
                         return tab.parent == parent || tab.parentUUID == parent.tabUUID
                     } else {
@@ -1368,7 +1366,21 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         storeChanges()
     }
 
-    func handleNavigationFromPinnedTab(_ tab: Tab) {
+    func handleAsNavigationFromPinnedTabIfNeeded(tab: Tab, url: URL) {
+        let options: [URL.EqualsOption] = [
+            .normalizeHost, .ignoreFragment, .ignoreLastSlash, .ignoreScheme,
+        ]
+
+        if tab.isPinned,
+            !(tab.url?.equals(url, with: options) ?? false),
+            !(InternalURL(tab.url)?.isSessionRestore ?? false),
+            !(InternalURL(url)?.isSessionRestore ?? false)
+        {
+            handleNavigationFromPinnedTab(tab)
+        }
+    }
+
+    private func handleNavigationFromPinnedTab(_ tab: Tab) {
         guard FeatureFlag[.pinnedTabImprovments] else {
             return
         }
@@ -1387,7 +1399,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         tab.tabUUID = UUID().uuidString
         tab.parent = newPinnedTab
         tab.parentUUID = newPinnedTab.tabUUID
-        tab.rootUUID = newPinnedTab.rootUUID
         tab.parentSpaceID = ""
         tab.pinnedTime = nil
         tab.isPinned = false

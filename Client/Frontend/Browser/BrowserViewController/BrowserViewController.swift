@@ -1180,18 +1180,8 @@ extension BrowserViewController: TabDelegate {
             // didCommitNavigation to confirm the page load.
             .filter { tab.url?.origin == $0?.origin }
             .sink { [self] url in
-                // Handle pinned tab navigation.
-                let options: [URL.EqualsOption] = [
-                    .normalizeHost, .ignoreFragment, .ignoreLastSlash, .ignoreScheme,
-                ]
-
-                if let selectedTab = tabManager.selectedTab,
-                    selectedTab.isPinned,
-                    !(selectedTab.url?.equals(url, with: options) ?? false),
-                    !(InternalURL(selectedTab.url)?.isSessionRestore ?? false),
-                    !(InternalURL(url)?.isSessionRestore ?? false)
-                {
-                    tabManager.handleNavigationFromPinnedTab(selectedTab)
+                if let url = url {
+                    tabManager.handleAsNavigationFromPinnedTabIfNeeded(tab: tab, url: url)
                 }
 
                 tab.setURL(url)
