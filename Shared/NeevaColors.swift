@@ -161,6 +161,8 @@ extension UIColor {
     public static let PreviewHomeBackground = UIColor(
         named: "PreviewHomeBackground", in: NeevaConstants.sharedBundle, compatibleWith: nil)!
     public static let SpaceIconBackground = UIColor.brand.variant.polar
+    public static let ToastBackground = UIColor(
+        named: "ToastBackground", in: NeevaConstants.sharedBundle, compatibleWith: nil)!
 }
 
 extension Color {
@@ -265,4 +267,5 @@ extension Color {
     public static let spaceIconBackground = Color(UIColor.SpaceIconBackground)
 
     public static let PreviewHomeBackground = Color(UIColor.PreviewHomeBackground)
+    public static let ToastBackground = Color(UIColor.ToastBackground)
 }

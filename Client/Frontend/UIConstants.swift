@@ -6,13 +6,6 @@ import Foundation
 import Shared
 import SwiftUI
 
-extension UIColor {
-    // These are defaults from http://design.firefox.com/photon/visuals/color.html
-    struct Defaults {
-        static let LightBeige = UIColor(rgb: 0xf0e6dc)
-    }
-}
-
 extension Color {
     public enum Tour {
         public static let Background = Color(UIColor.Tour.Background)
@@ -23,7 +16,7 @@ extension Color {
     }
 }
 
-public struct UIConstants {
+struct UIConstants {
     static let TextFieldHeight: CGFloat = 42
 
     // Landscape and tablet mode:
@@ -31,7 +24,6 @@ public struct UIConstants {
 
     // Bottom bar when in portrait mode on a phone:
     static var ToolbarHeight: CGFloat = 55
-    static let PortraitToolbarHeight: CGFloat = 50
     static var BottomToolbarHeight: CGFloat {
         return ToolbarHeight + safeArea.bottom
     }
@@ -41,7 +33,6 @@ public struct UIConstants {
 
     /// JPEG compression quality for persisted screenshots. Must be between 0-1.
     static let ScreenshotQuality: Float = 0.3
-    static let ActiveScreenshotQuality: CGFloat = 0.5
 
     static var safeArea: UIEdgeInsets {
         let keyWindow = SceneDelegate.getKeyWindow(for: nil)
@@ -56,7 +47,6 @@ public struct UIConstants {
 extension UIColor {
     public struct HomePanel {
         public static let topSitesBackground = UIColor.systemBackground
-        public static let welcomeScreenText = UIColor.secondaryLabel
     }
 }
 
