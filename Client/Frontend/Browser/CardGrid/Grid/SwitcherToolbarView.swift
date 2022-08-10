@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import Combine
 import Defaults
 import Shared
 import SwiftUI
@@ -10,6 +11,9 @@ class SwitcherToolbarModel: ObservableObject {
     let tabManager: TabManager
     let openLazyTab: () -> Void
     let createNewSpace: () -> Void
+    private var selectedTabListener: AnyCancellable?
+
+    @Published var tabIsSelected = false
     @Published var dragOffset: CGFloat? = nil
 
     init(
@@ -20,6 +24,11 @@ class SwitcherToolbarModel: ObservableObject {
         self.tabManager = tabManager
         self.openLazyTab = openLazyTab
         self.createNewSpace = createNewSpace
+        self.tabIsSelected = tabManager.selectedTab != nil
+
+        self.selectedTabListener = tabManager.selectedTabPublisher.sink { selectedTab in
+            self.tabIsSelected = selectedTab != nil
+        }
     }
 
     func onToggleIncognito() {
@@ -31,17 +40,15 @@ class SwitcherToolbarModel: ObservableObject {
 struct SwitcherToolbarView: View {
     let top: Bool
 
-    @EnvironmentObject var gridModel: GridModel
     @EnvironmentObject var browserModel: BrowserModel
-    @EnvironmentObject var tabModel: TabCardModel
+    @EnvironmentObject var gridModel: GridModel
     @EnvironmentObject var toolbarModel: SwitcherToolbarModel
 
-    @State var presentingMenu: Bool = false
-
+    @State var presentingMenu = false
     @Default(.currentTheme) var currentTheme
 
     var bvc: BrowserViewController {
-        SceneDelegate.getBVC(with: toolbarModel.tabManager.scene)
+        SceneDelegate.getBVC(with: browserModel.tabManager.scene)
     }
 
     var body: some View {
@@ -145,7 +152,7 @@ struct SwitcherToolbarView: View {
                     switch gridModel.switcherState {
                     case .tabs:
                         browserModel.hideGridWithAnimation(
-                            tabToBeSelected: tabModel.manager.selectedTab)
+                            tabToBeSelected: browserModel.tabManager.selectedTab)
                     case .spaces:
                         browserModel.hideGridWithNoAnimation()
                     }
@@ -153,11 +160,11 @@ struct SwitcherToolbarView: View {
                     Text("Done")
                         .font(.system(size: 16, weight: .semibold, design: .default))
                 }
-                .accentColor(tabModel.manager.selectedTab == nil ? .secondaryLabel : .label)
-                .disabled(tabModel.manager.selectedTab == nil)
+                .accentColor(toolbarModel.tabIsSelected ? .label : .secondaryLabel)
+                .disabled(!toolbarModel.tabIsSelected)
                 .accessibilityIdentifier("TabTrayController.doneButton")
                 .accessibilityValue(
-                    Text(tabModel.manager.selectedTab == nil ? "Disabled" : "Enabled")
+                    Text(toolbarModel.tabIsSelected ? "Enabled" : "Disabled")
                 )
                 .padding(.horizontal, 10)  // a) Padding for contextMenu
                 .contextMenu {
@@ -171,7 +178,7 @@ struct SwitcherToolbarView: View {
                         showMenu: $gridModel.showConfirmCloseAllTabs,
                         tabManager: browserModel.tabManager)
                 )
-                .allowsHitTesting(tabModel.manager.selectedTab != nil)
+                .allowsHitTesting(toolbarModel.tabIsSelected)
                 .textButtonPointerEffect()
             }
             .padding(.horizontal, 16)
