@@ -16,7 +16,9 @@ class SessionDataTests: XCTestCase {
         ].map({ URL(string: $0)! })
 
         let input = SessionData(
-            currentPage: -1, urls: testUrls,
+            currentPage: -1,
+            navigationStackIndex: 0,
+            urls: testUrls,
             queries: testUrls.map { _ in return nil },
             suggestedQueries: Array.init(repeating: nil, count: testUrls.count),
             queryLocations: Array(repeating: nil, count: testUrls.count),

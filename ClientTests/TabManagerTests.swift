@@ -340,8 +340,12 @@ class TabManagerTests: XCTestCase {
         let tabToSave = Tab(
             bvc: SceneDelegate.getBVC(for: nil), configuration: WKWebViewConfiguration())
         tabToSave.sessionData = SessionData(
-            currentPage: 0, urls: [URL(string: "url")!],
-            queries: [nil], suggestedQueries: [nil], queryLocations: [nil],
+            currentPage: 0,
+            navigationStackIndex: 0,
+            urls: [URL(string: "url")!],
+            queries: [nil],
+            suggestedQueries: [nil],
+            queryLocations: [nil],
             lastUsedTime: Date.nowMilliseconds()
         )
 
