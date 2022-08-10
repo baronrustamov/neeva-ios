@@ -36,7 +36,7 @@ protocol TabDelegate {
     func tab(_ tab: Tab, didSelectSearchWithNeevaForSelection selection: String)
     @objc optional func tab(_ tab: Tab, didCreateWebView webView: WKWebView)
     @objc optional func tab(_ tab: Tab, willDeleteWebView webView: WKWebView)
-    @objc optional func tab(_ tab: Tab, willUpdateWebView webView: WKWebView)
+    @objc optional func tab(_ tab: Tab, didUpdateWebView webView: WKWebView)
 }
 
 public enum TabSection: String, CaseIterable {
@@ -364,7 +364,7 @@ class Tab: NSObject, ObservableObject {
             .store(in: &webViewSubscriptions)
 
         contentScriptManager.updateConnectedTab(tab: self)
-        tabDelegate?.tab?(self, willUpdateWebView: webView)
+        tabDelegate?.tab?(self, didUpdateWebView: webView)
     }
 
     func addRefreshControl() {

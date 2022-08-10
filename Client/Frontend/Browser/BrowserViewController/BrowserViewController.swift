@@ -1279,7 +1279,7 @@ extension BrowserViewController: TabDelegate {
         tab.addContentScript(webuiMessageHelper, name: WebUIMessageHelper.name())
     }
 
-    func tab(_ tab: Tab, willUpdateWebView webView: WKWebView) {
+    func tab(_ tab: Tab, didUpdateWebView webView: WKWebView) {
         self.subscribe(to: webView, for: tab)
     }
 
