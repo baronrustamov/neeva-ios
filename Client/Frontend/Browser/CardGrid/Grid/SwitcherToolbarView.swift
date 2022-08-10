@@ -135,6 +135,7 @@ struct SwitcherToolbarView: View {
                 }
                 .disabled(gridModel.switcherState != .tabs && !NeevaUserInfo.shared.isUserLoggedIn)
                 .accentColor(.label)
+                .hoverEffect()
 
                 if !top {
                     Spacer()
@@ -171,6 +172,7 @@ struct SwitcherToolbarView: View {
                         tabManager: browserModel.tabManager)
                 )
                 .allowsHitTesting(tabModel.manager.selectedTab != nil)
+                .textButtonPointerEffect()
             }
             .padding(.horizontal, 16)
             .frame(

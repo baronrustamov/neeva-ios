@@ -290,6 +290,8 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             selectedTabWebViewPublisher.send(selectedTab.webView)
         }
 
+        updateWindowTitle()
+
         if let tab = tab, tab.isIncognito, let url = tab.url, NeevaConstants.isAppHost(url.host),
             !url.path.starts(with: "/incognito")
         {
@@ -332,6 +334,15 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         // Tab data needs to be updated after the lastExecutedTime is modified.
         updateAllTabDataAndSendNotifications(notify: true)
         updateWebViewForSelectedTab(notify: true)
+    }
+
+    /// Updates the name of the window when using iPad multitasking.
+    func updateWindowTitle() {
+        if let selectedTab = selectedTab, !selectedTab.isIncognito {
+            scene.title = selectedTab.displayTitle
+        } else {
+            scene.title = ""
+        }
     }
 
     // Called by other classes to signal that they are entering/exiting private mode

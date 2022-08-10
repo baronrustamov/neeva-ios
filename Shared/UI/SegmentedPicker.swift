@@ -34,7 +34,9 @@ struct SegmentTappedModifier: ViewModifier {
             selectedSegmentIndex = index
         } label: {
             content
-        }.accessibilityAddTraits(index == selectedSegmentIndex ? .isSelected : [])
+        }
+        .hoverEffect(.lift)
+        .accessibilityAddTraits(index == selectedSegmentIndex ? .isSelected : [])
     }
 }
 

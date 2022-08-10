@@ -137,6 +137,7 @@ struct Card<Details>: View where Details: CardDetails {
                             .clipShape(Circle())
                             .padding(6)
                             .opacity(animate && !browserModel.showGrid ? 0 : 1)
+                            .hoverEffect(.lift)
                     }
                     .accessibilityHidden(true),  // use the Close action instead
                     alignment: .topTrailing

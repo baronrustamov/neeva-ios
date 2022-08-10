@@ -25,7 +25,9 @@ struct FindInCardGridView: View {
                 tabCardModel.isSearchingForTabs = false
             } label: {
                 Text("Done")
-            }.accessibilityIdentifier("FindInCardGrid_Done")
+            }
+            .textButtonPointerEffect()
+            .accessibilityIdentifier("FindInCardGrid_Done")
         }.onChange(of: searchQuery) { newValue in
             tabCardModel.tabSearchFilter = newValue
         }.padding(.top, 4)

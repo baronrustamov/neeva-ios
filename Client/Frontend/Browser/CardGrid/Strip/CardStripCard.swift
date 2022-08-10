@@ -69,6 +69,7 @@ struct CardStripCard<Details>: View where Details: TabCardDetails {
                         .background(Color(UIColor.systemGray6))
                         .clipShape(Circle())
                         .accessibilityLabel("Close \(details.title)")
+                        .hoverEffect(.lift)
                 }
             }
         }.animation(nil)

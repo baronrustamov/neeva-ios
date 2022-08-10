@@ -1201,6 +1201,8 @@ extension BrowserViewController: TabDelegate {
             .sink { [self] title in
                 tab.lastTitle = title
                 navigateInTab(tab: tab, webViewStatus: .title)
+
+                tabManager.updateWindowTitle()
             }
             .store(in: &tab.webViewSubscriptions)
 
