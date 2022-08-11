@@ -58,7 +58,6 @@ protocol Profile: AnyObject {
     var metadata: Metadata { get }
     var recommendations: HistoryRecommendations { get }
     var favicons: Favicons { get }
-    var logins: RustLogins { get }
     var certStore: CertStore { get }
     var panelDataObservers: PanelDataObservers { get }
 
@@ -179,7 +178,6 @@ open class BrowserProfile: Profile {
         isShutdown = false
 
         db.reopenIfClosed()
-        _ = logins.reopenIfClosed()
     }
 
     // swift-format-ignore: NoLeadingUnderscores
@@ -188,7 +186,6 @@ open class BrowserProfile: Profile {
         isShutdown = true
 
         db.forceClose()
-        _ = logins.forceClose()
     }
 
     @objc
@@ -304,21 +301,4 @@ open class BrowserProfile: Profile {
     func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
         return self.remoteClientsAndTabs.insertOrUpdateTabs(tabs)
     }
-
-    lazy var logins: RustLogins = {
-        let databasePath = URL(
-            fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true
-        ).appendingPathComponent("logins.db").path
-
-        let salt: String
-        if let val = keychain.string(forKey: loginsSaltKeychainKey) {
-            salt = val
-        } else {
-            salt = RustLogins.setupPlaintextHeaderAndGetSalt(
-                databasePath: databasePath, encryptionKey: loginsKey)
-            keychain.set(salt, forKey: loginsSaltKeychainKey, withAccessibility: .afterFirstUnlock)
-        }
-
-        return RustLogins(databasePath: databasePath, encryptionKey: loginsKey, salt: salt)
-    }()
 }
