@@ -54,6 +54,7 @@ public struct NeevaButtonStyle: ButtonStyle {
     public enum VisualSpec {
         case primary
         case secondary
+        case clear
     }
 
     let visualSpec: VisualSpec
@@ -67,11 +68,13 @@ public struct NeevaButtonStyle: ButtonStyle {
             .background(
                 Capsule()
                     .fill(
-                        visualSpec == VisualSpec.primary
+                        visualSpec == .primary
                             ? (configuration.isPressed
                                 ? Color.brand.variant.blue : Color.ui.adaptive.blue)
-                            : (configuration.isPressed
-                                ? Color.systemFill : Color.quaternarySystemFill)
+                            : visualSpec == .secondary
+                                ? (configuration.isPressed
+                                    ? Color.systemFill : Color.quaternarySystemFill)
+                                : Color.clear
                     )
                     .opacity(isEnabled ? 1 : 0.5)
             )

@@ -6,16 +6,6 @@ import Shared
 import StoreKit
 import SwiftUI
 
-// TODO: move to a better location during next refactor
-private enum PremiumPlan: String, Equatable, Encodable, Decodable {
-    /*
-     NOTE: These text values are important, they map directly to
-     App Store Connect product IDs.
-     */
-    case annual = "annual202206"
-    case monthly = "monthly202206"
-}
-
 @available(iOS 15.0, *)
 struct NeevaPremiumView: View {
     @ObservedObject var userInfo: NeevaUserInfo
@@ -164,7 +154,7 @@ struct NeevaPremiumView: View {
                     var attributes = EnvironmentHelper.shared.getAttributes()
                     attributes.append(
                         ClientLogCounterAttribute(
-                            key: LogConfig.Attribute.SubscriptionPlan,
+                            key: LogConfig.Attribute.subscriptionPlan,
                             value: product.id
                         )
                     )
@@ -178,7 +168,7 @@ struct NeevaPremiumView: View {
                     var attributes = EnvironmentHelper.shared.getAttributes()
                     attributes.append(
                         ClientLogCounterAttribute(
-                            key: LogConfig.Attribute.SubscriptionPlan,
+                            key: LogConfig.Attribute.subscriptionPlan,
                             value: product.id
                         )
                     )
@@ -195,7 +185,7 @@ struct NeevaPremiumView: View {
                 var attributes = EnvironmentHelper.shared.getAttributes()
                 attributes.append(
                     ClientLogCounterAttribute(
-                        key: LogConfig.Attribute.SubscriptionPlan,
+                        key: LogConfig.Attribute.subscriptionPlan,
                         value: product.id
                     )
                 )
@@ -209,7 +199,7 @@ struct NeevaPremiumView: View {
                 var attributes = EnvironmentHelper.shared.getAttributes()
                 attributes.append(
                     ClientLogCounterAttribute(
-                        key: LogConfig.Attribute.SubscriptionPlan,
+                        key: LogConfig.Attribute.subscriptionPlan,
                         value: product.id
                     )
                 )

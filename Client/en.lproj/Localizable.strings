@@ -93,3 +93,23 @@
 
 /* Sort by Space name */
 "Name" = "Name";
+
+/* Welcome screen value prop to specify we are a private browser */
+"Private" = "Private";
+
+/* Welcome screen value prop to specify we block trackers and cookie pop up */
+"Block pesky trackers and cookie pop-ups" = "Block pesky trackers and cookie pop-ups";
+
+/* Welcome screen value prop to specify we are unbiased in the search result */
+"Unbiased" = "Unbiased";
+
+"No advertisers controlling what you see" = "No advertisers controlling what you see";
+
+/* Default browser screen value prop to specify user's privacy is protected */
+"Protected" = "Protected";
+
+"Open links without trackers and pop-ups" = "Open links without trackers and pop-ups";
+
+"Faster" = "Faster";
+
+"Browse the web with no ads in your way" = "Browse the web with no ads in your way";
