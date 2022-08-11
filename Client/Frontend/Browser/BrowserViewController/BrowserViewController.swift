@@ -1175,24 +1175,25 @@ extension BrowserViewController: TabDelegate {
             .forEach(updateGestureHandler)
             // Special case for "about:blank" popups, if the webView.url is nil, keep the tab url as "about:blank"
             .filter { tab.url != .aboutBlank || $0 != nil }
-            // To prevent spoofing, only change the URL immediately if the new URL is on
-            // the same origin as the current URL. Otherwise, do nothing and wait for
-            // didCommitNavigation to confirm the page load.
-            .filter { tab.url?.origin == $0?.origin }
             .sink { [self] url in
                 if let url = url {
                     tabManager.handleAsNavigationFromPinnedTabIfNeeded(tab: tab, url: url)
                 }
 
-                tab.setURL(url)
+                // To prevent spoofing, only change the URL immediately if the new URL is on
+                // the same origin as the current URL. Otherwise, do nothing and wait for
+                // didCommitNavigation to confirm the page load.
+                if tab.url?.origin == url?.origin {
+                    tab.setURL(url)
 
-                if tab === tabManager.selectedTab && !tab.restoring {
-                    updateUIForReaderHomeStateForTab(tab)
+                    if tab === tabManager.selectedTab && !tab.restoring {
+                        updateUIForReaderHomeStateForTab(tab)
+                    }
+
+                    // Catch history pushState navigation, but ONLY for same origin navigation,
+                    // for reasons above about URL spoofing risk.
+                    navigateInTab(tab: tab, webViewStatus: .url)
                 }
-
-                // Catch history pushState navigation, but ONLY for same origin navigation,
-                // for reasons above about URL spoofing risk.
-                navigateInTab(tab: tab, webViewStatus: .url)
             }
             .store(in: &tab.webViewSubscriptions)
 
