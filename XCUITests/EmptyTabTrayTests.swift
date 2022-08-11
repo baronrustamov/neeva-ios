@@ -33,7 +33,7 @@ class EmptyTabTrayTests: BaseTestCase {
         openURLInNewTab()
         goToTabTray()
 
-        app.buttons["Close"].tap()
+        app.buttons["Close"].tap(force: true)
 
         waitForExistence(app.staticTexts["EmptyTabTray"])
     }
