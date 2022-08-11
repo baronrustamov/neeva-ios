@@ -78,6 +78,7 @@ private struct CollapsedCardStripTabGroupCardView: View {
         }
         .transition(.identity)
         .animation(CardTransitionUX.animation)
+        .contextMenu(menuItems: groupDetails.contextMenu)
         .background(Color.groupedBackground)
         .onDrop(of: ["public.url", "public.text"], delegate: groupDetails)
     }
