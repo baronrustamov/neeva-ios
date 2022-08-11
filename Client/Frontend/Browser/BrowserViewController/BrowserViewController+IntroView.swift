@@ -108,6 +108,47 @@ extension BrowserViewController {
     }
 }
 
+// MARK: - Welcome flow
+extension BrowserViewController {
+    func presentWelcomeFlow(startScreen: WelcomeFlowScreen?) {
+        let welcomeFlowModel = WelcomeFlowModel(
+            authStore: AuthStore(bvc: self),
+            onCloseAction: {
+                self.overlayManager.hideCurrentOverlay()
+            }
+        )
+        if let startScreen = startScreen {
+            // handle restoring from the default browser screen
+            if startScreen == .defaultBrowser {
+                welcomeFlowModel.defaultBrowserContinueMode = true
+                welcomeFlowModel.showCloseButton = true
+            }
+
+            welcomeFlowModel.currentScreen = startScreen
+        }
+
+        overlayManager.presentFullScreenCover(
+            content: AnyView(
+                WelcomeFlowView(model: welcomeFlowModel)
+                    .onAppear {
+                        /*
+                         NOTE: orientation locking does not work on iPads
+                         without breaking multitasking support
+                         https://stackoverflow.com/a/55528118
+                        */
+                        AppDelegate.setRotationLock(to: .portrait)
+                    }
+                    .onDisappear {
+                        AppDelegate.setRotationLock(to: .all)
+                    }
+            ),
+            ignoreSafeArea: true
+        ) {
+            // noop
+        }
+    }
+}
+
 // MARK: - Default Browser
 extension BrowserViewController {
     func presentDefaultBrowserFirstRun() {

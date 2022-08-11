@@ -223,18 +223,6 @@
 /* Toggle logins syncing setting */
 "Logins" = "Anmeldungen";
 
-/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptSaveLogin.Title" = "Anmeldung %1$@ für %2$@ speichern?";
-
-/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
-"LoginsHelper.PromptSavePassword.Title" = "Passwort für %@ speichern?";
-
-/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
-"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Anmeldung für %@ aktualisieren?";
-
-/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Anmeldung %1$@ für %2$@ aktualisieren?";
-
 /* No comment provided by engineer. */
 "Microsoft" = "Microsoft";
 

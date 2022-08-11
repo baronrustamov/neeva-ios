@@ -541,12 +541,14 @@ class BrowserViewController: UIViewController, ModalPresenter {
     override func viewDidAppear(_ animated: Bool) {
         if NeevaConstants.currentTarget != .xyz {
             if !Defaults[.introSeen] {
-                presentDefaultBrowserFirstRun()
-            } else if let didDismiss = Defaults[.didDismissDefaultBrowserInterstitial],
-                !didDismiss
-                    && !Defaults[.didFirstNavigation]
-            {
-                restoreDefaultBrowserFirstRun()
+                var startScreen: WelcomeFlowScreen? = nil
+
+                if Defaults[.welcomeFlowRestoreToDefaultBrowser] {
+                    Defaults[.welcomeFlowRestoreToDefaultBrowser] = false
+                    startScreen = .defaultBrowser
+                }
+
+                presentWelcomeFlow(startScreen: startScreen)
             }
         }
 
@@ -809,7 +811,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
         self.openURLInNewTab(url, isIncognito: incognitoModel.isIncognito)
     }
 
-    func openURLInBackground(_ url: URL, isIncognito: Bool? = nil) {
+    func openURLInBackground(_ url: URL, isIncognito: Bool? = nil, showToast: Bool? = true) {
         let isIncognito = isIncognito == nil ? incognitoModel.isIncognito : isIncognito!
 
         let tab = self.tabManager.addTab(
@@ -824,13 +826,15 @@ class BrowserViewController: UIViewController, ModalPresenter {
             toastLabelText = "New Tab opened"
         }
 
-        toastViewManager.makeToast(
-            text: toastLabelText,
-            buttonText: "Switch",
-            buttonAction: {
-                self.tabManager.selectTab(tab, notify: true)
-            }
-        )
+        if showToast == nil || showToast == true {
+            toastViewManager.makeToast(
+                text: toastLabelText,
+                buttonText: "Switch",
+                buttonAction: {
+                    self.tabManager.selectTab(tab, notify: true)
+                }
+            )
+        }
     }
 
     func openLazyTab(
@@ -1228,12 +1232,6 @@ extension BrowserViewController: TabDelegate {
         let readerMode = ReaderMode(tab: tab)
         readerMode.delegate = self
         tab.addContentScript(readerMode, name: ReaderMode.name())
-
-        // only add the logins helper if the tab is not a private browsing tab
-        if !incognitoModel.isIncognito {
-            let logins = LoginsHelper(tab: tab, profile: profile)
-            tab.addContentScript(logins, name: LoginsHelper.name())
-        }
 
         let contextMenuHelper = ContextMenuHelper(tab: tab)
         contextMenuHelper.delegate = self

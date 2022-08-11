@@ -223,18 +223,6 @@
 /* Toggle logins syncing setting */
 "Logins" = "Identifiants de connexion";
 
-/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptSaveLogin.Title" = "Enregistrer l'identifiant %1$@ pour %2$@ ?";
-
-/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
-"LoginsHelper.PromptSavePassword.Title" = "Enregistrer le mot de passe pour %@ ?";
-
-/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
-"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "Mettre à jour l'identifiant pour %@ ?";
-
-/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "Mettre à jour l'identifiant %1$@ pour %2$@ ?";
-
 /* No comment provided by engineer. */
 "Microsoft" = "Microsoft";
 

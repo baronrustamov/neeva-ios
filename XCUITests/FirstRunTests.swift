@@ -33,6 +33,7 @@ class FirstRunTests: BaseTestCase {
     }
 
     func testOpenNeevaSettingsAndClose() throws {
+        try skipTest(issue: 4155, "Disabled because we are implementing a new welcome flow")
         openNeevaSettings()
 
         waitForExistence(app.buttons["close"])
@@ -43,6 +44,7 @@ class FirstRunTests: BaseTestCase {
     }
 
     func testOpenNeevaSettingsAndRemind() throws {
+        try skipTest(issue: 4155, "Disabled because we are implementing a new welcome flow")
         openNeevaSettings()
 
         waitForExistence(app.buttons["Continue to Neeva"])
@@ -53,6 +55,7 @@ class FirstRunTests: BaseTestCase {
     }
 
     func testRemindMeLater() throws {
+        try skipTest(issue: 4155, "Disabled because we are implementing a new welcome flow")
         waitForExistence(app.buttons["Let's Go"])
         app.buttons["Let's Go"].tap()
 
@@ -64,6 +67,7 @@ class FirstRunTests: BaseTestCase {
     }
 
     func testDirectClose() throws {
+        try skipTest(issue: 4155, "Disabled because we are implementing a new welcome flow")
         waitForExistence(app.buttons["Let's Go"])
         app.buttons["Let's Go"].tap()
 
@@ -103,6 +107,7 @@ class FirstRunTests: BaseTestCase {
     }
 
     func testToggleConsentOptin() throws {
+        try skipTest(issue: 4155, "Disabled because we are implementing a new welcome flow")
         waitForExistence(app.buttons["Let's Go"])
         app.buttons["Let's Go"].tap()
 
@@ -123,6 +128,7 @@ class FirstRunTests: BaseTestCase {
     }
 
     func testToggleConsentOptout() throws {
+        try skipTest(issue: 4155, "Disabled because we are implementing a new welcome flow")
         waitForExistence(app.buttons["Help improve this app by sending usage statistics to Neeva."])
         app.buttons["Help improve this app by sending usage statistics to Neeva."].tap()
 

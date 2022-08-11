@@ -912,16 +912,6 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // The challenge may come from a background tab, so ensure it's the one visible.
         tabManager.selectTab(tab, notify: true)
-
-        let loginsHelper = tab.getContentScript(name: LoginsHelper.name()) as? LoginsHelper
-        Authenticator.handleAuthRequest(self, challenge: challenge)
-            .uponQueue(.main) { res in
-                if let credentials = res.successValue {
-                    completionHandler(.useCredential, credentials.credentials)
-                } else {
-                    completionHandler(.rejectProtectionSpace, nil)
-                }
-            }
     }
 
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {

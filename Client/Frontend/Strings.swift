@@ -69,31 +69,6 @@ extension Strings {
         comment: "Title for popup action menu to clear recent history.")
 }
 
-// Neeva Logins
-extension Strings {
-    // Prompts
-    public static let SaveLoginUsernamePrompt = MZLocalizedString(
-        "LoginsHelper.PromptSaveLogin.Title", value: "Save login %@ for %@?",
-        comment:
-            "Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site."
-    )
-    public static let SaveLoginPrompt = MZLocalizedString(
-        "LoginsHelper.PromptSavePassword.Title", value: "Save password for %@?",
-        comment:
-            "Prompt for saving a password with no username. The parameter is the hostname of the site."
-    )
-    public static let UpdateLoginUsernamePrompt = MZLocalizedString(
-        "LoginsHelper.PromptUpdateLogin.Title.TwoArg", value: "Update login %@ for %@?",
-        comment:
-            "Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site."
-    )
-    public static let UpdateLoginPrompt = MZLocalizedString(
-        "LoginsHelper.PromptUpdateLogin.Title.OneArg", value: "Update login for %@?",
-        comment:
-            "Prompt for updating a login. The first parameter is the hostname for which the password will be updated for."
-    )
-}
-
 //Hotkey Titles
 extension Strings {
     public static let ReloadPageTitle = MZLocalizedString(
