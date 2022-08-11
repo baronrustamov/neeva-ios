@@ -99,6 +99,7 @@ class PinnedTabTests: BaseTestCase {
         app.buttons["IANA-managed Reserved Domains, Tab"].tap()
 
         // Create child tab.
+        waitForExistence(app.links["RFC 2606"])
         app.links["RFC 2606"].tap()
 
         // Go to pinned tab and navigate back.
