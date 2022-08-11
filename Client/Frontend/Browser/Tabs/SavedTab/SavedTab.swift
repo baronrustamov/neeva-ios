@@ -24,33 +24,6 @@ class SavedTab: NSObject, NSCoding {
     var parentSpaceID: String?
     var pageZoom: CGFloat?
 
-    var jsonDictionary: [String: AnyObject] {
-        let title: String = self.title ?? "null"
-        let faviconURL: String = self.faviconURL?.absoluteString ?? "null"
-        let uuid: String = self.screenshotUUID?.uuidString ?? "null"
-
-        var json: [String: AnyObject] = [
-            "title": title as AnyObject,
-            "isPrivate": String(self.isIncognito) as AnyObject,
-            "isSelected": String(self.isSelected) as AnyObject,
-            "faviconURL": faviconURL as AnyObject,
-            "screenshotUUID": uuid as AnyObject,
-            "url": url as AnyObject,
-            "UUID": self.UUID as AnyObject,
-            "rootUUID": self.UUID as AnyObject,
-            "parentUUID": self.UUID as AnyObject,
-            "tabIndex": self.tabIndex as AnyObject,
-            "parentSpaceID": self.parentSpaceID as AnyObject,
-            "pageZoom": self.pageZoom as AnyObject,
-        ]
-
-        if let sessionDataInfo = self.sessionData?.jsonDictionary {
-            json["sessionData"] = sessionDataInfo as AnyObject?
-        }
-
-        return json
-    }
-
     init(
         screenshotUUID: UUID?, isSelected: Bool, title: String?, isIncognito: Bool, isPinned: Bool,
         pinnedTime: TimeInterval?, lastExecutedTIme: Timestamp?,

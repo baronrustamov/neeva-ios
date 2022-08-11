@@ -69,6 +69,7 @@ struct CardStripCard<Details>: View where Details: TabCardDetails {
                         .background(Color(UIColor.systemGray6))
                         .clipShape(Circle())
                         .accessibilityLabel("Close \(details.title)")
+                        .hoverEffect(.lift)
                 }
             }
         }.animation(nil)
@@ -97,13 +98,13 @@ struct CardStripCard<Details>: View where Details: TabCardDetails {
             .transition(.identity)
             .animation(CardTransitionUX.animation)
             .contextMenu(menuItems: details.contextMenu)
+            .background(
+                details.isSelected ? Color.DefaultBackground : Color.groupedBackground
+            )
             .if(!details.isPinned) { view in
                 view
                     .onDrop(of: ["public.url", "public.text"], delegate: details)
                     .modifier(CardDragAndDropModifier(tabCardDetail: details))
             }
-            .background(
-                details.isSelected ? Color.DefaultBackground : Color.groupedBackground
-            )
     }
 }
