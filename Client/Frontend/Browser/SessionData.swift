@@ -56,16 +56,6 @@ class SessionData: NSObject, NSCoding {
     let queryLocations: [QueryForNavigation.Query.Location.RawValue?]
     let lastUsedTime: Timestamp
 
-    var jsonDictionary: [String: Any] {
-        return [
-            "currentPage": String(self.currentPage),
-            "urls": urls.map { $0.absoluteString },
-            "queries": typedQueries,
-            "suggestedQueries": suggestedQueries,
-            "lastUsedTime": String(self.lastUsedTime),
-        ]
-    }
-
     var currentUrl: URL? {
         // TODO: We should probably unwrap this if it is a session restore internal URL.
         let index = urls.count - 1 + currentPage
