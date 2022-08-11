@@ -15,7 +15,9 @@ struct TabLocationBarButton<Label: View>: View {
             label
                 .frame(width: TabLocationViewUX.height, height: TabLocationViewUX.height)
                 .transition(.opacity)
-        }.foregroundColor(.label)
+        }
+        .foregroundColor(.label)
+        .hoverEffect(.lift)
     }
 }
 

@@ -131,7 +131,7 @@ struct ToastView: View {
                                 .foregroundColor(Color.ui.aqua)
                         }.if(content.currentToastStateContent.keyboardShortcut != nil) {
                             $0.keyboardShortcut(content.currentToastStateContent.keyboardShortcut!)
-                        }
+                        }.textButtonPointerEffect()
                     }
                 }.padding(.horizontal, 16).colorScheme(.dark)
             }.frame(height: 53).padding(.horizontal)

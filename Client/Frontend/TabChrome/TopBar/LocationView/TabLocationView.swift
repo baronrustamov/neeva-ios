@@ -178,10 +178,12 @@ struct TabLocationView: View {
                     onCancel()
                     chromeModel.setEditingLocation(to: false)
                 } label: {
-                    Text("Cancel").withFont(.bodyLarge)
+                    Text("Cancel")
+                        .withFont(.bodyLarge)
                 }
                 .transition(.move(edge: .trailing).combined(with: .opacity))
                 .accentColor(incognitoModel.isIncognito ? .label : .ui.adaptive.blue)
+                .textButtonPointerEffect()
             }
         }
     }

@@ -296,9 +296,12 @@ public class CheatsheetMenuViewModel: ObservableObject {
             for: [.deviceTheme, .deviceOrientation, .deviceScreenSize, .isUserSignedIn, .deviceOS]
         )
 
+        // Evaluate computed `loggerAttributes` synchronously
+        let allAttributes = envAttributes + loggerAttributes + attributes
+
         ClientLogger.shared.logCounter(
             path,
-            attributes: envAttributes + loggerAttributes + attributes
+            attributes: allAttributes
         )
     }
 
@@ -364,6 +367,7 @@ public class CheatsheetMenuViewModel: ObservableObject {
     }
 
     func onOverlayDismissed() {
+        self.log(.CloseCheatsheet)
         self.endJourney()
     }
 

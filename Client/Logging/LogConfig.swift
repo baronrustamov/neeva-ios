@@ -355,6 +355,7 @@ public enum LogConfig {
         case CheatsheetUGCHitNoRedditDataV2
         // Journey Associated
         case OpenCheatsheet
+        case CloseCheatsheet
         case CheatsheetEducationImpressionOnSRP
         case CheatsheetEducationImpressionOnPage
         case AckCheatsheetEducationOnSRP
@@ -728,6 +729,7 @@ public enum LogConfig {
         case .CheatsheetPopoverReachedLimit: return .Cheatsheet
         case .CheatsheetUGCIndicatorImpression: return .Cheatsheet
         case .OpenCheatsheet: return .Cheatsheet
+        case .CloseCheatsheet: return .Cheatsheet
         case .CheatsheetEducationImpressionOnSRP: return .Cheatsheet
         case .CheatsheetEducationImpressionOnPage: return .Cheatsheet
         case .AckCheatsheetEducationOnSRP: return .Cheatsheet

@@ -720,6 +720,52 @@ class TabGroupCardDetails: CardDropDelegate, ObservableObject {
     }
 
     @Published var allDetails: [TabCardDetails] = []
+    @Published var renaming = false
+    @Published var deleting = false {
+        didSet {
+            if deleting {
+                guard Defaults[.confirmCloseAllTabs] else {
+                    onClose(showToast: true)
+                    deleting = false
+                    return
+                }
+            }
+        }
+    }
+
+    @ViewBuilder func contextMenu() -> some View {
+        if let title = customTitle {
+            Text("\(allDetails.count) tabs from “\(title)”")
+        } else {
+            Text("\(allDetails.count) Tabs")
+        }
+
+        Button {
+            ClientLogger.shared.logCounter(.tabGroupRenameThroughThreeDotMenu)
+            self.renaming = true
+        } label: {
+            Label("Rename", systemSymbol: .pencil)
+        }
+
+        if #available(iOS 15.0, *) {
+            Button(
+                role: .destructive,
+                action: {
+                    ClientLogger.shared.logCounter(.tabGroupDeleteThroughThreeDotMenu)
+                    self.deleting = true
+                }
+            ) {
+                Label("Close All", systemSymbol: .trash)
+            }
+        } else {
+            Button {
+                ClientLogger.shared.logCounter(.tabGroupDeleteThroughThreeDotMenu)
+                self.deleting = true
+            } label: {
+                Label("Close All", systemSymbol: .trash)
+            }
+        }
+    }
 
     init(tabGroup: TabGroup, tabManager: TabManager) {
         self.id = tabGroup.id

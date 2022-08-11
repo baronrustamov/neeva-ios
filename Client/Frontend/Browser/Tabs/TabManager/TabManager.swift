@@ -268,25 +268,25 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
 
         assert(tab === selectedTab, "Expected tab is selected")
 
-        guard let selectedTab = selectedTab else {
-            return
-        }
+        if let selectedTab = selectedTab {
+            selectedTab.lastExecutedTime = Date.nowMilliseconds()
+            selectedTab.applyTheme()
 
-        selectedTab.lastExecutedTime = Date.nowMilliseconds()
-        selectedTab.applyTheme()
+            if selectedTab.shouldPerformHeavyUpdatesUponSelect {
+                // Don't need to send WebView notifications if they will be sent below.
+                updateWebViewForSelectedTab(notify: !notify)
 
-        if selectedTab.shouldPerformHeavyUpdatesUponSelect {
-            // Don't need to send WebView notifications if they will be sent below.
-            updateWebViewForSelectedTab(notify: !notify)
-
-            // Tab data needs to be updated after the lastExecutedTime is modified.
-            updateAllTabDataAndSendNotifications(notify: notify)
+                // Tab data needs to be updated after the lastExecutedTime is modified.
+                updateAllTabDataAndSendNotifications(notify: notify)
+            }
         }
 
         if notify {
             sendSelectTabNotifications(previous: previous)
-            selectedTabWebViewPublisher.send(selectedTab.webView)
+            selectedTabWebViewPublisher.send(selectedTab?.webView)
         }
+
+        updateWindowTitle()
 
         if let tab = tab, tab.isIncognito, let url = tab.url, NeevaConstants.isAppHost(url.host),
             !url.path.starts(with: "/incognito")
@@ -330,6 +330,15 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         // Tab data needs to be updated after the lastExecutedTime is modified.
         updateAllTabDataAndSendNotifications(notify: true)
         updateWebViewForSelectedTab(notify: true)
+    }
+
+    /// Updates the name of the window when using iPad multitasking.
+    func updateWindowTitle() {
+        if let selectedTab = selectedTab, !selectedTab.isIncognito {
+            scene.title = selectedTab.displayTitle
+        } else {
+            scene.title = ""
+        }
     }
 
     // Called by other classes to signal that they are entering/exiting private mode
@@ -1008,21 +1017,16 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         let lastTabIndex = tabs.firstIndex(of: lastTab)
         let tabsToKeep = self.tabs.filter { !tabsToBeRemoved.contains($0) }
         self.tabs = tabsToKeep
-        if let lastTabIndex = lastTabIndex, updateSelectedTab {
-            updateSelectedTabAfterRemovalOf(lastTab, deletedIndex: lastTabIndex, notify: false)
-        }
 
         tabsToBeRemoved.forEach { tab in
             removeTab(tab, flushToDisk: false, notify: false)
         }
 
-        if notify {
-            updateAllTabDataAndSendNotifications(notify: true)
-            sendSelectTabNotifications(previous: previous)
-        } else {
-            updateAllTabDataAndSendNotifications(notify: false)
+        if let lastTabIndex = lastTabIndex, updateSelectedTab {
+            updateSelectedTabAfterRemovalOf(lastTab, deletedIndex: lastTabIndex, notify: true)
         }
 
+        updateAllTabDataAndSendNotifications(notify: notify)
         storeChanges()
     }
 
@@ -1083,7 +1087,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         {
             DispatchQueue.main.async {
                 self.selectTab(nil, notify: notify)
-                bvc.showTabTray()
+                bvc.browserModel.showGridWithNoAnimation()
             }
         } else if let selectedTab = selectedTab, let deletedIndex = deletedIndex {
             if !selectParentTab(afterRemoving: selectedTab) {
@@ -1098,8 +1102,8 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
                 }
             }
         } else {
-            selectTab(nil, notify: false)
-            SceneDelegate.getBVC(with: scene).browserModel.showGridWithNoAnimation()
+            selectTab(nil, notify: notify)
+            bvc.browserModel.showGridWithNoAnimation()
         }
     }
 
