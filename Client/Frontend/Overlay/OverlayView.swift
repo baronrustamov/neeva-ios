@@ -84,6 +84,14 @@ struct OverlayView: View {
                             fullScreenModal
                         }
                 }
+            case .fullScreenCover(let fullScreenModal):
+                Color.clear
+                    .fullScreenCover(isPresented: $overlayManager.showFullScreenPopoverSheet) {
+                        // OnDismiss
+                        // Nothing to do here
+                    } content: {
+                        fullScreenModal
+                    }
             case .notification(let notification):
                 VStack {
                     notification

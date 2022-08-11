@@ -217,6 +217,10 @@ extension Defaults.Keys {
     public static let walletProfilePictureAssetId = Defaults.Key<Int?>(
         "walletProfilePictureAssetId", default: nil)
 
+    // MARK: - welcome flow
+    public static let welcomeFlowRestoreToDefaultBrowser = Defaults.BoolKey(
+        "profile.welcomeFlowRestoreToDefaultBrowser")
+
     // MARK: - default browser
     public static let didDismissDefaultBrowserCard = Defaults.BoolKey(
         "profile.didDismissDefaultBrowserCard")

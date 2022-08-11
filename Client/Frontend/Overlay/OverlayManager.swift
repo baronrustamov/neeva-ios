@@ -18,6 +18,7 @@ enum OverlayType: Equatable {
     case backForwardList(BackForwardListView?)
     case find(FindView?)
     case fullScreenModal(AnyView)
+    case fullScreenCover(AnyView)
     case notification(NotificationRow?)
     case popover(PopoverRootView?)
     case sheet(OverlaySheetRootView?)
@@ -25,7 +26,7 @@ enum OverlayType: Equatable {
 
     func isPriority(_ priority: OverlayPriority) -> Bool {
         switch self {
-        case .backForwardList, .find, .fullScreenModal:
+        case .backForwardList, .find, .fullScreenModal, .fullScreenCover:
             return priority == .modal
         case .popover, .sheet:
             return priority == .modal || priority == .sheet
@@ -38,7 +39,7 @@ enum OverlayType: Equatable {
         switch self {
         case .backForwardList, .find:
             return priorities.contains(.modal)
-        case .fullScreenModal:
+        case .fullScreenModal, .fullScreenCover:
             return priorities.contains(.fullScreen)
         case .popover, .sheet:
             return priorities.contains(.modal) || priorities.contains(.sheet)
@@ -100,6 +101,22 @@ class OverlayManager: ObservableObject {
         )
 
         show(overlay: .fullScreenModal(content), animate: animate, completion: completion)
+    }
+
+    public func presentFullScreenCover(
+        content: AnyView, animate: Bool = true,
+        ignoreSafeArea: Bool = true,
+        completion: (() -> Void)? = nil
+    ) {
+        let content = AnyView(
+            content
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .if(ignoreSafeArea) { view in
+                    view.ignoresSafeArea()
+                }
+        )
+
+        show(overlay: .fullScreenCover(content), animate: animate, completion: completion)
     }
 
     @discardableResult public func show(
@@ -165,7 +182,7 @@ class OverlayManager: ObservableObject {
             switch overlay {
             case .backForwardList:
                 slideAndFadeIn(offset: 100)
-            case .fullScreenModal, .popover:
+            case .fullScreenModal, .fullScreenCover, .popover:
                 withAnimation(animation) {
                     showFullScreenPopoverSheet = true
                     displaying = true
@@ -183,6 +200,9 @@ class OverlayManager: ObservableObject {
             }
         } else {
             if case .fullScreenModal = overlay {
+                showFullScreenPopoverSheet = true
+            }
+            if case .fullScreenCover = overlay {
                 showFullScreenPopoverSheet = true
             }
             displaying = true

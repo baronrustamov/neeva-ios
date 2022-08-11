@@ -405,7 +405,6 @@
 		4A42C4B127E58487003B9826 /* ZeroQueryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AC6658E26C20A5900019C24 /* ZeroQueryModel.swift */; };
 		4A42C4B227E58487003B9826 /* NeevaTabContentBlocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB8950B2193994A00EB91A0 /* NeevaTabContentBlocker.swift */; };
 		4A42C4B327E58487003B9826 /* BuyingGuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCF864CC276C5FDC00E94B3A /* BuyingGuideView.swift */; };
-		4A42C4B427E58487003B9826 /* OktaAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC93328D2715324700B9BE1C /* OktaAuth.swift */; };
 		4A42C4B527E58487003B9826 /* TourPromptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5C43BE265F407F007E2F61 /* TourPromptViewController.swift */; };
 		4A42C4B627E58487003B9826 /* WebViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DDC11F26B9E24900F293AB /* WebViewContainer.swift */; };
 		4A42C4B727E58487003B9826 /* TrackingMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0102C2E2605240B00B5F884 /* TrackingMenuView.swift */; };
@@ -1557,6 +1556,9 @@
 		F80983C428387B6D0039FCBD /* System@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F80983C228387B6D0039FCBD /* System@3x.png */; };
 		F80983C528387B6D0039FCBD /* System@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F80983C328387B6D0039FCBD /* System@2x.png */; };
 		F80983C62838A0630039FCBD /* AppearanceSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80983B8283848450039FCBD /* AppearanceSettingsSection.swift */; };
+		F815A5E72899C57A003FE9A8 /* WelcomeFlowSignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F815A5E62899C57A003FE9A8 /* WelcomeFlowSignInView.swift */; };
+		F815A5E92899C68A003FE9A8 /* WelcomeFlowPlansView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F815A5E82899C68A003FE9A8 /* WelcomeFlowPlansView.swift */; };
+		F815A5EB2899C9FF003FE9A8 /* WelcomeFlowPrivacyAndTermsLinksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F815A5EA2899C9FF003FE9A8 /* WelcomeFlowPrivacyAndTermsLinksView.swift */; };
 		F82EF4DB283360FA0030F185 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E6639F171BF11E17002D0853 /* Settings.bundle */; };
 		F82EF4DC283361270030F185 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E6639F171BF11E17002D0853 /* Settings.bundle */; };
 		F82F28752876289600F7E0EA /* StoreKitLocalTesting.storekit in Resources */ = {isa = PBXBuildFile; fileRef = F8F360362875066200736740 /* StoreKitLocalTesting.storekit */; };
@@ -1567,6 +1569,32 @@
 		F84B220B1A0910F600AAB793 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B21EF1A0910F600AAB793 /* Images.xcassets */; };
 		F84B22541A0920C600AAB793 /* ShareTo.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F84B22491A0920C600AAB793 /* ShareTo.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F8708D2E1A0970B70051AB07 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8708D251A0970990051AB07 /* Images.xcassets */; };
+		F87F479628999FCF0076B95C /* WelcomeFlowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87F479528999FCF0076B95C /* WelcomeFlowModel.swift */; };
+		F87F47982899A01A0076B95C /* WelcomeFlowIntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87F47972899A01A0076B95C /* WelcomeFlowIntroView.swift */; };
+		F87F479A2899A0F70076B95C /* WelcomeFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87F47992899A0F70076B95C /* WelcomeFlowView.swift */; };
+		F880C5A02899E8FE00C53D1E /* PremiumStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C59F2899E8FE00C53D1E /* PremiumStore.swift */; };
+		F880C5A22899FEE600C53D1E /* WelcomeFlowDefaultBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5A12899FEE600C53D1E /* WelcomeFlowDefaultBrowserView.swift */; };
+		F880C5A4289A124100C53D1E /* WelcomeFlowSignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5A3289A124100C53D1E /* WelcomeFlowSignUpView.swift */; };
+		F880C5A6289B4BDA00C53D1E /* WelcomeFlowAuthButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5A5289B4BDA00C53D1E /* WelcomeFlowAuthButtonView.swift */; };
+		F880C5A8289B588B00C53D1E /* WelcomeFlowSignUpEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5A7289B588B00C53D1E /* WelcomeFlowSignUpEmailView.swift */; };
+		F880C5AB289B7B4B00C53D1E /* AuthStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5AA289B7B4B00C53D1E /* AuthStore.swift */; };
+		F880C5AD289BA28C00C53D1E /* OktaEmailSignUpForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5AC289BA28C00C53D1E /* OktaEmailSignUpForm.swift */; };
+		F880C5AE289BA7BB00C53D1E /* OktaAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC93328D2715324700B9BE1C /* OktaAuth.swift */; };
+		F880C5AF289C53F400C53D1E /* WelcomeFlowSignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F815A5E62899C57A003FE9A8 /* WelcomeFlowSignInView.swift */; };
+		F880C5B0289C53F400C53D1E /* WelcomeFlowSignUpEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5A7289B588B00C53D1E /* WelcomeFlowSignUpEmailView.swift */; };
+		F880C5B1289C53F400C53D1E /* WelcomeFlowSignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5A3289A124100C53D1E /* WelcomeFlowSignUpView.swift */; };
+		F880C5B2289C53F400C53D1E /* WelcomeFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87F47992899A0F70076B95C /* WelcomeFlowView.swift */; };
+		F880C5B3289C53F400C53D1E /* WelcomeFlowAuthButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5A5289B4BDA00C53D1E /* WelcomeFlowAuthButtonView.swift */; };
+		F880C5B4289C53F400C53D1E /* WelcomeFlowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87F479528999FCF0076B95C /* WelcomeFlowModel.swift */; };
+		F880C5B5289C53F400C53D1E /* WelcomeFlowPrivacyAndTermsLinksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F815A5EA2899C9FF003FE9A8 /* WelcomeFlowPrivacyAndTermsLinksView.swift */; };
+		F880C5B6289C53F400C53D1E /* WelcomeFlowDefaultBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5A12899FEE600C53D1E /* WelcomeFlowDefaultBrowserView.swift */; };
+		F880C5B7289C53F400C53D1E /* WelcomeFlowPlansView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F815A5E82899C68A003FE9A8 /* WelcomeFlowPlansView.swift */; };
+		F880C5B8289C53F400C53D1E /* WelcomeFlowIntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87F47972899A01A0076B95C /* WelcomeFlowIntroView.swift */; };
+		F880C5B9289C53FB00C53D1E /* AuthStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5AA289B7B4B00C53D1E /* AuthStore.swift */; };
+		F880C5BA289C53FE00C53D1E /* OktaEmailSignUpForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5AC289BA28C00C53D1E /* OktaEmailSignUpForm.swift */; };
+		F880C5BB289C541400C53D1E /* PremiumStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C59F2899E8FE00C53D1E /* PremiumStore.swift */; };
+		F880C5BD289C642D00C53D1E /* WelcomeFlowHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5BC289C642D00C53D1E /* WelcomeFlowHeaderView.swift */; };
+		F880C5BE289C650D00C53D1E /* WelcomeFlowHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5BC289C642D00C53D1E /* WelcomeFlowHeaderView.swift */; };
 		F8F360332874D9B800736740 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8F360322874D9B800736740 /* StoreKit.framework */; };
 		F8F360352874DA6700736740 /* NeevaPremiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F360342874DA6700736740 /* NeevaPremiumView.swift */; };
 		FA6B2AC21D41F02D00429414 /* Punycode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6B2AC11D41F02D00429414 /* Punycode.swift */; };
@@ -3026,6 +3054,9 @@
 		F80983BB283849E00039FCBD /* Black@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Black@2x.png"; sourceTree = "<group>"; };
 		F80983C228387B6D0039FCBD /* System@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "System@3x.png"; sourceTree = "<group>"; };
 		F80983C328387B6D0039FCBD /* System@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "System@2x.png"; sourceTree = "<group>"; };
+		F815A5E62899C57A003FE9A8 /* WelcomeFlowSignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeFlowSignInView.swift; sourceTree = "<group>"; };
+		F815A5E82899C68A003FE9A8 /* WelcomeFlowPlansView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeFlowPlansView.swift; sourceTree = "<group>"; };
+		F815A5EA2899C9FF003FE9A8 /* WelcomeFlowPrivacyAndTermsLinksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeFlowPrivacyAndTermsLinksView.swift; sourceTree = "<group>"; };
 		F8418EDD282B2EBA004F1305 /* SpacesLoginRequiredView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacesLoginRequiredView.swift; sourceTree = "<group>"; };
 		F84B21BE1A090F8100AAB793 /* Client.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Client.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F84B21D31A090F8100AAB793 /* ClientTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClientTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3037,6 +3068,17 @@
 		F84B22491A0920C600AAB793 /* ShareTo.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareTo.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8708D251A0970990051AB07 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		F8708D261A0970990051AB07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F87F479528999FCF0076B95C /* WelcomeFlowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeFlowModel.swift; sourceTree = "<group>"; };
+		F87F47972899A01A0076B95C /* WelcomeFlowIntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeFlowIntroView.swift; sourceTree = "<group>"; };
+		F87F47992899A0F70076B95C /* WelcomeFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeFlowView.swift; sourceTree = "<group>"; };
+		F880C59F2899E8FE00C53D1E /* PremiumStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumStore.swift; sourceTree = "<group>"; };
+		F880C5A12899FEE600C53D1E /* WelcomeFlowDefaultBrowserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeFlowDefaultBrowserView.swift; sourceTree = "<group>"; };
+		F880C5A3289A124100C53D1E /* WelcomeFlowSignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeFlowSignUpView.swift; sourceTree = "<group>"; };
+		F880C5A5289B4BDA00C53D1E /* WelcomeFlowAuthButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeFlowAuthButtonView.swift; sourceTree = "<group>"; };
+		F880C5A7289B588B00C53D1E /* WelcomeFlowSignUpEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeFlowSignUpEmailView.swift; sourceTree = "<group>"; };
+		F880C5AA289B7B4B00C53D1E /* AuthStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthStore.swift; sourceTree = "<group>"; };
+		F880C5AC289BA28C00C53D1E /* OktaEmailSignUpForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaEmailSignUpForm.swift; sourceTree = "<group>"; };
+		F880C5BC289C642D00C53D1E /* WelcomeFlowHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeFlowHeaderView.swift; sourceTree = "<group>"; };
 		F8F360322874D9B800736740 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		F8F360342874DA6700736740 /* NeevaPremiumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeevaPremiumView.swift; sourceTree = "<group>"; };
 		F8F360362875066200736740 /* StoreKitLocalTesting.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKitLocalTesting.storekit; sourceTree = "<group>"; };
@@ -5017,8 +5059,8 @@
 				6672D0DB27A46E8300CEFFC2 /* IntroViewModel.swift */,
 				BC6D33C726228EA00050DEC4 /* IntroFirstRunView.swift */,
 				BC15D22A26FA575A00FDF6A7 /* AuthButton.swift */,
-				BC15D22C26FA5F9C00FDF6A7 /* OtherOptionsPage.swift */,
 				BC93328D2715324700B9BE1C /* OktaAuth.swift */,
+				BC15D22C26FA5F9C00FDF6A7 /* OtherOptionsPage.swift */,
 				BCC7737A27443E7F008E7538 /* SignUpOneButtonPromptView.swift */,
 				BC6239DF27476BC8004A036F /* SignUpTwoButtonsPromptView.swift */,
 			);
@@ -5416,6 +5458,7 @@
 		F84B21C01A090F8100AAB793 /* Client */ = {
 			isa = PBXGroup;
 			children = (
+				F880C5A9289B7B2800C53D1E /* Authentication */,
 				F80983C1283879890039FCBD /* AltAppIcons */,
 				F84B21E41A0910F600AAB793 /* Application */,
 				F84B21EB1A0910F600AAB793 /* Assets */,
@@ -5527,18 +5570,20 @@
 		F84B21F11A0910F600AAB793 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
-				BCAAA0D1276D99E50013223E /* NeevaWallet */,
-				C8CF648C26F907BB00C3816F /* Favicons */,
 				D3A994941A368691008AD1AC /* Browser */,
-				C9098F5C26AF485400D2B5F4 /* TabChrome */,
 				23ED80FD25C899D700D0E9D5 /* DefaultBrowserOnboarding */,
+				C8CF648C26F907BB00C3816F /* Favicons */,
 				66B379DF26DDAD4700087B04 /* Feedback */,
+				D05434F3225FDA3400FDE4EF /* History+RecentlyClosed */,
+				C868193A27AF9C1A002ECEEF /* IncognitoModel.swift */,
 				EBC486972195F46A00CDA48D /* InternalSchemeHandler */,
 				E49943F31AE6879C00BF9DE4 /* Intro */,
-				D05434F3225FDA3400FDE4EF /* History+RecentlyClosed */,
+				BCAAA0D1276D99E50013223E /* NeevaWallet */,
 				6650585A26E68CE400C9CD51 /* Notifications */,
-				66BB89D226A64BA4000C4BDF /* Overlay */,
 				2034988D2843307C00799544 /* OrientationDependentStack.swift */,
+				66BB89D226A64BA4000C4BDF /* Overlay */,
+				2C49854D206173C800893DAE /* photon-colors.swift */,
+				F880C59E2899E8EA00C53D1E /* Premium */,
 				BC85E224264F29660068092F /* Prompt */,
 				66C2B6302748AA020074B695 /* QueuedViewManager.swift */,
 				F84B21F51A0910F600AAB793 /* Reader */,
@@ -5546,12 +5591,14 @@
 				D3972BF01C22412B00035B87 /* Share */,
 				206954A227FF424D000360D6 /* Site */,
 				C9C18DFC26559007004710CD /* Suggestions */,
+				C9098F5C26AF485400D2B5F4 /* TabChrome */,
+				EB9A179720E69A7E00B12184 /* Theme */,
 				668CA09726797E9800BA756F /* Toast */,
 				2816EFFF1B33E05400522243 /* UIConstants.swift */,
 				D0FCF7EE1FE44E15004A7995 /* UserContent */,
+				F87F479428999E2C0076B95C /* WelcomeFlow */,
 				D38A1BEB1A9FA2CA00F6A386 /* Widgets */,
 				F84B22211A09122500AAB793 /* ZeroQuery */,
-				C868193A27AF9C1A002ECEEF /* IncognitoModel.swift */,
 			);
 			path = Frontend;
 			sourceTree = "<group>";
@@ -5649,6 +5696,41 @@
 				E6AB6324283C0A2200B0169C /* OpenInNeevaView.swift */,
 			);
 			path = ShareTo;
+			sourceTree = "<group>";
+		};
+		F87F479428999E2C0076B95C /* WelcomeFlow */ = {
+			isa = PBXGroup;
+			children = (
+				F880C5A5289B4BDA00C53D1E /* WelcomeFlowAuthButtonView.swift */,
+				F880C5A12899FEE600C53D1E /* WelcomeFlowDefaultBrowserView.swift */,
+				F880C5BC289C642D00C53D1E /* WelcomeFlowHeaderView.swift */,
+				F87F47972899A01A0076B95C /* WelcomeFlowIntroView.swift */,
+				F87F479528999FCF0076B95C /* WelcomeFlowModel.swift */,
+				F815A5E82899C68A003FE9A8 /* WelcomeFlowPlansView.swift */,
+				F815A5EA2899C9FF003FE9A8 /* WelcomeFlowPrivacyAndTermsLinksView.swift */,
+				F815A5E62899C57A003FE9A8 /* WelcomeFlowSignInView.swift */,
+				F880C5A7289B588B00C53D1E /* WelcomeFlowSignUpEmailView.swift */,
+				F880C5A3289A124100C53D1E /* WelcomeFlowSignUpView.swift */,
+				F87F47992899A0F70076B95C /* WelcomeFlowView.swift */,
+			);
+			path = WelcomeFlow;
+			sourceTree = "<group>";
+		};
+		F880C59E2899E8EA00C53D1E /* Premium */ = {
+			isa = PBXGroup;
+			children = (
+				F880C59F2899E8FE00C53D1E /* PremiumStore.swift */,
+			);
+			path = Premium;
+			sourceTree = "<group>";
+		};
+		F880C5A9289B7B2800C53D1E /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				F880C5AA289B7B4B00C53D1E /* AuthStore.swift */,
+				F880C5AC289BA28C00C53D1E /* OktaEmailSignUpForm.swift */,
+			);
+			path = Authentication;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -7071,6 +7153,7 @@
 				4A42C42927E58487003B9826 /* IncognitoModel.swift in Sources */,
 				4A42C42A27E58487003B9826 /* Popover.swift in Sources */,
 				4A42C42B27E58487003B9826 /* LoggingSettingsView.swift in Sources */,
+				F880C5B2289C53F400C53D1E /* WelcomeFlowView.swift in Sources */,
 				4A42C42C27E58487003B9826 /* NotificationList.swift in Sources */,
 				4A42C42D27E58487003B9826 /* FindInPageHelper.swift in Sources */,
 				4A42C42F27E58487003B9826 /* PrivacySettingsSection.swift in Sources */,
@@ -7111,6 +7194,7 @@
 				4A42C44B27E58487003B9826 /* PageActionMenu.swift in Sources */,
 				4A42C44C27E58487003B9826 /* DownloadContentScript.swift in Sources */,
 				4A42C44D27E58487003B9826 /* ScapeImageEntityView.swift in Sources */,
+				F880C5AF289C53F400C53D1E /* WelcomeFlowSignInView.swift in Sources */,
 				4A42C44E27E58487003B9826 /* SpaceTopView.swift in Sources */,
 				4A42C44F27E58487003B9826 /* TabEventHandlers.swift in Sources */,
 				E942D4352810962400B4A3EC /* KnowledgeCardView.swift in Sources */,
@@ -7124,6 +7208,7 @@
 				204691292887833F00069C16 /* FittedCard.swift in Sources */,
 				4A42C45727E58487003B9826 /* SpaceEntityThumbnailView.swift in Sources */,
 				4A42C45827E58487003B9826 /* IntroFirstRunView.swift in Sources */,
+				F880C5B6289C53F400C53D1E /* WelcomeFlowDefaultBrowserView.swift in Sources */,
 				4A42C45927E58487003B9826 /* DataManagementView.swift in Sources */,
 				4A42C45A27E58487003B9826 /* ZeroQuerySuggestionModels.swift in Sources */,
 				4A42C45B27E58487003B9826 /* SearchBarTourPromptViewController.swift in Sources */,
@@ -7150,6 +7235,7 @@
 				4A42C46D27E58487003B9826 /* TabPrintPageRenderer.swift in Sources */,
 				4A42C46E27E58487003B9826 /* ReaderMode.swift in Sources */,
 				4A42C46F27E58487003B9826 /* SessionData.swift in Sources */,
+				F880C5BB289C541400C53D1E /* PremiumStore.swift in Sources */,
 				E67CD27027F33BB5007BFE58 /* RecommendedSpacesView.swift in Sources */,
 				E67B0B3B2809B9D3008D1CCD /* OpenSessionsView.swift in Sources */,
 				4A42C47027E58487003B9826 /* SettingsView.swift in Sources */,
@@ -7187,6 +7273,7 @@
 				4A42C48B27E58487003B9826 /* SendFeedbackPanel.swift in Sources */,
 				E97149902849564700A6A1FC /* CheatsheetLoadingView.swift in Sources */,
 				4A42C48C27E58487003B9826 /* DownloadOverlayContent.swift in Sources */,
+				F880C5B9289C53FB00C53D1E /* AuthStore.swift in Sources */,
 				4A42C48D27E58487003B9826 /* (null) in Sources */,
 				4A42C48E27E58487003B9826 /* TransitionExtensions.swift in Sources */,
 				4AB8160627EA662E0017203D /* ScreenCaptureHelper.swift in Sources */,
@@ -7194,6 +7281,7 @@
 				4A42C49027E58487003B9826 /* GroupedRowButtonView.swift in Sources */,
 				E67B0B412809BC8C008D1CCD /* WalletListSeparatorModifier.swift in Sources */,
 				E67B0B432809BCA9008D1CCD /* SessionActionsModifier.swift in Sources */,
+				F880C5B8289C53F400C53D1E /* WelcomeFlowIntroView.swift in Sources */,
 				E67CD27427F33BCA007BFE58 /* ZeroQueryPlaceholder.swift in Sources */,
 				E67B0B3D2809BBDC008D1CCD /* YourNFTsView.swift in Sources */,
 				4A42C49327E58487003B9826 /* TrackingPreventionUtils.swift in Sources */,
@@ -7221,6 +7309,7 @@
 				67724FE22859217B00680F6B /* LoopingPlayer.swift in Sources */,
 				4A42C4A527E58487003B9826 /* LoginsHelper.swift in Sources */,
 				4A42C4A627E58487003B9826 /* SavedTab+ConfigureExtension.swift in Sources */,
+				F880C5B5289C53F400C53D1E /* WelcomeFlowPrivacyAndTermsLinksView.swift in Sources */,
 				4A42C4A727E58487003B9826 /* FeedbackHelper.swift in Sources */,
 				4A42C4A827E58487003B9826 /* OpenInHelper.swift in Sources */,
 				4A42C4A927E58487003B9826 /* CommunitySubmissionView.swift in Sources */,
@@ -7240,7 +7329,6 @@
 				4A42C4B227E58487003B9826 /* NeevaTabContentBlocker.swift in Sources */,
 				E677D1D62800E8CD0060869F /* SiteRowView.swift in Sources */,
 				4A42C4B327E58487003B9826 /* BuyingGuideView.swift in Sources */,
-				4A42C4B427E58487003B9826 /* OktaAuth.swift in Sources */,
 				4A42C4B527E58487003B9826 /* TourPromptViewController.swift in Sources */,
 				4A42C4B627E58487003B9826 /* WebViewContainer.swift in Sources */,
 				4A42C4B727E58487003B9826 /* TrackingMenuView.swift in Sources */,
@@ -7300,6 +7388,7 @@
 				4A42C4E527E58487003B9826 /* DebugLocaleSetting.swift in Sources */,
 				4A42C4E627E58487003B9826 /* BrowserPrompts.swift in Sources */,
 				4A42C4E727E58487003B9826 /* NavigationRouter+MaybeRewriteURL.swift in Sources */,
+				F880C5B0289C53F400C53D1E /* WelcomeFlowSignUpEmailView.swift in Sources */,
 				4A42C4E827E58487003B9826 /* WebResultView.swift in Sources */,
 				4A50D5B427F2E638006C9A39 /* TabGroup.swift in Sources */,
 				4A42C4E927E58487003B9826 /* WidgetKitTopSiteModel.swift in Sources */,
@@ -7337,6 +7426,7 @@
 				4A42C50727E58487003B9826 /* CheatsheetMenuView.swift in Sources */,
 				4A42C50827E58487003B9826 /* ContentBlocker.swift in Sources */,
 				E67CD27727F33C3B007BFE58 /* TabGroup.swift in Sources */,
+				F880C5B4289C53F400C53D1E /* WelcomeFlowModel.swift in Sources */,
 				4A42C50927E58487003B9826 /* NeevaSettingsSection.swift in Sources */,
 				E67CD27127F33BBE007BFE58 /* View+Extensions.swift in Sources */,
 				4A42C50B27E58487003B9826 /* AboutSettingsSection.swift in Sources */,
@@ -7354,6 +7444,7 @@
 				4A42C51527E58487003B9826 /* KMCGeigerCounter.m in Sources */,
 				E9EC2606283ED06300B9A79B /* CheatsheetSettingsView.swift in Sources */,
 				E9EC2601283C598B00B9A79B /* BloomFilterManager.swift in Sources */,
+				F880C5B1289C53F400C53D1E /* WelcomeFlowSignUpView.swift in Sources */,
 				4A42C51727E58487003B9826 /* FaviconHandler.swift in Sources */,
 				4A42C51827E58487003B9826 /* InternalSchemeHandler.swift in Sources */,
 				4A42C51927E58487003B9826 /* TrackingMenuProtectionRowButton.swift in Sources */,
@@ -7421,7 +7512,9 @@
 				4A42C54727E58487003B9826 /* CloseButton.swift in Sources */,
 				4A42C54827E58487003B9826 /* DefaultBrowserIntestitialOnboardingView.swift in Sources */,
 				4A42C54927E58487003B9826 /* HTTPAuthPromptOverlayContent.swift in Sources */,
+				F880C5BE289C650D00C53D1E /* WelcomeFlowHeaderView.swift in Sources */,
 				E677D1D22800E89E0060869F /* HistoryPanelView.swift in Sources */,
+				F880C5B7289C53F400C53D1E /* WelcomeFlowPlansView.swift in Sources */,
 				4A42C54A27E58487003B9826 /* URLFixup.swift in Sources */,
 				203203EC28879D7B00405C07 /* CardStripModel.swift in Sources */,
 				E67CD27627F33BD1007BFE58 /* SuggestedXYZSearchesView.swift in Sources */,
@@ -7433,6 +7526,7 @@
 				E67B0B48280F0296008D1CCD /* YourCollectionDetailView.swift in Sources */,
 				4A42C55227E58487003B9826 /* BrowserViewController.swift in Sources */,
 				20167FCE2824601900223B9E /* FindView.swift in Sources */,
+				F880C5AE289BA7BB00C53D1E /* OktaAuth.swift in Sources */,
 				20978E712874AE6B0009D346 /* CardModels.swift in Sources */,
 				4A42C55327E58487003B9826 /* SuggestionsContent.swift in Sources */,
 				4A42C55427E58487003B9826 /* SpacesFilterView.swift in Sources */,
@@ -7461,6 +7555,7 @@
 				4A42C56C27E58487003B9826 /* GeometryExtensions.swift in Sources */,
 				4A42C56E27E58487003B9826 /* NeevaFeatureFlagSettingsView.swift in Sources */,
 				20BB666E28220F11001FA7E9 /* ChangeNotificationPreferenceDialogView.swift in Sources */,
+				F880C5BA289C53FE00C53D1E /* OktaEmailSignUpForm.swift in Sources */,
 				4A42C57027E58487003B9826 /* OverlayView.swift in Sources */,
 				4A42C57127E58487003B9826 /* NotificationPermissionHelper.swift in Sources */,
 				4A42C57227E58487003B9826 /* LocationViewTouchHandler.swift in Sources */,
@@ -7478,6 +7573,7 @@
 				4A42C57E27E58487003B9826 /* BrowserBottomBarView.swift in Sources */,
 				4A42C57F27E58487003B9826 /* RelatedSearchesView.swift in Sources */,
 				4A42C58027E58487003B9826 /* BrowserViewController+TopBarDelegate.swift in Sources */,
+				F880C5B3289C53F400C53D1E /* WelcomeFlowAuthButtonView.swift in Sources */,
 				4A42C58127E58487003B9826 /* SpotlightLogger.swift in Sources */,
 				4A42C58227E58487003B9826 /* BrowserViewController+KeyCommands.swift in Sources */,
 				E971498A2849382D00A6A1FC /* PriceHistoryView.swift in Sources */,
@@ -7672,9 +7768,11 @@
 				D029A04920A62DB0001DB72F /* TemporaryDocument.swift in Sources */,
 				4A5CCE8326524B7F0063783D /* FaviconView.swift in Sources */,
 				C9E5F2C42677F0A600025A7F /* LocationLabel.swift in Sources */,
+				F880C5A6289B4BDA00C53D1E /* WelcomeFlowAuthButtonView.swift in Sources */,
 				D38F02D11C05127100175932 /* Authenticator.swift in Sources */,
 				C9299E3B2695EA4B00758795 /* TextSizeView.swift in Sources */,
 				D0FCF7F51FE45842004A7995 /* UserScriptManager.swift in Sources */,
+				F815A5EB2899C9FF003FE9A8 /* WelcomeFlowPrivacyAndTermsLinksView.swift in Sources */,
 				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
 				4A9F654B27229E3400B7C06E /* BottomSheetView.swift in Sources */,
 				66EA9BF2277644870013DB07 /* BrowserTopBarView.swift in Sources */,
@@ -7746,6 +7844,7 @@
 				C9F49CB9266FBFEA00F3408A /* DataManagementView.swift in Sources */,
 				C9BED4BB2667E3F8001D9C77 /* ZeroQuerySuggestionModels.swift in Sources */,
 				E64024E827F2432300D65B63 /* RecommendedSpacesView.swift in Sources */,
+				F880C5BD289C642D00C53D1E /* WelcomeFlowHeaderView.swift in Sources */,
 				BC85E240264F40B80068092F /* SearchBarTourPromptViewController.swift in Sources */,
 				C9655DF126A09AC900925912 /* CompletionForAnimation.swift in Sources */,
 				C9E5F2C92678062300025A7F /* LocationTextField.swift in Sources */,
@@ -7777,6 +7876,7 @@
 				BCC39A1F26C6532B00EEC559 /* NeevaUserFlagSettingsView.swift in Sources */,
 				66430430267C19D200674549 /* ToastDefaults.swift in Sources */,
 				39F4C10A2045DB2E00746155 /* FocusHelper.swift in Sources */,
+				F880C5AD289BA28C00C53D1E /* OktaEmailSignUpForm.swift in Sources */,
 				4AB203A0267D4EEC00920F39 /* BrowserPrimitive.swift in Sources */,
 				206954A827FF449E000360D6 /* RecentlyClosedTabsPanelView.swift in Sources */,
 				2034988E2843307C00799544 /* OrientationDependentStack.swift in Sources */,
@@ -7786,6 +7886,7 @@
 				6650586026E68F2F00C9CD51 /* NotificationManager.swift in Sources */,
 				7BEFC6801BFF68C30059C952 /* QuickActions.swift in Sources */,
 				4A9F65432710A49000B7C06E /* CustomThumbnails.swift in Sources */,
+				F880C5A02899E8FE00C53D1E /* PremiumStore.swift in Sources */,
 				8A422E9B26E19783005CC814 /* AddOrUpdateSpaceView.swift in Sources */,
 				E96C21D32880F2EF00B58C86 /* CheatsheetDataStore.swift in Sources */,
 				C9157BB926BDDA4E009678D9 /* ViewRef.swift in Sources */,
@@ -7805,6 +7906,8 @@
 				D31CF65C1CC1959A001D0BD0 /* PrivilegedRequest.swift in Sources */,
 				C832BF8726E3CA0900B9A1F8 /* SendFeedbackPanel.swift in Sources */,
 				C832BF5D26E0A8D500B9A1F8 /* DownloadOverlayContent.swift in Sources */,
+				F87F47982899A01A0076B95C /* WelcomeFlowIntroView.swift in Sources */,
+				F815A5E72899C57A003FE9A8 /* WelcomeFlowSignInView.swift in Sources */,
 				C99646652655AA9A005FFE83 /* (null) in Sources */,
 				20BB666C2821E0F0001FA7E9 /* ChangeNotificationPreferenceDialogView.swift in Sources */,
 				1AC3F333278CDE7E000CCE09 /* TransitionExtensions.swift in Sources */,
@@ -7815,6 +7918,7 @@
 				4AA14F20264C7954003B815A /* ZeroQueryView.swift in Sources */,
 				205132B128208DB0003AAE96 /* SheetHeader.swift in Sources */,
 				6672D0DC27A46E8300CEFFC2 /* IntroViewModel.swift in Sources */,
+				F87F479A2899A0F70076B95C /* WelcomeFlowView.swift in Sources */,
 				E9714992284959B200A6A1FC /* CheatsheetPromoModel.swift in Sources */,
 				C832BF5926DEE0BB00B9A1F8 /* AddToSpaceOverlayContent.swift in Sources */,
 				66C3C76C267A8858002B50B1 /* ToastView.swift in Sources */,
@@ -7848,6 +7952,7 @@
 				C9DDC12026B9E24900F293AB /* WebViewContainer.swift in Sources */,
 				F0102C2F2605240B00B5F884 /* TrackingMenuView.swift in Sources */,
 				E6EA734B27F6104C00845FFB /* URLExtensions.swift in Sources */,
+				F880C5A22899FEE600C53D1E /* WelcomeFlowDefaultBrowserView.swift in Sources */,
 				C832BF8326E15B5B00B9A1F8 /* OverflowMenuOverlayContent.swift in Sources */,
 				668DC29926E9B1310072799E /* AppDelegate+UNUserNotificationCenterDelegate.swift in Sources */,
 				C9B55A0F26A87C9B00C71F31 /* DebugSettingsRestartPromptView.swift in Sources */,
@@ -7860,6 +7965,7 @@
 				E9EC25FF283C337F00B9A79B /* CheatsheetUGCIndicatorView.swift in Sources */,
 				4A1D054B26642BF400D63333 /* SimulatedSwipeController.swift in Sources */,
 				1A840EC72788E840005F6003 /* GenericSuggestion.swift in Sources */,
+				F815A5E92899C68A003FE9A8 /* WelcomeFlowPlansView.swift in Sources */,
 				D0C95E0E200FD3B200E4E51C /* PrintHelper.swift in Sources */,
 				665CA48626F04FA4006E2F4D /* NotificationBadge.swift in Sources */,
 				C9C18E6826559DCF004710CD /* FormatDateTime.swift in Sources */,
@@ -7879,6 +7985,7 @@
 				C894C5892735DAF40068B0BE /* CardTransitionModifier.swift in Sources */,
 				67AA22F226C476F300F33D09 /* BrowserViewController+OverflowMenu.swift in Sources */,
 				67292D3326AD2CF200DB1BFA /* AnnotationType.swift in Sources */,
+				F880C5AB289B7B4B00C53D1E /* AuthStore.swift in Sources */,
 				C8B109A5275E9CE60010EBE4 /* BrowserView.swift in Sources */,
 				F8418EDE282B2EBA004F1305 /* SpacesLoginRequiredView.swift in Sources */,
 				BC6239E027476BC8004A036F /* SignUpTwoButtonsPromptView.swift in Sources */,
@@ -7888,6 +7995,8 @@
 				8AA97E4026AF36F300ACCCCF /* ZeroQueryCommonContextMenuActions.swift in Sources */,
 				6670187126BB678700960CF3 /* SuggestionModel.swift in Sources */,
 				665CA48826F054CC006E2F4D /* NotificationRow.swift in Sources */,
+				F880C5A8289B588B00C53D1E /* WelcomeFlowSignUpEmailView.swift in Sources */,
+				DA9FD88924E213E500168D1E /* QuickLinkSelection.intentdefinition in Sources */,
 				673AF3FF289CDE8D00F62A80 /* QuickLinkSelection.intentdefinition in Sources */,
 				E97D7E842834A91100944EF5 /* BloomFilterManager.swift in Sources */,
 				E65075521E37F6D1006961AC /* UIViewExtensions.swift in Sources */,
@@ -7972,6 +8081,7 @@
 				661AFF1A2727A4840099B3E4 /* CardGridOverflowMenuView.swift in Sources */,
 				67724FE12859217B00680F6B /* LoopingPlayer.swift in Sources */,
 				E942D4342810778300B4A3EC /* KnowledgeCardView.swift in Sources */,
+				F880C5A4289A124100C53D1E /* WelcomeFlowSignUpView.swift in Sources */,
 				4A227BE82758BE5B00A89322 /* SpaceComments.swift in Sources */,
 				C9BED4B92667D5D3001D9C77 /* Roobert.swift in Sources */,
 				20469125288782A400069C16 /* CardDropDelegate.swift in Sources */,
@@ -8015,6 +8125,7 @@
 				C832BF5F26E0A9E400B9A1F8 /* HTTPAuthPromptOverlayContent.swift in Sources */,
 				D3C744CD1A687D6C004CE85D /* URLFixup.swift in Sources */,
 				204691232887825700069C16 /* CardStripView.swift in Sources */,
+				F87F479628999FCF0076B95C /* WelcomeFlowModel.swift in Sources */,
 				32D95B0427A37C8100447507 /* CheatsheetTooltipPopoverView.swift in Sources */,
 				E4A961181AC041C40069AD6F /* ReadabilityService.swift in Sources */,
 				D3BE7B261B054D4400641031 /* main.swift in Sources */,
