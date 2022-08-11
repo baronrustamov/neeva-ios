@@ -67,22 +67,6 @@ open class Visit: Hashable {
         self.date = date
         self.type = type
     }
-
-    open class func fromJSON(_ json: [String: Any]) -> Visit? {
-        if let type = json["type"] as? Int,
-            let typeEnum = VisitType(rawValue: type),
-            let date = json["date"] as? Int64, date >= 0
-        {
-            return Visit(date: MicrosecondTimestamp(date), type: typeEnum)
-        }
-        return nil
-    }
-
-    open func toJSON() -> [String: Any] {
-        let d = NSNumber(value: self.date)
-        let o: [String: Any] = ["type": self.type.rawValue, "date": d]
-        return o
-    }
 }
 
 public func == (lhs: Visit, rhs: Visit) -> Bool {

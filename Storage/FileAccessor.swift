@@ -92,14 +92,6 @@ open class FileAccessor {
         }
     }
 
-    open func copy(_ fromRelativePath: String, toAbsolutePath: String) throws -> Bool {
-        let fromPath = URL(fileURLWithPath: rootPath).appendingPathComponent(fromRelativePath).path
-        let dest = URL(fileURLWithPath: toAbsolutePath).deletingLastPathComponent().path
-        try createDir(dest)
-        try FileManager.default.copyItem(atPath: fromPath, toPath: toAbsolutePath)
-        return true
-    }
-
     /// Creates a directory with the given path, including any intermediate directories.
     /// Does nothing if the directory already exists.
     fileprivate func createDir(_ absolutePath: String) throws {

@@ -10,9 +10,7 @@ open class SuggestedSite: Site {
         url
     }
 
-    let trackingId: Int
     init(data: SuggestedSiteData) {
-        self.trackingId = data.trackingId
         super.init(url: data.url, title: data.title)
         // A guid is required in the case the site might become a pinned site
         self.guid = "default" + data.title
@@ -41,7 +39,7 @@ open class SuggestedSitesCursor: ArrayCursor<SuggestedSite> {
     }
 }
 
-public struct SuggestedSiteData {
+struct SuggestedSiteData {
     var url: URL
     var bgColor: String
     var imageUrl: String

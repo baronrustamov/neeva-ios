@@ -23,14 +23,6 @@ public struct ExtensionUtils {
     public enum ExtractedShareItem {
         case shareItem(ShareItem)
         case rawText(String)
-
-        public func isUrlType() -> Bool {
-            if case .shareItem(_) = self {
-                return true
-            } else {
-                return false
-            }
-        }
     }
 
     /// Look through the extensionContext for a url and title. Walks over all inputItems and then over all the attachments.
