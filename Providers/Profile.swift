@@ -61,10 +61,6 @@ protocol Profile: AnyObject {
     var certStore: CertStore { get }
     var panelDataObservers: PanelDataObservers { get }
 
-    #if !MOZ_TARGET_NOTIFICATIONSERVICE
-        var readingList: ReadingList { get }
-    #endif
-
     var isShutdown: Bool { get }
 
     /// WARNING: Only to be called as part of the app lifecycle from the AppDelegate
@@ -94,7 +90,6 @@ open class BrowserProfile: Profile {
     internal let files: FileAccessor
 
     let db: BrowserDB
-    let readingListDB: BrowserDB
 
     private let loginsSaltKeychainKey = "sqlcipher.key.logins.salt"
     private let loginsUnlockKeychainKey = "sqlcipher.key.logins.db"
@@ -144,8 +139,6 @@ open class BrowserProfile: Profile {
 
         // Set up our database handles.
         self.db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
-        self.readingListDB = BrowserDB(
-            filename: "ReadingList.db", schema: ReadingListSchema(), files: files)
 
         if isNewProfile {
             log.info("New profile. Removing old Keychain/Prefs data.")
@@ -272,10 +265,6 @@ open class BrowserProfile: Profile {
     var recommendations: HistoryRecommendations {
         return self.legacyPlaces
     }
-
-    lazy var readingList: ReadingList = {
-        return SQLiteReadingList(db: self.readingListDB)
-    }()
 
     lazy var remoteClientsAndTabs:
         RemoteClientsAndTabs & ResettableSyncStorage & AccountRemovalDelegate & RemoteDevices = {

@@ -64,7 +64,6 @@ open class MockProfile: Client.Profile {
     }()
 
     var db: BrowserDB
-    var readingListDB: BrowserDB
 
     fileprivate let name: String = "mockaccount"
 
@@ -72,8 +71,6 @@ open class MockProfile: Client.Profile {
         files = MockFiles()
         try? files.remove("\(databasePrefix)_logins.db")
         db = BrowserDB(filename: "\(databasePrefix).db", schema: BrowserSchema(), files: files)
-        readingListDB = BrowserDB(
-            filename: "\(databasePrefix)_ReadingList.db", schema: ReadingListSchema(), files: files)
         legacyPlaces = SQLiteHistory(db: self.db)
         recommendations = legacyPlaces
         history = legacyPlaces
@@ -114,10 +111,6 @@ open class MockProfile: Client.Profile {
 
     lazy public var certStore: CertStore = {
         return CertStore()
-    }()
-
-    lazy public var readingList: ReadingList = {
-        return SQLiteReadingList(db: self.readingListDB)
     }()
 
     internal lazy var remoteClientsAndTabs: RemoteClientsAndTabs = {
