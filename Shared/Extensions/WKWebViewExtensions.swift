@@ -81,4 +81,8 @@ extension WKBackForwardList {
     public var all: [WKBackForwardListItem] {
         return (backList + [currentItem] + forwardList).compactMap { $0 }
     }
+
+    public var navigationStackIndex: Int {
+        backList.count
+    }
 }

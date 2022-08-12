@@ -16,9 +16,6 @@ struct ArchivedTabsRowView: View {
 
     func getURLForTab(tab: Tab) -> URL? {
         if let url = tab.url ?? tab.sessionData?.currentUrl {
-            if let internalUrl = InternalURL(url) {
-                return internalUrl.extractedUrlParam
-            }
             return url
         }
 

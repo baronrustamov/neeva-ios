@@ -112,4 +112,8 @@ class WebUIMessageHelper: TabContentScript {
             }
         }
     }
+
+    func connectedTabChanged(_ tab: Tab) {
+        self.tab = tab
+    }
 }

@@ -176,4 +176,6 @@ extension ContextMenuHelper: TabContentScript {
             elements = nil
         }
     }
+
+    func connectedTabChanged(_ tab: Tab) {}
 }

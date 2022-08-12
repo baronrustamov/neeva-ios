@@ -433,10 +433,6 @@ extension WKNavigationAction {
 
 extension BrowserViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        if tabManager.selectedTab?.webView !== webView {
-            return
-        }
-
         logJSConsoleOutputIfEnabled(for: webView)
 
         locationModel.resetSecureListener()

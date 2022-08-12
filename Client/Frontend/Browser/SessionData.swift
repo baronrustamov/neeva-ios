@@ -47,6 +47,7 @@ private func migrate(urls: [URL]) -> [URL] {
 
 class SessionData: NSObject, NSCoding {
     let currentPage: Int
+    let navigationStackIndex: Int
     let urls: [URL]
 
     /// For each URL there is a corresponding query or nil.
@@ -57,9 +58,14 @@ class SessionData: NSObject, NSCoding {
     let lastUsedTime: Timestamp
 
     var currentUrl: URL? {
-        // TODO: We should probably unwrap this if it is a session restore internal URL.
         let index = urls.count - 1 + currentPage
-        return 0..<urls.count ~= index ? urls[index] : nil
+        let url = 0..<urls.count ~= index ? urls[index] : nil
+
+        if let nestedUrl = InternalURL.unwrapSessionRestore(url: url) {
+            return nestedUrl
+        }
+
+        return url
     }
 
     var initialUrl: URL? {
@@ -78,12 +84,16 @@ class SessionData: NSObject, NSCoding {
     ///   - urls: The sequence of URLs in this tab's session history.
     ///   - lastUsedTime: The last time this tab was modified.
     init(
-        currentPage: Int, urls: [URL],
-        queries: [String?], suggestedQueries: [String?],
+        currentPage: Int,
+        navigationStackIndex: Int,
+        urls: [URL],
+        queries: [String?],
+        suggestedQueries: [String?],
         queryLocations: [QueryForNavigation.Query.Location?],
         lastUsedTime: Timestamp
     ) {
         self.currentPage = currentPage
+        self.navigationStackIndex = navigationStackIndex
         self.urls = migrate(urls: urls)
         self.typedQueries = queries
         self.suggestedQueries = suggestedQueries
@@ -97,6 +107,7 @@ class SessionData: NSObject, NSCoding {
 
     required init?(coder: NSCoder) {
         self.currentPage = coder.decodeInteger(forKey: "currentPage")
+        self.navigationStackIndex = coder.decodeInteger(forKey: "navigationStackIndex")
         self.urls = migrate(urls: coder.decodeObject(forKey: "urls") as? [URL] ?? [URL]())
         let queries = coder.decodeObject(forKey: "queries") as? [String?] ?? [String]()
         self.typedQueries = queries
@@ -112,6 +123,7 @@ class SessionData: NSObject, NSCoding {
 
     func encode(with coder: NSCoder) {
         coder.encode(currentPage, forKey: "currentPage")
+        coder.encode(navigationStackIndex, forKey: "navigationStackIndex")
         coder.encode(migrate(urls: urls), forKey: "urls")
         coder.encode(typedQueries, forKey: "queries")
         coder.encode(suggestedQueries, forKey: "suggestedQueries")

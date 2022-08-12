@@ -15,8 +15,9 @@ protocol ContentBlockerTab: AnyObject {
 }
 
 class TabContentBlocker: ObservableObject {
+    @Published var stats: TPPageStats = TPPageStats()
     private(set) weak var tab: ContentBlockerTab?
-
+    
     var isEnabled: Bool {
         return false
     }
@@ -25,13 +26,6 @@ class TabContentBlocker: ObservableObject {
 
     func notifyContentBlockingChanged() {}
 
-    @Published var stats: TPPageStats = TPPageStats()
-
-    init(tab: ContentBlockerTab) {
-        self.tab = tab
-        NotificationCenter.default.addObserver(self, selector: #selector(notifiedTabSetupRequired), name: .contentBlockerTabSetupRequired, object: nil)
-    }
-    
     func scriptMessageHandlerName() -> String? {
         return "trackingProtectionStats"
     }
@@ -40,7 +34,16 @@ class TabContentBlocker: ObservableObject {
         // This class func needs to notify all the active instances of ContentBlocker to update.
         NotificationCenter.default.post(name: .contentBlockerTabSetupRequired, object: nil)
     }
+    
+    func updateTab(_ tab: Tab) {
+        self.tab = tab
+    }
 
+    init(tab: ContentBlockerTab) {
+        self.tab = tab
+        NotificationCenter.default.addObserver(self, selector: #selector(notifiedTabSetupRequired), name: .contentBlockerTabSetupRequired, object: nil)
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }

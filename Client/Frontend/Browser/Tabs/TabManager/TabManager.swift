@@ -213,9 +213,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             } else if let sessionUrl = tab.sessionData?.currentUrl {  // Match zombie tabs
                 log.info("Checking sessionUrl: \(sessionUrl)")
 
-                if url.equals(sessionUrl, with: options)
-                    || url.equals(InternalURL.unwrapSessionRestore(url: sessionUrl), with: options)
-                {
+                if url.equals(sessionUrl, with: options) {
                     if let parent = parent {
                         return tab.parent == parent || tab.parentUUID == parent.tabUUID
                     } else {
@@ -556,15 +554,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         if notify {
             tabsUpdatedPublisher.send()
         }
-    }
-
-    func toggleTabPinnedState(_ tab: Tab) {
-        tab.pinnedTime =
-            (tab.isPinned ? nil : Date().timeIntervalSinceReferenceDate)
-        tab.isPinned.toggle()
-
-        tabsUpdatedPublisher.send()
-        storeChanges()
     }
 
     // Tab Group related functions
@@ -1369,6 +1358,64 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     func testClearArchive() {
         assert(AppConstants.IsRunningTest)
         store.clearArchive(for: SceneDelegate.getCurrentScene(for: nil))
+    }
+
+    // MARK: - Pinned Tabs
+    func toggleTabPinnedState(_ tab: Tab) {
+        tab.pinnedTime =
+            (tab.isPinned ? nil : Date().timeIntervalSinceReferenceDate)
+        tab.isPinned.toggle()
+
+        tabsUpdatedPublisher.send()
+        storeChanges()
+    }
+
+    func handleAsNavigationFromPinnedTabIfNeeded(tab: Tab, url: URL) {
+        let options: [URL.EqualsOption] = [
+            .normalizeHost, .ignoreFragment, .ignoreLastSlash, .ignoreScheme,
+        ]
+
+        if tab.isPinned,
+            !(tab.url?.equals(url, with: options) ?? false),
+            !(InternalURL(tab.url)?.isSessionRestore ?? false),
+            !(InternalURL(url)?.isSessionRestore ?? false)
+        {
+            handleNavigationFromPinnedTab(tab)
+        }
+    }
+
+    private func handleNavigationFromPinnedTab(_ tab: Tab) {
+        guard FeatureFlag[.pinnedTabImprovments] else {
+            return
+        }
+
+        let tabIndex = tabs.firstIndex(of: tab)
+
+        // Create a new placeholder tab to represent the pinned tab.
+        // Should be a zombie with the same session data as
+        // the original pinned tab before it navigated.
+        let newPinnedTab = addTab(atIndex: tabIndex, flushToDisk: true, zombie: true)
+        let savedTab = tab.saveSessionDataAndCreateSavedTab(isSelected: false, tabIndex: tabIndex)
+        savedTab.configureTab(newPinnedTab, imageStore: store.imageStore)
+        newPinnedTab.updateCanGoBackForward()
+
+        // Reset the navigated tab (the original pinned tabs) data.
+        tab.tabUUID = UUID().uuidString
+        tab.parent = newPinnedTab
+        tab.parentUUID = newPinnedTab.tabUUID
+        tab.parentSpaceID = ""
+        tab.pinnedTime = nil
+        tab.isPinned = false
+        tab.updateCanGoBackForward()
+
+        // Update the other children with the new parent.
+        tabs.forEach {
+            if $0.parentUUID ?? "" == newPinnedTab.tabUUID {
+                $0.parent = newPinnedTab
+            }
+        }
+
+        updateAllTabDataAndSendNotifications(notify: true)
     }
 
     // MARK: - TabStats

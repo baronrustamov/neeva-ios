@@ -266,6 +266,10 @@ class ReaderMode: TabContentScript {
         }
     }
 
+    func connectedTabChanged(_ tab: Tab) {
+        self.tab = tab
+    }
+
     var defaultTheme: ReaderModeStyle {
         if let defaultValue = Defaults.Keys.readerModeStyle.defaultValue {
             return defaultValue

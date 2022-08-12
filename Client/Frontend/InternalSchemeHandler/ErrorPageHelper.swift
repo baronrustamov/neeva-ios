@@ -354,4 +354,6 @@ extension ErrorPageHelper: TabContentScript {
             assertionFailure("Unknown error message")
         }
     }
+
+    func connectedTabChanged(_ tab: Tab) {}
 }

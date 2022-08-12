@@ -26,6 +26,7 @@ protocol TabContentScript {
     static func name() -> String
     func scriptMessageHandlerName() -> String?
     func userContentController(didReceiveScriptMessage message: WKScriptMessage)
+    func connectedTabChanged(_ tab: Tab)
 }
 
 @objc
@@ -35,6 +36,7 @@ protocol TabDelegate {
     func tab(_ tab: Tab, didSelectSearchWithNeevaForSelection selection: String)
     @objc optional func tab(_ tab: Tab, didCreateWebView webView: WKWebView)
     @objc optional func tab(_ tab: Tab, willDeleteWebView webView: WKWebView)
+    @objc optional func tab(_ tab: Tab, didUpdateWebView webView: WKWebView)
 }
 
 public enum TabSection: String, CaseIterable {
@@ -326,32 +328,43 @@ class Tab: NSObject, ObservableObject {
             restore(webView)
 
             self.webView = webView
-            addRefreshControl()
-
-            send(
-                webView: \.title, to: \.title,
-                provided: { [weak self] in self?.hasContentProcess ?? false })
-            send(webView: \.isLoading, to: \.isLoading)
-            send(webView: \.canGoBack, to: \.webViewCanGoBack)
-            send(webView: \.canGoForward, to: \.webViewCanGoForward)
-
-            $isLoading
-                .combineLatest(webView.publisher(for: \.estimatedProgress, options: .new))
-                .sink { isLoading, progress in
-                    // Unfortunately WebKit can report partial progress when isLoading is false! That can
-                    // happen when a load is cancelled. Avoid reporting partial progress here, but take
-                    // care to let the case of progress complete (value of 1) through.
-                    self.estimatedProgress = (isLoading || progress == 1) ? progress : 0
-                }
-                .store(in: &webViewSubscriptions)
 
             UserScriptManager.shared.injectUserScriptsIntoTab(self)
+            setupWebViewListeners()
             tabDelegate?.tab?(self, didCreateWebView: webView)
 
             return true
         }
 
         return false
+    }
+
+    private func setupWebViewListeners() {
+        guard let webView = webView else {
+            return
+        }
+
+        addRefreshControl()
+
+        send(
+            webView: \.title, to: \.title,
+            provided: { [weak self] in self?.hasContentProcess ?? false })
+        send(webView: \.isLoading, to: \.isLoading)
+        send(webView: \.canGoBack, to: \.webViewCanGoBack)
+        send(webView: \.canGoForward, to: \.webViewCanGoForward)
+
+        $isLoading
+            .combineLatest(webView.publisher(for: \.estimatedProgress, options: .new))
+            .sink { isLoading, progress in
+                // Unfortunately WebKit can report partial progress when isLoading is false! That can
+                // happen when a load is cancelled. Avoid reporting partial progress here, but take
+                // care to let the case of progress complete (value of 1) through.
+                self.estimatedProgress = (isLoading || progress == 1) ? progress : 0
+            }
+            .store(in: &webViewSubscriptions)
+
+        contentScriptManager.updateConnectedTab(tab: self)
+        tabDelegate?.tab?(self, didUpdateWebView: webView)
     }
 
     func addRefreshControl() {
@@ -496,6 +509,11 @@ class Tab: NSObject, ObservableObject {
     }
 
     func updateCanGoForward() {
+        if FeatureFlag[.pinnedTabImprovments] && isPinned {
+            canGoForward = false
+            return
+        }
+
         if let bvc = browserViewController, bvc.tabManager.selectedTab == self {
             canGoForward =
                 webViewCanGoForward || bvc.simulatedSwipeModel.canGoForward()
@@ -505,11 +523,33 @@ class Tab: NSObject, ObservableObject {
     }
 
     func goBack(checkBackNavigationSuggestionQuery: Bool = true) {
-        // If the user opened this tab from FastTap, return to FastTap.
+        let currentIndex =
+            webView?.backForwardList.navigationStackIndex ?? sessionData?.navigationStackIndex ?? 0
+        let parentIndex =
+            parent?.webView?.backForwardList.navigationStackIndex
+            ?? parent?.sessionData?.navigationStackIndex ?? 0
+
+        // If the parent tab is pinned, and back nav would put the child tab at the same navigation index,
+        // then return to the parent and pass the WebView if needed.
+        // Else if the user opened this tab from FastTap, return to FastTap.
         // Else if the user opened this tab from another one, close this one to return to the parent.
         // Else if the user opened this tab from a space, return to the SpaceDetailView.
         // Else just perform a regular back navigation.
-        if checkBackNavigationSuggestionQuery,
+        if FeatureFlag[.pinnedTabImprovments],
+            let parent = parent, parent.isPinned,
+            parentIndex == currentIndex - 1
+        {
+            if parent.webView == nil, let webView = webView {
+                parent.webView = webView
+                parent.setupWebViewListeners()
+
+                webView.goBack()
+
+                self.webView = nil
+            }
+
+            browserViewController?.tabManager.removeTab(self, showToast: false)
+        } else if checkBackNavigationSuggestionQuery,
             let searchQuery = backNavigationSuggestionQuery(),
             let bvc = browserViewController
         {
@@ -755,12 +795,15 @@ class Tab: NSObject, ObservableObject {
             let navigationList = webView?.backForwardList.all ?? []
             let urls = navigationList.compactMap { $0.url }
             let currentPage = -(webView?.backForwardList.forwardList ?? []).count
+            let navigationStackIndex = webView?.backForwardList.navigationStackIndex ?? 0
             let queries = navigationList.map {
                 queryForNavigation.findQueryFor(navigation: $0)
             }
 
             sessionData = SessionData(
-                currentPage: currentPage, urls: urls,
+                currentPage: currentPage,
+                navigationStackIndex: navigationStackIndex,
+                urls: urls,
                 queries: queries.map { $0?.typed },
                 suggestedQueries: queries.map { $0?.suggested },
                 queryLocations: queries.map { $0?.location },
@@ -866,6 +909,12 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
     func removeContentScript(_ name: String, forTab tab: Tab) {
         tab.webView?.configuration.userContentController.removeScriptMessageHandler(
             forName: name)
+    }
+
+    func updateConnectedTab(tab: Tab) {
+        helpers.forEach { helper in
+            helper.value.connectedTabChanged(tab)
+        }
     }
 }
 
