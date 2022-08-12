@@ -20,7 +20,7 @@ class PinnedTabTests: BaseTestCase {
         waitForExistence(app.buttons["Pin tab"])
         app.buttons["Pin tab"].tap()
         waitForNoExistence(app.buttons["Pin Tab"])
-        
+
         app.buttons["Example Domain, Tab"].tap()
 
         if addChild {
