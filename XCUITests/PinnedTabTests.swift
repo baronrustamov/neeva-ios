@@ -19,6 +19,8 @@ class PinnedTabTests: BaseTestCase {
 
         waitForExistence(app.buttons["Pin tab"])
         app.buttons["Pin tab"].tap()
+        waitForNoExistence(app.buttons["Pin Tab"])
+        
         app.buttons["Example Domain, Tab"].tap()
 
         if addChild {
@@ -96,7 +98,9 @@ class PinnedTabTests: BaseTestCase {
 
         waitForExistence(app.buttons["Pin tab"])
         app.buttons["Pin tab"].tap()
-        app.buttons["IANA-managed Reserved Domains, Tab"].tap()
+        waitForNoExistence(app.buttons["Pin Tab"])
+
+        app.buttons["IANA-managed Reserved Domains, Tab"].tap(force: true)
 
         // Create child tab.
         waitForExistence(app.links["RFC 2606"])
