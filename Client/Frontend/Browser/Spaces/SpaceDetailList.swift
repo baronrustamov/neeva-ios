@@ -166,18 +166,27 @@ struct SpaceDetailList: View {
     }
 
     private func onDelete(offsets: IndexSet) {
-        let entitiesToBeDeleted = offsets.map { index in
+        //this is only for visual
+        let entities = offsets.compactMap { index in
             primitive.allDetails[index]
         }
 
+        let entitiesToBeDeleted = offsets.compactMap { index in
+            primitive.allDetails[index].item
+        }
+
         primitive.allDetails.remove(atOffsets: offsets)
+        if let spaceID = primitive.item?.id.id,
+            let space = SpaceStore.shared.get(for: spaceID)
+        {
+            space.contentData?.remove(atOffsets: offsets)
+        }
         spacesModel.delete(
             space: primitive.id, entities: entitiesToBeDeleted, from: tabModel.manager.scene
         ) {
-            for index in 0..<entitiesToBeDeleted.count {
-                primitive.allDetails.insert(entitiesToBeDeleted[index], at: 0)
-            }
+            primitive.allDetails = entities.reversed() + primitive.allDetails
         }
+
     }
 
     private func onMove(source: IndexSet, destination: Int) {

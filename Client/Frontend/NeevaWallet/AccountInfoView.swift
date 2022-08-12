@@ -46,13 +46,13 @@ struct AccountInfoView: View {
                 }) {
                     HStack(spacing: 4) {
                         Symbol(decorative: .docOnDoc, style: .bodyMedium)
-                        Text(copyAddressText).frame(minWidth: 100)
+                        Text(verbatim: copyAddressText).frame(minWidth: 100)
                     }
                 }.buttonStyle(DashboardButtonStyle())
                 Button(action: { showQRScanner = true }) {
                     HStack(spacing: 4) {
                         Symbol(decorative: .qrcodeViewfinder, style: .bodyMedium)
-                        Text("Scan")
+                        Text(verbatim: "Scan")
                     }
                 }.sheet(isPresented: $showQRScanner) {
                     ScannerView(
@@ -75,7 +75,7 @@ struct AccountInfoView: View {
                     Button(action: { showSendForm = true }) {
                         HStack(spacing: 4) {
                             Symbol(decorative: .paperplane, style: .bodyMedium)
-                            Text("Send")
+                            Text(verbatim: "Send")
                         }
                     }
                     .buttonStyle(DashboardButtonStyle())

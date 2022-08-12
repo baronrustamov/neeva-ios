@@ -29,7 +29,7 @@ class ZombieTabTests: XCTestCase {
         manager.restoreSavedTabs([savedTab])
 
         // Check that the restored tab has the correct data.
-        let restoredTab = manager.tabs[0]
+        let restoredTab = manager.activeTabs[0]
         XCTAssertEqual(url, restoredTab.url)
     }
 }

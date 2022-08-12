@@ -21,6 +21,8 @@ public enum FeatureFlag: String, CaseIterable, RawRepresentable {
     case newWeb3Features = "New Web3 Features"
     case oldDBFirstRun = "Old Default Browser Interstitial"
     case openZeroQueryAfterLongDuration = "Open Zero Query After Inactive Duration"
+    case pinnedTabImprovments = "Pin Tab Improvments"
+    case pinnnedTabSection = "Pinned Tab Section"
     case pinToTopSites = "Pin to Top Sites"
     case qrCodeSignIn = "Sign in with QR Code"
     case recommendedSpaces = "Recommended Spaces"

@@ -72,7 +72,7 @@ public class Space: Hashable, Identifiable {
     public var thumbnail: String?
     public var followers: Int?
     public var views: Int?
-    public let lastModifiedTs: String
+    public var lastModifiedTs: String
     public let resultCount: Int
     public let isDefaultSpace: Bool
     public var isShared: Bool
@@ -277,7 +277,7 @@ public class SpaceStore: ObservableObject {
         }
     }
 
-    public func refreshSpace(spaceID: String, url: URL? = nil) {
+    public func refreshSpace(spaceID: String, url: URL? = nil, anonymous: Bool) {
         guard let space = allSpaces.first(where: { $0.id.id == spaceID }),
             let index = allSpaces.firstIndex(where: { $0.id.id == spaceID })
         else {
@@ -290,7 +290,7 @@ public class SpaceStore: ObservableObject {
         if disableRefresh { return }
         state = .refreshing
 
-        fetch(spaces: [space]) { [self, space, url] in
+        fetch(spaces: [space], anonymous: anonymous) { [self, space, url] in
             // We do this to make sure the UI is properly updated when
             // an item is deleted from a Space but it might be in other Spaces
             if let url = url, let spaceURLs = space.contentURLs, !spaceURLs.contains(url) {
@@ -303,20 +303,20 @@ public class SpaceStore: ObservableObject {
     }
 
     private func fetchSuggestedSpaces(id: String) {
-        GraphQLAPI.shared.isAnonymous = true
         allSpaces.append(
             Space(
                 id: SpaceID(value: id), name: "", description: nil,
                 followers: nil, views: nil, lastModifiedTs: "", thumbnail: nil, resultCount: 1,
                 isDefaultSpace: false, isShared: false, isPublic: true, userACL: .publicView,
                 acls: [], notifications: [], owner: nil))
-        refreshSpace(spaceID: id)
-        GraphQLAPI.shared.isAnonymous = false
+        refreshSpace(spaceID: id, anonymous: true)
     }
 
     public static func onRecommendedSpaceSelected(space: Space) {
         shared.allSpaces.append(space)
-        SpaceServiceProvider.shared.getSpacesData(spaceIds: [space.id.id]) { result in
+        SpaceServiceProvider.shared.getSpacesData(
+            anonymous: false, spaceIds: [space.id.id]
+        ) { result in
             switch result {
             case .success:
                 Logger.browser.info("Space followed")
@@ -335,7 +335,9 @@ public class SpaceStore: ObservableObject {
                 completion(nil)
             }
         } else {
-            SpaceServiceProvider.shared.getSpacesData(spaceIds: [spaceId]) { result in
+            SpaceServiceProvider.shared.getSpacesData(
+                anonymous: false, spaceIds: [spaceId]
+            ) { result in
                 switch result {
                 case .success(let data):
                     if let model = data.first {
@@ -351,7 +353,8 @@ public class SpaceStore: ObservableObject {
     }
 
     public func getSpaceDetails(
-        spaceId: String, completion: @escaping (Space) -> Void
+        spaceId: String,
+        completion: @escaping (Space) -> Void
     ) {
         if let space = allSpaces.first(where: { $0.id.id == spaceId }) {
             completion(space)
@@ -366,10 +369,13 @@ public class SpaceStore: ObservableObject {
 
     private func getSpacesData(
         spaceId: String,
+        anonymous: Bool,
         completion: @escaping (Space) -> Void
     ) {
         state = .refreshing
-        SpaceServiceProvider.shared.getSpacesData(spaceIds: [spaceId]) { result in
+        SpaceServiceProvider.shared.getSpacesData(
+            anonymous: anonymous, spaceIds: [spaceId]
+        ) { result in
             switch result {
             case .success(let arr):
                 guard let model = arr.first else { return }
@@ -388,16 +394,14 @@ public class SpaceStore: ObservableObject {
         spaceId: String,
         completion: @escaping (Space) -> Void
     ) {
-        GraphQLAPI.shared.isAnonymous = true
-        getSpacesData(spaceId: spaceId, completion: completion)
-        GraphQLAPI.shared.isAnonymous = false
+        getSpacesData(spaceId: spaceId, anonymous: true, completion: completion)
     }
 
     public func followSpace(
         spaceId: String,
         completion: ((Space) -> Void)? = nil
     ) {
-        getSpacesData(spaceId: spaceId) { space in
+        getSpacesData(spaceId: spaceId, anonymous: false) { space in
             self.allSpaces.append(space)
             self.spaceLocalMutation.send(space)
             completion?(space)
@@ -471,7 +475,8 @@ public class SpaceStore: ObservableObject {
                         urls: contentURLs,
                         data: contentData,
                         comments: comments,
-                        generators: generators)
+                        generators: generators,
+                        lastModifiedTs: newSpace.lastModifiedTs)
                 } else {
                     spacesToFetch.append(newSpace)
                 }
@@ -501,7 +506,7 @@ public class SpaceStore: ObservableObject {
         self.allSpaces = allSpaces
 
         if spacesToFetch.count > 0 {
-            fetch(spaces: spacesToFetch)
+            fetch(spaces: spacesToFetch, anonymous: false)
         } else {
             self.updatedSpacesFromLastRefresh = force ? allSpaces : []
             self.state = .ready
@@ -510,8 +515,15 @@ public class SpaceStore: ObservableObject {
         }
     }
 
-    private func fetch(spaces spacesToFetch: [Space], beforeReady: (() -> Void)? = nil) {
-        SpaceServiceProvider.shared.getSpacesData(spaceIds: spacesToFetch.map(\.id.value)) {
+    private func fetch(
+        spaces spacesToFetch: [Space],
+        anonymous: Bool,
+        beforeReady: (() -> Void)? = nil
+    ) {
+        SpaceServiceProvider.shared.getSpacesData(
+            anonymous: anonymous,
+            spaceIds: spacesToFetch.map(\.id.value)
+        ) {
             result in
             switch result {
             case .success(let spaces):
@@ -534,7 +546,8 @@ public class SpaceStore: ObservableObject {
                             }),
                         data: space.entities,
                         comments: space.comments,
-                        generators: space.generators
+                        generators: space.generators,
+                        lastModifiedTs: space.lastModifiedTs
                     )
                 }
 
@@ -556,7 +569,7 @@ public class SpaceStore: ObservableObject {
     private func onUpdateSpaceURLs(
         space: Space, description: String?, followers: Int?, views: Int?,
         urls: Set<URL>, data: [SpaceEntityData], comments: [SpaceCommentData],
-        generators: [SpaceGeneratorData]
+        generators: [SpaceGeneratorData], lastModifiedTs: String?
     ) {
         space.contentURLs = urls
         space.contentData = data
@@ -565,6 +578,10 @@ public class SpaceStore: ObservableObject {
         space.description = description
         space.followers = followers
         space.views = views
+        if let lastModifiedTs = lastModifiedTs {
+            space.lastModifiedTs = lastModifiedTs
+            space.timestamp = dateParser.date(from: lastModifiedTs)?.timeIntervalSince1970 ?? 0
+        }
         for url in urls {
             var spaces = urlToSpacesMap[url] ?? []
             spaces.append(space)

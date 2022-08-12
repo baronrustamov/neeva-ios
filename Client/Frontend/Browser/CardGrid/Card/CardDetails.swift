@@ -214,12 +214,12 @@ public class TabCardDetails: CardDropDelegate, CardDetails, AccessingManagerProv
         }
 
         let fromIndex =
-            manager.tabs.firstIndex {
+            manager.activeTabs.firstIndex {
                 $0.tabUUID == draggingDetail.id
             } ?? 0
 
         let toIndex =
-            manager.tabs.firstIndex {
+            manager.activeTabs.firstIndex {
                 $0.tabUUID == self.id
             } ?? 0
 
@@ -480,7 +480,7 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
         guard !(self.item?.isDigest ?? false) else { return }
 
         if isFollowing {
-            manager.refreshSpace(spaceID: self.id)
+            manager.refreshSpace(spaceID: self.id, anonymous: false)
         }
 
         refreshSpaceSubscription = manager.$state.sink { state in

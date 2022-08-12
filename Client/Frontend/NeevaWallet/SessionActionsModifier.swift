@@ -36,13 +36,13 @@ struct SessionActionsModifier: ViewModifier {
                     Button(role: .destructive) {
                         delete()
                     } label: {
-                        Label("Disconnect", systemImage: "")
+                        Label(String("Disconnect"), systemImage: "")
                     }
 
                     Button {
                         switchChain()
                     } label: {
-                        Label("Switch Chain", systemImage: "")
+                        Label(String("Switch Chain"), systemImage: "")
                             .foregroundColor(.white)
                     }.tint(.blue)
                 }
@@ -56,7 +56,7 @@ struct SessionActionsModifier: ViewModifier {
                             },
                             label: {
                                 Label(
-                                    title: { Text("Switch") },
+                                    title: { Text(verbatim: "Switch") },
                                     icon: {
                                         switch switchToNode {
                                         case .Polygon:

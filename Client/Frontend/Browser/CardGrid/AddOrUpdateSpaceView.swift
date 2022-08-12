@@ -254,8 +254,10 @@ struct AddOrUpdateSpaceView: View {
                             // modify target spaceCardDetail's Data and signal changes
                             space.contentData?.insert(data, at: 0)
                             spaceModel.add(
-                                spaceID: space.id.id, url: urlText,
-                                title: titleText, description: descriptionText)
+                                spaceID: space.id.id,
+                                url: urlText,
+                                title: titleText,
+                                description: descriptionText)
                             spaceModel.detailedSpace?.updateDetails()
                         case .updateSpaceItem(let entityID):
                             guard

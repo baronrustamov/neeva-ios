@@ -7,7 +7,7 @@ import SwiftUI
 
 // RandomAccessCollection is to satisfy the requirements of `ForEach`
 struct RelatedSearchesView<T: RandomAccessCollection>: View where T.Element == String {
-    let title: String
+    let title: LocalizedStringKey
     let searches: T
 
     var body: some View {

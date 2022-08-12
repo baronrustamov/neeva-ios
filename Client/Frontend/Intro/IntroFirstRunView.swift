@@ -161,6 +161,15 @@ struct IntroFirstRunView: View {
     var body: some View {
         ZStack {
             VStack {
+                Spacer()
+
+                if model.onOtherOptionsPage {
+                    OtherOptionsPage()
+                } else {
+                    FirstRunHomePage()
+                }
+            }
+            VStack {
                 FirstRunCloseButton {
                     model.buttonAction(.skipToBrowser)
 
@@ -172,14 +181,7 @@ struct IntroFirstRunView: View {
                 }
                 .padding(.top, safeArea.top)
                 .padding(.trailing, FirstRunViewUX.closeButtonPadding)
-
                 Spacer()
-
-                if model.onOtherOptionsPage {
-                    OtherOptionsPage()
-                } else {
-                    FirstRunHomePage()
-                }
             }
 
             Color.clear

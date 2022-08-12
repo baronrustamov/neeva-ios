@@ -33,25 +33,27 @@ struct BalancesView: View {
                 HStack {
                     token.thumbnail
                     VStack(alignment: .leading, spacing: 0) {
-                        Text(token.currency.name)
+                        Text(verbatim: token.currency.name)
                             .withFont(.bodyMedium)
                             .fixedSize(horizontal: false, vertical: true)
                             .foregroundColor(.label)
-                        Text(token.network.rawValue)
+                        Text(verbatim: token.network.rawValue)
                             .withFont(.bodySmall)
                             .foregroundColor(.secondaryLabel)
                     }
                     Spacer()
                     VStack(alignment: .trailing, spacing: 0) {
                         Text(
-                            "$\(token.toUSD(model.balanceFor(token) ?? "0"))"
+                            verbatim: "$\(token.toUSD(model.balanceFor(token) ?? "0"))"
                         )
                         .foregroundColor(.label)
                         .withFont(.bodyMedium)
                         .frame(alignment: .center)
-                        Text("\(model.balanceFor(token) ?? "") \(token.currency.rawValue)")
-                            .withFont(.bodySmall)
-                            .foregroundColor(.secondaryLabel)
+                        Text(
+                            verbatim: "\(model.balanceFor(token) ?? "") \(token.currency.rawValue)"
+                        )
+                        .withFont(.bodySmall)
+                        .foregroundColor(.secondaryLabel)
                     }
 
                 }.modifier(WalletListSeparatorModifier())

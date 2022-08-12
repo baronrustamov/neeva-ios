@@ -7,6 +7,8 @@ import Storage
 import SwiftUI
 
 struct SuggestionsList: View {
+    // `placeholderNavSuggestion` is used for testing (see `SuggestionViewsTests.swift`).
+    // PR #4122; periphery:ignore
     static let placeholderNavSuggestion = NavSuggestion(
         url: "https://neeva.com", title: "PlaceholderLongTitleOneWord")
 

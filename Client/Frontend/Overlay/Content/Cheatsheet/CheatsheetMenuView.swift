@@ -50,10 +50,7 @@ public struct CheatsheetMenuView: View {
                         self.height = height
                     }
                     .onAppear {
-                        ClientLogger.shared.logCounter(
-                            .ShowCheatsheetContent,
-                            attributes: EnvironmentHelper.shared.getAttributes()
-                        )
+                        model.log(.ShowCheatsheetContent)
                     }
             } else if let error = model.cheatsheetDataError {
                 ErrorView(error, in: self, tryAgain: { model.reload() })
@@ -62,12 +59,7 @@ public struct CheatsheetMenuView: View {
             } else {
                 CheatsheetNoResultView(currentCheatsheetQueryAsURL: model.currentQueryAsURL)
                     .onAppear {
-                        guard model.hasFetchedOnce else { return }
-                        ClientLogger.shared.logCounter(
-                            .CheatsheetEmpty,
-                            attributes: EnvironmentHelper.shared.getAttributes()
-                                + model.loggerAttributes
-                        )
+                        model.onNoResultViewAppear()
                     }
             }
         }
@@ -99,11 +91,7 @@ public struct CheatsheetMenuView: View {
                                     size: proxy.size
                                 )
                             openSupport = false
-                            ClientLogger.shared.logCounter(
-                                .OpenCheatsheetSupport,
-                                attributes: EnvironmentHelper.shared.getAttributes()
-                                    + model.loggerAttributes
-                            )
+                            model.log(.OpenCheatsheetSupport)
                             menuAction(.support(screenshot: image))
                         }
                     }

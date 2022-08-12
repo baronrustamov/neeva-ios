@@ -28,7 +28,8 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
 
     static var all = WeakList<TabManager>()
 
-    var tabs = [Tab]()
+    // External classes should only be able to access this through `activeTabs` and `archivedTabs`.
+    private var tabs = [Tab]()
     var tabsUpdatedPublisher = PassthroughSubject<Void, Never>()
 
     // Tab Group related variables
@@ -98,7 +99,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     }
 
     var todaysTabs: [Tab] {
-        return activeNormalTabs.filter { $0.wasLastExecuted(.today) }
+        return activeNormalTabs.filter { $0.isIncluded(in: .today) }
     }
 
     var count: Int {
@@ -300,7 +301,9 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
                     return
                 }
 
-                StartIncognitoMutation(url: url).perform { result in
+                GraphQLAPI.shared.perform(
+                    mutation: StartIncognitoMutation(url: url)
+                ) { result in
                     guard
                         case .success(let data) = result,
                         let url = URL(string: data.startIncognito)
@@ -518,11 +521,10 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             return $0.isArchived
         }
 
-        activeTabGroups = getAll()
+        activeTabGroups =
+            activeTabs
             .reduce(into: [String: [Tab]]()) { dict, tab in
-                if !tab.isArchived {
-                    dict[tab.rootUUID, default: []].append(tab)
-                }
+                dict[tab.rootUUID, default: []].append(tab)
             }.filter { $0.value.count > 1 }.reduce(into: [String: TabGroup]()) { dict, element in
                 dict[element.key] = TabGroup(children: element.value, id: element.key)
             }
@@ -530,9 +532,10 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         // In archivedTabsPanelView, there are special UI treatments for a child tab,
         // even if it's the only arcvhied tab in a group. Those tabs won't be filtered
         // out (see activeTabGroups for comparison).
-        archivedTabGroups = getAll()
+        archivedTabGroups =
+            archivedTabs
             .reduce(into: [String: [Tab]]()) { dict, tab in
-                if tabGroupDict[tab.rootUUID] != nil && tab.isArchived {
+                if tabGroupDict[tab.rootUUID] != nil {
                     dict[tab.rootUUID, default: []].append(tab)
                 }
             }.reduce(into: [String: TabGroup]()) { dict, element in
@@ -540,6 +543,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             }
 
         cleanUpTabGroupNames()
+
         if notify {
             tabsUpdatedPublisher.send()
         }
@@ -549,7 +553,9 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         tab.pinnedTime =
             (tab.isPinned ? nil : Date().timeIntervalSinceReferenceDate)
         tab.isPinned.toggle()
+
         tabsUpdatedPublisher.send()
+        storeChanges()
     }
 
     // Tab Group related functions
@@ -980,7 +986,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         // switcher, the normalTabs get filtered to make sure we only select tab in
         // today section.
         let normalTabsToday = normalTabs.filter {
-            $0.isPinnedTodayOrWasLastExecuted(.today)
+            $0.isIncluded(in: .today)
         }
 
         let index =
@@ -1074,7 +1080,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             tab.isIncognito
             ? incognitoTabs
             : normalTabs.filter {
-                $0.isPinnedTodayOrWasLastExecuted(.today)
+                $0.isIncluded(in: .today)
             }
         let bvc = SceneDelegate.getBVC(with: scene)
 
@@ -1084,7 +1090,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         }
 
         if closedLastNormalTab || closedLastIncognitoTab
-            || !viableTabs.contains(where: { $0.isPinnedTodayOrWasLastExecuted(.today) })
+            || !viableTabs.contains(where: { $0.isIncluded(in: .today) })
         {
             DispatchQueue.main.async {
                 self.selectTab(nil, notify: notify)
@@ -1344,6 +1350,8 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         return store.getStartupTabs(for: SceneDelegate.getCurrentScene(for: nil)).count
     }
 
+    // TODO(jon): Find a way to test the prod version of this function
+    // (`restoreTabs(_:) instead.
     func testRestoreTabs() {
         assert(AppConstants.IsRunningTest)
         let _ = store.restoreStartupTabs(
@@ -1351,11 +1359,38 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             clearIncognitoTabs: false,
             tabManager: self
         )
+        updateAllTabDataAndSendNotifications(notify: true)
     }
 
     func testClearArchive() {
         assert(AppConstants.IsRunningTest)
         store.clearArchive(for: SceneDelegate.getCurrentScene(for: nil))
+    }
+
+    // MARK: - TabStats
+    struct TabStats {
+        let numberOfActiveNonZombieTabs: Int
+        let numberOfActiveZombieTabs: Int
+        let numberOfArchivedTabs: Int
+
+        fileprivate init(
+            numberOfActiveNonZombieTabs: Int, numberOfActiveZombieTabs: Int,
+            numberOfArchivedTabs: Int
+        ) {
+            self.numberOfActiveNonZombieTabs = numberOfActiveNonZombieTabs
+            self.numberOfActiveZombieTabs = numberOfActiveZombieTabs
+            self.numberOfArchivedTabs = numberOfArchivedTabs
+        }
+    }
+
+    func getTabStats() -> TabStats {
+        let numberOfZombieTabs = activeTabs.filter({ $0.webView == nil }).count
+
+        return TabStats(
+            numberOfActiveNonZombieTabs: activeTabs.count - numberOfZombieTabs,
+            numberOfActiveZombieTabs: numberOfZombieTabs,
+            numberOfArchivedTabs: archivedTabs.count
+        )
     }
 
     // MARK: - WKNavigationDelegate

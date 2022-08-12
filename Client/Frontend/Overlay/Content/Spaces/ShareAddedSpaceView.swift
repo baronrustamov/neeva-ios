@@ -141,7 +141,7 @@ struct ShareAddedSpaceView: View {
                             : SpaceCardDetails(space: space!, manager: SpaceStore.shared)))
 
                 if let space = space {
-                    SpaceStore.shared.refreshSpace(spaceID: space.id.id)
+                    SpaceStore.shared.refreshSpace(spaceID: space.id.id, anonymous: false)
                 } else {
                     SpaceStore.shared.refresh()
                 }

@@ -346,13 +346,14 @@ public enum LogConfig {
         case openURLShortcut
         case searchShortcut
 
-        // MARK: recipe cheatsheet
-        case RecipeCheatsheetShowMoreRecipe
-
         // MARK: Cheatsheet(NeevaScope)
         case CheatsheetPopoverImpression
         case CheatsheetPopoverReachedLimit
         case CheatsheetUGCIndicatorImpression
+        case CheatsheetBadURLString
+        case CheatsheetUGCStatsForSession
+        case CheatsheetUGCHitNoRedditDataV2
+        // Journey Associated
         case OpenCheatsheet
         case CheatsheetEducationImpressionOnSRP
         case CheatsheetEducationImpressionOnPage
@@ -361,14 +362,16 @@ public enum LogConfig {
         case ShowCheatsheetEducationOnSRP
         case ShowCheatsheetEducationOnPage
         case ShowCheatsheetContent
+        case LoadCheatsheet
+        case CheatsheetUGCStatsForPage
         case CheatsheetEmpty
         case OpenLinkFromCheatsheet
         case CheatsheetQueryFallback
         case OpenCheatsheetSupport
-        case CheatsheetBadURLString
         case CheatsheetFetchError
-        case CheatsheetUGCStatsForSession
-        case CheatsheetUGCHitNoRedditDataV2
+
+        // MARK: recipe cheatsheet
+        case RecipeCheatsheetShowMoreRecipe
 
         // MARK: tab group
         case tabGroupExpanded
@@ -732,12 +735,14 @@ public enum LogConfig {
         case .ShowCheatsheetEducationOnSRP: return .Cheatsheet
         case .ShowCheatsheetEducationOnPage: return .Cheatsheet
         case .ShowCheatsheetContent: return .Cheatsheet
+        case .LoadCheatsheet: return .Cheatsheet
         case .CheatsheetEmpty: return .Cheatsheet
         case .OpenLinkFromCheatsheet: return .Cheatsheet
         case .CheatsheetQueryFallback: return .Cheatsheet
         case .OpenCheatsheetSupport: return .Cheatsheet
         case .CheatsheetBadURLString: return .Cheatsheet
         case .CheatsheetFetchError: return .Cheatsheet
+        case .CheatsheetUGCStatsForPage: return .Cheatsheet
         case .CheatsheetUGCStatsForSession: return .Cheatsheet
         case .CheatsheetUGCHitNoRedditDataV2: return .Cheatsheet
 
@@ -903,6 +908,8 @@ public enum LogConfig {
         public static let cheatsheetQuerySource = "cheatsheetQuerySource"
         public static let openLinkSource = "openLinkSource"
         public static let api = "api"
+        public static let journeyID = "journeyID"
+        public static let tabID = "tabID"
 
         public enum QuerySource: String {
             case uToQ
@@ -923,6 +930,8 @@ public enum LogConfig {
             case ugcHit
             case ugcClear
             case ugcCanonicalError
+            case hasUGCData
+            case isEnabled
         }
     }
 

@@ -24,6 +24,7 @@ public struct LaunchArguments {
 
     public static let SetLoginCookie = "SET_LOGIN_COOKIE:"
     public static let EnableFeatureFlags = "ENABLE_FEATURE_FLAGS:"
+    public static let EnableNeevaFeatureBoolFlags = "ENABLE_NEEV_FEATURE_BOOL_FLAGS:"
 
     public static let EnableMockAppHost = "ENABLE_MOCK_APP_HOST"
     public static let EnableMockUserInfo = "ENABLE_MOCK_USER_INFO"

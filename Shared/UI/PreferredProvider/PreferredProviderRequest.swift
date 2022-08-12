@@ -17,7 +17,7 @@ public class PreferredProviderRequest: ObservableObject {
     private var completion: () -> Void
 
     public func setPreferredProvider() {
-        preferredProvider.perform { [weak self] result in
+        GraphQLAPI.shared.perform(mutation: preferredProvider) { [weak self] result in
             guard let self = self else { return }
 
             switch result {

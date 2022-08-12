@@ -1,6 +1,7 @@
 fragment spacesMetadata on SpaceData {
     name
     description
+    lastModifiedTs
     owner {
         displayName
         pictureURL

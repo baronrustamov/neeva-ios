@@ -69,6 +69,7 @@ public protocol SpaceService {
 
     @discardableResult
     func getSpacesData(
+        anonymous: Bool,
         spaceIds: [String],
         completion: @escaping (Result<[SpacesDataQueryController.Space], Error>) -> Void
     ) -> Cancellable?

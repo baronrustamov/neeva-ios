@@ -29,9 +29,9 @@ class TabCardModel: CardDropDelegate, CardModel {
 
     private(set) var manager: TabManager
     private(set) var normalRows: [Row] = []
-    private(set) var timeBasedNormalRows: [TimeFilter: [Row]] = [:]
+    private(set) var timeBasedNormalRows: [TabSection: [Row]] = [:]
     private(set) var incognitoRows: [Row] = []
-    private(set) var timeBasedIncognitoRows: [TimeFilter: [Row]] = [:]
+    private(set) var timeBasedIncognitoRows: [TabSection: [Row]] = [:]
     private(set) var allDetails: [TabCardDetails] = []
     private(set) var allDetailsWithExclusionList: [TabCardDetails] = []  // Unused
     var columnCount: Int = 2 {
@@ -47,6 +47,8 @@ class TabCardModel: CardDropDelegate, CardModel {
     @Default(.tabGroupExpanded) private var tabGroupExpanded: Set<String>
     @Default(.archivedTabsDuration) var archivedTabsDuration
     var needsUpdateRows: Bool = false
+
+    static let pinnedRowHeaderID: String = "pinned-header"
     static let todayRowHeaderID: String = "today-header"
     static let yesterdayRowHeaderID: String = "yesterday-header"
     static let lastweekRowHeaderID: String = "lastWeek-header"
@@ -71,18 +73,23 @@ class TabCardModel: CardDropDelegate, CardModel {
     private(set) var tabsDidChange = false
 
     private func updateRows() {
-        timeBasedNormalRows[.today] = buildRows(incognito: false, byTime: .today)
-        timeBasedNormalRows[.yesterday] = buildRows(incognito: false, byTime: .yesterday)
-        timeBasedNormalRows[.lastWeek] = buildRows(
-            incognito: false, byTime: .lastWeek)
-        // TODO: in the future, we might apply time-based treatments to incognito mode.
-        incognitoRows = buildRows(incognito: true)
-        if archivedTabsDuration == .month {
-            timeBasedNormalRows[.lastMonth] = buildRows(incognito: false, byTime: .lastMonth)
-        } else if archivedTabsDuration == .forever {
-            timeBasedNormalRows[.lastMonth] = buildRows(incognito: false, byTime: .lastMonth)
-            timeBasedNormalRows[.overAMonth] = buildRows(incognito: false, byTime: .overAMonth)
+        if FeatureFlag[.pinnnedTabSection] {
+            timeBasedNormalRows[.pinned] = buildRows(incognito: false, for: .pinned)
         }
+
+        timeBasedNormalRows[.today] = buildRows(incognito: false, for: .today)
+        timeBasedNormalRows[.yesterday] = buildRows(incognito: false, for: .yesterday)
+        timeBasedNormalRows[.lastWeek] = buildRows(incognito: false, for: .lastWeek)
+
+        if archivedTabsDuration == .month {
+            timeBasedNormalRows[.lastMonth] = buildRows(incognito: false, for: .lastMonth)
+        } else if archivedTabsDuration == .forever {
+            timeBasedNormalRows[.lastMonth] = buildRows(incognito: false, for: .lastMonth)
+            timeBasedNormalRows[.overAMonth] = buildRows(incognito: false, for: .overAMonth)
+        }
+
+        // TODO: in the future, we might apply time-based treatments to incognito mode.
+        incognitoRows = buildRows(incognito: true, for: .all)
 
         // Defer signaling until after we have finished updating. This way our state is
         // completely consistent with TabManager prior to accessing allDetails, etc.
@@ -103,6 +110,7 @@ class TabCardModel: CardDropDelegate, CardModel {
             if archivedTabsDuration == .month {
                 return (timeBasedNormalRows[.lastMonth] ?? [])
             }
+
             if archivedTabsDuration == .forever {
                 return (timeBasedNormalRows[.lastMonth] ?? [])
                     + (timeBasedNormalRows[.overAMonth] ?? [])
@@ -115,9 +123,14 @@ class TabCardModel: CardDropDelegate, CardModel {
                 // TODO: in the future, we might apply time-based treatments to incognito mode.
                 incognitoRows
         } else {
+            let pinnedAndToday: [Row] =
+                (timeBasedNormalRows[.pinned] ?? []) + (timeBasedNormalRows[.today] ?? [])
+            let yesterdayAndLastWeek: [Row] =
+                (timeBasedNormalRows[.yesterday] ?? []) + (timeBasedNormalRows[.lastWeek] ?? [])
+
             returnValue =
-                (timeBasedNormalRows[.today] ?? []) + (timeBasedNormalRows[.yesterday] ?? [])
-                + (timeBasedNormalRows[.lastWeek] ?? [])
+                pinnedAndToday
+                + yesterdayAndLastWeek
                 + getOlderRows()
         }
 
@@ -163,7 +176,7 @@ class TabCardModel: CardDropDelegate, CardModel {
             case tab(TabCardDetails)
             case tabGroupInline(TabGroupCardDetails)
             case tabGroupGridRow(TabGroupCardDetails, Range<Int>)
-            case sectionHeader(TimeFilter)
+            case sectionHeader(TabSection)
 
             var id: String {
                 switch self {
@@ -175,6 +188,12 @@ class TabCardModel: CardDropDelegate, CardModel {
                     return details.allDetails[range].reduce("") { $0 + $1.id + ":" }
                 case .sectionHeader(let timeFilter):
                     switch timeFilter {
+                    case .all:
+                        // No id for all.
+                        return ""
+                    case .pinned:
+                        return FeatureFlag[.pinnnedTabSection]
+                            ? TabCardModel.pinnedRowHeaderID : TabCardModel.todayRowHeaderID
                     case .today:
                         return TabCardModel.todayRowHeaderID
                     case .yesterday:
@@ -229,20 +248,38 @@ class TabCardModel: CardDropDelegate, CardModel {
         var multipleCellTypes: Bool = false
     }
 
-    func buildRows(incognito: Bool, byTime: TimeFilter? = nil) -> [Row] {
+    func buildRows(incognito: Bool, for section: TabSection) -> [Row] {
         var rows: [Row] = []
 
-        // Get list of all top-level tabs and the first tab of each group.
+        // Get all the tabs matching the section,
+        // incognito state, and search filter (if active).
         var allDetailsFiltered = allDetails.filter { tabCard in
             let tab = tabCard.tab
-            let tabGroup = manager.getTabGroup(for: tab)
-            return (tabGroup == nil || isRepresentativeTab(tab, in: tabGroup!))
-                && tab.isIncognito == incognito
-                && (!incognito
-                    ? (tabGroup != nil
-                        ? tabGroup!.wasLastExecuted(byTime!)
-                        : tab.isPinnedTodayOrWasLastExecuted(byTime!)) : true)
-                && tabIncludedInSearch(tabCard)
+            let incognitoMatches = tab.isIncognito == incognito
+            let includedInSection = tab.isIncluded(in: section)
+            let includedInSearch = tabIncludedInSearch(tabCard)
+
+            guard incognitoMatches, includedInSearch else {
+                return false
+            }
+
+            // Check to see if the detail is in a TabGroup.
+            if let tabGroup = manager.getTabGroup(for: tab) {
+                /* Prevents the TabGroup from being added multiple times to the grid
+                 * by only adding the first or "representative" tab to the filtered list. */
+                let isRepresentativeTab = isRepresentativeTab(tab, in: tabGroup)
+
+                /* Check if the most recently used tab in TabGroup is
+                 * a part of the section. Or if a tab in the TabGroup is pinned.
+                 * This can differ from tabCard since it may not be the
+                 * most recently used tab in the TabGroup. */
+                let tabGroupIncludedInSection = tabGroup.isIncluded(in: section)
+
+                return isRepresentativeTab && tabGroupIncludedInSection
+            }
+
+            // If tabCard isn't a TabGroup, can just check if it is included in the section.
+            return includedInSection
         }
 
         modifyAllDetailsFilteredPromotingPinnedTabs(&allDetailsFiltered)
@@ -366,8 +403,8 @@ class TabCardModel: CardDropDelegate, CardModel {
             !$0.cells.isEmpty
         }
 
-        if !rows.isEmpty, let byTime = byTime {
-            rows.insert(Row(cells: [Row.Cell.sectionHeader(byTime)]), at: 0)
+        if !rows.isEmpty, section != .all {
+            rows.insert(Row(cells: [Row.Cell.sectionHeader(section)]), at: 0)
         }
 
         return rows
@@ -433,9 +470,8 @@ class TabCardModel: CardDropDelegate, CardModel {
     }
 
     func buildRowsForTesting() -> [Row] {
-        timeBasedNormalRows[.today] = buildRows(incognito: false, byTime: .today)
-        timeBasedNormalRows[.lastWeek] = buildRows(
-            incognito: false, byTime: .lastWeek)
+        timeBasedNormalRows[.today] = buildRows(incognito: false, for: .today)
+        timeBasedNormalRows[.lastWeek] = buildRows(incognito: false, for: .lastWeek)
         return getRows(incognito: false)
     }
 
@@ -535,7 +571,7 @@ class SpaceCardModel: CardModel {
                         to: .spaceDetailView(id))
                 }
             } else if let id = spaceNeedsRefresh {
-                manager.refreshSpace(spaceID: id)
+                manager.refreshSpace(spaceID: id, anonymous: false)
                 spaceNeedsRefresh = nil
 
             }
@@ -548,8 +584,8 @@ class SpaceCardModel: CardModel {
     private var anyCancellable: AnyCancellable? = nil
     private var recommendationSubscription: AnyCancellable? = nil
     private var editingSubscription: AnyCancellable? = nil
-    private var mutationSubscription: AnyCancellable? = nil
     private var detailsSubscriptions: Set<AnyCancellable> = Set()
+    private var mutationSubscriptions: Set<AnyCancellable> = Set()
     private var spaceNeedsRefresh: String? = nil
     private var scene: UIScene?
 
@@ -623,14 +659,14 @@ class SpaceCardModel: CardModel {
     }
 
     private func listenSpaceMutations() {
-        mutationSubscription = manager.spaceLocalMutation.sink { [weak self] space in
+        manager.spaceLocalMutation.sink { [weak self] space in
             guard let self = self else { return }
             if let space = space {
                 let details = SpaceCardDetails(space: space, manager: self.manager)
                 self.allDetails.append(details)
                 self.subscribeToShowingDetails(for: details)
             }
-        }
+        }.store(in: &mutationSubscriptions)
 
     }
 
@@ -642,13 +678,18 @@ class SpaceCardModel: CardModel {
         listenForShowingDetails()
     }
 
-    func add(spaceID: String, url: String, title: String, description: String? = nil) {
+    func add(
+        spaceID: String, url: String, title: String, description: String? = nil
+    ) {
         DispatchQueue.main.async {
             let request = SpaceServiceProvider.shared.addToSpaceWithURL(
                 spaceID: spaceID, url: url, title: title, description: description)
+
             request?.$state.sink { state in
-                self.spaceNeedsRefresh = spaceID
-            }.cancel()
+                if case .success = state {
+                    SpaceStore.shared.refreshSpace(spaceID: spaceID, anonymous: false)
+                }
+            }.store(in: &self.mutationSubscriptions)
         }
     }
 
@@ -659,9 +700,11 @@ class SpaceCardModel: CardModel {
             let request = SpaceServiceProvider.shared.updateSpaceEntity(
                 spaceID: spaceID, entityID: entityID, title: title, snippet: snippet,
                 thumbnail: thumbnail)
-            request?.$state.sink { state in
-                self.spaceNeedsRefresh = spaceID
-            }.cancel()
+            request?.$state.sink { [weak self] state in
+                if case .success = state {
+                    self?.spaceNeedsRefresh = spaceID
+                }
+            }.store(in: &self.mutationSubscriptions)
         }
     }
 
@@ -669,22 +712,26 @@ class SpaceCardModel: CardModel {
         DispatchQueue.main.async {
             let request = SpaceServiceProvider.shared.claimGeneratedItem(
                 spaceID: spaceID, entityID: entityID)
-            request?.$state.sink { state in
-                self.spaceNeedsRefresh = spaceID
-            }.cancel()
+            request?.$state.sink { [weak self] state in
+                if case .success = state {
+                    self?.spaceNeedsRefresh = spaceID
+                }
+            }.store(in: &self.mutationSubscriptions)
         }
     }
 
     func delete(
-        space spaceID: String, entities: [SpaceEntityThumbnail], from scene: UIScene,
+        space spaceID: String, entities: [SpaceEntityData], from scene: UIScene,
         undoDeletion: @escaping () -> Void
     ) {
         DispatchQueue.main.async {
             let request = SpaceServiceProvider.shared.deleteSpaceItems(
                 spaceID: spaceID, ids: entities.map { $0.id })
-            request?.$state.sink { state in
-                self.spaceNeedsRefresh = spaceID
-            }.cancel()
+            request?.$state.sink { [weak self] state in
+                if case .success = state {
+                    self?.spaceNeedsRefresh = spaceID
+                }
+            }.store(in: &self.mutationSubscriptions)
 
             ToastDefaults().showToastForRemoveFromSpace(
                 bvc: SceneDelegate.getBVC(with: scene), request: request!
@@ -694,8 +741,8 @@ class SpaceCardModel: CardModel {
                 // Undo deletion of Space item
                 entities.forEach { entity in
                     self.add(
-                        spaceID: spaceID, url: entity.data.url?.absoluteString ?? "",
-                        title: entity.title, description: entity.description)
+                        spaceID: spaceID, url: entity.url?.absoluteString ?? "",
+                        title: entity.title ?? "", description: entity.pageMetadata?.description)
                 }
             } retryDeletion: { [weak self] in
                 guard let self = self else { return }
@@ -708,9 +755,11 @@ class SpaceCardModel: CardModel {
     func reorder(space spaceID: String, entities: [String]) {
         DispatchQueue.main.async {
             let request = SpaceServiceProvider.shared.reorderSpace(spaceID: spaceID, ids: entities)
-            request?.$state.sink { state in
-                self.spaceNeedsRefresh = spaceID
-            }.cancel()
+            request?.$state.sink { [weak self] state in
+                if case .success = state {
+                    self?.spaceNeedsRefresh = spaceID
+                }
+            }.store(in: &self.mutationSubscriptions)
         }
     }
 
@@ -718,18 +767,22 @@ class SpaceCardModel: CardModel {
         DispatchQueue.main.async {
             if add {
                 let request = SpaceServiceProvider.shared.addPublicACL(spaceID: space.id.id)
-                request?.$state.sink { state in
-                    self.spaceNeedsRefresh = space.id.id
-                    space.isPublic = true
-                    self.objectWillChange.send()
-                }.cancel()
+                request?.$state.sink { [weak self] state in
+                    if case .success = state {
+                        self?.spaceNeedsRefresh = space.id.id
+                        space.isPublic = true
+                        self?.objectWillChange.send()
+                    }
+                }.store(in: &self.mutationSubscriptions)
             } else {
                 let request = SpaceServiceProvider.shared.deletePublicACL(spaceID: space.id.id)
-                request?.$state.sink { state in
-                    self.spaceNeedsRefresh = space.id.id
-                    space.isPublic = false
-                    self.objectWillChange.send()
-                }.cancel()
+                request?.$state.sink { [weak self] state in
+                    if case .success = state {
+                        self?.spaceNeedsRefresh = space.id.id
+                        space.isPublic = false
+                        self?.objectWillChange.send()
+                    }
+                }.store(in: &self.mutationSubscriptions)
             }
         }
     }
@@ -738,11 +791,13 @@ class SpaceCardModel: CardModel {
         DispatchQueue.main.async {
             let request = SpaceServiceProvider.shared.addSoloACLs(
                 spaceID: space.id.id, emails: emails, acl: acl, note: note)
-            request?.$state.sink { state in
-                self.spaceNeedsRefresh = space.id.id
-                space.isShared = true
-                self.objectWillChange.send()
-            }.cancel()
+            request?.$state.sink { [weak self] state in
+                if case .success = state {
+                    self?.spaceNeedsRefresh = space.id.id
+                    space.isShared = true
+                    self?.objectWillChange.send()
+                }
+            }.store(in: &self.mutationSubscriptions)
         }
     }
 
@@ -754,13 +809,15 @@ class SpaceCardModel: CardModel {
             let request = SpaceServiceProvider.shared.updateSpace(
                 spaceID: space.id.id, title: title,
                 description: description, thumbnail: thumbnail)
-            request?.$state.sink { state in
-                self.spaceNeedsRefresh = space.id.id
-                space.name = title
-                space.description = description
-                space.thumbnail = thumbnail
-                self.objectWillChange.send()
-            }.cancel()
+            request?.$state.sink { [weak self] state in
+                if case .success = state {
+                    self?.spaceNeedsRefresh = space.id.id
+                    space.name = title
+                    space.description = description
+                    space.thumbnail = thumbnail
+                    self?.objectWillChange.send()
+                }
+            }.store(in: &self.mutationSubscriptions)
         }
     }
 
@@ -768,9 +825,11 @@ class SpaceCardModel: CardModel {
         DispatchQueue.main.async {
             let request = SpaceServiceProvider.shared.deleteGenerator(
                 spaceID: spaceID, generatorID: generatorID)
-            request?.$state.sink { state in
-                self.spaceNeedsRefresh = spaceID
-            }.cancel()
+            request?.$state.sink { [weak self] state in
+                if case .success = state {
+                    self?.spaceNeedsRefresh = spaceID
+                }
+            }.store(in: &self.mutationSubscriptions)
         }
     }
 

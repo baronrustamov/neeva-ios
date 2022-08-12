@@ -74,4 +74,18 @@ class BackgroundFileWriterTests: XCTestCase {
 
         assert(file: testFile, contains: data2)
     }
+
+    func testDataProvider() {
+        let data = "hello world".data(using: .utf8)!
+
+        let relativePath = "testfile"
+        let testFile = URL(fileURLWithPath: testDir).appendingPathComponent(relativePath).path
+
+        let writer = BackgroundFileWriter(label: "testBasic", path: testFile)
+        writer.writeData(from: { data })
+
+        writer.serialQueueForTesting.sync {}  // Ensure data has been written
+
+        assert(file: testFile, contains: data)
+    }
 }

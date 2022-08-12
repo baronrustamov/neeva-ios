@@ -41,7 +41,7 @@ struct YourCollectionDetailView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 16, height: 16)
-                        Text("Twitter")
+                        Text(verbatim: "Twitter")
                     }
                 }.buttonStyle(DashboardButtonStyle())
                 Button(action: {
@@ -52,7 +52,7 @@ struct YourCollectionDetailView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 16, height: 16)
-                        Text("Discord")
+                        Text(verbatim: "Discord")
                     }
                 }.buttonStyle(DashboardButtonStyle())
                 Button(action: {
@@ -60,7 +60,7 @@ struct YourCollectionDetailView: View {
                 }) {
                     HStack(spacing: 2) {
                         Symbol(decorative: .arrowUpRight, style: .bodyMedium)
-                        Text("Website")
+                        Text(verbatim: "Website")
                     }
                 }.buttonStyle(DashboardButtonStyle())
             }

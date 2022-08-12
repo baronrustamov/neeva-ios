@@ -176,10 +176,6 @@ enum TabToolbarButtons {
             TabToolbarButton(
                 label: icon,
                 action: {
-                    ClientLogger.shared.logCounter(
-                        .OpenCheatsheet,
-                        attributes: EnvironmentHelper.shared.getAttributes()
-                    )
                     promoModel.openSheet(
                         on: chromeModel.topBarDelegate?.tabManager.selectedTab?.url
                     )
@@ -304,13 +300,24 @@ enum TabToolbarButtons {
         @EnvironmentObject var browserModel: BrowserModel
         @EnvironmentObject var gridModel: GridModel
 
-        @ViewBuilder
-        var body: some View {
+        var button: some View {
             #if XYZ
                 TabToolbarButton(
                     label: Web3Theme(with: currentTheme).tabsImage,
                     action: action
                 )
+            #else
+                TabToolbarButton(
+                    label: Symbol(
+                        .squareOnSquare, size: 20, weight: weight, label: "Show Tabs"),
+                    action: action
+                )
+            #endif
+        }
+
+        @ViewBuilder
+        var body: some View {
+            button
                 .modifier(MenuBuilder.ShowTabsButtonMenu(tabManager: browserModel.tabManager))
                 .modifier(
                     MenuBuilder.ConfirmCloseAllTabsConfirmationDialog(
@@ -318,18 +325,6 @@ enum TabToolbarButtons {
                         tabManager: browserModel.tabManager)
                 )
                 .accessibilityLabel(Text("Show Tabs"))
-            #else
-                TabToolbarButton(
-                    label: Symbol(
-                        .squareOnSquare, size: 20, weight: weight, label: "Show Tabs"),
-                    action: action
-                )
-                .modifier(MenuBuilder.ShowTabsButtonMenu(tabManager: browserModel.tabManager))
-                .modifier(
-                    MenuBuilder.ConfirmCloseAllTabsConfirmationDialog(
-                        showMenu: $gridModel.showConfirmCloseAllTabs,
-                        tabManager: browserModel.tabManager))
-            #endif
         }
     }
 

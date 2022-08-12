@@ -113,7 +113,9 @@ class ToastDefaults: NSObject {
             } else {
                 self.toastProgressViewModel?.status = .success
                 if let spaceID = request.targetSpaceID {
-                    SpaceStore.shared.refreshSpace(spaceID: spaceID, url: request.url)
+                    SpaceStore.shared.refreshSpace(
+                        spaceID: spaceID, url: request.url, anonymous: false
+                    )
                 }
             }
         }
@@ -192,7 +194,7 @@ class ToastDefaults: NSObject {
             autoDismiss: false)
     }
 
-    func showToastForFeedback(request: FeedbackRequest, toastViewManager: ToastViewManager) {
+    func showToastForFeedback(toastViewManager: ToastViewManager) {
         let normalContent = ToastStateContent(text: "Sent. Thanks for your feedback!")
         let toastContent = ToastViewContent(
             normalContent: normalContent)

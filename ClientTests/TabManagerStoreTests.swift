@@ -143,15 +143,15 @@ class TabManagerStoreTests: XCTestCase {
         XCTAssertEqual(tab1, tab2.parent)
 
         let newManager = TabManager(profile: profile, imageStore: nil)
-        XCTAssertEqual(newManager.tabs.count, 0)
+        XCTAssertEqual(newManager.activeTabs.count, 0)
 
         // restore tabs
         newManager.testRestoreTabs()
-        XCTAssertEqual(newManager.tabs.count, 2)
+        XCTAssertEqual(newManager.activeTabs.count, 2)
 
         // verify parent is restored
-        let childTab = try XCTUnwrap(newManager.tabs.first { $0.parent != nil })
+        let childTab = try XCTUnwrap(newManager.activeTabs.first { $0.parent != nil })
         let parentTab = try XCTUnwrap(childTab.parent)
-        XCTAssertTrue(newManager.tabs.contains(parentTab))
+        XCTAssertTrue(newManager.activeTabs.contains(parentTab))
     }
 }

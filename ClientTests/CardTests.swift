@@ -383,7 +383,7 @@ class CardTests: XCTestCase {
         manager.addTab()
         manager.addTab()
         manager.addTab()
-        waitForCondition(condition: { manager.tabs.count == 3 })
+        waitForCondition(condition: { manager.activeTabs.count == 3 })
 
         let cardContainer = CardsContainer(
             columns: Array(repeating: GridItem(.fixed(100), spacing: 20), count: 2)
@@ -402,9 +402,9 @@ class CardTests: XCTestCase {
 
         manager.addTab()
         manager.addTab()
-        waitForCondition(condition: { manager.tabs.count == 5 })
+        waitForCondition(condition: { manager.activeTabs.count == 5 })
 
-        XCTAssertEqual(manager.tabs.count, 5)
+        XCTAssertEqual(manager.activeTabs.count, 5)
         XCTAssertEqual(tabCardModel.allDetails.count, 5)
     }
 
@@ -412,7 +412,7 @@ class CardTests: XCTestCase {
         manager.addTab()
         manager.addTab()
         manager.addTab()
-        waitForCondition(condition: { manager.tabs.count == 3 })
+        waitForCondition(condition: { manager.activeTabs.count == 3 })
 
         gridModel.setSwitcherState(to: .spaces)
         spaceCardModel.onDataUpdated()
@@ -471,6 +471,31 @@ class CardTests: XCTestCase {
         XCTAssertEqual(tabCardModel.timeBasedNormalRows[.today]?[1].cells[0].id, tab1.id)
         XCTAssertEqual(tabCardModel.timeBasedNormalRows[.yesterday]?.count, 2)
         XCTAssertEqual(tabCardModel.timeBasedNormalRows[.yesterday]?[1].cells[0].id, tab2.id)
+    }
+
+    /// Tests that TabGroups correctly appear in different sections of the CardGrid.
+    func testTabGroupInTimeSection() {
+        let startOfOneDayAgo = Calendar.current.date(
+            byAdding: .day, value: -1, to: Date())
+        guard let startOfOneDayAgo = startOfOneDayAgo else { return }
+
+        let tab1 = manager.addTab()
+        let tab1Child = manager.addTab(afterTab: tab1)
+
+        let tab2 = manager.addTab()
+        let tab2Child = manager.addTab(afterTab: tab2)
+
+        tab2.lastExecutedTime = UInt64(startOfOneDayAgo.timeIntervalSince1970) * 1000
+        tab2Child.lastExecutedTime = UInt64(startOfOneDayAgo.timeIntervalSince1970) * 1000
+        manager.updateAllTabDataAndSendNotifications(notify: true)
+
+        XCTAssertEqual(tabCardModel.timeBasedNormalRows[.today]?.count, 2)
+        let todayRow = tabCardModel.timeBasedNormalRows[.today]?[1] as! TabCardModel.Row
+        XCTAssertEqual(todayRow.cells[0].numTabs, 2)
+
+        XCTAssertEqual(tabCardModel.timeBasedNormalRows[.yesterday]?.count, 2)
+        let yesterdayRow = tabCardModel.timeBasedNormalRows[.yesterday]?[1] as! TabCardModel.Row
+        XCTAssertEqual(yesterdayRow.cells[0].numTabs, 2)
     }
 
     /// Add a tab last used over a week ago, check if it shows up in the archives.

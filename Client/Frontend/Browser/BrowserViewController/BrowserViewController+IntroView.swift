@@ -85,18 +85,9 @@ extension BrowserViewController {
     }
 
     private func openURLFromAuth(_ url: URL) {
-        if let selectedTab = self.tabManager.selectedTab,
-            let _ = self.tabManager.selectedTab?.url
-        {
-            DispatchQueue.main.async {
-                selectedTab.loadRequest(URLRequest(url: url))
-                self.hideCardGrid(withAnimation: false)
-            }
-        } else {
-            openURLInNewTab(url)
-            DispatchQueue.main.async {
-                self.hideCardGrid(withAnimation: false)
-            }
+        DispatchQueue.main.async {
+            self.openURLInNewTab(url)
+            self.hideCardGrid(withAnimation: false)
         }
     }
 

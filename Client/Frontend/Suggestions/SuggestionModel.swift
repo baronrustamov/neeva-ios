@@ -18,6 +18,7 @@ class SuggestionModel: ObservableObject {
     let bvc: BrowserViewController
 
     private(set) var queryModel: SearchQueryModel
+    // PR #4122; periphery:ignore
     private var searchQueryListener: AnyCancellable?
 
     private var searchQuery: String = "" {
@@ -116,6 +117,7 @@ class SuggestionModel: ObservableObject {
     // `weak` usage here allows deferred queue to be the owner. The deferred is always filled and this set to nil,
     // this is defensive against any changes to queue (or cancellation) behaviour in future.
     private weak var currentDeferredHistoryQuery: CancellableDeferred<Maybe<Cursor<Site?>>>?
+    // PR #4122; periphery:ignore
     private var searchTextSubscription: AnyCancellable?
 
     // MARK: - Nav Suggestions
@@ -569,7 +571,7 @@ class SuggestionModel: ObservableObject {
     }
 
     // MARK: - Suggestion Handling
-    public func handleSuggestionSelected(_ suggestion: Suggestion) {
+    func handleSuggestionSelected(_ suggestion: Suggestion) {
         var suggestionLocationAttributes =
             findSuggestionLocationInfo(suggestion)?.loggingAttributes() ?? []
         var hideZeroQuery = true
@@ -696,7 +698,7 @@ class SuggestionModel: ObservableObject {
     }
 
     // MARK: - Keyboard Shortcut
-    public func handleKeyboardShortcut(input: String) {
+    func handleKeyboardShortcut(input: String) {
         switch input {
         case UIKeyCommand.inputUpArrow:
             moveFocus(amount: -1)
@@ -740,7 +742,7 @@ class SuggestionModel: ObservableObject {
         }
     }
 
-    public func isFocused(_ suggestion: Suggestion) -> Bool {
+    func isFocused(_ suggestion: Suggestion) -> Bool {
         return suggestion == keyboardFocusedSuggestion
     }
 

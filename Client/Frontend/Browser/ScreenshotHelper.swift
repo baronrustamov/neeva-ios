@@ -10,8 +10,6 @@ private let log = Logger.browser
 
 /// Handles screenshots for a given tab, including pages with non-webview content.
 class ScreenshotHelper {
-    var viewIsVisible = false
-
     fileprivate weak var controller: BrowserViewController?
 
     init(controller: BrowserViewController) {
@@ -49,29 +47,6 @@ class ScreenshotHelper {
             } else {
                 log.error("Tab snapshot error: bad image!?")
             }
-        }
-    }
-
-    /// Takes a screenshot after a small delay.
-    /// Trying to take a screenshot immediately after didFinishNavigation results in a screenshot
-    /// of the previous page, presumably due to an iOS bug. Adding a brief delay fixes this.
-    func takeDelayedScreenshot(_ tab: Tab) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            // If the view controller isn't visible, the screenshot will be blank.
-            // Wait until the view controller is visible again to take the screenshot.
-            guard self.viewIsVisible else {
-                tab.pendingScreenshot = true
-                return
-            }
-
-            self.takeScreenshot(tab)
-        }
-    }
-
-    func takePendingScreenshots(_ tabs: [Tab]) {
-        for tab in tabs where tab.pendingScreenshot {
-            tab.pendingScreenshot = false
-            takeDelayedScreenshot(tab)
         }
     }
 }

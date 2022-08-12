@@ -162,7 +162,7 @@ class TabManagerTests: XCTestCase {
 
         manager.removeTab(deleteTab)
         XCTAssertEqual(tab, manager.selectedTab)
-        XCTAssertFalse(manager.tabs.contains(deleteTab))
+        XCTAssertFalse(manager.activeTabs.contains(deleteTab))
     }
 
     func testDeleteSelectedTab() {
@@ -206,13 +206,13 @@ class TabManagerTests: XCTestCase {
         // Create the tab before adding the mock delegate. So we don't have to check
         // delegate calls we dont care about
         (0..<10).forEach { _ in manager.addTab() }
-        manager.selectTab(manager.tabs.last, notify: true)
-        let newSelectedTab = manager.tabs[8]
+        manager.selectTab(manager.activeTabs.last, notify: true)
+        let newSelectedTab = manager.activeTabs[8]
 
         tabsUpdated = false
         selectedTabUpdated = false
 
-        manager.removeTab(manager.tabs.last!)
+        manager.removeTab(manager.activeTabs.last!)
 
         XCTAssertTrue(tabsUpdated)
         XCTAssertTrue(selectedTabUpdated)
@@ -252,13 +252,13 @@ class TabManagerTests: XCTestCase {
         // Create the tab before adding the mock delegate. So we don't have to check
         // delegate calls we dont care about
         (0..<10).forEach { _ in manager.addTab() }
-        manager.selectTab(manager.tabs.first, notify: true)
-        let newSelectedTab = manager.tabs[1]
+        manager.selectTab(manager.activeTabs.first, notify: true)
+        let newSelectedTab = manager.activeTabs[1]
 
         tabsUpdated = false
         selectedTabUpdated = false
 
-        manager.removeTab(manager.tabs.first!)
+        manager.removeTab(manager.activeTabs.first!)
 
         XCTAssertTrue(tabsUpdated)
         XCTAssertTrue(selectedTabUpdated)
@@ -270,8 +270,8 @@ class TabManagerTests: XCTestCase {
         let tab1 = manager.addTab()
 
         manager.removeAllTabs()
-        XCTAssert(nil == manager.tabs.firstIndex(of: tab0))
-        XCTAssert(nil == manager.tabs.firstIndex(of: tab1))
+        XCTAssert(nil == manager.activeTabs.firstIndex(of: tab0))
+        XCTAssert(nil == manager.activeTabs.firstIndex(of: tab1))
     }
 
     // Incognito tabs and regular tabs are in the same tabs array.
@@ -322,12 +322,13 @@ class TabManagerTests: XCTestCase {
         let newSelectedTab = manager.addTab()
         manager.addTab(isIncognito: true)
         manager.addTab()
-        manager.selectTab(manager.tabs.first, notify: true)
+        // For some reason, incognito tabs come first in `activeTabs`. We don't want that.
+        manager.selectTab(manager.activeTabs[1], notify: true)
 
         tabsUpdated = false
         selectedTabUpdated = false
 
-        manager.removeTab(manager.tabs.first!)
+        manager.removeTab(manager.activeTabs[1])
 
         XCTAssertTrue(tabsUpdated)
         XCTAssertTrue(selectedTabUpdated)
@@ -347,7 +348,7 @@ class TabManagerTests: XCTestCase {
         manager.removeTabs([tab], updateSelectedTab: true)
         manager.restoreAllClosedTabs()
 
-        XCTAssertNotEqual(manager.tabs.first, tab)
+        XCTAssertNotEqual(manager.activeTabs.first, tab)
     }
 
     func testRootUUIDNotEqualToUUID() {
@@ -423,7 +424,7 @@ class TabManagerTests: XCTestCase {
             XCTFail("Did not switch to existing tab")
             return
         }
-        XCTAssertEqual(manager.tabs.count, 1)
+        XCTAssertEqual(manager.activeTabs.count, 1)
     }
 
     func testCoSCreateNewTab() throws {
@@ -434,7 +435,7 @@ class TabManagerTests: XCTestCase {
             XCTFail("Did not create new tab")
             return
         }
-        XCTAssertEqual(manager.tabs.count, 2)
+        XCTAssertEqual(manager.activeTabs.count, 2)
 
         // find the newly created tab
         let tab2 = try XCTUnwrap(manager.selectedTab)
@@ -446,7 +447,7 @@ class TabManagerTests: XCTestCase {
             let urlString = "tab\($0)"
             manager.addTab(URLRequest(url: try XCTUnwrap(URL(string: urlString))))
         }
-        manager.selectTab(manager.tabs.last, notify: true)
+        manager.selectTab(manager.activeTabs.last, notify: true)
         let selectedTab = try XCTUnwrap(manager.selectedTab)
 
         let result = manager.createOrSwitchToTab(for: try XCTUnwrap(URL(string: "tab3")))

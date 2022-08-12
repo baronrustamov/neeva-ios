@@ -117,7 +117,6 @@ struct SpacesIntroView: View {
                         .padding(landscapeMode ? 4 : 8)
                     Text(detailText)
                         .withFont(.bodyLarge)
-                        .lineLimit(3)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 40)
                         .fixedSize(horizontal: false, vertical: true)

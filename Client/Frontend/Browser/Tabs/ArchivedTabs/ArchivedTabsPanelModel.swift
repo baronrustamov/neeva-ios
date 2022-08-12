@@ -35,17 +35,17 @@ class ArchivedTabsPanelModel: ObservableObject {
         archivedTabGroups = tabManager.archivedTabGroups
 
         groupedSites.sites[.lastMonth] = archivedTabs.filter {
-            return $0.isPinnedTodayOrWasLastExecuted(.lastMonth)
+            return $0.isIncluded(in: .lastMonth)
         }
 
         groupedSites.sites[.overAMonth] = archivedTabs.filter {
-            return $0.isPinnedTodayOrWasLastExecuted(.overAMonth)
+            return $0.isIncluded(in: .overAMonth)
         }
     }
 
     func clearArchivedTabs() {
         tabManager.removeTabs(
-            tabManager.tabs.filter { archivedTabs.contains($0) }, updateSelectedTab: false,
+            tabManager.archivedTabs, updateSelectedTab: false,
             dontAddToRecentlyClosed: true, notify: false)
         loadData()
         self.objectWillChange.send()

@@ -9,54 +9,48 @@ private let impressionOnSRPTimeInterval: TimeInterval = 2
 private let impressionOnPageTimeInterval: TimeInterval = 2
 
 struct CheatsheetInfoViewOnSRP: View {
+    @EnvironmentObject private var model: CheatsheetMenuViewModel
+
     let buttonAction: () -> Void
 
     var body: some View {
         CheatsheetInfoView(buttonText: "Got it!") {
-            ClientLogger.shared.logCounter(
-                .AckCheatsheetEducationOnSRP,
-                attributes: EnvironmentHelper.shared.getAttributes()
-            )
+            model.log(.AckCheatsheetEducationOnSRP)
             buttonAction()
         }
         .onAppear {
-            ClientLogger.shared.logCounter(
-                .ShowCheatsheetEducationOnSRP,
-                attributes: EnvironmentHelper.shared.getAttributes()
-            )
+            model.log(.ShowCheatsheetEducationOnSRP)
         }
         .modifier(
             ImpressionLoggerModifier(
                 timeInterval: impressionOnSRPTimeInterval,
-                path: .CheatsheetEducationImpressionOnSRP,
-                attributes: EnvironmentHelper.shared.getAttributes()
+                makeLog: {
+                    model.log(.CheatsheetEducationImpressionOnSRP)
+                }
             )
         )
     }
 }
 
 struct CheatsheetInfoViewOnPage: View {
+    @EnvironmentObject private var model: CheatsheetMenuViewModel
+
     let buttonAction: () -> Void
 
     var body: some View {
         CheatsheetInfoView(buttonText: "Let's try it!") {
-            ClientLogger.shared.logCounter(
-                .AckCheatsheetEducationOnPage,
-                attributes: EnvironmentHelper.shared.getAttributes()
-            )
+            model.log(.AckCheatsheetEducationOnPage)
             buttonAction()
         }
         .onAppear {
-            ClientLogger.shared.logCounter(
-                .ShowCheatsheetEducationOnPage,
-                attributes: EnvironmentHelper.shared.getAttributes()
-            )
+            model.log(.ShowCheatsheetEducationOnPage)
         }
         .modifier(
             ImpressionLoggerModifier(
                 timeInterval: impressionOnPageTimeInterval,
-                path: .CheatsheetEducationImpressionOnPage,
-                attributes: EnvironmentHelper.shared.getAttributes()
+                makeLog: {
+                    model.log(.CheatsheetEducationImpressionOnPage)
+                }
             )
         )
     }

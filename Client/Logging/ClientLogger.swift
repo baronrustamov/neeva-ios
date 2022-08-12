@@ -107,12 +107,14 @@ public class ClientLogger {
                 version: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")
                     as! String, environment: self.env)
 
-            LogMutation(
-                input: ClientLogInput(
-                    base: clientLogBase,
-                    log: [clientLog]
+            GraphQLAPI.shared.perform(
+                mutation: LogMutation(
+                    input: ClientLogInput(
+                        base: clientLogBase,
+                        log: [clientLog]
+                    )
                 )
-            ).perform { result in
+            ) { result in
                 switch result {
                 case .failure(let error):
                     print("LogMutation Error: \(error)")

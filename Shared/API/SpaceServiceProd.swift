@@ -25,7 +25,7 @@ public class SpaceServiceProd: SpaceService {
         thumbnail: String? = nil, data: String?, mediaType: String?, isBase64: Bool?,
         completion: @escaping (Result<AddToSpaceMutation.Data, Error>) -> Void
     ) -> Cancellable? {
-        return AddToSpaceMutation(
+        let mutation = AddToSpaceMutation(
             input: AddSpaceResultByURLInput(
                 spaceId: spaceId,
                 url: url,
@@ -35,7 +35,8 @@ public class SpaceServiceProd: SpaceService {
                 mediaType: mediaType,
                 isBase64: isBase64
             )
-        ).perform(resultHandler: completion)
+        )
+        return GraphQLAPI.shared.perform(mutation: mutation, resultHandler: completion)
     }
 
     public func addToSpaceWithURL(spaceID: String, url: String, title: String, description: String?)
@@ -73,12 +74,13 @@ public class SpaceServiceProd: SpaceService {
         spaceId: String, url: String,
         completion: @escaping (Result<DeleteSpaceResultByUrlMutation.Data, Error>) -> Void
     ) -> Cancellable? {
-        return DeleteSpaceResultByUrlMutation(
+        let mutation = DeleteSpaceResultByUrlMutation(
             input: DeleteSpaceResultByURLInput(
                 spaceId: spaceId,
                 url: url
             )
-        ).perform(resultHandler: completion)
+        )
+        return GraphQLAPI.shared.perform(mutation: mutation, resultHandler: completion)
     }
 
     public func getRelatedSpacesCountData(
@@ -103,10 +105,16 @@ public class SpaceServiceProd: SpaceService {
     }
 
     public func getSpacesData(
+        anonymous: Bool,
         spaceIds: [String],
         completion: @escaping (Result<[SpacesDataQueryController.Space], Error>) -> Void
     ) -> Cancellable? {
-        return SpacesDataQueryController.getSpacesData(spaceIds: spaceIds, completion: completion)
+        let api: GraphQLAPI = anonymous ? .anonymous : .shared
+        return SpacesDataQueryController.getSpacesData(
+            spaceIds: spaceIds,
+            using: api,
+            completion: completion
+        )
     }
 
     public func reorderSpace(spaceID: String, ids: [String]) -> ReorderSpaceRequest? {

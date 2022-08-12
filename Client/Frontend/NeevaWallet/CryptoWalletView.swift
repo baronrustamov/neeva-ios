@@ -16,7 +16,7 @@ struct CryptoWalletView: View {
     @ViewBuilder var overlay: some View {
         if viewState != .xyzIntro {
             Button(action: dismiss) {
-                Text(viewState == .starter ? "Skip" : "Done")
+                Text(verbatim: viewState == .starter ? "Skip" : "Done")
                     .withFont(.labelLarge)
                     .foregroundColor(.ui.adaptive.blue)
                     .frame(height: 48)

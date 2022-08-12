@@ -84,33 +84,34 @@ public final class CheatsheetServiceProvider: CheatsheetDataService {
             return
         }
 
-        NeevaScopeSearch.SearchController.getRichResult(query: query) { [weak self] result in
-            switch result {
-            case .success(let richResults):
-                if richResults.lazy.map({ $0.dataComplete }).contains(false) {
-                    DispatchQueue.main.async {
-                        ClientLogger.shared.logCounter(
-                            .CheatsheetBadURLString,
-                            attributes: EnvironmentHelper.shared.getAttributes()
-                                + [
-                                    ClientLogCounterAttribute(
-                                        key: LogConfig.CheatsheetAttribute.currentCheatsheetQuery,
-                                        value: query
-                                    )
-                                ]
+        DispatchQueue.main.async {
+            NeevaScopeSearch.SearchController.getRichResult(query: query) { [weak self] result in
+                switch result {
+                case .success(let richResults):
+                    if richResults.lazy.map({ $0.dataComplete }).contains(false) {
+                        let attribute = ClientLogCounterAttribute(
+                            key: LogConfig.CheatsheetAttribute.currentCheatsheetQuery,
+                            value: query
                         )
+                        DispatchQueue.main.async {
+                            ClientLogger.shared.logCounter(
+                                .CheatsheetBadURLString,
+                                attributes: EnvironmentHelper.shared.getAttributes()
+                                    + [attribute]
+                            )
+                        }
                     }
-                }
 
-                let result = SearchResult(
-                    results: Self.parseResults(from: richResults).map {
-                        CheatsheetResult(data: $0)
-                    }
-                )
-                self?.store.insertRichResult(result, query: query)
-                completion(.success(result))
-            case .failure(let error):
-                completion(.failure(error))
+                    let result = SearchResult(
+                        results: Self.parseResults(from: richResults).map {
+                            CheatsheetResult(data: $0)
+                        }
+                    )
+                    self?.store.insertRichResult(result, query: query)
+                    completion(.success(result))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
             }
         }
     }
@@ -159,26 +160,6 @@ public final class CheatsheetServiceProvider: CheatsheetDataService {
         let ugcDiscussion = UGCDiscussion(backlinks: cheatsheetInfo.backlinks)
         if !ugcDiscussion.isEmpty {
             results.append(.discussions(ugcDiscussion))
-        } else {
-            // If no UGC results are returned, check bloom filter
-            if let canonicalURL = CanonicalURL(
-                from: inputURL, stripMobile: true, relaxed: true
-            )?.asString,
-                BloomFilterManager.shared.contains(canonicalURL) == true
-            {
-                // Log false positive if bloom filter is true
-                DispatchQueue.main.async {
-                    ClientLogger.shared.logCounter(
-                        .CheatsheetUGCHitNoRedditDataV2,
-                        attributes: EnvironmentHelper.shared.getAttributes() + [
-                            ClientLogCounterAttribute(
-                                key: LogConfig.CheatsheetAttribute.currentPageURL,
-                                value: inputURL
-                            )
-                        ]
-                    )
-                }
-            }
         }
 
         return results

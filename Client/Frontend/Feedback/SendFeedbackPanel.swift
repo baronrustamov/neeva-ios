@@ -8,19 +8,25 @@ import SwiftUI
 public class SendFeedbackPanel: UIHostingController<AnyView> {
     init(
         requestId: String?, screenshot: UIImage?, url: URL?, query: String?,
-        onOpenURL: @escaping (URL) -> Void
+        tabStats: TabManager.TabStats, onOpenURL: @escaping (URL) -> Void
     ) {
         super.init(rootView: AnyView(EmptyView()))
+
+        var debugInfo: String = ""
+        debugInfo += "\n\nActive Tabs (excluding zombies): \(tabStats.numberOfActiveNonZombieTabs)"
+        debugInfo += "\nZombie Tabs: \(tabStats.numberOfActiveZombieTabs)"
+        debugInfo += "\nArchived Tabs: \(tabStats.numberOfArchivedTabs)"
+
         rootView = AnyView(
             SendFeedbackView(
                 screenshot: screenshot, url: url,
                 onDismiss: { self.dismiss(animated: true, completion: nil) }, requestId: requestId,
-                query: query
-            ) { feedbackRequest in
+                query: query,
+                debugInfo: debugInfo
+            ) { _ in
                 // Wait for feedback UI to dismiss
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     ToastDefaults().showToastForFeedback(
-                        request: feedbackRequest,
                         toastViewManager: SceneDelegate.getBVC(for: self.view)
                             .toastViewManager)
                 }

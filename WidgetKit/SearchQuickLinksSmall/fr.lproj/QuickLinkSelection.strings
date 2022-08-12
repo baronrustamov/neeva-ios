@@ -1,0 +1,40 @@
+"2I56oC" = "Intent Quick Link";
+
+"9NY97H" = "String.QuickActionDescription";
+
+"DFGT8d" = "Quick Link Selection";
+
+"Dt1192" = "Incognito Search";
+
+"JiZVv0" = "Close Incognito Tabs";
+
+"MXB2K6" = "Search in Neeva";
+
+"QjQSnd-Dt1192" = "Just to confirm, you wanted ‘Incognito Search’?";
+
+"QjQSnd-JiZVv0" = "Just to confirm, you wanted ‘Close Incognito Tabs’?";
+
+"QjQSnd-MXB2K6" = "Just to confirm, you wanted ‘Search in Neeva’?";
+
+"QjQSnd-bpYlov" = "Just to confirm, you wanted ‘Go to Copied Link’?";
+
+"bpYlov" = "Go to Copied Link";
+
+"oQDtoo-Dt1192" = "There are ${count} options matching ‘Incognito Search’.";
+
+"oQDtoo-JiZVv0" = "There are ${count} options matching ‘Close Incognito Tabs’.";
+
+"oQDtoo-MXB2K6" = "There are ${count} options matching ‘Search in Neeva’.";
+
+"oQDtoo-bpYlov" = "There are ${count} options matching ‘Go to Copied Link’.";
+
+"pooIV6-Dt1192" = "There are ${count} options matching ‘Incognito Search’.";
+
+"pooIV6-JiZVv0" = "There are ${count} options matching ‘Close Incognito Tabs’.";
+
+"pooIV6-MXB2K6" = "There are ${count} options matching ‘Search in Neeva’.";
+
+"pooIV6-bpYlov" = "There are ${count} options matching ‘Go to Copied Link’.";
+
+"wsnbbt" = "Quick Action";
+

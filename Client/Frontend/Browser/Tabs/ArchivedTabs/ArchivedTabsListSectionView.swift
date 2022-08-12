@@ -108,9 +108,9 @@ struct ArchivedTabsListSectionView: View {
                     .children.filter { child in
                         switch section {
                         case .lastMonth:
-                            return child.isPinnedTodayOrWasLastExecuted(.lastMonth)
+                            return child.isIncluded(in: .lastMonth)
                         case .overAMonth:
-                            return child.isPinnedTodayOrWasLastExecuted(.overAMonth)
+                            return child.isIncluded(in: .overAMonth)
                         }
                     }
                 {

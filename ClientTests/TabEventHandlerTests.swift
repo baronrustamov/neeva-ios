@@ -56,11 +56,11 @@ class TabEventHandlerTests: XCTestCase {
 
         let exists = NSPredicate { obj, _ in
             let tabManager = obj as! TabManager
-            return tabManager.tabs.count > 2
+            return tabManager.activeTabs.count > 2
         }
 
         expectation(for: exists, evaluatedWith: tabManager) {
-            let url = SceneDelegate.getTabManagerOrNil()!.tabs[2].url
+            let url = SceneDelegate.getTabManagerOrNil()!.activeTabs[2].url
             XCTAssertTrue(url?.absoluteString == "about:blank")
             return true
         }

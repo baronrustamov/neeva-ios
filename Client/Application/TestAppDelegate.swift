@@ -46,11 +46,15 @@ class MockUserInfoProvider: UserInfoProvider {
 class TestAppDelegate: AppDelegate {
     lazy var dirForTestProfile = { "\(appRootDir())/profile.testProfile" }()
 
+    private static let boolFlagsKey = Defaults.Key<[Int: Bool]>(
+        "neevaBoolFlags", default: [:], suite: UserDefaults(suiteName: NeevaConstants.appGroup)!)
+
     override func createProfile() -> Profile {
         var profile: BrowserProfile
         let launchArguments = ProcessInfo.processInfo.arguments
         var loginCookie: String?
         var enableFeatureFlags: [FeatureFlag]?
+        var enableNeevaFeatureBoolFlags: [NeevaFeatureFlags.BoolFlag]?
 
         launchArguments.forEach { arg in
             if arg.starts(with: LaunchArguments.ServerPort) {
@@ -124,6 +128,14 @@ class TestAppDelegate: AppDelegate {
                     of: LaunchArguments.EnableFeatureFlags, with: "")
                 enableFeatureFlags = flags.components(separatedBy: ",").compactMap {
                     FeatureFlag(caseName: $0)
+                }
+            }
+
+            if arg.starts(with: LaunchArguments.EnableNeevaFeatureBoolFlags) {
+                let flags = arg.replacingOccurrences(
+                    of: LaunchArguments.EnableNeevaFeatureBoolFlags, with: "")
+                enableNeevaFeatureBoolFlags = flags.components(separatedBy: ",").compactMap {
+                    NeevaFeatureFlags.BoolFlag(rawValue: Int($0)!)
                 }
             }
         }
@@ -204,6 +216,12 @@ class TestAppDelegate: AppDelegate {
 
         if let enableFeatureFlags = enableFeatureFlags {
             FeatureFlag.enabledFlags = Set(enableFeatureFlags)
+        }
+
+        if let enableNeevaFeatureBoolFlags = enableNeevaFeatureBoolFlags {
+            for enableNeevaFeatureBoolFlag in enableNeevaFeatureBoolFlags {
+                Defaults[Self.boolFlagsKey][enableNeevaFeatureBoolFlag.rawValue] = true
+            }
         }
 
         return profile

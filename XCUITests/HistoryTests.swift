@@ -27,6 +27,7 @@ class HistoryTests: BaseTestCase {
             LaunchArguments.SetDidFirstNavigation, LaunchArguments.SkipWhatsNew,
             LaunchArguments.SkipETPCoverSheet, LaunchArguments.DeviceName,
             "\(LaunchArguments.ServerPort)\(serverPort)",
+            "\(LaunchArguments.EnableNeevaFeatureBoolFlags)40640",
             LaunchArguments.DisableCheatsheetBloomFilters,
             LaunchArguments.LoadDatabasePrefix + historyDB, LaunchArguments.DontAddTabOnLaunch,
         ]
@@ -83,6 +84,20 @@ class HistoryTests: BaseTestCase {
                 app.cells.containing(NSPredicate(format: "label CONTAINS %@", option)).element
                     .exists)
         }
+    }
+
+    func testClearBrowsingDataNeevaMemoryNavigationInHistory() {
+        openURLInNewTab()
+        goToHistory()
+
+        waitForExistence(app.buttons["Clear Browsing Data"])
+        app.buttons["Clear Browsing Data"].tap()
+
+        waitForExistence(app.buttons["Manage Neeva Memory"])
+        app.buttons["Manage Neeva Memory"].tap()
+
+        // Make sure we are back to main screen with overflow menu button
+        waitForExistence(app.buttons["Tracking Protection"])
     }
 
     // MARK: - Delete

@@ -81,9 +81,9 @@ public class SpaceImportHandler {
     }
 
     private func createSpace() {
-        self.cancellable = CreateSpaceMutation(
-            name: title
-        ).perform { result in
+        self.cancellable = GraphQLAPI.shared.perform(
+            mutation: CreateSpaceMutation(name: title)
+        ) { result in
             self.cancellable = nil
             switch result {
             case .success(let data):

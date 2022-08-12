@@ -29,7 +29,7 @@ public struct CommunitySubmissionView: View {
         VStack(spacing: 24) {
             VStack(spacing: 8) {
                 WalletSequenceSiteHeader(iconURL: iconURL, domain: domain, trusted: false)
-                Text("We're building out community trust flags for sites like this one.")
+                Text(verbatim: "We're building out community trust flags for sites like this one.")
                     .withFont(.bodyLarge)
                     .foregroundColor(Color(light: .brand.variant.blue, dark: .brand.blue))
                     .multilineTextAlignment(.center)
@@ -40,7 +40,8 @@ public struct CommunitySubmissionView: View {
             .background(Color.quaternarySystemFill)
             .cornerRadius(12)
             Text(
-                "Do you have knowledge of this site? Help keep the community safe and contribute below."
+                verbatim:
+                    "Do you have knowledge of this site? Help keep the community safe and contribute below."
             )
             .withFont(.bodyXLarge)
             .foregroundColor(.label)
@@ -55,7 +56,7 @@ public struct CommunitySubmissionView: View {
                         }
                     },
                     label: {
-                        Text("Hold to verify")
+                        Text(verbatim: "Hold to verify")
                             .frame(maxWidth: .infinity)
 
                     }
@@ -69,7 +70,7 @@ public struct CommunitySubmissionView: View {
                         }
                     },
                     label: {
-                        Text("Report as scam")
+                        Text(verbatim: "Report as scam")
                             .frame(maxWidth: .infinity)
                     }
                 ).buttonStyle(.wallet(.secondary))

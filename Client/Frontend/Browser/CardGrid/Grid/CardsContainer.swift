@@ -257,8 +257,8 @@ struct CardsContainer: View {
 func getLogCounterAttributesForTabs(tab: Tab) -> [ClientLogCounterAttribute] {
     var lastExecutedTime = ""
 
-    for time in TimeFilter.allCases {
-        if tab.isPinnedTodayOrWasLastExecuted(time) {
+    for time in TabSection.allCases {
+        if tab.isIncluded(in: time) {
             lastExecutedTime = time.rawValue
             break
         }
