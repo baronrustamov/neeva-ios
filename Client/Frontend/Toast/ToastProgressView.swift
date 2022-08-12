@@ -63,7 +63,7 @@ struct ToastProgressView: View {
                     .foregroundColor(.white)
 
                 Symbol(decorative: progressViewModel.status.icon, size: 10)
-                    .foregroundColor(Color(ToastViewUX.ToastDefaultColor))
+                    .foregroundColor(Color.ToastBackground)
             }
         }
         .frame(width: width, height: width)

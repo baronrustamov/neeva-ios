@@ -58,13 +58,8 @@ protocol Profile: AnyObject {
     var metadata: Metadata { get }
     var recommendations: HistoryRecommendations { get }
     var favicons: Favicons { get }
-    var logins: RustLogins { get }
     var certStore: CertStore { get }
     var panelDataObservers: PanelDataObservers { get }
-
-    #if !MOZ_TARGET_NOTIFICATIONSERVICE
-        var readingList: ReadingList { get }
-    #endif
 
     var isShutdown: Bool { get }
 
@@ -95,7 +90,6 @@ open class BrowserProfile: Profile {
     internal let files: FileAccessor
 
     let db: BrowserDB
-    let readingListDB: BrowserDB
 
     private let loginsSaltKeychainKey = "sqlcipher.key.logins.salt"
     private let loginsUnlockKeychainKey = "sqlcipher.key.logins.db"
@@ -145,8 +139,6 @@ open class BrowserProfile: Profile {
 
         // Set up our database handles.
         self.db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
-        self.readingListDB = BrowserDB(
-            filename: "ReadingList.db", schema: ReadingListSchema(), files: files)
 
         if isNewProfile {
             log.info("New profile. Removing old Keychain/Prefs data.")
@@ -179,7 +171,6 @@ open class BrowserProfile: Profile {
         isShutdown = false
 
         db.reopenIfClosed()
-        _ = logins.reopenIfClosed()
     }
 
     // swift-format-ignore: NoLeadingUnderscores
@@ -188,7 +179,6 @@ open class BrowserProfile: Profile {
         isShutdown = true
 
         db.forceClose()
-        _ = logins.forceClose()
     }
 
     @objc
@@ -276,10 +266,6 @@ open class BrowserProfile: Profile {
         return self.legacyPlaces
     }
 
-    lazy var readingList: ReadingList = {
-        return SQLiteReadingList(db: self.readingListDB)
-    }()
-
     lazy var remoteClientsAndTabs:
         RemoteClientsAndTabs & ResettableSyncStorage & AccountRemovalDelegate & RemoteDevices = {
             return SQLiteRemoteClientsAndTabs(db: self.db)
@@ -304,21 +290,4 @@ open class BrowserProfile: Profile {
     func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
         return self.remoteClientsAndTabs.insertOrUpdateTabs(tabs)
     }
-
-    lazy var logins: RustLogins = {
-        let databasePath = URL(
-            fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true
-        ).appendingPathComponent("logins.db").path
-
-        let salt: String
-        if let val = keychain.string(forKey: loginsSaltKeychainKey) {
-            salt = val
-        } else {
-            salt = RustLogins.setupPlaintextHeaderAndGetSalt(
-                databasePath: databasePath, encryptionKey: loginsKey)
-            keychain.set(salt, forKey: loginsSaltKeychainKey, withAccessibility: .afterFirstUnlock)
-        }
-
-        return RustLogins(databasePath: databasePath, encryptionKey: loginsKey, salt: salt)
-    }()
 }

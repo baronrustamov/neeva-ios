@@ -20,10 +20,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var bvc: BrowserViewController!
     private var geigerCounter: KMCGeigerCounter?
 
-    @Default(.sceneLastOpenedTime) private var sceneLastOpenedTime
     private var urlHandledOnLaunch = false
 
-    @Default(.scenePreviousUIState) private var scenePreviousUIState
     private let backgroundProcessor = BackgroundTaskProcessor(label: "SceneDelegate")
 
     // MARK: - Scene state
@@ -170,10 +168,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private func restoreSceneState() {
         let shouldSetEditingLocationToTrue =
             FeatureFlag[.openZeroQueryAfterLongDuration]
-            && sceneLastOpenedTime.hoursBetweenDate(toDate: Date()) > 1
+            && UserDefaults.standard[.sceneLastOpenedTime].hoursBetweenDate(toDate: Date()) > 1
 
         // Restoring SceneUIState.
-        let sceneUIState = SceneUIState(rawValue: scenePreviousUIState)
+        let sceneUIState = SceneUIState(rawValue: UserDefaults.standard[.scenePreviousUIState])
 
         switch sceneUIState {
         case .cardGrid(let switcherState, let isIncognito):
@@ -203,16 +201,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 bvc.chromeModel.setEditingLocation(to: true)
             }
 
-            self.sceneLastOpenedTime = Date()
+            UserDefaults.standard[.sceneLastOpenedTime] = Date()
         }
     }
 
     func setSceneUIState(to state: SceneUIState) {
-        // This ensures that the state is correctly saved.
+        // This ensures that the state is correctly saved. Use `UserDefaults`
+        // directly here since it is thread-safe.
         backgroundProcessor.performTask {
-            DispatchQueue.main.sync {
-                self.scenePreviousUIState = state.rawValue
-            }
+            UserDefaults.standard[.scenePreviousUIState] = state.rawValue
         }
     }
 

@@ -291,53 +291,10 @@ struct TabGroupHeader: View {
     @Environment(\.columns) private var columns
     let rowIndex: Int?
 
-    @State private var renaming = false
-    @State private var deleting = false {
-        didSet {
-            if deleting {
-                guard Defaults[.confirmCloseAllTabs] else {
-                    groupDetails.onClose(showToast: true)
-                    deleting = false
-                    return
-                }
-            }
-        }
-    }
-
     var body: some View {
         HStack {
             Menu {
-                if let title = groupDetails.customTitle {
-                    Text("\(groupDetails.allDetails.count) tabs from “\(title)”")
-                } else {
-                    Text("\(groupDetails.allDetails.count) Tabs")
-                }
-
-                Button {
-                    ClientLogger.shared.logCounter(.tabGroupRenameThroughThreeDotMenu)
-                    renaming = true
-                } label: {
-                    Label("Rename", systemSymbol: .pencil)
-                }
-
-                if #available(iOS 15.0, *) {
-                    Button(
-                        role: .destructive,
-                        action: {
-                            ClientLogger.shared.logCounter(.tabGroupDeleteThroughThreeDotMenu)
-                            deleting = true
-                        }
-                    ) {
-                        Label("Close All", systemSymbol: .trash)
-                    }
-                } else {
-                    Button {
-                        ClientLogger.shared.logCounter(.tabGroupDeleteThroughThreeDotMenu)
-                        deleting = true
-                    } label: {
-                        Label("Close All", systemSymbol: .trash)
-                    }
-                }
+                groupDetails.contextMenu()
             } label: {
                 Label("ellipsis", systemImage: "ellipsis")
                     .foregroundColor(.label)
@@ -396,41 +353,10 @@ struct TabGroupHeader: View {
             groupDetails.isShowingDetails.toggle()
         }
         .contentShape(Rectangle())
-        .contextMenu {
-            if let title = groupDetails.customTitle {
-                Text("\(groupDetails.allDetails.count) tabs from “\(title)”")
-            } else {
-                Text("\(groupDetails.allDetails.count) Tabs")
-            }
-
-            Button(action: {
-                ClientLogger.shared.logCounter(.tabGroupRemaneThroughLongPressMenu)
-                renaming = true
-            }) {
-                Label("Rename", systemSymbol: .pencil)
-            }
-
-            if #available(iOS 15.0, *) {
-                Button(
-                    role: .destructive,
-                    action: {
-                        ClientLogger.shared.logCounter(.tabGroupDeleteThroughLongPressMenu)
-                        deleting = true
-                    }
-                ) {
-                    Label("Close All", systemSymbol: .trash)
-                }
-            } else {
-                Button(action: {
-                    ClientLogger.shared.logCounter(.tabGroupDeleteThroughLongPressMenu)
-                    deleting = true
-                }) {
-                    Label("Close All", systemSymbol: .trash)
-                }
-            }
-        }
+        .contextMenu(menuItems: groupDetails.contextMenu)
         .textFieldAlert(
-            isPresented: $renaming, title: "Rename “\(groupDetails.title)”", required: false
+            isPresented: $groupDetails.renaming, title: "Rename “\(groupDetails.title)”",
+            required: false
         ) { newName in
             if newName.isEmpty {
                 groupDetails.customTitle = nil
@@ -443,7 +369,7 @@ struct TabGroupHeader: View {
             tf.text = groupDetails.customTitle
             tf.autocapitalizationType = .words
         }
-        .actionSheet(isPresented: $deleting) {
+        .actionSheet(isPresented: $groupDetails.deleting) {
             let buttons: [ActionSheet.Button] = [
                 .destructive(Text("Close All")) {
                     groupDetails.onClose(showToast: false)

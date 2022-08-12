@@ -186,6 +186,8 @@ public enum LogConfig {
         case AuthOptionSignupWithGoogle
         /// Click Sign up with Microsoft on auth panel under other options
         case AuthOptionSignupWithMicrosoft
+        /// Click Sign up with Email on auth panel under other options
+        case AuthOptionSignupWithEmail
         /// Click close on the first run under other options
         case OptionClosePanel
         /// Click close on the auth panel under other options
@@ -355,6 +357,7 @@ public enum LogConfig {
         case CheatsheetUGCHitNoRedditDataV2
         // Journey Associated
         case OpenCheatsheet
+        case CloseCheatsheet
         case CheatsheetEducationImpressionOnSRP
         case CheatsheetEducationImpressionOnPage
         case AckCheatsheetEducationOnSRP
@@ -408,6 +411,17 @@ public enum LogConfig {
 
         // MARK: Archived Tabs
         case clearArchivedTabs
+
+        // MARK: Generic
+        case BrowsePlanClick
+        case ChoosePlanClick
+        case PremiumPurchaseCancel
+        case PremiumPurchasePending
+        case PremiumPurchaseUnverified
+        case PremiumPurchaseVerified
+        case PreviousScreenClick
+        case ScreenImpression
+        case SignInClick
     }
 
     /// Specify a comma separated string with these values to
@@ -435,6 +449,7 @@ public enum LogConfig {
         case Web3 = "Web3"
         case CookieCutter = "CookieCutter"
         case ArchiveTab = "ArchiveTab"
+        case Generic = "Generic"
     }
 
     public static var enabledLoggingCategories: Set<InteractionCategory>?
@@ -452,6 +467,7 @@ public enum LogConfig {
         .CookieCutter,
         .UI,
         .OverflowMenu,
+        .Generic,
     ]
     public static func featureFlagEnabled(for category: InteractionCategory) -> Bool {
         if alwaysEnabledCategories.contains(category) {
@@ -497,6 +513,7 @@ public enum LogConfig {
             .CookieCutter,
             .UI,
             .OverflowMenu,
+            .Generic,
         ]
 
         let validInteraction =
@@ -599,6 +616,7 @@ public enum LogConfig {
         case .AuthOptionSignupWithApple: return .FirstRun
         case .AuthOptionSignupWithGoogle: return .FirstRun
         case .AuthOptionSignupWithMicrosoft: return .FirstRun
+        case .AuthOptionSignupWithEmail: return .FirstRun
         case .OptionClosePanel: return .FirstRun
         case .AuthOptionClosePanel: return .FirstRun
         case .RecommendedSpaceVisited: return .FirstRun
@@ -728,6 +746,7 @@ public enum LogConfig {
         case .CheatsheetPopoverReachedLimit: return .Cheatsheet
         case .CheatsheetUGCIndicatorImpression: return .Cheatsheet
         case .OpenCheatsheet: return .Cheatsheet
+        case .CloseCheatsheet: return .Cheatsheet
         case .CheatsheetEducationImpressionOnSRP: return .Cheatsheet
         case .CheatsheetEducationImpressionOnPage: return .Cheatsheet
         case .AckCheatsheetEducationOnSRP: return .Cheatsheet
@@ -780,6 +799,17 @@ public enum LogConfig {
         case .CookieNoticeHandled: return .CookieCutter
         // MARK: Archived Tabs
         case .clearArchivedTabs: return .ArchiveTab
+
+        // MARK: Generic
+        case .BrowsePlanClick: return .Generic
+        case .ChoosePlanClick: return .Generic
+        case .PremiumPurchaseCancel: return .Generic
+        case .PremiumPurchasePending: return .Generic
+        case .PremiumPurchaseUnverified: return .Generic
+        case .PremiumPurchaseVerified: return .Generic
+        case .PreviousScreenClick: return .Generic
+        case .ScreenImpression: return .Generic
+        case .SignInClick: return .Generic
         }
     }
 
@@ -841,8 +871,12 @@ public enum LogConfig {
 
         public static let pushNotificationTokenEnvironment = "PushNotificationTokenEnvironment"
 
-        /// Premium subscription attributes
-        public static let SubscriptionPlan = "SubscriptionPlan"
+        /// Generic attributes
+        public static let screenName = "ScreenName"
+        public static let source = "Source"
+
+        /// Premium attributes
+        public static let subscriptionPlan = "SubscriptionPlan"
     }
 
     public enum UIInteractionAttribute {
@@ -1006,5 +1040,9 @@ public enum LogConfig {
         public static let connectedSite = "ConnectedSite"
         public static let partnerCollection = "PartnerCollection"
         public static let transactionAmount = "TransactionAmount"
+    }
+
+    public enum WelcomeFlowAttribute {
+        public static let welcomeFlowTrigger = "welcomeFlowTrigger"
     }
 }

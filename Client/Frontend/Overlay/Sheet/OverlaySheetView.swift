@@ -39,7 +39,7 @@ public struct OverlayHeaderButton {
 // half-height (or middle) position. The user can drag it to a fullscreen (or
 // top) position or can drag down to dismiss.
 // Intended to present content that is flexible in height (e.g., a ScrollView).
-struct OverlaySheetView<Content: View, HeaderContent: View>: View, KeyboardReadable {
+struct OverlaySheetView<Content: View, HeaderContent: View>: View {
     // MARK: - Properties
     @StateObject var model: OverlaySheetModel
 

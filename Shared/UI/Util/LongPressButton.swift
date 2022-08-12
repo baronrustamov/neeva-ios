@@ -30,7 +30,9 @@ public struct LongPressButton<Label: View>: View {
             didLongPress = false
         } label: {
             label()
-        }.simultaneousGesture(
+        }
+        .hoverEffect()
+        .simultaneousGesture(
             LongPressGesture(minimumDuration: 0.3).onEnded { _ in
                 if let longPressAction = longPressAction {
                     longPressAction()

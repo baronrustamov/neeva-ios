@@ -75,7 +75,6 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - XCUITests/
   - SyncTests/
   - StorageTests/
-  - ReadingListTests/
   - ClientTests/
   - AccountTests/
   - fastlane/
