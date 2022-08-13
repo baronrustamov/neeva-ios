@@ -15,29 +15,7 @@ public struct RemoteClient: Equatable {
     public let version: String?
     public let fxaDeviceId: String?
 
-    let protocols: [String]?
-
-    let appPackage: String?
-    let application: String?
     let formfactor: String?
-    let device: String?
-
-    // Requires a valid ClientPayload (: CleartextPayloadJSON: JSON).
-    public init(json: JSON, modified: Timestamp) {
-        self.guid = json["id"].string
-        self.modified = modified
-        self.name = json["name"].stringValue
-        self.type = json["type"].string
-
-        self.version = json["version"].string
-        self.protocols = jsonsToStrings(json["protocols"].array)
-        self.os = json["os"].string
-        self.appPackage = json["appPackage"].string
-        self.application = json["application"].string
-        self.formfactor = json["formfactor"].string
-        self.device = json["device"].string
-        self.fxaDeviceId = json["fxaDeviceId"].string
-    }
 
     public init(
         guid: GUID?, name: String, modified: Timestamp, type: String?, formfactor: String?,
@@ -51,11 +29,6 @@ public struct RemoteClient: Equatable {
         self.os = os
         self.version = version
         self.fxaDeviceId = fxaDeviceId
-
-        self.device = nil
-        self.appPackage = nil
-        self.application = nil
-        self.protocols = nil
     }
 }
 

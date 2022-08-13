@@ -6,15 +6,15 @@ import Foundation
 import Reachability
 
 /// Provides information about whether the network is reachable
-public class NetworkReachability: ObservableObject {
+class NetworkReachability: ObservableObject {
     /// Since network reachability is global, use `@ObservedObject var reachability = NetworkReachability.shared`
-    public static var shared = NetworkReachability()
+    static var shared = NetworkReachability()
 
     /// `true` if the device is connected to the Internet, `false` if the device is not connected
     /// and `nil` if the reachability check is ongoing
-    @Published public var isOnline: Bool?
+    @Published var isOnline: Bool?
     /// The best connection (WiFi, cellular, or none) to the Internet that this device has
-    @Published public var connection: Reachability.Connection?
+    @Published var connection: Reachability.Connection?
 
     private let reachability = try! Reachability()
 
