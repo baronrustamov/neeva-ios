@@ -622,45 +622,6 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
     }
 }
 
-class SiteCardDetails: CardDetails, AccessingManagerProvider {
-    typealias Item = Site
-    typealias Manager = SiteFetcher
-
-    @Published var manager: SiteFetcher
-    // periphery:ignore
-    var anyCancellable: AnyCancellable? = nil
-    var id: String
-    var item: Site? { manager.get(for: id) }
-    var closeButtonImage: UIImage?
-    var tabManager: TabManager
-
-    var accessibilityLabel: String {
-        "\(title), Link"
-    }
-
-    init(url: URL, fetcher: SiteFetcher, tabManager: TabManager) {
-        self.id = url.absoluteString
-        self.manager = fetcher
-        self.tabManager = tabManager
-
-        self.anyCancellable = fetcher.objectWillChange.sink { [weak self] (_) in
-            self?.objectWillChange.send()
-        }
-
-        fetcher.load(url: url, profile: tabManager.profile)
-    }
-
-    func onSelect() {
-        guard let site = manager.get(for: id) else {
-            return
-        }
-
-        tabManager.selectedTab?.select(site)
-    }
-
-    func onClose() {}
-}
-
 // TabGroupCardDetails are not to be used for storing data because they can be recreated.
 class TabGroupCardDetails: CardDropDelegate, ObservableObject {
     @Default(.tabGroupExpanded) private var tabGroupExpanded: Set<String>
