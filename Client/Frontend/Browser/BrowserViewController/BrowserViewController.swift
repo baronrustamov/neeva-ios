@@ -8,6 +8,7 @@ import Foundation
 import MobileCoreServices
 import Photos
 import SDWebImage
+import SafariServices
 import Shared
 import Storage
 import SwiftUI
@@ -1327,7 +1328,15 @@ extension BrowserViewController: ZeroQueryPanelDelegate {
 
 extension BrowserViewController {
     func selectedTabChanged(selected: Tab?, previous: Tab?) {
-        presentedViewController?.dismiss(animated: false, completion: nil)
+        /*
+         * Sometimes we load a SFSafariViewController and immediately close the tab behind it
+         * (e.g., with Google Device Policy profile downloads). We need to make an exception
+         * for this case, otherwise the SFSafariViewController will close too quickly for the
+         * user to interact with it.
+         */
+        if !(presentedViewController is SFSafariViewController?) {
+            presentedViewController?.dismiss(animated: false, completion: nil)
+        }
 
         // Remove the old accessibilityLabel. Since this webview shouldn't be visible, it doesn't need it
         // and having multiple views with the same label confuses tests.
