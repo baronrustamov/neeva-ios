@@ -1,24 +1,36 @@
-"Psym5q" = "Open ${url} in Neeva ";
+/* (No Comment) */
+"aacx7x" = "Rechercher sur Neeva";
 
-"aacx7x" = "Search Neeva";
+/* (No Comment) */
+"antZ8U" = "Rechercher ${text} sur Neeva";
 
-"antZ8U" = "Search Neeva for ${text}";
+/* (No Comment) */
+"gJTK8U" = "Lancer une recherche dans l'application Neeva";
 
-"gJTK8U" = "Start a Search in the Neeva app";
+/* (No Comment) */
+"iJ3UUS" = "URL d'accueil";
 
-"iJ3UUS" = "Opening URL";
+/* (No Comment) */
+"iotyO4" = "Impossible d'ouvrir l'URL";
 
-"iotyO4" = "Unable to open URL";
+/* (No Comment) */
+"iqpbOU" = "Texte de recherche";
 
-"iqpbOU" = "Search Text";
+/* (No Comment) */
+"jSLMCE" = "Que souhaitez-vous rechercher ?";
 
-"jSLMCE" = "What do you want to search for?";
-
+/* (No Comment) */
 "nLVBhR" = "URL";
 
-"q5ZTZU" = "Search in Neeva";
+/* (No Comment) */
+"Psym5q" = "Ouvrir ${url} dans Neeva ";
 
-"uCodUk" = "Opens a URL in the Neeva app";
+/* (No Comment) */
+"q5ZTZU" = "Rechercher dans Neeva";
 
-"y9Tupb" = "Open URL";
+/* (No Comment) */
+"uCodUk" = "Ouvre une URL dans l'application Neeva";
+
+/* (No Comment) */
+"y9Tupb" = "Ouvrir l'URL";
 
