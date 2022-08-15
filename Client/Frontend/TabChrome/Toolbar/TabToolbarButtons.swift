@@ -19,7 +19,7 @@ struct TabToolbarButton<Content: View>: View {
 
     @Environment(\.isEnabled) private var isEnabled
 
-    public init(
+    init(
         label: Content,
         action: @escaping () -> Void,
         longPressAction: (() -> Void)? = nil
@@ -325,21 +325,6 @@ enum TabToolbarButtons {
                         tabManager: browserModel.tabManager)
                 )
                 .accessibilityLabel(Text("Show Tabs"))
-        }
-    }
-
-    struct ShareButton: View {
-        let weight: Font.Weight
-        let action: () -> Void
-
-        var body: some View {
-            TabToolbarButton(
-                label: Symbol(
-                    .squareAndArrowUp,
-                    size: 20, weight: weight,
-                    label: "share"),
-                action: action
-            )
         }
     }
 }

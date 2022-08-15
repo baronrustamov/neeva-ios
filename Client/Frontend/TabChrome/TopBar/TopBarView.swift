@@ -21,7 +21,6 @@ struct TopBarView: View {
 
     @EnvironmentObject private var cardStripModel: CardStripModel
     @EnvironmentObject private var chrome: TabChromeModel
-    @EnvironmentObject private var location: LocationViewModel
     @EnvironmentObject private var scrollingControlModel: ScrollingControlModel
     @EnvironmentObject private var incognitoModel: IncognitoModel
 

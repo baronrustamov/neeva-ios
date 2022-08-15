@@ -14,13 +14,13 @@ class LocationViewModel: ObservableObject {
     @Published private var hasOnlySecureContent = false
     var isSecure: Bool? { hasOnlySecureContentListener == nil ? nil : hasOnlySecureContent }
 
-    public func updateSecureListener(with webView: WKWebView) {
+    func updateSecureListener(with webView: WKWebView) {
         hasOnlySecureContentListener = webView.publisher(
             for: \.hasOnlySecureContent, options: [.initial, .new]
         ).assign(to: \.hasOnlySecureContent, on: self)
     }
 
-    public func resetSecureListener() {
+    func resetSecureListener() {
         hasOnlySecureContentListener = nil
     }
 

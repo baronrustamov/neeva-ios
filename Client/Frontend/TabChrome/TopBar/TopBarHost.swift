@@ -15,7 +15,6 @@ protocol TopBarDelegate: ToolbarDelegate {
     func urlBar(didSubmitText text: String, isSearchQuerySuggestion: Bool)
 
     func perform(menuAction: OverflowMenuAction)
-    func updateFeedbackImage()
 
     var tabContainerModel: TabContainerModel { get }
     var tabManager: TabManager { get }
