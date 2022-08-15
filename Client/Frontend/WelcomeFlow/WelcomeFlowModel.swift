@@ -61,6 +61,17 @@ class WelcomeFlowModel: ObservableObject {
         }
     }
 
+    func flushLoggingQueue() {
+        // set the default usage collect state if it hasn't been set (default value unchanged)
+        if Defaults[.shouldCollectUsageStats] == nil {
+            Defaults[.shouldCollectUsageStats] = true
+        }
+
+        if Defaults[.shouldCollectUsageStats] == true {
+            ClientLogger.shared.flushLoggingQueue()
+        }
+    }
+
     func logCounter(
         _ interaction: LogConfig.Interaction,
         attributes: [ClientLogCounterAttribute]? = nil
