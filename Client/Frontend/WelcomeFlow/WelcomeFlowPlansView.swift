@@ -72,7 +72,7 @@ struct WelcomeFlowPlansView: View {
                     VStack {
                         Text("Premium\nAnnual")
                             .font(.system(size: 16, weight: .bold))
-                        Text("\(priceString(from: annualProduct.price / 12)) /mo")
+                        Text("\(PremiumHelpers.priceString(from: annualProduct.price / 12)) /mo")
                             .font(.system(size: 14))
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -134,7 +134,7 @@ struct WelcomeFlowPlansView: View {
                             .BrowsePlanClick,
                             attributes: [
                                 ClientLogCounterAttribute(
-                                    key: LogConfig.Attribute.subscriptionPlan, value: "Annual"
+                                    key: LogConfig.Attribute.subscriptionPlan, value: "Monthly"
                                 )
                             ]
                         )
@@ -166,15 +166,20 @@ struct WelcomeFlowPlansView: View {
                 Spacer()
 
                 HStack {
-                    Text(priceText()).fontWeight(.bold)
-                    if termText() != "" {
-                        Text(termText()).foregroundColor(.secondaryLabel)
+                    if #available(iOS 15.0, *) {
+                        Text(PremiumStore.shared.priceText(model.currentPremiumPlan)).fontWeight(
+                            .bold)
+                    }
+                    if let termText = PremiumHelpers.termText(model.currentPremiumPlan),
+                        termText != ""
+                    {
+                        Text(termText).foregroundColor(.secondaryLabel)
                     }
                 }
                 .frame(maxWidth: .infinity)
                 .multilineTextAlignment(.center)
 
-                if let subText = priceSubText() {
+                if let subText = PremiumHelpers.priceSubText(model.currentPremiumPlan) {
                     HStack {
                         if subText.0 != "" {
                             Text(subText.0)
@@ -228,7 +233,7 @@ struct WelcomeFlowPlansView: View {
                         }
                     },
                     label: {
-                        Text(primaryButtonText())
+                        Text(PremiumHelpers.primaryActionText(model.currentPremiumPlan))
                             .withFont(.labelLarge)
                             .foregroundColor(.brand.white)
                             .frame(maxWidth: .infinity)
@@ -322,54 +327,5 @@ struct WelcomeFlowPlansView: View {
 
         model.prevScreen = nil
         model.changeScreenTo(.defaultBrowser)
-    }
-
-    func primaryButtonText() -> String {
-        switch model.currentPremiumPlan {
-        case .annual:
-            return "Subscribe Yearly"
-        case .monthly:
-            return "Subscribe Monthly"
-        default:
-            return "Get FREE"
-        }
-    }
-
-    func priceText() -> String {
-        guard #available(iOS 15.0, *),
-            let product = PremiumStore.shared.getProductForPlan(model.currentPremiumPlan)
-        else {
-            return "FREE"
-        }
-
-        return product.displayPrice
-    }
-
-    func priceSubText() -> (String, String) {
-        switch model.currentPremiumPlan {
-        case .annual:
-            return ("Save 16%", "Cancel anytime")
-        case .monthly:
-            return ("", "Cancel anytime")
-        default:
-            return ("", "")
-        }
-    }
-
-    func termText() -> String {
-        switch model.currentPremiumPlan {
-        case .annual:
-            return "/year"
-        case .monthly:
-            return "/month"
-        default:
-            return ""
-        }
-    }
-
-    func priceString(from input: Decimal) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        return formatter.string(from: input as NSNumber) ?? "\(input)"
     }
 }

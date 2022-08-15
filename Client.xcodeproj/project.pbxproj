@@ -5436,7 +5436,6 @@
 		F84B21C01A090F8100AAB793 /* Client */ = {
 			isa = PBXGroup;
 			children = (
-				F880C5A9289B7B2800C53D1E /* Authentication */,
 				F80983C1283879890039FCBD /* AltAppIcons */,
 				F84B21E41A0910F600AAB793 /* Application */,
 				F84B21EB1A0910F600AAB793 /* Assets */,
@@ -5548,6 +5547,7 @@
 		F84B21F11A0910F600AAB793 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
+				F880C5A9289B7B2800C53D1E /* Authentication */,
 				D3A994941A368691008AD1AC /* Browser */,
 				23ED80FD25C899D700D0E9D5 /* DefaultBrowserOnboarding */,
 				C8CF648C26F907BB00C3816F /* Favicons */,
