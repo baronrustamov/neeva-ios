@@ -63,11 +63,11 @@ class WelcomeFlowModel: ObservableObject {
     }
 
     func logCounter(
-        _ path: LogConfig.Interaction,
+        _ interaction: LogConfig.Interaction,
         attributes: [ClientLogCounterAttribute]? = nil
     ) {
         ClientLogger.shared.logCounter(
-            path,
+            interaction,
             attributes: (attributes ?? []) + [
                 ClientLogCounterAttribute(
                     key: LogConfig.Attribute.source, value: "WelcomeFlow"
