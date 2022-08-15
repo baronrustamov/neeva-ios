@@ -56,9 +56,8 @@ class WelcomeFlowModel: ObservableObject {
         self.onCloseAction?()
         self.onCloseAction = nil
 
-        if NeevaUserInfo.shared.isUserLoggedIn {
-            authStore.bvc.tabManager.selectTab(
-                authStore.bvc.tabManager.activeTabs[0], notify: false)
+        if let tab = authStore.bvc.tabManager.activeTabs.first {
+            authStore.bvc.tabManager.selectTab(tab, notify: false)
         }
     }
 
