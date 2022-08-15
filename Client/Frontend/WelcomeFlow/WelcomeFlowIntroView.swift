@@ -103,7 +103,7 @@ struct WelcomeFlowIntroView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
                 .onChange(of: collectUsageStats) { newValue in
-                    Defaults[.shouldCollectUsageStats] = collectUsageStats
+                    Defaults[.shouldCollectUsageStats] = newValue
                 }
             }
             .padding(.bottom, 18)

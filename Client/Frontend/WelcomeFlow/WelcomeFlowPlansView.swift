@@ -285,10 +285,7 @@ struct WelcomeFlowPlansView: View {
                 }
             }
 
-            // flush logging based on preference
-            if Defaults[.shouldCollectUsageStats] == true {
-                ClientLogger.shared.flushLoggingQueue()
-            }
+            model.flushLoggingQueue()
         }
     }
 
