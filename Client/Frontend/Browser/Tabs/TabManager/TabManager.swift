@@ -611,7 +611,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         tabGroupDict = temp
     }
 
-    public static func makeWebViewConfig(isIncognito: Bool) -> WKWebViewConfiguration {
+    static func makeWebViewConfig(isIncognito: Bool) -> WKWebViewConfiguration {
         let configuration = WKWebViewConfiguration()
         configuration.dataDetectorTypes = [.phoneNumber]
         configuration.processPool = WKProcessPool()

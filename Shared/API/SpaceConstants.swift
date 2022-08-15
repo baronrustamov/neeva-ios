@@ -2,6 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-public struct SpaceConstants {
-    public static let suggestedSpaceId = "RMB2VXVA5vvSSw1tvVG2ShtnkRZE2CqJmzlgqzYb"
+struct SpaceConstants {
+    static let suggestedSpaceId = "RMB2VXVA5vvSSw1tvVG2ShtnkRZE2CqJmzlgqzYb"
 }

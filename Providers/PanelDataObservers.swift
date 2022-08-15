@@ -6,7 +6,7 @@ import Defaults
 import Foundation
 import Shared
 
-public let ActivityStreamTopSiteCacheSize: Int32 = 32
+let ActivityStreamTopSiteCacheSize: Int32 = 32
 
 private let log = Logger.browser
 

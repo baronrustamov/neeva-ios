@@ -13,7 +13,7 @@ enum OverflowMenuUX {
     static let squareButtonIconSize: CGFloat = 20
 }
 
-public struct OverflowMenuButtonView: View {
+struct OverflowMenuButtonView: View {
     let label: LocalizedStringKey
     var symbol: SFSymbol? = nil
     var nicon: Nicon? = nil
@@ -23,7 +23,7 @@ public struct OverflowMenuButtonView: View {
 
     @Environment(\.isEnabled) private var isEnabled
 
-    public init(
+    init(
         label: LocalizedStringKey, symbol: SFSymbol,
         isIncognito: Bool = false,
         longPressAction: (() -> Void)? = nil,
@@ -49,7 +49,7 @@ public struct OverflowMenuButtonView: View {
         self.isIncognito = isIncognito
     }
 
-    public var body: some View {
+    var body: some View {
         GroupedCellButton(
             action: action, longPressAction: longPressAction,
             backgroundColor: isIncognito
@@ -72,7 +72,7 @@ public struct OverflowMenuButtonView: View {
     }
 }
 
-public struct OverflowMenuView: View {
+struct OverflowMenuView: View {
     private let menuAction: (OverflowMenuAction) -> Void
     private let changedUserAgent: Bool
 
@@ -83,7 +83,7 @@ public struct OverflowMenuView: View {
     // used to show a little bit of the support option to encourage scrolling
     private static let heightPeekingOffset: CGFloat = 80
 
-    public init(
+    init(
         changedUserAgent: Bool = false,
         menuAction: @escaping (OverflowMenuAction) -> Void
     ) {
@@ -95,7 +95,7 @@ public struct OverflowMenuView: View {
         height + Self.heightPeekingOffset
     }
 
-    public var body: some View {
+    var body: some View {
         GroupedStack {
             VStack(spacing: GroupedCellUX.spacing) {
                 if !chromeModel.inlineToolbar {

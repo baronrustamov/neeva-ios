@@ -88,7 +88,7 @@ class OverlayManager: ObservableObject {
     /// [(Overlay, Animate, Completion)]
     var queuedOverlays = [(OverlayType, Bool, (() -> Void)?)]()
 
-    public func presentFullScreenModal(
+    func presentFullScreenModal(
         content: AnyView, animate: Bool = true, ignoreSafeArea: Bool = true,
         completion: (() -> Void)? = nil
     ) {
@@ -103,7 +103,7 @@ class OverlayManager: ObservableObject {
         show(overlay: .fullScreenModal(content), animate: animate, completion: completion)
     }
 
-    public func presentFullScreenCover(
+    func presentFullScreenCover(
         content: AnyView, animate: Bool = true,
         ignoreSafeArea: Bool = true,
         completion: (() -> Void)? = nil
@@ -119,7 +119,7 @@ class OverlayManager: ObservableObject {
         show(overlay: .fullScreenCover(content), animate: animate, completion: completion)
     }
 
-    @discardableResult public func show(
+    @discardableResult func show(
         overlay: OverlayType, animate: Bool = true, completion: (() -> Void)? = nil
     ) -> OverlayType {
         guard animationCompleted == nil else {
@@ -220,7 +220,7 @@ class OverlayManager: ObservableObject {
     }
 
     /// Hides a specific Overlay.
-    public func hide(
+    func hide(
         overlay: OverlayType,
         animate: Bool = true, showNext: Bool = true, completion: (() -> Void)? = nil
     ) {
@@ -235,7 +235,7 @@ class OverlayManager: ObservableObject {
     /// Hides a the current Overlay.
     /// - Parameters:
     ///     - ofPriority: Only hide the current Overlay if it matches this priority.
-    public func hideCurrentOverlay(
+    func hideCurrentOverlay(
         ofPriority: OverlayPriority?,
         animate: Bool = true, showNext: Bool = true, completion: (() -> Void)? = nil
     ) {
@@ -252,7 +252,7 @@ class OverlayManager: ObservableObject {
     /// Hides a the current Overlay.
     /// - Parameters:
     ///     - ofPriorities: Only hide the current Overlay if it matches one of passed priorities.
-    public func hideCurrentOverlay(
+    func hideCurrentOverlay(
         ofPriorities: [OverlayPriority]? = nil,
         animate: Bool = true, showNext: Bool = true, completion: (() -> Void)? = nil
     ) {

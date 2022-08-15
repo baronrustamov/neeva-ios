@@ -22,17 +22,17 @@ enum PremiumPurchaseSuccessType {
 
 @available(iOS 15.0, *)
 class PremiumStore: ObservableObject {
-    public static let shared = PremiumStore()
+    static let shared = PremiumStore()
     private static let dateFormatter = ISO8601DateFormatter()
 
     // NOTE: currently only the U.S. but as we expand we'll maintain a list of valid country codes
     // https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
-    public static let countries = ["USA"]
+    static let countries = ["USA"]
 
-    @Published public var products: [Product] = []
-    @Published public var loadingProducts = false
-    @Published public var loadingPurchase = false
-    @Published public var loadingMutation = false
+    @Published var products: [Product] = []
+    @Published var loadingProducts = false
+    @Published var loadingPurchase = false
+    @Published var loadingMutation = false
 
     init() {
         Task {
@@ -54,7 +54,7 @@ class PremiumStore: ObservableObject {
         }
     }
 
-    public static func isOfferedInCountry() -> Bool {
+    static func isOfferedInCountry() -> Bool {
         if let storefront = SKPaymentQueue.default().storefront {
             if PremiumStore.countries.contains(storefront.countryCode) {
                 return true
@@ -66,7 +66,7 @@ class PremiumStore: ObservableObject {
         return false
     }
 
-    public func getProductForPlan(_ plan: PremiumPlan?) -> Product? {
+    func getProductForPlan(_ plan: PremiumPlan?) -> Product? {
         if plan == nil {
             return nil
         }
@@ -84,7 +84,7 @@ class PremiumStore: ObservableObject {
         return product.displayPrice
     }
 
-    public func purchase(
+    func purchase(
         _ product: Product, reloadUserInfo: Bool, onPending: (@escaping () -> Void),
         onCancelled: (@escaping () -> Void),
         onSuccess: (@escaping (_ successType: PremiumPurchaseSuccessType) -> Void)

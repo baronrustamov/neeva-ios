@@ -44,12 +44,12 @@ class FindInPageModel: ObservableObject {
     }
 
     /// Navigates to the next result
-    public func next() {
+    func next() {
         search(function: .findNext)
     }
 
     /// Navigates to the previous result
-    public func previous() {
+    func previous() {
         search(function: .findPrevious)
     }
 

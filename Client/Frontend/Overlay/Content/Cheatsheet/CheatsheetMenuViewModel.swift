@@ -38,7 +38,7 @@ struct SourcePage {
 }
 
 // MARK: - CheatsheetMenuViewModel Declaration
-public class CheatsheetMenuViewModel: ObservableObject {
+class CheatsheetMenuViewModel: ObservableObject {
     typealias RichResult = NeevaScopeSearch.SearchController.RichResult
 
     // Data sources

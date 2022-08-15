@@ -29,7 +29,7 @@ enum PasswordStrength: String {
     case strong = "strong"
 }
 
-public struct EmailForm: View {
+struct EmailForm: View {
     @EnvironmentObject var model: IntroViewModel
     @Binding private var email: String
     @Binding private var firstname: String
@@ -54,7 +54,7 @@ public struct EmailForm: View {
         self.action = action
     }
 
-    public var body: some View {
+    var body: some View {
         VStack {
             TextField(emailPlaceHolder(), text: $email)
                 .padding()

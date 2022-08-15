@@ -29,10 +29,10 @@ enum OverlaySheetUX {
     static let animationOffset: CGFloat = 500
 }
 
-public struct OverlayHeaderButton {
-    public let text: LocalizedStringKey
-    public let icon: Nicon
-    public let action: () -> Void
+struct OverlayHeaderButton {
+    let text: LocalizedStringKey
+    let icon: Nicon
+    let action: () -> Void
 }
 
 // This view provides an overlay bottom sheet implementation that starts in a

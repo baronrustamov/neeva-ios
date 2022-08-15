@@ -11,7 +11,7 @@ enum CheatsheetUX {
     static let horizontalPadding: CGFloat = 16
 }
 
-public struct CheatsheetMenuView: View {
+struct CheatsheetMenuView: View {
     @Default(.seenCheatsheetIntro) var seenCheatsheetIntro: Bool
     @Default(.showTryCheatsheetPopover) var defaultShowTryCheatsheetPopover: Bool
 
@@ -27,7 +27,7 @@ public struct CheatsheetMenuView: View {
         self.menuAction = menuAction
     }
 
-    public var body: some View {
+    var body: some View {
         ZStack {
             // Show Cheatsheet Info if on Neeva domain page
             if NeevaConstants.isInNeevaDomain(model.sourcePage?.url) {

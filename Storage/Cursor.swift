@@ -11,7 +11,7 @@ public enum CursorStatus {
     case closed
 }
 
-public protocol TypedCursor: Sequence {
+protocol TypedCursor: Sequence {
     associatedtype T
     var count: Int { get }
     var status: CursorStatus { get }

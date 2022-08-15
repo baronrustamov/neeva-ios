@@ -13,7 +13,7 @@ struct FindInPageView: View {
     @ObservedObject var model: FindInPageModel
     let onDismiss: () -> Void
 
-    public var body: some View {
+    var body: some View {
         HStack {
             SingleLineTextField(
                 icon: Symbol(decorative: .magnifyingglass, style: .labelLarge),

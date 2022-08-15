@@ -8,7 +8,7 @@ import Shared
 import XCGLogger
 
 private let log = Logger.storage
-public let TopSiteCacheSize: Int32 = 16
+let TopSiteCacheSize: Int32 = 16
 
 class NoSuchRecordError: MaybeErrorType {
     let guid: GUID

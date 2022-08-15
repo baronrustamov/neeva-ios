@@ -77,7 +77,7 @@ private func isSameDay(_ date1: Date, _ date2: Date) -> Bool {
 ///   - string: The ISO8601-formatted string to parse
 ///   - visualSpec: The type of output to display
 ///   - now: The time to compare relative dates to
-public func format(
+func format(
     _ string: String?, as visualSpec: DateTimeVisualSpec = .default, from now: Date = Date()
 ) -> String? {
     if let string = string,
@@ -95,7 +95,7 @@ public func format(
 ///   - time: The `Date` object to format
 ///   - visualSpec: The type of output to display
 ///   - now: The time to compare relative dates to
-public func format(
+func format(
     _ time: Date, as visualSpec: DateTimeVisualSpec = .default, from now: Date = Date()
 ) -> String {
     switch visualSpec {

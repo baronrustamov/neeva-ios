@@ -80,7 +80,7 @@ private struct PromoStateStorage {
     }
 }
 
-public class CheatsheetPromoModel: ObservableObject {
+class CheatsheetPromoModel: ObservableObject {
     enum PromoType {
         case tryCheatsheet
         case UGC

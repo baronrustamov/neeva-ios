@@ -7,9 +7,9 @@
 
 import Foundation
 
-public let NSFileManagerExtensionsDomain = "co.neeva.NSFileManagerExtensions"
+let NSFileManagerExtensionsDomain = "co.neeva.NSFileManagerExtensions"
 
-public enum NSFileManagerExtensionsErrorCodes: Int {
+enum NSFileManagerExtensionsErrorCodes: Int {
     case enumeratorFailure = 0
     case enumeratorElementNotURL = 1
     case errorEnumeratingDirectory = 2

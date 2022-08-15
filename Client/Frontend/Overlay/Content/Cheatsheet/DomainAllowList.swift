@@ -4,10 +4,10 @@
 
 import Foundation
 
-public enum DomainAllowList {
+enum DomainAllowList {
     public typealias RawValue = [String: Bool]
 
-    public static let recipeDomains = [
+    static let recipeDomains = [
         "101cookbooks.com": true,
         "aclassictwist.com": true,
         "acouplecooks.com": true,

@@ -264,7 +264,7 @@ class ZeroQueryModel: ObservableObject {
         self.suggestedSitesViewModel.sites.removeAll(where: { $0 == site })
     }
 
-    public func reset(
+    func reset(
         bvc: BrowserViewController?, createdLazyTab: Bool = false, wasCancelled: Bool = false
     ) {
         if let bvc = bvc, bvc.incognitoModel.isIncognito, !(bvc.tabManager.incognitoTabs.count > 0),

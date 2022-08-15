@@ -8,11 +8,11 @@ import XCGLogger
 
 // Copied from mozilla/application-services
 enum BookmarkRoots {
-    public static let RootGUID = "root________"
-    public static let MobileFolderGUID = "mobile______"
-    public static let MenuFolderGUID = "menu________"
-    public static let ToolbarFolderGUID = "toolbar_____"
-    public static let UnfiledFolderGUID = "unfiled_____"
+    static let RootGUID = "root________"
+    static let MobileFolderGUID = "mobile______"
+    static let MenuFolderGUID = "menu________"
+    static let ToolbarFolderGUID = "toolbar_____"
+    static let UnfiledFolderGUID = "unfiled_____"
 
     public static let All = Set<String>([
         BookmarkRoots.RootGUID,

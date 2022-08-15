@@ -15,27 +15,27 @@ enum ClientLoggerStatus {
     case disabled
 }
 
-public struct DebugLog: Hashable {
+struct DebugLog: Hashable {
     let pathStr: String
     let attributeStr: String
 }
 
-public class ClientLogger {
-    public var env: ClientLogEnvironment
+class ClientLogger {
+    var env: ClientLogEnvironment
     private let status: ClientLoggerStatus
 
-    public static let shared = ClientLogger()
-    @Published public var debugLoggerHistory = [DebugLog]()
+    static let shared = ClientLogger()
+    @Published var debugLoggerHistory = [DebugLog]()
 
-    public var loggingQueue = [ClientLog]()
+    var loggingQueue = [ClientLog]()
 
-    public init() {
+    init() {
         self.env = ClientLogEnvironment.init(rawValue: "Prod")!
         // disable client logging until we have a plan for privacy control
         self.status = .enabled
     }
 
-    public func logCounter(
+    func logCounter(
         _ path: LogConfig.Interaction, attributes: [ClientLogCounterAttribute] = []
     ) {
         if self.status != ClientLoggerStatus.enabled {
@@ -92,7 +92,7 @@ public class ClientLogger {
         }
     }
 
-    public func flushLoggingQueue() {
+    func flushLoggingQueue() {
         for clientLog in loggingQueue {
             performLogMutation(clientLog)
         }

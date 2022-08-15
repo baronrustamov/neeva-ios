@@ -12,13 +12,13 @@ enum SpaceFilterState: String, CaseIterable, Identifiable {
     var id: RawValue { rawValue }
 }
 
-public enum SpaceSortType: String, CaseIterable, Identifiable {
+enum SpaceSortType: String, CaseIterable, Identifiable {
     case updatedDate = "Last Updated"
     case name = "Name"
 
-    public var id: RawValue { rawValue }
+    var id: RawValue { rawValue }
 
-    public var keyPath: KeyPath<Space, AnyComparable> {
+    var keyPath: KeyPath<Space, AnyComparable> {
         switch self {
         case .updatedDate: return \Space.timestamp.anyComparable
         case .name: return \Space.name.anyComparable

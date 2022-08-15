@@ -6,10 +6,10 @@ import WebKit
 
 class UserScriptManager {
     // Scripts can use this to verify the *app* (not JS on the web) is calling into them.
-    public static let appIdToken = UUID().uuidString
+    static let appIdToken = UUID().uuidString
 
     // Singleton instance.
-    public static let shared = UserScriptManager()
+    static let shared = UserScriptManager()
 
     private let compiledUserScripts: [String: WKUserScript]
 
@@ -44,7 +44,7 @@ class UserScriptManager {
         self.compiledUserScripts = compiledUserScripts
     }
 
-    public func injectUserScriptsIntoTab(_ tab: Tab) {
+    func injectUserScriptsIntoTab(_ tab: Tab) {
         // Start off by ensuring that any previously-added user scripts are
         // removed to prevent the same script from being injected twice.
         tab.webView?.configuration.userContentController.removeAllUserScripts()

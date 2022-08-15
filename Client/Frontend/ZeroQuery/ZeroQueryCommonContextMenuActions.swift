@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import SwiftUI
 
-public struct ZeroQueryCommonContextMenuActions: View {
+struct ZeroQueryCommonContextMenuActions: View {
     private let siteURL: URL
     private let title: String?
     private let description: String?
@@ -30,7 +30,7 @@ public struct ZeroQueryCommonContextMenuActions: View {
     @Environment(\.shareURL) private var shareURL
     @Environment(\.saveToSpace) private var saveToSpace
 
-    public var body: some View {
+    var body: some View {
         Button(action: { openInNewTab(siteURL, false) }) {
             Label("Open in New Tab", systemSymbol: .plusSquare)
         }

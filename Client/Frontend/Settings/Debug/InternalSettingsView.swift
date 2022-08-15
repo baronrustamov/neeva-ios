@@ -360,7 +360,7 @@ struct NumberField<Number: FixedWidthInteger>: View {
     }
 }
 
-public struct OptionalStringField: View {
+struct OptionalStringField: View {
     init(_ title: String, text: Binding<String?>) {
         self.title = title
         self._text = text
@@ -369,7 +369,7 @@ public struct OptionalStringField: View {
     let title: String
     @Binding var text: String?
 
-    public var body: some View {
+    var body: some View {
         HStack {
             Text(title)
             TextField(

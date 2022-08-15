@@ -216,7 +216,7 @@ class ContextMenuActionsBuilder {
 
 class MenuBuilder {
     // MARK: - Close All Tabs
-    public struct ConfirmCloseAllTabsConfirmationDialog: ViewModifier {
+    struct ConfirmCloseAllTabsConfirmationDialog: ViewModifier {
         @Binding var showMenu: Bool
         let tabManager: TabManager
 
@@ -267,13 +267,13 @@ class MenuBuilder {
     }
 
     // MARK: - ShowTabsButton Menu
-    public struct ShowTabsButtonMenu: ViewModifier {
+    struct ShowTabsButtonMenu: ViewModifier {
         @EnvironmentObject var gridModel: GridModel
         @EnvironmentObject var incognitoModel: IncognitoModel
 
         let tabManager: TabManager
 
-        public func body(content: Content) -> some View {
+        func body(content: Content) -> some View {
             let bvc: BrowserViewController = {
                 SceneDelegate.getBVC(with: tabManager.scene)
             }()

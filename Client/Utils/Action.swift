@@ -8,7 +8,7 @@ import SwiftUI
 
 /// An action that’s able to be represented both as a button/menu item
 /// and an accessibility action for VoiceOver users.
-public struct Action: Identifiable {
+struct Action: Identifiable {
     /// The display name of the string
     let name: String
     /// The SF Symbol name of the icon displayed next to the name
@@ -16,7 +16,7 @@ public struct Action: Identifiable {
     /// A function that performs the action
     let handler: () -> Void
 
-    public var id: String { name }
+    var id: String { name }
 
     init(_ name: String, icon: SFSymbol, handler: @escaping () -> Void) {
         self.name = name

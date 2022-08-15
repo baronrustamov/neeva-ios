@@ -17,13 +17,13 @@ class LocalNotifications {
         let urlStr: String?
     }
 
-    public enum LocalNotificationTapAction: String {
+    enum LocalNotificationTapAction: String {
         case openWelcomeTour = "openWelcomeTour"
         case openIntroView = "openIntroView"
         case openCustomURL = "openCustomURL"
     }
 
-    public enum ScheduleCallSite: String {
+    enum ScheduleCallSite: String {
         case enterForeground = "enterForeground"
         case authorizeNotification = "authorizedNotification"
         case featureFlagUpdate = "featureFlagUpdate"

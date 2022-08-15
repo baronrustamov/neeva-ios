@@ -475,7 +475,7 @@ class TabCardModel: CardDropDelegate, CardModel {
         return getRows(incognito: false)
     }
 
-    public override func dropEntered(info: DropInfo) {
+    override func dropEntered(info: DropInfo) {
         guard let draggingDetail = TabCardDetails.draggingDetail else {
             return
         }

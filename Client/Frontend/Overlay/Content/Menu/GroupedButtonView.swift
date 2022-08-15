@@ -6,7 +6,7 @@ import SFSafeSymbols
 import Shared
 import SwiftUI
 
-public struct GroupedButtonView: View {
+struct GroupedButtonView: View {
     let label: LocalizedStringKey
     let nicon: Nicon?
     let symbol: SFSymbol?
@@ -18,7 +18,7 @@ public struct GroupedButtonView: View {
     ///   - label: The text displayed on the button
     ///   - nicon: The Nicon to use
     ///   - isDisabled: Whether to apply gray out disabled style
-    public init(label: LocalizedStringKey, nicon: Nicon, action: @escaping () -> Void) {
+    init(label: LocalizedStringKey, nicon: Nicon, action: @escaping () -> Void) {
         self.label = label
         self.nicon = nicon
         self.symbol = nil
@@ -36,7 +36,7 @@ public struct GroupedButtonView: View {
         self.action = action
     }
 
-    public var body: some View {
+    var body: some View {
         GroupedCellButton(action: action) {
             VStack(spacing: 4) {
                 if let nicon = self.nicon {

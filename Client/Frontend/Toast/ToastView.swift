@@ -6,7 +6,7 @@ import Shared
 import SwiftUI
 import UIKit
 
-public enum ToastViewUX {
+enum ToastViewUX {
     static let defaultDisplayTime = 4.5
     static let height: CGFloat = 53
     static let threshold: CGFloat = 15
@@ -144,7 +144,7 @@ struct ToastView: View {
         }
     }
 
-    public func enqueue(at location: QueuedViewLocation = .last, manager: ToastViewManager) {
+    func enqueue(at location: QueuedViewLocation = .last, manager: ToastViewManager) {
         manager.enqueue(view: self, at: location)
     }
 }

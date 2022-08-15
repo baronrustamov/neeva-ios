@@ -5,7 +5,7 @@
 import Shared
 import SwiftUI
 
-public struct AuthButton: View {
+struct AuthButton: View {
     let action: () -> Void
     let icon: Image
     let isSignIn: Bool
@@ -14,7 +14,7 @@ public struct AuthButton: View {
     let backgroundColor: Color
     var tintIcon: Bool = false
 
-    public var body: some View {
+    var body: some View {
         Button(action: action) {
             let label = Text(isSignIn ? "Sign in with \(service)" : "Sign up with \(service)")
             HStack {
@@ -37,11 +37,11 @@ public struct AuthButton: View {
     }
 }
 
-public struct SignUpWithAppleButton: View {
+struct SignUpWithAppleButton: View {
     var action: () -> Void
     @Binding public var onSignInMode: Bool
 
-    public var body: some View {
+    var body: some View {
         AuthButton(
             action: action,
             icon: Image(systemSymbol: .applelogo),
@@ -53,11 +53,11 @@ public struct SignUpWithAppleButton: View {
     }
 }
 
-public struct SignUpWithGoogleButton: View {
+struct SignUpWithGoogleButton: View {
     var action: () -> Void
     @Binding public var onSignInMode: Bool
 
-    public var body: some View {
+    var body: some View {
         AuthButton(
             action: action,
             icon: Image("google_icon"),
@@ -68,11 +68,11 @@ public struct SignUpWithGoogleButton: View {
     }
 }
 
-public struct SignUpWithMicrosoftButton: View {
+struct SignUpWithMicrosoftButton: View {
     var action: () -> Void
     @Binding public var onSignInMode: Bool
 
-    public var body: some View {
+    var body: some View {
         AuthButton(
             action: action,
             icon: Image("microsoft"),
@@ -131,10 +131,10 @@ struct FirstRunCloseButton: View {
     }
 }
 
-public struct QRCodeScanButton: View {
+struct QRCodeScanButton: View {
     var action: () -> Void
 
-    public var body: some View {
+    var body: some View {
         Button(action: action) {
             let label = Text("Sign in with QR Code")
             HStack {

@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-public struct OverlayStyle {
+struct OverlayStyle {
     let showTitle: Bool
     let backgroundColor: UIColor
     /// Disables dismissing the modal by clicking outside the view.

@@ -27,7 +27,7 @@ struct OktaEmailSignUpForm: View {
         self.action = action
     }
 
-    public var body: some View {
+    var body: some View {
         VStack {
             TextField("Email (required)", text: $email)
                 .padding()

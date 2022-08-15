@@ -10,13 +10,13 @@ import XCGLogger
 
 private let log = Logger.browser
 
-public enum NotificationPermissionStatus: Int {
+enum NotificationPermissionStatus: Int {
     case undecided = 0
     case authorized = 1
     case denied = 2
 }
 
-public enum NotificationAuthorizationCallSite: String {
+enum NotificationAuthorizationCallSite: String {
     case tourFlow
     case promoCard
     case settings

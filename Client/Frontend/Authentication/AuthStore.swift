@@ -10,10 +10,10 @@ import Shared
 private let log = Logger.auth
 
 class AuthStore: NSObject, ObservableObject {
-    public var bvc: BrowserViewController
+    var bvc: BrowserViewController
     private var onError: ((_ message: String) -> Void)?
     private var onSuccess: (() -> Void)?
-    public var marketingEmailOptOut = false
+    var marketingEmailOptOut = false
 
     init(bvc: BrowserViewController) {
         self.bvc = bvc
@@ -40,7 +40,7 @@ class AuthStore: NSObject, ObservableObject {
     // MARK: - Auth Initializers
 
     // NOTE: look further down in this file for the extensions that support Apple auth
-    public func signUpWithApple(onError: ((_ message: String) -> Void)?, onSuccess: (() -> Void)?) {
+    func signUpWithApple(onError: ((_ message: String) -> Void)?, onSuccess: (() -> Void)?) {
         self.onError = onError
         self.onSuccess = onSuccess
 
@@ -54,7 +54,7 @@ class AuthStore: NSObject, ObservableObject {
         authorizationController.performRequests()
     }
 
-    public func oauthWithProvider(
+    func oauthWithProvider(
         provider: NeevaConstants.OAuthProvider, email: String,
         onError: ((_ message: String) -> Void)?, onSuccess: (() -> Void)?
     ) {

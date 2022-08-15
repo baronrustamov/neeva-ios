@@ -64,7 +64,7 @@ public func deferMaybe<T>(_ s: T) -> Deferred<Maybe<T>> {
 
 // This specific overload prevents Strings, which conform to MaybeErrorType, from
 // always matching the failure case. See <https://github.com/mozilla-mobile/firefox-ios/issues/7791>.
-public func deferMaybe(_ s: String) -> Deferred<Maybe<String>> {
+func deferMaybe(_ s: String) -> Deferred<Maybe<String>> {
     return Deferred(value: Maybe(success: s))
 }
 
@@ -88,7 +88,7 @@ public func walk<T>(_ items: [T], f: @escaping (T) -> Success) -> Success {
 
 /// Like `all`, but thanks to its taking thunks as input, each result is
 /// generated in strict sequence. Fails immediately if any result is failure.
-public func accumulate<T>(_ thunks: [() -> Deferred<Maybe<T>>]) -> Deferred<Maybe<[T]>> {
+func accumulate<T>(_ thunks: [() -> Deferred<Maybe<T>>]) -> Deferred<Maybe<[T]>> {
     if thunks.isEmpty {
         return deferMaybe([])
     }
@@ -170,7 +170,7 @@ extension Array where Element: Success {
     }
 }
 
-public func chainDeferred<T, U>(_ a: Deferred<Maybe<T>>, f: @escaping (T) -> Deferred<Maybe<U>>)
+func chainDeferred<T, U>(_ a: Deferred<Maybe<T>>, f: @escaping (T) -> Deferred<Maybe<U>>)
     -> Deferred<Maybe<U>>
 {
     return a.bind { res in
@@ -197,7 +197,7 @@ public func chain<T, U>(_ a: Deferred<Maybe<T>>, f: @escaping (T) -> U) -> Defer
 }
 
 /// Defer-ifies a block to an async dispatch queue.
-public func deferDispatchAsync<T>(_ queue: DispatchQueue, f: @escaping () -> Deferred<Maybe<T>>)
+func deferDispatchAsync<T>(_ queue: DispatchQueue, f: @escaping () -> Deferred<Maybe<T>>)
     -> Deferred<Maybe<T>>
 {
     let deferred = Deferred<Maybe<T>>()

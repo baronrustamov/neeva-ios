@@ -247,8 +247,8 @@ extension SearchEngine {
 }
 
 private struct ByCountry: Codable {
-    public let countryMapping: [String: String]
-    public let engineLists: [EngineList]
+    let countryMapping: [String: String]
+    let engineLists: [EngineList]
 
     fileprivate var defaultEngineList: EngineList {
         engineLists.first { $0.code == "default" }!
@@ -256,10 +256,10 @@ private struct ByCountry: Codable {
 }
 
 private struct EngineList: Codable {
-    public let code: String
+    let code: String
     private let engines: [String]
 
-    public var searchEngines: [SearchEngine] {
+    var searchEngines: [SearchEngine] {
         engines.compactMap { SearchEngine.all[$0] }
     }
 }

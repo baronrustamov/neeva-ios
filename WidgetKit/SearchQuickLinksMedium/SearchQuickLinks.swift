@@ -21,11 +21,11 @@ struct Provider: TimelineProvider {
         completion(timeline)
     }
 
-    public typealias Entry = SimpleEntry
+    typealias Entry = SimpleEntry
 }
 
 struct SimpleEntry: TimelineEntry {
-    public let date: Date
+    let date: Date
 }
 
 struct SearchQuickLinksEntryView: View {
@@ -49,7 +49,7 @@ struct SearchQuickLinksEntryView: View {
 struct SearchQuickLinksWidget: Widget {
     private let kind: String = "Quick Actions - Medium"
 
-    public var body: some WidgetConfiguration {
+    var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             SearchQuickLinksEntryView()
         }

@@ -6,7 +6,7 @@ import SFSafeSymbols
 import Shared
 import SwiftUI
 
-public struct GroupedRowButtonView: View {
+struct GroupedRowButtonView: View {
     let label: LocalizedStringKey
     let nicon: Nicon?
     let symbol: SFSymbol?
@@ -16,7 +16,7 @@ public struct GroupedRowButtonView: View {
     /// - Parameters:
     ///   - label: The text displayed on the button
     ///   - nicon: The Nicon to use
-    public init(label: LocalizedStringKey, nicon: Nicon?, action: @escaping () -> Void) {
+    init(label: LocalizedStringKey, nicon: Nicon?, action: @escaping () -> Void) {
         self.label = label
         self.nicon = nicon
         self.symbol = nil
@@ -27,7 +27,7 @@ public struct GroupedRowButtonView: View {
     /// - Parameters:
     ///   - label: The text displayed on the button
     ///   - symbol: The SFSymbol to use
-    public init(label: LocalizedStringKey, symbol: SFSymbol?, action: @escaping () -> Void) {
+    init(label: LocalizedStringKey, symbol: SFSymbol?, action: @escaping () -> Void) {
         self.label = label
         self.nicon = nil
         self.symbol = symbol
@@ -45,7 +45,7 @@ public struct GroupedRowButtonView: View {
         self.isPromo = isPromo
     }
 
-    public var body: some View {
+    var body: some View {
         Button(action: action) {
             HStack(spacing: 0) {
                 Text(label)

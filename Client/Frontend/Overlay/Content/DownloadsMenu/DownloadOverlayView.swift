@@ -14,7 +14,7 @@ struct DownloadMenuView: View {
     let onDownload: () -> Void
     let onCancel: () -> Void
 
-    public var body: some View {
+    var body: some View {
         GroupedStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text(fileName)

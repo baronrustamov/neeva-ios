@@ -987,7 +987,7 @@ class TabWebView: WKWebView, MenuHelperInterface {
     }
 }
 
-public func wasLastExecuted(in tabSection: TabSection, isPinned: Bool, lastExecutedTime: Timestamp)
+func wasLastExecuted(in tabSection: TabSection, isPinned: Bool, lastExecutedTime: Timestamp)
     -> Bool
 {
     // lastExecutedTime is passed in milliseconds, needs to be converted to seconds.
