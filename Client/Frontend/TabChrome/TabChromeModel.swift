@@ -23,11 +23,9 @@ class TabChromeModel: ObservableObject {
     @Published private(set) var urlInSpace: Bool = false
     @Published var estimatedProgress: Double?
     @Published private(set) var isEditingLocation = false
-    @Published var showNeevaMenuTourPrompt = false
     @Published var keyboardShowing = false
     @Published var bottomBarHeight: CGFloat = 0
 
-    private var appActiveRefreshSubscription: AnyCancellable? = nil
     private var navigationSubscriptions: Set<AnyCancellable> = []
     private var spaceRefreshSubscription: AnyCancellable?
     private var subscriptions: Set<AnyCancellable> = []

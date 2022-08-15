@@ -47,13 +47,6 @@ class ShareExtensionHelper: NSObject {
         let activityViewController = UIActivityViewController(
             activityItems: activityItems, applicationActivities: appActivities)
 
-        // Hide 'Add to Reading List' which currently uses Safari.
-        // We would also hide View Later, if possible, but the exclusion list doesn't currently support
-        // third-party activity types (rdar://19430419).
-        activityViewController.excludedActivityTypes = [
-            UIActivity.ActivityType.addToReadingList
-        ]
-
         // This needs to be ready by the time the share menu has been displayed and
         // activityViewController(activityViewController:, activityType:) is called,
         // which is after the user taps the button. So a million cycles away.

@@ -1002,6 +1002,8 @@
 		B61D069027ED27E10075F65E /* ContentVisibilityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61D068F27ED27E10075F65E /* ContentVisibilityModel.swift */; };
 		B62FC4AB27E9162600848461 /* ConversionLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62FC4AA27E9162600848461 /* ConversionLogger.swift */; };
 		B6420CD1280F46F200B94101 /* TabRestoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6420CD0280F46F200B94101 /* TabRestoreTests.swift */; };
+		B66E1A7E28A5FAC800F218B5 /* MRUCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66E1A7D28A5FAC800F218B5 /* MRUCache.swift */; };
+		B66E1A8028A6CA5E00F218B5 /* MRUCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66E1A7F28A6CA5E00F218B5 /* MRUCacheTests.swift */; };
 		BC07524626C324A3008B607A /* CheatsheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC07524426C324A3008B607A /* CheatsheetController.swift */; };
 		BC07524C26C3B98F008B607A /* CheatsheetMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC07524B26C3B98F008B607A /* CheatsheetMenuView.swift */; };
 		BC15D22B26FA575A00FDF6A7 /* AuthButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC15D22A26FA575A00FDF6A7 /* AuthButton.swift */; };
@@ -1255,11 +1257,7 @@
 		D054352A226687A400FDE4EF /* UIBarButtonItemExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0543529226687A400FDE4EF /* UIBarButtonItemExtensions.swift */; };
 		D0625C98208E87F10081F3B2 /* DownloadQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625C97208E87F10081F3B2 /* DownloadQueue.swift */; };
 		D0625CA8208FC47A0081F3B2 /* BrowserViewController+DownloadQueueDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625CA7208FC47A0081F3B2 /* BrowserViewController+DownloadQueueDelegate.swift */; };
-		D07696F820697F9C00FACFD8 /* ReadingListSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07696F720697F9C00FACFD8 /* ReadingListSchema.swift */; };
-		D076971F206AC60900FACFD8 /* ReadingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D076971E206AC60900FACFD8 /* ReadingList.swift */; };
-		D0769743206C19E900FACFD8 /* SQLiteReadingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0769742206C19E800FACFD8 /* SQLiteReadingList.swift */; };
 		D0A627642270C682006AFA2E /* SQLiteHistoryFavicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A627632270C682006AFA2E /* SQLiteHistoryFavicons.swift */; };
-		D0B693D5206C5BB9008A8B11 /* TestSQLiteReadingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B693D4206C5BB9008A8B11 /* TestSQLiteReadingList.swift */; };
 		D0C95E0E200FD3B200E4E51C /* PrintHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C95E0D200FD3B200E4E51C /* PrintHelper.swift */; };
 		D0C95E36200FDC5500E4E51C /* MetadataParserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C95E35200FDC5400E4E51C /* MetadataParserHelper.swift */; };
 		D0C95EF6201A55A800E4E51C /* BrowserViewController+UIDropInteractionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C95EF5201A55A800E4E51C /* BrowserViewController+UIDropInteractionDelegate.swift */; };
@@ -2535,6 +2533,8 @@
 		B61D068F27ED27E10075F65E /* ContentVisibilityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentVisibilityModel.swift; sourceTree = "<group>"; };
 		B62FC4AA27E9162600848461 /* ConversionLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionLogger.swift; sourceTree = "<group>"; };
 		B6420CD0280F46F200B94101 /* TabRestoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabRestoreTests.swift; sourceTree = "<group>"; };
+		B66E1A7D28A5FAC800F218B5 /* MRUCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MRUCache.swift; sourceTree = "<group>"; };
+		B66E1A7F28A6CA5E00F218B5 /* MRUCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MRUCacheTests.swift; sourceTree = "<group>"; };
 		BC07524426C324A3008B607A /* CheatsheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheatsheetController.swift; sourceTree = "<group>"; };
 		BC07524B26C3B98F008B607A /* CheatsheetMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheatsheetMenuView.swift; sourceTree = "<group>"; };
 		BC0E275C26805A2600EAAE00 /* FeedbackHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackHelper.swift; sourceTree = "<group>"; };
@@ -2782,11 +2782,7 @@
 		D0543529226687A400FDE4EF /* UIBarButtonItemExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBarButtonItemExtensions.swift; sourceTree = "<group>"; };
 		D0625C97208E87F10081F3B2 /* DownloadQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadQueue.swift; sourceTree = "<group>"; };
 		D0625CA7208FC47A0081F3B2 /* BrowserViewController+DownloadQueueDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+DownloadQueueDelegate.swift"; sourceTree = "<group>"; };
-		D07696F720697F9C00FACFD8 /* ReadingListSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingListSchema.swift; sourceTree = "<group>"; };
-		D076971E206AC60900FACFD8 /* ReadingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingList.swift; sourceTree = "<group>"; };
-		D0769742206C19E800FACFD8 /* SQLiteReadingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteReadingList.swift; sourceTree = "<group>"; };
 		D0A627632270C682006AFA2E /* SQLiteHistoryFavicons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteHistoryFavicons.swift; sourceTree = "<group>"; };
-		D0B693D4206C5BB9008A8B11 /* TestSQLiteReadingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSQLiteReadingList.swift; sourceTree = "<group>"; };
 		D0C95DF1200EAD3000E4E51C /* FindInPage.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FindInPage.js; sourceTree = "<group>"; };
 		D0C95E03200FCA8800E4E51C /* ReaderMode.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ReaderMode.js; sourceTree = "<group>"; };
 		D0C95E0D200FD3B200E4E51C /* PrintHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintHelper.swift; sourceTree = "<group>"; };
@@ -3629,6 +3625,7 @@
 			isa = PBXGroup;
 			children = (
 				C8CF648326ED20DF00C3816F /* BackgroundFileWriter.swift */,
+				C8D0F5AD27D8055500E008D6 /* BackgroundTaskProcessor.swift */,
 				D37DE2821CA2047500A5EC69 /* CertStore.swift */,
 				28C4AB711AD42D4300D9ACE3 /* Clients.swift */,
 				2FCAE2411ABB531100877008 /* Cursor.swift */,
@@ -3642,7 +3639,6 @@
 				E677F0531D94247300ECF1FB /* Metadata.swift */,
 				E6FF6AC91D873CFF0070C294 /* PageMetadata.swift */,
 				285D3B671B4380B70035FD22 /* Queue.swift */,
-				D076971E206AC60900FACFD8 /* ReadingList.swift */,
 				2FCAE2471ABB531100877008 /* RemoteTabs.swift */,
 				2829D39F1C2F0AD400DCF931 /* Sharing.swift */,
 				2FCAE2481ABB531100877008 /* Site.swift */,
@@ -3653,7 +3649,6 @@
 				7BF5A1E91B41640500EA9DD8 /* SyncQueue.swift */,
 				2FCAE25A1ABB531100877008 /* ThirdParty */,
 				2FCAE25C1ABB531100877008 /* Visit.swift */,
-				C8D0F5AD27D8055500E008D6 /* BackgroundTaskProcessor.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -3674,7 +3669,6 @@
 				D37DE2C91CA356F900A5EC69 /* testcert2.pem */,
 				2FCAE27D1ABB533A00877008 /* TestSQLiteHistory.swift */,
 				E63F71871DB7FBE200A995C9 /* TestSQLiteMetadata.swift */,
-				D0B693D4206C5BB9008A8B11 /* TestSQLiteReadingList.swift */,
 				2FCAE27A1ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift */,
 			);
 			path = StorageTests;
@@ -3694,7 +3688,6 @@
 			children = (
 				2FCAE24B1ABB531100877008 /* BrowserDB.swift */,
 				282915E51AF1A7920006EEB5 /* BrowserSchema.swift */,
-				D07696F720697F9C00FACFD8 /* ReadingListSchema.swift */,
 				D018F93D1F44A7190098F8CA /* Schema.swift */,
 				D0131B4C1F3CF7D8000CDE86 /* SQLiteFavicons.swift */,
 				2FCAE2551ABB531100877008 /* SQLiteHistory.swift */,
@@ -3703,7 +3696,6 @@
 				E6F368281D7F594F008CDD67 /* SQLiteHistoryRecommendations.swift */,
 				E677F0441D9423FB00ECF1FB /* SQLiteMetadata.swift */,
 				285D3B8F1B4386520035FD22 /* SQLiteQueue.swift */,
-				D0769742206C19E800FACFD8 /* SQLiteReadingList.swift */,
 				2FCAE2581ABB531100877008 /* SQLiteRemoteClientsAndTabs.swift */,
 			);
 			path = SQL;
@@ -5087,6 +5079,7 @@
 				7401461DBA6DB88F82931350 /* Localizable.strings */,
 				E65075881E37F7AB006961AC /* Logger.swift */,
 				99C94644BBAAC6B90043899F /* LoginManager.strings */,
+				B66E1A7D28A5FAC800F218B5 /* MRUCache.swift */,
 				C9C18E0F2655910C004710CD /* NeevaColors.swift */,
 				C9C18E1326559118004710CD /* NeevaColors.xcassets */,
 				C8B45FC3265EDFB9008E5231 /* NeevaConstants.swift */,
@@ -5209,16 +5202,17 @@
 		E6F9650D1B2F1CF20034B023 /* SharedTests */ = {
 			isa = PBXGroup;
 			children = (
-				E6F9650E1B2F1CF20034B023 /* Supporting Files */,
 				39E65D261CA5B92000C63CE3 /* AsyncReducerTests.swift */,
+				E96D95672832F27700DD5BB3 /* BloomFilterTests.swift */,
 				28786E541AB0F5FA009EA9EF /* DeferredTests.swift */,
+				E9EC2602283C5E4F00B9A79B /* FileHasherTest.swift */,
 				E4E25CCA1CA99E7400D0F088 /* HexExtensionsTests.swift */,
+				B66E1A7F28A6CA5E00F218B5 /* MRUCacheTests.swift */,
 				E6F9653B1B2F1D5D0034B023 /* NSURLExtensionsTests.swift */,
 				2FEBABAE1AB3659000DB5728 /* ResultTests.swift */,
 				E61453BD1B750A1700C3F9D7 /* RollingFileLoggerTests.swift */,
+				E6F9650E1B2F1CF20034B023 /* Supporting Files */,
 				28A6CE891AC082E200C1A2D4 /* UtilsTests.swift */,
-				E96D95672832F27700DD5BB3 /* BloomFilterTests.swift */,
-				E9EC2602283C5E4F00B9A79B /* FileHasherTest.swift */,
 			);
 			path = SharedTests;
 			sourceTree = "<group>";
@@ -5442,7 +5436,6 @@
 		F84B21C01A090F8100AAB793 /* Client */ = {
 			isa = PBXGroup;
 			children = (
-				F880C5A9289B7B2800C53D1E /* Authentication */,
 				F80983C1283879890039FCBD /* AltAppIcons */,
 				F84B21E41A0910F600AAB793 /* Application */,
 				F84B21EB1A0910F600AAB793 /* Assets */,
@@ -5554,6 +5547,7 @@
 		F84B21F11A0910F600AAB793 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
+				F880C5A9289B7B2800C53D1E /* Authentication */,
 				D3A994941A368691008AD1AC /* Browser */,
 				23ED80FD25C899D700D0E9D5 /* DefaultBrowserOnboarding */,
 				C8CF648C26F907BB00C3816F /* Favicons */,
@@ -5566,7 +5560,6 @@
 				6650585A26E68CE400C9CD51 /* Notifications */,
 				2034988D2843307C00799544 /* OrientationDependentStack.swift */,
 				66BB89D226A64BA4000C4BDF /* Overlay */,
-				2C49854D206173C800893DAE /* photon-colors.swift */,
 				F880C59E2899E8EA00C53D1E /* Premium */,
 				BC85E224264F29660068092F /* Prompt */,
 				66C2B6302748AA020074B695 /* QueuedViewManager.swift */,
@@ -5576,7 +5569,6 @@
 				206954A227FF424D000360D6 /* Site */,
 				C9C18DFC26559007004710CD /* Suggestions */,
 				C9098F5C26AF485400D2B5F4 /* TabChrome */,
-				EB9A179720E69A7E00B12184 /* Theme */,
 				668CA09726797E9800BA756F /* Toast */,
 				2816EFFF1B33E05400522243 /* UIConstants.swift */,
 				D0FCF7EE1FE44E15004A7995 /* UserContent */,
@@ -6899,6 +6891,7 @@
 				3215C66C27B6191B00D593BF /* FlowAnimation.swift in Sources */,
 				E65075AC1E37F7AB006961AC /* StringExtensions.swift in Sources */,
 				C8B45FC4265EDFBA008E5231 /* NeevaConstants.swift in Sources */,
+				B66E1A7E28A5FAC800F218B5 /* MRUCache.swift in Sources */,
 				C994645F2657052200613110 /* FeatureFlags.swift in Sources */,
 				C9255AA226C4392F00AA1C2E /* GroupedCell.swift in Sources */,
 				665451DF2759B9B50077CA1F /* SegmentedPicker.swift in Sources */,
@@ -6993,8 +6986,6 @@
 				D0A627642270C682006AFA2E /* SQLiteHistoryFavicons.swift in Sources */,
 				D0131B4D1F3CF7D8000CDE86 /* SQLiteFavicons.swift in Sources */,
 				28B62ACE1BC745E7004A585A /* Syncable.swift in Sources */,
-				D07696F820697F9C00FACFD8 /* ReadingListSchema.swift in Sources */,
-				D0769743206C19E900FACFD8 /* SQLiteReadingList.swift in Sources */,
 				E65075C21E37F956006961AC /* ExtensionUtils.swift in Sources */,
 				7BF5A1EA1B41640500EA9DD8 /* SyncQueue.swift in Sources */,
 				E677F0541D94247300ECF1FB /* Metadata.swift in Sources */,
@@ -7014,7 +7005,6 @@
 				0B54BD191B698B7C004C822C /* SuggestedSites.swift in Sources */,
 				318FB6EB1DB5600D0004E40F /* SQLiteHistoryFactories.swift in Sources */,
 				285D3B681B4380B70035FD22 /* Queue.swift in Sources */,
-				D076971F206AC60900FACFD8 /* ReadingList.swift in Sources */,
 				28E08C9A1AF44F00009BA2FA /* BrowserSchema.swift in Sources */,
 				2FCAE2681ABB531100877008 /* BrowserDB.swift in Sources */,
 				2FCAE2651ABB531100877008 /* RemoteTabs.swift in Sources */,
@@ -7031,7 +7021,6 @@
 			files = (
 				C8800ED72635F0FE005B7503 /* DeferredTestUtils.swift in Sources */,
 				C8611C8E1F71904C00C3DE7D /* DiskImageStoreTests.swift in Sources */,
-				D0B693D5206C5BB9008A8B11 /* TestSQLiteReadingList.swift in Sources */,
 				E63F71881DB7FBE200A995C9 /* TestSQLiteMetadata.swift in Sources */,
 				2FCAE2851ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift in Sources */,
 				289A4C131C4EB90600A460E3 /* StorageTestUtils.swift in Sources */,
@@ -7727,6 +7716,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B66E1A8028A6CA5E00F218B5 /* MRUCacheTests.swift in Sources */,
 				28532BEB1C472015000072D9 /* UtilsTests.swift in Sources */,
 				28532BEA1C472008000072D9 /* DeferredTests.swift in Sources */,
 				E61453BE1B750A1700C3F9D7 /* RollingFileLoggerTests.swift in Sources */,
@@ -7976,7 +7966,6 @@
 				6670187126BB678700960CF3 /* SuggestionModel.swift in Sources */,
 				665CA48826F054CC006E2F4D /* NotificationRow.swift in Sources */,
 				F880C5A8289B588B00C53D1E /* WelcomeFlowSignUpEmailView.swift in Sources */,
-				DA9FD88924E213E500168D1E /* QuickLinkSelection.intentdefinition in Sources */,
 				673AF3FF289CDE8D00F62A80 /* QuickLinkSelection.intentdefinition in Sources */,
 				E97D7E842834A91100944EF5 /* BloomFilterManager.swift in Sources */,
 				E65075521E37F6D1006961AC /* UIViewExtensions.swift in Sources */,

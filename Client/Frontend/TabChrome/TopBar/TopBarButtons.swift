@@ -11,10 +11,6 @@ struct TopBarNeevaButton: View {
     @EnvironmentObject var incognitoModel: IncognitoModel
     @EnvironmentObject var chromeModel: TabChromeModel
 
-    // TODO: sync this state variable with TabToolbarView somehow
-    @State private var presenting = false
-    @State private var action: OverflowMenuAction?
-
     let onMenuAction: (OverflowMenuAction) -> Void
 
     static private let neevaIconWidth: CGFloat = 24

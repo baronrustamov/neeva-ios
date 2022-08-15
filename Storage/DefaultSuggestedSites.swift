@@ -33,7 +33,7 @@ open class DefaultSuggestedSites {
         ]
     ]
 
-    public static let sites = [
+    static let sites = [
         "default": [],
         "web3": [
             SuggestedSiteData(

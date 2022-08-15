@@ -149,7 +149,6 @@ class TestError: MaybeErrorType {
     var description = "Error"
 }
 
-private let serialQueue = DispatchQueue(label: "co.neeva.test.serial", attributes: [])
 private let concurrentQueue = DispatchQueue(
     label: "co.neeva.test.concurrent", attributes: DispatchQueue.Attributes.concurrent)
 

@@ -7,7 +7,6 @@ import SwiftyJSON
 
 public struct SyncCommand: Equatable {
     public let value: String
-    public var commandID: Int?
     public var clientGUID: GUID?
 
     let version: String?
@@ -15,14 +14,12 @@ public struct SyncCommand: Equatable {
     public init(value: String) {
         self.value = value
         self.version = nil
-        self.commandID = nil
         self.clientGUID = nil
     }
 
     public init(id: Int, value: String) {
         self.value = value
         self.version = nil
-        self.commandID = id
         self.clientGUID = nil
     }
 
@@ -30,22 +27,6 @@ public struct SyncCommand: Equatable {
         self.value = value
         self.version = nil
         self.clientGUID = clientGUID
-        self.commandID = id
-    }
-
-    /// Sent displayURI commands include the sender client GUID.
-    public static func displayURIFromShareItem(_ shareItem: ShareItem, asClient sender: GUID)
-        -> SyncCommand
-    {
-        let jsonObj: [String: Any] = [
-            "command": "displayURI",
-            "args": [shareItem.url, sender, shareItem.title ?? ""],
-        ]
-        return SyncCommand(value: JSON(jsonObj).stringify()!)
-    }
-
-    public func withClientGUID(_ clientGUID: String?) -> SyncCommand {
-        return SyncCommand(id: self.commandID, value: self.value, clientGUID: clientGUID)
     }
 }
 

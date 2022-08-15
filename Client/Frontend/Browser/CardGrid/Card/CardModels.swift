@@ -865,40 +865,6 @@ class SpaceCardModel: CardModel {
 
 }
 
-class SiteCardModel: CardModel {
-    typealias Manager = SiteFetcher
-    typealias Details = SiteCardDetails
-
-    @Published var manager = SiteFetcher()
-    @Published var allDetails: [SiteCardDetails] = [] {
-        didSet {
-            allDetailsWithExclusionList = allDetails
-        }
-    }
-    @Published var allDetailsWithExclusionList: [SiteCardDetails] = []
-    var anyCancellable: AnyCancellable? = nil
-    let tabManager: TabManager
-
-    init(urls: [URL], tabManager: TabManager) {
-        self.tabManager = tabManager
-
-        self.allDetails = urls.reduce(into: []) {
-            $0.append(SiteCardDetails(url: $1, fetcher: manager, tabManager: tabManager))
-        }
-        self.anyCancellable = manager.objectWillChange.sink { [weak self] (_) in
-            self?.objectWillChange.send()
-        }
-    }
-
-    func refresh(urls: [URL]) {
-        self.allDetails = urls.reduce(into: []) {
-            $0.append(SiteCardDetails(url: $1, fetcher: manager, tabManager: tabManager))
-        }
-    }
-
-    func onDataUpdated() {}
-}
-
 class SpaceCardViewModel: ObservableObject {
     @Published var dataSource: [SpaceCardDetails] = []
     @Published var filterState: SpaceFilterState = .allSpaces

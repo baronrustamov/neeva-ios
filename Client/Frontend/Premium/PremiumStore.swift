@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import StoreKit
 
-enum PremiumPlan: String, Equatable, Encodable, Decodable {
+enum PremiumPlan: String, Equatable, Codable {
     /*
      NOTE: These text values are important, they map directly to
      App Store Connect product IDs.
@@ -74,6 +74,14 @@ class PremiumStore: ObservableObject {
         return self.products.first { product in
             return product.id == plan!.rawValue
         }
+    }
+
+    func priceText(_ plan: PremiumPlan?) -> String {
+        guard let product = self.getProductForPlan(plan) else {
+            return "FREE"
+        }
+
+        return product.displayPrice
     }
 
     public func purchase(
@@ -163,5 +171,46 @@ class PremiumStore: ObservableObject {
                 }
             }
         }
+    }
+}
+
+class PremiumHelpers {
+    static func primaryActionText(_ plan: PremiumPlan?, subscribed: Bool = false) -> String {
+        switch plan {
+        case .annual:
+            return subscribed ? "Manage Yearly" : "Subscribe Yearly"
+        case .monthly:
+            return subscribed ? "Manage Monthly" : "Subscribe Monthly"
+        default:
+            return "Get FREE"
+        }
+    }
+
+    static func priceSubText(_ plan: PremiumPlan?) -> (String, String) {
+        switch plan {
+        case .annual:
+            return ("Save 16%", "Cancel anytime")
+        case .monthly:
+            return ("", "Cancel anytime")
+        default:
+            return ("", "")
+        }
+    }
+
+    static func termText(_ plan: PremiumPlan?) -> String {
+        switch plan {
+        case .annual:
+            return "/year"
+        case .monthly:
+            return "/month"
+        default:
+            return ""
+        }
+    }
+
+    static func priceString(from input: Decimal) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        return formatter.string(from: input as NSNumber) ?? "\(input)"
     }
 }
