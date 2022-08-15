@@ -242,9 +242,6 @@ extension Defaults.Keys {
     public static let didDismissDefaultBrowserInterstitial = Defaults.Key<Bool?>(
         "didDismissDefaultBrowserInterstitial")
 
-    public static let didShowAdBlockerPromo = Defaults.BoolKey(
-        "didShowAdBlockerPromo")
-
     // MARK: - Spotlight Search
     public static let createUserActivities = Defaults.BoolKey("createUserActivities", default: true)
     public static let makeActivityAvailForSearch = Defaults.BoolKey(

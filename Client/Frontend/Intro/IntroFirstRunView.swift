@@ -18,63 +18,66 @@ struct FirstRunHomePage: View {
 
     var body: some View {
         GeometryReader { geom in
-            VStack(spacing: 0) {
-                Spacer(minLength: FirstRunViewUX.spacerLength)
+            ScrollView {
+                VStack(spacing: 0) {
+                    Spacer(minLength: FirstRunViewUX.spacerLength)
 
-                VStack(alignment: .leading, spacing: 30) {
-                    Image(decorative: "neeva-letter-only")
+                    VStack(alignment: .leading, spacing: 30) {
+                        Image(decorative: "neeva-letter-only")
 
-                    let isSmallScreen = geom.size.width < FirstRunViewUX.smallSizeScreen
-                    VStack(alignment: .leading) {
-                        Text("Welcome To Neeva")
-                            .font(.roobert(size: isSmallScreen ? 28 : 36))
-                        Text("Create your free Neeva account")
-                            .font(.roobert(size: isSmallScreen ? 16 : 20))
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .accessibilityElement(children: .combine)
-                .accessibilityAddTraits(.isHeader)
-                .padding(.bottom, 50)
-
-                VStack(spacing: 25) {
-                    IntroButton(
-                        icon: Image(systemSymbol: .applelogo), label: "Sign up with Apple",
-                        color: .black
-                    ) {
-                        logFirstRunSignUpWithAppleClick()
-                        model.buttonAction(.signupWithApple(model.marketingEmailOptOut, nil, nil))
-                    }
-
-                    IntroButton(icon: nil, label: "Other sign up options", color: .brand.blue) {
-                        logFirstRunOtherSignupOption()
-                        model.onOtherOptionsPage = true
-                        model.onSignInMode = false
-                    }
-
-                    TermsAndPrivacyLinks(width: geom.size.width)
-
-                    Button(action: { model.marketingEmailOptOut.toggle() }) {
-                        HStack {
-                            model.marketingEmailOptOut
-                                ? Symbol(decorative: .circle, size: 20)
-                                    .foregroundColor(Color.tertiaryLabel)
-                                : Symbol(decorative: .checkmarkCircleFill, size: 20)
-                                    .foregroundColor(Color.blue)
-                            Text("Send me product & privacy tips")
-                                .font(.roobert(size: 13))
-                                .foregroundColor(Color.ui.gray20)
-                                .multilineTextAlignment(.center)
+                        let isSmallScreen = geom.size.width < FirstRunViewUX.smallSizeScreen
+                        VStack(alignment: .leading) {
+                            Text("Welcome To Neeva")
+                                .font(.roobert(size: isSmallScreen ? 28 : 36))
+                            Text("Create your free Neeva account")
+                                .font(.roobert(size: isSmallScreen ? 16 : 20))
                         }
                     }
-                }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityAddTraits(.isHeader)
+                    .padding(.bottom, 50)
 
-                Spacer(minLength: FirstRunViewUX.spacerLength)
+                    VStack(spacing: 25) {
+                        IntroButton(
+                            icon: Image(systemSymbol: .applelogo), label: "Sign up with Apple",
+                            color: .black
+                        ) {
+                            logFirstRunSignUpWithAppleClick()
+                            model.buttonAction(
+                                .signupWithApple(model.marketingEmailOptOut, nil, nil))
+                        }
 
-                SignInButton {
-                    logFirstRunSignin()
-                    model.onOtherOptionsPage = true
-                    model.onSignInMode = true
+                        IntroButton(icon: nil, label: "Other sign up options", color: .brand.blue) {
+                            logFirstRunOtherSignupOption()
+                            model.onOtherOptionsPage = true
+                            model.onSignInMode = false
+                        }
+
+                        TermsAndPrivacyLinks(width: geom.size.width)
+
+                        Button(action: { model.marketingEmailOptOut.toggle() }) {
+                            HStack {
+                                model.marketingEmailOptOut
+                                    ? Symbol(decorative: .circle, size: 20)
+                                        .foregroundColor(Color.tertiaryLabel)
+                                    : Symbol(decorative: .checkmarkCircleFill, size: 20)
+                                        .foregroundColor(Color.blue)
+                                Text("Send me product & privacy tips")
+                                    .font(.roobert(size: 13))
+                                    .foregroundColor(Color.ui.gray20)
+                                    .multilineTextAlignment(.center)
+                            }
+                        }
+                    }
+
+                    Spacer(minLength: FirstRunViewUX.spacerLength)
+
+                    SignInButton {
+                        logFirstRunSignin()
+                        model.onOtherOptionsPage = true
+                        model.onSignInMode = true
+                    }
                 }
             }
             .padding(.horizontal, 25)

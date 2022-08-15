@@ -65,6 +65,7 @@ public struct GroupedRowButtonView: View {
             .padding(.horizontal, GroupedCellUX.padding)
             .frame(minHeight: GroupedCellUX.minCellHeight)
         }
+        .hoverEffect(.highlight)
         .buttonStyle(.tableCell)
     }
 }

@@ -198,8 +198,6 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
     static var createNewTabOnStartForTesting: Bool = false
 
-    var shouldShowAdBlockPromo: Bool = false
-
     /// Update the screenshot sent along with feedback. Called before opening overflow menu
     func updateFeedbackImage() {
         UIGraphicsBeginImageContextWithOptions(view.window!.bounds.size, true, 0)
@@ -551,11 +549,6 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
                 presentWelcomeFlow(startScreen: startScreen)
             }
-        }
-
-        if shouldShowAdBlockPromo {
-            ClientLogger.shared.logCounter(.AdBlockPromoImp)
-            self.showAdBlockerPromo()
         }
 
         tabManager.selectedTab?.lastExecutedTime = Date.nowMilliseconds()
@@ -1675,16 +1668,6 @@ extension BrowserViewController {
                 thumbnail: thumbnailUrl,
                 importData: importData,
                 updater: updater)
-        }
-    }
-
-    func showAdBlockerPromo() {
-        self.overlayManager.backgroundOpacityLevel = 2
-        self.showAsModalOverlayPopover(style: .adBlockerPromo) {
-            AdBlockerPromoOverlayContent()
-                .onDisappear {
-                    self.overlayManager.backgroundOpacityLevel = 5
-                }
         }
     }
 

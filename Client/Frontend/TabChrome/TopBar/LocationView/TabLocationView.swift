@@ -189,15 +189,12 @@ struct TabLocationView: View {
     }
 
     private var readerButton: some View {
-        LongPressButton {
+        TabLocationBarButton(label: Symbol(.docPlaintext, label: "Reader Mode")) {
             if readerModeModel.state != .active {
                 readerModeModel.enableReadingMode()
             } else {
                 showReaderModeSettings = true
             }
-        } label: {
-            Symbol(.docPlaintext, label: "Reader Mode")
-                .padding()
         }
         .accessibilityLabel(
             Text(

@@ -7,14 +7,15 @@ import SwiftUI
 
 struct PopoverView<Content: View>: View {
     @State private var title: LocalizedStringKey? = nil
+    @State private var safeAreaBottom: CGFloat = 0
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) private var verticalSizeClass
 
     let style: OverlayStyle
-    let onDismiss: () -> Void
     let headerButton: OverlayHeaderButton?
     let content: () -> Content
+    let onDismiss: () -> Void
 
     var horizontalPadding: CGFloat {
         paddingForSizeClass(horizontalSizeClass)
@@ -26,51 +27,54 @@ struct PopoverView<Content: View>: View {
 
     var body: some View {
         GeometryReader { geo in
-            HStack {
+            VStack {
                 Spacer()
 
-                VStack {
+                HStack {
                     Spacer()
 
-                    SheetHeaderButtonView(headerButton: headerButton, onDismiss: onDismiss)
-                        .padding(.vertical, 12)
+                    VStack(spacing: 12) {
+                        SheetHeaderButtonView(headerButton: headerButton, onDismiss: onDismiss)
 
-                    VStack {
-                        if style.showTitle, let title = title {
-                            SheetHeaderView(title: title, onDismiss: onDismiss)
-                        }
+                        VStack {
+                            if style.showTitle, let title = title {
+                                SheetHeaderView(title: title, onDismiss: onDismiss)
+                            }
 
-                        ScrollView(.vertical, showsIndicators: false) {
-                            content()
-                                .onPreferenceChange(OverlayTitlePreferenceKey.self) {
-                                    self.title = $0
-                                }
+                            ScrollView(.vertical, showsIndicators: false) {
+                                content()
+                                    .padding(.bottom, safeAreaBottom)
+                                    .onPreferenceChange(OverlayTitlePreferenceKey.self) {
+                                        self.title = $0
+                                    }
+                            }
                         }
+                        .padding(14)
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                        .background(
+                            Color(style.backgroundColor)
+                                .cornerRadius(16)
+                        )
                     }
-                    .padding(14)
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                    .background(
-                        Color(style.backgroundColor)
-                            .cornerRadius(16)
-                    )
-                    // 88 is button height + VStack padding + outer padding
                     .frame(
-                        minWidth:
-                            style.isAdBlockerPromo ? 0 : 400,
+                        minWidth: 400,
                         maxWidth: geo.size.width - (horizontalPadding * 2),
+                        minHeight: 300,
                         maxHeight: geo.size.height - (verticalPadding * 2)
-                            - (style.isAdBlockerPromo ? 0 : 88),
-                        alignment: .center
-                    ).fixedSize(horizontal: !style.expandPopoverWidth, vertical: true)
+                    )
+                    .fixedSize(
+                        horizontal: !style.expandPopoverWidth, vertical: !style.expandPopoverHeight)
 
                     Spacer()
                 }
 
                 Spacer()
             }
-            .padding(.horizontal, style.isAdBlockerPromo ? 0 : horizontalPadding)
-            .padding(.vertical, verticalPadding)
-            .accessibilityAction(.escape, onDismiss)
+        }
+        .accessibilityAction(.escape, onDismiss)
+        .ignoresSafeArea()
+        .safeAreaChanged { safeArea in
+            safeAreaBottom = safeArea.bottom
         }
     }
 
