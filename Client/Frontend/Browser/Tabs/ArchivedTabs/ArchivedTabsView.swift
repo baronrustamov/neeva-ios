@@ -9,21 +9,9 @@ import SwiftUI
 struct ArchivedTabsView: View {
     var containerGeometry: CGSize
     @EnvironmentObject var tabModel: TabCardModel
-    @Environment(\.openSettings) private var openSettings
     @Environment(\.openArchivedTabsPanelView) private var openArchivedTabsPanelView
 
     @Default(.archivedTabsDuration) var archivedTabsDuration
-
-    var tabsDurationText: String {
-        switch archivedTabsDuration {
-        case .week:
-            return "for 7 days"
-        case .month:
-            return "for 30 days"
-        case .forever:
-            return "forever"
-        }
-    }
 
     var body: some View {
         VStack(alignment: .center, spacing: 0) {

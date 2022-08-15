@@ -86,12 +86,9 @@ class ArchivedTabsListSectionViewModel {
 
 struct ArchivedTabsListSectionView: View {
     @Environment(\.onOpenURL) var openURL
-    @Environment(\.selectionCompletion) private var selectionCompletion: () -> Void
     @EnvironmentObject var panelModel: ArchivedTabsPanelModel
     var listSectionModel: ArchivedTabsListSectionViewModel
-    @Default(.tabGroupNames) private var tabGroupDict: [String: String]
 
-    private let padding: CGFloat = 4
     let tabManager: TabManager
     let section: ArchivedTabTimeSection
 

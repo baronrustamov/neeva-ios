@@ -11,7 +11,7 @@ enum ArchivedTabTimeSection: String, CaseIterable {
     case overAMonth = "Older"
 }
 
-public struct ArchivedTabsData {
+struct ArchivedTabsData {
     var sites: [ArchivedTabTimeSection: [Tab]] = [:]
 
     func itemsForSection(section: ArchivedTabTimeSection) -> [Tab] {
@@ -27,7 +27,6 @@ class ArchivedTabsPanelModel: ObservableObject {
     var numOfArchivedTabs: Int {
         return archivedTabs.count
     }
-    @Default(.archivedTabsDuration) var archivedTabsDuration
     private var updateArchivedTabsSubscription: AnyCancellable?
 
     func loadData() {
