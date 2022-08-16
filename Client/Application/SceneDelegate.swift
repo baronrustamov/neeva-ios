@@ -5,7 +5,6 @@
 import CoreSpotlight
 import Defaults
 import Shared
-import Storage
 
 private let log = Logger.browser
 
@@ -18,8 +17,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private var geigerCounter: KMCGeigerCounter?
 
     private var urlHandledOnLaunch = false
-
-    private let backgroundProcessor = BackgroundTaskProcessor(label: "SceneDelegate")
 
     // MARK: - Scene state
     func scene(
@@ -203,11 +200,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func setSceneUIState(to state: SceneUIState) {
-        // This ensures that the state is correctly saved. Use `UserDefaults`
-        // directly here since it is thread-safe.
-        backgroundProcessor.performTask {
-            UserDefaults.standard[.scenePreviousUIState] = state.rawValue
-        }
+        assert(Thread.isMainThread)
+        UserDefaults.standard[.scenePreviousUIState] = state.rawValue
     }
 
     static func handleThemePreference(for option: AppearanceThemeOption) {
