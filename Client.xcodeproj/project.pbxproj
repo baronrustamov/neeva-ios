@@ -131,11 +131,11 @@
 		20D297F6281DAA3B0036DDBA /* ZombieTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D297F5281DAA3B0036DDBA /* ZombieTabTests.swift */; };
 		20D86CAF2866E1F2001ED834 /* DragToCloseInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20217D9E28666523003EF3A7 /* DragToCloseInteraction.swift */; };
 		20D86CB02866E207001ED834 /* BorderTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20217DA028666575003EF3A7 /* BorderTreatment.swift */; };
-		20DA384428A425070009598D /* TextButtonPointerEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DA384328A425070009598D /* TextButtonPointerEffect.swift */; };
 		20E51A112819D8BB00394720 /* CookieCutterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200976842810EA620055A02B /* CookieCutterHelper.swift */; };
 		20ED47CE27F28235002E3ADF /* BrowserViewController+IntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20ED47CD27F28235002E3ADF /* BrowserViewController+IntroView.swift */; };
 		20F2889227FD1BA9005A8A79 /* HistoryPanelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F2889127FD1BA9005A8A79 /* HistoryPanelModel.swift */; };
 		20F2889427FD20B4005A8A79 /* HistoryPanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F2889327FD20B4005A8A79 /* HistoryPanelViewController.swift */; };
+		20FB97FA28A98809008BF8A2 /* HoverEffectButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20FB97F928A98809008BF8A2 /* HoverEffectButton.swift */; };
 		20FBBE732838822B000F666B /* BackForwardListViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20FBBE722838822B000F666B /* BackForwardListViewTests.swift */; };
 		2328616825C9BD3D0015EA47 /* DefaultBrowserOnboarding.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2328616725C9BD3D0015EA47 /* DefaultBrowserOnboarding.xcassets */; };
 		23BEA767251A99ED00A014BF /* NewYorkMedium-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 23BEA766251A99E300A014BF /* NewYorkMedium-Bold.otf */; };
@@ -2025,10 +2025,10 @@
 		20BB666B2821E0F0001FA7E9 /* ChangeNotificationPreferenceDialogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeNotificationPreferenceDialogView.swift; sourceTree = "<group>"; };
 		20C5B262282D82F400BD35B9 /* CookieCutterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCutterTests.swift; sourceTree = "<group>"; };
 		20D297F5281DAA3B0036DDBA /* ZombieTabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZombieTabTests.swift; sourceTree = "<group>"; };
-		20DA384328A425070009598D /* TextButtonPointerEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextButtonPointerEffect.swift; sourceTree = "<group>"; };
 		20ED47CD27F28235002E3ADF /* BrowserViewController+IntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+IntroView.swift"; sourceTree = "<group>"; };
 		20F2889127FD1BA9005A8A79 /* HistoryPanelModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPanelModel.swift; sourceTree = "<group>"; };
 		20F2889327FD20B4005A8A79 /* HistoryPanelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPanelViewController.swift; sourceTree = "<group>"; };
+		20FB97F928A98809008BF8A2 /* HoverEffectButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoverEffectButton.swift; sourceTree = "<group>"; };
 		20FBBE722838822B000F666B /* BackForwardListViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackForwardListViewTests.swift; sourceTree = "<group>"; };
 		2328616725C9BD3D0015EA47 /* DefaultBrowserOnboarding.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DefaultBrowserOnboarding.xcassets; sourceTree = "<group>"; };
 		23BEA763251A99E200A014BF /* NewYorkMedium-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkMedium-Regular.otf"; sourceTree = "<group>"; };
@@ -4603,7 +4603,6 @@
 				3FE1BC2827DBB74E004122F8 /* SpaceMarkdownSnippet.swift */,
 				66BEFDC826A7678200AA32EF /* GroupedCell.swift */,
 				C9ADD2A426726F8C005F9C4B /* ButtonStyles.swift */,
-				20DA384328A425070009598D /* TextButtonPointerEffect.swift */,
 				66F5079527ACB84800911173 /* FocusableTextField.swift */,
 				C908604F266693340049C072 /* SingleLineTextField.swift */,
 				C9C18DD926558FF3004710CD /* ActivityIndicator.swift */,
@@ -4613,6 +4612,7 @@
 				C9C18DDA26558FF3004710CD /* LoadingView.swift */,
 				C9AFE6DE2657F8DA000C5A03 /* QuickLookView.swift */,
 				C9BED4CA2669451B001D9C77 /* ViewControllerWrapper.swift */,
+				20FB97F928A98809008BF8A2 /* HoverEffectButton.swift */,
 				675EEDD226D9AF1700473332 /* LongPressButton.swift */,
 				E942D43F281F275100B4A3EC /* SelectableTextModifier.swift */,
 				E61A44A72833F97B004AAC3F /* URLDisplayView.swift */,
@@ -6816,6 +6816,7 @@
 				3215C66E27B6191B00D593BF /* FlowShapeView.swift in Sources */,
 				3215C67427B6191B00D593BF /* CATransaction+Extension.swift in Sources */,
 				C9C18E4C265596C5004710CD /* ActivityIndicator.swift in Sources */,
+				20FB97FA28A98809008BF8A2 /* HoverEffectButton.swift in Sources */,
 				E65075991E37F7AB006961AC /* Cancellable.swift in Sources */,
 				205789782852931A00E6CB6B /* DateExtensions.swift in Sources */,
 				C9C18E3D26559504004710CD /* Incognito.swift in Sources */,
@@ -6917,7 +6918,6 @@
 				EB7FFFC820A9D38D003E1E34 /* AlertController.swift in Sources */,
 				C9BED4BF2667F83E001D9C77 /* SSOProvider.swift in Sources */,
 				E942D4372818830700B4A3EC /* Strings+HTMLExtension.swift in Sources */,
-				20DA384428A425070009598D /* TextButtonPointerEffect.swift in Sources */,
 				B61D068E27ED22FB0075F65E /* DebugCounter.swift in Sources */,
 				C9C18E4E26559766004710CD /* AddToSpaceView.swift in Sources */,
 				C9C18E5426559827004710CD /* Space.swift in Sources */,

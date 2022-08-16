@@ -29,13 +29,12 @@ struct SegmentTappedModifier: ViewModifier {
     @Binding var selectedSegmentIndex: Int
 
     func body(content: Content) -> some View {
-        Button {
+        HoverEffectButton(effect: .lift) {
             segment.selectedAction()
             selectedSegmentIndex = index
         } label: {
             content
         }
-        .hoverEffect(.lift)
         .accessibilityAddTraits(index == selectedSegmentIndex ? .isSelected : [])
     }
 }

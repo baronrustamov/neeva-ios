@@ -11,11 +11,11 @@ struct TabLocationBarButton<Label: View>: View {
     let action: () -> Void
 
     var body: some View {
-        Button(action: action) {
+        HoverEffectButton(effect: .lift, action: action) {
             label
                 .frame(width: TabLocationViewUX.height, height: TabLocationViewUX.height)
                 .transition(.opacity)
-        }.hoverEffect(.lift)
+        }
     }
 }
 

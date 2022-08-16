@@ -40,10 +40,9 @@ struct FindInPageView: View {
                 .accessibilityIdentifier("FindInPage_Next")
             }
 
-            Button(action: onDismiss) {
+            HoverEffectButton(isTextButton: true, action: onDismiss) {
                 Text("Done")
             }
-            .textButtonPointerEffect()
             .accessibilityIdentifier("FindInPage_Done")
             .accessibilityLabel(Text("Done"))
         }

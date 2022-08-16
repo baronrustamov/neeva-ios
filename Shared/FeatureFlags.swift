@@ -15,6 +15,7 @@ public enum FeatureFlag: String, CaseIterable, RawRepresentable {
     case customSearchEngine = "Custom Search Engine"
     case debugURLBar = "URL Bar Debug Mode"
     case enableSuggestedSpaces = "Show Spaces from Neeva Community"
+    case hoverEffects = "Enable Hover Effects"
     case incognitoQuickClose = "Incognito Quick Close"
     case inlineAccountSettings = "Inline Account Settings"
     case interactiveScrollView = "Interactive Scroll View"

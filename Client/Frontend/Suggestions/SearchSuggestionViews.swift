@@ -84,13 +84,11 @@ struct SuggestionSpec: ViewModifier {
                 .frame(minHeight: SuggestionViewUX.RowHeight)
                 .padding(.horizontal, SuggestionViewUX.Padding)
                 .background(suggestionState.color)
-                .hoverEffect()
         case .dictionary:
             content.padding(.horizontal, SuggestionViewUX.Padding)
                 .padding(.top, SuggestionViewUX.Padding)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(suggestionState.color)
-                .hoverEffect()
         }
     }
 }

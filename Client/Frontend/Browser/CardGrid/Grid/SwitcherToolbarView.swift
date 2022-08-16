@@ -121,7 +121,7 @@ struct SwitcherToolbarView: View {
                     Spacer()
                 }
 
-                Button {
+                HoverEffectButton {
                     switch gridModel.switcherState {
                     case .tabs:
                         toolbarModel.openLazyTab()
@@ -130,9 +130,8 @@ struct SwitcherToolbarView: View {
                         toolbarModel.createNewSpace()
                     }
                 } label: {
-                    Symbol(.plus, size: 20, weight: .medium, label: "Add Tab")
+                    Symbol(.plus, size: 20, weight: .medium, label: "Add Tab").tapTargetFrame()
                 }
-                .tapTargetFrame()
                 .contextMenu {
                     if bvc.tabManager.recentlyClosedTabsFlattened.count > 0 {
                         ContextMenuActionsBuilder.RecentlyClosedTabsAction(
@@ -142,13 +141,12 @@ struct SwitcherToolbarView: View {
                 }
                 .disabled(gridModel.switcherState != .tabs && !NeevaUserInfo.shared.isUserLoggedIn)
                 .accentColor(.label)
-                .hoverEffect()
 
                 if !top {
                     Spacer()
                 }
 
-                Button {
+                HoverEffectButton(isTextButton: true) {
                     switch gridModel.switcherState {
                     case .tabs:
                         browserModel.hideGridWithAnimation(
@@ -179,7 +177,6 @@ struct SwitcherToolbarView: View {
                         tabManager: browserModel.tabManager)
                 )
                 .allowsHitTesting(toolbarModel.tabIsSelected)
-                .textButtonPointerEffect()
             }
             .padding(.horizontal, 16)
             .frame(

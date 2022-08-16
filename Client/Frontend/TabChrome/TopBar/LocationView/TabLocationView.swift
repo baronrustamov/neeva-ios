@@ -174,7 +174,7 @@ struct TabLocationView: View {
             }
 
             if chromeModel.isEditingLocation {
-                Button {
+                HoverEffectButton(isTextButton: true) {
                     onCancel()
                     chromeModel.setEditingLocation(to: false)
                 } label: {
@@ -183,7 +183,6 @@ struct TabLocationView: View {
                 }
                 .transition(.move(edge: .trailing).combined(with: .opacity))
                 .accentColor(incognitoModel.isIncognito ? .label : .ui.adaptive.blue)
-                .textButtonPointerEffect()
             }
         }
     }
