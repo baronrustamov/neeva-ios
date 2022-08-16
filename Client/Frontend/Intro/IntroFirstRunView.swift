@@ -78,7 +78,7 @@ struct FirstRunHomePage: View {
                         model.onOtherOptionsPage = true
                         model.onSignInMode = true
                     }
-                }
+                }.frame(minHeight: geom.size.height)
             }
             .padding(.horizontal, 25)
             .padding(.vertical, 35)
