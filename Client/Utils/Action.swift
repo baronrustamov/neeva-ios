@@ -3,8 +3,6 @@
 // found in the LICENSE file.
 
 import SFSafeSymbols
-import Shared
-import SwiftUI
 
 /// An action that’s able to be represented both as a button/menu item
 /// and an accessibility action for VoiceOver users.

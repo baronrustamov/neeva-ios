@@ -7,7 +7,6 @@ import MobileCoreServices
 import PassKit
 import QuickLook
 import Shared
-import WebKit
 
 struct MIMEType {
     static let Bitmap = "image/bmp"

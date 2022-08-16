@@ -4,7 +4,6 @@
 
 import Shared
 import SwiftUI
-import UIKit
 
 enum ToastViewUX {
     static let defaultDisplayTime = 4.5

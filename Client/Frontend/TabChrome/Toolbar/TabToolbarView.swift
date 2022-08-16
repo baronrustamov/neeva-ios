@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import Defaults
-import SFSafeSymbols
 import Shared
 import SwiftUI
 

@@ -4,7 +4,6 @@
 
 import Defaults
 import Shared
-import WebKit
 
 extension Defaults.Keys {
     // TODO: migrate to a new naming without dot so publisher/observer work

@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 import Storage
-import WebKit
 
 // This cannot be easily imported into extension targets, so we break it out here.
 extension SavedTab {

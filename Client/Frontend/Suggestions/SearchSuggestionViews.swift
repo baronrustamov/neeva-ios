@@ -4,7 +4,6 @@
 
 import SDWebImageSwiftUI
 import Shared
-import Storage
 import SwiftUI
 
 enum SuggestionViewUX {

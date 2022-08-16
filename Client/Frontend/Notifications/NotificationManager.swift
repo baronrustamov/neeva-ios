@@ -6,7 +6,6 @@ import Combine
 import Defaults
 import Foundation
 import Shared
-import SwiftUI
 
 private let logger = Logger.browser
 

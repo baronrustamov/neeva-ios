@@ -7,7 +7,6 @@ import Defaults
 import Foundation
 import Shared
 import StoreKit
-import SwiftyJSON
 
 private enum AttributionTokenErrorType: String {
     case olderIOSRequest

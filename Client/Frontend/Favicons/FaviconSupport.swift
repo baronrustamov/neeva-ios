@@ -4,7 +4,6 @@
 
 import SDWebImage
 import Shared
-import SwiftyJSON
 
 /// A helper class with various favicon utilities.
 open class FaviconSupport: NSObject {

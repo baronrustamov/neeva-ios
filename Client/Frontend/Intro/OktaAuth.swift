@@ -2,9 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import CryptoKit
 import Foundation
-import Shared
 
 class OktaAccountCreatedDelegate: NSObject, URLSessionTaskDelegate {
     var onDismiss: ((FirstRunButtonActions) -> Void)

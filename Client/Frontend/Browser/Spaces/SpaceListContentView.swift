@@ -4,7 +4,6 @@
 
 import Defaults
 import Shared
-import Storage
 import SwiftUI
 
 struct SpaceListContentView: View {

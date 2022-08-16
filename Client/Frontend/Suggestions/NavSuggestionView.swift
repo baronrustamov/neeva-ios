@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import Shared
-import Storage
 import SwiftUI
 
 /// Renders a nav suggestion

@@ -2,17 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import AVFoundation
-import BackgroundTasks
-import CoreSpotlight
 import CrashReporter
 import Defaults
-import LocalAuthentication
-import MessageUI
 import SDWebImage
 import Shared
-import Storage
-import SwiftKeychainWrapper
 import XCGLogger
 
 private let log = Logger.browser

@@ -4,7 +4,6 @@
 
 import Combine
 import Foundation
-import SwiftUI
 
 /// One instance per window. Contains information about the current tab.
 class LocationViewModel: ObservableObject {

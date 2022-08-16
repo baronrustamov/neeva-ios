@@ -6,7 +6,6 @@ import Combine
 import Foundation
 import MapKit
 import Shared
-import SwiftUI
 
 struct PlaceAnnotation: Identifiable {
     typealias ID = String

@@ -4,7 +4,6 @@
 
 import Combine
 import Shared
-import SwiftUI
 
 class SpaceContentSheetModel: ObservableObject {
     @Published private(set) var currentSpaceDetail: SpaceCardDetails? {

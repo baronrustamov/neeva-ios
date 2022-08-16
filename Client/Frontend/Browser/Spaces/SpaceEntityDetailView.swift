@@ -3,9 +3,7 @@
 // found in the LICENSE file.
 
 import Defaults
-import SDWebImageSwiftUI
 import Shared
-import Storage
 import SwiftUI
 
 struct SpaceEntityDetailView: View {

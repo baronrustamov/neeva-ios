@@ -3,8 +3,6 @@
 // found in the LICENSE file.
 
 import Combine
-import Defaults
-import Shared
 
 enum ArchivedTabTimeSection: String, CaseIterable {
     case lastMonth = "Last Month"

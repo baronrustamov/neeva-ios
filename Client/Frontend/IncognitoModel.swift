@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import Combine
-import Foundation
 
 class IncognitoModel: ObservableObject {
     @Published private(set) var isIncognito: Bool

@@ -1,6 +1,4 @@
-import Foundation
 import Shared
-import SwiftUI
 import WebKit
 
 let messageHandlerName = "webui"

@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import Foundation
-import Shared
 
 //MARK: - Interface
 private protocol Expirable {

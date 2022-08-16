@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import Foundation
-
 // See https://github.com/neevaco/neeva-ios/pull/1004#issuecomment-882558870
 // for an explanation of why these functions (and only these functions) are implemented
 

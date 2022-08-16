@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import Combine
-import Shared
 import SwiftUI
 
 private let ToolbarBaseAnimationDuration = 0.3

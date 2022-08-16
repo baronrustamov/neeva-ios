@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import SDWebImage
-import SFSafeSymbols
 import Shared
 import UIKit
 

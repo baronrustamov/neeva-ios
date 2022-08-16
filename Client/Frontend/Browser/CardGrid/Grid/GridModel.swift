@@ -3,9 +3,7 @@
 // found in the LICENSE file.
 
 import Combine
-import Foundation
 import Shared
-import SwiftUI
 
 class GridModel: ObservableObject {
     let tabCardModel: TabCardModel

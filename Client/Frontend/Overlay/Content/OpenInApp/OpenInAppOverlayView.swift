@@ -4,7 +4,6 @@
 
 import Shared
 import SwiftUI
-import UIKit
 
 struct OpenInAppOverlayView: View {
     let url: URL

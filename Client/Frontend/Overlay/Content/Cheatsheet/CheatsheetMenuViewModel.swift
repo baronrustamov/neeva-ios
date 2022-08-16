@@ -3,10 +3,8 @@
 // found in the LICENSE file.
 
 import Combine
-import Defaults
 import Foundation
 import Shared
-import SwiftUI
 
 // MARK: - Source Page Declaration
 struct SourcePage {

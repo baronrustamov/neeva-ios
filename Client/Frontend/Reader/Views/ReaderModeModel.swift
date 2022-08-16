@@ -4,8 +4,6 @@
 
 import Defaults
 import Foundation
-import Shared
-import SwiftUI
 
 class ReaderModeModel: ObservableObject {
     @Published private(set) var state: ReaderModeState = .unavailable

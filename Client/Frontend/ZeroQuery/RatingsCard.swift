@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import Shared
-import StoreKit
 import SwiftUI
 
 enum RatingsCardState {

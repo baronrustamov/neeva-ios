@@ -4,7 +4,6 @@
 
 import Combine
 import Shared
-import SwiftUI
 import UIKit
 
 class SimulatedSwipeModel: ObservableObject {

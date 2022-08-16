@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import Combine
-import Shared
 import SwiftUI
 
 // For sharing to work, this must currently be the BrowserViewController
