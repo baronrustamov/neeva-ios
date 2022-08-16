@@ -17,8 +17,8 @@ class PinnedTabTests: BaseTestCase {
         waitForExistence(app.buttons["Example Domain, Tab"])
         app.buttons["Example Domain, Tab"].press(forDuration: 1)
 
-        waitForExistence(app.buttons["Pin tab"])
-        app.buttons["Pin tab"].tap()
+        waitForExistence(app.buttons["Pin Tab"])
+        app.buttons["Pin Tab"].tap()
         waitForNoExistence(app.buttons["Pin Tab"])
 
         app.buttons["Example Domain, Tab"].tap()
@@ -96,8 +96,8 @@ class PinnedTabTests: BaseTestCase {
         waitForExistence(app.buttons["IANA-managed Reserved Domains, Tab"])
         app.buttons["IANA-managed Reserved Domains, Tab"].press(forDuration: 1)
 
-        waitForExistence(app.buttons["Pin tab"])
-        app.buttons["Pin tab"].tap()
+        waitForExistence(app.buttons["Pin Tab"])
+        app.buttons["Pin Tab"].tap()
         waitForNoExistence(app.buttons["Pin Tab"])
 
         app.buttons["IANA-managed Reserved Domains, Tab"].tap(force: true)

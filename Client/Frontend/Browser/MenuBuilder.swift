@@ -212,6 +212,29 @@ class ContextMenuActionsBuilder {
             }
         }
     }
+
+    // MARK: - Pin Tab
+    struct TogglePinnedTabAction: View {
+        let tabManager: TabManager
+        let tab: Tab
+        var isPinned: Bool
+
+        var body: some View {
+            Button {
+                // This delay waits for the ContextMenu to dismiss before running the action.
+                // Prevents a very strange SwiftUI visual glitch.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                    tabManager.toggleTabPinnedState(tab)
+                    ToastDefaults().showToastForPinningTab(
+                        pinning: !isPinned, tabManager: tabManager)
+                }
+            } label: {
+                isPinned
+                    ? Label("Unpin Tab", systemSymbol: .pinSlash)
+                    : Label("Pin Tab", systemSymbol: .pin)
+            }
+        }
+    }
 }
 
 class MenuBuilder {
@@ -291,8 +314,13 @@ class MenuBuilder {
                     bvc.openLazyTab(openedFrom: .newTabButton)
                 }
 
-                ContextMenuActionsBuilder.CloseTabAction {
-                    tabManager.removeTab(tabManager.selectedTab)
+                if let selectedTab = tabManager.selectedTab {
+                    ContextMenuActionsBuilder.TogglePinnedTabAction(
+                        tabManager: tabManager, tab: selectedTab, isPinned: selectedTab.isPinned)
+
+                    ContextMenuActionsBuilder.CloseTabAction {
+                        tabManager.removeTab(selectedTab)
+                    }
                 }
 
                 if gridModel.numberOfTabsForCurrentState > 1 {

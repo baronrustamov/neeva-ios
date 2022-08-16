@@ -1145,7 +1145,7 @@
 "Pin" = "Épingler";
 
 /* No comment provided by engineer. */
-"Pin tab" = "Épingler l'onglet";
+"Pin Tab" = "Épingler l'onglet";
 
 /* No comment provided by engineer. */
 "Pin/unpin not yet implemented" = "La fonction épingler/désépingler n'a pas encore été implémentée";
@@ -1625,7 +1625,7 @@
 "Unpin" = "Supprimer";
 
 /* No comment provided by engineer. */
-"Unpin tab" = "Désépingler l'onglet";
+"Unpin Tab" = "Désépingler l'onglet";
 
 /* No comment provided by engineer. */
 "Untitled" = "Sans titre";

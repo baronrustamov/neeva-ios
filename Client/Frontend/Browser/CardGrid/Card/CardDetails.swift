@@ -288,16 +288,8 @@ public class TabCardDetails: CardDropDelegate, CardDetails, AccessingManagerProv
                 }
             }
 
-            Button { [self] in
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [self] in
-                    manager.toggleTabPinnedState(tab)
-                    ToastDefaults().showToastForPinningTab(pinning: isPinned, tabManager: manager)
-                }
-            } label: {
-                isPinned
-                    ? Label("Unpin tab", systemSymbol: .pinSlash)
-                    : Label("Pin tab", systemSymbol: .pin)
-            }
+            ContextMenuActionsBuilder.TogglePinnedTabAction(
+                tabManager: manager, tab: tab, isPinned: tab.isPinned)
 
             Divider()
 

@@ -1145,7 +1145,7 @@
 "Pin" = "Pin";
 
 /* No comment provided by engineer. */
-"Pin tab" = "Pin tab";
+"Pin Tab" = "Pin Tab";
 
 /* No comment provided by engineer. */
 "Pin/unpin not yet implemented" = "Pin/unpin not yet implemented";
@@ -1625,7 +1625,7 @@
 "Unpin" = "Unpin";
 
 /* No comment provided by engineer. */
-"Unpin tab" = "Unpin tab";
+"Unpin Tab" = "Unpin Tab";
 
 /* No comment provided by engineer. */
 "Untitled" = "Untitled";
