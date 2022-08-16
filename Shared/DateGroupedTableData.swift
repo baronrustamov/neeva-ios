@@ -55,9 +55,7 @@ public struct DateGroupedTableData<T: Equatable> {
 
     public init() {}
 
-    @discardableResult mutating public func add(_ item: T, timestamp: TimeInterval) -> IndexPath {
-        let date = Date(timeIntervalSince1970: timestamp)
-
+    @discardableResult mutating public func add(_ item: T, date: Date) -> IndexPath {
         if date.isToday() {
             today.append(item)
             return IndexPath(row: today.count - 1, section: 0)

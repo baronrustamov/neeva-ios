@@ -56,8 +56,9 @@ class HistoryPanelModel: ObservableObject {
                     return
                 }
 
-                self.groupedSites.add(
-                    site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
+                let date = Date(
+                    timeIntervalSince1970: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
+                self.groupedSites.add(site, date: date)
             }
         }
     }
@@ -82,8 +83,10 @@ class HistoryPanelModel: ObservableObject {
                         return
                     }
 
-                    self.filteredSites.add(
-                        site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
+                    let date = Date(
+                        timeIntervalSince1970: TimeInterval.fromMicrosecondTimestamp(
+                            latestVisit.date))
+                    self.filteredSites.add(site, date: date)
                 }
             }
         }

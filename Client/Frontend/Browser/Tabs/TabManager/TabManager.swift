@@ -417,7 +417,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         else { return false }
 
         let parentTabIsMostRecentUsed = mostRecentTab(inTabs: viableTabs) == parentTab
-        if parentTabIsMostRecentUsed, parentTab.lastExecutedTime != nil {
+        if parentTabIsMostRecentUsed {
             selectTab(parentTab, previous: tab, notify: true)
             return true
         }
@@ -580,7 +580,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
 
     func getMostRecentChild(_ item: TabGroup) -> Tab? {
         return item.children.max(by: { lhs, rhs in
-            lhs.lastExecutedTime ?? 0 < rhs.lastExecutedTime ?? 0
+            lhs.lastExecutedTime < rhs.lastExecutedTime
         })
     }
 
@@ -1155,7 +1155,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     func makeTabsIntoZombies(tabsToKeepAlive: Int = 10) {
         // Filter tabs for each Scene
         let tabs = tabs.sorted {
-            $0.lastExecutedTime ?? Timestamp() > $1.lastExecutedTime ?? Timestamp()
+            $0.lastExecutedTime > $1.lastExecutedTime
         }
 
         tabs.enumerated().forEach { index, tab in

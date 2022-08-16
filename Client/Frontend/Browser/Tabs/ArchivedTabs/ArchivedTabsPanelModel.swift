@@ -4,40 +4,78 @@
 
 import Combine
 
-enum ArchivedTabTimeSection: String, CaseIterable {
-    case lastMonth = "Last Month"
-    case overAMonth = "Older"
-}
+enum ArchivedTabRow: Equatable {
+    case tab(Tab)
+    case tabGroup(TabGroup)
 
-struct ArchivedTabsData {
-    var sites: [ArchivedTabTimeSection: [Tab]] = [:]
+    var lastExcecutedTime: Timestamp {
+        switch self {
+        case .tab(let tab):
+            return tab.lastExecutedTime
+        case .tabGroup(let group):
+            return group.lastExecutedTime
+        }
+    }
 
-    func itemsForSection(section: ArchivedTabTimeSection) -> [Tab] {
-        return sites[section] ?? []
+    var id: String {
+        switch self {
+        case .tab(let tab):
+            return tab.id
+        case .tabGroup(let group):
+            return group.id
+        }
+    }
+
+    static func == (lhs: ArchivedTabRow, rhs: ArchivedTabRow) -> Bool {
+        switch (lhs, rhs) {
+        case (.tab(let tabLhs), .tab(let tabRhs)):
+            return tabLhs.id == tabRhs.id
+        case (.tabGroup(let groupLhs), .tabGroup(let groupRhs)):
+            return groupLhs.id == groupRhs.id
+        default:
+            return false
+        }
     }
 }
 
 class ArchivedTabsPanelModel: ObservableObject {
     let tabManager: TabManager
-    var archivedTabs: [Tab]
-    var archivedTabGroups: [String: TabGroup]
-    var groupedSites = ArchivedTabsData()
+    var groupedRows = DateGroupedTableData<ArchivedTabRow>()
     var numOfArchivedTabs: Int {
-        return archivedTabs.count
+        return tabManager.archivedTabs.count
     }
+
     private var updateArchivedTabsSubscription: AnyCancellable?
 
     func loadData() {
-        archivedTabs = tabManager.archivedTabs
-        archivedTabGroups = tabManager.archivedTabGroups
+        groupedRows = DateGroupedTableData<ArchivedTabRow>()
 
-        groupedSites.sites[.lastMonth] = archivedTabs.filter {
-            return $0.isIncluded(in: .lastMonth)
+        // Once all the tab groups are added, no need to also add duplicate tabs.
+        // This prevents any tab with a RootID already added from being inserted into the rows again.
+        var handledRootIDs: [String] = []
+
+        tabManager.archivedTabGroups.forEach {
+            handledRootIDs.append($0.key)
+
+            let tabGroup = $0.value
+            // lastExecutedTime is in milliseconds, needs to be converted to seconds.
+            let lastExecutedTimeSeconds = tabGroup.lastExecutedTime / 1000
+            groupedRows.add(
+                .tabGroup(tabGroup),
+                date: Date(timeIntervalSince1970: TimeInterval(lastExecutedTimeSeconds)))
         }
 
-        groupedSites.sites[.overAMonth] = archivedTabs.filter {
-            return $0.isIncluded(in: .overAMonth)
+        // Add the rest of the tabs as long as they weren't already added with a TabGroup.
+        tabManager.archivedTabs.forEach {
+            if !handledRootIDs.contains($0.rootUUID) {
+                let lastExecutedTimeSeconds = $0.lastExecutedTime / 1000
+                groupedRows.add(
+                    .tab($0),
+                    date: Date(timeIntervalSince1970: TimeInterval(lastExecutedTimeSeconds)))
+            }
         }
+
+        self.objectWillChange.send()
     }
 
     func clearArchivedTabs() {
@@ -45,18 +83,14 @@ class ArchivedTabsPanelModel: ObservableObject {
             tabManager.archivedTabs, updateSelectedTab: false,
             dontAddToRecentlyClosed: true, notify: false)
         loadData()
-        self.objectWillChange.send()
     }
 
     init(tabManager: TabManager) {
         self.tabManager = tabManager
-        self.archivedTabs = tabManager.archivedTabs
-        self.archivedTabGroups = tabManager.archivedTabGroups
 
         updateArchivedTabsSubscription = tabManager.updateArchivedTabsPublisher.sink {
             [weak self] _ in
             self?.loadData()
-            self?.objectWillChange.send()
         }
     }
 }

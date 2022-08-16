@@ -553,9 +553,9 @@ class CardTests: XCTestCase {
 
         manager.updateAllTabDataAndSendNotifications(notify: false)
         archivedTabsPanelModel.loadData()
-        XCTAssertEqual(archivedTabsPanelModel.groupedSites.sites[.lastMonth]?.count, 2)
+        XCTAssertFalse(archivedTabsPanelModel.groupedRows.isEmpty)
         archivedTabsPanelModel.clearArchivedTabs()
-        XCTAssertEqual(archivedTabsPanelModel.groupedSites.sites[.lastMonth]?.count, 0)
+        XCTAssertTrue(archivedTabsPanelModel.groupedRows.isEmpty)
     }
 
     func testRestoreTabDeletedFromYesterday() {

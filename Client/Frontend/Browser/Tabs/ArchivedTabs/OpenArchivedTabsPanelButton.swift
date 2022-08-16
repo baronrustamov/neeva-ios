@@ -6,12 +6,10 @@ import Defaults
 import Shared
 import SwiftUI
 
-struct ArchivedTabsView: View {
+struct OpenArchivedTabsPanelButton: View {
     var containerGeometry: CGSize
     @EnvironmentObject var tabModel: TabCardModel
     @Environment(\.openArchivedTabsPanelView) private var openArchivedTabsPanelView
-
-    @Default(.archivedTabsDuration) var archivedTabsDuration
 
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
@@ -19,19 +17,15 @@ struct ArchivedTabsView: View {
                 .frame(width: containerGeometry.width, height: 8)
                 .padding(.horizontal, -CardGridUX.GridSpacing)
 
-            Button(
-                action: {
-                    openArchivedTabsPanelView()
-                },
-                label: {
-                    HStack {
-                        Spacer()
-                        Symbol(decorative: .clock)
-                        Text("Archived Tabs")
-                        Spacer()
-                    }
+            Button {
+                openArchivedTabsPanelView()
+            } label: {
+                HStack {
+                    Spacer()
+                    Label("Archived Tabs", systemSymbol: .clock)
+                    Spacer()
                 }
-            )
+            }
             .buttonStyle(.neeva(.secondary))
             .padding(16)
         }

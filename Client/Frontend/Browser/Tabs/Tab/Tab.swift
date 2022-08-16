@@ -15,7 +15,7 @@ private let log = Logger.browser
 func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
     var recent = tabs.first
     tabs.forEach { tab in
-        if let time = tab.lastExecutedTime, time > (recent?.lastExecutedTime ?? 0) {
+        if tab.lastExecutedTime > (recent?.lastExecutedTime ?? 0) {
             recent = tab
         }
     }
@@ -91,7 +91,7 @@ class Tab: NSObject, ObservableObject {
 
     @Published var favicon: Favicon?
 
-    var lastExecutedTime: Timestamp?
+    var lastExecutedTime: Timestamp = Date.nowMilliseconds()
     var sessionData: SessionData?
     fileprivate var lastRequest: URLRequest?
     var restoring: Bool = false
@@ -780,7 +780,7 @@ class Tab: NSObject, ObservableObject {
     func isIncluded(in tabSection: TabSection) -> Bool {
         // The fallback value won't be used. tab.lastExecutedTime is
         // guaranteed to be non-nil in configureTab()
-        let lastExecutedTime = lastExecutedTime ?? Date.nowMilliseconds()
+        let lastExecutedTime = lastExecutedTime
         return wasLastExecuted(
             in: tabSection, isPinned: isPinned, lastExecutedTime: lastExecutedTime)
     }
@@ -807,7 +807,7 @@ class Tab: NSObject, ObservableObject {
                 queries: queries.map { $0?.typed },
                 suggestedQueries: queries.map { $0?.suggested },
                 queryLocations: queries.map { $0?.location },
-                lastUsedTime: lastExecutedTime ?? Date.nowMilliseconds()
+                lastUsedTime: lastExecutedTime
             )
         }
     }

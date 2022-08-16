@@ -6,26 +6,13 @@ import Defaults
 import Shared
 import SwiftUI
 
-struct ArchivedTabsSectionHeader: View {
-    let section: ArchivedTabTimeSection
-
-    var body: some View {
-        HStack {
-            Text(section.rawValue)
-                .fontWeight(.medium)
-            Spacer()
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.leading)
-        .padding(.vertical, 8)
-    }
-}
-
 struct ArchivedTabsPanelView: View {
     @ObservedObject var model: ArchivedTabsPanelModel
+
     @Default(.archivedTabsDuration) var archivedTabsDuration
     @State var showArchivedTabsSettings = false
     @State private var confirmationShow = false
+
     let onDismiss: () -> Void
     private let clearAllArchiveButtonTitle = "Are you sure you want to close all archived tabs?"
 
@@ -41,16 +28,13 @@ struct ArchivedTabsPanelView: View {
     }
 
     var clearAllArchivesButton: some View {
-        HStack(spacing: 0) {
-            Text("Clear All Archived Tabs")
-                .withFont(.bodyLarge)
-                .foregroundColor(model.numOfArchivedTabs < 1 ? .tertiaryLabel : .red)
-                .fixedSize(horizontal: false, vertical: true)
-                .padding(.vertical, 10)
-            Spacer()
+        GroupedRowButtonView(
+            label: "Clear All Archived Tabs", symbol: .trash
+        ) {
+            confirmationShow = true
         }
-        .padding(.horizontal, 16)
-        .frame(height: 52)
+        .accentColor(model.numOfArchivedTabs < 1 ? .tertiaryLabel : .red)
+        .disabled(model.numOfArchivedTabs < 1)
     }
 
     var clearAllArchiveButtonText: String {
@@ -59,35 +43,23 @@ struct ArchivedTabsPanelView: View {
 
     var content: some View {
         ScrollView {
-            VStack(spacing: 0) {
-                Button(action: {
-                    showArchivedTabsSettings = true
-                }) {
-                    HStack(spacing: 0) {
-                        Text("Archive tabs")
-                            .withFont(.bodyLarge)
-                            .foregroundColor(.label)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .padding(.vertical, 10)
-                        Spacer()
-                        Text(archivedTabsLabel)
-                            .withFont(.bodyLarge)
-                            .foregroundColor(.secondaryLabel)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .padding(.vertical, 10)
-                            .padding(.horizontal, 12)
-                        Symbol(decorative: .chevronRight, size: 16)
-                            .foregroundColor(.secondaryLabel)
+            GroupedCell.Decoration {
+                VStack(spacing: 0) {
+                    GroupedRowButtonView(
+                        label: "Auto Archive Tabs", symbolLabel: archivedTabsLabel,
+                        symbol: .chevronRight
+                    ) {
+                        showArchivedTabsSettings = true
+                    }.accentColor(.label)
+
+                    NavigationLink(isActive: $showArchivedTabsSettings) {
+                        ArchivedTabSettings()
+                    } label: {
+                        EmptyView()
                     }
-                    .padding(.horizontal, 16)
-                    .frame(height: 52)
-                }
 
-                Color.groupedBackground.frame(height: 1)
+                    Color.groupedBackground.frame(height: 1)
 
-                Button(action: {
-                    confirmationShow = true
-                }) {
                     if #available(iOS 15.0, *) {
                         clearAllArchivesButton
                             .confirmationDialog(
@@ -112,9 +84,7 @@ struct ArchivedTabsPanelView: View {
                                     title: Text(clearAllArchiveButtonTitle),
                                     buttons: [
                                         .destructive(
-                                            Text(
-                                                clearAllArchiveButtonText
-                                            )
+                                            Text(clearAllArchiveButtonText)
                                         ) {
                                             model.clearArchivedTabs()
                                         },
@@ -124,37 +94,24 @@ struct ArchivedTabsPanelView: View {
                             }
                     }
                 }
-                .disabled(model.numOfArchivedTabs < 1)
-
-                NavigationLink(isActive: $showArchivedTabsSettings) {
-                    ArchivedTabSettings()
-                } label: {
-                    EmptyView()
-                }
-
-                Color.secondarySystemFill
-                    .frame(height: 8)
             }
 
-            // Archived tabs
             VStack(spacing: 0) {
-                ForEach(ArchivedTabTimeSection.allCases, id: \.self) { section in
-                    let itemsInSection = model.groupedSites.itemsForSection(section: section)
-
-                    if itemsInSection.count > 0 {
-                        Section(header: ArchivedTabsSectionHeader(section: section)) {
+                // None of the tabs will be today/yesterday, fine to just call for older tabs.
+                ForEach(model.groupedRows.itemsForSection(.older), id: \.self) { section in
+                    if section.data.count > 0 {
+                        Section(header: DateSectionHeaderView(text: section.dateString)) {
                             ArchivedTabsListSectionView(
-                                listSectionModel: ArchivedTabsListSectionViewModel(
-                                    itemsInSection: itemsInSection),
-                                tabManager: model.tabManager, section: section
-                            )
-                            .environmentObject(model)
+                                rows: section.data, tabManager: model.tabManager)
                         }
                     }
                 }
             }
-
         }
+        .padding(.horizontal)
+        .background(
+            Color.groupedBackground.ignoresSafeArea(.container)
+        )
     }
 
     var body: some View {
@@ -171,7 +128,7 @@ struct ArchivedTabsPanelView: View {
                     }
                 }
                 .introspectNavigationController { target in
-                    target.navigationBar.backgroundColor = UIColor.systemBackground
+                    target.navigationBar.backgroundColor = UIColor.systemGroupedBackground
                 }
         }
         .navigationViewStyle(.stack)

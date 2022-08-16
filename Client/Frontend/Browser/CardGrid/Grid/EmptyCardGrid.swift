@@ -32,7 +32,7 @@ struct EmptyCardGrid: View {
             .accessibilityLabel(
                 Text(isIncognito ? "Empty Card Grid (Incognito)" : "Empty Card Grid"))
             if showArchivedTabsView {
-                ArchivedTabsView(containerGeometry: containerGeom)
+                OpenArchivedTabsPanelButton(containerGeometry: containerGeom)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
