@@ -91,7 +91,7 @@ class CookieCutterHelper: TabContentScript {
                 if let provider = data["provider"] as? String {
                     let attributes = [
                         ClientLogCounterAttribute(
-                            key: LogConfig.Attribute.CookieCutterProviderUsed,
+                            key: LogConfig.CookieCutterAttribute.CookieCutterProviderUsed,
                             value: provider
                         )
                     ]
