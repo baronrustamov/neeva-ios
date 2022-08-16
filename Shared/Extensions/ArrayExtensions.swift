@@ -2,8 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
-
 extension Array where Element: Any {
     /// Checks if an item exists at an index before attempting to read it.
     /// If element does not exists, returns nil.

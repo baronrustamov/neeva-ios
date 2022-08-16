@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import WebKit
 
 open class UserAgent {
     public static let uaBitSafari = "Safari/605.1.15"

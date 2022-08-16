@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import Combine
-import Foundation
 
 class SpaceServiceProd: SpaceService {
     func addPublicACL(spaceID: String) -> AddPublicACLRequest? {

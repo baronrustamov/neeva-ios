@@ -4,7 +4,6 @@
 
 import Apollo
 import Foundation
-import SwiftUI
 
 private let log = Logger.browser
 
