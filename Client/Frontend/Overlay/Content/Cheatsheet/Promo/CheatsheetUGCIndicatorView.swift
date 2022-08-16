@@ -11,7 +11,7 @@ private enum CheatsheetUGCIndicatorUX {
 }
 
 struct CheatsheetUGCIndicatorView: View {
-    @State var impressionTimer: Timer? = nil
+    @State var impressionTimer: Timer?
 
     var body: some View {
         HStack(alignment: .center, spacing: 10) {

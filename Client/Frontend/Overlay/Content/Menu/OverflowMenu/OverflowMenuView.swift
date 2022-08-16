@@ -15,8 +15,8 @@ enum OverflowMenuUX {
 
 struct OverflowMenuButtonView: View {
     let label: LocalizedStringKey
-    var symbol: SFSymbol? = nil
-    var nicon: Nicon? = nil
+    var symbol: SFSymbol?
+    var nicon: Nicon?
     let action: () -> Void
     let longPressAction: (() -> Void)?
     var isIncognito: Bool

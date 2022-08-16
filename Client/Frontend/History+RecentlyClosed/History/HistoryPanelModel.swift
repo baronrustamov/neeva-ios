@@ -126,7 +126,7 @@ class HistoryPanelModel: ObservableObject {
     // MARK: - User Action
     // History Items
     func removeItemFromHistory(site: Site) {
-        profile.history.removeHistoryForURL(site.url).uponQueue(.main) { result in
+        profile.history.removeHistoryForURL(site.url).uponQueue(.main) { _ in
             self.groupedSites.remove(site)
         }
     }

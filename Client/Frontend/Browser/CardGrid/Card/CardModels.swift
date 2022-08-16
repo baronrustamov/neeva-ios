@@ -216,20 +216,20 @@ class TabCardModel: CardDropDelegate, CardModel {
                     return details.isSelected
                 case .tabGroupGridRow(let details, let range):
                     return details.allDetails[range].contains { $0.isSelected }
-                case .sectionHeader(_):
+                case .sectionHeader:
                     return false
                 }
             }
 
             var numTabs: Int {
                 switch self {
-                case .tab(_):
+                case .tab:
                     return 1
                 case .tabGroupInline(let details):
                     return details.allDetails.count
                 case .tabGroupGridRow(_, let range):
                     return range.count
-                case .sectionHeader(_):
+                case .sectionHeader:
                     return 0
                 }
             }
@@ -414,7 +414,7 @@ class TabCardModel: CardDropDelegate, CardModel {
         allDetails = manager.activeTabs.map { TabCardDetails(tab: $0, manager: manager) }
 
         allTabGroupDetails =
-            manager.activeTabGroups.map { id, group in
+            manager.activeTabGroups.map { _, group in
                 TabGroupCardDetails(tabGroup: group, tabManager: manager)
             }
 
@@ -581,12 +581,12 @@ class SpaceCardModel: CardModel {
     var viewModel: SpaceCardViewModel = SpaceCardViewModel()
 
     var thumbnailURLCandidates = [URL: [URL]]()
-    private var anyCancellable: AnyCancellable? = nil
-    private var recommendationSubscription: AnyCancellable? = nil
-    private var editingSubscription: AnyCancellable? = nil
+    private var anyCancellable: AnyCancellable?
+    private var recommendationSubscription: AnyCancellable?
+    private var editingSubscription: AnyCancellable?
     private var detailsSubscriptions: Set<AnyCancellable> = Set()
     private var mutationSubscriptions: Set<AnyCancellable> = Set()
-    private var spaceNeedsRefresh: String? = nil
+    private var spaceNeedsRefresh: String?
     private var scene: UIScene?
 
     init(manager: SpaceStore = SpaceStore.shared, scene: UIScene?) {

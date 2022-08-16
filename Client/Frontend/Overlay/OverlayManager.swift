@@ -75,7 +75,7 @@ class OverlayManager: ObservableObject {
     @Published private(set) var displaying = false
     @Published var offset: CGFloat = 0
     @Published var opacity: CGFloat = 1
-    @Published var animationCompleted: (() -> Void)? = nil
+    @Published var animationCompleted: (() -> Void)?
     @Published var offsetForBottomBar = false
     @Published var hideBottomBar = false
     @Published var isPresentedViewControllerVisible = false

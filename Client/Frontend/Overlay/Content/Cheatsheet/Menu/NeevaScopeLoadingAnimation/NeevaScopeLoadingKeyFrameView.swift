@@ -42,7 +42,7 @@ public class NeevaScopeKeyFrameView: UIView {
         createViews()
         addSubviews()
         layer.name = "neevaScopeSceneLayer"
-        //scale(to: frame.size)
+        // scale(to: frame.size)
     }
 
     private func fillView() {

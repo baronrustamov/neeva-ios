@@ -153,7 +153,7 @@ open class FaviconSupport: NSObject {
         // cache found, don't download
         guard !checkImageCache(imageKey: imageKey) else { return }
         // no cache found, download image
-        SDWebImageDownloader.shared.downloadImage(with: imageURL) { image, data, err, value in
+        SDWebImageDownloader.shared.downloadImage(with: imageURL) { _, data, err, _ in
             guard err == nil else { return }
             do {
                 // save image to disk cache

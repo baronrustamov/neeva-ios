@@ -287,7 +287,7 @@ public struct SendFeedbackView: View {
                         }
                     )
                     .padding(.vertical, 7)
-                    .onChange(of: urlString) { value in
+                    .onChange(of: urlString) { _ in
                         self.url = URL(string: urlString)
                     }
                 }

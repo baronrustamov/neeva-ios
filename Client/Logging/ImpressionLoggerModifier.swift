@@ -9,7 +9,7 @@ import SwiftUI
 private let defaultTimeInterval: TimeInterval = 2
 
 struct ImpressionLoggerModifier: ViewModifier {
-    @State var impressionTimer: Timer? = nil
+    @State var impressionTimer: Timer?
 
     let timeInterval: TimeInterval
 

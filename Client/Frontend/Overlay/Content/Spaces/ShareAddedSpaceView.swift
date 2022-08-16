@@ -11,7 +11,7 @@ struct ShareAddedSpaceView: View {
     @EnvironmentObject private var chromeModel: TabChromeModel
     @EnvironmentObject private var browserModel: BrowserModel
 
-    @State var subscription: AnyCancellable? = nil
+    @State var subscription: AnyCancellable?
     @State var refreshing = false
     @State var presentingShareUI: Bool = true
     @ObservedObject var request: AddToSpaceRequest

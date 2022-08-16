@@ -237,8 +237,8 @@ class Tab: NSObject, ObservableObject {
             updateCanGoBack()
         }
     }
-    var parentUUID: String? = nil
-    var parentSpaceID: String? = nil
+    var parentUUID: String?
+    var parentSpaceID: String?
 
     // All tabs with the same `rootUUID` are considered part of the same group.
     var rootUUID: String = UUID().uuidString
@@ -750,7 +750,7 @@ class Tab: NSObject, ObservableObject {
             let webView = webView
         {
             webView.evaluateJavaScript(domain.script) {
-                [weak browserViewController, weak self] (result, error) in
+                [weak browserViewController, weak self] (result, _) in
                 guard let bvc = browserViewController, let self = self else { return }
                 guard let linkData = result as? [[String]] else {
                     bvc.showAddToSpacesSheet(

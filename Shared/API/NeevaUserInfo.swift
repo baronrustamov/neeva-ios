@@ -57,7 +57,7 @@ public class NeevaUserInfo: ObservableObject {
             self.connection = reachability.connection
             self.fetch()
         }
-        reachability.whenUnreachable = { reachability in
+        reachability.whenUnreachable = { _ in
             self.connection = nil
         }
         try! reachability.startNotifier()

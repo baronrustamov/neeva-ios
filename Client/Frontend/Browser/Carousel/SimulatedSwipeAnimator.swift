@@ -72,7 +72,7 @@ class SimulatedSwipeAnimator: NSObject {
     }
 }
 
-//MARK: Private Helpers
+// MARK: Private Helpers
 extension SimulatedSwipeAnimator {
     fileprivate func animateBackToCenter(canceledSwipe: Bool) {
         if canceledSwipe {
@@ -130,7 +130,7 @@ extension SimulatedSwipeAnimator {
     }
 }
 
-//MARK: Selectors
+// MARK: Selectors
 extension SimulatedSwipeAnimator {
     @objc func didPan(_ recognizer: UIPanGestureRecognizer!) {
         let translation = recognizer.translation(in: animatingView)

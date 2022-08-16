@@ -51,13 +51,13 @@ class TrackingStatsViewModel: ObservableObject {
     }
     @Published var showTrackingStatsViewPopover = false
 
-    private var selectedTab: Tab? = nil {
+    private var selectedTab: Tab? {
         didSet {
             listenForStatUpdates()
         }
     }
 
-    private var selectedTabURL: URL? = nil {
+    private var selectedTabURL: URL? {
         didSet {
             guard let selectedTabURL = selectedTabURL, selectedTabURL.isWebPage() else {
                 return
@@ -71,7 +71,7 @@ class TrackingStatsViewModel: ObservableObject {
     }
 
     private var subscriptions: Set<AnyCancellable> = []
-    private var statsSubscription: AnyCancellable? = nil
+    private var statsSubscription: AnyCancellable?
 
     /// FOR TESTING ONLY
     private(set) var trackers: [TrackingEntity] {

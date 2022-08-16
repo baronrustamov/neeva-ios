@@ -284,7 +284,7 @@ struct QuerySuggestionView: View {
                 SpaceIconView()
             case .standard:
                 Symbol(decorative: .magnifyingglass)
-            case .operator, .unknown, .__unknown(_):  // seemingly unused
+            case .operator, .unknown, .__unknown:  // seemingly unused
                 Symbol(decorative: .questionmarkCircle).foregroundColor(.secondaryLabel)
             }
         }

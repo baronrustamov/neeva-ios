@@ -108,7 +108,7 @@ struct AssetView: View {
 public class AssetGroup: ThumbnailModel, Identifiable {
     public var id: String = UUID().uuidString
     var allDetails: [Asset] = []
-    var assetStoreSubscription: AnyCancellable? = nil
+    var assetStoreSubscription: AnyCancellable?
     var collections: [String] = []
     var allDetailsWithExclusionList: [Asset] {
         return allDetails

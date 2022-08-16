@@ -325,7 +325,7 @@ class SpaceEntityThumbnail: CardDetails, AccessingManagerProvider {
 
     var id: String
     var item: SpaceEntityData? { manager.get(for: id) }
-    var closeButtonImage: UIImage? = nil
+    var closeButtonImage: UIImage?
     var accessibilityLabel: String = "Space Item"
 
     var ACL: SpaceACLLevel {
@@ -402,7 +402,7 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
     @Published var allDetails: [SpaceEntityThumbnail] = []
     @Published var allDetailsWithExclusionList: [SpaceEntityThumbnail] = []
     @Published var item: Space?
-    @Published private(set) var refreshSpaceSubscription: AnyCancellable? = nil
+    @Published private(set) var refreshSpaceSubscription: AnyCancellable?
 
     var isFollowing: Bool {
         manager.allSpaces.contains { $0.id.id == id }

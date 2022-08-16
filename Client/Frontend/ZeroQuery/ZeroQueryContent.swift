@@ -9,7 +9,7 @@ import SwiftUI
 
 extension EnvironmentValues {
     private struct HideTopSiteKey: EnvironmentKey {
-        static var defaultValue: ((Site) -> Void)? = nil
+        static var defaultValue: ((Site) -> Void)?
     }
 
     public var zeroQueryHideTopSite: (Site) -> Void {

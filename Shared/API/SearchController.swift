@@ -240,9 +240,7 @@ public enum NeevaScopeSearch {
         public let secondarySocials: [SocialNetwork]
     }
 
-    public class SearchController:
-        QueryController<SearchQuery, [SearchController.RichResult]>
-    {
+    public class SearchController: QueryController<SearchQuery, [SearchController.RichResult]> {
         public struct RichResult: Identifiable {
             public var id = UUID()
             public var result: RichSearchResult

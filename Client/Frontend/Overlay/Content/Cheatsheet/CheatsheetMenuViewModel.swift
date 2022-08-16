@@ -57,7 +57,7 @@ class CheatsheetMenuViewModel: ObservableObject {
     // Workaround to indicate to SwiftUI view if it should log empty cheatsheet
     private var hasFetchedOnce = false
     /// - Warning: Do not access this directly. Use MainActor `journeyID` instead
-    private var _journeyID: UUID? = nil
+    private var _journeyID: UUID?
     private var journeyID: UUID? {
         get {
             precondition(Thread.isMainThread)

@@ -308,7 +308,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
                     else { return }
                     let configuration = URLSessionConfiguration.ephemeral
                     makeURLSession(userAgent: UserAgent.getUserAgent(), configuration: .ephemeral)
-                        .dataTask(with: url) { (data, response, error) in
+                        .dataTask(with: url) { (_, _, _) in
                             print(configuration.httpCookieStorage?.cookies ?? [])
                         }
                 }
@@ -779,7 +779,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         if let atIndex = atIndex, atIndex <= tabs.count {
             tabs.insert(tab, at: atIndex)
         } else {
-            var insertIndex: Int? = nil
+            var insertIndex: Int?
 
             // Add tab to be root of a tab group if it follows the rule for the nytimes case.
             // See TabGroupTests.swift for example.
@@ -1347,7 +1347,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     // (`restoreTabs(_:) instead.
     func testRestoreTabs() {
         assert(AppConstants.IsRunningTest)
-        let _ = store.restoreStartupTabs(
+        _ = store.restoreStartupTabs(
             for: SceneDelegate.getCurrentScene(for: nil),
             clearIncognitoTabs: false,
             tabManager: self

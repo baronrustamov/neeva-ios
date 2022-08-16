@@ -14,7 +14,7 @@ class SwitcherToolbarModel: ObservableObject {
     private var selectedTabListener: AnyCancellable?
 
     @Published var tabIsSelected = false
-    @Published var dragOffset: CGFloat? = nil
+    @Published var dragOffset: CGFloat?
 
     init(
         tabManager: TabManager,

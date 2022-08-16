@@ -610,7 +610,7 @@ public struct InternalURL {
     }
 }
 
-//MARK: Private Helpers
+// MARK: Private Helpers
 extension URL {
     fileprivate func publicSuffixFromHost(
         _ host: String, withAdditionalParts additionalPartCount: Int

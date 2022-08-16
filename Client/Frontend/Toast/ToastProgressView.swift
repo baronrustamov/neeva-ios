@@ -26,7 +26,7 @@ enum ToastProgressStatus {
 
 class ToastProgressViewModel: ObservableObject {
     @Published var status: ToastProgressStatus = .inProgress
-    @Published var progress: Double? = nil
+    @Published var progress: Double?
 
     var downloadListener: AnyCancellable?
 }

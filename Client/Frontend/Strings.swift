@@ -69,7 +69,7 @@ extension Strings {
         comment: "Title for popup action menu to clear recent history.")
 }
 
-//Hotkey Titles
+// Hotkey Titles
 extension Strings {
     public static let ReloadPageTitle = MZLocalizedString(
         "Hotkeys.Reload.DiscoveryTitle", value: "Reload Page",
@@ -110,7 +110,7 @@ extension Strings {
         comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
 }
 
-//Clipboard Toast
+// Clipboard Toast
 extension Strings {
     public static let GoToCopiedLink = MZLocalizedString(
         "ClipboardToast.GoToCopiedLink.Title", value: "Go to copied link?",
@@ -198,7 +198,7 @@ extension Strings {
         comment: "Message in error prompt explaining why the URL is invalid.")
 }
 
-//Today Widget Strings - [New Search - Private Search]
+// Today Widget Strings - [New Search - Private Search]
 extension String {
     // Widget - Shared
 

@@ -423,7 +423,7 @@ struct ShareSpaceView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onChange(
             of: emailText,
-            perform: { value in
+            perform: { _ in
                 guard !emailText.isEmpty else {
                     suggestedContacts = []
                     return

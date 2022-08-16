@@ -6,7 +6,7 @@ import Combine
 import SwiftUI
 
 public class AddToSpaceRequest: ObservableObject {
-    var cancellable: Cancellable? = nil
+    var cancellable: Cancellable?
 
     public let title: String
     public let description: String?  // meta description
@@ -133,7 +133,7 @@ public class AddToSpaceRequest: ObservableObject {
                     self.state = .failed
                 }
                 break
-            case .success(_):
+            case .success:
                 self.targetSpaceID = id
                 withAnimation {
                     self.state = .savedToSpace
@@ -163,7 +163,7 @@ public class AddToSpaceRequest: ObservableObject {
                     self.state = .failed
                 }
                 break
-            case .success(_):
+            case .success:
                 self.targetSpaceID = id
                 withAnimation {
                     self.state = .deletedFromSpace
@@ -182,7 +182,7 @@ public struct AddToSpaceView: View {
     @ObservedObject var spaceStore = SpaceStore.shared
 
     @State private var searchTerm = ""
-    @State private var backgroundColor: Color? = nil
+    @State private var backgroundColor: Color?
     @State private var height: CGFloat = 0
 
     let onDismiss: () -> Void
@@ -263,7 +263,7 @@ public struct AddToSpaceView: View {
                 }
             } else {
                 let spaceList = VStack {
-                    if case .failed(_) = spaceStore.state {
+                    if case .failed = spaceStore.state {
                     } else {
                         searchHeader
                     }

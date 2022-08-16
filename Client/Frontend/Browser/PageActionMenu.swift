@@ -10,7 +10,7 @@ extension BrowserViewController {
         presentableVC: UIViewController & UIPopoverPresentationControllerDelegate
     ) {
         let helper = ShareExtensionHelper(url: fileURL, tab: tabManager.selectedTab)
-        let controller = helper.createActivityViewController { completed, activityType in
+        let controller = helper.createActivityViewController { completed, _ in
             print("Shared downloaded file: \(completed)")
         }
 

@@ -110,7 +110,7 @@ extension ActiveLensBangType {
         switch self {
         case .bang: return "!"
         case .lens: return "@"
-        case .unknown, .__unknown(_): return ""
+        case .unknown, .__unknown: return ""
         }
     }
     // TODO: use Nicon? / customize to favicon
@@ -118,7 +118,7 @@ extension ActiveLensBangType {
         switch self {
         case .bang: return .exclamationmarkCircle
         case .lens: return .at
-        case .unknown, .__unknown(_): return .questionmarkDiamondFill
+        case .unknown, .__unknown: return .questionmarkDiamondFill
         }
     }
 }

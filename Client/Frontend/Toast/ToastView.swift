@@ -13,7 +13,7 @@ enum ToastViewUX {
 
 struct ToastStateContent {
     var text: LocalizedStringKey?
-    var description: (() -> AnyView)? = nil
+    var description: (() -> AnyView)?
     var buttonText: LocalizedStringKey?
     var buttonAction: (() -> Void)?
     var keyboardShortcut: KeyboardShortcut?

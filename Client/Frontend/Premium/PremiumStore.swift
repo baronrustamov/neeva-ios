@@ -140,10 +140,10 @@ class PremiumStore: ObservableObject {
                             )
                         ) { result in
                             switch result {
-                            case .failure(_):
+                            case .failure:
                                 // TODO: What should we do in this case? The user has paid, but our API call failed.
                                 break
-                            case .success(_):
+                            case .success:
                                 break
                             }
 
@@ -157,7 +157,7 @@ class PremiumStore: ObservableObject {
                         }
 
                         await transaction.finish()
-                    case .unverified(_, _):
+                    case .unverified:
                         /*
                          NOTE: If we got here StoreKitV2 was unable to verify the JWT
                          token, probably a very rare event.

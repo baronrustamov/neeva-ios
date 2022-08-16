@@ -178,9 +178,9 @@ public class SpaceStore: ObservableObject {
     public static let dailyDigestID = "spaceDailyDigest"
     public static let dailyDigestSeeMoreID = "\(SpaceStore.dailyDigestID)SeeMore"
 
-    private static var subscription: AnyCancellable? = nil
+    private static var subscription: AnyCancellable?
     private var refreshCompletionHandlers: [() -> Void] = []
-    public var suggestedSpaceID: String? = nil
+    public var suggestedSpaceID: String?
 
     public init(suggestedID: String? = nil) {
         self.suggestedSpaceID = suggestedID

@@ -40,7 +40,7 @@ extension UIImage {
     }
 
     public func createScaled(_ size: CGSize) -> UIImage {
-        UIGraphicsImageRenderer(size: size).image { (ctx) in
+        UIGraphicsImageRenderer(size: size).image { (_) in
             draw(in: CGRect(size: size))
         }
     }

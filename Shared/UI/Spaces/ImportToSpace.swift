@@ -54,7 +54,7 @@ public class SpaceImportHandler {
         """
     let title: String
     var data: [SpaceLinkData]
-    private var completion: (() -> Void)? = nil
+    private var completion: (() -> Void)?
     public var spaceURL: URL {
         guard let id = spaceID else {
             return NeevaConstants.appSpacesURL
@@ -63,8 +63,8 @@ public class SpaceImportHandler {
         return NeevaConstants.appSpacesURL / id
     }
 
-    private var cancellable: Cancellable? = nil
-    private var spaceID: String? = nil
+    private var cancellable: Cancellable?
+    private var spaceID: String?
 
     public init(title: String, data: [[String]]) {
         self.data = data.map {
@@ -88,7 +88,7 @@ public class SpaceImportHandler {
             case .success(let data):
                 self.spaceID = data.createSpace
                 self.addNext()
-            case .failure(_):
+            case .failure:
                 self.completion?()
             }
         }
@@ -109,10 +109,10 @@ public class SpaceImportHandler {
         ) { result in
             self.cancellable = nil
             switch result {
-            case .failure(_):
+            case .failure:
                 self.completion?()
                 break
-            case .success(_):
+            case .success:
                 self.addNext()
             }
         }

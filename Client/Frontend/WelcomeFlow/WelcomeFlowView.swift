@@ -116,7 +116,7 @@ struct WelcomeFlowView: View {
              will trigger initialization.
              */
             if #available(iOS 15.0, *) {
-                let _ = PremiumStore.shared.products.count
+                _ = PremiumStore.shared.products.count
 
                 /*
                  TODO: We should try check if a user has an active entitlement

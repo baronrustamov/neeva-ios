@@ -295,7 +295,7 @@ class CheatsheetPromoModel: ObservableObject {
         uiUpdatePublisher.send(.syncUGCState(state: cachedState, url: url))
     }
 
-    //MARK: - Interaction Methods
+    // MARK: - Interaction Methods
     func openSheet(on url: URL?) {
         precondition(Thread.isMainThread)
         switch promoType {

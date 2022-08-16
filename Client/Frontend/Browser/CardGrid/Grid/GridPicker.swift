@@ -105,7 +105,7 @@ struct SwipeToSwitchToSpacesGesture: ViewModifier {
                 // Divide by 2.5 to follow drag more accurately
                 horizontalOffsetChanged(
                     fromPicker ? horizontalAmount : (-horizontalAmount / 2.5))
-            }.onEnded { value in
+            }.onEnded { _ in
                 horizontalOffsetChanged(nil)
             }
     }

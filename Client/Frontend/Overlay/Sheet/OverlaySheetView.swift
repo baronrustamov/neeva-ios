@@ -47,10 +47,10 @@ struct OverlaySheetView<Content: View, HeaderContent: View>: View {
     @State private var contentHeight: CGFloat = 0
     @State private var headerHeight: CGFloat = 0
     @State private var minHeightToFillScrollView: CGFloat = 0
-    @State private var title: LocalizedStringKey? = nil
+    @State private var title: LocalizedStringKey?
     @State private var isFixedHeight: Bool = false
     @State private var bottomSafeArea: CGFloat = 0
-    @State private var middlePreferredHeight: CGFloat? = nil
+    @State private var middlePreferredHeight: CGFloat?
     @State private var childIgnoreSafeArea: Edge.Set = []
 
     let style: OverlayStyle
@@ -219,7 +219,7 @@ struct OverlaySheetView<Content: View, HeaderContent: View>: View {
                 } else if !style.embedScrollView {
                     sheetContent
                 } else {
-                    GeometryReader { proxy in
+                    GeometryReader { _ in
                         ScrollView(
                             model.position == .top ? [.vertical] : [], showsIndicators: false
                         ) {

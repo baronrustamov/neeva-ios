@@ -22,7 +22,7 @@ struct AddOrUpdateSpaceContent: View {
         switch config {
         case .addSpaceItem:
             return "Add item"
-        case .updateSpaceItem(_):
+        case .updateSpaceItem:
             return "Edit item"
         case .updateSpace:
             return "Update Space"
@@ -287,7 +287,7 @@ struct AddOrUpdateSpaceView: View {
                             thumbnailModel.thumbnailData = []
                             spaceModel.detailedSpace?.updateDetails()
                         case .updateSpace:
-                            var thumbnail: String? = nil
+                            var thumbnail: String?
                             if let id = thumbnailModel.selectedSpaceThumbnailEntityID {
                                 thumbnail =
                                     space.contentData?.first(where: { $0.id == id })?.thumbnail

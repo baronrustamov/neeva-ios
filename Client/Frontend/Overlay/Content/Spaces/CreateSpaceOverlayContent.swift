@@ -9,7 +9,7 @@ import SwiftUI
 struct CreateSpaceOverlayContent: View {
     @Environment(\.hideOverlay) private var hideOverlay
     @EnvironmentObject var spaceModel: SpaceCardModel
-    @State private var subscription: AnyCancellable? = nil
+    @State private var subscription: AnyCancellable?
 
     var body: some View {
         if NeevaUserInfo.shared.isUserLoggedIn, !NeevaUserInfo.shared.isVerified {

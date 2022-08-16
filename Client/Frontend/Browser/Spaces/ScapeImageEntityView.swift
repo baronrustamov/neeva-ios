@@ -13,7 +13,7 @@ struct SpaceImageEntityView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            //To-Do: Fix resize issue
+            // To-Do: Fix resize issue
             AnimatedImage(url: url)
                 .resizable()
                 .scaledToFit()

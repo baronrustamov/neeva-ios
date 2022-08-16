@@ -38,7 +38,7 @@ where Mutation: GraphQLMutation {
             self.withOptionalAnimation {
                 self.cancellable = nil
                 switch result {
-                case .failure(_):
+                case .failure:
                     self.onUpdate(nil)
                 case .success(let data):
                     self.onSuccess()

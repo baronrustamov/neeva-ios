@@ -110,7 +110,7 @@ class PlaceViewModel: ObservableObject {
         )
         annotatedMapItems = [PlaceAnnotation(from: place)]
 
-        Self.geocoder.geocodeAddressString(place.address.full) { [self] placemarks, error in
+        Self.geocoder.geocodeAddressString(place.address.full) { [self] placemarks, _ in
             if let placemark = placemarks?.first {
                 self.resolvedPlaceMark = CLPlacemark(
                     location: CLLocation(

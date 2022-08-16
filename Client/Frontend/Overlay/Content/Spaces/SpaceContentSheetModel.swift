@@ -17,7 +17,7 @@ class SpaceContentSheetModel: ObservableObject {
     @Published private(set) var currentSpaceEntityDetail: SpaceEntityThumbnail?
     @Published var didUserDismiss: Bool = false
     private var subscriptions = Set<AnyCancellable>()
-    private var urlSubscription: AnyCancellable? = nil
+    private var urlSubscription: AnyCancellable?
     private var spaceModel: SpaceCardModel
 
     init(tabManager: TabManager, spaceModel: SpaceCardModel) {

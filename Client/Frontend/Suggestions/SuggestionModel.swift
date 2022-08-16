@@ -332,7 +332,7 @@ class SuggestionModel: ObservableObject {
         var request = URLRequest(url: suggestURL)
         request.httpMethod = "GET"
 
-        URLSession.shared.dataTask(with: request) { [self] (data, response, error) in
+        URLSession.shared.dataTask(with: request) { [self] (data, _, error) in
             guard error == nil, let data = data else { return }
             DispatchQueue.main.async { [self] in
                 xyzQuerySuggestions = []
@@ -593,7 +593,7 @@ class SuggestionModel: ObservableObject {
             if let index = querySuggestionIndexMap[suggestion.suggestedQuery] {
                 querySuggestionIndex = index
                 suggestedQuery = suggestion.suggestedQuery
-                if let memorizedUrl = memorizedSuggestionMap.first(where: { k, v in
+                if let memorizedUrl = memorizedSuggestionMap.first(where: { _, v in
                     v == suggestedQuery
                 }) {
                     suggestedUrl = memorizedUrl.key
@@ -835,9 +835,9 @@ extension SuggestionModel {
         var numberOfStockAnnotations = 0
         var numberOfDictionaryAnnotations = 0
 
-        suggestions.enumerated().forEach { (index, suggestion) in
+        suggestions.enumerated().forEach { (_, suggestion) in
             switch suggestion {
-            case .tabSuggestion(_):
+            case .tabSuggestion:
                 implLogAttributes.append(
                     ClientLogCounterAttribute(
                         key:
@@ -906,14 +906,14 @@ extension SuggestionModel {
                             value: SuggestionLoggingType.historySuggestion.rawValue)
                     )
                 }
-            case .bang(_):
+            case .bang:
                 implLogAttributes.append(
                     ClientLogCounterAttribute(
                         key:
                             "\(LogConfig.SuggestionAttribute.suggestionTypePosition)\(suggestionIdx)",
                         value: SuggestionLoggingType.bangSuggestion.rawValue)
                 )
-            case .lens(_):
+            case .lens:
                 implLogAttributes.append(
                     ClientLogCounterAttribute(
                         key:

@@ -38,7 +38,7 @@ class TabContainerModel: ObservableObject {
     @Published private(set) var currentContentUI: ContentUIType
 
     // periphery:ignore
-    private var subscription: AnyCancellable? = nil
+    private var subscription: AnyCancellable?
 
     private let zeroQueryModel: ZeroQueryModel
     let tabCardModel: TabCardModel

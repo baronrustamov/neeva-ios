@@ -17,7 +17,7 @@ struct WalletSequenceContent: View {
     @Environment(\.hideOverlay) private var hideOverlaySheet
     @ObservedObject var model: Web3Model
     @State var communityTrusted: Bool = false
-    @State var userSelectedChain: EthNode? = nil
+    @State var userSelectedChain: EthNode?
 
     var chainToUse: EthNode {
         userSelectedChain ?? model.currentSequence?.chain ?? .Ethereum

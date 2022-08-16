@@ -5,7 +5,7 @@
 import SwiftUI
 
 struct PopoverView<Content: View>: View {
-    @State private var title: LocalizedStringKey? = nil
+    @State private var title: LocalizedStringKey?
     @State private var safeAreaBottom: CGFloat = 0
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass

@@ -60,7 +60,7 @@ class SuggestedSearchesModel: ObservableObject {
             }
 
             var queries = Set<String>()
-            var topFrecentHistoryQuery: String? = nil
+            var topFrecentHistoryQuery: String?
             if let topFrecentHistorySite = topFrecentHistorySite,
                 let query = SearchEngine.current.queryForSearchURL(topFrecentHistorySite.url)
             {

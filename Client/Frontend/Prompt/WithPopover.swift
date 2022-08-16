@@ -25,7 +25,7 @@ enum WithPopoverColorMode {
 struct WithPopover<Content: View, PopoverContent: View>: View {
 
     @Binding var showPopover: Bool
-    var popoverSize: CGSize? = nil
+    var popoverSize: CGSize?
     let content: () -> Content
     let popoverContent: () -> PopoverContent
     let backgroundMode: WithPopoverColorMode

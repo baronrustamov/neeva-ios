@@ -133,7 +133,7 @@ extension UserActivityHandler {
             : SDWebImageOptions.lowPriority
 
         let onCompletedPageFavicon: SDInternalCompletionBlock = {
-            (img, data, _, _, _, url) -> Void in
+            (img, _, _, _, _, _) -> Void in
             if let img = img {
                 completion(img)
             } else {

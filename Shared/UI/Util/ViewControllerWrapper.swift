@@ -136,7 +136,7 @@ struct ViewControllerWrapper_Presenter<Wrapper: ViewControllerWrapper>: View {
 
     var body: some View {
         // Reference `state` in the view body to make sure this view gets re-rendered whenever the state changes
-        let _ = state
+        _ = state
         // use an EmptyView here because calling `introspect` on `self` results in an infinitely-nested view tree that crashes the app
         return EmptyView().frame(width: 0, height: 0).introspect(selector: { $0 }) { view in
             guard let vc = findViewController(in: view) else {

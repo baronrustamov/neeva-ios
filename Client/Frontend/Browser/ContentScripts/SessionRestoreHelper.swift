@@ -33,8 +33,8 @@ class SessionRestoreHelper: TabContentScript {
                                 let query = sessionData.typedQueries[index]
                             else { break }
 
-                            var suggestedQuery: String? = nil
-                            var queryLocation: QueryForNavigation.Query.Location? = nil
+                            var suggestedQuery: String?
+                            var queryLocation: QueryForNavigation.Query.Location?
                             if sessionData.suggestedQueries.indices.contains(index) {
                                 suggestedQuery = sessionData.suggestedQueries[index]
                             }

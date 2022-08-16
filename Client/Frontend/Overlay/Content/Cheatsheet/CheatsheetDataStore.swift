@@ -4,7 +4,7 @@
 
 import Foundation
 
-//MARK: - Interface
+// MARK: - Interface
 private protocol Expirable {
     var hasExpired: Bool { get }
 }

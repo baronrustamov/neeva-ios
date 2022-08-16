@@ -53,7 +53,7 @@ struct SuggestionsList: View {
                 if !suggestionModel.xyzQuerySuggestions.isEmpty {
                     SuggestionsSection(header: "NFT Search from Neevaxyz") {
                         ForEach(Array(suggestionModel.xyzQuerySuggestions.enumerated()), id: \.0) {
-                            index, suggestion in
+                            _, suggestion in
                             SearchSuggestionView(suggestion)
                         }
                     }

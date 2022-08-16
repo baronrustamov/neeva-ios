@@ -306,7 +306,7 @@ struct SafariVCLink: View {
     let title: LocalizedStringKey
     let url: URL
 
-    private var _token: Any? = nil
+    private var _token: Any?
     @available(iOS 15.0, *)
     var token: SFSafariViewController.PrewarmingToken? {
         _token as! SFSafariViewController.PrewarmingToken?

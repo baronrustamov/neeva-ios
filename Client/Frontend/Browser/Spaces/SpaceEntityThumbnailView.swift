@@ -9,7 +9,7 @@ struct SpaceEntityThumbnailView: View {
     let details: SpaceEntityThumbnail
 
     var body: some View {
-        if case .techDoc(_) = details.data.previewEntity {
+        if case .techDoc = details.data.previewEntity {
             EmptyView()
         } else {
             details.thumbnail.frame(

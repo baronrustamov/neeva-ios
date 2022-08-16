@@ -133,7 +133,7 @@ struct OverlayView: View {
                             animationCompleted()
                         }
                     }
-                    .onChange(of: geom.safeAreaInsets.bottom) { newValue in
+                    .onChange(of: geom.safeAreaInsets.bottom) { _ in
                         safeArea = geom.safeAreaInsets.bottom
                         keyboardHidden = safeArea < 100
                     }

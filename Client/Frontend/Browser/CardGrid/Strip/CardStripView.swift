@@ -39,7 +39,7 @@ struct CardStripView: View {
     var content: some View {
         HStack(spacing: 0) {
             ForEach(model.rows) { row in
-                ForEach(Array(row.cells.enumerated()), id: \.0) { index, details in
+                ForEach(Array(row.cells.enumerated()), id: \.0) { _, details in
                     switch details {
                     case .tabGroupInline(let groupDetails):
                         CardStripTabGroupCardView(groupDetails: groupDetails)

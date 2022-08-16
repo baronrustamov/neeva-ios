@@ -32,7 +32,7 @@ class QueryForNavigation {
     }
 
     func findQueryForNavigation(with url: URL) -> Query? {
-        return queryForNavigations.first { key, value in
+        return queryForNavigations.first { key, _ in
             key.url == url
         }?.value
     }

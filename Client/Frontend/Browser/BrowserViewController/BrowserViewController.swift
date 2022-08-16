@@ -267,7 +267,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
             hideOverlayPopoverViewController()
         }
 
-        coordinator.animate { [self] context in
+        coordinator.animate { [self] _ in
             browserModel.scrollingControlModel.updateMinimumZoom()
 
             if let popover = displayedPopoverController {
@@ -340,7 +340,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
         displayedPopoverController?.dismiss(animated: true, completion: nil)
 
-        coordinator.animate { [self] context in
+        coordinator.animate { [self] _ in
             browserModel.scrollingControlModel.showToolbars(animated: false)
         }
     }
@@ -535,7 +535,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
     override func viewDidAppear(_ animated: Bool) {
         if NeevaConstants.currentTarget != .xyz {
             if !Defaults[.introSeen] {
-                var startScreen: WelcomeFlowScreen? = nil
+                var startScreen: WelcomeFlowScreen?
 
                 if Defaults[.welcomeFlowRestoreToDefaultBrowser] {
                     Defaults[.welcomeFlowRestoreToDefaultBrowser] = false
@@ -935,7 +935,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
         }
 
         let controller = helper.createActivityViewController(appActivities: appActivities) {
-            [weak self] completed, _ in
+            [weak self] _, _ in
             guard let self = self else { return }
 
             // After dismissing, check to see if there were any prompts we queued up
@@ -1530,7 +1530,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
     fileprivate func getImageData(_ url: URL, success: @escaping (Data) -> Void) {
         makeURLSession(
             userAgent: UserAgent.getUserAgent(), configuration: URLSessionConfiguration.default
-        ).dataTask(with: url) { (data, response, error) in
+        ).dataTask(with: url) { (data, response, _) in
             if let _ = validatedHTTPResponse(response, statusCode: 200..<300), let data = data {
                 success(data)
             }
@@ -1605,7 +1605,7 @@ extension BrowserViewController {
             // TODO: Inject this as a ContentScript to avoid the delay here.
             webView.evaluateJavaScript(SpaceImportHandler.descriptionImageScript) {
                 [weak self]
-                (result, error) in
+                (result, _) in
 
                 guard let self = self else { return }
                 let output = result as? [[String]]

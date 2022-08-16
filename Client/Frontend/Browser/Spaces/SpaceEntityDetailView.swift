@@ -101,7 +101,7 @@ struct SpaceActionsModifier: ViewModifier {
 
     var isNewsItem: Bool {
         switch details.data.previewEntity {
-        case .newsItem(_):
+        case .newsItem:
             return true
         default:
             return false

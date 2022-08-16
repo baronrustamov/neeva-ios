@@ -13,9 +13,7 @@ enum SwipeUX {
     static let EdgeWidth: CGFloat = 30
 }
 
-class SimulatedSwipeController:
-    UIViewController, TabEventHandler, SimulateForwardAnimatorDelegate
-{
+class SimulatedSwipeController: UIViewController, TabEventHandler, SimulateForwardAnimatorDelegate {
     var model: SimulatedSwipeModel
     var animator: SimulatedSwipeAnimator!
     let blankView: UIView = {

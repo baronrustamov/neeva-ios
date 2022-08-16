@@ -20,7 +20,7 @@ enum FirstRunButtonActions {
     case signupWithApple(Bool?, String?, String?)
     case signupWithOther
     case skipToBrowser
-    case oktaSignup(String, String, String, Bool)  //email, first name, password, marketing option
+    case oktaSignup(String, String, String, Bool)  // email, first name, password, marketing option
     case oktaSignin(String)  // email
     case oauthWithProvider(NeevaConstants.OAuthProvider, Bool, String, String)
     case oktaAccountCreated(String)  // token

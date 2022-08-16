@@ -127,7 +127,7 @@ struct SpaceContainerView: View {
 // Allows the NavigationView to keep the swipe back interaction,
 // while also hiding the navigation bar.
 
-//To-Do: Figurate a better way to do
+// To-Do: Figurate a better way to do
 extension UINavigationController {
     override open func viewDidLoad() {
         super.viewDidLoad()
