@@ -408,6 +408,7 @@ public enum LogConfig {
 
         // MARK: Cookie Cutter
         case CookieNoticeHandled
+        case ToggleTrackingProtection
 
         // MARK: Archived Tabs
         case clearArchivedTabs
@@ -503,6 +504,7 @@ public enum LogConfig {
         for path: LogConfig.Interaction
     ) -> Bool {
         let category = LogConfig.category(for: path)
+
         let validCategories: Set<LogConfig.InteractionCategory> = [
             .FirstRun,
             .Stability,
@@ -518,6 +520,10 @@ public enum LogConfig {
 
         let validInteraction =
             path == .SpacesLoginRequired || path == .SpacesRecommendedDetailUIVisited
+
+        if path == .ToggleTrackingProtection {
+            return false
+        }
 
         return validCategories.contains(category) || validInteraction
     }
@@ -797,6 +803,8 @@ public enum LogConfig {
 
         // MARK: Cookie Cutter
         case .CookieNoticeHandled: return .CookieCutter
+        case .ToggleTrackingProtection: return .CookieCutter
+
         // MARK: Archived Tabs
         case .clearArchivedTabs: return .ArchiveTab
 
@@ -859,9 +867,6 @@ public enum LogConfig {
         /// Attribution Token Error Type
         public static let AttributionTokenErrorType = "AttributionTokenErrorType"
 
-        /// The name of the Cookie Cutter provider that was used.
-        public static let CookieCutterProviderUsed = "CookieCutterProviderUsed"
-
         /// First Run Logging Error
         public static let FirstRunLogErrorMessage = "FirstRunLogErrorMessage"
 
@@ -877,6 +882,15 @@ public enum LogConfig {
 
         /// Premium attributes
         public static let subscriptionPlan = "SubscriptionPlan"
+    }
+
+    public enum CookieCutterAttribute {
+        public static let adBlockEnabled = "adBlockEnabled"
+        public static let cookieCutterToggleState = "cookieCutterToggleState"
+        public static let trackingProtectionDomain = "trackingProtectionDomain"
+
+        /// The name of the Cookie Cutter provider that was used.
+        public static let CookieCutterProviderUsed = "CookieCutterProviderUsed"
     }
 
     public enum UIInteractionAttribute {

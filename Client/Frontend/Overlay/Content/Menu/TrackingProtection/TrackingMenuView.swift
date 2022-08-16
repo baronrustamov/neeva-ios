@@ -44,6 +44,20 @@ class TrackingStatsViewModel: ObservableObject {
                     return
                 }
 
+                ClientLogger.shared.logCounter(
+                    .ToggleTrackingProtection,
+                    attributes: [
+                        ClientLogCounterAttribute(
+                            key: LogConfig.CookieCutterAttribute.adBlockEnabled,
+                            value: String(Defaults[.adBlockEnabled])),
+                        ClientLogCounterAttribute(
+                            key: LogConfig.CookieCutterAttribute.cookieCutterToggleState,
+                            value: String(self.preventTrackersForCurrentPage)),
+                        ClientLogCounterAttribute(
+                            key: LogConfig.CookieCutterAttribute.trackingProtectionDomain,
+                            value: domain),
+                    ])
+
                 self.selectedTab?.contentBlocker?.notifiedTabSetupRequired()
                 self.selectedTab?.reload()
             }
