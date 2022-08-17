@@ -117,31 +117,15 @@ struct Card<Details>: View where Details: CardDetails {
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(details.accessibilityLabel)
         .modifier(ActionsModifier(close: details.closeButtonImage == nil ? nil : details.onClose))
+        .modifier(
+            CloseButtonModifier(
+                details: details, animate: animate, showGrid: browserModel.showGrid,
+                dragToClose: dragToClose)
+        )
         .accessibilityAddTraits(.isButton)
         .accesibilityFocus(
             shouldFocus: details.isSelected, trigger: cardTransitionModel.state == .hidden
         )
-        .if(let: details.closeButtonImage) { buttonImage, view in
-            view
-                .overlay(
-                    HoverEffectButton(effect: .lift, action: details.onClose) {
-                        Image(uiImage: buttonImage).resizable().renderingMode(.template)
-                            .scaledToFit()
-                            .foregroundColor(.secondaryLabel)
-                            .padding(6)
-                            .frame(width: CardUX.CloseButtonSize, height: CardUX.CloseButtonSize)
-                            .background(Color(UIColor.systemGray6))
-                            .clipShape(Circle())
-                            .padding(6)
-                            .opacity(animate && !browserModel.showGrid ? 0 : 1)
-                    }
-                    .accessibilityHidden(true),  // use the Close action instead
-                    alignment: .topTrailing
-                )
-                .if(dragToClose) { view in
-                    view.modifier(DragToCloseInteraction(action: details.onClose))
-                }
-        }
         .if(!animate) { view in
             view
                 .scaleEffect(isPressed ? 0.95 : 1)
@@ -281,6 +265,43 @@ struct Card<Details>: View where Details: CardDetails {
                         // remove padding of selected tab
                         .padding(details.isSelected ? -1.5 : 0)
                 }
+        }
+    }
+
+    private struct CloseButtonModifier<Details>: ViewModifier where Details: CardDetails {
+        @ObservedObject var details: Details
+        let animate: Bool
+        let showGrid: Bool
+        let dragToClose: Bool
+
+        private var closeButton: some View {
+            HoverEffectButton(effect: .lift, action: details.onClose) {
+                Image(uiImage: details.closeButtonImage!)
+                    .resizable()
+                    .renderingMode(.template)
+                    .scaledToFit()
+                    .foregroundColor(.secondaryLabel)
+                    .padding(6)
+                    .frame(width: CardUX.CloseButtonSize, height: CardUX.CloseButtonSize)
+                    .background(Color(UIColor.systemGray6))
+                    .clipShape(Circle())
+                    .padding(6)
+                    .opacity(animate && !showGrid ? 0 : 1)
+                    .transition(.identity.combined(with: .opacity))
+                    .animation(CardTransitionUX.animation)
+            }.accessibilityHidden(true)
+        }
+
+        func body(content: Content) -> some View {
+            if details.closeButtonImage != nil {
+                content
+                    .overlay(closeButton, alignment: .topTrailing)
+                    .if(dragToClose) { view in
+                        view.modifier(DragToCloseInteraction(action: details.onClose))
+                    }
+            } else {
+                content
+            }
         }
     }
 }
