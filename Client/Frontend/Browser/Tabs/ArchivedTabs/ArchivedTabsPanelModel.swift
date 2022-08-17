@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import Combine
+import Shared
 
 enum ArchivedTabRow: Equatable {
     case tab(Tab)
