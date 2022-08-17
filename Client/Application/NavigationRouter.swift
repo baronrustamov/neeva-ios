@@ -21,7 +21,7 @@ extension URLComponents {
 enum NavigationPath {
     case url(webURL: URL?, isIncognito: Bool)
     case widgetUrl(webURL: URL?, uuid: String)
-    case closeIncogntioTabs
+    case closeIncognitoTabs
     case space(String, [String]?, Bool)
     case spaceDigest
     case openSetting(SettingsPage?)
@@ -108,7 +108,7 @@ enum NavigationPath {
         switch nav {
         case .url(let url, let isIncognito):
             NavigationPath.handleURL(url: url, isIncognito: isIncognito, with: bvc)
-        case .closeIncogntioTabs:
+        case .closeIncognitoTabs:
             NavigationPath.handleCloseIncognitoTabs(with: bvc)
         case .widgetUrl(let webURL, let uuid):
             NavigationPath.handleWidgetURL(url: webURL, uuid: uuid, with: bvc)
@@ -167,8 +167,8 @@ enum NavigationPath {
         } else if urlString.starts(with: "\(scheme)://widget-small-quicklink-close-private-tabs")
             || urlString.starts(with: "\(scheme)://widget-medium-quicklink-close-private-tabs")
         {
-            // Widget Quick links - medium - close private tabs
-            return .closeIncogntioTabs
+            // Widget Quick links - medium - close incognito tabs
+            return .closeIncognitoTabs
         }
 
         return nil
@@ -199,7 +199,7 @@ enum NavigationPath {
 
     private static func handleCloseIncognitoTabs(with bvc: BrowserViewController) {
         bvc.tabManager.removeTabs(bvc.tabManager.incognitoTabs)
-        guard let tab = mostRecentTab(inTabs: bvc.tabManager.normalTabs) else {
+        guard let tab = mostRecentTab(inTabs: bvc.tabManager.activeNormalTabs) else {
             bvc.tabManager.selectTab(bvc.tabManager.addTab(), notify: true)
             return
         }

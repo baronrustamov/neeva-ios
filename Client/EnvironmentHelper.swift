@@ -171,7 +171,7 @@ class EnvironmentHelper {
         // number of archived tabs
         var numOfArchivedTabs = 0
         TabManager.all.forEach { tabManager in
-            numOfNormalTabs += tabManager.normalTabs.count
+            numOfNormalTabs += tabManager.activeNormalTabs.count
             numOfIncognitoTabs += tabManager.incognitoTabs.count
             numOfArchivedTabs += tabManager.archivedTabs.count
         }

@@ -349,7 +349,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             } else {
                 // open a new search
                 DispatchQueue.main.async { [self] in
-                    let isEmpty = self.bvc.tabManager.normalTabs.count == 0
+                    let isEmpty = self.bvc.tabManager.activeNormalTabs.count == 0
                     self.bvc.searchQueryModel.value = ""
                     self.bvc.openLazyTab(
                         openedFrom: isEmpty ? .tabTray : .openTab(nil),

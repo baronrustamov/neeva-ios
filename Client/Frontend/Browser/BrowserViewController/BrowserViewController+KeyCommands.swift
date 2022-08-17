@@ -66,7 +66,8 @@ extension BrowserViewController {
             return
         }
 
-        let tabs = incognitoModel.isIncognito ? tabManager.incognitoTabs : tabManager.normalTabs
+        let tabs =
+            incognitoModel.isIncognito ? tabManager.incognitoTabs : tabManager.activeNormalTabs
         if let index = tabs.firstIndex(of: currentTab), index + 1 < tabs.count {
             tabManager.selectTab(tabs[index + 1], notify: true)
         } else if let firstTab = tabs.first {
@@ -79,7 +80,8 @@ extension BrowserViewController {
             return
         }
 
-        let tabs = incognitoModel.isIncognito ? tabManager.incognitoTabs : tabManager.normalTabs
+        let tabs =
+            incognitoModel.isIncognito ? tabManager.incognitoTabs : tabManager.activeNormalTabs
         if let index = tabs.firstIndex(of: currentTab), index - 1 < tabs.count && index != 0 {
             tabManager.selectTab(tabs[index - 1], notify: true)
         } else if let lastTab = tabs.last {

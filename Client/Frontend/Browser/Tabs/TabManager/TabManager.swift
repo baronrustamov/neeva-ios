@@ -84,7 +84,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     var timerToTabsToast: Timer?
     var closedTabsToShowToastFor = [SavedTab]()
 
-    var normalTabs: [Tab] {
+    private var normalTabs: [Tab] {
         assert(Thread.isMainThread)
         return tabs.filter { !$0.isIncognito }
     }

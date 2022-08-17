@@ -206,7 +206,7 @@ struct CardsContainer: View {
                 .animation(gridModel.switchModeWithoutAnimation ? nil : .interactiveSpring())
                 .accessibilityElement(children: .contain)
                 .accessibilityLabel("Tabs")
-                .accessibilityValue(Text("\(tabModel.manager.normalTabs.count) tabs"))
+                .accessibilityValue(Text("\(tabModel.manager.activeNormalTabs.count) tabs"))
                 .accessibilityHidden(gridModel.switcherState != .tabs || incognitoModel.isIncognito)
 
                 // Incognito Tabs

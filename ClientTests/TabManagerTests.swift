@@ -72,7 +72,7 @@ class TabManagerTests: XCTestCase {
         tabsUpdated = false
         manager.addTab()
         XCTAssertTrue(tabsUpdated)
-        XCTAssertEqual(manager.normalTabs.count, 1, "There should be one normal tab")
+        XCTAssertEqual(manager.activeNormalTabs.count, 1, "There should be one normal tab")
     }
 
     func testAddTabShouldAddOneIncognitoTab() {
@@ -105,7 +105,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(
             manager.incognitoTabs.count, 0,
             "If the normal tab is selected the private tab should have been deleted")
-        XCTAssertEqual(manager.normalTabs.count, 1, "The regular tab should stil be around")
+        XCTAssertEqual(manager.activeNormalTabs.count, 1, "The regular tab should stil be around")
 
         manager.selectTab(manager.addTab(isIncognito: true), notify: true)
         XCTAssertEqual(manager.incognitoTabs.count, 1, "There should be one new private tab")
@@ -125,7 +125,7 @@ class TabManagerTests: XCTestCase {
             "But once we add a normal tab we've switched out of private mode. Private tabs should be deleted"
         )
         XCTAssertEqual(
-            manager.normalTabs.count, 2,
+            manager.activeNormalTabs.count, 2,
             "The original normal tab and the new one should both still exist")
 
         Defaults[.closeIncognitoTabs] = false
@@ -151,7 +151,7 @@ class TabManagerTests: XCTestCase {
         manager.willSwitchTabMode(leavingPBM: true)
         XCTAssertEqual(manager.incognitoTabs.count, 0, "There should be 0 private tab")
         manager.removeTab(tab)
-        XCTAssertEqual(manager.normalTabs.count, 1, "There should be 1 normal tab")
+        XCTAssertEqual(manager.activeNormalTabs.count, 1, "There should be 1 normal tab")
     }
 
     func testRemoveNonSelectedTab() {
