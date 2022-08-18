@@ -31,7 +31,7 @@ struct WelcomeFlowView: View {
                 VStack(spacing: 0) {
                     // nav buttons (back and close)
                     HStack(alignment: .bottom) {
-                        if model.prevScreen != nil {
+                        if model.prevScreens.count != 0 {
                             Button(action: {
                                 model.logCounter(.PreviousScreenClick)
                                 model.goToPreviousScreen()
@@ -75,6 +75,8 @@ struct WelcomeFlowView: View {
                             WelcomeFlowSignUpEmailView(model: model)
                         case .signIn:
                             WelcomeFlowSignInView(model: model)
+                        case .signInQRCode:
+                            WelcomeFlowSignInQRCodeView(model: model)
                         case .defaultBrowser:
                             WelcomeFlowDefaultBrowserView(model: model)
                         default:

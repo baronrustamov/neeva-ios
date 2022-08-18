@@ -27,7 +27,7 @@ struct WelcomeFlowSignInView: View {
                     self.error = message
                     self.showError = true
                 }) {
-                    model.prevScreen = nil
+                    model.clearPreviousScreens()
                     model.changeScreenTo(.defaultBrowser)
                 }
             }
@@ -45,7 +45,7 @@ struct WelcomeFlowSignInView: View {
                         self.showError = true
                     }
                 ) {
-                    model.prevScreen = nil
+                    model.clearPreviousScreens()
                     model.changeScreenTo(.defaultBrowser)
                 }
             }
@@ -63,7 +63,7 @@ struct WelcomeFlowSignInView: View {
                         self.showError = true
                     }
                 ) {
-                    model.prevScreen = nil
+                    model.clearPreviousScreens()
                     model.changeScreenTo(.defaultBrowser)
                 }
             }
@@ -81,12 +81,22 @@ struct WelcomeFlowSignInView: View {
                         self.showError = true
                     }
                 ) {
-                    model.prevScreen = nil
+                    model.clearPreviousScreens()
                     model.changeScreenTo(.defaultBrowser)
                 }
             }
 
-            // TODO: sign-in with QR code
+            if FeatureFlag[.qrCodeSignIn] {
+                WelcomeFlowAuthButtonView(
+                    icon: Image(systemSymbol: .qrcode),
+                    label: "Sign in with QR Code",
+                    foregroundColor: .primary,
+                    backgroundColor: .secondary.opacity(0.25)
+                ) {
+                    model.prevScreens.append(.signIn)
+                    model.changeScreenTo(.signInQRCode)
+                }
+            }
 
             Spacer()
         }

@@ -53,7 +53,7 @@ struct WelcomeFlowSignUpView: View {
                     foregroundColor: .primary,
                     backgroundColor: .secondary.opacity(0.25)
                 ) {
-                    model.prevScreen = .signUp
+                    model.prevScreens.append(.signUp)
                     model.changeScreenTo(.signUpEmail)
                 }
 
@@ -129,8 +129,8 @@ struct WelcomeFlowSignUpView: View {
             model.logCounter(.ScreenImpression)
 
             // ensure we can get back to the plans page
-            if model.prevScreen == nil {
-                model.prevScreen = .plans
+            if model.prevScreens.count == 0 {
+                model.prevScreens.append(.plans)
             }
         }
     }

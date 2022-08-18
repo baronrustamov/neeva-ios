@@ -13,13 +13,14 @@ enum WelcomeFlowScreen: String, CaseIterable {
     case signUp
     case signUpEmail
     case signIn
+    case signInQRCode
 }
 
 class WelcomeFlowModel: ObservableObject {
     var onCloseAction: (() -> Void)?
     var authStore: AuthStore
     @Published var currentScreen: WelcomeFlowScreen = .intro
-    @Published var prevScreen: WelcomeFlowScreen?
+    @Published var prevScreens: [WelcomeFlowScreen] = []
     @Published var showCloseButton = false
     @Published var showAllSignUpOptions = false
     @Published var defaultBrowserContinueMode = false
@@ -35,9 +36,12 @@ class WelcomeFlowModel: ObservableObject {
     }
 
     func goToPreviousScreen() {
-        guard let prev = self.prevScreen else { return }
+        guard let prev = self.prevScreens.popLast() else { return }
         self.currentScreen = prev
-        self.prevScreen = nil
+    }
+
+    func clearPreviousScreens() {
+        self.prevScreens = []
     }
 
     func scheduleDefaultBrowserReminder() {

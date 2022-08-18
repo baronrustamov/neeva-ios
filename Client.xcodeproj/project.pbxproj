@@ -1540,6 +1540,8 @@
 		F0FDDBB025EE91F300B12287 /* libStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* libStorage.a */; };
 		F35B8D2B1D6380EA008E3D61 /* SessionRestore.html in Resources */ = {isa = PBXBuildFile; fileRef = F35B8D2A1D6380EA008E3D61 /* SessionRestore.html */; };
 		F35B8D2D1D6383E9008E3D61 /* SessionRestoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F35B8D2C1D6383E9008E3D61 /* SessionRestoreHelper.swift */; };
+		F564D05728ADB4AF00A033CA /* WelcomeFlowSignInQRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D05628ADB4AF00A033CA /* WelcomeFlowSignInQRCodeView.swift */; };
+		F564D05828ADEA4800A033CA /* WelcomeFlowSignInQRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D05628ADB4AF00A033CA /* WelcomeFlowSignInQRCodeView.swift */; };
 		F801D2B128852F0E00E6899F /* NeevaPremiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F360342874DA6700736740 /* NeevaPremiumView.swift */; };
 		F805A79F2840187D00372451 /* Black@3x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = F805A79B2840187D00372451 /* Black@3x~ipad.png */; };
 		F805A7A02840187D00372451 /* System@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = F805A79C2840187D00372451 /* System@2x~ipad.png */; };
@@ -3036,6 +3038,7 @@
 		F0ACC19E25E8C2380024991B /* Neeva.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Neeva.entitlements; sourceTree = "<group>"; };
 		F35B8D2A1D6380EA008E3D61 /* SessionRestore.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = SessionRestore.html; sourceTree = "<group>"; };
 		F35B8D2C1D6383E9008E3D61 /* SessionRestoreHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionRestoreHelper.swift; sourceTree = "<group>"; };
+		F564D05628ADB4AF00A033CA /* WelcomeFlowSignInQRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeFlowSignInQRCodeView.swift; sourceTree = "<group>"; };
 		F805A79B2840187D00372451 /* Black@3x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Black@3x~ipad.png"; sourceTree = "<group>"; };
 		F805A79C2840187D00372451 /* System@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "System@2x~ipad.png"; sourceTree = "<group>"; };
 		F805A79D2840187D00372451 /* Black@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Black@2x~ipad.png"; sourceTree = "<group>"; };
@@ -5693,6 +5696,7 @@
 				F87F479528999FCF0076B95C /* WelcomeFlowModel.swift */,
 				F815A5E82899C68A003FE9A8 /* WelcomeFlowPlansView.swift */,
 				F815A5EA2899C9FF003FE9A8 /* WelcomeFlowPrivacyAndTermsLinksView.swift */,
+				F564D05628ADB4AF00A033CA /* WelcomeFlowSignInQRCodeView.swift */,
 				F815A5E62899C57A003FE9A8 /* WelcomeFlowSignInView.swift */,
 				F880C5A7289B588B00C53D1E /* WelcomeFlowSignUpEmailView.swift */,
 				F880C5A3289A124100C53D1E /* WelcomeFlowSignUpView.swift */,
@@ -7141,6 +7145,7 @@
 				4A42C42F27E58487003B9826 /* PrivacySettingsSection.swift in Sources */,
 				4A42C43027E58487003B9826 /* BrowserViewController+ReaderMode.swift in Sources */,
 				E677D1D12800E88E0060869F /* HistoryPanelViewController.swift in Sources */,
+				F564D05828ADEA4800A033CA /* WelcomeFlowSignInQRCodeView.swift in Sources */,
 				4A42C43127E58487003B9826 /* TabContainer.swift in Sources */,
 				8AC5D2C028468E9200E44B04 /* CardTransitionModel.swift in Sources */,
 				8A35CEF8282891EC00E71CD1 /* ArchivedTabsPanelSectionView.swift in Sources */,
@@ -7976,6 +7981,7 @@
 				6670187126BB678700960CF3 /* SuggestionModel.swift in Sources */,
 				665CA48826F054CC006E2F4D /* NotificationRow.swift in Sources */,
 				F880C5A8289B588B00C53D1E /* WelcomeFlowSignUpEmailView.swift in Sources */,
+				F564D05728ADB4AF00A033CA /* WelcomeFlowSignInQRCodeView.swift in Sources */,
 				673AF3FF289CDE8D00F62A80 /* QuickLinkSelection.intentdefinition in Sources */,
 				E97D7E842834A91100944EF5 /* BloomFilterManager.swift in Sources */,
 				E65075521E37F6D1006961AC /* UIViewExtensions.swift in Sources */,

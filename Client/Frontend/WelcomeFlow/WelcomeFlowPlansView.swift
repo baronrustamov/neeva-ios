@@ -212,7 +212,7 @@ struct WelcomeFlowPlansView: View {
                         )
 
                         if model.currentPremiumPlan == nil {
-                            model.prevScreen = .plans
+                            model.prevScreens.append(.plans)
                             model.changeScreenTo(.defaultBrowser)
                         } else {
                             if !NeevaUserInfo.shared.hasLoginCookie() {
@@ -245,7 +245,7 @@ struct WelcomeFlowPlansView: View {
                         action: {
                             model.logCounter(.SignInClick)
                             model.changeScreenTo(.signIn)
-                            model.prevScreen = .plans
+                            model.prevScreens.append(.plans)
                         },
                         label: {
                             Text("Already have an account? Sign in")
@@ -321,7 +321,7 @@ struct WelcomeFlowPlansView: View {
                 )
             ])
 
-        model.prevScreen = nil
+        model.clearPreviousScreens()
         model.changeScreenTo(.defaultBrowser)
     }
 }
