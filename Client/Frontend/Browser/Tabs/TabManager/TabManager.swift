@@ -1395,7 +1395,8 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         // Should be a zombie with the same session data as
         // the original pinned tab before it navigated.
         let newPinnedTab = addTab(atIndex: tabIndex, flushToDisk: true, zombie: true)
-        let savedTab = tab.saveSessionDataAndCreateSavedTab(isSelected: false, tabIndex: tabIndex)
+        let savedTab = tab.saveSessionDataAndCreateSavedTab(
+            isSelected: false, tabIndex: tabIndex, isForPinnedTabPlaceholder: true)
         savedTab.configureTab(newPinnedTab, imageStore: store.imageStore)
         newPinnedTab.updateCanGoBackForward()
 

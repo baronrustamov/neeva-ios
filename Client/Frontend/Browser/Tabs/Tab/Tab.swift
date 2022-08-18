@@ -785,7 +785,7 @@ class Tab: NSObject, ObservableObject {
             in: tabSection, isPinned: isPinned, lastExecutedTime: lastExecutedTime)
     }
 
-    private func saveSessionData() {
+    private func saveSessionData(isForPinnedTabPlaceholder: Bool = false) {
         let currentItem: WKBackForwardListItem! = webView?.backForwardList.currentItem
 
         // Freshly created WebViews won't have any history entries at all.
@@ -793,11 +793,21 @@ class Tab: NSObject, ObservableObject {
         if currentItem != nil {
             // Here we create the SessionData for the tab and pass that to the SavedTab.
             let navigationList = webView?.backForwardList.all ?? []
-            let urls = navigationList.compactMap { $0.url }
             let currentPage = -(webView?.backForwardList.forwardList ?? []).count
-            let navigationStackIndex = webView?.backForwardList.navigationStackIndex ?? 0
-            let queries = navigationList.map {
+            var urls = navigationList.compactMap { $0.url }
+            var navigationStackIndex = webView?.backForwardList.navigationStackIndex ?? 0
+            var queries = navigationList.map {
                 queryForNavigation.findQueryFor(navigation: $0)
+            }
+
+            // When creating SessionData for a pinned tab's placeholder, a
+            // URL will be added to SessionData even if it hasn't yet been set for the tab.
+            // This prevents the URL from being included in the SessionData
+            // since it's not meant to be used in the placeholder.
+            if urls.last != url, isForPinnedTabPlaceholder {
+                urls.removeLast()
+                queries.removeLast()
+                navigationStackIndex -= 1
             }
 
             sessionData = SessionData(
@@ -812,8 +822,10 @@ class Tab: NSObject, ObservableObject {
         }
     }
 
-    func saveSessionDataAndCreateSavedTab(isSelected: Bool, tabIndex: Int?) -> SavedTab {
-        saveSessionData()
+    func saveSessionDataAndCreateSavedTab(
+        isSelected: Bool, tabIndex: Int?, isForPinnedTabPlaceholder: Bool = false
+    ) -> SavedTab {
+        saveSessionData(isForPinnedTabPlaceholder: isForPinnedTabPlaceholder)
 
         return SavedTab(
             screenshotUUID: screenshotUUID, isSelected: isSelected,
