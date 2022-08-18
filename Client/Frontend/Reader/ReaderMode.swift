@@ -266,6 +266,10 @@ class ReaderMode: TabContentScript {
         }
     }
 
+    func connectedTabChanged(_ tab: Tab) {
+        self.tab = tab
+    }
+
     var defaultTheme: ReaderModeStyle {
         if let defaultValue = Defaults.Keys.readerModeStyle.defaultValue {
             return defaultValue
@@ -286,7 +290,7 @@ class ReaderMode: TabContentScript {
             if state == ReaderModeState.active {
                 tab?.webView?.evaluateJavascriptInDefaultContentWorld(
                     "\(ReaderModeNamespace).setStyle(\(style.encode()))"
-                ) { object, error in
+                ) { _, _ in
                     return
                 }
             }

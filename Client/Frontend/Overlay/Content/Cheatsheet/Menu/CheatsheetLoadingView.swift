@@ -5,7 +5,7 @@
 import SwiftUI
 
 struct CheatsheetLoadingView: View {
-    public var body: some View {
+    var body: some View {
         VStack(alignment: .center, spacing: 36) {
             Spacer()
             NeevaScopeLoadingView()

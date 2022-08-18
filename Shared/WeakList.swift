@@ -2,8 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
-
 /// A list that weakly holds references to its items.
 /// Note that while the references themselves are cleared, their wrapper objects
 /// are not (though they are reused). Also note that since slots are reused,

@@ -33,7 +33,7 @@ struct ArchivedTabSettings: View {
         .listStyle(.insetGrouped)
         .pickerStyle(.inline)
         .applyToggleStyle()
-        .navigationTitle(Text("Archive Tabs"))
+        .navigationTitle(Text("Auto Archive Tabs"))
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {

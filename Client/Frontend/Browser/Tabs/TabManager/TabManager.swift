@@ -33,7 +33,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     var tabsUpdatedPublisher = PassthroughSubject<Void, Never>()
 
     // Tab Group related variables
-    @Default(.tabGroupNames) private var tabGroupDict: [String: String]
     @Default(.archivedTabsDuration) var archivedTabsDuration
     var activeTabs: [Tab] = []
     var archivedTabs: [Tab] = []
@@ -84,7 +83,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     var timerToTabsToast: Timer?
     var closedTabsToShowToastFor = [SavedTab]()
 
-    var normalTabs: [Tab] {
+    private var normalTabs: [Tab] {
         assert(Thread.isMainThread)
         return tabs.filter { !$0.isIncognito }
     }
@@ -213,9 +212,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             } else if let sessionUrl = tab.sessionData?.currentUrl {  // Match zombie tabs
                 log.info("Checking sessionUrl: \(sessionUrl)")
 
-                if url.equals(sessionUrl, with: options)
-                    || url.equals(InternalURL.unwrapSessionRestore(url: sessionUrl), with: options)
-                {
+                if url.equals(sessionUrl, with: options) {
                     if let parent = parent {
                         return tab.parent == parent || tab.parentUUID == parent.tabUUID
                     } else {
@@ -310,7 +307,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
                     else { return }
                     let configuration = URLSessionConfiguration.ephemeral
                     makeURLSession(userAgent: UserAgent.getUserAgent(), configuration: .ephemeral)
-                        .dataTask(with: url) { (data, response, error) in
+                        .dataTask(with: url) { (_, _, _) in
                             print(configuration.httpCookieStorage?.cookies ?? [])
                         }
                 }
@@ -419,7 +416,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         else { return false }
 
         let parentTabIsMostRecentUsed = mostRecentTab(inTabs: viableTabs) == parentTab
-        if parentTabIsMostRecentUsed, parentTab.lastExecutedTime != nil {
+        if parentTabIsMostRecentUsed {
             selectTab(parentTab, previous: tab, notify: true)
             return true
         }
@@ -544,7 +541,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         archivedTabGroups =
             archivedTabs
             .reduce(into: [String: [Tab]]()) { dict, tab in
-                if tabGroupDict[tab.rootUUID] != nil {
+                if Defaults[.tabGroupNames][tab.rootUUID] != nil {
                     dict[tab.rootUUID, default: []].append(tab)
                 }
             }.reduce(into: [String: TabGroup]()) { dict, element in
@@ -556,15 +553,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         if notify {
             tabsUpdatedPublisher.send()
         }
-    }
-
-    func toggleTabPinnedState(_ tab: Tab) {
-        tab.pinnedTime =
-            (tab.isPinned ? nil : Date().timeIntervalSinceReferenceDate)
-        tab.isPinned.toggle()
-
-        tabsUpdatedPublisher.send()
-        storeChanges()
     }
 
     // Tab Group related functions
@@ -591,7 +579,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
 
     func getMostRecentChild(_ item: TabGroup) -> Tab? {
         return item.children.max(by: { lhs, rhs in
-            lhs.lastExecutedTime ?? 0 < rhs.lastExecutedTime ?? 0
+            lhs.lastExecutedTime < rhs.lastExecutedTime
         })
     }
 
@@ -609,8 +597,8 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         // Write newly created tab group names into dictionary
         tabGroups.forEach { group in
             let id = group.key
-            if tabGroupDict[id] == nil {
-                tabGroupDict[id] = group.value.displayTitle
+            if Defaults[.tabGroupNames][id] == nil {
+                Defaults[.tabGroupNames][id] = group.value.displayTitle
             }
         }
 
@@ -619,10 +607,10 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         tabGroups.forEach { group in
             temp[group.key] = group.value.displayTitle
         }
-        tabGroupDict = temp
+        Defaults[.tabGroupNames] = temp
     }
 
-    public static func makeWebViewConfig(isIncognito: Bool) -> WKWebViewConfiguration {
+    static func makeWebViewConfig(isIncognito: Bool) -> WKWebViewConfiguration {
         let configuration = WKWebViewConfiguration()
         configuration.dataDetectorTypes = [.phoneNumber]
         configuration.processPool = WKProcessPool()
@@ -790,7 +778,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         if let atIndex = atIndex, atIndex <= tabs.count {
             tabs.insert(tab, at: atIndex)
         } else {
-            var insertIndex: Int? = nil
+            var insertIndex: Int?
 
             // Add tab to be root of a tab group if it follows the rule for the nytimes case.
             // See TabGroupTests.swift for example.
@@ -1166,7 +1154,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     func makeTabsIntoZombies(tabsToKeepAlive: Int = 10) {
         // Filter tabs for each Scene
         let tabs = tabs.sorted {
-            $0.lastExecutedTime ?? Timestamp() > $1.lastExecutedTime ?? Timestamp()
+            $0.lastExecutedTime > $1.lastExecutedTime
         }
 
         tabs.enumerated().forEach { index, tab in
@@ -1358,7 +1346,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     // (`restoreTabs(_:) instead.
     func testRestoreTabs() {
         assert(AppConstants.IsRunningTest)
-        let _ = store.restoreStartupTabs(
+        _ = store.restoreStartupTabs(
             for: SceneDelegate.getCurrentScene(for: nil),
             clearIncognitoTabs: false,
             tabManager: self
@@ -1369,6 +1357,65 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     func testClearArchive() {
         assert(AppConstants.IsRunningTest)
         store.clearArchive(for: SceneDelegate.getCurrentScene(for: nil))
+    }
+
+    // MARK: - Pinned Tabs
+    func toggleTabPinnedState(_ tab: Tab) {
+        tab.pinnedTime =
+            (tab.isPinned ? nil : Date().timeIntervalSinceReferenceDate)
+        tab.isPinned.toggle()
+
+        tabsUpdatedPublisher.send()
+        storeChanges()
+    }
+
+    func handleAsNavigationFromPinnedTabIfNeeded(tab: Tab, url: URL) {
+        let options: [URL.EqualsOption] = [
+            .normalizeHost, .ignoreFragment, .ignoreLastSlash, .ignoreScheme,
+        ]
+
+        if tab.isPinned,
+            !(tab.url?.equals(url, with: options) ?? false),
+            !(InternalURL(tab.url)?.isSessionRestore ?? false),
+            !(InternalURL(url)?.isSessionRestore ?? false)
+        {
+            handleNavigationFromPinnedTab(tab)
+        }
+    }
+
+    private func handleNavigationFromPinnedTab(_ tab: Tab) {
+        guard FeatureFlag[.pinnedTabImprovments] else {
+            return
+        }
+
+        let tabIndex = tabs.firstIndex(of: tab)
+
+        // Create a new placeholder tab to represent the pinned tab.
+        // Should be a zombie with the same session data as
+        // the original pinned tab before it navigated.
+        let newPinnedTab = addTab(atIndex: tabIndex, flushToDisk: true, zombie: true)
+        let savedTab = tab.saveSessionDataAndCreateSavedTab(
+            isSelected: false, tabIndex: tabIndex, isForPinnedTabPlaceholder: true)
+        savedTab.configureTab(newPinnedTab, imageStore: store.imageStore)
+        newPinnedTab.updateCanGoBackForward()
+
+        // Reset the navigated tab (the original pinned tabs) data.
+        tab.tabUUID = UUID().uuidString
+        tab.parent = newPinnedTab
+        tab.parentUUID = newPinnedTab.tabUUID
+        tab.parentSpaceID = ""
+        tab.pinnedTime = nil
+        tab.isPinned = false
+        tab.updateCanGoBackForward()
+
+        // Update the other children with the new parent.
+        tabs.forEach {
+            if $0.parentUUID ?? "" == newPinnedTab.tabUUID {
+                $0.parent = newPinnedTab
+            }
+        }
+
+        updateAllTabDataAndSendNotifications(notify: true)
     }
 
     // MARK: - TabStats

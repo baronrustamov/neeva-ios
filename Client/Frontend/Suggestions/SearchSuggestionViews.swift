@@ -4,7 +4,6 @@
 
 import SDWebImageSwiftUI
 import Shared
-import Storage
 import SwiftUI
 
 enum SuggestionViewUX {
@@ -84,13 +83,11 @@ struct SuggestionSpec: ViewModifier {
                 .frame(minHeight: SuggestionViewUX.RowHeight)
                 .padding(.horizontal, SuggestionViewUX.Padding)
                 .background(suggestionState.color)
-                .hoverEffect()
         case .dictionary:
             content.padding(.horizontal, SuggestionViewUX.Padding)
                 .padding(.top, SuggestionViewUX.Padding)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(suggestionState.color)
-                .hoverEffect()
         }
     }
 }
@@ -287,7 +284,7 @@ struct QuerySuggestionView: View {
                 SpaceIconView()
             case .standard:
                 Symbol(decorative: .magnifyingglass)
-            case .operator, .unknown, .__unknown(_):  // seemingly unused
+            case .operator, .unknown, .__unknown:  // seemingly unused
                 Symbol(decorative: .questionmarkCircle).foregroundColor(.secondaryLabel)
             }
         }

@@ -7,7 +7,6 @@ import MobileCoreServices
 import PassKit
 import QuickLook
 import Shared
-import WebKit
 
 struct MIMEType {
     static let Bitmap = "image/bmp"
@@ -167,7 +166,7 @@ class OpenPassBookHelper: NSObject, OpenInHelper {
                 message: Strings.UnableToAddPassErrorMessage, preferredStyle: .alert)
             alertController.addAction(
                 UIAlertAction(title: Strings.UnableToAddPassErrorDismiss, style: .cancel) {
-                    (action) in
+                    (_) in
                     // Do nothing.
                 })
             browserViewController.present(alertController, animated: true, completion: nil)

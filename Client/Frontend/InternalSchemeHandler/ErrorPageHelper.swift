@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import GCDWebServers
 import Shared
 import Storage
 import WebKit
@@ -354,4 +353,6 @@ extension ErrorPageHelper: TabContentScript {
             assertionFailure("Unknown error message")
         }
     }
+
+    func connectedTabChanged(_ tab: Tab) {}
 }

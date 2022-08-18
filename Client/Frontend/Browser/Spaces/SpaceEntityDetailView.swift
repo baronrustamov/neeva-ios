@@ -3,9 +3,7 @@
 // found in the LICENSE file.
 
 import Defaults
-import SDWebImageSwiftUI
 import Shared
-import Storage
 import SwiftUI
 
 struct SpaceEntityDetailView: View {
@@ -103,7 +101,7 @@ struct SpaceActionsModifier: ViewModifier {
 
     var isNewsItem: Bool {
         switch details.data.previewEntity {
-        case .newsItem(_):
+        case .newsItem:
             return true
         default:
             return false

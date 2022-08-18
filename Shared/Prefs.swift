@@ -147,8 +147,6 @@ extension Defaults.Keys {
     public static let seenTryCheatsheetPopoverOnRecipe = Defaults.BoolKey(
         "seenTryCheatsheetPopoverOnRecipe")
     public static let cheatsheetDebugQuery = Defaults.BoolKey("cheatsheetDebugQuery")
-    public static let showNeevaMenuWillMove = Defaults.BoolKey(
-        "showNeevaMenuWillMove", default: true)
     public static let useCheatsheetBloomFilters = Defaults.BoolKey(
         "useCheatsheetBloomFilters", default: true
     )
@@ -238,19 +236,11 @@ extension Defaults.Keys {
     public static let didSetDefaultBrowser = Defaults.BoolKey(
         "didSetDefaultBrowser")
 
-    public static let loggedDefaultBrowserExperiment = Defaults.BoolKey(
-        "loggedDefaultBrowserExperiment", default: false)
-    public static let lastDefaultBrowserPromptInteraction = Defaults.Key<String?>(
-        "lastDefaultBrowserPromptInteraction")
-
     public static let lastDefaultBrowserInterstitialChoice = Defaults.Key<Int>(
         "lastDefaultBrowserInterstitialChoice", default: 0)
 
     public static let didDismissDefaultBrowserInterstitial = Defaults.Key<Bool?>(
         "didDismissDefaultBrowserInterstitial")
-
-    public static let didShowAdBlockerPromo = Defaults.BoolKey(
-        "didShowAdBlockerPromo")
 
     // MARK: - Spotlight Search
     public static let createUserActivities = Defaults.BoolKey("createUserActivities", default: true)
@@ -280,11 +270,6 @@ extension Defaults.Keys {
 
     public static let lastReportedConversionEvent = Defaults.Key<Int>(
         "lastReportedConversionEvent", default: -1)
-
-    public static let hasLogErrorFromFirstRunEvent = Defaults.Key<Bool>(
-        "hasLogErrorFromFirstRunEvent", default: false)
-    public static let lastFirstRunEventLogError = Defaults.Key<String>(
-        "lastFirstRunEventLogError", default: "")
 
     public static let shouldCollectUsageStats = Defaults.Key<Bool?>(
         "shouldCollectUsageStats"

@@ -45,7 +45,6 @@ class TabCardModel: CardDropDelegate, CardModel {
     private(set) var allTabGroupDetails: [TabGroupCardDetails] = []
 
     @Default(.tabGroupExpanded) private var tabGroupExpanded: Set<String>
-    @Default(.archivedTabsDuration) var archivedTabsDuration
     var needsUpdateRows: Bool = false
 
     static let pinnedRowHeaderID: String = "pinned-header"
@@ -81,9 +80,9 @@ class TabCardModel: CardDropDelegate, CardModel {
         timeBasedNormalRows[.yesterday] = buildRows(incognito: false, for: .yesterday)
         timeBasedNormalRows[.lastWeek] = buildRows(incognito: false, for: .lastWeek)
 
-        if archivedTabsDuration == .month {
+        if Defaults[.archivedTabsDuration] == .month {
             timeBasedNormalRows[.lastMonth] = buildRows(incognito: false, for: .lastMonth)
-        } else if archivedTabsDuration == .forever {
+        } else if Defaults[.archivedTabsDuration] == .forever {
             timeBasedNormalRows[.lastMonth] = buildRows(incognito: false, for: .lastMonth)
             timeBasedNormalRows[.overAMonth] = buildRows(incognito: false, for: .overAMonth)
         }
@@ -107,11 +106,11 @@ class TabCardModel: CardDropDelegate, CardModel {
         var returnValue: [Row] = []
 
         func getOlderRows() -> [Row] {
-            if archivedTabsDuration == .month {
+            if Defaults[.archivedTabsDuration] == .month {
                 return (timeBasedNormalRows[.lastMonth] ?? [])
             }
 
-            if archivedTabsDuration == .forever {
+            if Defaults[.archivedTabsDuration] == .forever {
                 return (timeBasedNormalRows[.lastMonth] ?? [])
                     + (timeBasedNormalRows[.overAMonth] ?? [])
             }
@@ -216,20 +215,20 @@ class TabCardModel: CardDropDelegate, CardModel {
                     return details.isSelected
                 case .tabGroupGridRow(let details, let range):
                     return details.allDetails[range].contains { $0.isSelected }
-                case .sectionHeader(_):
+                case .sectionHeader:
                     return false
                 }
             }
 
             var numTabs: Int {
                 switch self {
-                case .tab(_):
+                case .tab:
                     return 1
                 case .tabGroupInline(let details):
                     return details.allDetails.count
                 case .tabGroupGridRow(_, let range):
                     return range.count
-                case .sectionHeader(_):
+                case .sectionHeader:
                     return 0
                 }
             }
@@ -414,7 +413,7 @@ class TabCardModel: CardDropDelegate, CardModel {
         allDetails = manager.activeTabs.map { TabCardDetails(tab: $0, manager: manager) }
 
         allTabGroupDetails =
-            manager.activeTabGroups.map { id, group in
+            manager.activeTabGroups.map { _, group in
                 TabGroupCardDetails(tabGroup: group, tabManager: manager)
             }
 
@@ -422,11 +421,11 @@ class TabCardModel: CardDropDelegate, CardModel {
         // unable to expand, we remove the group from the expanded list. A side-effect
         // of this resolves a problem where TabGroupHeader doesn't hide arrows button
         // when the number of tabs drops below columnCount.
-        tabGroupExpanded.forEach { groupID in
+        Defaults[.tabGroupExpanded].forEach { groupID in
             if let tabGroup = allTabGroupDetails.first(where: { groupID == $0.id }),
                 tabGroup.allDetails.count <= columnCount
             {
-                tabGroupExpanded.remove(groupID)
+                Defaults[.tabGroupExpanded].remove(groupID)
             }
         }
 
@@ -475,7 +474,7 @@ class TabCardModel: CardDropDelegate, CardModel {
         return getRows(incognito: false)
     }
 
-    public override func dropEntered(info: DropInfo) {
+    override func dropEntered(info: DropInfo) {
         guard let draggingDetail = TabCardDetails.draggingDetail else {
             return
         }
@@ -581,12 +580,12 @@ class SpaceCardModel: CardModel {
     var viewModel: SpaceCardViewModel = SpaceCardViewModel()
 
     var thumbnailURLCandidates = [URL: [URL]]()
-    private var anyCancellable: AnyCancellable? = nil
-    private var recommendationSubscription: AnyCancellable? = nil
-    private var editingSubscription: AnyCancellable? = nil
+    private var anyCancellable: AnyCancellable?
+    private var recommendationSubscription: AnyCancellable?
+    private var editingSubscription: AnyCancellable?
     private var detailsSubscriptions: Set<AnyCancellable> = Set()
     private var mutationSubscriptions: Set<AnyCancellable> = Set()
-    private var spaceNeedsRefresh: String? = nil
+    private var spaceNeedsRefresh: String?
     private var scene: UIScene?
 
     init(manager: SpaceStore = SpaceStore.shared, scene: UIScene?) {
@@ -863,40 +862,6 @@ class SpaceCardModel: CardModel {
         }
     }
 
-}
-
-class SiteCardModel: CardModel {
-    typealias Manager = SiteFetcher
-    typealias Details = SiteCardDetails
-
-    @Published var manager = SiteFetcher()
-    @Published var allDetails: [SiteCardDetails] = [] {
-        didSet {
-            allDetailsWithExclusionList = allDetails
-        }
-    }
-    @Published var allDetailsWithExclusionList: [SiteCardDetails] = []
-    var anyCancellable: AnyCancellable? = nil
-    let tabManager: TabManager
-
-    init(urls: [URL], tabManager: TabManager) {
-        self.tabManager = tabManager
-
-        self.allDetails = urls.reduce(into: []) {
-            $0.append(SiteCardDetails(url: $1, fetcher: manager, tabManager: tabManager))
-        }
-        self.anyCancellable = manager.objectWillChange.sink { [weak self] (_) in
-            self?.objectWillChange.send()
-        }
-    }
-
-    func refresh(urls: [URL]) {
-        self.allDetails = urls.reduce(into: []) {
-            $0.append(SiteCardDetails(url: $1, fetcher: manager, tabManager: tabManager))
-        }
-    }
-
-    func onDataUpdated() {}
 }
 
 class SpaceCardViewModel: ObservableObject {

@@ -52,14 +52,14 @@ struct WelcomeFlowIntroView: View {
                                  will make this something a user notices.
                                  */
                             } else if PremiumStore.isOfferedInCountry() {
-                                model.prevScreen = nil
+                                model.clearPreviousScreens()
                                 model.changeScreenTo(.plans)
                             } else {
-                                model.prevScreen = nil
+                                model.clearPreviousScreens()
                                 model.changeScreenTo(.defaultBrowser)
                             }
                         } else {
-                            model.prevScreen = nil
+                            model.clearPreviousScreens()
                             model.changeScreenTo(.defaultBrowser)
                         }
                     },
@@ -76,7 +76,7 @@ struct WelcomeFlowIntroView: View {
                     action: {
                         model.logCounter(.SignInClick)
                         model.changeScreenTo(.signIn)
-                        model.prevScreen = .intro
+                        model.prevScreens.append(.intro)
                     },
                     label: {
                         Text("Already have an account? Sign in")
@@ -103,7 +103,7 @@ struct WelcomeFlowIntroView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
                 .onChange(of: collectUsageStats) { newValue in
-                    Defaults[.shouldCollectUsageStats] = collectUsageStats
+                    Defaults[.shouldCollectUsageStats] = newValue
                 }
             }
             .padding(.bottom, 18)

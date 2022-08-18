@@ -54,7 +54,7 @@ class SiriShortcuts {
     static func manageSiri(
         for activityType: SiriShortcuts.activityType, in viewController: UIViewController
     ) {
-        INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
+        INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, _) in
             DispatchQueue.main.async {
                 guard let voiceShortcuts = voiceShortcuts else { return }
                 let foundShortcut = voiceShortcuts.filter { (attempt) in
@@ -86,7 +86,7 @@ class SiriShortcutManager: ObservableObject {
     }
 
     func reload() {
-        INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
+        INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, _) in
             DispatchQueue.main.async {
                 if let foundShortcut = voiceShortcuts?.first(where: {
                     $0.shortcut.userActivity?.activityType == self.activityType.rawValue

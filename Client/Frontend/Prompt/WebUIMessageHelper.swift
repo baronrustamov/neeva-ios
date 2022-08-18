@@ -1,6 +1,4 @@
-import Foundation
 import Shared
-import SwiftUI
 import WebKit
 
 let messageHandlerName = "webui"
@@ -111,5 +109,9 @@ class WebUIMessageHelper: TabContentScript {
                 ClientLogger.shared.logCounter(.NotificationPromptSkip)
             }
         }
+    }
+
+    func connectedTabChanged(_ tab: Tab) {
+        self.tab = tab
     }
 }

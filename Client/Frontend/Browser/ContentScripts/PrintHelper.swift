@@ -2,8 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
-import Shared
 import WebKit
 
 class PrintHelper: TabContentScript {
@@ -27,5 +25,9 @@ class PrintHelper: TabContentScript {
             printController.printFormatter = webView.viewPrintFormatter()
             printController.present(animated: true, completionHandler: nil)
         }
+    }
+
+    func connectedTabChanged(_ tab: Tab) {
+        self.tab = tab
     }
 }

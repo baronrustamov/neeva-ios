@@ -1,7 +1,6 @@
 // Copyright 2022 Neeva Inc. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-import Defaults
 import Shared
 import SwiftUI
 
@@ -126,7 +125,7 @@ struct CollapsedCardGroupView: View {
                 // Hack: trigger SwiftUI to run this code each time an instance of this View type is
                 // instantiated. This works by referencing an input parameter (groupDetails), which causes
                 // SwiftUI to think that this ViewModifier needs to be evaluated again.
-                let _ = groupDetails
+                _ = groupDetails
 
                 // Fixes a bug where the Card would get clipped during opening/closing animation.
                 scrollView.clipsToBounds = browserModel.cardTransitionModel.state == .hidden

@@ -12,7 +12,7 @@ enum QuickLink: Int {
     case incognitoSearch
     case closeIncognitoTabs
 
-    public var imageName: String {
+    var imageName: String {
         switch self {
         case .search:
             return "faviconNeeva"
@@ -25,7 +25,7 @@ enum QuickLink: Int {
         }
     }
 
-    public var label: String {
+    var label: String {
         switch self {
         case .search:
             return String.SearchInNeevaV2
@@ -38,7 +38,7 @@ enum QuickLink: Int {
         }
     }
 
-    public var url: URL {
+    var url: URL {
         switch self {
         case .search:
             return linkToContainingApp("?private=false", query: "open-url")
@@ -51,7 +51,7 @@ enum QuickLink: Int {
         }
     }
 
-    public var backgroundColors: [Color] {
+    var backgroundColors: [Color] {
         switch self {
         case .search:
             return [Color("searchButtonColorTwo"), Color("searchButtonColorOne")]

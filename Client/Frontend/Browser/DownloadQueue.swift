@@ -74,7 +74,7 @@ class HTTPDownload: Download {
     private var resumeData: Data?
 
     // Used to avoid name spoofing using Unicode RTL char to change file extension
-    public static func stripUnicode(fromFilename string: String) -> String {
+    static func stripUnicode(fromFilename string: String) -> String {
         let allowed = CharacterSet.alphanumerics.union(CharacterSet.punctuationCharacters)
         return string.components(separatedBy: allowed.inverted).joined()
     }
@@ -290,7 +290,7 @@ extension DownloadQueue: DownloadDelegate {
     }
 }
 
-public func openDownloadsFolderInFilesApp() {
+func openDownloadsFolderInFilesApp() {
     guard
         let documentPath = NSSearchPathForDirectoriesInDomains(
             .documentDirectory, .allDomainsMask, true

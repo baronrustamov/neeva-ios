@@ -13,7 +13,7 @@ struct SpacesSearchHeaderView: View {
     let onDismiss: () -> Void
     let importData: SpaceImportHandler?
 
-    public init(
+    init(
         searchText: Binding<String>,
         createAction: @escaping () -> Void,
         onDismiss: @escaping () -> Void,

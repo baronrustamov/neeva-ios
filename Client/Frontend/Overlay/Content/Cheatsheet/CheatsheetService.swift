@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import Combine
 import Foundation
 import Shared
 
@@ -16,7 +15,7 @@ public struct SearchResult {
     let results: [CheatsheetResult]
 }
 
-public protocol CheatsheetDataService {
+protocol CheatsheetDataService {
     func getCheatsheetInfo(
         url: String,
         title: String,
@@ -29,7 +28,7 @@ public protocol CheatsheetDataService {
     )
 }
 
-public final class CheatsheetServiceProvider: CheatsheetDataService {
+final class CheatsheetServiceProvider: CheatsheetDataService {
     // MARK: - Static Properties
     static let shared = CheatsheetServiceProvider()
     static private let infoTTL: TimeInterval = .minutes(60)
@@ -39,7 +38,7 @@ public final class CheatsheetServiceProvider: CheatsheetDataService {
     private let store: CheatsheetDataStore
 
     // MARK: - Public Methods
-    public init(store: CheatsheetDataStore? = nil) {
+    init(store: CheatsheetDataStore? = nil) {
         if let store = store {
             self.store = store
         } else {
@@ -47,7 +46,7 @@ public final class CheatsheetServiceProvider: CheatsheetDataService {
         }
     }
 
-    public func getCheatsheetInfo(
+    func getCheatsheetInfo(
         url: String,
         title: String,
         completion: @escaping (Result<CheatsheetInfo, Error>) -> Void
@@ -74,7 +73,7 @@ public final class CheatsheetServiceProvider: CheatsheetDataService {
         }
     }
 
-    public func getRichResult(
+    func getRichResult(
         query: String,
         completion: @escaping (Result<SearchResult, Error>) ->
             Void

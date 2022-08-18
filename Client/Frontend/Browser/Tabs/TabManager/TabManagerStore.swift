@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 import Storage
-import SwiftUI
 import XCGLogger
 
 private let log = Logger.storage
@@ -17,7 +16,7 @@ class TabManagerStore {
             quality: UIConstants.ScreenshotQuality))
 
     fileprivate var lockedForReading = false
-    public let imageStore: DiskImageStore?
+    let imageStore: DiskImageStore?
     fileprivate var fileManager = FileManager.default
     private var backgroundFileWriters: [String: BackgroundFileWriter] = [:]
 

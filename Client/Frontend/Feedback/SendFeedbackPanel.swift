@@ -5,7 +5,7 @@
 import Shared
 import SwiftUI
 
-public class SendFeedbackPanel: UIHostingController<AnyView> {
+class SendFeedbackPanel: UIHostingController<AnyView> {
     init(
         requestId: String?, screenshot: UIImage?, url: URL?, query: String?,
         tabStats: TabManager.TabStats, onOpenURL: @escaping (URL) -> Void

@@ -2,14 +2,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import CoreServices
 import CoreSpotlight
 import Defaults
 import Foundation
 import SDWebImage
 import Shared
 import Storage
-import SwiftUI
 import WebKit
 
 private let searchableIndex = CSSearchableIndex(name: "neeva")
@@ -135,7 +133,7 @@ extension UserActivityHandler {
             : SDWebImageOptions.lowPriority
 
         let onCompletedPageFavicon: SDInternalCompletionBlock = {
-            (img, data, _, _, _, url) -> Void in
+            (img, _, _, _, _, _) -> Void in
             if let img = img {
                 completion(img)
             } else {

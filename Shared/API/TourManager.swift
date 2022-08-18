@@ -45,10 +45,10 @@ public enum TourStep: String {
 public class TourManager {
     public static let shared = TourManager()
 
-    public var activeStep: Step? = nil
-    public var lastTap: TapTarget? = nil
+    public var activeStep: Step?
+    public var lastTap: TapTarget?
     public var subStepIdx: Int = 0
-    private var webView: WKWebView? = nil
+    private var webView: WKWebView?
 
     public func setActiveStep(id: String, stepName: TourStep, webView: WKWebView?) {
         self.activeStep = Step(id: id, stepName: stepName)

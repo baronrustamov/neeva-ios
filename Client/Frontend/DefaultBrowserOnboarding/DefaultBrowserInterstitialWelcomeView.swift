@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import Defaults
-import Foundation
 import Shared
 import SwiftUI
 

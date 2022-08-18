@@ -4,9 +4,7 @@
 
 import Combine
 import Defaults
-import SFSafeSymbols
 import Shared
-import Storage
 import SwiftUI
 
 private enum TrackingMenuUX {
@@ -46,6 +44,20 @@ class TrackingStatsViewModel: ObservableObject {
                     return
                 }
 
+                ClientLogger.shared.logCounter(
+                    .ToggleTrackingProtection,
+                    attributes: [
+                        ClientLogCounterAttribute(
+                            key: LogConfig.CookieCutterAttribute.adBlockEnabled,
+                            value: String(Defaults[.adBlockEnabled])),
+                        ClientLogCounterAttribute(
+                            key: LogConfig.CookieCutterAttribute.cookieCutterToggleState,
+                            value: String(self.preventTrackersForCurrentPage)),
+                        ClientLogCounterAttribute(
+                            key: LogConfig.CookieCutterAttribute.trackingProtectionDomain,
+                            value: domain),
+                    ])
+
                 self.selectedTab?.contentBlocker?.notifiedTabSetupRequired()
                 self.selectedTab?.reload()
             }
@@ -53,13 +65,13 @@ class TrackingStatsViewModel: ObservableObject {
     }
     @Published var showTrackingStatsViewPopover = false
 
-    private var selectedTab: Tab? = nil {
+    private var selectedTab: Tab? {
         didSet {
             listenForStatUpdates()
         }
     }
 
-    private var selectedTabURL: URL? = nil {
+    private var selectedTabURL: URL? {
         didSet {
             guard let selectedTabURL = selectedTabURL, selectedTabURL.isWebPage() else {
                 return
@@ -73,7 +85,7 @@ class TrackingStatsViewModel: ObservableObject {
     }
 
     private var subscriptions: Set<AnyCancellable> = []
-    private var statsSubscription: AnyCancellable? = nil
+    private var statsSubscription: AnyCancellable?
 
     /// FOR TESTING ONLY
     private(set) var trackers: [TrackingEntity] {

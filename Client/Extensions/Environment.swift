@@ -6,7 +6,7 @@ import SwiftUI
 
 extension EnvironmentValues {
     private struct OpenInNewTabKey: EnvironmentKey {
-        static var defaultValue: ((URL, _ isIncognito: Bool) -> Void)? = nil
+        static var defaultValue: ((URL, _ isIncognito: Bool) -> Void)?
     }
     public var openInNewTab: (URL, _ isIncognito: Bool) -> Void {
         get {
@@ -19,7 +19,7 @@ extension EnvironmentValues {
 
     // UIView here is used as a target view to anchor the share pop over on iPad.
     private struct ShareURLKey: EnvironmentKey {
-        static var defaultValue: ((URL, UIView) -> Void)? = nil
+        static var defaultValue: ((URL, UIView) -> Void)?
     }
     public var shareURL: (URL, UIView) -> Void {
         get {
@@ -31,7 +31,7 @@ extension EnvironmentValues {
     }
 
     private struct SetSearchInputKey: EnvironmentKey {
-        static var defaultValue: ((String) -> Void)? = nil
+        static var defaultValue: ((String) -> Void)?
     }
     public var setSearchInput: (String) -> Void {
         get {
@@ -52,7 +52,7 @@ extension EnvironmentValues {
     }
 
     private struct SaveToSpaceKey: EnvironmentKey {
-        static var defaultValue: ((URL, _ description: String?, _ title: String?) -> Void)? = nil
+        static var defaultValue: ((URL, _ description: String?, _ title: String?) -> Void)?
     }
     public var saveToSpace: (URL, _ description: String?, _ title: String?) -> Void {
         get {
@@ -63,7 +63,7 @@ extension EnvironmentValues {
         set { self[SaveToSpaceKey.self] = newValue }
     }
     private struct dismissScreenKey: EnvironmentKey {
-        static var defaultValue: (() -> Void)? = nil
+        static var defaultValue: (() -> Void)?
     }
     public var dismissScreen: () -> Void {
         get {
@@ -74,7 +74,7 @@ extension EnvironmentValues {
         set { self[dismissScreenKey.self] = newValue }
     }
     private struct showNotificationPromptKey: EnvironmentKey {
-        static var defaultValue: (() -> Void)? = nil
+        static var defaultValue: (() -> Void)?
     }
     public var showNotificationPrompt: () -> Void {
         get {
@@ -102,7 +102,7 @@ extension EnvironmentValues {
     }
 
     private struct OpenArchivedTabsPanelViewKey: EnvironmentKey {
-        static var defaultValue: (() -> Void)? = nil
+        static var defaultValue: (() -> Void)?
     }
     public var openArchivedTabsPanelView: () -> Void {
         get {

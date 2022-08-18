@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import Defaults
 import Shared
 import SwiftUI
 
@@ -11,13 +10,11 @@ struct TabLocationBarButton<Label: View>: View {
     let action: () -> Void
 
     var body: some View {
-        Button(action: action) {
+        HoverEffectButton(effect: .lift, action: action) {
             label
                 .frame(width: TabLocationViewUX.height, height: TabLocationViewUX.height)
                 .transition(.opacity)
         }
-        .foregroundColor(.label)
-        .hoverEffect(.lift)
     }
 }
 

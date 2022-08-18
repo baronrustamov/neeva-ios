@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import WebKit
 
 // Temporary flag to test the new sandboxed javascript environment
@@ -80,5 +79,9 @@ extension WKUserScript {
 extension WKBackForwardList {
     public var all: [WKBackForwardListItem] {
         return (backList + [currentItem] + forwardList).compactMap { $0 }
+    }
+
+    public var navigationStackIndex: Int {
+        backList.count
     }
 }

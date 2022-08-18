@@ -2,11 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import Apollo
 import Defaults
 import Foundation
 import Reachability
-import SwiftUI
 import WebKit
 
 public class NeevaUserInfo: ObservableObject {
@@ -59,7 +57,7 @@ public class NeevaUserInfo: ObservableObject {
             self.connection = reachability.connection
             self.fetch()
         }
-        reachability.whenUnreachable = { reachability in
+        reachability.whenUnreachable = { _ in
             self.connection = nil
         }
         try! reachability.startNotifier()

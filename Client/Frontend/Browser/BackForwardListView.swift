@@ -3,9 +3,7 @@
 // found in the LICENSE file.
 
 import Shared
-import Storage
 import SwiftUI
-import UIKit
 import WebKit
 
 class BackForwardListModel: ObservableObject {

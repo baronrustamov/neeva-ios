@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import CoreFoundation
-import Network
 
 /// Assertion for checking that the call is being made on the main thread.
 ///

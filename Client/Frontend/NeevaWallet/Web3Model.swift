@@ -30,7 +30,7 @@ class Web3Model: ObservableObject {
             wallet?.publicAddress ?? ""
         }
 
-        @Published var currentSequence: SequenceInfo? = nil {
+        @Published var currentSequence: SequenceInfo? {
             didSet {
                 guard currentSequence != nil, wallet != nil else { return }
 
@@ -52,7 +52,7 @@ class Web3Model: ObservableObject {
 
         @Published var showingWalletDetails = false
         @Published var trustSignal: TrustSignal = .notTrusted
-        @Published var alternateTrustedDomain: String? = nil
+        @Published var alternateTrustedDomain: String?
         @Published var matchingCollection: Collection?
         @Published var showingMaliciousSiteWarning = false
         @Published var desktopSession = false
@@ -82,9 +82,9 @@ class Web3Model: ObservableObject {
         var wallet: WalletAccessor?
         var communityBasedTrustSignals = [String: TrustSignal]()
 
-        private var selectedTabSubscription: AnyCancellable? = nil
-        private var urlSubscription: AnyCancellable? = nil
-        private var walletConnectSubscription: AnyCancellable? = nil
+        private var selectedTabSubscription: AnyCancellable?
+        private var urlSubscription: AnyCancellable?
+        private var walletConnectSubscription: AnyCancellable?
         private let closeTab: (Tab) -> Void
 
         var allSavedSessions: [Session] {
@@ -357,7 +357,7 @@ class Web3Model: ObservableObject {
                 .evaluateJavascriptInDefaultContentWorld(
                     WalletConnectDetector.scrapeWalletConnectURI
                 ) {
-                    object, error in
+                    object, _ in
                     guard let walletConnectUriString = object as? String,
                         let wcURL = WCURL(walletConnectUriString.removingPercentEncoding ?? "")
                     else { return }
@@ -381,7 +381,7 @@ class Web3Model: ObservableObject {
                 .evaluateJavascriptInDefaultContentWorld(
                     Collection.scrapeForOpenSeaLink
                 ) {
-                    object, error in
+                    object, _ in
                     guard let openSeaSlugs = object as? [String],
                         !openSeaSlugs.isEmpty
                     else { return }

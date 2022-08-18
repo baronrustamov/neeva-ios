@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import AuthenticationServices
+import CodeScanner
 import CryptoKit
 import Defaults
 import Shared
@@ -10,10 +11,10 @@ import Shared
 private let log = Logger.auth
 
 class AuthStore: NSObject, ObservableObject {
-    public var bvc: BrowserViewController
+    var bvc: BrowserViewController
     private var onError: ((_ message: String) -> Void)?
     private var onSuccess: (() -> Void)?
-    public var marketingEmailOptOut = false
+    var marketingEmailOptOut = false
 
     init(bvc: BrowserViewController) {
         self.bvc = bvc
@@ -40,7 +41,7 @@ class AuthStore: NSObject, ObservableObject {
     // MARK: - Auth Initializers
 
     // NOTE: look further down in this file for the extensions that support Apple auth
-    public func signUpWithApple(onError: ((_ message: String) -> Void)?, onSuccess: (() -> Void)?) {
+    func signUpWithApple(onError: ((_ message: String) -> Void)?, onSuccess: (() -> Void)?) {
         self.onError = onError
         self.onSuccess = onSuccess
 
@@ -54,7 +55,7 @@ class AuthStore: NSObject, ObservableObject {
         authorizationController.performRequests()
     }
 
-    public func oauthWithProvider(
+    func oauthWithProvider(
         provider: NeevaConstants.OAuthProvider, email: String,
         onError: ((_ message: String) -> Void)?, onSuccess: (() -> Void)?
     ) {
@@ -397,42 +398,52 @@ class OktaAccountCreationDelegate: NSObject, URLSessionTaskDelegate {
 // MARK: - QR Code Support
 
 extension AuthStore {
-    public func signInwithQRCode() {
-        // TODO:
-        /*
-        overlayManager.presentFullScreenModal(
-            content: AnyView(
-                ZStack(alignment: .topTrailing) {
-                    CodeScannerView(codeTypes: [.qr]) { result in
-                        self.showQRScanner = false
-                        self.overlayManager.hideCurrentOverlay()
-                        switch result {
-                        case .success(let result):
-                            guard let url = URL(string: result.string),
-                                let delegate = SceneDelegate.getCurrentSceneDelegateOrNil()
-                            else { return }
-                            if !delegate.checkForSignInToken(in: url) {
-                                DispatchQueue.main.async {
-                                    self.toastViewManager.makeToast(text: "Invalid QR Code")
-                                }
-                            }
-                        case .failure(let error):
-                            DispatchQueue.main.async {
-                                self.toastViewManager.makeToast(
-                                    text: "QR Code: \(error.localizedDescription)"
-                                )
-                            }
-                        }
-                    }
-                    CloseButton(action: {
-                        self.overlayManager.hideCurrentOverlay()
-                    })
-                    .padding(.trailing, 20)
-                    .padding(.top, 40)
-                    .background(Color.clear)
+    func signInTokenFromQRCodeURL(_ url: URL) -> String? {
+        if url.scheme == "https", NeevaConstants.isAppHost(url.host, allowM1: true),
+            let components = URLComponents(url: url, resolvingAgainstBaseURL: true),
+            components.path == "/appclip/login",
+            let queryItems = components.queryItems,
+            let signInToken = queryItems.first(where: { $0.name == "token" })?.value
+        {
+            return signInToken
+        }
+
+        return nil
+    }
+
+    public func signInwithQRCode(
+        _ scanResult: Result<ScanResult, ScanError>,
+        onError: ((_ message: String) -> Void),
+        onSuccess: @escaping (() -> Void)
+    ) {
+        switch scanResult {
+        case .success(let result):
+            guard let url = URL(string: result.string) else { return }
+
+            if let token = self.signInTokenFromQRCodeURL(url) {
+                DispatchQueue.main.async { [self] in
+                    let signInURL = URL(
+                        string: "https://\(NeevaConstants.appHost)/login/qr/finish?q=\(token)")!
+
+                    /*
+                     NOTE: At the time of writing, the happy path works as expected. However,
+                     if the sign-in token was invalid, our app detects the login screen and
+                     will overlay the native sign-in flow, which interrupts the welcome flow.
+                     */
+                    self.bvc.openURLInBackground(signInURL, showToast: false)
+
+                    /*
+                     NOTE: Success here doesn't mean the user has fully authenticated,
+                     it just means we found what looks like a sign-in token in the URL
+                     (built from the scan result) and opened it in the background.
+                     */
+                    onSuccess()
                 }
-            )
-        )
-         */
+            } else {
+                onError("Invalid QR Code")
+            }
+        case .failure(let error):
+            onError("QR Code: \(error.localizedDescription)")
+        }
     }
 }

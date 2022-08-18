@@ -9,12 +9,12 @@ enum PerformanceLoggerAttribute: String {
     case pageLoaded
 }
 
-public class PerformanceLogger {
+class PerformanceLogger {
 
-    public static let shared = PerformanceLogger()
+    static let shared = PerformanceLogger()
 
     // increment user default page load if scheme is http or https
-    public func incrementPageLoad(url: URL) {
+    func incrementPageLoad(url: URL) {
         if url.scheme == "http" || url.scheme == "https" {
             let currentCount = Defaults[.pageLoadedCounter]
             Defaults[.pageLoadedCounter] = currentCount + 1
@@ -27,7 +27,7 @@ public class PerformanceLogger {
     }
 
     // sent last crash status with page load number
-    public func logPageLoadWithCrashedStatus(crashed: Bool, forCrashReporter: Bool = false) {
+    func logPageLoadWithCrashedStatus(crashed: Bool, forCrashReporter: Bool = false) {
         var attributes = [ClientLogCounterAttribute]()
         let pageLoadedCount = Defaults[.pageLoadedCounter]
         attributes.append(

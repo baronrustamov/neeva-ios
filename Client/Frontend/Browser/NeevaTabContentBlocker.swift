@@ -4,7 +4,6 @@
 
 import Defaults
 import Shared
-import WebKit
 
 extension Defaults.Keys {
     // TODO: migrate to a new naming without dot so publisher/observer work
@@ -80,5 +79,9 @@ class NeevaTabContentBlocker: TabContentBlocker, TabContentScript {
         if let tab = tab as? Tab {
             TabEvent.post(.didChangeContentBlocking, for: tab)
         }
+    }
+
+    func connectedTabChanged(_ tab: Tab) {
+        self.updateTab(tab)
     }
 }

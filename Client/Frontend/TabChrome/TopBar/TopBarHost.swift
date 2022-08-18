@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import Combine
-import Shared
 import SwiftUI
 
 // For sharing to work, this must currently be the BrowserViewController
@@ -15,7 +13,6 @@ protocol TopBarDelegate: ToolbarDelegate {
     func urlBar(didSubmitText text: String, isSearchQuerySuggestion: Bool)
 
     func perform(menuAction: OverflowMenuAction)
-    func updateFeedbackImage()
 
     var tabContainerModel: TabContainerModel { get }
     var tabManager: TabManager { get }

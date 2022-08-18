@@ -6,7 +6,6 @@ import Combine
 import Defaults
 import Foundation
 import Shared
-import SwiftUI
 
 private let logger = Logger.browser
 
@@ -14,10 +13,10 @@ class NotificationManager: ObservableObject {
     static let promoIdKey = "PromoId"
     static let shared = NotificationManager()
 
-    public struct notificationKey {
-        public static let deeplinkURL = "deeplinkURL"
-        public static let campaignID = "campaignID"
-        public static let localNotificationURL = "localNotificationURL"
+    struct notificationKey {
+        static let deeplinkURL = "deeplinkURL"
+        static let campaignID = "campaignID"
+        static let localNotificationURL = "localNotificationURL"
     }
 
     @Published private(set) var notifications = [BaseNotification]() {

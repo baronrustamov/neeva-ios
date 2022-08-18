@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import Defaults
-import SDWebImageSwiftUI
 import Shared
 import SwiftUI
 
@@ -166,7 +165,7 @@ struct SpaceDetailList: View {
     }
 
     private func onDelete(offsets: IndexSet) {
-        //this is only for visual
+        // this is only for visual
         let entities = offsets.compactMap { index in
             primitive.allDetails[index]
         }

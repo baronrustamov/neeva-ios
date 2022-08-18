@@ -13,7 +13,7 @@ enum SiteListData {
 
 struct SiteListView: View {
     let tabManager: TabManager
-    var historyPanelModel: HistoryPanelModel? = nil
+    var historyPanelModel: HistoryPanelModel?
 
     var data: SiteListData
     var itemAtIndexAppeared: (Int) -> Void = { _ in }

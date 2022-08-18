@@ -2,18 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import Combine
-import Defaults
 import Shared
 import SwiftUI
 
 struct TopBarNeevaButton: View {
     @EnvironmentObject var incognitoModel: IncognitoModel
     @EnvironmentObject var chromeModel: TabChromeModel
-
-    // TODO: sync this state variable with TabToolbarView somehow
-    @State private var presenting = false
-    @State private var action: OverflowMenuAction?
 
     let onMenuAction: (OverflowMenuAction) -> Void
 

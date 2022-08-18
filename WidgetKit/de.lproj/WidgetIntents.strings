@@ -1,32 +1,48 @@
-"2GqvPe" = "Go to Copied Link";
+/* (No Comment) */
+"2GqvPe" = "Zum kopierten Link gehen";
 
-"PzSrmZ-2GqvPe" = "Just to confirm, you wanted ‘Go to Copied Link’?";
+/* (No Comment) */
+"ctDNmu" = "Aktionsshortcut – Beschreibung";
 
-"PzSrmZ-eHmH1H" = "Just to confirm, you wanted ‘Clear Incognito Tabs’?";
+/* (No Comment) */
+"eHmH1H" = "Inkognito-Tabs löschen";
 
-"PzSrmZ-scEmjs" = "Just to confirm, you wanted ‘New Incognito Search’?";
+/* (No Comment) */
+"eqyNJg" = "Aktionsshortcut";
 
-"PzSrmZ-xRJbBP" = "Just to confirm, you wanted ‘New Search’?";
-
-"ctDNmu" = "Quick Action Description";
-
-"eHmH1H" = "Clear Incognito Tabs";
-
+/* (No Comment) */
 "eV8mOT" = "QuickActionType";
 
-"eqyNJg" = "Quick Action";
+/* (No Comment) */
+"fi3W24-2GqvPe" = "Es gibt ${count} Treffer für „Zu kopiertem Link gehen“.";
 
-"fi3W24-2GqvPe" = "There are ${count} options matching ‘Go to Copied Link’.";
+/* (No Comment) */
+"fi3W24-eHmH1H" = "Es gibt ${count} Treffer für „Inkognito-Tabs löschen“.";
 
-"fi3W24-eHmH1H" = "There are ${count} options matching ‘Clear Incognito Tabs’.";
+/* (No Comment) */
+"fi3W24-scEmjs" = "Es gibt ${count} Treffer für „Neue Inkognito-Suche“.";
 
-"fi3W24-scEmjs" = "There are ${count} options matching ‘New Incognito Search’.";
+/* (No Comment) */
+"fi3W24-xRJbBP" = "Es gibt ${count} Treffer für „Neue Suche“.";
 
-"fi3W24-xRJbBP" = "There are ${count} options matching ‘New Search’.";
+/* (No Comment) */
+"PzSrmZ-2GqvPe" = "Nur zur Bestätigung: War „Zu kopiertem Link gehen“ das, was Sie wollten?";
 
-"scEmjs" = "New Incognito Search";
+/* (No Comment) */
+"PzSrmZ-eHmH1H" = "Nur zur Bestätigung: War „Inkognito-Tabs löschen“ das, was Sie wollten?";
 
-"w9jdPK" = "Quick Action";
+/* (No Comment) */
+"PzSrmZ-scEmjs" = "Nur zur Bestätigung: War „Neue Inkognito-Suche“ das, was Sie wollten?";
 
-"xRJbBP" = "New Search";
+/* (No Comment) */
+"PzSrmZ-xRJbBP" = "Nur zur Bestätigung: War „Neue Suche“ das, was Sie wollten?";
+
+/* (No Comment) */
+"scEmjs" = "Neue Inkognito-Suche";
+
+/* (No Comment) */
+"w9jdPK" = "Aktionsshortcut";
+
+/* (No Comment) */
+"xRJbBP" = "Neue Suche";
 

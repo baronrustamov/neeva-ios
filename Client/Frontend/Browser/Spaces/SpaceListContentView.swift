@@ -4,7 +4,6 @@
 
 import Defaults
 import Shared
-import Storage
 import SwiftUI
 
 struct SpaceListContentView: View {
@@ -48,7 +47,7 @@ struct SpaceListContentView: View {
             return details.description ?? product.description.first
         case .newsItem(let newsItem):
             return newsItem.formattedDatePublished.capitalized + " - " + newsItem.snippet
-        case .recipe(_):
+        case .recipe:
             return details.description
         case .techDoc(let doc):
             return doc.body?.string

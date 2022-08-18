@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import Apollo
 import Combine
 import CoreGraphics
 
@@ -241,9 +240,7 @@ public enum NeevaScopeSearch {
         public let secondarySocials: [SocialNetwork]
     }
 
-    public class SearchController:
-        QueryController<SearchQuery, [SearchController.RichResult]>
-    {
+    public class SearchController: QueryController<SearchQuery, [SearchController.RichResult]> {
         public struct RichResult: Identifiable {
             public var id = UUID()
             public var result: RichSearchResult

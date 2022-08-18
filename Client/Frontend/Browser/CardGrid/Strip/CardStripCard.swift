@@ -59,7 +59,7 @@ struct CardStripCard<Details>: View where Details: TabCardDetails {
             if let image = details.closeButtonImage,
                 width > CardStripUX.CardMinimumContentWidthRequirement - 15
             {
-                Button(action: details.onClose) {
+                HoverEffectButton(effect: .lift, action: details.onClose) {
                     Image(uiImage: image)
                         .resizable()
                         .renderingMode(.template)
@@ -69,7 +69,6 @@ struct CardStripCard<Details>: View where Details: TabCardDetails {
                         .background(Color(UIColor.systemGray6))
                         .clipShape(Circle())
                         .accessibilityLabel("Close \(details.title)")
-                        .hoverEffect(.lift)
                 }
             }
         }.animation(nil)

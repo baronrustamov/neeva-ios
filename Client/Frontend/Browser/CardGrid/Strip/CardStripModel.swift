@@ -4,7 +4,6 @@
 
 import Combine
 import Shared
-import SwiftUI
 
 class CardStripModel: ObservableObject {
     let incognitoModel: IncognitoModel

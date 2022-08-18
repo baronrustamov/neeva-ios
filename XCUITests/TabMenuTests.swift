@@ -117,19 +117,36 @@ class TabMenuTests: BaseTestCase {
         waitForExistence(app.buttons["restore"])
     }
 
-    func testPinTabFromSwitcher() {
+    // MARK: - Pin Tab
+    func testPinTabFromTab() {
         openURL(firstWebsite.url)
+
+        // Pin.
+        app.buttons["Show Tabs"].press(forDuration: 1)
+        app.buttons["Pin Tab"].tap()
+
+        // Unpin.
+        app.buttons["Show Tabs"].press(forDuration: 1)
+        app.buttons["Unpin Tab"].tap()
+
+        // Check that Pin option exists.
+        app.buttons["Show Tabs"].press(forDuration: 1)
+        waitForExistence(app.buttons["Pin Tab"])
+    }
+
+    func testPinTabFromSwitcher() {
+        openURL()
         goToTabTray()
 
-        waitForExistence(app.buttons[firstWebsite.tabName], timeout: 30)
-        app.buttons[firstWebsite.tabName].press(forDuration: 1)
+        waitForExistence(app.buttons["Example Domain, Tab"], timeout: 30)
+        app.buttons["Example Domain, Tab"].press(forDuration: 1)
 
-        waitForExistence(app.buttons["Pin tab"], timeout: 30)
-        app.buttons["Pin tab"].tap()
+        waitForExistence(app.buttons["Pin Tab"], timeout: 30)
+        app.buttons["Pin Tab"].tap()
 
-        app.buttons[firstWebsite.tabName].press(forDuration: 1)
+        app.buttons["Example Domain, Tab"].press(forDuration: 1)
 
         // Check that unpin option exists
-        waitForExistence(app.buttons["Unpin tab"])
+        waitForExistence(app.buttons["Unpin Tab"])
     }
 }

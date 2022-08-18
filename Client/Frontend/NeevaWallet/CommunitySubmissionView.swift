@@ -16,7 +16,7 @@ public struct CommunitySubmissionView: View {
     let domain: String
     let url: URL
     @Binding var trust: Bool
-    @State private var request: TrustSignalRequest? = nil
+    @State private var request: TrustSignalRequest?
 
     public init(iconURL: URL, domain: String, url: URL, trust: Binding<Bool>) {
         self.iconURL = iconURL

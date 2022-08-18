@@ -10,12 +10,20 @@ struct TabGroup {
     var children: [Tab]
     var id: String
     var lastExecutedTime: Timestamp {
-        children.map { $0.lastExecutedTime ?? Date.nowMilliseconds() }.max()
+        children.map { $0.lastExecutedTime }.max()
             ?? Date.nowMilliseconds()
     }
 
     var hasPinnedChild: Bool {
         children.contains { $0.isPinned }
+    }
+
+    var displayTitle: String {
+        title ?? inferredTitle ?? "\(children.count) Tabs"
+    }
+
+    var title: String? {
+        Defaults[.tabGroupNames][id] ?? children.first?.displayTitle
     }
 
     var inferredTitle: String? {
@@ -28,10 +36,6 @@ struct TabGroup {
             }
         }
         return children.first?.displayTitle
-    }
-
-    var displayTitle: String {
-        inferredTitle ?? "\(children.count) Tabs"
     }
 
     func isIncluded(in tabSection: TabSection) -> Bool {

@@ -15,7 +15,7 @@ private let log = Logger.browser
 func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
     var recent = tabs.first
     tabs.forEach { tab in
-        if let time = tab.lastExecutedTime, time > (recent?.lastExecutedTime ?? 0) {
+        if tab.lastExecutedTime > (recent?.lastExecutedTime ?? 0) {
             recent = tab
         }
     }
@@ -26,6 +26,7 @@ protocol TabContentScript {
     static func name() -> String
     func scriptMessageHandlerName() -> String?
     func userContentController(didReceiveScriptMessage message: WKScriptMessage)
+    func connectedTabChanged(_ tab: Tab)
 }
 
 @objc
@@ -35,6 +36,7 @@ protocol TabDelegate {
     func tab(_ tab: Tab, didSelectSearchWithNeevaForSelection selection: String)
     @objc optional func tab(_ tab: Tab, didCreateWebView webView: WKWebView)
     @objc optional func tab(_ tab: Tab, willDeleteWebView webView: WKWebView)
+    @objc optional func tab(_ tab: Tab, didUpdateWebView webView: WKWebView)
 }
 
 public enum TabSection: String, CaseIterable {
@@ -89,7 +91,7 @@ class Tab: NSObject, ObservableObject {
 
     @Published var favicon: Favicon?
 
-    var lastExecutedTime: Timestamp?
+    var lastExecutedTime: Timestamp = Date.nowMilliseconds()
     var sessionData: SessionData?
     fileprivate var lastRequest: URLRequest?
     var restoring: Bool = false
@@ -105,7 +107,6 @@ class Tab: NSObject, ObservableObject {
     @Published var title: String?
     /// For security reasons, the URL may differ from the web view’s URL.
     @Published var url: URL?
-    @Default(.archivedTabsDuration) var archivedTabsDuration
     private var webViewCanGoBack = false {
         didSet {
             updateCanGoBack()
@@ -209,7 +210,7 @@ class Tab: NSObject, ObservableObject {
             return false
         }
 
-        switch archivedTabsDuration {
+        switch Defaults[.archivedTabsDuration] {
         case .week:
             return
                 !(isIncluded(in: .today)
@@ -235,8 +236,8 @@ class Tab: NSObject, ObservableObject {
             updateCanGoBack()
         }
     }
-    var parentUUID: String? = nil
-    var parentSpaceID: String? = nil
+    var parentUUID: String?
+    var parentSpaceID: String?
 
     // All tabs with the same `rootUUID` are considered part of the same group.
     var rootUUID: String = UUID().uuidString
@@ -326,32 +327,43 @@ class Tab: NSObject, ObservableObject {
             restore(webView)
 
             self.webView = webView
-            addRefreshControl()
-
-            send(
-                webView: \.title, to: \.title,
-                provided: { [weak self] in self?.hasContentProcess ?? false })
-            send(webView: \.isLoading, to: \.isLoading)
-            send(webView: \.canGoBack, to: \.webViewCanGoBack)
-            send(webView: \.canGoForward, to: \.webViewCanGoForward)
-
-            $isLoading
-                .combineLatest(webView.publisher(for: \.estimatedProgress, options: .new))
-                .sink { isLoading, progress in
-                    // Unfortunately WebKit can report partial progress when isLoading is false! That can
-                    // happen when a load is cancelled. Avoid reporting partial progress here, but take
-                    // care to let the case of progress complete (value of 1) through.
-                    self.estimatedProgress = (isLoading || progress == 1) ? progress : 0
-                }
-                .store(in: &webViewSubscriptions)
 
             UserScriptManager.shared.injectUserScriptsIntoTab(self)
+            setupWebViewListeners()
             tabDelegate?.tab?(self, didCreateWebView: webView)
 
             return true
         }
 
         return false
+    }
+
+    private func setupWebViewListeners() {
+        guard let webView = webView else {
+            return
+        }
+
+        addRefreshControl()
+
+        send(
+            webView: \.title, to: \.title,
+            provided: { [weak self] in self?.hasContentProcess ?? false })
+        send(webView: \.isLoading, to: \.isLoading)
+        send(webView: \.canGoBack, to: \.webViewCanGoBack)
+        send(webView: \.canGoForward, to: \.webViewCanGoForward)
+
+        $isLoading
+            .combineLatest(webView.publisher(for: \.estimatedProgress, options: .new))
+            .sink { isLoading, progress in
+                // Unfortunately WebKit can report partial progress when isLoading is false! That can
+                // happen when a load is cancelled. Avoid reporting partial progress here, but take
+                // care to let the case of progress complete (value of 1) through.
+                self.estimatedProgress = (isLoading || progress == 1) ? progress : 0
+            }
+            .store(in: &webViewSubscriptions)
+
+        contentScriptManager.updateConnectedTab(tab: self)
+        tabDelegate?.tab?(self, didUpdateWebView: webView)
     }
 
     func addRefreshControl() {
@@ -496,6 +508,11 @@ class Tab: NSObject, ObservableObject {
     }
 
     func updateCanGoForward() {
+        if FeatureFlag[.pinnedTabImprovments] && isPinned {
+            canGoForward = false
+            return
+        }
+
         if let bvc = browserViewController, bvc.tabManager.selectedTab == self {
             canGoForward =
                 webViewCanGoForward || bvc.simulatedSwipeModel.canGoForward()
@@ -505,11 +522,33 @@ class Tab: NSObject, ObservableObject {
     }
 
     func goBack(checkBackNavigationSuggestionQuery: Bool = true) {
-        // If the user opened this tab from FastTap, return to FastTap.
+        let currentIndex =
+            webView?.backForwardList.navigationStackIndex ?? sessionData?.navigationStackIndex ?? 0
+        let parentIndex =
+            parent?.webView?.backForwardList.navigationStackIndex
+            ?? parent?.sessionData?.navigationStackIndex ?? 0
+
+        // If the parent tab is pinned, and back nav would put the child tab at the same navigation index,
+        // then return to the parent and pass the WebView if needed.
+        // Else if the user opened this tab from FastTap, return to FastTap.
         // Else if the user opened this tab from another one, close this one to return to the parent.
         // Else if the user opened this tab from a space, return to the SpaceDetailView.
         // Else just perform a regular back navigation.
-        if checkBackNavigationSuggestionQuery,
+        if FeatureFlag[.pinnedTabImprovments],
+            let parent = parent, parent.isPinned,
+            parentIndex == currentIndex - 1
+        {
+            if parent.webView == nil, let webView = webView {
+                parent.webView = webView
+                parent.setupWebViewListeners()
+
+                webView.goBack()
+
+                self.webView = nil
+            }
+
+            browserViewController?.tabManager.removeTab(self, showToast: false)
+        } else if checkBackNavigationSuggestionQuery,
             let searchQuery = backNavigationSuggestionQuery(),
             let bvc = browserViewController
         {
@@ -710,7 +749,7 @@ class Tab: NSObject, ObservableObject {
             let webView = webView
         {
             webView.evaluateJavaScript(domain.script) {
-                [weak browserViewController, weak self] (result, error) in
+                [weak browserViewController, weak self] (result, _) in
                 guard let bvc = browserViewController, let self = self else { return }
                 guard let linkData = result as? [[String]] else {
                     bvc.showAddToSpacesSheet(
@@ -740,12 +779,12 @@ class Tab: NSObject, ObservableObject {
     func isIncluded(in tabSection: TabSection) -> Bool {
         // The fallback value won't be used. tab.lastExecutedTime is
         // guaranteed to be non-nil in configureTab()
-        let lastExecutedTime = lastExecutedTime ?? Date.nowMilliseconds()
+        let lastExecutedTime = lastExecutedTime
         return wasLastExecuted(
             in: tabSection, isPinned: isPinned, lastExecutedTime: lastExecutedTime)
     }
 
-    private func saveSessionData() {
+    private func saveSessionData(isForPinnedTabPlaceholder: Bool = false) {
         let currentItem: WKBackForwardListItem! = webView?.backForwardList.currentItem
 
         // Freshly created WebViews won't have any history entries at all.
@@ -753,24 +792,39 @@ class Tab: NSObject, ObservableObject {
         if currentItem != nil {
             // Here we create the SessionData for the tab and pass that to the SavedTab.
             let navigationList = webView?.backForwardList.all ?? []
-            let urls = navigationList.compactMap { $0.url }
             let currentPage = -(webView?.backForwardList.forwardList ?? []).count
-            let queries = navigationList.map {
+            var urls = navigationList.compactMap { $0.url }
+            var navigationStackIndex = webView?.backForwardList.navigationStackIndex ?? 0
+            var queries = navigationList.map {
                 queryForNavigation.findQueryFor(navigation: $0)
             }
 
+            // When creating SessionData for a pinned tab's placeholder, a
+            // URL will be added to SessionData even if it hasn't yet been set for the tab.
+            // This prevents the URL from being included in the SessionData
+            // since it's not meant to be used in the placeholder.
+            if urls.last != url, isForPinnedTabPlaceholder {
+                urls.removeLast()
+                queries.removeLast()
+                navigationStackIndex -= 1
+            }
+
             sessionData = SessionData(
-                currentPage: currentPage, urls: urls,
+                currentPage: currentPage,
+                navigationStackIndex: navigationStackIndex,
+                urls: urls,
                 queries: queries.map { $0?.typed },
                 suggestedQueries: queries.map { $0?.suggested },
                 queryLocations: queries.map { $0?.location },
-                lastUsedTime: lastExecutedTime ?? Date.nowMilliseconds()
+                lastUsedTime: lastExecutedTime
             )
         }
     }
 
-    func saveSessionDataAndCreateSavedTab(isSelected: Bool, tabIndex: Int?) -> SavedTab {
-        saveSessionData()
+    func saveSessionDataAndCreateSavedTab(
+        isSelected: Bool, tabIndex: Int?, isForPinnedTabPlaceholder: Bool = false
+    ) -> SavedTab {
+        saveSessionData(isForPinnedTabPlaceholder: isForPinnedTabPlaceholder)
 
         return SavedTab(
             screenshotUUID: screenshotUUID, isSelected: isSelected,
@@ -867,6 +921,12 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
         tab.webView?.configuration.userContentController.removeScriptMessageHandler(
             forName: name)
     }
+
+    func updateConnectedTab(tab: Tab) {
+        helpers.forEach { helper in
+            helper.value.connectedTabChanged(tab)
+        }
+    }
 }
 
 private protocol TabWebViewDelegate: AnyObject {
@@ -938,7 +998,7 @@ class TabWebView: WKWebView, MenuHelperInterface {
     }
 }
 
-public func wasLastExecuted(in tabSection: TabSection, isPinned: Bool, lastExecutedTime: Timestamp)
+func wasLastExecuted(in tabSection: TabSection, isPinned: Bool, lastExecutedTime: Timestamp)
     -> Bool
 {
     // lastExecutedTime is passed in milliseconds, needs to be converted to seconds.

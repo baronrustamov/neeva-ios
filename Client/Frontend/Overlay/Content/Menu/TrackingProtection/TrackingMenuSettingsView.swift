@@ -77,7 +77,7 @@ struct TrackingSettingsSectionBlock: View {
         if #available(iOS 15.0, *) {
             Section {
                 Toggle("Ad Blocking", isOn: $adBlockEnabled)
-                    .onChange(of: adBlockEnabled) { value in
+                    .onChange(of: adBlockEnabled) { _ in
                         if adBlockEnabled {
                             ClientLogger.shared.logCounter(.AdBlockEnabled)
                         }

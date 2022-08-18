@@ -1,40 +1,60 @@
+/* (No Comment) */
 "2I56oC" = "Intent Quick Link";
 
+/* (No Comment) */
 "9NY97H" = "String.QuickActionDescription";
 
-"DFGT8d" = "Quick Link Selection";
+/* (No Comment) */
+"bpYlov" = "Accéder au lien copié";
 
-"Dt1192" = "Incognito Search";
+/* (No Comment) */
+"DFGT8d" = "Sélection de liens rapides";
 
-"JiZVv0" = "Close Incognito Tabs";
+/* (No Comment) */
+"Dt1192" = "Recherche privée";
 
-"MXB2K6" = "Search in Neeva";
+/* (No Comment) */
+"JiZVv0" = "Fermer les onglets de navigation privée";
 
-"QjQSnd-Dt1192" = "Just to confirm, you wanted ‘Incognito Search’?";
+/* (No Comment) */
+"MXB2K6" = "Rechercher dans Neeva";
 
-"QjQSnd-JiZVv0" = "Just to confirm, you wanted ‘Close Incognito Tabs’?";
+/* (No Comment) */
+"oQDtoo-bpYlov" = "${count} options correspondent à « Accéder au lien copié ».";
 
-"QjQSnd-MXB2K6" = "Just to confirm, you wanted ‘Search in Neeva’?";
+/* (No Comment) */
+"oQDtoo-Dt1192" = "${count} options correspondent à « Recherche privée ».";
 
-"QjQSnd-bpYlov" = "Just to confirm, you wanted ‘Go to Copied Link’?";
+/* (No Comment) */
+"oQDtoo-JiZVv0" = "${count} options correspondent à « Fermer les onglets de navigation privée ».";
 
-"bpYlov" = "Go to Copied Link";
+/* (No Comment) */
+"oQDtoo-MXB2K6" = "${count} options correspondent à « Rechercher dans Neeva ».";
 
-"oQDtoo-Dt1192" = "There are ${count} options matching ‘Incognito Search’.";
+/* (No Comment) */
+"pooIV6-bpYlov" = "${count} options correspondent à « Accéder au lien copié ».";
 
-"oQDtoo-JiZVv0" = "There are ${count} options matching ‘Close Incognito Tabs’.";
+/* (No Comment) */
+"pooIV6-Dt1192" = "${count} options correspondent à « Recherche privée ».";
 
-"oQDtoo-MXB2K6" = "There are ${count} options matching ‘Search in Neeva’.";
+/* (No Comment) */
+"pooIV6-JiZVv0" = "${count} options correspondent à « Fermer les onglets de navigation privée ».";
 
-"oQDtoo-bpYlov" = "There are ${count} options matching ‘Go to Copied Link’.";
+/* (No Comment) */
+"pooIV6-MXB2K6" = "${count} options correspondent à « Rechercher dans Neeva ».";
 
-"pooIV6-Dt1192" = "There are ${count} options matching ‘Incognito Search’.";
+/* (No Comment) */
+"QjQSnd-bpYlov" = "Juste pour confirmer, vous voulez « Accéder au lien copié » ?";
 
-"pooIV6-JiZVv0" = "There are ${count} options matching ‘Close Incognito Tabs’.";
+/* (No Comment) */
+"QjQSnd-Dt1192" = "Juste pour confirmer, vous voulez effectuer une « Recherche privée » ?";
 
-"pooIV6-MXB2K6" = "There are ${count} options matching ‘Search in Neeva’.";
+/* (No Comment) */
+"QjQSnd-JiZVv0" = "Juste pour confirmer, vous voulez « Fermer les onglets de navigation privée » ?";
 
-"pooIV6-bpYlov" = "There are ${count} options matching ‘Go to Copied Link’.";
+/* (No Comment) */
+"QjQSnd-MXB2K6" = "Juste pour confirmer, vous voulez « Rechercher dans Neeva » ?";
 
-"wsnbbt" = "Quick Action";
+/* (No Comment) */
+"wsnbbt" = "Action rapide";
 

@@ -4,7 +4,6 @@
 
 import Apollo
 import Foundation
-import SwiftUI
 
 private let log = Logger.browser
 
@@ -98,8 +97,8 @@ open class UserInfoProvider {
     }
 }
 
-public class ResendVerificationEmailRequest: MutationRequest<ResendVerificationEmailMutation> {
-    public init() {
+class ResendVerificationEmailRequest: MutationRequest<ResendVerificationEmailMutation> {
+    init() {
         super.init(mutation: ResendVerificationEmailMutation())
     }
 }

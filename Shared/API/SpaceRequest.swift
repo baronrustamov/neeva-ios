@@ -2,9 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import Apollo
-import Combine
-
 public class CreateSpaceRequest: MutationRequest<CreateSpaceMutation> {
     public init(name: String, testMode: Bool = false) {
         super.init(mutation: CreateSpaceMutation(name: name), testMode: testMode)

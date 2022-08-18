@@ -99,7 +99,7 @@ private func findViewController(in responder: UIResponder) -> UIViewController? 
 }
 
 /// The SwiftUI view that handles the actual present/dismiss logic
-public struct ViewControllerWrapper_Presenter<Wrapper: ViewControllerWrapper>: View {
+struct ViewControllerWrapper_Presenter<Wrapper: ViewControllerWrapper>: View {
     @Binding var state: ModalState
     let wrapper: Wrapper
 
@@ -134,9 +134,9 @@ public struct ViewControllerWrapper_Presenter<Wrapper: ViewControllerWrapper>: V
         }
     }
 
-    public var body: some View {
+    var body: some View {
         // Reference `state` in the view body to make sure this view gets re-rendered whenever the state changes
-        let _ = state
+        _ = state
         // use an EmptyView here because calling `introspect` on `self` results in an infinitely-nested view tree that crashes the app
         return EmptyView().frame(width: 0, height: 0).introspect(selector: { $0 }) { view in
             guard let vc = findViewController(in: view) else {

@@ -27,7 +27,9 @@ struct SheetHeaderView: View {
                         Circle()
                             .foregroundColor(.secondaryBackground)
                     ).tapTargetFrame()
-            }.padding(.trailing, addPadding ? 8 : 0)
+            }
+            .padding(.trailing, addPadding ? 8 : 0)
+            .hoverEffect()
         }
     }
 }
@@ -53,6 +55,7 @@ struct SheetHeaderButtonView: View {
                 }
                 .buttonStyle(.neeva(.primary))
                 .layoutPriority(0.5)
+                .hoverEffect()
             }
         }
     }

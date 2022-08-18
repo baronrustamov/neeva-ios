@@ -11,7 +11,7 @@ import WalletCore
 struct OpenSessionsView: View {
     @State var isExpanded: Bool = true
     @State var showConfirmDisconnectAlert = false
-    @State var sessionToDisconnect: Session? = nil
+    @State var sessionToDisconnect: Session?
     @Default(.sessionsPeerIDs) var savedSessions
 
     @ObservedObject var model: Web3Model

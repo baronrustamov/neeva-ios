@@ -72,7 +72,7 @@ class ReadabilityOperation: Operation {
                     )
                     // TODO Fail
                 }
-            case .error(_):
+            case .error:
                 // TODO Not entitely sure what to do on error. Needs UX discussion and followup bug.
                 break
             }

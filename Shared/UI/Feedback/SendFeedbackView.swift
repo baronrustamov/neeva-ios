@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import QuickLook
 import SwiftUI
 
 /// Ask the user for feedback
@@ -288,7 +287,7 @@ public struct SendFeedbackView: View {
                         }
                     )
                     .padding(.vertical, 7)
-                    .onChange(of: urlString) { value in
+                    .onChange(of: urlString) { _ in
                         self.url = URL(string: urlString)
                     }
                 }

@@ -6,14 +6,14 @@ import SFSafeSymbols
 import Shared
 import SwiftUI
 
-public struct CardGridOverflowMenuView: View {
+struct CardGridOverflowMenuView: View {
     private let menuAction: (OverflowMenuAction) -> Void
     private let changedUserAgent: Bool
 
     @EnvironmentObject var chromeModel: TabChromeModel
     @EnvironmentObject var locationModel: LocationViewModel
 
-    public init(
+    init(
         changedUserAgent: Bool = false,
         menuAction: @escaping (OverflowMenuAction) -> Void
     ) {
@@ -21,7 +21,7 @@ public struct CardGridOverflowMenuView: View {
         self.changedUserAgent = changedUserAgent
     }
 
-    public var body: some View {
+    var body: some View {
         GroupedStack {
             GroupedCell.Decoration {
                 VStack(spacing: 0) {

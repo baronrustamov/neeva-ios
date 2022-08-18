@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
-import SwiftUI
 
 extension BrowserViewController {
     func updateFindInPageVisibility(visible: Bool, tab: Tab? = nil, query: String? = nil) {

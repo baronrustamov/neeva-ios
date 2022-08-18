@@ -6,25 +6,6 @@ import Shared
 import Storage
 import SwiftUI
 
-struct HistorySectionHeader: View {
-    let text: String
-
-    var title: some View {
-        HStack {
-            Text(String(text))
-                .fontWeight(.medium)
-            Spacer()
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.leading)
-        .padding(.vertical, 8)
-    }
-
-    var body: some View {
-        title.background(Color.groupedBackground)
-    }
-}
-
 struct HistoryPanelView: View {
     @ObservedObject var model: HistoryPanelModel
     @Environment(\.onOpenURL) var openURL
@@ -172,7 +153,7 @@ struct HistoryPanelView: View {
     ) -> some View {
         Group {
             if sites.count > 0 {
-                Section(header: HistorySectionHeader(text: sectionHeaderTitle)) {
+                Section(header: DateSectionHeaderView(text: sectionHeaderTitle)) {
                     SiteListView(
                         tabManager: model.tabManager,
                         historyPanelModel: model,

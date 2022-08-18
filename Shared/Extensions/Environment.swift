@@ -7,7 +7,7 @@ import SwiftUI
 // The `openURL` environment key is not writable, so we need to roll our own.
 extension EnvironmentValues {
     private struct OnOpenURLKey: EnvironmentKey {
-        static var defaultValue: ((URL) -> Void)? = nil
+        static var defaultValue: ((URL) -> Void)?
     }
 
     /// Provide this environment key to open URLs in an app other than Safari.
@@ -17,7 +17,7 @@ extension EnvironmentValues {
     }
 
     private struct OnOpenURLForSpaceKey: EnvironmentKey {
-        static var defaultValue: ((URL, String) -> Void)? = nil
+        static var defaultValue: ((URL, String) -> Void)?
     }
 
     public var onOpenURLForSpace: (URL, String) -> Void {
@@ -26,7 +26,7 @@ extension EnvironmentValues {
     }
 
     private struct OnOpenURLForCheatsheetKey: EnvironmentKey {
-        static var defaultValue: ((URL, String) -> Void)? = nil
+        static var defaultValue: ((URL, String) -> Void)?
     }
 
     public var onOpenURLForCheatsheet: (URL, String) -> Void {
@@ -35,7 +35,7 @@ extension EnvironmentValues {
     }
 
     private struct onSigninOrJoinNeevaKey: EnvironmentKey {
-        static var defaultValue: (() -> Void)? = nil
+        static var defaultValue: (() -> Void)?
     }
     public var onSigninOrJoinNeeva: () -> Void {
         get {

@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import SDWebImage
 import UIKit
 
 private let imageLock = NSLock()
@@ -41,7 +40,7 @@ extension UIImage {
     }
 
     public func createScaled(_ size: CGSize) -> UIImage {
-        UIGraphicsImageRenderer(size: size).image { (ctx) in
+        UIGraphicsImageRenderer(size: size).image { (_) in
             draw(in: CGRect(size: size))
         }
     }

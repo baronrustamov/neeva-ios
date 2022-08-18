@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import Combine
 import Defaults
 import Shared
 import SwiftUI
@@ -194,7 +193,7 @@ struct CardsContainer: View {
                                 scrollProxy: scrollProxy
                             )
                             .zIndex(1)
-                            ArchivedTabsView(containerGeometry: geom.size)
+                            OpenArchivedTabsPanelButton(containerGeometry: geom.size)
                         }.onAppear {
                             gridModel.scrollToSelectedTab()
                         }
@@ -207,7 +206,7 @@ struct CardsContainer: View {
                 .animation(gridModel.switchModeWithoutAnimation ? nil : .interactiveSpring())
                 .accessibilityElement(children: .contain)
                 .accessibilityLabel("Tabs")
-                .accessibilityValue(Text("\(tabModel.manager.normalTabs.count) tabs"))
+                .accessibilityValue(Text("\(tabModel.manager.activeNormalTabs.count) tabs"))
                 .accessibilityHidden(gridModel.switcherState != .tabs || incognitoModel.isIncognito)
 
                 // Incognito Tabs

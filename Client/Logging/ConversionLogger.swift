@@ -7,7 +7,6 @@ import Defaults
 import Foundation
 import Shared
 import StoreKit
-import SwiftyJSON
 
 private enum AttributionTokenErrorType: String {
     case olderIOSRequest
@@ -54,7 +53,7 @@ class ConversionLogger {
                 neevaTokenRequest.setValue(
                     "application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
 
-                URLSession.shared.dataTask(with: neevaTokenRequest) { data, response, error in
+                URLSession.shared.dataTask(with: neevaTokenRequest) { _, response, error in
                     guard error == nil else {
                         logNeevaRequestError(token: token, errorType: .requestError)
                         return

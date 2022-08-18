@@ -46,27 +46,6 @@ public func curry<A, B, C, D, E>(_ f: @escaping (A, B, C, D) -> E) -> (A, B, C) 
     }
 }
 
-// Function composition.
-infix operator •
-
-public func • <T, U, V>(f: @escaping (T) -> U, g: @escaping (U) -> V) -> (T) -> V {
-    return { t in
-        return g(f(t))
-    }
-}
-public func • <T, V>(f: @escaping (T) -> Void, g: @escaping () -> V) -> (T) -> V {
-    return { t in
-        f(t)
-        return g()
-    }
-}
-public func • <V>(f: @escaping () -> Void, g: @escaping () -> V) -> () -> V {
-    return {
-        f()
-        return g()
-    }
-}
-
 // Why not simply provide an override for ==? Well, that's scary, and can accidentally recurse.
 // This is enough to catch arrays, which Swift will delegate to element-==.
 public func optArrayEqual<T: Equatable>(_ lhs: [T]?, rhs: [T]?) -> Bool {

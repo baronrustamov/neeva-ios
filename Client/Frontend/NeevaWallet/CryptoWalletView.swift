@@ -85,7 +85,7 @@ struct CryptoWalletView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .overlay(
             overlay
-        ).onChange(of: viewState) { value in
+        ).onChange(of: viewState) { _ in
             if case .starter = viewState {
                 Defaults[.walletIntroSeen] = true
             }

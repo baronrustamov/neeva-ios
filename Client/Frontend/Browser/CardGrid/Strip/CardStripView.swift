@@ -2,9 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import Combine
 import Shared
-import Storage
 import SwiftUI
 
 struct CardStripUX {
@@ -41,7 +39,7 @@ struct CardStripView: View {
     var content: some View {
         HStack(spacing: 0) {
             ForEach(model.rows) { row in
-                ForEach(Array(row.cells.enumerated()), id: \.0) { index, details in
+                ForEach(Array(row.cells.enumerated()), id: \.0) { _, details in
                     switch details {
                     case .tabGroupInline(let groupDetails):
                         CardStripTabGroupCardView(groupDetails: groupDetails)

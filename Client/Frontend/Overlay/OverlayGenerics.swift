@@ -25,7 +25,7 @@ struct PopoverRootView: View {
     let headerButton: OverlayHeaderButton?
 
     var body: some View {
-        PopoverView(style: style, onDismiss: { onDismiss(self) }, headerButton: headerButton) {
+        PopoverView(style: style, headerButton: headerButton) {
             content()
                 .environment(
                     \.onOpenURL,
@@ -37,6 +37,8 @@ struct PopoverRootView: View {
                 // some views require the OverlayModel as an EnvironmentObject.
                 .environmentObject(overlayModel)
                 .environment(\.hideOverlay, { self.onDismiss(self) })
+        } onDismiss: {
+            onDismiss(self)
         }
     }
 }

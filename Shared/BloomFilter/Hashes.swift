@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import Foundation
-
 /// Implementation for FNVHash for 64 bit architectures
 enum FNVHash {
     static let offset: UInt = 14_695_981_039_346_656_037

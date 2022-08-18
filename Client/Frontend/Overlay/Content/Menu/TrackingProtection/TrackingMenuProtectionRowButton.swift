@@ -6,11 +6,11 @@ import Defaults
 import Shared
 import SwiftUI
 
-public struct TrackingMenuProtectionRowButton: View {
+struct TrackingMenuProtectionRowButton: View {
     @Binding var preventTrackers: Bool
     @Environment(\.openSettings) var openSettings
 
-    public var body: some View {
+    var body: some View {
         GroupedCell.Decoration {
             VStack(spacing: 0) {
                 if Defaults[.cookieCutterEnabled] {

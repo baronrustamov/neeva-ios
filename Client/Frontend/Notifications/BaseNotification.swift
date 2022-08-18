@@ -25,7 +25,7 @@ class BaseNotification: Codable, Identifiable {
     let campaignID: String?
 
     let dateReceived: Date
-    var dateRead: Date? = nil
+    var dateRead: Date?
 
     var isUnread: Bool {
         dateRead == nil

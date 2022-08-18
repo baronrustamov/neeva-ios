@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import Combine
-import Shared
 import SwiftUI
 import UIKit
 
@@ -15,9 +13,7 @@ enum SwipeUX {
     static let EdgeWidth: CGFloat = 30
 }
 
-class SimulatedSwipeController:
-    UIViewController, TabEventHandler, SimulateForwardAnimatorDelegate
-{
+class SimulatedSwipeController: UIViewController, TabEventHandler, SimulateForwardAnimatorDelegate {
     var model: SimulatedSwipeModel
     var animator: SimulatedSwipeAnimator!
     let blankView: UIView = {

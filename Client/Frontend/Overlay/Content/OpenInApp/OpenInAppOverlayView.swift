@@ -4,7 +4,6 @@
 
 import Shared
 import SwiftUI
-import UIKit
 
 struct OpenInAppOverlayView: View {
     let url: URL
@@ -13,7 +12,7 @@ struct OpenInAppOverlayView: View {
 
     @Environment(\.hideOverlay) private var hideOverlay
 
-    public var body: some View {
+    var body: some View {
         GroupedStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Open link in external app?")

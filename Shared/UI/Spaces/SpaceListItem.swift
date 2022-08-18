@@ -44,6 +44,7 @@ struct SpaceListItem: View {
             Symbol(decorative: icon, weight: .semibold, relativeTo: .title3)
                 .tapTargetFrame()
                 .foregroundColor(iconColor)
+                .hoverEffect()
         }
         .padding(.vertical, 6)
         .padding(.leading, 16)

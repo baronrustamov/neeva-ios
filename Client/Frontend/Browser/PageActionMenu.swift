@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
-import Storage
 
 extension BrowserViewController {
     func share(
@@ -11,7 +10,7 @@ extension BrowserViewController {
         presentableVC: UIViewController & UIPopoverPresentationControllerDelegate
     ) {
         let helper = ShareExtensionHelper(url: fileURL, tab: tabManager.selectedTab)
-        let controller = helper.createActivityViewController { completed, activityType in
+        let controller = helper.createActivityViewController { completed, _ in
             print("Shared downloaded file: \(completed)")
         }
 

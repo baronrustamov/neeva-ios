@@ -3,9 +3,8 @@
 // found in the LICENSE file.
 
 import Foundation
-import Shared
 
-//MARK: - Interface
+// MARK: - Interface
 private protocol Expirable {
     var hasExpired: Bool { get }
 }

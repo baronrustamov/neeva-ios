@@ -2,59 +2,58 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import Foundation
 import Shared
 
-public struct OverlayStyle {
+struct OverlayStyle {
     let showTitle: Bool
     let backgroundColor: UIColor
-    let nonDismissible: Bool  // disable dismiss modal by clicking the gray black
+    /// Disables dismissing the modal by clicking outside the view.
+    let nonDismissible: Bool
     let embedScrollView: Bool
-    // TODO: this should be removed in the next version to support portrait popover
-    let isAdBlockerPromo: Bool
-    /// If true, will fill the entire width of the screen with the popover
+    /// If true, will fill the entire width of the screen with the popover.
     let expandPopoverWidth: Bool
+    /// If true, expands the view to fill the height of the popover.
+    let expandPopoverHeight: Bool
 
     init(
-        showTitle: Bool, backgroundColor: UIColor = .DefaultBackground,
+        showTitle: Bool,
+        backgroundColor: UIColor = .DefaultBackground,
         nonDismissible: Bool = false,
-        embedScrollView: Bool = true, expandPopoverWidth: Bool = false,
-        isAdBlockerPromo: Bool = false
+        embedScrollView: Bool = true,
+        expandPopoverWidth: Bool = true,
+        expandPopoverHeight: Bool = true
     ) {
         self.showTitle = showTitle
         self.backgroundColor = backgroundColor
         self.nonDismissible = nonDismissible
         self.embedScrollView = embedScrollView
         self.expandPopoverWidth = expandPopoverWidth
-        self.isAdBlockerPromo = isAdBlockerPromo
+        self.expandPopoverHeight = expandPopoverHeight
     }
 
     /// Use for sheets containing grouped sets of controls (e.g., like the Overflow menu).
     static let grouped = OverlayStyle(
         showTitle: false,
-        backgroundColor: .systemGroupedBackground.elevated)
+        backgroundColor: .systemGroupedBackground.elevated,
+        expandPopoverHeight: false
+    )
 
     static let spaces = OverlayStyle(
         showTitle: true,
-        backgroundColor: .DefaultBackground,
-        expandPopoverWidth: true
+        backgroundColor: .DefaultBackground
     )
 
     static let cheatsheet = OverlayStyle(
         showTitle: false,
-        backgroundColor: .DefaultBackground
+        backgroundColor: .DefaultBackground,
+        expandPopoverWidth: false,
+        expandPopoverHeight: false
     )
 
     static let nonScrollableMenu = OverlayStyle(
         showTitle: false,
         backgroundColor: .systemGroupedBackground.elevated,
         embedScrollView: false
-    )
-
-    static let adBlockerPromo = OverlayStyle(
-        showTitle: false,
-        backgroundColor: .DefaultBackground,
-        isAdBlockerPromo: true
     )
 
     static let withTitle = OverlayStyle(showTitle: true)

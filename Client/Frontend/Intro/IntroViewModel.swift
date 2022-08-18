@@ -21,7 +21,7 @@ enum FirstRunButtonActions {
     case signupWithApple(Bool?, String?, String?)
     case signupWithOther
     case skipToBrowser
-    case oktaSignup(String, String, String, Bool)  //email, first name, password, marketing option
+    case oktaSignup(String, String, String, Bool)  // email, first name, password, marketing option
     case oktaSignin(String)  // email
     case oauthWithProvider(NeevaConstants.OAuthProvider, Bool, String, String)
     case oktaAccountCreated(String)  // token
@@ -35,15 +35,15 @@ class IntroViewModel: NSObject, ObservableObject {
     @Published var showQRScanner = false
     @Published var qrcodeInstruction = ""
 
-    public var signInErrorMessage: String = ""
-    public var presentationController: UIViewController
-    public var overlayManager: OverlayManager
-    public var toastViewManager: ToastViewManager
+    var signInErrorMessage: String = ""
+    var presentationController: UIViewController
+    var overlayManager: OverlayManager
+    var toastViewManager: ToastViewManager
 
     private(set) var isDisplaying = false
     private var onDismiss: ((FirstRunButtonActions) -> Void)?
 
-    public func buttonAction(_ option: FirstRunButtonActions) {
+    func buttonAction(_ option: FirstRunButtonActions) {
         // Make sure all actions are run on the main thread to prevent runtime errors
         DispatchQueue.main.async {
             switch option {
@@ -86,7 +86,7 @@ class IntroViewModel: NSObject, ObservableObject {
     }
 
     // MARK: - Presenting/Dismissing
-    public func present(
+    func present(
         onDismiss: @escaping ((FirstRunButtonActions) -> Void), completion: @escaping (() -> Void)
     ) {
         self.onDismiss = onDismiss
@@ -108,7 +108,7 @@ class IntroViewModel: NSObject, ObservableObject {
         }
     }
 
-    public func dismiss(_ firstRunButtonAction: FirstRunButtonActions?) {
+    func dismiss(_ firstRunButtonAction: FirstRunButtonActions?) {
         Defaults[.introSeen] = true
 
         overlayManager.hideCurrentOverlay(ofPriority: .fullScreen) {
@@ -210,7 +210,7 @@ class IntroViewModel: NSObject, ObservableObject {
     }
 
     // MARK: - Init
-    public init(
+    init(
         presentationController: UIViewController,
         overlayManager: OverlayManager,
         toastViewManager: ToastViewManager

@@ -8,8 +8,8 @@ import Foundation
 import Shared
 import UIKit
 
-public class NeevaScopeLoadingTimeline: FlowTimeline {
-    public convenience init(
+class NeevaScopeLoadingTimeline: FlowTimeline {
+    convenience init(
         view: NeevaScopeKeyFrameView,
         duration: TimeInterval,
         autoreverses: Bool = true,

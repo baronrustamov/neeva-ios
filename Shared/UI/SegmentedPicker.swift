@@ -29,13 +29,12 @@ struct SegmentTappedModifier: ViewModifier {
     @Binding var selectedSegmentIndex: Int
 
     func body(content: Content) -> some View {
-        Button {
+        HoverEffectButton(effect: .lift) {
             segment.selectedAction()
             selectedSegmentIndex = index
         } label: {
             content
         }
-        .hoverEffect(.lift)
         .accessibilityAddTraits(index == selectedSegmentIndex ? .isSelected : [])
     }
 }
@@ -44,12 +43,12 @@ public struct SegmentedPicker: View {
     private let segmentWidth: CGFloat = 72
     private let segmentHeight: CGFloat = 36
     let segments: [Segment]
-    var dragOffset: CGFloat? = nil
+    var dragOffset: CGFloat?
     var canAnimate: Bool = true
 
     @Binding var selectedSegmentIndex: Int
     @GestureState var pressed = false
-    @State var placeholderIndex: Int? = nil
+    @State var placeholderIndex: Int?
 
     var currentIndex: Int {
         guard let placeholderIndex = placeholderIndex else {

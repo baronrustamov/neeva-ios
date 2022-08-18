@@ -13,13 +13,14 @@ enum WelcomeFlowScreen: String, CaseIterable {
     case signUp
     case signUpEmail
     case signIn
+    case signInQRCode
 }
 
 class WelcomeFlowModel: ObservableObject {
     var onCloseAction: (() -> Void)?
     var authStore: AuthStore
     @Published var currentScreen: WelcomeFlowScreen = .intro
-    @Published var prevScreen: WelcomeFlowScreen?
+    @Published var prevScreens: [WelcomeFlowScreen] = []
     @Published var showCloseButton = false
     @Published var showAllSignUpOptions = false
     @Published var defaultBrowserContinueMode = false
@@ -35,9 +36,12 @@ class WelcomeFlowModel: ObservableObject {
     }
 
     func goToPreviousScreen() {
-        guard let prev = self.prevScreen else { return }
+        guard let prev = self.prevScreens.popLast() else { return }
         self.currentScreen = prev
-        self.prevScreen = nil
+    }
+
+    func clearPreviousScreens() {
+        self.prevScreens = []
     }
 
     func scheduleDefaultBrowserReminder() {
@@ -56,18 +60,28 @@ class WelcomeFlowModel: ObservableObject {
         self.onCloseAction?()
         self.onCloseAction = nil
 
-        if NeevaUserInfo.shared.isUserLoggedIn {
-            authStore.bvc.tabManager.selectTab(
-                authStore.bvc.tabManager.activeTabs[0], notify: false)
+        if let tab = authStore.bvc.tabManager.activeTabs.first {
+            authStore.bvc.tabManager.selectTab(tab, notify: false)
+        }
+    }
+
+    func flushLoggingQueue() {
+        // set the default usage collect state if it hasn't been set (default value unchanged)
+        if Defaults[.shouldCollectUsageStats] == nil {
+            Defaults[.shouldCollectUsageStats] = true
+        }
+
+        if Defaults[.shouldCollectUsageStats] == true {
+            ClientLogger.shared.flushLoggingQueue()
         }
     }
 
     func logCounter(
-        _ path: LogConfig.Interaction,
+        _ interaction: LogConfig.Interaction,
         attributes: [ClientLogCounterAttribute]? = nil
     ) {
         ClientLogger.shared.logCounter(
-            path,
+            interaction,
             attributes: (attributes ?? []) + [
                 ClientLogCounterAttribute(
                     key: LogConfig.Attribute.source, value: "WelcomeFlow"

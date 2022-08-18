@@ -78,8 +78,12 @@ class TabManagerStoreTests: XCTestCase {
         tab.setURL(URL(string: "\(webServerBase!)/hello"))
         configureTab(tab)
         tab.sessionData = SessionData(
-            currentPage: 0, urls: [tab.url!],
-            queries: [nil], suggestedQueries: [nil], queryLocations: [nil],
+            currentPage: 0,
+            navigationStackIndex: 0,
+            urls: [tab.url!],
+            queries: [nil],
+            suggestedQueries: [nil],
+            queryLocations: [nil],
             lastUsedTime: Date.nowMilliseconds()
         )
         return tab

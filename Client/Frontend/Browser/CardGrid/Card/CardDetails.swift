@@ -288,16 +288,8 @@ public class TabCardDetails: CardDropDelegate, CardDetails, AccessingManagerProv
                 }
             }
 
-            Button { [self] in
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [self] in
-                    manager.toggleTabPinnedState(tab)
-                    ToastDefaults().showToastForPinningTab(pinning: isPinned, tabManager: manager)
-                }
-            } label: {
-                isPinned
-                    ? Label("Unpin tab", systemSymbol: .pinSlash)
-                    : Label("Pin tab", systemSymbol: .pin)
-            }
+            ContextMenuActionsBuilder.TogglePinnedTabAction(
+                tabManager: manager, tab: tab, isPinned: tab.isPinned)
 
             Divider()
 
@@ -333,7 +325,7 @@ class SpaceEntityThumbnail: CardDetails, AccessingManagerProvider {
 
     var id: String
     var item: SpaceEntityData? { manager.get(for: id) }
-    var closeButtonImage: UIImage? = nil
+    var closeButtonImage: UIImage?
     var accessibilityLabel: String = "Space Item"
 
     var ACL: SpaceACLLevel {
@@ -410,7 +402,7 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
     @Published var allDetails: [SpaceEntityThumbnail] = []
     @Published var allDetailsWithExclusionList: [SpaceEntityThumbnail] = []
     @Published var item: Space?
-    @Published private(set) var refreshSpaceSubscription: AnyCancellable? = nil
+    @Published private(set) var refreshSpaceSubscription: AnyCancellable?
 
     var isFollowing: Bool {
         manager.allSpaces.contains { $0.id.id == id }
@@ -622,49 +614,8 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
     }
 }
 
-class SiteCardDetails: CardDetails, AccessingManagerProvider {
-    typealias Item = Site
-    typealias Manager = SiteFetcher
-
-    @Published var manager: SiteFetcher
-    // periphery:ignore
-    var anyCancellable: AnyCancellable? = nil
-    var id: String
-    var item: Site? { manager.get(for: id) }
-    var closeButtonImage: UIImage?
-    var tabManager: TabManager
-
-    var accessibilityLabel: String {
-        "\(title), Link"
-    }
-
-    init(url: URL, fetcher: SiteFetcher, tabManager: TabManager) {
-        self.id = url.absoluteString
-        self.manager = fetcher
-        self.tabManager = tabManager
-
-        self.anyCancellable = fetcher.objectWillChange.sink { [weak self] (_) in
-            self?.objectWillChange.send()
-        }
-
-        fetcher.load(url: url, profile: tabManager.profile)
-    }
-
-    func onSelect() {
-        guard let site = manager.get(for: id) else {
-            return
-        }
-
-        tabManager.selectedTab?.select(site)
-    }
-
-    func onClose() {}
-}
-
 // TabGroupCardDetails are not to be used for storing data because they can be recreated.
 class TabGroupCardDetails: CardDropDelegate, ObservableObject {
-    @Default(.tabGroupExpanded) private var tabGroupExpanded: Set<String>
-
     @Published var manager: TabManager
     @Published var isShowingDetails = false
     @Published var isSelected: Bool = false
@@ -673,13 +624,13 @@ class TabGroupCardDetails: CardDropDelegate, ObservableObject {
 
     var isExpanded: Bool {
         get {
-            tabGroupExpanded.contains(id)
+            Defaults[.tabGroupExpanded].contains(id)
         }
         set {
             if newValue {
-                tabGroupExpanded.insert(id)
+                Defaults[.tabGroupExpanded].insert(id)
             } else {
-                tabGroupExpanded.remove(id)
+                Defaults[.tabGroupExpanded].remove(id)
             }
         }
     }

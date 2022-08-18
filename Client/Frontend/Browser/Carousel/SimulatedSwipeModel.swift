@@ -4,7 +4,6 @@
 
 import Combine
 import Shared
-import SwiftUI
 import UIKit
 
 class SimulatedSwipeModel: ObservableObject {
@@ -150,7 +149,7 @@ extension SimulatedSwipeModel: TabEventHandler {
                 SearchResultsController.getSearchResults(for: query) { result in
                     switch result {
                     case .failure(let error):
-                        let _ = error as NSError
+                        _ = error as NSError
                         self.updateForwardVisibility(id: tab.tabUUID, results: nil)
                     case .success(let results):
                         self.updateForwardVisibility(id: tab.tabUUID, results: results)

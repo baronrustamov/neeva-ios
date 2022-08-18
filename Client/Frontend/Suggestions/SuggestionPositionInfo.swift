@@ -2,12 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import Apollo
-import Combine
-import Defaults
 import Shared
-import Storage
-import UIKit
 
 struct SuggestionPositionInfo {
     let positionIndex: Int

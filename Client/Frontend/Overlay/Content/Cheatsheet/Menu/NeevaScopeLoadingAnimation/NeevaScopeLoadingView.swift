@@ -4,7 +4,6 @@
 
 // Made With Flow.
 
-import Foundation
 import Shared
 import SwiftUI
 import UIKit
@@ -47,20 +46,20 @@ public class NeevaScopeLoadingViewController: UIViewController {
     }
 }
 
-public struct NeevaScopeLoadingController: UIViewControllerRepresentable {
-    public func makeUIViewController(context: Context) -> NeevaScopeLoadingViewController {
+struct NeevaScopeLoadingController: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> NeevaScopeLoadingViewController {
         let vc = NeevaScopeLoadingViewController()
         return vc
     }
 
-    public func updateUIViewController(
+    func updateUIViewController(
         _ uiViewController: NeevaScopeLoadingViewController, context: Context
     ) {
     }
 }
 
-public struct NeevaScopeLoadingView: View {
-    public var body: some View {
+struct NeevaScopeLoadingView: View {
+    var body: some View {
         NeevaScopeLoadingController()
     }
 }

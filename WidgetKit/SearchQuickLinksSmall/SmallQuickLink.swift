@@ -26,7 +26,7 @@ struct IntentProvider: TimelineProvider {
 }
 
 struct QuickLinkEntry: TimelineEntry {
-    public let date: Date
+    let date: Date
     let link: QuickLink
 }
 
@@ -48,7 +48,7 @@ struct SmallQuickLinkView: View {
 struct SmallQuickLinkWidget: Widget {
     private let kind: String = "Quick Actions - Small"
 
-    public var body: some WidgetConfiguration {
+    var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: IntentProvider()) { entry in
             SmallQuickLinkView(entry: entry)
         }

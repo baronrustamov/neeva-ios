@@ -45,7 +45,7 @@ public enum NeevaExperiment {
         }
     }
 
-    //MARK: Debug Helpers
+    // MARK: Debug Helpers
     static public func resetAllExperiments() {
         Defaults[self.experimentValuesKey] = [:]
     }
@@ -78,6 +78,6 @@ extension NeevaExperiment {
 }
 
 // Experiment Example */
-//extension NeevaExperiment.Experiment where Arm == NeevaExperiment.DefaultBrowserV2 {
-//public static let defaultBrowserPromptV2 = Self()
-//}
+// extension NeevaExperiment.Experiment where Arm == NeevaExperiment.DefaultBrowserV2 {
+// public static let defaultBrowserPromptV2 = Self()
+// }

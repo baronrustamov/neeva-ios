@@ -2,11 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import Defaults
-import SDWebImageSwiftUI
 import Shared
 import SwiftUI
-import UniformTypeIdentifiers
 
 enum TabLocationViewUX {
     static let height: CGFloat = 42
@@ -174,7 +171,7 @@ struct TabLocationView: View {
             }
 
             if chromeModel.isEditingLocation {
-                Button {
+                HoverEffectButton(isTextButton: true) {
                     onCancel()
                     chromeModel.setEditingLocation(to: false)
                 } label: {
@@ -183,21 +180,17 @@ struct TabLocationView: View {
                 }
                 .transition(.move(edge: .trailing).combined(with: .opacity))
                 .accentColor(incognitoModel.isIncognito ? .label : .ui.adaptive.blue)
-                .textButtonPointerEffect()
             }
         }
     }
 
     private var readerButton: some View {
-        LongPressButton {
+        TabLocationBarButton(label: Symbol(.docPlaintext, label: "Reader Mode")) {
             if readerModeModel.state != .active {
                 readerModeModel.enableReadingMode()
             } else {
                 showReaderModeSettings = true
             }
-        } label: {
-            Symbol(.docPlaintext, label: "Reader Mode")
-                .padding()
         }
         .accessibilityLabel(
             Text(

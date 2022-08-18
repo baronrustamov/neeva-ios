@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import Defaults
-import SDWebImageSwiftUI
 import Shared
 import SwiftUI
 
@@ -15,7 +14,7 @@ struct SpaceTopView: View {
     @EnvironmentObject var spacesModel: SpaceCardModel
     @Environment(\.onOpenURL) var onOpenURL
     @Environment(\.shareURL) var shareURL
-    @State private var shareTargetView: UIView? = nil
+    @State private var shareTargetView: UIView?
     @State private var showConfirmDeleteAlert = false
     @ObservedObject var primitive: SpaceCardDetails
     @Binding var headerVisible: Bool

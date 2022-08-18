@@ -6,8 +6,8 @@ import SDWebImageSwiftUI
 import SwiftUI
 
 class CustomThumbnailModel: ObservableObject {
-    @Published var selectedThumbnail: URL? = nil
-    @Published var selectedSpaceThumbnailEntityID: String? = nil
+    @Published var selectedThumbnail: URL?
+    @Published var selectedSpaceThumbnailEntityID: String?
     @Published var thumbnailData: [URL] = []
     @Published var showing = true
 }
@@ -82,7 +82,7 @@ struct URLBasedThumbnailView: View {
             action: { model.selectedThumbnail = thumbnail },
             label: {
                 WebImage(url: thumbnail)
-                    .onSuccess { image, data, cacheType in
+                    .onSuccess { _, _, _ in
                         guard model.showing,
                             !model.thumbnailData.contains(thumbnail)
                         else {

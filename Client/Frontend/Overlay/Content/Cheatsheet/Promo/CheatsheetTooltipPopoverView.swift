@@ -16,7 +16,7 @@ struct CheatsheetTooltipPopoverView: View {
         return (trait.userInterfaceStyle == .dark) ? .brand.variant.polar : .brand.blue
     }
 
-    @State var impressionTimer: Timer? = nil
+    @State var impressionTimer: Timer?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {

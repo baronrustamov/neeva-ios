@@ -88,8 +88,9 @@ public struct RelatedRecipe {
     }
 }
 
-public class CheatsheetQueryController:
-    QueryController<CheatsheetInfoQuery, [CheatsheetQueryController.CheatsheetInfo]>
+public class CheatsheetQueryController: QueryController<
+    CheatsheetInfoQuery, [CheatsheetQueryController.CheatsheetInfo]
+>
 {
     /// Parses date in format like `2019-10-08 03:07:19 +0000 UTC`
     static let dateFormatter: DateFormatter = {

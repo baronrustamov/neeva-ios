@@ -4,7 +4,6 @@
 
 import Shared
 import SwiftUI
-import WebKit
 
 struct TextSizeView: View {
     @ObservedObject var model: TextSizeModel

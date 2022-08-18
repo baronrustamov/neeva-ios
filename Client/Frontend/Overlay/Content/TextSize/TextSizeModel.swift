@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import Combine
-import WebKit
 
 class TextSizeModel: ObservableObject {
     private let tab: Tab

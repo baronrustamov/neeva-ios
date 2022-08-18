@@ -15,7 +15,7 @@ struct HTTPAuthPromptOverlayView: View {
     @State var username = ""
     @State var password = ""
 
-    public var body: some View {
+    var body: some View {
         GroupedStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Sign in to:")

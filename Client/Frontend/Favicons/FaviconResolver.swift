@@ -4,11 +4,17 @@
 
 import Combine
 import Foundation
+import Shared
 import Storage
 
 /// Used to determine what favicon `URL` to use for a given `Site` and provides reasonable
 /// fallback content to use when needed.
 class FaviconResolver: ObservableObject {
+    // Used to optimize the Site.url to Favicon.url mapping, which is a DB query. Avoids
+    // moments when the user would see a flicker from fallback favicon to the site-specified
+    // favicon. Sized so this works well for history UI, archived tabs, etc.
+    private static var cache = MRUCache<URL, URL>(maxEntries: 128)
+
     private let site: Site?
 
     /// Updated asynchronously when the favicon has been resolved.
@@ -52,7 +58,15 @@ class FaviconResolver: ObservableObject {
         return FaviconSupport.letter(forUrl: site.url)
     }
 
+    static func updateCache(for site: Site, with favicon: Favicon) {
+        cache[site.url] = favicon.url
+    }
+
     private func trySite(site: Site) {
+        if let url = Self.cache[site.url] {
+            self.faviconUrl = url
+            return
+        }
         getAppDelegate().profile.favicons.getWidestFavicon(forSite: site).uponQueue(.main) {
             result in
             guard let favicon = result.successValue else {
@@ -67,6 +81,7 @@ class FaviconResolver: ObservableObject {
                 }
                 return
             }
+            Self.updateCache(for: site, with: favicon)
             self.faviconUrl = favicon.url
         }
     }

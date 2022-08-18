@@ -2,13 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import Shared
 import SwiftUI
-import UIKit
 
 class ToastViewManager: QueuedViewManager<ToastView> {
     /// Creates Toast that can then be displayed
-    @discardableResult public func makeToast(
+    @discardableResult func makeToast(
         text: LocalizedStringKey, checkmark: Bool = false, buttonText: LocalizedStringKey? = nil,
         toastProgressViewModel: ToastProgressViewModel? = nil, displayTime: Double = 4.5,
         autoDismiss: Bool = true, buttonAction: (() -> Void)? = nil
@@ -25,7 +23,7 @@ class ToastViewManager: QueuedViewManager<ToastView> {
         return toast
     }
 
-    @discardableResult public func makeToast(
+    @discardableResult func makeToast(
         content: ToastViewContent,
         toastProgressViewModel: ToastProgressViewModel? = nil,
         displayTime: Double = 4.5, autoDismiss: Bool = true

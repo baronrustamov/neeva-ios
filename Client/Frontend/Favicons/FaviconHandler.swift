@@ -54,6 +54,7 @@ class FaviconHandler {
             getAppDelegate().profile.favicons.addFavicon(favicon, forSite: site) >>> {
                 deferred.fill(Maybe(success: (favicon, data)))
             }
+            FaviconResolver.updateCache(for: site, with: favicon)
         }
 
         let onCompletedSiteFavicon: SDInternalCompletionBlock = {

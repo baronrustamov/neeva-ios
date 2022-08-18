@@ -15,7 +15,7 @@ import SwiftUI
 //    }
 //
 struct OverlayTitlePreferenceKey: PreferenceKey {
-    static var defaultValue: LocalizedStringKey? = nil
+    static var defaultValue: LocalizedStringKey?
     static func reduce(value: inout LocalizedStringKey?, nextValue: () -> LocalizedStringKey?) {
         value = nextValue()
     }

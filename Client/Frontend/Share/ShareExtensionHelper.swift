@@ -53,7 +53,7 @@ class ShareExtensionHelper: NSObject {
         findLoginExtensionItem()
 
         activityViewController.completionWithItemsHandler = {
-            activityType, completed, returnedItems, activityError in
+            activityType, completed, returnedItems, _ in
             if !completed {
                 completionHandler(completed, activityType)
                 return

@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import StoreKit
 
-enum PremiumPlan: String, Equatable, Encodable, Decodable {
+enum PremiumPlan: String, Equatable, Codable {
     /*
      NOTE: These text values are important, they map directly to
      App Store Connect product IDs.
@@ -22,17 +22,17 @@ enum PremiumPurchaseSuccessType {
 
 @available(iOS 15.0, *)
 class PremiumStore: ObservableObject {
-    public static let shared = PremiumStore()
+    static let shared = PremiumStore()
     private static let dateFormatter = ISO8601DateFormatter()
 
     // NOTE: currently only the U.S. but as we expand we'll maintain a list of valid country codes
     // https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
-    public static let countries = ["USA"]
+    static let countries = ["USA"]
 
-    @Published public var products: [Product] = []
-    @Published public var loadingProducts = false
-    @Published public var loadingPurchase = false
-    @Published public var loadingMutation = false
+    @Published var products: [Product] = []
+    @Published var loadingProducts = false
+    @Published var loadingPurchase = false
+    @Published var loadingMutation = false
 
     init() {
         Task {
@@ -54,7 +54,7 @@ class PremiumStore: ObservableObject {
         }
     }
 
-    public static func isOfferedInCountry() -> Bool {
+    static func isOfferedInCountry() -> Bool {
         if let storefront = SKPaymentQueue.default().storefront {
             if PremiumStore.countries.contains(storefront.countryCode) {
                 return true
@@ -66,7 +66,7 @@ class PremiumStore: ObservableObject {
         return false
     }
 
-    public func getProductForPlan(_ plan: PremiumPlan?) -> Product? {
+    func getProductForPlan(_ plan: PremiumPlan?) -> Product? {
         if plan == nil {
             return nil
         }
@@ -76,7 +76,15 @@ class PremiumStore: ObservableObject {
         }
     }
 
-    public func purchase(
+    func priceText(_ plan: PremiumPlan?) -> String {
+        guard let product = self.getProductForPlan(plan) else {
+            return "FREE"
+        }
+
+        return product.displayPrice
+    }
+
+    func purchase(
         _ product: Product, reloadUserInfo: Bool, onPending: (@escaping () -> Void),
         onCancelled: (@escaping () -> Void),
         onSuccess: (@escaping (_ successType: PremiumPurchaseSuccessType) -> Void)
@@ -132,10 +140,10 @@ class PremiumStore: ObservableObject {
                             )
                         ) { result in
                             switch result {
-                            case .failure(_):
+                            case .failure:
                                 // TODO: What should we do in this case? The user has paid, but our API call failed.
                                 break
-                            case .success(_):
+                            case .success:
                                 break
                             }
 
@@ -149,7 +157,7 @@ class PremiumStore: ObservableObject {
                         }
 
                         await transaction.finish()
-                    case .unverified(_, _):
+                    case .unverified:
                         /*
                          NOTE: If we got here StoreKitV2 was unable to verify the JWT
                          token, probably a very rare event.
@@ -163,5 +171,46 @@ class PremiumStore: ObservableObject {
                 }
             }
         }
+    }
+}
+
+class PremiumHelpers {
+    static func primaryActionText(_ plan: PremiumPlan?, subscribed: Bool = false) -> String {
+        switch plan {
+        case .annual:
+            return subscribed ? "Manage Yearly" : "Subscribe Yearly"
+        case .monthly:
+            return subscribed ? "Manage Monthly" : "Subscribe Monthly"
+        default:
+            return "Get FREE"
+        }
+    }
+
+    static func priceSubText(_ plan: PremiumPlan?) -> (String, String) {
+        switch plan {
+        case .annual:
+            return ("Save 16%", "Cancel anytime")
+        case .monthly:
+            return ("", "Cancel anytime")
+        default:
+            return ("", "")
+        }
+    }
+
+    static func termText(_ plan: PremiumPlan?) -> String {
+        switch plan {
+        case .annual:
+            return "/year"
+        case .monthly:
+            return "/month"
+        default:
+            return ""
+        }
+    }
+
+    static func priceString(from input: Decimal) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        return formatter.string(from: input as NSNumber) ?? "\(input)"
     }
 }

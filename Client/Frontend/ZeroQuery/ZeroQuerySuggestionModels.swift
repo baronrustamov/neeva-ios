@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import Defaults
 import Shared
 import Storage
 
@@ -61,7 +60,7 @@ class SuggestedSearchesModel: ObservableObject {
             }
 
             var queries = Set<String>()
-            var topFrecentHistoryQuery: String? = nil
+            var topFrecentHistoryQuery: String?
             if let topFrecentHistorySite = topFrecentHistorySite,
                 let query = SearchEngine.current.queryForSearchURL(topFrecentHistorySite.url)
             {

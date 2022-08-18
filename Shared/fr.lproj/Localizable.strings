@@ -125,6 +125,9 @@
 "Email" = "E-mail";
 
 /* No comment provided by engineer. */
+"Enter a URL to submit with the feedback" = "Saisissez une URL à envoyer avec les commentaires";
+
+/* No comment provided by engineer. */
 "Error" = "Erreur";
 
 /* Label for button to perform advanced actions on the error page */
@@ -274,6 +277,9 @@
 
 /* No comment provided by engineer. */
 "Placeholder" = "Espace réservé";
+
+/* No comment provided by engineer. */
+"Please share your questions, issues, or feature requests. Your feedback helps us improve Neeva!" = "N'hésitez pas à partager vos questions, problèmes ou demandes de fonctionnalités. C'est grâce à vos commentaires que nous améliorons Neeva !";
 
 /* No comment provided by engineer. */
 "Please sign in to Neeva to view this page" = "Veuillez vous connecter à Neeva pour voir cette page";

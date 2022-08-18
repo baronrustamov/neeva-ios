@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import Foundation
 import Shared
 import SwiftUI
 
@@ -29,10 +28,10 @@ enum OverlaySheetUX {
     static let animationOffset: CGFloat = 500
 }
 
-public struct OverlayHeaderButton {
-    public let text: LocalizedStringKey
-    public let icon: Nicon
-    public let action: () -> Void
+struct OverlayHeaderButton {
+    let text: LocalizedStringKey
+    let icon: Nicon
+    let action: () -> Void
 }
 
 // This view provides an overlay bottom sheet implementation that starts in a
@@ -48,10 +47,10 @@ struct OverlaySheetView<Content: View, HeaderContent: View>: View {
     @State private var contentHeight: CGFloat = 0
     @State private var headerHeight: CGFloat = 0
     @State private var minHeightToFillScrollView: CGFloat = 0
-    @State private var title: LocalizedStringKey? = nil
+    @State private var title: LocalizedStringKey?
     @State private var isFixedHeight: Bool = false
     @State private var bottomSafeArea: CGFloat = 0
-    @State private var middlePreferredHeight: CGFloat? = nil
+    @State private var middlePreferredHeight: CGFloat?
     @State private var childIgnoreSafeArea: Edge.Set = []
 
     let style: OverlayStyle
@@ -220,7 +219,7 @@ struct OverlaySheetView<Content: View, HeaderContent: View>: View {
                 } else if !style.embedScrollView {
                     sheetContent
                 } else {
-                    GeometryReader { proxy in
+                    GeometryReader { _ in
                         ScrollView(
                             model.position == .top ? [.vertical] : [], showsIndicators: false
                         ) {

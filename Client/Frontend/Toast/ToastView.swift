@@ -4,9 +4,8 @@
 
 import Shared
 import SwiftUI
-import UIKit
 
-public enum ToastViewUX {
+enum ToastViewUX {
     static let defaultDisplayTime = 4.5
     static let height: CGFloat = 53
     static let threshold: CGFloat = 15
@@ -14,7 +13,7 @@ public enum ToastViewUX {
 
 struct ToastStateContent {
     var text: LocalizedStringKey?
-    var description: (() -> AnyView)? = nil
+    var description: (() -> AnyView)?
     var buttonText: LocalizedStringKey?
     var buttonAction: (() -> Void)?
     var keyboardShortcut: KeyboardShortcut?
@@ -119,7 +118,7 @@ struct ToastView: View {
                     if let buttonText = content.currentToastStateContent.buttonText {
                         Spacer()
 
-                        Button {
+                        HoverEffectButton(isTextButton: true) {
                             if let buttonAction = content.currentToastStateContent.buttonAction {
                                 buttonAction()
                             }
@@ -131,7 +130,7 @@ struct ToastView: View {
                                 .foregroundColor(Color.ui.aqua)
                         }.if(content.currentToastStateContent.keyboardShortcut != nil) {
                             $0.keyboardShortcut(content.currentToastStateContent.keyboardShortcut!)
-                        }.textButtonPointerEffect()
+                        }
                     }
                 }.padding(.horizontal, 16).colorScheme(.dark)
             }.frame(height: 53).padding(.horizontal)
@@ -144,7 +143,7 @@ struct ToastView: View {
         }
     }
 
-    public func enqueue(at location: QueuedViewLocation = .last, manager: ToastViewManager) {
+    func enqueue(at location: QueuedViewLocation = .last, manager: ToastViewManager) {
         manager.enqueue(view: self, at: location)
     }
 }

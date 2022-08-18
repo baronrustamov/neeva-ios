@@ -224,7 +224,7 @@ extension BrowserViewController: WKUIDelegate {
 
                     return previewViewController
                 },
-                actionProvider: { (suggested) -> UIMenu? in
+                actionProvider: { (_) -> UIMenu? in
                     guard let url = elementInfo.linkURL,
                         let currentTab = self.tabManager.selectedTab,
                         let contextHelper = currentTab.getContentScript(
@@ -240,7 +240,7 @@ extension BrowserViewController: WKUIDelegate {
                         makeURLSession(
                             userAgent: UserAgent.getUserAgent(),
                             configuration: URLSessionConfiguration.default
-                        ).dataTask(with: url) { (data, response, error) in
+                        ).dataTask(with: url) { (data, response, _) in
                             if let _ = validatedHTTPResponse(response, statusCode: 200..<300),
                                 let data = data
                             {
@@ -290,7 +290,7 @@ extension BrowserViewController: WKUIDelegate {
                             // This checks if download is a blob, if yes, begin blob download process
                             if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab)
                             {
-                                //if not a blob, set pendingDownloadWebView and load the request in the webview, which will trigger the WKWebView navigationResponse delegate function and eventually downloadHelper.open()
+                                // if not a blob, set pendingDownloadWebView and load the request in the webview, which will trigger the WKWebView navigationResponse delegate function and eventually downloadHelper.open()
                                 self.pendingDownloadWebView = currentTab.webView
                                 let request = URLRequest(url: url)
                                 currentTab.webView?.load(request)
@@ -433,10 +433,6 @@ extension WKNavigationAction {
 
 extension BrowserViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        if tabManager.selectedTab?.webView !== webView {
-            return
-        }
-
         logJSConsoleOutputIfEnabled(for: webView)
 
         locationModel.resetSecureListener()

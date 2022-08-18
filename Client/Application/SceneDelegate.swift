@@ -2,13 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import Combine
 import CoreSpotlight
 import Defaults
-import SDWebImage
 import Shared
-import Storage
-import StoreKit
 
 private let log = Logger.browser
 
@@ -21,8 +17,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private var geigerCounter: KMCGeigerCounter?
 
     private var urlHandledOnLaunch = false
-
-    private let backgroundProcessor = BackgroundTaskProcessor(label: "SceneDelegate")
 
     // MARK: - Scene state
     func scene(
@@ -206,11 +200,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func setSceneUIState(to state: SceneUIState) {
-        // This ensures that the state is correctly saved. Use `UserDefaults`
-        // directly here since it is thread-safe.
-        backgroundProcessor.performTask {
-            UserDefaults.standard[.scenePreviousUIState] = state.rawValue
-        }
+        assert(Thread.isMainThread)
+        UserDefaults.standard[.scenePreviousUIState] = state.rawValue
     }
 
     static func handleThemePreference(for option: AppearanceThemeOption) {
@@ -358,7 +349,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             } else {
                 // open a new search
                 DispatchQueue.main.async { [self] in
-                    let isEmpty = self.bvc.tabManager.normalTabs.count == 0
+                    let isEmpty = self.bvc.tabManager.activeNormalTabs.count == 0
                     self.bvc.searchQueryModel.value = ""
                     self.bvc.openLazyTab(
                         openedFrom: isEmpty ? .tabTray : .openTab(nil),
@@ -649,23 +640,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
             if previousVersion.compare("1.43.0", options: .numeric) == .orderedAscending {
                 Defaults[.contentBlockingStrength] = BlockingStrength.easyPrivacyStrict.rawValue
-            }
-
-            if previousVersion.compare("1.46.0", options: .numeric) == .orderedAscending {
-                // Only enable ad block for iOS 15+
-                if #available(iOS 15.0, *) {
-                    if (!NeevaUserInfo.shared.hasLoginCookie()
-                        || Defaults[.notificationPermissionState]
-                            != NotificationPermissionStatus.authorized.rawValue)
-                        && (!Defaults[.didSetDefaultBrowser] && !Defaults[.adBlockEnabled]
-                            && !Defaults[.didShowAdBlockerPromo])
-                    {
-                        Defaults[.didShowAdBlockerPromo] = true
-                        if bvc != nil {
-                            bvc.shouldShowAdBlockPromo = true
-                        }
-                    }
-                }
             }
 
             return true

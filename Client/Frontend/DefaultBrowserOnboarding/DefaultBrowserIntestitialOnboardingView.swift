@@ -6,7 +6,7 @@ import Defaults
 import Shared
 import SwiftUI
 
-public enum DefaultBrowserInterstitialChoice: Int {
+enum DefaultBrowserInterstitialChoice: Int {
     case undecided = 0
     case openSettings = 1
     case skipForNow = 2
@@ -89,7 +89,7 @@ class DefaultBrowserInterstitialOnboardingViewController: UIHostingController<
     }
 }
 
-public enum OpenDefaultBrowserOnboardingTrigger: String {
+enum OpenDefaultBrowserOnboardingTrigger: String {
     case defaultBrowserFirstScreen
     case defaultBrowserPromoCard
     case defaultBrowserSettings

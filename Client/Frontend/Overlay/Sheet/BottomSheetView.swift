@@ -118,7 +118,7 @@ struct BottomSheetView<Content: View>: View {
                             self.model.deltaHeight = min(value.translation.height, maxValue)
                         }
                     }
-                    .onEnded { value in
+                    .onEnded { _ in
                         guard self.model.deltaHeight != 0 else {
                             return
                         }

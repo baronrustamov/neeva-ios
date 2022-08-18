@@ -1,32 +1,48 @@
-"2GqvPe" = "Go to Copied Link";
+/* (No Comment) */
+"2GqvPe" = "Accéder au lien copié";
 
-"PzSrmZ-2GqvPe" = "Just to confirm, you wanted ‘Go to Copied Link’?";
+/* (No Comment) */
+"ctDNmu" = "Description de l'action rapide";
 
-"PzSrmZ-eHmH1H" = "Just to confirm, you wanted ‘Clear Incognito Tabs’?";
+/* (No Comment) */
+"eHmH1H" = "Supprimer les onglets de navigation privée";
 
-"PzSrmZ-scEmjs" = "Just to confirm, you wanted ‘New Incognito Search’?";
+/* (No Comment) */
+"eqyNJg" = "Action rapide";
 
-"PzSrmZ-xRJbBP" = "Just to confirm, you wanted ‘New Search’?";
-
-"ctDNmu" = "Quick Action Description";
-
-"eHmH1H" = "Clear Incognito Tabs";
-
+/* (No Comment) */
 "eV8mOT" = "QuickActionType";
 
-"eqyNJg" = "Quick Action";
+/* (No Comment) */
+"fi3W24-2GqvPe" = "${count} options correspondent à « Accéder au lien copié ».";
 
-"fi3W24-2GqvPe" = "There are ${count} options matching ‘Go to Copied Link’.";
+/* (No Comment) */
+"fi3W24-eHmH1H" = "${count} options correspondent à « Supprimer les onglets de navigation privée ».";
 
-"fi3W24-eHmH1H" = "There are ${count} options matching ‘Clear Incognito Tabs’.";
+/* (No Comment) */
+"fi3W24-scEmjs" = "${count} options correspondent à « Nouvelle recherche privée ».";
 
-"fi3W24-scEmjs" = "There are ${count} options matching ‘New Incognito Search’.";
+/* (No Comment) */
+"fi3W24-xRJbBP" = "${count} options correspondent à « Nouvelle recherche ».";
 
-"fi3W24-xRJbBP" = "There are ${count} options matching ‘New Search’.";
+/* (No Comment) */
+"PzSrmZ-2GqvPe" = "Juste pour confirmer, vous voulez « Accéder au lien copié » ?";
 
-"scEmjs" = "New Incognito Search";
+/* (No Comment) */
+"PzSrmZ-eHmH1H" = "Juste pour confirmer, vous voulez « Supprimer les onglets de navigation privée » ?";
 
-"w9jdPK" = "Quick Action";
+/* (No Comment) */
+"PzSrmZ-scEmjs" = "Juste pour confirmer, vous voulez effectuer une « Nouvelle recherche privée » ?";
 
-"xRJbBP" = "New Search";
+/* (No Comment) */
+"PzSrmZ-xRJbBP" = "Juste pour confirmer, vous voulez effectuer une « Nouvelle recherche » ?";
+
+/* (No Comment) */
+"scEmjs" = "Nouvelle recherche privée";
+
+/* (No Comment) */
+"w9jdPK" = "Action rapide";
+
+/* (No Comment) */
+"xRJbBP" = "Nouvelle recherche";
 

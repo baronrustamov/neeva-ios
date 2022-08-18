@@ -6,7 +6,7 @@ import Apollo
 import Combine
 
 open class MutationRequest<Mutation: GraphQLMutation>: ObservableObject {
-    private var subcription: Combine.Cancellable? = nil
+    private var subcription: Combine.Cancellable?
 
     public enum State {
         case initial
@@ -30,7 +30,7 @@ open class MutationRequest<Mutation: GraphQLMutation>: ObservableObject {
             case .failure(let error):
                 self.error = error
                 self.state = .failure
-            case .success(_):
+            case .success:
                 self.state = .success
             }
         }

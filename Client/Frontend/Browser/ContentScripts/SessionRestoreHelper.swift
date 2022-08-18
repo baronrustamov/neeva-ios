@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import WebKit
 
 protocol SessionRestoreHelperDelegate: AnyObject {
@@ -34,8 +33,8 @@ class SessionRestoreHelper: TabContentScript {
                                 let query = sessionData.typedQueries[index]
                             else { break }
 
-                            var suggestedQuery: String? = nil
-                            var queryLocation: QueryForNavigation.Query.Location? = nil
+                            var suggestedQuery: String?
+                            var queryLocation: QueryForNavigation.Query.Location?
                             if sessionData.suggestedQueries.indices.contains(index) {
                                 suggestedQuery = sessionData.suggestedQueries[index]
                             }
@@ -56,6 +55,10 @@ class SessionRestoreHelper: TabContentScript {
                 }
             }
         }
+    }
+
+    func connectedTabChanged(_ tab: Tab) {
+        self.tab = tab
     }
 
     class func name() -> String {

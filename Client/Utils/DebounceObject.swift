@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import Combine
-import Foundation
 
 // Based on https://onmyway133.com/posts/how-to-debounce-textfield-search-in-swiftui/
 // Example usage:
@@ -20,7 +19,7 @@ class DebounceObject: ObservableObject {
     @Published var debouncedText: String = ""
     private var subscriptions = Set<AnyCancellable>()
 
-    public init() {
+    init() {
         $text
             .removeDuplicates()
             .debounce(for: .seconds(0.3), scheduler: DispatchQueue.main)

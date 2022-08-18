@@ -18,11 +18,11 @@ public class SocialInfoUpdater: ObservableObject {
     var ogImage: String
     let updateReady: (Range<Int>, SpaceEntityData, SpaceID) -> Void
 
-    var thumbnail: String? = nil
-    var subscription: AnyCancellable? = nil
+    var thumbnail: String?
+    var subscription: AnyCancellable?
     var updateAfterDownload = false
-    var cachedEntityID: String? = nil
-    var cachedSpaceID: String? = nil
+    var cachedEntityID: String?
+    var cachedSpaceID: String?
 
     @Published var state: UpdateSpaceEntityRequest.State = .initial
 
@@ -48,7 +48,7 @@ public class SocialInfoUpdater: ObservableObject {
             with: URL(string: self.ogImage),
             options: .highPriority,
             progress: nil
-        ) { (image, data, error, cacheType, isFinished, imageUrl) in
+        ) { (image, data, _, _, _, _) in
             DispatchQueue.global(qos: .userInitiated).async {
                 guard
                     let image = image,

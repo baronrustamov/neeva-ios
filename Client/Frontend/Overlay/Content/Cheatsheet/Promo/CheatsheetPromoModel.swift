@@ -80,7 +80,7 @@ private struct PromoStateStorage {
     }
 }
 
-public class CheatsheetPromoModel: ObservableObject {
+class CheatsheetPromoModel: ObservableObject {
     enum PromoType {
         case tryCheatsheet
         case UGC
@@ -295,7 +295,7 @@ public class CheatsheetPromoModel: ObservableObject {
         uiUpdatePublisher.send(.syncUGCState(state: cachedState, url: url))
     }
 
-    //MARK: - Interaction Methods
+    // MARK: - Interaction Methods
     func openSheet(on url: URL?) {
         precondition(Thread.isMainThread)
         switch promoType {

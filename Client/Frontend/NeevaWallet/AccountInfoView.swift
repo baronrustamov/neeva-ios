@@ -263,7 +263,7 @@ struct AccountInfoView: View {
         let reason =
             "Exporting wallet secret phrase requires authentication"
         let onAuth: (Bool, Error?) -> Void = {
-            success, authenticationError in
+            success, _ in
             if success {
                 showOverflowSheet = false
                 viewState = .showPhrases

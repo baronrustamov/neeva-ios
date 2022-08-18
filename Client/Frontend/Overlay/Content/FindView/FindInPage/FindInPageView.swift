@@ -13,7 +13,7 @@ struct FindInPageView: View {
     @ObservedObject var model: FindInPageModel
     let onDismiss: () -> Void
 
-    public var body: some View {
+    var body: some View {
         HStack {
             SingleLineTextField(
                 icon: Symbol(decorative: .magnifyingglass, style: .labelLarge),
@@ -40,10 +40,9 @@ struct FindInPageView: View {
                 .accessibilityIdentifier("FindInPage_Next")
             }
 
-            Button(action: onDismiss) {
+            HoverEffectButton(isTextButton: true, action: onDismiss) {
                 Text("Done")
             }
-            .textButtonPointerEffect()
             .accessibilityIdentifier("FindInPage_Done")
             .accessibilityLabel(Text("Done"))
         }

@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import Defaults
 import Shared
 import SwiftUI
 
@@ -22,11 +21,11 @@ struct ExperimentSettingsView: View {
                 }
 
                 /* Experiment Example */
-                //OptionalPrefilledStringField<NeevaExperiment.DefaultBrowserV2>(
+                // OptionalPrefilledStringField<NeevaExperiment.DefaultBrowserV2>(
                 //    "DefaultBrowserPromptView",
                 //    value: $valueText,
                 //    experiment: .defaultBrowserPromptV2
-                //)
+                // )
             }
         }
         .listStyle(.insetGrouped)

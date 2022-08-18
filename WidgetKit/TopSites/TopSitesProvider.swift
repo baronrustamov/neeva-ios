@@ -7,7 +7,7 @@ import SwiftUI
 import WidgetKit
 
 struct TopSitesProvider: TimelineProvider {
-    public typealias Entry = TopSitesEntry
+    typealias Entry = TopSitesEntry
 
     func placeholder(in context: Context) -> TopSitesEntry {
         return TopSitesEntry(date: Date(), favicons: [String: Image](), sites: [])

@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import Defaults
 import Foundation
 import Shared
 
@@ -91,7 +90,7 @@ class CookieCutterHelper: TabContentScript {
                 if let provider = data["provider"] as? String {
                     let attributes = [
                         ClientLogCounterAttribute(
-                            key: LogConfig.Attribute.CookieCutterProviderUsed,
+                            key: LogConfig.CookieCutterAttribute.CookieCutterProviderUsed,
                             value: provider
                         )
                     ]
@@ -112,6 +111,8 @@ class CookieCutterHelper: TabContentScript {
 
         log.info("Cookie Cutter script updated: \(update)")
     }
+
+    func connectedTabChanged(_ tab: Tab) {}
 
     // MARK: - init
     init(cookieCutterModel: CookieCutterModel) {

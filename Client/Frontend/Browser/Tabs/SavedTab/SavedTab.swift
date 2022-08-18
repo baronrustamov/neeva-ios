@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import WebKit
 
 class SavedTab: NSObject, NSCoding {
     var isSelected: Bool

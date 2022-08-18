@@ -85,7 +85,7 @@ struct SpacesProfileView: View {
 
     @ViewBuilder
     private func cardScrollView(with geom: GeometryProxy) -> some View {
-        CardScrollContainer(columns: columns) { scrollProxy in
+        CardScrollContainer(columns: columns) { _ in
             VStack(alignment: .leading) {
                 LazyVGrid(columns: columns, spacing: CardGridUX.GridSpacing) {
                     ForEach(viewModel.spaceCards, id: \.id) { spaceCard in

@@ -4,9 +4,9 @@
 
 import SwiftUI
 
-public struct ErrorViewBackgroundPreferenceKey: PreferenceKey {
-    public static var defaultValue: Color? = nil
-    public static func reduce(value: inout Color?, nextValue: () -> Color?) {
+struct ErrorViewBackgroundPreferenceKey: PreferenceKey {
+    static var defaultValue: Color?
+    static func reduce(value: inout Color?, nextValue: () -> Color?) {
         value = nextValue()
     }
 }

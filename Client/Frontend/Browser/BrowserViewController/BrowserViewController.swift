@@ -5,16 +5,12 @@
 import Combine
 import Defaults
 import Foundation
-import MobileCoreServices
-import Photos
-import SDWebImage
+import SafariServices
 import Shared
 import Storage
 import SwiftUI
-import SwiftyJSON
 import UIKit
 import WebKit
-import XCGLogger
 
 #if XYZ
     import WalletConnectSwift
@@ -197,8 +193,6 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
     static var createNewTabOnStartForTesting: Bool = false
 
-    var shouldShowAdBlockPromo: Bool = false
-
     /// Update the screenshot sent along with feedback. Called before opening overflow menu
     func updateFeedbackImage() {
         UIGraphicsBeginImageContextWithOptions(view.window!.bounds.size, true, 0)
@@ -273,7 +267,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
             hideOverlayPopoverViewController()
         }
 
-        coordinator.animate { [self] context in
+        coordinator.animate { [self] _ in
             browserModel.scrollingControlModel.updateMinimumZoom()
 
             if let popover = displayedPopoverController {
@@ -346,7 +340,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
         displayedPopoverController?.dismiss(animated: true, completion: nil)
 
-        coordinator.animate { [self] context in
+        coordinator.animate { [self] _ in
             browserModel.scrollingControlModel.showToolbars(animated: false)
         }
     }
@@ -541,7 +535,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
     override func viewDidAppear(_ animated: Bool) {
         if NeevaConstants.currentTarget != .xyz {
             if !Defaults[.introSeen] {
-                var startScreen: WelcomeFlowScreen? = nil
+                var startScreen: WelcomeFlowScreen?
 
                 if Defaults[.welcomeFlowRestoreToDefaultBrowser] {
                     Defaults[.welcomeFlowRestoreToDefaultBrowser] = false
@@ -550,11 +544,6 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
                 presentWelcomeFlow(startScreen: startScreen)
             }
-        }
-
-        if shouldShowAdBlockPromo {
-            ClientLogger.shared.logCounter(.AdBlockPromoImp)
-            self.showAdBlockerPromo()
         }
 
         tabManager.selectedTab?.lastExecutedTime = Date.nowMilliseconds()
@@ -946,7 +935,7 @@ class BrowserViewController: UIViewController, ModalPresenter {
         }
 
         let controller = helper.createActivityViewController(appActivities: appActivities) {
-            [weak self] completed, _ in
+            [weak self] _, _ in
             guard let self = self else { return }
 
             // After dismissing, check to see if there were any prompts we queued up
@@ -1179,20 +1168,25 @@ extension BrowserViewController: TabDelegate {
             .forEach(updateGestureHandler)
             // Special case for "about:blank" popups, if the webView.url is nil, keep the tab url as "about:blank"
             .filter { tab.url != .aboutBlank || $0 != nil }
-            // To prevent spoofing, only change the URL immediately if the new URL is on
-            // the same origin as the current URL. Otherwise, do nothing and wait for
-            // didCommitNavigation to confirm the page load.
-            .filter { tab.url?.origin == $0?.origin }
             .sink { [self] url in
-                tab.setURL(url)
-
-                if tab === tabManager.selectedTab && !tab.restoring {
-                    updateUIForReaderHomeStateForTab(tab)
+                if let url = url {
+                    tabManager.handleAsNavigationFromPinnedTabIfNeeded(tab: tab, url: url)
                 }
 
-                // Catch history pushState navigation, but ONLY for same origin navigation,
-                // for reasons above about URL spoofing risk.
-                navigateInTab(tab: tab, webViewStatus: .url)
+                // To prevent spoofing, only change the URL immediately if the new URL is on
+                // the same origin as the current URL. Otherwise, do nothing and wait for
+                // didCommitNavigation to confirm the page load.
+                if tab.url?.origin == url?.origin {
+                    tab.setURL(url)
+
+                    if tab === tabManager.selectedTab && !tab.restoring {
+                        updateUIForReaderHomeStateForTab(tab)
+                    }
+
+                    // Catch history pushState navigation, but ONLY for same origin navigation,
+                    // for reasons above about URL spoofing risk.
+                    navigateInTab(tab: tab, webViewStatus: .url)
+                }
             }
             .store(in: &tab.webViewSubscriptions)
 
@@ -1220,8 +1214,6 @@ extension BrowserViewController: TabDelegate {
 
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {
         webView.uiDelegate = self
-
-        self.subscribe(to: webView, for: tab)
 
         let formPostHelper = FormPostHelper(tab: tab)
         tab.addContentScript(formPostHelper, name: FormPostHelper.name())
@@ -1265,6 +1257,10 @@ extension BrowserViewController: TabDelegate {
             webView: webView,
             tabManager: tabManager)
         tab.addContentScript(webuiMessageHelper, name: WebUIMessageHelper.name())
+    }
+
+    func tab(_ tab: Tab, didUpdateWebView webView: WKWebView) {
+        self.subscribe(to: webView, for: tab)
     }
 
     // Cleans up a tab when it is to be removed.
@@ -1320,7 +1316,15 @@ extension BrowserViewController: ZeroQueryPanelDelegate {
 
 extension BrowserViewController {
     func selectedTabChanged(selected: Tab?, previous: Tab?) {
-        presentedViewController?.dismiss(animated: false, completion: nil)
+        /*
+         * Sometimes we load a SFSafariViewController and immediately close the tab behind it
+         * (e.g., with Google Device Policy profile downloads). We need to make an exception
+         * for this case, otherwise the SFSafariViewController will close too quickly for the
+         * user to interact with it.
+         */
+        if !(presentedViewController is SFSafariViewController?) {
+            presentedViewController?.dismiss(animated: false, completion: nil)
+        }
 
         // Remove the old accessibilityLabel. Since this webview shouldn't be visible, it doesn't need it
         // and having multiple views with the same label confuses tests.
@@ -1526,7 +1530,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
     fileprivate func getImageData(_ url: URL, success: @escaping (Data) -> Void) {
         makeURLSession(
             userAgent: UserAgent.getUserAgent(), configuration: URLSessionConfiguration.default
-        ).dataTask(with: url) { (data, response, error) in
+        ).dataTask(with: url) { (data, response, _) in
             if let _ = validatedHTTPResponse(response, statusCode: 200..<300), let data = data {
                 success(data)
             }
@@ -1601,7 +1605,7 @@ extension BrowserViewController {
             // TODO: Inject this as a ContentScript to avoid the delay here.
             webView.evaluateJavaScript(SpaceImportHandler.descriptionImageScript) {
                 [weak self]
-                (result, error) in
+                (result, _) in
 
                 guard let self = self else { return }
                 let output = result as? [[String]]
@@ -1659,16 +1663,6 @@ extension BrowserViewController {
                 thumbnail: thumbnailUrl,
                 importData: importData,
                 updater: updater)
-        }
-    }
-
-    func showAdBlockerPromo() {
-        self.overlayManager.backgroundOpacityLevel = 2
-        self.showAsModalOverlayPopover(style: .adBlockerPromo) {
-            AdBlockerPromoOverlayContent()
-                .onDisappear {
-                    self.overlayManager.backgroundOpacityLevel = 5
-                }
         }
     }
 

@@ -15,7 +15,7 @@ public struct EmailVerificationPrompt: View {
         self.dismiss = dismiss
     }
 
-    @State var request: ResendVerificationEmailRequest? = nil
+    @State var request: ResendVerificationEmailRequest?
 
     public var body: some View {
         VStack(spacing: 0) {

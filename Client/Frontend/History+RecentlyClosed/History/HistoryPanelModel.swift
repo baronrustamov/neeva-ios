@@ -56,8 +56,9 @@ class HistoryPanelModel: ObservableObject {
                     return
                 }
 
-                self.groupedSites.add(
-                    site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
+                let date = Date(
+                    timeIntervalSince1970: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
+                self.groupedSites.add(site, date: date)
             }
         }
     }
@@ -82,8 +83,10 @@ class HistoryPanelModel: ObservableObject {
                         return
                     }
 
-                    self.filteredSites.add(
-                        site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
+                    let date = Date(
+                        timeIntervalSince1970: TimeInterval.fromMicrosecondTimestamp(
+                            latestVisit.date))
+                    self.filteredSites.add(site, date: date)
                 }
             }
         }
@@ -126,7 +129,7 @@ class HistoryPanelModel: ObservableObject {
     // MARK: - User Action
     // History Items
     func removeItemFromHistory(site: Site) {
-        profile.history.removeHistoryForURL(site.url).uponQueue(.main) { result in
+        profile.history.removeHistoryForURL(site.url).uponQueue(.main) { _ in
             self.groupedSites.remove(site)
         }
     }

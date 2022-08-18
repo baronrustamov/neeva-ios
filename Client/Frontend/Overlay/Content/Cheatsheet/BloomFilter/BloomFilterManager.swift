@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import Combine
 import Defaults
 import Foundation
 import Shared
@@ -73,7 +72,7 @@ private enum BloomFilterLoader {
         }
 
         // get new checksum file from network
-        defaultSession.downloadTask(with: locations.checksumURL) { tempURL, response, error in
+        defaultSession.downloadTask(with: locations.checksumURL) { tempURL, _, error in
             if let error = error {
                 completion(.failure(error))
                 return
@@ -110,7 +109,7 @@ private enum BloomFilterLoader {
 
             // Cannot return from current local file. Acquire new one
             restrictedSession.downloadTask(with: locations.binUrl) {
-                tempFilterURL, filterResponse, filterError in
+                tempFilterURL, _, filterError in
                 if let error = filterError {
                     completion(.failure(error))
                     return
