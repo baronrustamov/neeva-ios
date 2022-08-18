@@ -107,7 +107,6 @@ class Tab: NSObject, ObservableObject {
     @Published var title: String?
     /// For security reasons, the URL may differ from the web view’s URL.
     @Published var url: URL?
-    @Default(.archivedTabsDuration) var archivedTabsDuration
     private var webViewCanGoBack = false {
         didSet {
             updateCanGoBack()
@@ -211,7 +210,7 @@ class Tab: NSObject, ObservableObject {
             return false
         }
 
-        switch archivedTabsDuration {
+        switch Defaults[.archivedTabsDuration] {
         case .week:
             return
                 !(isIncluded(in: .today)

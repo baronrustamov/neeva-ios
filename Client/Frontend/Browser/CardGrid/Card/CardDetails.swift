@@ -616,8 +616,6 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
 
 // TabGroupCardDetails are not to be used for storing data because they can be recreated.
 class TabGroupCardDetails: CardDropDelegate, ObservableObject {
-    @Default(.tabGroupExpanded) private var tabGroupExpanded: Set<String>
-
     @Published var manager: TabManager
     @Published var isShowingDetails = false
     @Published var isSelected: Bool = false
@@ -626,13 +624,13 @@ class TabGroupCardDetails: CardDropDelegate, ObservableObject {
 
     var isExpanded: Bool {
         get {
-            tabGroupExpanded.contains(id)
+            Defaults[.tabGroupExpanded].contains(id)
         }
         set {
             if newValue {
-                tabGroupExpanded.insert(id)
+                Defaults[.tabGroupExpanded].insert(id)
             } else {
-                tabGroupExpanded.remove(id)
+                Defaults[.tabGroupExpanded].remove(id)
             }
         }
     }

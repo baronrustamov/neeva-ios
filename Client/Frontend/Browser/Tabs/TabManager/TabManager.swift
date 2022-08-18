@@ -33,7 +33,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     var tabsUpdatedPublisher = PassthroughSubject<Void, Never>()
 
     // Tab Group related variables
-    @Default(.tabGroupNames) private var tabGroupDict: [String: String]
     @Default(.archivedTabsDuration) var archivedTabsDuration
     var activeTabs: [Tab] = []
     var archivedTabs: [Tab] = []
@@ -542,7 +541,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         archivedTabGroups =
             archivedTabs
             .reduce(into: [String: [Tab]]()) { dict, tab in
-                if tabGroupDict[tab.rootUUID] != nil {
+                if Defaults[.tabGroupNames][tab.rootUUID] != nil {
                     dict[tab.rootUUID, default: []].append(tab)
                 }
             }.reduce(into: [String: TabGroup]()) { dict, element in
@@ -598,8 +597,8 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         // Write newly created tab group names into dictionary
         tabGroups.forEach { group in
             let id = group.key
-            if tabGroupDict[id] == nil {
-                tabGroupDict[id] = group.value.displayTitle
+            if Defaults[.tabGroupNames][id] == nil {
+                Defaults[.tabGroupNames][id] = group.value.displayTitle
             }
         }
 
@@ -608,7 +607,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         tabGroups.forEach { group in
             temp[group.key] = group.value.displayTitle
         }
-        tabGroupDict = temp
+        Defaults[.tabGroupNames] = temp
     }
 
     static func makeWebViewConfig(isIncognito: Bool) -> WKWebViewConfiguration {

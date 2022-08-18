@@ -45,7 +45,6 @@ class TabCardModel: CardDropDelegate, CardModel {
     private(set) var allTabGroupDetails: [TabGroupCardDetails] = []
 
     @Default(.tabGroupExpanded) private var tabGroupExpanded: Set<String>
-    @Default(.archivedTabsDuration) var archivedTabsDuration
     var needsUpdateRows: Bool = false
 
     static let pinnedRowHeaderID: String = "pinned-header"
@@ -81,9 +80,9 @@ class TabCardModel: CardDropDelegate, CardModel {
         timeBasedNormalRows[.yesterday] = buildRows(incognito: false, for: .yesterday)
         timeBasedNormalRows[.lastWeek] = buildRows(incognito: false, for: .lastWeek)
 
-        if archivedTabsDuration == .month {
+        if Defaults[.archivedTabsDuration] == .month {
             timeBasedNormalRows[.lastMonth] = buildRows(incognito: false, for: .lastMonth)
-        } else if archivedTabsDuration == .forever {
+        } else if Defaults[.archivedTabsDuration] == .forever {
             timeBasedNormalRows[.lastMonth] = buildRows(incognito: false, for: .lastMonth)
             timeBasedNormalRows[.overAMonth] = buildRows(incognito: false, for: .overAMonth)
         }
@@ -107,11 +106,11 @@ class TabCardModel: CardDropDelegate, CardModel {
         var returnValue: [Row] = []
 
         func getOlderRows() -> [Row] {
-            if archivedTabsDuration == .month {
+            if Defaults[.archivedTabsDuration] == .month {
                 return (timeBasedNormalRows[.lastMonth] ?? [])
             }
 
-            if archivedTabsDuration == .forever {
+            if Defaults[.archivedTabsDuration] == .forever {
                 return (timeBasedNormalRows[.lastMonth] ?? [])
                     + (timeBasedNormalRows[.overAMonth] ?? [])
             }
@@ -422,11 +421,11 @@ class TabCardModel: CardDropDelegate, CardModel {
         // unable to expand, we remove the group from the expanded list. A side-effect
         // of this resolves a problem where TabGroupHeader doesn't hide arrows button
         // when the number of tabs drops below columnCount.
-        tabGroupExpanded.forEach { groupID in
+        Defaults[.tabGroupExpanded].forEach { groupID in
             if let tabGroup = allTabGroupDetails.first(where: { groupID == $0.id }),
                 tabGroup.allDetails.count <= columnCount
             {
-                tabGroupExpanded.remove(groupID)
+                Defaults[.tabGroupExpanded].remove(groupID)
             }
         }
 
