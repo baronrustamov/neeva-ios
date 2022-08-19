@@ -39,17 +39,7 @@ protocol TabDelegate {
     @objc optional func tab(_ tab: Tab, didUpdateWebView webView: WKWebView)
 }
 
-public enum TabSection: String, CaseIterable {
-    case all = "All"
-    case pinned = "Pinned"
-    case today = "Today"
-    case yesterday = "Yesterday"
-    case lastWeek = "Past 7 Days"
-    case lastMonth = "Past 30 Days"
-    case overAMonth = "Older"
-}
-
-class Tab: NSObject, ObservableObject {
+class Tab: NSObject, ObservableObject, GenericTab {
     let isIncognito: Bool
     @Published var isPinned: Bool = false
     var pinnedTime: TimeInterval?
@@ -205,26 +195,8 @@ class Tab: NSObject, ObservableObject {
         return false
     }
 
-    var isArchived: Bool {
-        if isPinned {
-            return false
-        }
-
-        switch Defaults[.archivedTabsDuration] {
-        case .week:
-            return
-                !(isIncluded(in: .today)
-                || isIncluded(in: .yesterday)
-                || isIncluded(in: .lastWeek))
-        case .month:
-            return
-                !(isIncluded(in: .today)
-                || isIncluded(in: .yesterday)
-                || isIncluded(in: .lastWeek)
-                || isIncluded(in: .lastMonth))
-        case .forever:
-            return false
-        }
+    var shouldBeArchived: Bool {
+        !isPinned && Client.shouldBeArchived(basedOn: lastExecutedTime)
     }
 
     fileprivate(set) var screenshot: UIImage?
@@ -777,11 +749,8 @@ class Tab: NSObject, ObservableObject {
     /// Returns a bool on if the tab was last used in the passed `TabSection`.
     /// Tab will also return `true` for `today` if it is pinned and `pinnnedTabSection` isn't enabled.
     func isIncluded(in tabSection: TabSection) -> Bool {
-        // The fallback value won't be used. tab.lastExecutedTime is
-        // guaranteed to be non-nil in configureTab()
-        let lastExecutedTime = lastExecutedTime
-        return wasLastExecuted(
-            in: tabSection, isPinned: isPinned, lastExecutedTime: lastExecutedTime)
+        return tabSection.includes(
+            isPinned: isPinned, lastExecutedTime: lastExecutedTime)
     }
 
     private func saveSessionData(isForPinnedTabPlaceholder: Bool = false) {
@@ -829,7 +798,7 @@ class Tab: NSObject, ObservableObject {
         return SavedTab(
             screenshotUUID: screenshotUUID, isSelected: isSelected,
             title: title ?? lastTitle, isIncognito: isIncognito, isPinned: isPinned,
-            pinnedTime: pinnedTime, lastExecutedTIme: lastExecutedTime,
+            pinnedTime: pinnedTime, lastExecutedTime: lastExecutedTime,
             faviconURL: displayFavicon?.url, url: url, sessionData: sessionData,
             uuid: tabUUID, rootUUID: rootUUID, parentUUID: parentUUID ?? "",
             tabIndex: tabIndex, parentSpaceID: parentSpaceID ?? "",
@@ -995,45 +964,5 @@ class TabWebView: WKWebView, MenuHelperInterface {
         _ javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)? = nil
     ) {
         super.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
-    }
-}
-
-func wasLastExecuted(in tabSection: TabSection, isPinned: Bool, lastExecutedTime: Timestamp)
-    -> Bool
-{
-    // lastExecutedTime is passed in milliseconds, needs to be converted to seconds.
-    let lastExecutedTimeSeconds = lastExecutedTime / 1000
-    let dateLastExecutedTime = Date(timeIntervalSince1970: TimeInterval(lastExecutedTimeSeconds))
-
-    // If someone sets their device clock forward and then
-    // back, this prevents them from losing tabs.
-    let isExecutedTimeAFutureDate = dateLastExecutedTime.daysFromToday() < 0
-
-    if isPinned {
-        switch tabSection {
-        case .all, .pinned:
-            return true
-        default:
-            return false
-        }
-    } else {
-        switch tabSection {
-        case .all:
-            return true
-        case .pinned:
-            return false
-        case .today:
-            return dateLastExecutedTime.isToday() || isExecutedTimeAFutureDate
-        case .yesterday:
-            return dateLastExecutedTime.isYesterday()
-        case .lastWeek:
-            return dateLastExecutedTime.isWithinLast7Days()
-                && !(dateLastExecutedTime.isToday() || dateLastExecutedTime.isYesterday())
-        case .lastMonth:
-            return !dateLastExecutedTime.isWithinLast7Days()
-                && dateLastExecutedTime.isWithinLastMonth()
-        case .overAMonth:
-            return !dateLastExecutedTime.isWithinLastMonth()
-        }
     }
 }

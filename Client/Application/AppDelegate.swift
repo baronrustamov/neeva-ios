@@ -305,17 +305,18 @@ extension AppDelegate {
             )
         }
 
-        let tabs =
-            (SceneDelegate.getTabManagerOrNil()?.activeTabs ?? [])
-            + (SceneDelegate.getTabManagerOrNil()?.archivedTabs ?? [])
+        let tabManager = SceneDelegate.getTabManagerOrNil()
+        let activeTabs = tabManager?.activeTabs ?? []
+        let archivedTabs = tabManager?.archivedTabs ?? []
+
         let numberOfZombieTabs: Int = {
-            tabs.filter { $0.webView == nil }.count
+            activeTabs.filter { $0.webView == nil }.count
         }()
 
         attributes.append(
             ClientLogCounterAttribute(
                 key: LogConfig.Attribute.AllTabsOpened,
-                value: "\(tabs.count)"
+                value: "\(activeTabs.count + archivedTabs.count)"
             )
         )
 

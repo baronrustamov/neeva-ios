@@ -6,26 +6,31 @@ import Foundation
 import Shared
 
 class SavedTab: NSObject, NSCoding {
-    var isSelected: Bool
-    var title: String?
-    var url: URL?
-    var isIncognito: Bool
-    var isPinned: Bool
-    var pinnedTime: TimeInterval?
-    var lastExecutedTime: Timestamp?
-    var sessionData: SessionData?
-    var screenshotUUID: UUID?
-    var faviconURL: URL?
-    var UUID: String?
-    var rootUUID: String?
-    var parentUUID: String?
-    var tabIndex: Int?
-    var parentSpaceID: String?
-    var pageZoom: CGFloat?
+    let isSelected: Bool
+    let title: String?
+    let url: URL?
+    let isIncognito: Bool
+    let isPinned: Bool
+    let pinnedTime: TimeInterval?
+    let lastExecutedTime: Timestamp?
+    let sessionData: SessionData?
+    let screenshotUUID: UUID?
+    let faviconURL: URL?
+    let tabUUID: String
+    let rootUUID: String
+    let parentUUID: String?
+
+    // Used to support undo close tab, so that we can remember where to re-insert
+    // the tab upon restore.
+    // TODO(darin): A tombstone in the tabs array would be a better approach.
+    let tabIndex: Int?
+
+    let parentSpaceID: String?
+    let pageZoom: CGFloat?
 
     init(
         screenshotUUID: UUID?, isSelected: Bool, title: String?, isIncognito: Bool, isPinned: Bool,
-        pinnedTime: TimeInterval?, lastExecutedTIme: Timestamp?,
+        pinnedTime: TimeInterval?, lastExecutedTime: Timestamp,
         faviconURL: URL?, url: URL?, sessionData: SessionData?, uuid: String, rootUUID: String,
         parentUUID: String, tabIndex: Int?, parentSpaceID: String, pageZoom: CGFloat
     ) {
@@ -35,11 +40,11 @@ class SavedTab: NSObject, NSCoding {
         self.isIncognito = isIncognito
         self.isPinned = isPinned
         self.pinnedTime = pinnedTime
-        self.lastExecutedTime = lastExecutedTIme
+        self.lastExecutedTime = lastExecutedTime
         self.faviconURL = faviconURL
         self.url = url
         self.sessionData = sessionData
-        self.UUID = uuid
+        self.tabUUID = uuid
         self.rootUUID = rootUUID
         self.parentUUID = parentUUID
         self.tabIndex = tabIndex
@@ -60,8 +65,8 @@ class SavedTab: NSObject, NSCoding {
         self.isIncognito = coder.decodeBool(forKey: "isPrivate")
         self.faviconURL = (coder.decodeObject(forKey: "faviconURL") as? URL)
         self.url = coder.decodeObject(forKey: "url") as? URL
-        self.UUID = coder.decodeObject(forKey: "UUID") as? String
-        self.rootUUID = coder.decodeObject(forKey: "rootUUID") as? String
+        self.tabUUID = coder.decodeObject(forKey: "UUID") as? String ?? UUID().uuidString
+        self.rootUUID = coder.decodeObject(forKey: "rootUUID") as? String ?? UUID().uuidString
         self.parentUUID = coder.decodeObject(forKey: "parentUUID") as? String
         self.tabIndex = coder.decodeObject(forKey: "tabIndex") as? Int
         self.parentSpaceID = coder.decodeObject(forKey: "parentSpaceID") as? String
@@ -79,7 +84,7 @@ class SavedTab: NSObject, NSCoding {
         coder.encode(isIncognito, forKey: "isPrivate")
         coder.encode(faviconURL, forKey: "faviconURL")
         coder.encode(url, forKey: "url")
-        coder.encode(UUID, forKey: "UUID")
+        coder.encode(tabUUID, forKey: "UUID")
         coder.encode(rootUUID, forKey: "rootUUID")
         coder.encode(parentUUID, forKey: "parentUUID")
         coder.encode(tabIndex, forKey: "tabIndex")

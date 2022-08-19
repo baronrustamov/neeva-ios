@@ -8,17 +8,17 @@ import SwiftUI
 struct ArchivedTabsRowView: View {
     @Environment(\.selectionCompletion) private var selectionCompletion: () -> Void
 
-    let tab: Tab
+    let tab: ArchivedTab
     let tabManager: TabManager
     private let padding: CGFloat = 4
 
     var tabURL: URL? {
-        return tab.url ?? tab.sessionData?.currentUrl
+        return tab.url
     }
 
     var body: some View {
         Button {
-            tabManager.select(tab)
+            tabManager.select(archivedTab: tab)
             selectionCompletion()
         } label: {
             HStack {
@@ -30,7 +30,7 @@ struct ArchivedTabsRowView: View {
                 }
 
                 VStack(alignment: .leading, spacing: padding) {
-                    Text(tab.title ?? "")
+                    Text(tab.displayTitle)
                         .foregroundColor(.label)
 
                     Text(tabURL?.absoluteString ?? "")

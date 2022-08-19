@@ -6,8 +6,8 @@ import Defaults
 import Foundation
 import Shared
 
-struct TabGroup {
-    var children: [Tab]
+struct GenericTabGroup<TabType: GenericTab> {
+    var children: [TabType]
     var id: String
     var lastExecutedTime: Timestamp {
         children.map { $0.lastExecutedTime }.max()
@@ -39,7 +39,9 @@ struct TabGroup {
     }
 
     func isIncluded(in tabSection: TabSection) -> Bool {
-        return wasLastExecuted(
-            in: tabSection, isPinned: hasPinnedChild, lastExecutedTime: lastExecutedTime)
+        return tabSection.includes(isPinned: hasPinnedChild, lastExecutedTime: lastExecutedTime)
     }
 }
+
+typealias TabGroup = GenericTabGroup<Tab>
+typealias ArchivedTabGroup = GenericTabGroup<ArchivedTab>

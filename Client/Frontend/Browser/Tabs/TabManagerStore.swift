@@ -15,7 +15,6 @@ class TabManagerStore {
             files: getAppDelegate().profile.files, namespace: "TabManagerScreenshots",
             quality: UIConstants.ScreenshotQuality))
 
-    fileprivate var lockedForReading = false
     let imageStore: DiskImageStore?
     fileprivate var fileManager = FileManager.default
     private var backgroundFileWriters: [String: BackgroundFileWriter] = [:]
@@ -23,10 +22,6 @@ class TabManagerStore {
     init(imageStore: DiskImageStore?, _ fileManager: FileManager = FileManager.default) {
         self.fileManager = fileManager
         self.imageStore = imageStore
-    }
-
-    var isRestoringTabs: Bool {
-        return lockedForReading
     }
 
     fileprivate func getBasePath() -> String? {
@@ -57,10 +52,15 @@ class TabManagerStore {
     }
 
     fileprivate func prepareSavedTabs(
-        fromTabs tabs: [Tab], existingSavedTabs: [SavedTab], selectedTab: Tab?
+        fromTabs tabs: [Tab], fromArchivedTabs archivedTabs: [ArchivedTab],
+        existingSavedTabs: [SavedTab], selectedTab: Tab?
     ) -> [SavedTab]? {
         var savedTabs = [SavedTab]()
         var screenshots: [DiskImageStore.Entry] = []
+
+        for tab in archivedTabs {
+            savedTabs.append(tab.savedTab)
+        }
 
         for tab in tabs {
             tab.tabUUID = tab.tabUUID.isEmpty ? UUID().uuidString : tab.tabUUID
@@ -94,7 +94,8 @@ class TabManagerStore {
     // after this completes. Deferred completion is called always, regardless of Data.write return value.
     // Write failures (i.e. due to read locks) are considered inconsequential, as preserveTabs will be called frequently.
     func preserveTabs(
-        _ tabs: [Tab], existingSavedTabs: [SavedTab], selectedTab: Tab?, for scene: UIScene
+        _ tabs: [Tab], archivedTabs: [ArchivedTab], existingSavedTabs: [SavedTab],
+        selectedTab: Tab?, for scene: UIScene
     ) {
         log.info("Preserve tabs for scene: \(scene.session.persistentIdentifier)")
 
@@ -102,7 +103,8 @@ class TabManagerStore {
 
         guard
             let savedTabs = prepareSavedTabs(
-                fromTabs: tabs, existingSavedTabs: existingSavedTabs, selectedTab: selectedTab),
+                fromTabs: tabs, fromArchivedTabs: archivedTabs,
+                existingSavedTabs: existingSavedTabs, selectedTab: selectedTab),
             let path = tabSavePath(withId: scene.session.persistentIdentifier)
         else {
             clearArchive(for: scene)
@@ -152,12 +154,6 @@ class TabManagerStore {
         -> Tab?
     {
         assertIsMainThread("Restoration is a main-only operation")
-        guard !lockedForReading, savedTabs.count > 0 else { return nil }
-
-        lockedForReading = true
-        defer {
-            lockedForReading = false
-        }
 
         var savedTabs = savedTabs
 
@@ -168,18 +164,23 @@ class TabManagerStore {
 
         var tabToSelect: Tab?
         var restoredTabs = [Tab]()
-        restoredTabs.reserveCapacity(savedTabs.count)
+        restoredTabs.reserveCapacity(savedTabs.count)  // Overestimating
 
         for savedTab in savedTabs {
-            // Provide an empty request to prevent a new tab from loading the home screen
-            let tab = tabManager.addTab(
-                flushToDisk: false, zombie: true, isIncognito: savedTab.isIncognito, notify: false)
-            savedTab.configureTab(tab, imageStore: imageStore)
+            let shouldBeArchived =
+                !savedTab.isPinned
+                && shouldBeArchived(
+                    basedOn: savedTab.lastExecutedTime ?? Date.nowMilliseconds())
+            if shouldBeArchived {
+                tabManager.add(archivedTab: ArchivedTab(savedTab: savedTab))
+            } else {
+                let tab = tabManager.restore(savedTab: savedTab, resolveParentRef: false)
 
-            restoredTabs.append(tab)
+                restoredTabs.append(tab)
 
-            if savedTab.isSelected, tab.isIncluded(in: .today) {
-                tabToSelect = tab
+                if savedTab.isSelected, tab.isIncluded(in: .today) {
+                    tabToSelect = tab
+                }
             }
         }
 

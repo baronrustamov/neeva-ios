@@ -199,7 +199,7 @@ class EnvironmentHelper {
         TabManager.all.forEach { tabManager in
             // In the future, we may also want to log archived tab groups.
             numOfTabGroups += tabManager.activeTabGroups.count
-            numOfChildTabs += tabManager.childTabs.count
+            numOfChildTabs += tabManager.activeTabGroups.values.map(\.children.count).reduce(0, +)
         }
 
         let numTabGroupsTotal = ClientLogCounterAttribute(

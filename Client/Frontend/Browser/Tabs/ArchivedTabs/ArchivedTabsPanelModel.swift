@@ -6,8 +6,8 @@ import Combine
 import Shared
 
 enum ArchivedTabRow: Equatable {
-    case tab(Tab)
-    case tabGroup(TabGroup)
+    case tab(ArchivedTab)
+    case tabGroup(ArchivedTabGroup)
 
     var lastExcecutedTime: Timestamp {
         switch self {
@@ -80,9 +80,7 @@ class ArchivedTabsPanelModel: ObservableObject {
     }
 
     func clearArchivedTabs() {
-        tabManager.removeTabs(
-            tabManager.archivedTabs, updateSelectedTab: false,
-            dontAddToRecentlyClosed: true, notify: false)
+        tabManager.remove(archivedTabs: tabManager.archivedTabs)
         loadData()
     }
 

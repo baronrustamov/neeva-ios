@@ -316,19 +316,19 @@ class TabManagerTests: XCTestCase {
     }
 
     func testTabsIndexClosingFirst() {
-        // We add 2 tabs. Then an incognito one before adding another normal tab and selecting the first.
+        // We add 2 tabs. Then an incognito one before adding another normal tab and selecting it.
         // Make sure that when the last one is deleted we dont switch to the private tab
         manager.addTab()
         let newSelectedTab = manager.addTab()
         manager.addTab(isIncognito: true)
         manager.addTab()
-        // For some reason, incognito tabs come first in `activeTabs`. We don't want that.
-        manager.selectTab(manager.activeTabs[1], notify: true)
+
+        manager.selectTab(manager.activeNormalTabs.last, notify: true)
 
         tabsUpdated = false
         selectedTabUpdated = false
 
-        manager.removeTab(manager.activeTabs[1])
+        manager.removeTab(manager.activeNormalTabs.last)
 
         XCTAssertTrue(tabsUpdated)
         XCTAssertTrue(selectedTabUpdated)

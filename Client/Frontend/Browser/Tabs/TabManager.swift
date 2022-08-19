@@ -34,13 +34,12 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
 
     // Tab Group related variables
     @Default(.archivedTabsDuration) var archivedTabsDuration
-    var activeTabs: [Tab] = []
-    var archivedTabs: [Tab] = []
+
+    // TODO: consolidate accessors, don't need both `tabs` and `activeTabs`
+    var activeTabs: [Tab] { tabs }
+    var archivedTabs: [ArchivedTab] = []
     var activeTabGroups: [String: TabGroup] = [:]
-    var archivedTabGroups: [String: TabGroup] = [:]
-    var childTabs: [Tab] {
-        activeTabGroups.values.flatMap(\.children)
-    }
+    var archivedTabGroups: [String: ArchivedTabGroup] = [:]
 
     // Use `selectedTabPublisher` to observe changes to `selectedTab`.
     private(set) var selectedTab: Tab?
@@ -262,7 +261,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         incognitoModel.update(isIncognito: tab?.isIncognito ?? isIncognito)
 
         store.preserveTabs(
-            tabs, existingSavedTabs: recentlyClosedTabsFlattened,
+            tabs, archivedTabs: archivedTabs, existingSavedTabs: recentlyClosedTabsFlattened,
             selectedTab: selectedTab, for: scene)
 
         assert(tab === selectedTab, "Expected tab is selected")
@@ -508,47 +507,53 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         preserveTabs()
     }
 
-    func updateActiveTabsAndSendNotifications(notify: Bool) {
-        activeTabs =
-            incognitoTabs
-            + normalTabs.filter {
-                return !$0.isArchived
-            }
-
-        if notify {
-            tabsUpdatedPublisher.send()
-        }
-    }
-
+    // TODO: make this function private
     internal func updateAllTabDataAndSendNotifications(notify: Bool) {
-        updateActiveTabsAndSendNotifications(notify: false)
-
-        archivedTabs = normalTabs.filter {
-            return $0.isArchived
+        // Handle the case of the selected tab needing to be archived. This can happen
+        // if the app has been in the background for a while. In this case, we'll just
+        // regard the tab as still being active to avoid the selected tab disappearing.
+        if let selectedTab = selectedTab, selectedTab.shouldBeArchived {
+            selectedTab.lastExecutedTime = Date.nowMilliseconds()
         }
 
-        activeTabGroups =
-            activeTabs
-            .reduce(into: [String: [Tab]]()) { dict, tab in
+        // Determine if any of the active tabs should be converted to archived tabs.
+        // Incognito tabs are never archived.
+        let shouldBeArchivedCondition: (Tab) -> Bool = {
+            !$0.isIncognito && $0.shouldBeArchived
+        }
+        let tabsToArchive = tabs.filter(shouldBeArchivedCondition)
+        for tab in tabsToArchive {
+            tab.closeWebView()
+            // Discard tabIndex at this point. When restored, we'll simply append to activeTabs.
+            archivedTabs.append(
+                ArchivedTab(
+                    savedTab: tab.saveSessionDataAndCreateSavedTab(isSelected: false, tabIndex: nil)
+                ))
+        }
+        if !tabsToArchive.isEmpty {
+            tabs.removeAll(where: shouldBeArchivedCondition)
+        }
+
+        // Re-build any tab groups.
+        func generateTabGroups<TabType: GenericTab>(
+            for tabs: [TabType], predicate: ([TabType]) -> Bool
+        ) -> [String: GenericTabGroup<TabType>] {
+            return tabs.reduce(into: [String: [TabType]]()) { dict, tab in
                 dict[tab.rootUUID, default: []].append(tab)
-            }.filter { $0.value.count > 1 }.reduce(into: [String: TabGroup]()) { dict, element in
-                dict[element.key] = TabGroup(children: element.value, id: element.key)
             }
-
-        // In archivedTabsPanelView, there are special UI treatments for a child tab,
-        // even if it's the only arcvhied tab in a group. Those tabs won't be filtered
-        // out (see activeTabGroups for comparison).
-        archivedTabGroups =
-            archivedTabs
-            .reduce(into: [String: [Tab]]()) { dict, tab in
-                if Defaults[.tabGroupNames][tab.rootUUID] != nil {
-                    dict[tab.rootUUID, default: []].append(tab)
-                }
-            }.reduce(into: [String: TabGroup]()) { dict, element in
-                dict[element.key] = TabGroup(children: element.value, id: element.key)
+            .filter({ predicate($0.value) })
+            .reduce(into: [String: GenericTabGroup<TabType>]()) { dict, element in
+                dict[element.key] = .init(children: element.value, id: element.key)
             }
-
-        cleanUpTabGroupNames()
+        }
+        activeTabGroups = generateTabGroups(for: tabs) { tabs in
+            tabs.count > 1
+        }
+        archivedTabGroups = generateTabGroups(for: archivedTabs) { tabs in
+            // Allow groups of one in the archived set.
+            tabs.count > 1 || Defaults[.tabGroupNames][tabs[0].rootUUID] != nil
+        }
+        updateTabGroupNames()
 
         if notify {
             tabsUpdatedPublisher.send()
@@ -583,28 +588,12 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         })
     }
 
-    func cleanUpTabGroupNames() {
-        // The merged set of tab groups is still needed here to avoid displaying different
-        // titles for the same tab group. Either subset(active/archive) of a tab group will
-        // reference the same dictionary and show the same title.
-        let tabGroups = getAll()
-            .reduce(into: [String: [Tab]]()) { dict, tab in
-                dict[tab.rootUUID, default: []].append(tab)
-            }.filter { $0.value.count > 1 }.reduce(into: [String: TabGroup]()) { dict, element in
-                dict[element.key] = TabGroup(children: element.value, id: element.key)
-            }
-
-        // Write newly created tab group names into dictionary
-        tabGroups.forEach { group in
-            let id = group.key
-            if Defaults[.tabGroupNames][id] == nil {
-                Defaults[.tabGroupNames][id] = group.value.displayTitle
-            }
-        }
-
-        // Garbage collect tab group names for tab groups that don't exist anymore
+    private func updateTabGroupNames() {
         var temp = [String: String]()
-        tabGroups.forEach { group in
+        activeTabGroups.forEach { group in
+            temp[group.key] = group.value.displayTitle
+        }
+        archivedTabGroups.forEach { group in
             temp[group.key] = group.value.displayTitle
         }
         Defaults[.tabGroupNames] = temp
@@ -956,6 +945,20 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         restoreSavedTabs(Array(recentlyClosedTabs.joined()))
     }
 
+    @discardableResult func restore(savedTab: SavedTab, resolveParentRef: Bool = true) -> Tab {
+        // Provide an empty request to prevent a new tab from loading the home screen.
+        // NOTE: tabIndex is ignored here as tabs are assumed to be saved in the order
+        // they should be re-inserted.
+        let tab = addTab(
+            flushToDisk: false, zombie: true, isIncognito: savedTab.isIncognito,
+            notify: false)
+        savedTab.configureTab(tab, imageStore: store.imageStore)
+        if resolveParentRef {
+            self.resolveParentRef(for: [tab])
+        }
+        return tab
+    }
+
     func resolveParentRef(for restoredTabs: [Tab], restrictToActiveTabs: Bool = false) {
         let tabs = restrictToActiveTabs ? self.activeTabs : self.tabs
         let uuidMapping = [String: Tab](
@@ -1256,7 +1259,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {
         // Write the tabs out again to make sure we preserve the favicon update.
         store.preserveTabs(
-            tabs, existingSavedTabs: recentlyClosedTabsFlattened,
+            tabs, archivedTabs: archivedTabs, existingSavedTabs: recentlyClosedTabsFlattened,
             selectedTab: selectedTab, for: scene)
     }
 
@@ -1267,14 +1270,14 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     // MARK: - TabStorage
     func preserveTabs() {
         store.preserveTabs(
-            tabs, existingSavedTabs: recentlyClosedTabsFlattened,
+            tabs, archivedTabs: archivedTabs, existingSavedTabs: recentlyClosedTabsFlattened,
             selectedTab: selectedTab, for: scene)
     }
 
     func storeChanges() {
         saveTabs(toProfile: profile, normalTabs)
         store.preserveTabs(
-            tabs, existingSavedTabs: recentlyClosedTabsFlattened,
+            tabs, archivedTabs: archivedTabs, existingSavedTabs: recentlyClosedTabsFlattened,
             selectedTab: selectedTab, for: scene)
     }
 
@@ -1657,5 +1660,32 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
         }
 
         decisionHandler(res)
+    }
+}
+
+// MARK: Archived Tabs
+extension TabManager {
+    func select(archivedTab: ArchivedTab) {
+        if let index = archivedTabs.firstIndex(where: { $0 === archivedTab }) {
+            archivedTabs.remove(at: index)
+        }
+        selectTab(restore(savedTab: archivedTab.savedTab), notify: true)
+    }
+
+    func remove(archivedTabs toBeRemoved: [ArchivedTab]) {
+        archivedTabs = archivedTabs.filter { !toBeRemoved.contains($0) }
+        updateAllTabDataAndSendNotifications(notify: true)
+    }
+
+    func add(archivedTab: ArchivedTab) {
+        archivedTabs.append(archivedTab)
+    }
+
+    func debugArchiveAllTabs() {
+        // Very intentionally just change the lastExecutedTime here to simulate enough
+        // time passing to cause all tabs to appear as though they should be archived.
+        // Don't update anything else so we can use this as a way to test out how the
+        // code handles this scenario.
+        tabs.forEach { $0.lastExecutedTime = 0 }
     }
 }

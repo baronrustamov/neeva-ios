@@ -121,7 +121,7 @@ struct DebugSettingsSection: View {
                         return
                     }
 
-                    tabManager.activeTabs.forEach { $0.lastExecutedTime = 0 }
+                    tabManager.debugArchiveAllTabs()
                 }
 
                 Button(String("Force Crash App")) {

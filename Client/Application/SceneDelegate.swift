@@ -101,6 +101,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         )
 
         bvc.tabManager.removeBlankTabs()
+        bvc.tabManager.updateAllTabDataAndSendNotifications(notify: true)
         bvc.downloadQueue.resumeAll()
 
         var attributes = EnvironmentHelper.shared.getAttributes()

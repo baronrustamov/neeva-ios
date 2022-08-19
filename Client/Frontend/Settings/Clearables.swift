@@ -42,9 +42,8 @@ class HistoryClearable: Clearable {
 class ArchivedTabsClearable: Clearable {
     func clear() -> Success {
         SceneDelegate.getAllTabManagers().forEach {
-            $0.removeTabs(
-                $0.archivedTabs, updateSelectedTab: false, dontAddToRecentlyClosed: true,
-                notify: false
+            $0.remove(
+                archivedTabs: $0.archivedTabs
             )
         }
 

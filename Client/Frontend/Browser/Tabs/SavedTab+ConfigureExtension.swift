@@ -44,10 +44,8 @@ extension SavedTab {
         tab.pinnedTime = pinnedTime
         tab.lastExecutedTime = lastExecutedTime ?? Date.nowMilliseconds()
         tab.parentUUID = parentUUID
-        if let uuid = UUID {
-            tab.tabUUID = uuid
-        }
-        tab.rootUUID = rootUUID ?? ""
+        tab.tabUUID = tabUUID
+        tab.rootUUID = rootUUID
         tab.parentSpaceID = parentSpaceID ?? ""
         tab.pageZoom = pageZoom ?? 1.0
         tab.url = url

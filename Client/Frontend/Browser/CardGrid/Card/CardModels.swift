@@ -72,6 +72,8 @@ class TabCardModel: CardDropDelegate, CardModel {
     private(set) var tabsDidChange = false
 
     private func updateRows() {
+        needsUpdateRows = false
+
         timeBasedNormalRows[.pinned] = buildRows(incognito: false, for: .pinned)
         timeBasedNormalRows[.today] = buildRows(incognito: false, for: .today)
         timeBasedNormalRows[.yesterday] = buildRows(incognito: false, for: .yesterday)
@@ -94,7 +96,6 @@ class TabCardModel: CardDropDelegate, CardModel {
 
     func updateIfNeeded(forceUpdateRows: Bool = false) {
         if needsUpdateRows || forceUpdateRows {
-            needsUpdateRows = false
             updateRows()
         }
     }
