@@ -104,12 +104,6 @@ extension BaseTestCase {
         app.typeText(text)
         app.typeText("\r")
 
-        // Sometimes the sign in menu pops up,
-        // this will close it.
-        if app.buttons["Close"].exists {
-            app.buttons["Close"].tap()
-        }
-
         waitForExistence(app.buttons["Back"])
     }
 }

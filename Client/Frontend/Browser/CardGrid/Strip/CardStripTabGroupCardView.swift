@@ -81,6 +81,7 @@ private struct CollapsedCardStripTabGroupCardView: View {
         .contextMenu(menuItems: groupDetails.contextMenu)
         .background(Color.groupedBackground)
         .onDrop(of: ["public.url", "public.text"], delegate: groupDetails)
+        .accessibilityLabel(groupDetails.title + ", Card Strip Tab Group Card")
     }
 
     func calculateFaviconOpacity(index: Int) -> Double {

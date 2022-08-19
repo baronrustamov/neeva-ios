@@ -16,6 +16,7 @@ class AddToSpaceSheetTests: BaseTestCase {
             // Suppress sign-in prompts
             "\(LaunchArguments.SetLoginCookie)cookie",
             LaunchArguments.EnableMockUserInfo,
+            LaunchArguments.DontAddTabOnLaunch,
         ]
 
         super.setUp()
@@ -63,7 +64,12 @@ class AddToSpaceSheetTests: BaseTestCase {
 
     func testCloseSheetOnTapOutside() throws {
         app.buttons["Add To Space"].tap()
-        app.buttons["Address Bar"].tap()
+
+        if iPad() {
+            app.buttons["Back"].tap(force: true)
+        } else {
+            app.buttons["Address Bar"].tap()
+        }
 
         waitForNoExistence(app.buttons["View Spaces"])
     }

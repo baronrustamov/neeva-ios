@@ -68,7 +68,7 @@ struct CardStripCard<Details>: View where Details: TabCardDetails {
                         .frame(width: CardUX.CloseButtonSize, height: CardUX.CloseButtonSize)
                         .background(Color(UIColor.systemGray6))
                         .clipShape(Circle())
-                        .accessibilityLabel("Close \(details.title)")
+                        .accessibilityLabel(Text("Close Card Strip Tab \(details.title)"))
                 }
             }
         }.animation(nil)
@@ -105,5 +105,8 @@ struct CardStripCard<Details>: View where Details: TabCardDetails {
                     .onDrop(of: ["public.url", "public.text"], delegate: details)
                     .modifier(CardDragAndDropModifier(tabCardDetail: details))
             }
+            .accessibilityLabel(
+                details.title + ", Card Strip Tab" + "\(details.isPinned ? ", Pinned" : "")"
+                    + "\(details.isSelected ? ", Selected" : "")")
     }
 }

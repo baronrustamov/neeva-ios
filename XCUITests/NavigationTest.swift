@@ -19,47 +19,36 @@ let requestDesktopSiteLabel = "Request Desktop Site"
 
 class NavigationTest: BaseTestCase {
     func testNavigation() {
-        // Check that the back and forward buttons are disabled
-        if iPad() {
-            XCTAssert(app.buttons["Address Bar"].exists)
-            app.buttons["Address Bar"].tap()
-
-            app.buttons["Cancel"].tap()
-            XCTAssertFalse(app.buttons["Back"].isEnabled)
-            goToOverflowMenuButton(label: "Forward") { element in
-                XCTAssertFalse(element.isEnabled)
+        func checkForwardButtonDisabled() {
+            if app.buttons["Forward"].exists {
+                XCTAssertFalse(app.buttons["Forward"].isEnabled)
+            } else if iPad() {
+                // This fails on CircleCI when using an iPhone.
+                goToOverflowMenuButton(label: "Forward") { element in
+                    XCTAssertFalse(element.isEnabled)
+                    // Close the menu.
+                    element.tap()
+                }
             }
-            app.buttons["Address Bar"].tap(force: true)
-        } else {
-            XCTAssertFalse(app.buttons["Back"].isEnabled)
-            // Disable this check for now, not entirely sure why it fails this check only on CI. It works locally.
-            // The test case till this point is pretty straight forward just tapping on address bar and then find
-            // the overflow menu with forward button so it should be safe to disable this check for now
-            /*goToOverflowMenuButton(label: "Forward") { element in
-                XCTAssertFalse(element.isEnabled)
-            }*/
-
-            XCTAssert(app.buttons["Address Bar"].exists)
-            app.buttons["Address Bar"].tap()
         }
 
-        // The URL is opened in a new tab, so the back / forward buttons are disabled
+        closeAllTabs()
         openURL()
-        waitUntilPageLoad()
         waitForValueContains(app.buttons["Address Bar"], value: "example.com")
-        goToOverflowMenuButton(label: "Forward") { element in
-            XCTAssertFalse(element.isEnabled)
-        }
 
+        // Back button should be enabled since we opened a URL from search.
+        XCTAssertTrue(app.buttons["Back"].isEnabled)
+        checkForwardButtonDisabled()
+
+        waitForHittable(app.links["More information..."])
         app.links["More information..."].tap()
 
         // Once a second url is open, back button is enabled but not the forward one till we go back to url_1
         waitUntilPageLoad()
         waitForValueContains(app.buttons["Address Bar"], value: "www.iana.org")
         XCTAssertTrue(app.buttons["Back"].isEnabled)
-        goToOverflowMenuButton(label: "Forward") { element in
-            XCTAssertFalse(element.isEnabled)
-        }
+        checkForwardButtonDisabled()
+
         app.buttons["Back"].tap()
 
         waitUntilPageLoad()

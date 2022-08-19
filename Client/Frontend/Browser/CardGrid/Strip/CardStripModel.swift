@@ -13,8 +13,10 @@ class CardStripModel: ObservableObject {
     @Published var shouldEmbedInScrollView = false
 
     var rows: [Row] {
-        incognitoModel.isIncognito
-            ? tabCardModel.incognitoRows : tabCardModel.timeBasedNormalRows[.today] ?? []
+        let normalRows =
+            (tabCardModel.timeBasedNormalRows[.pinned]) ?? []
+            + (tabCardModel.timeBasedNormalRows[.today] ?? [])
+        return incognitoModel.isIncognito ? tabCardModel.incognitoRows : normalRows
     }
 
     private var detailCount: Int {
@@ -24,7 +26,7 @@ class CardStripModel: ObservableObject {
     }
 
     var showCardStrip: Bool {
-        return FeatureFlag[.cardStrip] && tabChromeModel.inlineToolbar
+        return tabChromeModel.inlineToolbar
             && !tabChromeModel.isEditingLocation
             && detailCount > 1
     }
