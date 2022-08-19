@@ -52,6 +52,10 @@ struct CardStripView: View {
                     }
                 }.id(row.id)
             }
+
+            if !model.todayTabsExists {
+                Spacer()
+            }
         }
         .opacity(scrollingControlModel.controlOpacity)
         .frame(height: CardStripUX.Height)

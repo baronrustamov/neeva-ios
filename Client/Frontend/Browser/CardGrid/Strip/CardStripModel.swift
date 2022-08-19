@@ -14,9 +14,13 @@ class CardStripModel: ObservableObject {
 
     var rows: [Row] {
         let normalRows =
-            (tabCardModel.timeBasedNormalRows[.pinned]) ?? []
+            (tabCardModel.timeBasedNormalRows[.pinned] ?? [])
             + (tabCardModel.timeBasedNormalRows[.today] ?? [])
         return incognitoModel.isIncognito ? tabCardModel.incognitoRows : normalRows
+    }
+
+    var todayTabsExists: Bool {
+        tabCardModel.allDetails.filter { $0.tab.isIncluded(in: .today) }.count > 0
     }
 
     private var detailCount: Int {
@@ -31,8 +35,11 @@ class CardStripModel: ObservableObject {
             && detailCount > 1
     }
 
-    init(incognitoModel: IncognitoModel, tabCardModel: TabCardModel, tabChromeModel: TabChromeModel)
-    {
+    init(
+        incognitoModel: IncognitoModel,
+        tabCardModel: TabCardModel,
+        tabChromeModel: TabChromeModel
+    ) {
         self.incognitoModel = incognitoModel
         self.tabCardModel = tabCardModel
         self.tabChromeModel = tabChromeModel

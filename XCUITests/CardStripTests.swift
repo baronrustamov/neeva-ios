@@ -14,7 +14,8 @@ class CardStripTests: IpadOnlyTestCase {
 
         // Select the other tab.
         waitForExistence(
-            app.buttons["Internet for people, not profit — Mozilla, Card Strip Tab, Selected"])
+            app.buttons["Internet for people, not profit — Mozilla, Card Strip Tab, Selected"]
+        )
         app.buttons["Example Domain, Card Strip Tab"].tap()
 
         // Make sure it's selected.
@@ -88,9 +89,10 @@ class CardStripTests: IpadOnlyTestCase {
         goToTabTray()
         waitForExistence(app.buttons["Example Domain, Tab"])
         app.buttons["Example Domain, Tab"].press(forDuration: 1)
-        app.buttons["Pin tab"].tap()
+        app.buttons["Pin Tab"].tap()
 
         // Make sure pinned tab appears in the strip.
+        waitForNoExistence(app.staticTexts["Tab Pinned"], timeoutValue: 30)
         app.buttons["Internet for people, not profit — Mozilla, Tab"].tap()
         waitForExistence(app.buttons["Example Domain, Card Strip Tab, Pinned"])
 
