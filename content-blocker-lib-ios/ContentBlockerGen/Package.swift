@@ -7,7 +7,7 @@ let package = Package(
     name: "ContentBlockerGen",
     products: [
         .executable(name: "ContentBlockerGen", targets: ["ContentBlockerGen"]),
-        .library(name: "ContentBlockerGenLib", targets: ["ContentBlockerGenLib"])
+        .library(name: "ContentBlockerGenLib", targets: ["ContentBlockerGenLib"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.

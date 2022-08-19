@@ -49,8 +49,8 @@ public class ContentBlockerGenLib {
     func buildOutputLine(urlFilter: String, unlessDomain: String, action: Action) -> String {
         let unlessDomainSection = unlessDomain.isEmpty ? "" : ",\"unless-domain\":\(unlessDomain)"
         let result = """
-                    {"action":{"type":\(action.rawValue)},"trigger":{"url-filter":"\(urlFilter)","load-type":["third-party"]\(unlessDomainSection)}}
-                    """
+            {"action":{"type":\(action.rawValue)},"trigger":{"url-filter":"\(urlFilter)","load-type":["third-party"]\(unlessDomainSection)}}
+            """
         return result
     }
 
@@ -63,7 +63,9 @@ public class ContentBlockerGenLib {
         let relatedDomains = companyToRelatedDomains[companyName, default: []]
         let unlessDomain = buildUnlessDomain(relatedDomains)
 
-        let entry = categoryItem.first!.value.first(where: { $0.key.hasPrefix("http") || $0.key.hasPrefix("www.") })!
+        let entry = categoryItem.first!.value.first(where: {
+            $0.key.hasPrefix("http") || $0.key.hasPrefix("www.")
+        })!
         // let companyDomain = entry.key // noting that companyDomain is not used anywhere
         let domains = entry.value as! [String]
         domains.forEach {
@@ -74,7 +76,9 @@ public class ContentBlockerGenLib {
         return result
     }
 
-    public func parseBlocklist(json: [String: Any], action: Action, categoryTitle: CategoryTitle) -> [String] {
+    public func parseBlocklist(json: [String: Any], action: Action, categoryTitle: CategoryTitle)
+        -> [String]
+    {
         let categories = json["categories"]! as! [String: Any]
         var result = [String]()
         let category = categories[categoryTitle.rawValue] as! [Any]
@@ -95,4 +99,3 @@ public class ContentBlockerGenLib {
         return result
     }
 }
-

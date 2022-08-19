@@ -1,8 +1,8 @@
+import Defaults
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 import Shared
-import Defaults
 
 struct TPPageStats {
     var domains: [String]
@@ -35,7 +35,9 @@ class TPStatsBlocklistChecker {
             return deferred
         }
 
-        guard let domain = url.baseDomain, let docDomain = mainDocumentURL.baseDomain, domain != docDomain else {
+        guard let domain = url.baseDomain, let docDomain = mainDocumentURL.baseDomain,
+            domain != docDomain
+        else {
             deferred.fill(false)
             return deferred
         }
@@ -45,16 +47,20 @@ class TPStatsBlocklistChecker {
 
         DispatchQueue.global().async {
             // Return true in the Deferred if the domain could potentially be blocked
-            deferred.fill(blockLists.urlIsInList(url,
-                                                 mainDocumentURL: mainDocumentURL,
-                                                 safelistedDomains: safelistRegex))
+            deferred.fill(
+                blockLists.urlIsInList(
+                    url,
+                    mainDocumentURL: mainDocumentURL,
+                    safelistedDomains: safelistRegex))
         }
         return deferred
     }
 
     func startup() {
         self.loadStatsParser()
-        Defaults.observe(keys: .cookieCutterEnabled, .contentBlockingStrength, options: []) { [weak self] in
+        Defaults.observe(
+            keys: .cookieCutterEnabled, .contentBlockingStrength, .adBlockEnabled, options: []
+        ) { [weak self] in
             guard let self = self else { return }
             self.loadStatsParser()
         }.tieToLifetime(of: self)
@@ -74,7 +80,7 @@ class TPStatsBlocklistChecker {
 // The 'unless-domain' and 'if-domain' rules use wildcard expressions, convert this to regex.
 func wildcardContentBlockerDomainToRegex(domain: String) -> String? {
     struct Memo { static var domains = [String: String]() }
-    
+
     if let memoized = Memo.domains[domain] {
         return memoized
     }
@@ -85,7 +91,7 @@ func wildcardContentBlockerDomainToRegex(domain: String) -> String? {
         regex = "." + regex
     }
     regex = regex.replacingOccurrences(of: ".", with: "\\.")
-    
+
     Memo.domains[domain] = regex
     return regex
 }
@@ -98,7 +104,10 @@ class TPStatsBlocklists {
         let domainExceptions: [String]?
         let list: BlocklistCategory
 
-        init(regex: String, loadType: LoadType, resourceType: ResourceType, domainExceptions: [String]?, list: BlocklistCategory) {
+        init(
+            regex: String, loadType: LoadType, resourceType: ResourceType,
+            domainExceptions: [String]?, list: BlocklistCategory
+        ) {
             self.regex = regex
             self.loadType = loadType
             self.resourceType = resourceType
@@ -126,18 +135,23 @@ class TPStatsBlocklists {
         // Use the strict list of files, as it is the complete list of rules,
         // keeping in mind the stats can't distinguish block vs cookie-block,
         // only that an url did or didn't match.
-        for blockListFile in [
-            NeevaConstants.currentTarget == .xyz ? BlocklistFileName.easyPrivacyStrict : BlocklistFileName.easyPrivacy,
-            ] {
+        for blockListFile in BlocklistFileName.statsListsForMode(
+            strength: BlockingStrength(rawValue: Defaults[.contentBlockingStrength]) ?? .easyPrivacy
+        ) {
             let list: [[String: AnyObject]]
             do {
-                guard let path = Bundle.main.path(forResource: blockListFile.filename, ofType: "json") else {
+                guard
+                    let path = Bundle.main.path(forResource: blockListFile.filename, ofType: "json")
+                else {
                     assertionFailure("Blocklists: bad file path.")
                     return
                 }
 
                 let json = try Data(contentsOf: URL(fileURLWithPath: path))
-                guard let data = try JSONSerialization.jsonObject(with: json, options: []) as? [[String: AnyObject]] else {
+                guard
+                    let data = try JSONSerialization.jsonObject(with: json, options: [])
+                        as? [[String: AnyObject]]
+                else {
                     assertionFailure("Blocklists: bad JSON cast.")
                     return
                 }
@@ -149,20 +163,23 @@ class TPStatsBlocklists {
 
             for rule in list {
                 guard let trigger = rule["trigger"] as? [String: AnyObject],
-                    let filter = trigger["url-filter"] as? String else {
-                        assertionFailure("Blocklists error: Rule has unexpected format.")
-                        continue
+                    let filter = trigger["url-filter"] as? String
+                else {
+                    assertionFailure("Blocklists error: Rule has unexpected format.")
+                    continue
                 }
 
                 guard let loc = filter.range(of: standardPrefix) else {
                     continue
                 }
-                var baseDomain = String(filter[loc.upperBound...]).replacingOccurrences(of: "\\.", with: ".")
+                var baseDomain = String(filter[loc.upperBound...]).replacingOccurrences(
+                    of: "\\.", with: ".")
                 baseDomain = baseDomain.components(separatedBy: "[")[0]
                 baseDomain = baseDomain.components(separatedBy: "/")[0]
                 assert(!baseDomain.isEmpty)
 
-                let domainExceptionsRegex = (trigger["unless-domain"] as? [String])?.compactMap { domain in
+                let domainExceptionsRegex = (trigger["unless-domain"] as? [String])?.compactMap {
+                    domain in
                     return wildcardContentBlockerDomainToRegex(domain: domain)
                 }
 
@@ -175,43 +192,47 @@ class TPStatsBlocklists {
                 let resourceType = resourceTypes.contains("font") ? ResourceType.font : .all
 
                 let category = BlocklistCategory.fromFile(blockListFile)
-                let rule = Rule(regex: filter, loadType: loadType, resourceType: resourceType, domainExceptions: domainExceptionsRegex, list: category)
+                let rule = Rule(
+                    regex: filter, loadType: loadType, resourceType: resourceType,
+                    domainExceptions: domainExceptionsRegex, list: category)
                 blockRules[baseDomain] = (blockRules[baseDomain] ?? []) + [rule]
             }
         }
     }
 
-     func urlIsInList(_ url: URL, mainDocumentURL: URL, safelistedDomains: [String]) -> Bool {
-         let resourceString = url.absoluteString
+    func urlIsInList(_ url: URL, mainDocumentURL: URL, safelistedDomains: [String]) -> Bool {
+        let resourceString = url.absoluteString
 
-         guard let firstPartyDomain = mainDocumentURL.baseDomain, let baseDomain = url.baseDomain, let rules = blockRules[baseDomain] else {
-             return false
-         }
+        guard let firstPartyDomain = mainDocumentURL.baseDomain, let baseDomain = url.baseDomain,
+            let rules = blockRules[baseDomain]
+        else {
+            return false
+        }
 
-         domainSearch: for rule in rules {
-             // First, test the top-level filters to see if this URL might be blocked.
-             if resourceString.range(of: rule.regex, options: .regularExpression) != nil {
-                 // Check the domain exceptions. If a domain exception matches, this filter does not apply.
-                 for domainRegex in (rule.domainExceptions ?? []) {
-                     if firstPartyDomain.range(of: domainRegex, options: .regularExpression) != nil {
-                         continue domainSearch
-                     }
-                 }
+        domainSearch: for rule in rules {
+            // First, test the top-level filters to see if this URL might be blocked.
+            if resourceString.range(of: rule.regex, options: .regularExpression) != nil {
+                // Check the domain exceptions. If a domain exception matches, this filter does not apply.
+                for domainRegex in (rule.domainExceptions ?? []) {
+                    if firstPartyDomain.range(of: domainRegex, options: .regularExpression) != nil {
+                        continue domainSearch
+                    }
+                }
 
-                 // Check the safelist.
-                 if let baseDomain = url.baseDomain, !safelistedDomains.isEmpty {
-                     for ignoreDomain in safelistedDomains {
-                         if baseDomain.range(of: ignoreDomain, options: .regularExpression) != nil {
-                             return false
-                         }
-                     }
-                 }
+                // Check the safelist.
+                if let baseDomain = url.baseDomain, !safelistedDomains.isEmpty {
+                    for ignoreDomain in safelistedDomains {
+                        if baseDomain.range(of: ignoreDomain, options: .regularExpression) != nil {
+                            return false
+                        }
+                    }
+                }
 
-                 return true
-             }
-             return false
-         }
+                return true
+            }
+            return false
+        }
 
-         return false
-     }
+        return false
+    }
 }

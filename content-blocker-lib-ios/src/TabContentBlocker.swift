@@ -5,8 +5,9 @@
 import WebKit
 
 extension Notification.Name {
-   public static let didChangeContentBlocking = Notification.Name("didChangeContentBlocking")
-   public static let contentBlockerTabSetupRequired = Notification.Name("contentBlockerTabSetupRequired")
+    public static let didChangeContentBlocking = Notification.Name("didChangeContentBlocking")
+    public static let contentBlockerTabSetupRequired = Notification.Name(
+        "contentBlockerTabSetupRequired")
 }
 
 protocol ContentBlockerTab: AnyObject {
@@ -17,7 +18,7 @@ protocol ContentBlockerTab: AnyObject {
 class TabContentBlocker: ObservableObject {
     @Published var stats: TPPageStats = TPPageStats()
     private(set) weak var tab: ContentBlockerTab?
-    
+
     var isEnabled: Bool {
         return false
     }
@@ -34,16 +35,18 @@ class TabContentBlocker: ObservableObject {
         // This class func needs to notify all the active instances of ContentBlocker to update.
         NotificationCenter.default.post(name: .contentBlockerTabSetupRequired, object: nil)
     }
-    
+
     func updateTab(_ tab: Tab) {
         self.tab = tab
     }
 
     init(tab: ContentBlockerTab) {
         self.tab = tab
-        NotificationCenter.default.addObserver(self, selector: #selector(notifiedTabSetupRequired), name: .contentBlockerTabSetupRequired, object: nil)
+        NotificationCenter.default.addObserver(
+            self, selector: #selector(notifiedTabSetupRequired),
+            name: .contentBlockerTabSetupRequired, object: nil)
     }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }

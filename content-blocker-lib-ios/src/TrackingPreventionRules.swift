@@ -33,7 +33,6 @@ struct TrackingPreventionTrigger: Encodable {
     var unlessTopUrl: [String]?
 }
 
-
 // Block - block the request from getting triggred
 let Block = "block"
 // BlockCookies - block all cookies in outgoing request
@@ -44,7 +43,6 @@ let CSSDisplayNone = "css-display-none"
 let IgnorePreviousRules = "ignore-previous-rules"
 // MakeHTTPS - conver all requests to HTTPS
 let MakeHTTPS = "make-https"
-
 
 struct TrackingPreventionAction: Encodable {
     var type: String

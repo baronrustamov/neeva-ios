@@ -2,8 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import WebKit
 import Defaults
+import WebKit
 
 extension ContentBlocker {
     // Get the safelist domain array as a JSON fragment that can be inserted at the end of a blocklist.
@@ -13,7 +13,9 @@ extension ContentBlocker {
         }
         // Note that * is added to the front of domains, so foo.com becomes *foo.com
         let list = "'*" + Defaults[.unblockedDomains].joined(separator: "','*") + "'"
-        return ", {'action': { 'type': 'ignore-previous-rules' }, 'trigger': { 'url-filter': '.*', 'if-domain': [\(list)] }}".replacingOccurrences(of: "'", with: "\"")
+        return
+            ", {'action': { 'type': 'ignore-previous-rules' }, 'trigger': { 'url-filter': '.*', 'if-domain': [\(list)] }}"
+            .replacingOccurrences(of: "'", with: "\"")
     }
 
     func clearSafelist(completion: (() -> Void)?) {

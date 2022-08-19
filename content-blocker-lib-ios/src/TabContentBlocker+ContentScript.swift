@@ -26,7 +26,8 @@ extension TabContentBlocker {
 
         // Reset the pageStats to make sure the trackingprotection shield icon knows that a page was safelisted
         guard let domain = mainDocumentUrl.host,
-              !Defaults[.unblockedDomains].contains(domain) else {
+            !Defaults[.unblockedDomains].contains(domain)
+        else {
             clearPageStats()
             return
         }
@@ -41,11 +42,12 @@ extension TabContentBlocker {
                 WalletConnectDetector.shared.detectWalletConnect(for: url, in: mainDocumentUrl)
             #endif
 
-            TPStatsBlocklistChecker.shared.isBlocked(url: url, mainDocumentURL: mainDocumentUrl).uponQueue(.main) { blocked in
-                if blocked, let host = url.host {
-                    self.stats = self.stats.create(host: host)
+            TPStatsBlocklistChecker.shared.isBlocked(url: url, mainDocumentURL: mainDocumentUrl)
+                .uponQueue(.main) { blocked in
+                    if blocked, let host = url.host {
+                        self.stats = self.stats.create(host: host)
+                    }
                 }
-            }
         }
     }
 }

@@ -2,10 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import WebKit
-import Shared
-import Foundation
 import Defaults
+import Foundation
+import Shared
+import WebKit
 
 enum BlocklistCategory: CaseIterable {
     case easyPrivacy
@@ -50,6 +50,20 @@ enum BlocklistFileName: String, CaseIterable {
         }
         return fileList
     }
+
+    static func statsListsForMode(strength: BlockingStrength) -> [BlocklistFileName] {
+        var blockListFiles = BlocklistFileName.listsForMode(
+            strength: BlockingStrength(rawValue: Defaults[.contentBlockingStrength]) ?? .easyPrivacy
+        )
+
+        // easyPrivacy should cover easyPrivacyStrict rules for stats collection purpose
+        if blockListFiles.contains(.easyPrivacy) {
+            blockListFiles.removeAll { file in
+                return file == .easyPrivacyStrict
+            }
+        }
+        return blockListFiles
+    }
 }
 
 class ContentBlocker {
@@ -61,15 +75,18 @@ class ContentBlocker {
     private init() {
         TPStatsBlocklistChecker.shared.startup()
 
-        removeOldListsByDateFromStore() {
-            self.removeOldListsByNameFromStore() {
+        removeOldListsByDateFromStore {
+            self.removeOldListsByNameFromStore {
                 self.compileListsNotInStore {
                     self.setupCompleted = true
-                    NotificationCenter.default.post(name: .contentBlockerTabSetupRequired, object: nil)
+                    NotificationCenter.default.post(
+                        name: .contentBlockerTabSetupRequired, object: nil)
                 }
             }
         }
-        Defaults.observe(keys: .cookieCutterEnabled, .contentBlockingStrength, .adBlockEnabled, options: []) { [weak self] in
+        Defaults.observe(
+            keys: .cookieCutterEnabled, .contentBlockingStrength, .adBlockEnabled, options: []
+        ) { [weak self] in
             guard let self = self else { return }
             self.prefsChanged()
         }.tieToLifetime(of: self)
@@ -85,7 +102,9 @@ class ContentBlocker {
     }
 
     // Function to install or remove TP for a tab
-    func setupTrackingProtection(forTab tab: ContentBlockerTab, isEnabled: Bool, rules: [BlocklistFileName]) {
+    func setupTrackingProtection(
+        forTab tab: ContentBlockerTab, isEnabled: Bool, rules: [BlocklistFileName]
+    ) {
         removeTrackingProtection(forTab: tab)
 
         if !isEnabled {
@@ -96,7 +115,8 @@ class ContentBlocker {
             let name = list.filename
             ruleStore.lookUpContentRuleList(forIdentifier: name) { rule, error in
                 guard let rule = rule else {
-                    let msg = "lookUpContentRuleList for \(name): \(error?.localizedDescription ?? "empty rules")"
+                    let msg =
+                        "lookUpContentRuleList for \(name): \(error?.localizedDescription ?? "empty rules")"
                     print("Content blocker error: \(msg)")
                     return
                 }
@@ -120,13 +140,16 @@ class ContentBlocker {
 // no longer match. Finally, any JSON rule files that aren't in the ruleStore need to be compiled and stored in the
 // ruleStore.
 extension ContentBlocker {
-    private func loadJsonFromBundle(forResource file: String, completion: @escaping (_ jsonString: String) -> Void) {
+    private func loadJsonFromBundle(
+        forResource file: String, completion: @escaping (_ jsonString: String) -> Void
+    ) {
         DispatchQueue.global().async {
             guard let path = Bundle.main.path(forResource: file, ofType: "json"),
-                  let source = try? String(contentsOfFile: path, encoding: .utf8) else {
-                      assert(false)
-                      return
-                  }
+                let source = try? String(contentsOfFile: path, encoding: .utf8)
+            else {
+                assert(false)
+                return
+            }
 
             DispatchQueue.main.async {
                 completion(source)
@@ -149,7 +172,9 @@ extension ContentBlocker {
         let blocklists = BlocklistFileName.allCases
 
         return blocklists.reduce(Date(timeIntervalSince1970: 0)) { result, list in
-            guard let path = Bundle.main.path(forResource: list.filename, ofType: "json") else { return result }
+            guard let path = Bundle.main.path(forResource: list.filename, ofType: "json") else {
+                return result
+            }
             if let date = lastModifiedSince1970(forFileAtPath: path) {
                 return date > result ? date : result
             }
@@ -180,12 +205,14 @@ extension ContentBlocker {
     // remove all the content blockers and reload them.
     func removeOldListsByDateFromStore(completion: @escaping () -> Void) {
 
-            guard let fileDate = dateOfMostRecentBlockerFile() else {
+        guard let fileDate = dateOfMostRecentBlockerFile() else {
             completion()
             return
         }
 
-        guard let prefsNewestDate = UserDefaults.standard.object(forKey: "blocker-file-date") as? Date else {
+        guard
+            let prefsNewestDate = UserDefaults.standard.object(forKey: "blocker-file-date") as? Date
+        else {
             UserDefaults.standard.set(fileDate, forKey: "blocker-file-date")
             completion()
             return
@@ -198,7 +225,7 @@ extension ContentBlocker {
 
         UserDefaults.standard.set(fileDate, forKey: "blocker-file-date")
 
-        removeAllRulesInStore() {
+        removeAllRulesInStore {
             completion()
         }
     }
@@ -215,7 +242,7 @@ extension ContentBlocker {
             let blocklists = BlocklistFileName.allCases.map { $0.filename }
             for listOnDisk in blocklists {
                 // If any file from the list on disk is not installed, remove all the rules and re-install them
-                if !available.contains(where: { $0 == listOnDisk}) {
+                if !available.contains(where: { $0 == listOnDisk }) {
                     noMatchingIdentifierFoundForRule = true
                     break
                 }
@@ -238,7 +265,10 @@ extension ContentBlocker {
         } else if #available(iOS 15.0, *) {
             blocklists = BlocklistFileName.allCases.map { $0.filename }
         } else {
-            blocklists = [BlocklistFileName.easyPrivacy.filename, BlocklistFileName.easyPrivacyStrict.filename]
+            blocklists = [
+                BlocklistFileName.easyPrivacy.filename,
+                BlocklistFileName.easyPrivacyStrict.filename,
+            ]
         }
         let deferreds: [Deferred<Void>] = blocklists.map { filename in
             let result = Deferred<Void>()
@@ -249,9 +279,12 @@ extension ContentBlocker {
                 }
                 self.loadJsonFromBundle(forResource: filename) { jsonString in
                     var str = jsonString
-                    guard let range = str.range(of: "]", options: String.CompareOptions.backwards) else { return }
+                    guard let range = str.range(of: "]", options: String.CompareOptions.backwards)
+                    else { return }
                     str = str.replacingCharacters(in: range, with: self.safelistAsJSON() + "]")
-                    self.ruleStore.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: str) { rule, error in
+                    self.ruleStore.compileContentRuleList(
+                        forIdentifier: filename, encodedContentRuleList: str
+                    ) { rule, error in
                         if let error = error {
                             print("Content blocker error: \(error)")
                             assert(false)
