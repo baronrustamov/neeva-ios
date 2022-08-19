@@ -72,10 +72,7 @@ class TabCardModel: CardDropDelegate, CardModel {
     private(set) var tabsDidChange = false
 
     private func updateRows() {
-        if FeatureFlag[.pinnnedTabSection] {
-            timeBasedNormalRows[.pinned] = buildRows(incognito: false, for: .pinned)
-        }
-
+        timeBasedNormalRows[.pinned] = buildRows(incognito: false, for: .pinned)
         timeBasedNormalRows[.today] = buildRows(incognito: false, for: .today)
         timeBasedNormalRows[.yesterday] = buildRows(incognito: false, for: .yesterday)
         timeBasedNormalRows[.lastWeek] = buildRows(incognito: false, for: .lastWeek)
@@ -191,8 +188,7 @@ class TabCardModel: CardDropDelegate, CardModel {
                         // No id for all.
                         return ""
                     case .pinned:
-                        return FeatureFlag[.pinnnedTabSection]
-                            ? TabCardModel.pinnedRowHeaderID : TabCardModel.todayRowHeaderID
+                        return TabCardModel.pinnedRowHeaderID
                     case .today:
                         return TabCardModel.todayRowHeaderID
                     case .yesterday:

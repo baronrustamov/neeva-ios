@@ -1011,13 +1011,8 @@ func wasLastExecuted(in tabSection: TabSection, isPinned: Bool, lastExecutedTime
 
     if isPinned {
         switch tabSection {
-        case .all:
+        case .all, .pinned:
             return true
-        case .pinned:
-            return FeatureFlag[.pinnnedTabSection]
-        case .today:
-            // If the tab is pinned, and pinnnedTabSection isn't enabled, keep it in the today section.
-            return !FeatureFlag[.pinnnedTabSection]
         default:
             return false
         }

@@ -269,7 +269,7 @@ class CardTests: XCTestCase {
         tabGroupExpanded.remove(tab2.rootUUID)
     }
 
-    func testPinnedTab() throws {
+    func testPinnedTabIsInCorrectSection() throws {
 
         /*
          Create two tabs. Pin the second tab and test if the
@@ -285,8 +285,12 @@ class CardTests: XCTestCase {
 
         let buildRowsTwoTabs = tabCardModel.buildRowsForTesting()
 
-        XCTAssertEqual(buildRowsTwoTabs[1].cells.count, 2)
+        // Confirm pinned tab is in pinned tab section.
+        XCTAssertEqual(buildRowsTwoTabs[1].cells.count, 1)
         XCTAssertEqual(buildRowsTwoTabs[1].cells[0].id, tab2.id)
+
+        // Confirm other tab is in today.
+        XCTAssertEqual(buildRowsTwoTabs[3].cells.count, 1)
     }
 
     func testPinnedTabGroup() throws {
@@ -309,29 +313,6 @@ class CardTests: XCTestCase {
 
         XCTAssertEqual(buildRowsThreeTabs[1].numTabsInRow, 2)
         XCTAssertNotEqual(buildRowsThreeTabs[1].cells[0].id, tab5.id)
-    }
-
-    func testPinnedTabsBeforeNonPinnedTabs() throws {
-
-        /*
-         Pin one tab and a tab group with two tabs. Make sure a following individual
-         tab doesn't get promoted to fill the hole.
-         */
-
-        let tab6 = manager.addTab()
-        let tab7 = manager.addTab()
-        let tab8 = manager.addTab(afterTab: tab7)
-        let tab9 = manager.addTab()
-        tab6.isPinned = true
-        tab6.pinnedTime = Date().timeIntervalSinceReferenceDate
-        tab7.isPinned = true
-        tab7.pinnedTime = Date().timeIntervalSinceReferenceDate
-        tabCardModel.onDataUpdated()
-
-        let buildRowsFourTabs = tabCardModel.buildRowsForTesting()
-
-        XCTAssertEqual(buildRowsFourTabs.count, 4)
-        XCTAssertEqual(buildRowsFourTabs[3].cells[0].id, tab9.id)
     }
 
     func testSpaceDetails() throws {
