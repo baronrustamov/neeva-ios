@@ -5,6 +5,7 @@
 import CoreSpotlight
 import Defaults
 import Shared
+import StoreKit
 
 private let log = Logger.browser
 

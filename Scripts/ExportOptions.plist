@@ -34,7 +34,7 @@
 	<key>teamID</key>
 	<string>A9735M6NPH</string>
 	<key>uploadBitcode</key>
-	<true/>
+	<false/>
 	<key>uploadSymbols</key>
 	<true/>
 </dict>
