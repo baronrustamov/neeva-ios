@@ -469,6 +469,7 @@ public enum LogConfig {
         .UI,
         .OverflowMenu,
         .Generic,
+        .Cheatsheet,
     ]
     public static func featureFlagEnabled(for category: InteractionCategory) -> Bool {
         if alwaysEnabledCategories.contains(category) {
