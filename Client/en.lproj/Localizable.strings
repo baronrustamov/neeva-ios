@@ -113,3 +113,30 @@
 "Faster" = "Faster";
 
 "Browse the web with no ads in your way" = "Browse the web with no ads in your way";
+
+/* Button to manager/configure your yearly subscription plan*/
+"Manage Yearly" = "Manage Yearly";
+
+/* Button to subscribe an annual subscription */
+"Subscribe Yearly" = "Subscribe Yearly";
+
+/* Button to manager/configure your monthly subscription plan*/
+"Manage Monthly" = "Manage Monthly";
+
+/* Button to subscribe a monthly subscription */
+"Subscribe Monthly" = "Subscribe Monthly";
+
+/* Button to get the free plan for our product */
+"Get FREE" = "Get FREE";
+
+/* save 16% discount in our product's subscription price */
+"Save 16%" = "Save 16%";
+
+/* Text to tell user they can cancel our service any time */
+"Cancel anytime" = "Cancel anytime";
+
+/* Price per year */
+"/year" = "/year";
+
+/* Price per month */
+"/month" = "/month";

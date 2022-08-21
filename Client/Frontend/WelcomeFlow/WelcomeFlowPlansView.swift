@@ -172,7 +172,7 @@ struct WelcomeFlowPlansView: View {
                     if let termText = PremiumHelpers.termText(model.currentPremiumPlan),
                         termText != ""
                     {
-                        Text(termText).foregroundColor(.secondaryLabel)
+                        Text(LocalizedStringKey(termText)).foregroundColor(.secondaryLabel)
                     }
                 }
                 .frame(maxWidth: .infinity)
@@ -181,13 +181,13 @@ struct WelcomeFlowPlansView: View {
                 if let subText = PremiumHelpers.priceSubText(model.currentPremiumPlan) {
                     HStack {
                         if subText.0 != "" {
-                            Text(subText.0)
+                            Text(LocalizedStringKey(subText.0))
                                 .fontWeight(.bold)
                                 .foregroundColor(.blue)
                             Text("·").foregroundColor(.secondaryLabel)
-                            Text(subText.1).foregroundColor(.secondaryLabel)
+                            Text(LocalizedStringKey(subText.1)).foregroundColor(.secondaryLabel)
                         } else {
-                            Text(subText.1).foregroundColor(.secondaryLabel)
+                            Text(LocalizedStringKey(subText.1)).foregroundColor(.secondaryLabel)
                         }
                     }
                     .withFont(unkerned: .bodySmall)
@@ -232,10 +232,13 @@ struct WelcomeFlowPlansView: View {
                         }
                     },
                     label: {
-                        Text(PremiumHelpers.primaryActionText(model.currentPremiumPlan))
-                            .withFont(.labelLarge)
-                            .foregroundColor(.brand.white)
-                            .frame(maxWidth: .infinity)
+                        Text(
+                            LocalizedStringKey(
+                                PremiumHelpers.primaryActionText(model.currentPremiumPlan))
+                        )
+                        .withFont(.labelLarge)
+                        .foregroundColor(.brand.white)
+                        .frame(maxWidth: .infinity)
                     }
                 )
                 .buttonStyle(.neeva(.primary))

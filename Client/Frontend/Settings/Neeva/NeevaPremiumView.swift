@@ -162,7 +162,7 @@ struct NeevaPremiumView: View {
                 HStack {
                     Text(PremiumStore.shared.priceText(currentPremiumPlan)).fontWeight(.bold)
                     if let termText = PremiumHelpers.termText(currentPremiumPlan), termText != "" {
-                        Text(termText).foregroundColor(.secondaryLabel)
+                        Text(LocalizedStringKey(termText)).foregroundColor(.secondaryLabel)
                     }
                 }
                 .frame(maxWidth: .infinity)
@@ -171,13 +171,13 @@ struct NeevaPremiumView: View {
                 if let subText = PremiumHelpers.priceSubText(currentPremiumPlan) {
                     HStack {
                         if subText.0 != "" {
-                            Text(subText.0)
+                            Text(LocalizedStringKey(subText.0))
                                 .fontWeight(.bold)
                                 .foregroundColor(.blue)
                             Text("·").foregroundColor(.secondaryLabel)
-                            Text(subText.1).foregroundColor(.secondaryLabel)
+                            Text(LocalizedStringKey(subText.1)).foregroundColor(.secondaryLabel)
                         } else {
-                            Text(subText.1).foregroundColor(.secondaryLabel)
+                            Text(LocalizedStringKey(subText.1)).foregroundColor(.secondaryLabel)
                         }
                     }
                     .withFont(unkerned: .bodySmall)
@@ -203,8 +203,9 @@ struct NeevaPremiumView: View {
                     },
                     label: {
                         Text(
-                            PremiumHelpers.primaryActionText(
-                                currentPremiumPlan, subscribed: isSubscribedToPlan())
+                            LocalizedStringKey(
+                                PremiumHelpers.primaryActionText(
+                                    currentPremiumPlan, subscribed: isSubscribedToPlan()))
                         )
                         .withFont(.labelLarge)
                         .foregroundColor(.brand.white)
