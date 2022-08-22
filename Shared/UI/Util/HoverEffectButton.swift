@@ -35,8 +35,6 @@ public struct HoverEffectButton<Label: View>: View {
 
     public var body: some View {
         button
-            .transition(.identity)
-            .animation(nil)
             .if(isTextButton) {
                 $0.padding(6)  // a) padding for hoverEffect
             }
