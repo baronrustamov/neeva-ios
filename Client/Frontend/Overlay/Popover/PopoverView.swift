@@ -58,7 +58,7 @@ struct PopoverView<Content: View>: View {
                     .frame(
                         minWidth: 400,
                         maxWidth: geo.size.width - (horizontalPadding * 2),
-                        minHeight: 300,
+                        minHeight: style.expandPopoverHeight ? 300 : 0,
                         maxHeight: geo.size.height - (verticalPadding * 2)
                     )
                     .fixedSize(

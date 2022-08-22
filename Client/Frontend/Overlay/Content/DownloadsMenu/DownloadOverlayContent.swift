@@ -21,7 +21,6 @@ struct DownloadOverlayContent: View {
                 onDownload()
             },
             onCancel: hideOverlay
-        )
-        .overlayIsFixedHeight(isFixedHeight: true)
+        ).overlayIsFixedHeight(isFixedHeight: true)
     }
 }

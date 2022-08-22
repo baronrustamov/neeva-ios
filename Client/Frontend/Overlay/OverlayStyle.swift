@@ -35,6 +35,7 @@ struct OverlayStyle {
     static let grouped = OverlayStyle(
         showTitle: false,
         backgroundColor: .systemGroupedBackground.elevated,
+        expandPopoverWidth: false,
         expandPopoverHeight: false
     )
 
