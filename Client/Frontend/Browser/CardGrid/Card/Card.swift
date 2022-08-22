@@ -288,7 +288,7 @@ struct Card<Details>: View where Details: CardDetails {
                     .padding(6)
                     .opacity(animate && !showGrid ? 0 : 1)
                     .transition(.identity.combined(with: .opacity))
-                    .animation(CardTransitionUX.animation)
+                    .animation(animate ? CardTransitionUX.animation : nil)
             }.accessibilityHidden(true)
         }
 
