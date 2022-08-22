@@ -35,12 +35,14 @@ struct TabGridContainer: View {
     @State var cardStackGeom: CGSize = CGSize.zero
 
     var selectedRowId: TabCardModel.Row.ID? {
-        if let row = tabModel.getRows(incognito: isIncognito).first(where: { row in
+        let rows = tabModel.getRows(incognito: isIncognito)
+        if let row = rows.first(where: { row in
             row.cells.contains(where: \.isSelected)
         }) {
             if row.index == 2 {
-                // scroll to today header
-                return [TabCardModel.todayRowHeaderID]
+                // Scroll to corresponding header to ensure that the resulting scroll offset is 0.
+                // NOTE: `row.index` is 1-based.
+                return rows[0].id
             } else {
                 return row.id
             }
