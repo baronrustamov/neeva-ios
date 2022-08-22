@@ -9,8 +9,6 @@ public struct LongPressButton<Label: View>: View {
     let longPressAction: (() -> Void)?
     let label: () -> Label
 
-    @State private var didLongPress = false
-
     public init(
         action: @escaping () -> Void,
         longPressAction: (() -> Void)? = nil,
@@ -23,28 +21,19 @@ public struct LongPressButton<Label: View>: View {
 
     public var body: some View {
         HoverEffectButton {
-            if !didLongPress {
-                action()
-            }
-
-            didLongPress = false
+            // Defer this to the TapGesture.
         } label: {
             label()
         }.simultaneousGesture(
-            LongPressGesture(minimumDuration: 0.3).onEnded { _ in
+            LongPressGesture().onEnded { _ in
                 if let longPressAction = longPressAction {
                     longPressAction()
                     Haptics.longPress()
                 }
-
-                didLongPress = true
-
-                // Give a small buffer to allow the gesture to reset.
-                // Set `didLongPress` to false so the user can perform
-                // the regular tap action.
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                    self.didLongPress = false
-                }
+            }
+        ).simultaneousGesture(
+            TapGesture().onEnded {
+                action()
             }
         )
     }

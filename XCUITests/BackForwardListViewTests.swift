@@ -15,8 +15,11 @@ class BackForwardListViewTests: BaseTestCase {
         waitUntilPageLoad()
 
         // Show BackForwardListView
-        app.buttons["Back"].press(forDuration: 1)
-        waitForExistence(app.alerts["Back/Forward List"])
+        app.buttons["Back"].press(forDuration: 2)
+        waitForExistence(app.alerts["Back/Forward List"], timeout: 20)
+
+        // Confirm the correct page is still visible.
+        XCTAssertTrue(app.links["RFC 2606"].exists)
 
         // Confirm navigation items exist
         waitForExistence(app.buttons["backForwardListItem-Example Domain"])
