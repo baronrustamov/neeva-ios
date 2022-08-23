@@ -48,6 +48,10 @@ struct RedditDiscussion: Identifiable {
         case comments([RedditComment])
     }
 
+    static let filteredBodyStrings: Set<String> = [
+        "[removed]", "[deleted]",
+    ]
+
     // Required Properties
     let title: String
     let content: Content
@@ -76,7 +80,8 @@ struct RedditDiscussion: Identifiable {
         {
             self.content = .comments(Array(filteredComments.prefix(10)))
         } else if let body = backlink.snippet?.tryRemovingHTMLencoding(strict: true),
-            !body.isEmptyOrWhitespace()
+            !body.isEmptyOrWhitespace(),
+            !Self.filteredBodyStrings.contains(body)
         {
             // else, show body snippet
             self.content = .body(body)
