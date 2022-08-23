@@ -924,10 +924,13 @@ public enum NeevaScopeSearch {
         }
 
         @discardableResult public static func getRichResult(
-            query: String, completion: @escaping (Result<[RichResult], Error>) -> Void
+            using api: GraphQLAPI = .shared,
+            query: String,
+            completion: @escaping (Result<[RichResult], Error>) -> Void
         ) -> Combine.Cancellable {
             Self.perform(
                 query: SearchQuery(query: query),
+                using: api,
                 on: queue,
                 completion: completion
             )

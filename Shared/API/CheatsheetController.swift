@@ -324,10 +324,14 @@ public class CheatsheetQueryController: QueryController<
     }
 
     @discardableResult public static func getCheatsheetInfo(
-        url: String, title: String, completion: @escaping (Result<[CheatsheetInfo], Error>) -> Void
+        using api: GraphQLAPI = .shared,
+        url: String,
+        title: String,
+        completion: @escaping (Result<[CheatsheetInfo], Error>) -> Void
     ) -> Combine.Cancellable {
         Self.perform(
             query: CheatsheetInfoQuery(input: url, title: title),
+            using: api,
             on: queue,
             completion: completion
         )

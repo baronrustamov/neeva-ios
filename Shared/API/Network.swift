@@ -17,6 +17,55 @@ private let approvedBundleIDs = Set([
 // MARK: - GraphQLAPI
 /// This singleton class manages access to the Neeva GraphQL API
 public class GraphQLAPI {
+    /// - Tag: AuthConfig
+    public enum AuthConfig {
+        /// Use [LogInCookieIntercept](x-source-tag://LogInCookieIntercept)
+        case shared
+        /// Use [AnonymizeHTTPCookieStorageIntercept](x-source-tag://AnonymizeHTTPCookieStorageIntercept)
+        case anonymous
+        /// Use [PreviewCookieIntercept](x-source-tag://PreviewCookieIntercept)
+        case preview
+    }
+
+    public struct Configuration {
+        let urlSessionConfig: URLSessionConfiguration
+        let sessionName: String?
+        let callbackQueue: OperationQueue?
+        let authConfig: AuthConfig?
+
+        /// Configuration to initialize a new GraphQLAPI instance
+        /// - Parameters:
+        ///     - urlSessionConfig: Configuration for the underlying `URLSession` used by Apollo
+        ///     - sessionName: Name of the `URLSession` for debugging
+        ///     - callbackQueue: `OperationQueue` on which the `URLSession` will execute callbacks to `ApolloClient`
+        ///     - authConfig: if not `nil`, this will add an interceptor to the apollo request chain to manage login cookies. See [AuthConfig](x-source-tag://AuthConfig)
+        public init(
+            urlSessionConfig: URLSessionConfiguration,
+            sessionName: String? = nil,
+            callbackQueue: OperationQueue? = nil,
+            authConfig: AuthConfig? = .shared
+        ) {
+            self.urlSessionConfig = urlSessionConfig
+            self.sessionName = sessionName
+            self.callbackQueue = callbackQueue
+            self.authConfig = authConfig
+        }
+
+        public static let shared = Self.init(
+            urlSessionConfig: .default,
+            sessionName: "GraphQLAPI.shared",
+            callbackQueue: nil,
+            authConfig: .shared
+        )
+
+        public static let anonymous = Self.init(
+            urlSessionConfig: .ephemeral,
+            sessionName: "GraphQLAPI.anonymous",
+            callbackQueue: nil,
+            authConfig: .anonymous
+        )
+    }
+
     /// A `GraphQLAPI.Error` is returned when the HTTP request was successful
     /// but there are one or more error messages in the `errors` array.
     public class Error: Swift.Error, CustomStringConvertible {
@@ -34,16 +83,8 @@ public class GraphQLAPI {
 
     // MARK: - Public Properties
     /// Access the API through this instance
-    public static let shared = GraphQLAPI(
-        urlSessionConfig: .default,
-        sessionName: "GraphQLAPI.shared"
-    )
-    public static let anonymous = GraphQLAPI(
-        urlSessionConfig: .ephemeral,
-        sessionName: "GraphQLAPI.anonymous",
-        anonymous: true
-    )
-    public let isAnonymous: Bool
+    public static let shared = GraphQLAPI(.shared)
+    public static let anonymous = GraphQLAPI(.anonymous)
 
     // MARK: - Private Properties
     /// The `ApolloClient` does the actual work of performing GraphQL requests.
@@ -75,22 +116,9 @@ public class GraphQLAPI {
     ///     - sessionName: Name of the `URLSession` for debugging
     ///     - callbackQueue: `OperationQueue` for the `URLSession` to execute callbacks on `ApolloClient`
     ///     - anonymous: passed to `NeevaInterceptProvider`
-    private init(
-        urlSessionConfig: URLSessionConfiguration,
-        sessionName: String? = nil,
-        callbackQueue: OperationQueue? = nil,
-        anonymous: Bool = false
+    public init(
+        _ configuration: Configuration
     ) {
-        let cache = InMemoryNormalizedCache()
-        let store = ApolloStore(cache: cache)
-
-        let client = NeevaURLSessionClient(
-            sessionConfiguration: urlSessionConfig,
-            callbackQueue: callbackQueue
-        )
-        client.sessionName = sessionName
-        let provider = NeevaInterceptProvider(client: client, store: store, anonymous: anonymous)
-
         guard approvedBundleIDs.contains(AppInfo.baseBundleIdentifier) else {
             fatalError(
                 """
@@ -99,13 +127,25 @@ public class GraphQLAPI {
                 """
             )
         }
+
+        let cache = InMemoryNormalizedCache()
+        let store = ApolloStore(cache: cache)
+
+        let client = NeevaURLSessionClient(
+            sessionConfiguration: configuration.urlSessionConfig,
+            callbackQueue: configuration.callbackQueue
+        )
+        client.sessionName = configuration.sessionName
+        let provider = NeevaInterceptProvider(
+            client: client, store: store, authConfig: configuration.authConfig
+        )
+
         let transport = NeevaNetworkTransport(
             interceptorProvider: provider,
             endpointURL: NeevaConstants.appURL / "graphql"
         )
 
         self.apollo = ApolloClient(networkTransport: transport, store: store)
-        self.isAnonymous = anonymous
     }
 
     // MARK: - public Methods
@@ -179,18 +219,18 @@ class NeevaInterceptProvider: InterceptorProvider {
     private let client: NeevaURLSessionClient
     private let store: ApolloStore
     private let shouldInvalidateClientOnDeinit: Bool
-    private let anonymous: Bool
+    private let authConfig: GraphQLAPI.AuthConfig?
 
     init(
         client: NeevaURLSessionClient = NeevaURLSessionClient(),
         shouldInvalidateClientOnDeinit: Bool = true,
         store: ApolloStore,
-        anonymous: Bool = false
+        authConfig: GraphQLAPI.AuthConfig?
     ) {
         self.client = client
         self.shouldInvalidateClientOnDeinit = shouldInvalidateClientOnDeinit
         self.store = store
-        self.anonymous = anonymous
+        self.authConfig = authConfig
     }
 
     deinit {
@@ -206,10 +246,22 @@ class NeevaInterceptProvider: InterceptorProvider {
             MaxRetryInterceptor(),
             CacheReadInterceptor(store: self.store),
         ]
-        if self.anonymous {
-            preFlightInterceptors.append(AnonymizeHTTPCookieStorageIntercept(client: client))
-        } else {
-            preFlightInterceptors.append(LogInCookieIntercept(client: client, userInfo: .shared))
+
+        if let authConfig = self.authConfig {
+            switch authConfig {
+            case .shared:
+                preFlightInterceptors.append(
+                    LogInCookieIntercept(client: client, userInfo: .shared)
+                )
+            case .anonymous:
+                preFlightInterceptors.append(
+                    AnonymizeHTTPCookieStorageIntercept(client: client)
+                )
+            case .preview:
+                preFlightInterceptors.append(
+                    PreviewCookieIntercept(client: client)
+                )
+            }
         }
 
         let postFlightInterceptors: [ApolloInterceptor] = [
@@ -232,6 +284,8 @@ class NeevaInterceptProvider: InterceptorProvider {
 }
 
 // MARK: - AnonymizeHTTPCookieStorageIntercept
+/// This removes log in cookies from the client's cookie storage
+/// - Tag: AnonymizeHTTPCookieStorageIntercept
 class AnonymizeHTTPCookieStorageIntercept: ApolloInterceptor {
     let client: NeevaURLSessionClient
 
@@ -251,6 +305,8 @@ class AnonymizeHTTPCookieStorageIntercept: ApolloInterceptor {
 }
 
 // MARK: - LogInCookieIntercept
+/// This reads sign in cookies from ``NeevaUserInfo`` and inserts it into the client's cookie storage
+/// - Tag: LogInCookieIntercept
 class LogInCookieIntercept: ApolloInterceptor {
     let client: NeevaURLSessionClient
     let userInfo: NeevaUserInfo
@@ -292,6 +348,41 @@ class LogInCookieIntercept: ApolloInterceptor {
             // Else, let this request fail with an authentication error.
             client.cookieStorage?.removeLogInCookies()
         }
+
+        // WKWebKit can leak cookies into URLSessions if both are using persistent
+        // cookie storages on physical devices. Remove these preview cookies
+        client.cookieStorage?.removePreviewCookie()
+
+        chain.proceedAsync(request: request, response: response, completion: completion)
+    }
+}
+
+// MARK: - PreviewCookieIntercept
+/// This reads sign in cookies from ``NeevaConstants`` and inserts it into the client's cookie storage
+/// - Tag: PreviewCookieIntercept
+class PreviewCookieIntercept: ApolloInterceptor {
+    let client: NeevaURLSessionClient
+
+    init(client: NeevaURLSessionClient) {
+        self.client = client
+    }
+
+    func interceptAsync<Operation: Apollo.GraphQLOperation>(
+        chain: Apollo.RequestChain,
+        request: Apollo.HTTPRequest<Operation>,
+        response: Apollo.HTTPResponse<Operation>?,
+        completion: @escaping (Result<Apollo.GraphQLResult<Operation.Data>, Error>) -> Void
+    ) {
+        // Read keychain on main
+        precondition(Thread.isMainThread)
+
+        if let cookie = try? NeevaConstants.getPreviewCookie() {
+            client.cookieStorage?.setCookie(NeevaConstants.previewCookie(for: cookie))
+        } else {
+            // Else, let this request fail with an authentication error.
+            client.cookieStorage?.removePreviewCookie()
+        }
+
         chain.proceedAsync(request: request, response: response, completion: completion)
     }
 }
@@ -334,6 +425,14 @@ extension HTTPCookieStorage {
             // we clean up things properly
             if let previewCookie = cookies.first(where: { $0.name == "preview~login" }) {
                 self.deleteCookie(previewCookie)
+            }
+        }
+    }
+
+    func removePreviewCookie() {
+        if let cookies = self.cookies(for: NeevaConstants.appURL) {
+            if let loginCookie = cookies.first(where: { $0.name == "httpd~preview" }) {
+                self.deleteCookie(loginCookie)
             }
         }
     }

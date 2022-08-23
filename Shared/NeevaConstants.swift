@@ -69,6 +69,7 @@ public struct NeevaConstants {
 
     /// The keychain key to store the Neeva login cookie into
     public static var loginKeychainKey: String { "neevaHttpdLogin-\(appHost)" }
+    public static var previewKeychainKey: String { "neevaHttpdPreview-\(appHost)" }
 
     /// The keychain key to store the Neeva-Wallet properties
     public static var cryptoPrivateKey: String { "neevaCryptoPrivateKey-\(appHost)" }
@@ -153,6 +154,21 @@ public struct NeevaConstants {
     public static func loginCookie(for value: String) -> HTTPCookie {
         HTTPCookie(properties: [
             .name: "httpd~login",
+            .value: value,
+            .domain: NeevaConstants.appHost,
+            .path: "/",
+            .expires: Date.distantFuture,
+            .secure: true,
+            .sameSitePolicy: HTTPCookieStringPolicy.sameSiteLax,
+            // ! potentially undocumented API
+            .init("HttpOnly"): true,
+        ])!
+    }
+
+    /// Generates a login cookie from the given cookie value.
+    public static func previewCookie(for value: String) -> HTTPCookie {
+        HTTPCookie(properties: [
+            .name: "httpd~preview",
             .value: value,
             .domain: NeevaConstants.appHost,
             .path: "/",
@@ -277,6 +293,27 @@ public struct NeevaConstants {
     // Neeva OAuth callback scheme
     public static func neevaOAuthCallbackScheme() -> String? {
         return "neeva://login/cb".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+    }
+
+    public static func getPreviewCookie() throws -> String? {
+        // Read keychain values on main
+        precondition(Thread.isMainThread)
+
+        return try Self.keychain.getString(Self.previewKeychainKey)
+    }
+
+    public static func setPreviewCookie(_ value: String) throws {
+        // Set keychain values on main
+        precondition(Thread.isMainThread)
+
+        try Self.keychain.set(value, key: Self.previewKeychainKey)
+    }
+
+    public static func removePreviewCookie() throws {
+        // Set keychain values on main
+        precondition(Thread.isMainThread)
+
+        try Self.keychain.remove(Self.previewKeychainKey)
     }
 }
 

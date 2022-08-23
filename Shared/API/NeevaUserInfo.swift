@@ -133,6 +133,9 @@ public class NeevaUserInfo: ObservableObject {
             try? NeevaConstants.keychain.set(value, key: NeevaConstants.loginKeychainKey)
             self.fetch()
         }
+
+        // Remove preview cookie from keychain
+        try? NeevaConstants.removePreviewCookie()
     }
 
     public func getLoginCookie() -> String? {
