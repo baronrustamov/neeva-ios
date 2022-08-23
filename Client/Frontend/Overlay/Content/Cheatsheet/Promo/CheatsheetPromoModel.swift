@@ -38,12 +38,13 @@ private struct PromoStateStorage {
             return
         }
 
-        Defaults[.numOfUGCTests] += 1
+        // TODO: (issue/4281) Not thread-safe; re-enable as part of session aggregated logging.
+        // Defaults[.numOfUGCTests] += 1
 
         // if cannot construct canonical url, consider as miss
         guard let canonicalURL = CanonicalURL(from: url, stripMobile: true, relaxed: true)?.asString
         else {
-            Defaults[.numOfUGCCanonicalError] += 1
+            // Defaults[.numOfUGCCanonicalError] += 1
             cache[url] = .missed
             return
         }
@@ -51,15 +52,16 @@ private struct PromoStateStorage {
         // leave value as unintialized if bloom filter manager is not ready to produce a result
         guard let result = bloomFilterManager.contains(canonicalURL)
         else {
-            Defaults[.numOfUGCNoResult] += 1
+            // Defaults[.numOfUGCNoResult] += 1
             return
         }
 
         cache[url] = result ? .hit : .missed
-        Defaults[.numOfUGCHits] += result ? 1 : 0
+        // Defaults[.numOfUGCHits] += result ? 1 : 0
     }
 
     mutating func performTransition(on url: URL, transition: Transition) {
+        assert(Thread.isMainThread)
         guard var state = cache[url] else {
             return
         }
@@ -329,7 +331,9 @@ class CheatsheetPromoModel: ObservableObject {
 
     private func dismissBubble(on url: URL) {
         Self.queue.async {
-            self.stateStorage.performTransition(on: url, transition: .dismissBubble)
+            DispatchQueue.main.sync {
+                self.stateStorage.performTransition(on: url, transition: .dismissBubble)
+            }
             self.updateDisplayedStateFromUGCStorage(for: url)
         }
     }
@@ -358,7 +362,9 @@ class CheatsheetPromoModel: ObservableObject {
     private func onUGCTimerFired(on url: URL) {
         cancelUGCIndicatorDismissTimer()
         Self.queue.async {
-            self.stateStorage.performTransition(on: url, transition: .dismissPromo)
+            DispatchQueue.main.sync {
+                self.stateStorage.performTransition(on: url, transition: .dismissPromo)
+            }
             self.updateDisplayedStateFromUGCStorage(for: url)
         }
     }
