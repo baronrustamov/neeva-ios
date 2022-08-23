@@ -59,6 +59,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
+        log.info("activeSceneCount=\(Self.activeSceneCount)")
+
         self.scene = scene
 
         Self.activeSceneCount += 1
@@ -66,9 +68,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             // We are back in the foreground, so set applicationCleanlyBackgrounded to false so that we can detect that
             // the application was cleanly backgrounded later.
             Defaults[.applicationCleanlyBackgrounded] = false
-
-            getAppDelegate().profile._reopen()
         }
+
+        // Safe to call this again if already open.
+        getAppDelegate().profile._reopen()
 
         checkForSignInTokenOnDevice()
 
@@ -134,6 +137,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
+        log.info("activeSceneCount=\(Self.activeSceneCount)")
+
         bvc.tabManager.preserveTabs()
 
         Self.activeSceneCount -= 1
