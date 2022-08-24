@@ -34,7 +34,7 @@ class TabManagerStoreTests: XCTestCase {
             wait(for: [predicate], timeout: 20)
         }
 
-        manager.testClearArchive()
+        manager.clearArchiveForTesting()
     }
 
     override func tearDown() {
@@ -57,13 +57,7 @@ class TabManagerStoreTests: XCTestCase {
     @discardableResult
     func addTabWithSessionData(isIncognito: Bool = false) -> Tab {
         return addTabWithSessionData(isIncognito: isIncognito) { tab in
-            manager.configureTab(
-                tab,
-                request: URLRequest(url: tab.url!),
-                flushToDisk: false,
-                zombie: false,
-                notify: true
-            )
+            manager.configureTabForTesting(tab)
         }
     }
 
@@ -90,9 +84,9 @@ class TabManagerStoreTests: XCTestCase {
     }
 
     func testNoData() {
-        manager.testClearArchive()
-        XCTAssertEqual(manager.testTabCountOnDisk(), 0, "Expected 0 tabs on disk")
-        XCTAssertEqual(manager.testCountRestoredTabs(), 0)
+        manager.clearArchiveForTesting()
+        XCTAssertEqual(manager.countTabsOnDiskForTesting(), 0, "Expected 0 tabs on disk")
+        XCTAssertEqual(manager.countRestoredTabsForTesting(), 0)
     }
 
     func testIncognitoTabsAreArchived() {
@@ -100,7 +94,7 @@ class TabManagerStoreTests: XCTestCase {
             addTabWithSessionData(isIncognito: true)
         }
         waitForCondition {
-            self.manager.testTabCountOnDisk() == 2
+            self.manager.countTabsOnDiskForTesting() == 2
         }
     }
 
@@ -110,7 +104,7 @@ class TabManagerStoreTests: XCTestCase {
             addTabWithSessionData()
         }
         waitForCondition {
-            self.manager.testTabCountOnDisk() == 2
+            self.manager.countTabsOnDiskForTesting() == 2
         }
 
         // Add 2 more
@@ -118,14 +112,14 @@ class TabManagerStoreTests: XCTestCase {
             addTabWithSessionData()
         }
         waitForCondition {
-            self.manager.testTabCountOnDisk() == 4
+            self.manager.countTabsOnDiskForTesting() == 4
         }
 
         // Remove all tabs, and add just 1 tab
         manager.removeAllTabs()
         addTabWithSessionData()
         waitForCondition {
-            self.manager.testTabCountOnDisk() == 1
+            self.manager.countTabsOnDiskForTesting() == 1
         }
     }
 
@@ -133,14 +127,10 @@ class TabManagerStoreTests: XCTestCase {
         // create and save two tabs
         let tab1 = addTabWithSessionData()
         let tab2 = addTabWithSessionData {
-            manager.configureTab(
-                $0, request: URLRequest(url: $0.url!),
-                afterTab: tab1,
-                flushToDisk: false, zombie: false, notify: true
-            )
+            manager.configureTabForTesting($0, afterTab: tab1)
         }
         waitForCondition {
-            self.manager.testTabCountOnDisk() == 2
+            self.manager.countTabsOnDiskForTesting() == 2
         }
 
         // verify parent tab relationship
@@ -150,7 +140,7 @@ class TabManagerStoreTests: XCTestCase {
         XCTAssertEqual(newManager.activeTabs.count, 0)
 
         // restore tabs
-        newManager.testRestoreTabs()
+        newManager.restoreTabsForTesting()
         XCTAssertEqual(newManager.activeTabs.count, 2)
 
         // verify parent is restored

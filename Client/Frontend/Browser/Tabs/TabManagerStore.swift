@@ -238,7 +238,7 @@ class TabManagerStore {
 
 // Functions for testing
 extension TabManagerStore {
-    func testTabCountOnDisk(sceneId: String) -> Int {
+    func countTabsOnDiskForTesting(sceneId: String) -> Int {
         assert(AppConstants.IsRunningTest)
         return
             SiteArchiver.tabsToRestore(

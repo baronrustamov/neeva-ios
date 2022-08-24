@@ -14,8 +14,8 @@ private let log = Logger.browser
 
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
 class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
-    let tabEventHandlers: [TabEventHandler]
-    let store: TabManagerStore
+    private let tabEventHandlers: [TabEventHandler]
+    private let store: TabManagerStore
     var scene: UIScene
     let profile: Profile
     let incognitoModel: IncognitoModel
@@ -24,7 +24,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         incognitoModel.isIncognito
     }
 
-    let delaySelectingNewPopupTab: TimeInterval = 0.1
+    private let delaySelectingNewPopupTab: TimeInterval = 0.1
 
     static var all = WeakList<TabManager>()
 
@@ -33,7 +33,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     var tabsUpdatedPublisher = PassthroughSubject<Void, Never>()
 
     // Tab Group related variables
-    @Default(.archivedTabsDuration) var archivedTabsDuration
+    @Default(.archivedTabsDuration) private var archivedTabsDuration
 
     // TODO: consolidate accessors, don't need both `tabs` and `activeTabs`
     var activeTabs: [Tab] { tabs }
@@ -56,7 +56,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     private var selectedTabURLSubscription: AnyCancellable?
     private var archivedTabsDurationSubscription: AnyCancellable?
 
-    let navDelegate: TabManagerNavDelegate
+    private let navDelegate: TabManagerNavDelegate
 
     // A WKWebViewConfiguration used for normal tabs
     lazy var configuration: WKWebViewConfiguration = {
@@ -64,7 +64,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     }()
 
     // A WKWebViewConfiguration used for private mode tabs
-    lazy var incognitoConfiguration: WKWebViewConfiguration = {
+    private lazy var incognitoConfiguration: WKWebViewConfiguration = {
         return TabManager.makeWebViewConfig(isIncognito: true)
     }()
 
@@ -78,9 +78,9 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     }
 
     // groups tabs closed together in a certain amount of time into one Toast
-    let toastGroupTimerInterval: TimeInterval = 1.5
-    var timerToTabsToast: Timer?
-    var closedTabsToShowToastFor = [SavedTab]()
+    private let toastGroupTimerInterval: TimeInterval = 1.5
+    private var timerToTabsToast: Timer?
+    private var closedTabsToShowToastFor = [SavedTab]()
 
     private var normalTabs: [Tab] {
         assert(Thread.isMainThread)
@@ -314,7 +314,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         }
     }
 
-    func updateWebViewForSelectedTab(notify: Bool) {
+    private func updateWebViewForSelectedTab(notify: Bool) {
         selectedTab?.createWebViewOrReloadIfNeeded()
 
         if notify {
@@ -408,7 +408,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     }
 
     // Select the most recently visited tab, IFF it is also the parent tab of the closed tab.
-    func selectParentTab(afterRemoving tab: Tab) -> Bool {
+    private func selectParentTab(afterRemoving tab: Tab) -> Bool {
         let viableTabs = (tab.isIncognito ? incognitoTabs : normalTabs).filter { $0 != tab }
         guard let parentTab = tab.parent, parentTab != tab, !viableTabs.isEmpty,
             viableTabs.contains(parentTab)
@@ -423,7 +423,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         return false
     }
 
-    @objc func prefsDidChange() {
+    @objc private func prefsDidChange() {
         DispatchQueue.main.async {
             let allowPopups = !Defaults[.blockPopups]
             // Each tab may have its own configuration, so we should tell each of them in turn.
@@ -466,12 +466,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         return popup
     }
 
-    func resetProcessPool() {
-        assert(Thread.isMainThread)
-        configuration.processPool = WKProcessPool()
-    }
-
-    func sendSelectTabNotifications(previous: Tab? = nil) {
+    private func sendSelectTabNotifications(previous: Tab? = nil) {
         selectedTabPublisher.send(selectedTab)
 
         if selectedTab?.shouldPerformHeavyUpdatesUponSelect ?? true {
@@ -574,18 +569,8 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         return activeTabGroups[tab.rootUUID]
     }
 
-    func closeTabGroup(_ item: TabGroup) {
-        removeTabs(item.children)
-    }
-
     func closeTabGroup(_ item: TabGroup, showToast: Bool) {
         removeTabs(item.children, showToast: showToast)
-    }
-
-    func getMostRecentChild(_ item: TabGroup) -> Tab? {
-        return item.children.max(by: { lhs, rhs in
-            lhs.lastExecutedTime < rhs.lastExecutedTime
-        })
     }
 
     private func updateTabGroupNames() {
@@ -670,7 +655,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         )
     }
 
-    func addTab(
+    private func addTab(
         _ request: URLRequest? = nil, webView: WKWebView? = nil,
         configuration: WKWebViewConfiguration? = nil,
         atIndex: Int? = nil,
@@ -706,7 +691,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         return tab
     }
 
-    func configureTab(
+    private func configureTab(
         _ tab: Tab, request: URLRequest?, webView: WKWebView? = nil, atIndex: Int? = nil,
         afterTab parent: Tab? = nil, keepInParentTabGroup: Bool = true,
         flushToDisk: Bool, zombie: Bool, isPopup: Bool = false,
@@ -1323,45 +1308,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         return tabToSelect != nil
     }
 
-    // MARK: - TestSupport
-    // Helper functions for test cases
-    convenience init(
-        profile: Profile, imageStore: DiskImageStore?
-    ) {
-        assert(Thread.isMainThread)
-
-        let scene = SceneDelegate.getCurrentScene(for: nil)
-        let incognitoModel = IncognitoModel(isIncognito: false)
-        self.init(profile: profile, scene: scene, incognitoModel: incognitoModel)
-    }
-
-    func testTabCountOnDisk() -> Int {
-        assert(AppConstants.IsRunningTest)
-        return store.testTabCountOnDisk(sceneId: SceneDelegate.getCurrentSceneId(for: nil))
-    }
-
-    func testCountRestoredTabs() -> Int {
-        assert(AppConstants.IsRunningTest)
-        return store.getStartupTabs(for: SceneDelegate.getCurrentScene(for: nil)).count
-    }
-
-    // TODO(jon): Find a way to test the prod version of this function
-    // (`restoreTabs(_:) instead.
-    func testRestoreTabs() {
-        assert(AppConstants.IsRunningTest)
-        _ = store.restoreStartupTabs(
-            for: SceneDelegate.getCurrentScene(for: nil),
-            clearIncognitoTabs: false,
-            tabManager: self
-        )
-        updateAllTabDataAndSendNotifications(notify: true)
-    }
-
-    func testClearArchive() {
-        assert(AppConstants.IsRunningTest)
-        store.clearArchive(for: SceneDelegate.getCurrentScene(for: nil))
-    }
-
     // MARK: - Pinned Tabs
     func toggleTabPinnedState(_ tab: Tab) {
         tab.pinnedTime =
@@ -1687,5 +1633,58 @@ extension TabManager {
         // Don't update anything else so we can use this as a way to test out how the
         // code handles this scenario.
         tabs.forEach { $0.lastExecutedTime = 0 }
+    }
+}
+
+// MARK: Testing support
+extension TabManager {
+    convenience init(
+        profile: Profile, imageStore: DiskImageStore?
+    ) {
+        assert(AppConstants.IsRunningTest)
+        assert(Thread.isMainThread)
+
+        let scene = SceneDelegate.getCurrentScene(for: nil)
+        let incognitoModel = IncognitoModel(isIncognito: false)
+        self.init(profile: profile, scene: scene, incognitoModel: incognitoModel)
+    }
+
+    func countTabsOnDiskForTesting() -> Int {
+        assert(AppConstants.IsRunningTest)
+        return store.countTabsOnDiskForTesting(sceneId: SceneDelegate.getCurrentSceneId(for: nil))
+    }
+
+    func countRestoredTabsForTesting() -> Int {
+        assert(AppConstants.IsRunningTest)
+        return store.getStartupTabs(for: SceneDelegate.getCurrentScene(for: nil)).count
+    }
+
+    // TODO(jon): Find a way to test the prod version of this function
+    // (`restoreTabs(_:) instead.
+    func restoreTabsForTesting() {
+        assert(AppConstants.IsRunningTest)
+        _ = store.restoreStartupTabs(
+            for: SceneDelegate.getCurrentScene(for: nil),
+            clearIncognitoTabs: false,
+            tabManager: self
+        )
+        updateAllTabDataAndSendNotifications(notify: true)
+    }
+
+    func clearArchiveForTesting() {
+        assert(AppConstants.IsRunningTest)
+        store.clearArchive(for: SceneDelegate.getCurrentScene(for: nil))
+    }
+
+    func configureTabForTesting(_ tab: Tab, afterTab parent: Tab? = nil) {
+        assert(AppConstants.IsRunningTest)
+        configureTab(
+            tab,
+            request: URLRequest(url: tab.url!),
+            afterTab: parent,
+            flushToDisk: false,
+            zombie: false,
+            notify: true
+        )
     }
 }
