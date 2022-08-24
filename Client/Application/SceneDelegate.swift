@@ -93,6 +93,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let interstitialViewModel = bvc.interstitialViewModel {
             interstitialViewModel.player?.play()
         }
+
+        // Update the selectedTab.lastExecutedTime if the tab is visible.
+        if bvc.browserModel.contentVisibilityModel.showContent {
+            bvc.tabManager.selectedTab?.lastExecutedTime = Date.nowMilliseconds()
+        }
     }
 
     func sceneWillEnterForeground(_ scene: UIScene) {
