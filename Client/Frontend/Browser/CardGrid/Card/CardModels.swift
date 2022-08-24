@@ -578,29 +578,37 @@ class SpaceCardModel: CardModel {
 
     var thumbnailURLCandidates = [URL: [URL]]()
     private var anyCancellable: AnyCancellable?
-    private var recommendationSubscription: AnyCancellable?
+    private var loginStateSubscription: AnyCancellable?
     private var editingSubscription: AnyCancellable?
     private var detailsSubscriptions: Set<AnyCancellable> = Set()
     private var mutationSubscriptions: Set<AnyCancellable> = Set()
     private var spaceNeedsRefresh: String?
     private var scene: UIScene?
+    private var isLoggedIn: Bool?
 
     init(manager: SpaceStore = SpaceStore.shared, scene: UIScene?) {
         self.manager = manager
         self.scene = scene
         manager.spotlightEventDelegate = SpotlightLogger.shared
+        viewModel.subscribe(to: $allDetails)
+        listenManagerState()
+        listenSpaceMutations()
+        subscribeToLoginState()
+    }
 
-        NeevaUserInfo.shared.$isUserLoggedIn.sink { isLoggedIn in
+    private func subscribeToLoginState() {
+        loginStateSubscription = NeevaUserInfo.shared.$isUserLoggedIn.sink { isLoggedIn in
+            guard self.isLoggedIn != isLoggedIn else {
+                return
+            }
+            self.isLoggedIn = isLoggedIn
             self.manager = isLoggedIn ? .shared : .suggested
             self.listenManagerState()
             self.listenSpaceMutations()
             DispatchQueue.main.async {
                 self.manager.refresh()
             }
-        }.store(in: &detailsSubscriptions)
-        viewModel.subscribe(to: $allDetails)
-        listenManagerState()
-        listenSpaceMutations()
+        }
     }
 
     private func listenManagerState() {
