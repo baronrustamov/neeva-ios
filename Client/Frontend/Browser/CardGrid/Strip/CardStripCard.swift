@@ -100,11 +100,8 @@ struct CardStripCard<Details>: View where Details: TabCardDetails {
             .background(
                 details.isSelected ? Color.DefaultBackground : Color.groupedBackground
             )
-            .if(!details.isPinned) { view in
-                view
-                    .onDrop(of: ["public.url", "public.text"], delegate: details)
-                    .modifier(CardDragAndDropModifier(tabCardDetail: details))
-            }
+            .onDrop(of: ["public.url", "public.text"], delegate: details)
+            .modifier(CardDragAndDropModifier(tabCardDetail: details))
             .accessibilityLabel(
                 details.title + ", Card Strip Tab" + "\(details.isPinned ? ", Pinned" : "")"
                     + "\(details.isSelected ? ", Selected" : "")")

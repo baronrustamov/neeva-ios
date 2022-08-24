@@ -82,8 +82,8 @@ struct Card<Details>: View where Details: CardDetails {
                         )
                         .clipped()
                         .onDrop(of: ["public.url", "public.text"], delegate: details)
-                        .if(tabCardDetail != nil && !tabCardDetail!.isPinned) {
-                            $0.modifier(CardDragAndDropModifier(tabCardDetail: tabCardDetail!))
+                        .if(let: tabCardDetail) { tabCardDetail, view in
+                            view.modifier(CardDragAndDropModifier(tabCardDetail: tabCardDetail))
                         }
                 }
                 .buttonStyle(.reportsPresses(to: $isPressed))

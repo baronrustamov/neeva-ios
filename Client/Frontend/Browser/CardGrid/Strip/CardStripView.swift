@@ -38,19 +38,17 @@ struct CardStripView: View {
     @ViewBuilder
     var content: some View {
         HStack(spacing: 0) {
-            ForEach(model.rows) { row in
-                ForEach(Array(row.cells.enumerated()), id: \.0) { _, details in
-                    switch details {
-                    case .tabGroupInline(let groupDetails):
-                        CardStripTabGroupCardView(groupDetails: groupDetails)
-                    case .tabGroupGridRow(let groupDetails, _):
-                        CardStripTabGroupCardView(groupDetails: groupDetails)
-                    case .tab(let tabDetails):
-                        CardStripCard(details: tabDetails)
-                    default:
-                        EmptyView()
-                    }
-                }.id(row.id)
+            ForEach(model.cells) { cell in
+                switch cell {
+                case .tabGroupInline(let groupDetails):
+                    CardStripTabGroupCardView(groupDetails: groupDetails)
+                case .tabGroupGridRow(let groupDetails, _):
+                    CardStripTabGroupCardView(groupDetails: groupDetails)
+                case .tab(let tabDetails):
+                    CardStripCard(details: tabDetails)
+                default:
+                    EmptyView()
+                }
             }
 
             if !model.todayTabsExists {

@@ -12,11 +12,25 @@ class CardStripModel: ObservableObject {
 
     @Published var shouldEmbedInScrollView = false
 
-    var rows: [Row] {
-        let normalRows =
-            (tabCardModel.timeBasedNormalRows[.pinned] ?? [])
-            + (tabCardModel.timeBasedNormalRows[.today] ?? [])
-        return incognitoModel.isIncognito ? tabCardModel.incognitoRows : normalRows
+    var cells: [TabCell] {
+        // Normal pinned tabs.
+        let pinnedRows = tabCardModel.timeBasedNormalRows[.pinned] ?? []
+        let pinnedCells: [TabCell] = Array(pinnedRows.map({ $0.cells }).joined())
+        // Use the binaryValue (0/1) instead of Bool for sorting.
+        // Makes sure singular pinned tabs appear before those in a TabGroup.
+        let pinnedCellsSorted = pinnedCells.sorted {
+            $0.isTabGroup.asInt < $1.isTabGroup.asInt
+        }
+
+        // Normal tabs.
+        let regularRows = tabCardModel.timeBasedNormalRows[.today] ?? []
+        let regularCells: [TabCell] = Array(regularRows.map({ $0.cells }).joined())
+
+        // Incognito tabs.
+        let incognitoRows = tabCardModel.incognitoRows
+        let incognitoCells: [TabCell] = Array(incognitoRows.map({ $0.cells }).joined())
+
+        return incognitoModel.isIncognito ? incognitoCells : pinnedCellsSorted + regularCells
     }
 
     var todayTabsExists: Bool {

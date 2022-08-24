@@ -141,6 +141,7 @@
 		20F2889427FD20B4005A8A79 /* HistoryPanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F2889327FD20B4005A8A79 /* HistoryPanelViewController.swift */; };
 		20FB97FA28A98809008BF8A2 /* HoverEffectButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20FB97F928A98809008BF8A2 /* HoverEffectButton.swift */; };
 		20FBBE732838822B000F666B /* BackForwardListViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20FBBE722838822B000F666B /* BackForwardListViewTests.swift */; };
+		20FD27C228B44558002FF7DC /* BoolExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20FD27C128B44558002FF7DC /* BoolExtensions.swift */; };
 		2328616825C9BD3D0015EA47 /* DefaultBrowserOnboarding.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2328616725C9BD3D0015EA47 /* DefaultBrowserOnboarding.xcassets */; };
 		23BEA767251A99ED00A014BF /* NewYorkMedium-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 23BEA766251A99E300A014BF /* NewYorkMedium-Bold.otf */; };
 		23BEA768251A99ED00A014BF /* NewYorkMedium-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 23BEA765251A99E200A014BF /* NewYorkMedium-BoldItalic.otf */; };
@@ -2044,6 +2045,7 @@
 		20F2889327FD20B4005A8A79 /* HistoryPanelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPanelViewController.swift; sourceTree = "<group>"; };
 		20FB97F928A98809008BF8A2 /* HoverEffectButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoverEffectButton.swift; sourceTree = "<group>"; };
 		20FBBE722838822B000F666B /* BackForwardListViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackForwardListViewTests.swift; sourceTree = "<group>"; };
+		20FD27C128B44558002FF7DC /* BoolExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoolExtensions.swift; sourceTree = "<group>"; };
 		2328616725C9BD3D0015EA47 /* DefaultBrowserOnboarding.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = DefaultBrowserOnboarding.xcassets; sourceTree = "<group>"; };
 		23BEA763251A99E200A014BF /* NewYorkMedium-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkMedium-Regular.otf"; sourceTree = "<group>"; };
 		23BEA764251A99E200A014BF /* NewYorkMedium-RegularItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NewYorkMedium-RegularItalic.otf"; sourceTree = "<group>"; };
@@ -5134,6 +5136,7 @@
 			isa = PBXGroup;
 			children = (
 				E65075711E37F7AB006961AC /* ArrayExtensions.swift */,
+				20FD27C128B44558002FF7DC /* BoolExtensions.swift */,
 				C9BED4C226680A33001D9C77 /* ColorExtensions.swift */,
 				661E82982783FDD500040C3E /* CGFloatExtension.swift */,
 				205789772852931A00E6CB6B /* DateExtensions.swift */,
@@ -6948,6 +6951,7 @@
 				E650759C1E37F7AB006961AC /* DeferredUtils.swift in Sources */,
 				E9D7BD7F282F4E6A0033CBAD /* BloomFilter.swift in Sources */,
 				C9C18E4D26559711004710CD /* ModalPresentationController.swift in Sources */,
+				20FD27C228B44558002FF7DC /* BoolExtensions.swift in Sources */,
 				E65075941E37F7AB006961AC /* AppInfo.swift in Sources */,
 				67B0FAB6279A82B00023A1C5 /* NeevaExperiment.swift in Sources */,
 				C9C18E4626559613004710CD /* DecorativeSection.swift in Sources */,
