@@ -15,10 +15,11 @@ struct FirstRunViewUX {
 
 struct FirstRunHomePage: View {
     @EnvironmentObject var model: IntroViewModel
+    private let verticalPadding: CGFloat = 35
 
     var body: some View {
         GeometryReader { geom in
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack(spacing: 0) {
                     Spacer(minLength: FirstRunViewUX.spacerLength)
 
@@ -78,10 +79,10 @@ struct FirstRunHomePage: View {
                         model.onOtherOptionsPage = true
                         model.onSignInMode = true
                     }
-                }.frame(minHeight: geom.size.height)
+                }.frame(minHeight: geom.size.height - verticalPadding * 2)
             }
             .padding(.horizontal, 25)
-            .padding(.vertical, 35)
+            .padding(.vertical, verticalPadding)
         }
         .onAppear(perform: logImpression)
     }
