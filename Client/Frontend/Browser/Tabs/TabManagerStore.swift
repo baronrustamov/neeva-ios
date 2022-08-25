@@ -178,7 +178,7 @@ class TabManagerStore {
 
                 restoredTabs.append(tab)
 
-                if savedTab.isSelected, tab.isIncluded(in: .today) {
+                if savedTab.isSelected, tab.isIncluded(in: [.pinned, .today]) {
                     tabToSelect = tab
                 }
             }
