@@ -248,13 +248,14 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     func selectTab(_ tab: Tab?, previous: Tab? = nil, notify: Bool) {
         assert(Thread.isMainThread)
         let previous = previous ?? selectedTab
+        previous?.isSelected = false
+        tab?.isSelected = true
+        selectedTab = tab
 
         // Make sure to wipe the private tabs if the user has the pref turned on
         if Defaults[.closeIncognitoTabs], !(tab?.isIncognito ?? false), incognitoTabs.count > 0 {
             removeAllIncognitoTabs()
         }
-
-        selectedTab = tab
 
         // TODO(darin): This writes to a published variable generating a notification.
         // Are we okay with that happening here?
@@ -415,7 +416,10 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         else { return false }
 
         let parentTabIsMostRecentUsed = mostRecentTab(inTabs: viableTabs) == parentTab
-        if parentTabIsMostRecentUsed {
+
+        // If the parentTab is pinned we should return to it regardless of it being
+        // the most recently used to pass back the WebView and navigation stack.
+        if parentTabIsMostRecentUsed || parentTab.isPinned {
             selectTab(parentTab, previous: tab, notify: true)
             return true
         }

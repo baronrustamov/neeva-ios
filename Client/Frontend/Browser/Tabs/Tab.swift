@@ -87,6 +87,7 @@ class Tab: NSObject, ObservableObject, GenericTab {
     var restoring: Bool = false
     var needsReloadUponSelect = false
     var shouldPerformHeavyUpdatesUponSelect = true
+    var isSelected = false
 
     @Published private(set) var canGoBack = false
     @Published private(set) var canGoForward = false
@@ -130,6 +131,12 @@ class Tab: NSObject, ObservableObject, GenericTab {
         }
 
         updateCanGoBackForward()
+
+        if isSelected {
+            // Since the user has performed an action inside the tab to change the URL,
+            // it's reasonable to update the last time the tab was interacted with.
+            lastExecutedTime = Date.nowMilliseconds()
+        }
     }
 
     // MARK: - Navigation Properties
@@ -485,7 +492,7 @@ class Tab: NSObject, ObservableObject, GenericTab {
             return
         }
 
-        if let bvc = browserViewController, bvc.tabManager.selectedTab == self {
+        if let bvc = browserViewController, isSelected {
             canGoForward =
                 webViewCanGoForward || bvc.simulatedSwipeModel.canGoForward()
         } else {
