@@ -132,7 +132,7 @@ struct CardGrid: View {
                         ? 0 : -(geom.size.width - detailDragOffset) / 5, y: 0
                 )
                 .background(CardGridBackground())
-                .modifier(SwipeToSwitchToSpacesGesture())
+                .modifier(SwipeToSwitchGridViewGesture())
             NavigationLink(
                 destination: detailedSpaceView,
                 isActive: $gridModel.showingDetailView

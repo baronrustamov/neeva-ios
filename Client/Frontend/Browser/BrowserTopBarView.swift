@@ -30,7 +30,7 @@ struct BrowserTopBarView: View {
         if browserModel.showGrid {
             switcherTopBar
                 .modifier(
-                    SwipeToSwitchToSpacesGesture(fromPicker: true))
+                    SwipeToSwitchGridViewGesture(fromPicker: true))
         } else {
             TopBarContent(
                 browserModel: browserModel,

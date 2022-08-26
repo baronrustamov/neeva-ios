@@ -91,7 +91,7 @@ struct GridPicker: View {
     }
 }
 
-struct SwipeToSwitchToSpacesGesture: ViewModifier {
+struct SwipeToSwitchGridViewGesture: ViewModifier {
     var fromPicker: Bool = false
 
     @EnvironmentObject var switcherToolbarModel: SwitcherToolbarModel
@@ -119,7 +119,7 @@ struct SwipeToSwitchToSpacesGesture: ViewModifier {
             if fromPicker {
                 content.simultaneousGesture(gesture)
             } else {
-                content.gesture(gesture)
+                content.highPriorityGesture(gesture)
             }
         } else {
             content
