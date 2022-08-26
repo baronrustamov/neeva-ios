@@ -44,7 +44,6 @@
 		1D06AE6624FEE4D5000B092B /* TopSitesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06AE6524FEE4D5000B092B /* TopSitesProvider.swift */; };
 		1D0BA05C24F46A0400D731B5 /* TopSitesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0BA05B24F46A0400D731B5 /* TopSitesManager.swift */; };
 		1D9E1FE524FEF56C006E561D /* TopSites in Resources */ = {isa = PBXBuildFile; fileRef = 3BC659481E5BA4AE006D560F /* TopSites */; };
-		1DA3CE5F24EEE7C600422BB2 /* SiteArchiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA3CE5E24EEE7C600422BB2 /* SiteArchiver.swift */; };
 		1DA3CE6324EEE83200422BB2 /* SavedTab+ConfigureExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA3CE6224EEE83200422BB2 /* SavedTab+ConfigureExtension.swift */; };
 		1DA3CE6724EEE86C00422BB2 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075641E37F7AB006961AC /* AppInfo.swift */; };
 		1DDAD13E24F0651C007623C8 /* TopSitesWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDAD13C24F064F7007623C8 /* TopSitesWidget.swift */; };
@@ -503,7 +502,6 @@
 		4A42C51F27E58487003B9826 /* ReaderModePopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F97CBF26F68C4A005A26C2 /* ReaderModePopover.swift */; };
 		4A42C52127E58487003B9826 /* SavedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D3821103EAE00F25400 /* SavedTab.swift */; };
 		4A42C52227E58487003B9826 /* SuggestedSitesViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9BED4BC2667E453001D9C77 /* SuggestedSitesViews.swift */; };
-		4A42C52327E58487003B9826 /* SiteArchiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA3CE5E24EEE7C600422BB2 /* SiteArchiver.swift */; };
 		4A42C52427E58487003B9826 /* NotificationPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67942DD726F14F2A0023F623 /* NotificationPromptView.swift */; };
 		4A42C52527E58487003B9826 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
 		4A42C52627E58487003B9826 /* CardGridOverflowMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661AFF192727A4840099B3E4 /* CardGridOverflowMenuView.swift */; };
@@ -1980,7 +1978,6 @@
 		1ADFEEFB278CAAE500A0E82E /* update-search-engine-list.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "update-search-engine-list.sh"; sourceTree = "<group>"; };
 		1D06AE6524FEE4D5000B092B /* TopSitesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesProvider.swift; sourceTree = "<group>"; };
 		1D0BA05B24F46A0400D731B5 /* TopSitesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesManager.swift; sourceTree = "<group>"; };
-		1DA3CE5E24EEE7C600422BB2 /* SiteArchiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteArchiver.swift; sourceTree = "<group>"; };
 		1DA3CE6224EEE83200422BB2 /* SavedTab+ConfigureExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SavedTab+ConfigureExtension.swift"; sourceTree = "<group>"; };
 		1DDAD13C24F064F7007623C8 /* TopSitesWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesWidget.swift; sourceTree = "<group>"; };
 		200976842810EA620055A02B /* CookieCutterHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCutterHelper.swift; sourceTree = "<group>"; };
@@ -5000,7 +4997,6 @@
 				D31F95E81AC226CB005C9F3B /* ScreenshotHelper.swift */,
 				66CA99DE2774E74500058241 /* ScrollingControlModel.swift */,
 				74C027441B2A348C001B1E88 /* SessionData.swift */,
-				1DA3CE5E24EEE7C600422BB2 /* SiteArchiver.swift */,
 				D029A04820A62DB0001DB72F /* TemporaryDocument.swift */,
 				1D0BA05B24F46A0400D731B5 /* TopSitesManager.swift */,
 				D3C744CC1A687D6C004CE85D /* URLFixup.swift */,
@@ -7435,7 +7431,6 @@
 				203203ED28879D7B00405C07 /* CardStripTabGroupCardView.swift in Sources */,
 				4A42C52127E58487003B9826 /* SavedTab.swift in Sources */,
 				4A42C52227E58487003B9826 /* SuggestedSitesViews.swift in Sources */,
-				4A42C52327E58487003B9826 /* SiteArchiver.swift in Sources */,
 				4A42C52427E58487003B9826 /* NotificationPromptView.swift in Sources */,
 				4A42C52527E58487003B9826 /* Profile.swift in Sources */,
 				8AB284B6280DE533008027D2 /* OpenArchivedTabsPanelButton.swift in Sources */,
@@ -8053,7 +8048,6 @@
 				673AF3E9289CDE4300F62A80 /* WidgetIntents.intentdefinition in Sources */,
 				63306D3921103EAE00F25400 /* SavedTab.swift in Sources */,
 				C9BED4BD2667E453001D9C77 /* SuggestedSitesViews.swift in Sources */,
-				1DA3CE5F24EEE7C600422BB2 /* SiteArchiver.swift in Sources */,
 				67942DD826F14F2A0023F623 /* NotificationPromptView.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
 				661AFF1A2727A4840099B3E4 /* CardGridOverflowMenuView.swift in Sources */,

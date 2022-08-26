@@ -222,9 +222,8 @@ class TabManagerStore {
         let path = tabSavePath(withId: scene.session.persistentIdentifier)
         log.info("Restoring tabs from \(path ?? "")")
 
-        let savedTabsWithNewPath = SiteArchiver.tabsToRestore(tabsStateArchivePath: path)
-        let fallbackTabs = SiteArchiver.tabsToRestore(
-            tabsStateArchivePath: fallbackTabsPath())
+        let savedTabsWithNewPath = retrieveSavedTabs(fromArchivePath: path)
+        let fallbackTabs = retrieveSavedTabs(fromArchivePath: fallbackTabsPath())
 
         if let savedTabsWithNewPath = savedTabsWithNewPath {
             return savedTabsWithNewPath
@@ -234,15 +233,33 @@ class TabManagerStore {
             return [SavedTab]()
         }
     }
+
+    fileprivate func retrieveSavedTabs(fromArchivePath archivePath: String?) -> [SavedTab]? {
+        guard let archivePath = archivePath,
+            FileManager.default.fileExists(atPath: archivePath),
+            let tabData = try? Data(contentsOf: URL(fileURLWithPath: archivePath))
+        else {
+            return nil
+        }
+
+        do {
+            if let savedTabs = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(tabData)
+                as? [SavedTab], savedTabs.count > 0
+            {
+                return savedTabs
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+
+        return nil
+    }
 }
 
 // Functions for testing
 extension TabManagerStore {
     func countTabsOnDiskForTesting(sceneId: String) -> Int {
         assert(AppConstants.IsRunningTest)
-        return
-            SiteArchiver.tabsToRestore(
-                tabsStateArchivePath: tabSavePath(withId: sceneId)
-            )?.count ?? 0
+        return retrieveSavedTabs(fromArchivePath: tabSavePath(withId: sceneId))?.count ?? 0
     }
 }
