@@ -14,7 +14,19 @@ class SwitcherToolbarModel: ObservableObject {
     private var selectedTabListener: AnyCancellable?
 
     @Published var tabIsSelected = false
-    @Published var dragOffset: CGFloat?
+    @Published private(set) var dragOffset: CGFloat?
+
+    func onToggleIncognito() {
+        tabManager.toggleIncognitoMode(clearSelectedTab: false)
+    }
+
+    func setDragOffset(to offset: CGFloat) {
+        dragOffset = offset
+    }
+
+    func resetDragOffset() {
+        dragOffset = nil
+    }
 
     init(
         tabManager: TabManager,
@@ -29,10 +41,6 @@ class SwitcherToolbarModel: ObservableObject {
         self.selectedTabListener = tabManager.selectedTabPublisher.sink { selectedTab in
             self.tabIsSelected = selectedTab != nil
         }
-    }
-
-    func onToggleIncognito() {
-        tabManager.toggleIncognitoMode(clearSelectedTab: false)
     }
 }
 

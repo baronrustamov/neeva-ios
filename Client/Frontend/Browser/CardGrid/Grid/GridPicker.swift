@@ -94,35 +94,39 @@ struct GridPicker: View {
 struct SwipeToSwitchGridViewGesture: ViewModifier {
     var fromPicker: Bool = false
 
+    @GestureState var dragOffset: CGFloat = 0
     @EnvironmentObject var switcherToolbarModel: SwitcherToolbarModel
     @EnvironmentObject var tabCardModel: TabCardModel
 
     private var gesture: some Gesture {
         DragGesture()
-            .onChanged { value in
-                let horizontalAmount = value.translation.width as CGFloat
+            .updating($dragOffset) { value, state, transaction in
+                let horizontalAmount = value.translation.width
 
                 // Divide by 2.5 to follow drag more accurately
-                horizontalOffsetChanged(
-                    fromPicker ? horizontalAmount : (-horizontalAmount / 2.5))
+                state = fromPicker ? horizontalAmount : (-horizontalAmount / 2.5)
             }.onEnded { _ in
-                horizontalOffsetChanged(nil)
+                switcherToolbarModel.resetDragOffset()
             }
-    }
-
-    private func horizontalOffsetChanged(_ offset: CGFloat?) {
-        switcherToolbarModel.dragOffset = offset
     }
 
     func body(content: Content) -> some View {
-        if !tabCardModel.isSearchingForTabs {
-            if fromPicker {
-                content.simultaneousGesture(gesture)
+        Group {
+            if !tabCardModel.isSearchingForTabs {
+                if fromPicker {
+                    content.simultaneousGesture(gesture)
+                } else {
+                    content.highPriorityGesture(gesture)
+                }
             } else {
-                content.highPriorityGesture(gesture)
+                content
             }
-        } else {
-            content
+        }.onChange(of: dragOffset) { newValue in
+            if newValue == 0 {
+                switcherToolbarModel.resetDragOffset()
+            } else {
+                switcherToolbarModel.setDragOffset(to: newValue)
+            }
         }
     }
 }

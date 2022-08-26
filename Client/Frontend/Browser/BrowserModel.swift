@@ -14,10 +14,6 @@ class BrowserModel: ObservableObject {
                 // Ensures toolbars are visible when user closes from the CardGrid.
                 // Expand when set to true, so ready when user returns.
                 scrollingControlModel.showToolbars(animated: true, completion: nil)
-
-                // Ensure that the switcher is reset in case a previous drag was not
-                // properly completed.
-                switcherToolbarModel.dragOffset = nil
             }
         }
     }
