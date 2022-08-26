@@ -1074,7 +1074,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         }
 
         if closedLastNormalTab || closedLastIncognitoTab
-            || !viableTabs.contains(where: { $0.isIncluded(in: .today) })
+            || viableTabs.isEmpty
         {
             DispatchQueue.main.async {
                 self.selectTab(nil, notify: notify)
