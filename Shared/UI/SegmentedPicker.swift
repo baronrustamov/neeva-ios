@@ -13,7 +13,9 @@ public struct Segment {
     let selectedAction: () -> Void
 
     public init(
-        symbol: Symbol, selectedIconColor: Color, selectedColor: Color,
+        symbol: Symbol,
+        selectedIconColor: Color = .white,
+        selectedColor: Color = Color.ui.adaptive.blue,
         selectedAction: @escaping () -> Void
     ) {
         self.symbol = symbol

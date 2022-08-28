@@ -66,6 +66,14 @@ struct OverlayView: View {
                     findView
                         .padding(.bottom, keyboardHidden ? 0 : -14)
                 }.ignoresSafeArea(.container)
+            case .fullScreenCover(let fullScreenModal):
+                Color.clear
+                    .fullScreenCover(isPresented: $overlayManager.showFullScreenPopoverSheet) {
+                        // OnDismiss
+                        // Nothing to do here
+                    } content: {
+                        fullScreenModal
+                    }
             case .fullScreenModal(let fullScreenModal):
                 if verticalSizeClass == .regular && horizontalSizeClass == .regular {
                     Color.clear
@@ -84,13 +92,13 @@ struct OverlayView: View {
                             fullScreenModal
                         }
                 }
-            case .fullScreenCover(let fullScreenModal):
+            case .fullScreenSheet(let fullScreenSheet):
                 Color.clear
-                    .fullScreenCover(isPresented: $overlayManager.showFullScreenPopoverSheet) {
+                    .sheet(isPresented: $overlayManager.showFullScreenPopoverSheet) {
                         // OnDismiss
                         // Nothing to do here
                     } content: {
-                        fullScreenModal
+                        fullScreenSheet
                     }
             case .notification(let notification):
                 VStack {

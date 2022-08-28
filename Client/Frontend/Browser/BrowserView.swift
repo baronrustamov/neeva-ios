@@ -137,8 +137,10 @@ struct BrowserView: View {
         .environment(
             \.openArchivedTabsPanelView,
             {
-                bvc.present(
-                    ArchivedTabsPanelViewController(browserModel: browserModel), animated: true)
+                if !FeatureFlag[.archivedTabsRedesign] {
+                    bvc.present(
+                        ArchivedTabsPanelViewController(browserModel: browserModel), animated: true)
+                }
             }
         )
         .environmentObject(browserModel)

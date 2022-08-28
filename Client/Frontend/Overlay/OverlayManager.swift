@@ -17,8 +17,12 @@ enum OverlayPriority {
 enum OverlayType: Equatable {
     case backForwardList(BackForwardListView?)
     case find(FindView?)
-    case fullScreenModal(AnyView)
+    /// Only uses `.fullScreenCover`.
     case fullScreenCover(AnyView)
+    /// Uses `.fullScreenCover` on regular views and `.sheet` on large displays.
+    case fullScreenModal(AnyView)
+    /// Only uses `.sheet`.
+    case fullScreenSheet(AnyView)
     case notification(NotificationRow?)
     case popover(PopoverRootView?)
     case sheet(OverlaySheetRootView?)
@@ -26,8 +30,10 @@ enum OverlayType: Equatable {
 
     func isPriority(_ priority: OverlayPriority) -> Bool {
         switch self {
-        case .backForwardList, .find, .fullScreenModal, .fullScreenCover:
+        case .backForwardList, .find:
             return priority == .modal
+        case .fullScreenCover, .fullScreenModal, .fullScreenSheet:
+            return priority == .fullScreen || priority == .modal
         case .popover, .sheet:
             return priority == .modal || priority == .sheet
         case .notification, .toast:
@@ -39,7 +45,7 @@ enum OverlayType: Equatable {
         switch self {
         case .backForwardList, .find:
             return priorities.contains(.modal)
-        case .fullScreenModal, .fullScreenCover:
+        case .fullScreenCover, .fullScreenModal, .fullScreenSheet:
             return priorities.contains(.fullScreen)
         case .popover, .sheet:
             return priorities.contains(.modal) || priorities.contains(.sheet)
@@ -54,7 +60,11 @@ enum OverlayType: Equatable {
             return true
         case (.find, .find):
             return true
+        case (.fullScreenCover, .fullScreenCover):
+            return true
         case (.fullScreenModal, .fullScreenModal):
+            return true
+        case (.fullScreenSheet, .fullScreenSheet):
             return true
         case (.notification, .notification):
             return true
@@ -182,7 +192,7 @@ class OverlayManager: ObservableObject {
             switch overlay {
             case .backForwardList:
                 slideAndFadeIn(offset: 100)
-            case .fullScreenModal, .fullScreenCover, .popover:
+            case .fullScreenCover, .fullScreenModal, .fullScreenSheet, .popover:
                 withAnimation(animation) {
                     showFullScreenPopoverSheet = true
                     displaying = true
@@ -199,12 +209,10 @@ class OverlayManager: ObservableObject {
                 }
             }
         } else {
-            if case .fullScreenModal = overlay {
+            if overlay.isPriority(.fullScreen) {
                 showFullScreenPopoverSheet = true
             }
-            if case .fullScreenCover = overlay {
-                showFullScreenPopoverSheet = true
-            }
+
             displaying = true
         }
 

@@ -8,6 +8,7 @@ import SwiftUI
 
 struct OpenArchivedTabsPanelButton: View {
     var containerGeometry: CGSize
+    @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var tabModel: TabCardModel
     @Environment(\.openArchivedTabsPanelView) private var openArchivedTabsPanelView
 
@@ -18,11 +19,19 @@ struct OpenArchivedTabsPanelButton: View {
                 .padding(.horizontal, -CardGridUX.GridSpacing)
 
             Button {
-                openArchivedTabsPanelView()
+                if FeatureFlag[.archivedTabsRedesign] {
+                    browserModel.overlayManager.show(
+                        overlay: .fullScreenSheet(
+                            AnyView(HistoryAndArchivedTabsPanelView(currentView: .history))))
+                } else {
+                    openArchivedTabsPanelView()
+                }
             } label: {
                 HStack {
                     Spacer()
-                    Label("Archived Tabs", systemSymbol: .clock)
+                    Label(
+                        "Archived Tabs",
+                        systemSymbol: FeatureFlag[.archivedTabsRedesign] ? .archivebox : .clock)
                     Spacer()
                 }
             }

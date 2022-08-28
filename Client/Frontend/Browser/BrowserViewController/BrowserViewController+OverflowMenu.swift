@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import Shared
+import SwiftUI
 
 public enum OverflowMenuAction {
     case forward
@@ -133,7 +134,13 @@ extension BrowserViewController {
                 attributes: EnvironmentHelper.shared.getAttributes() + [overflowMenuAttribute]
             )
 
-            present(HistoryPanelViewController(bvc: self), animated: true)
+            if FeatureFlag[.archivedTabsRedesign] {
+                overlayManager.show(
+                    overlay: .fullScreenSheet(
+                        AnyView(HistoryAndArchivedTabsPanelView(currentView: .archivedTabs))))
+            } else {
+                present(HistoryPanelViewController(bvc: self), animated: true)
+            }
         case .goToDownloads:
             ClientLogger.shared.logCounter(
                 .OpenDownloads,
