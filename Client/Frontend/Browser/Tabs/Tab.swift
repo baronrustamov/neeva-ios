@@ -768,7 +768,7 @@ class Tab: NSObject, ObservableObject, GenericTab {
         if currentItem != nil {
             // Here we create the SessionData for the tab and pass that to the SavedTab.
             let navigationList = webView?.backForwardList.all ?? []
-            let currentPage = -(webView?.backForwardList.forwardList ?? []).count
+            var currentPage = -(webView?.backForwardList.forwardList ?? []).count
             var urls = navigationList.compactMap { $0.url }
             var navigationStackIndex = webView?.backForwardList.navigationStackIndex ?? 0
             var queries = navigationList.map {
@@ -782,7 +782,14 @@ class Tab: NSObject, ObservableObject, GenericTab {
             if urls.last != url, isForPinnedTabPlaceholder {
                 urls.removeLast()
                 queries.removeLast()
-                navigationStackIndex -= 1
+
+                if navigationStackIndex > 1 {
+                    navigationStackIndex -= 1
+                }
+
+                if currentPage < 0 {
+                    currentPage += 1
+                }
             }
 
             sessionData = SessionData(

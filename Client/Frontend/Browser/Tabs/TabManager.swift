@@ -996,7 +996,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             addTabsToRecentlyClosed(tabsToBeRemoved, showToast: showToast)
         }
 
-        let previous = selectedTab
         let lastTab = tabsToBeRemoved[tabsToBeRemoved.count - 1]
         let lastTabIndex = tabs.firstIndex(of: lastTab)
         let tabsToKeep = self.tabs.filter { !tabsToBeRemoved.contains($0) }
@@ -1057,7 +1056,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             tab.isIncognito
             ? incognitoTabs
             : normalTabs.filter {
-                $0.isIncluded(in: .today)
+                $0.isIncluded(in: [.pinned, .today])
             }
         let bvc = SceneDelegate.getBVC(with: scene)
 
@@ -1330,6 +1329,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         ]
 
         if tab.isPinned,
+            !(tab.backList?.first?.url.equals(url, with: options) ?? false),
             !(tab.url?.equals(url, with: options) ?? false),
             !(InternalURL(tab.url)?.isSessionRestore ?? false),
             !(InternalURL(url)?.isSessionRestore ?? false)
