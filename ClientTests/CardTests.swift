@@ -6,7 +6,6 @@ import Defaults
 import Shared
 import SwiftUI
 import ViewInspector
-import WalletConnectSwift
 import XCTest
 
 @testable import Client

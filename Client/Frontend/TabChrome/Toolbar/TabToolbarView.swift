@@ -6,15 +6,10 @@ import Defaults
 import Shared
 import SwiftUI
 
-#if XYZ
-    import WalletCore
-#endif
-
 struct TabToolbarView: View {
     @EnvironmentObject var chromeModel: TabChromeModel
     @EnvironmentObject var scrollingControlModel: ScrollingControlModel
     @EnvironmentObject private var incognitoModel: IncognitoModel
-    @Default(.currentTheme) var currentTheme
 
     let performAction: (ToolbarAction) -> Void
 
@@ -23,22 +18,10 @@ struct TabToolbarView: View {
             Color.ui.adaptive.separator
                 .frame(height: 0.5)
                 .ignoresSafeArea()
-
-            #if XYZ
-                Web3Toolbar(
-                    opacity: scrollingControlModel.controlOpacity,
-                    onBack: { performAction(.back) },
-                    onLongPress: { performAction(.longPressBackForward) },
-                    overFlowMenuAction: { performAction(.overflow) },
-                    showTabsAction: { performAction(.showTabs) },
-                    zeroQueryAction: { performAction(.showZeroQuery) }
-                )
-            #else
-                normalTabToolbar
-            #endif
+            normalTabToolbar
             Spacer()
         }
-        .defaultBackgroundOrTheme(currentTheme)
+        .background(Color.DefaultBackground.ignoresSafeArea())
         .accentColor(.label)
         .offset(y: scrollingControlModel.footerBottomOffset)
     }

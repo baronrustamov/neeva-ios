@@ -12,25 +12,7 @@ import SwiftUI
 import UIKit
 import WebKit
 
-#if XYZ
-    import WalletConnectSwift
-    import WalletCore
-#endif
-
-// periphery:ignore
-// Used for XYZ
-protocol ModalPresenter {
-    func showModal<Content: View>(
-        style: OverlayStyle,
-        headerButton: OverlayHeaderButton?,
-        toPosition: OverlaySheetPosition,
-        content: @escaping () -> Content,
-        onDismiss: (() -> Void)?)
-    func presentFullScreenModal(content: AnyView, completion: (() -> Void)?)
-    func dismissCurrentOverlay()
-}
-
-class BrowserViewController: UIViewController, ModalPresenter {
+class BrowserViewController: UIViewController {
     private(set) var searchQueryModel = SearchQueryModel()
     private(set) var locationModel = LocationViewModel()
 
@@ -47,14 +29,6 @@ class BrowserViewController: UIViewController, ModalPresenter {
             }, tabManager: tabManager)
         model.delegate = self
         return model
-    }()
-
-    private(set) lazy var web3Model: Web3Model = {
-        #if XYZ
-            return Web3Model(presenter: self, tabManager: self.tabManager)
-        #else
-            return Web3Model()
-        #endif
     }()
 
     private(set) lazy var suggestionModel: SuggestionModel = {
@@ -223,10 +197,6 @@ class BrowserViewController: UIViewController, ModalPresenter {
 
         chromeModel.topBarDelegate = self
         chromeModel.toolbarDelegate = self
-        #if XYZ
-            web3Model.toastDelegate = self
-            web3Model.updateCurrentSession()
-        #endif
 
         cheatsheetPromoModel.subscribe(to: self.tabManager)
         cheatsheetPromoModel.subscribe(
@@ -408,17 +378,9 @@ class BrowserViewController: UIViewController, ModalPresenter {
             }
         }
 
-        if NeevaConstants.currentTarget == .client {
-            DispatchQueue.main.async {
-                SpaceStore.suggested.refresh()
-            }
+        DispatchQueue.main.async {
+            SpaceStore.suggested.refresh()
         }
-
-        #if XYZ
-            DispatchQueue.main.async {
-                self.web3Model.initializeWallet()
-            }
-        #endif
 
         gridModel.canResizeGrid = true
     }
@@ -514,38 +476,21 @@ class BrowserViewController: UIViewController, ModalPresenter {
             if Self.createNewTabOnStartForTesting {
                 self.tabManager.select(self.tabManager.addTab())
             } else if !didSelectTabOnStartup {
-                #if XYZ
+                if !Defaults[.didFirstNavigation] {
                     self.showZeroQuery()
-                #else
-                    if !Defaults[.didFirstNavigation] {
-                        self.showZeroQuery()
-                    } else {
-                        self.gridModel.switchModeWithoutAnimation = true
-                        self.showTabTray()
+                } else {
+                    self.gridModel.switchModeWithoutAnimation = true
+                    self.showTabTray()
 
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            self.gridModel.switchModeWithoutAnimation = false
-                        }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        self.gridModel.switchModeWithoutAnimation = false
                     }
-                #endif
+                }
             }
         }
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        if NeevaConstants.currentTarget != .xyz {
-            if !Defaults[.introSeen] {
-                var startScreen: WelcomeFlowScreen?
-
-                if Defaults[.welcomeFlowRestoreToDefaultBrowser] {
-                    Defaults[.welcomeFlowRestoreToDefaultBrowser] = false
-                    startScreen = .defaultBrowser
-                }
-
-                presentWelcomeFlow(startScreen: startScreen)
-            }
-        }
-
         tabManager.selectedTab?.lastExecutedTime = Date.nowMilliseconds()
 
         super.viewDidAppear(animated)

@@ -150,7 +150,7 @@ struct QRCodeScanButton: View {
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(label)
         }
-        .backgroundColorOrGradient(.white)
+        .background(Color.white)
         .clipShape(Capsule())
         .shadow(color: Color.ui.gray70, radius: 1, x: 0, y: 1)
         .font(.roobert(.semibold, size: 18))

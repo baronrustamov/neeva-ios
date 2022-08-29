@@ -31,15 +31,12 @@ struct GridPicker: View {
                 selectedIconColor: .white,
                 selectedColor: Color.ui.adaptive.blue,
                 selectedAction: { gridModel.switchToTabs(incognito: false) }),
+            Segment(
+                symbol: Symbol(.bookmarkOnBookmark, label: "Spaces"),
+                selectedIconColor: .white, selectedColor: Color.ui.adaptive.blue,
+                selectedAction: gridModel.switchToSpaces
+            ),
         ]
-        if NeevaConstants.currentTarget != .xyz {
-            segments.append(
-                Segment(
-                    symbol: Symbol(.bookmarkOnBookmark, label: "Spaces"),
-                    selectedIconColor: .white, selectedColor: Color.ui.adaptive.blue,
-                    selectedAction: gridModel.switchToSpaces
-                ))
-        }
         return segments
     }
 

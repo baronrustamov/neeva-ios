@@ -48,7 +48,7 @@ struct SuggestedNavigationView<Content: View>: View {
                     Text(title())
                         .withFont(.bodyMedium)
                         .lineLimit(1)
-                        .foregroundColorOrGradient(.secondaryLabel)
+                        .foregroundColor(.secondaryLabel)
                         .padding(.top, 4)
                 }
                 .contentShape(Rectangle())
@@ -64,28 +64,20 @@ struct SuggestedNavigationView<Content: View>: View {
 
 private struct SuggestedItemBackgroundModifier: ViewModifier {
     func body(content: Content) -> some View {
-        if NeevaConstants.currentTarget == .xyz {
-            content
-                .hexagonClip(with: SuggestedSiteUX.IconSize)
-        } else {
-            content
-                .frame(
-                    width: SuggestedSiteUX.IconSize,
-                    height: SuggestedSiteUX.IconSize,
-                    alignment: .center
-                )
-                .background(Color(light: .ui.gray97, dark: .systemFill))
-                .cornerRadius(SuggestedSiteUX.IconCornerRadius)
-        }
-
+        content
+            .frame(
+                width: SuggestedSiteUX.IconSize,
+                height: SuggestedSiteUX.IconSize,
+                alignment: .center
+            )
+            .background(Color(light: .ui.gray97, dark: .systemFill))
+            .cornerRadius(SuggestedSiteUX.IconCornerRadius)
     }
 }
 
 struct SuggestedHomeView: View {
-    var title: String {
-        NeevaConstants.currentTarget == .xyz
-            ? Defaults[.cryptoPublicKey].isEmpty ? "You" : "Your Wallet" : "Home"
-    }
+    var title = "Home"
+
     @State private var shareTargetView: UIView!
 
     var body: some View {
@@ -172,7 +164,7 @@ struct SuggestedSiteView: View {
 
 struct SuggestedSitesView: View {
     let isExpanded: Bool
-    var withHome: Bool = NeevaConstants.currentTarget == .client
+    var withHome = true
     @ObservedObject var viewModel: SuggestedSitesViewModel
     @Environment(\.zeroQueryWidth) private var zeroQueryWidth
     @Environment(\.verticalSizeClass) private var verticalSizeClass
@@ -221,14 +213,8 @@ struct SuggestedSitesView: View {
 
     @ViewBuilder
     private var horizontalScrollView: some View {
-        if NeevaConstants.currentTarget == .xyz {
-            ScrollView(.horizontal, showsIndicators: false) {
-                horizontalScrollContentView
-            }
-        } else {
-            FadingHorizontalScrollView { _ in
-                horizontalScrollContentView
-            }
+        FadingHorizontalScrollView { _ in
+            horizontalScrollContentView
         }
     }
 

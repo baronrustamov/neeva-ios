@@ -28,7 +28,6 @@ struct TopBarContent: View {
     let trackingStatsViewModel: TrackingStatsViewModel
     let chromeModel: TabChromeModel
     let readerModeModel: ReaderModeModel
-    var web3Model: Web3Model
     var geom: GeometryProxy
 
     let newTab: () -> Void
@@ -82,7 +81,6 @@ struct TopBarContent: View {
         .environmentObject(trackingStatsViewModel)
         .environmentObject(chromeModel)
         .environmentObject(readerModeModel)
-        .environmentObject(web3Model)
     }
 
     @ViewBuilder func topBarView(
@@ -95,30 +93,17 @@ struct TopBarContent: View {
         onCancel: @escaping () -> Void,
         onOverflowMenuAction: @escaping (OverflowMenuAction, UIView) -> Void
     ) -> some View {
-        #if XYZ
-            Web3TopBarView(
-                performTabToolbarAction: performTabToolbarAction,
-                onReload: onReload,
-                onSubmit: onSubmit,
-                onShare: onShare,
-                onMenuAction: onMenuAction,
-                newTab: newTab,
-                onCancel: onCancel,
-                onOverflowMenuAction: onOverflowMenuAction,
-                geom: geom
-            )
-        #else
-            TopBarView(
-                performTabToolbarAction: performTabToolbarAction,
-                onReload: onReload,
-                onSubmit: onSubmit,
-                onShare: onShare,
-                onMenuAction: onMenuAction,
-                newTab: newTab,
-                onCancel: onCancel,
-                onOverflowMenuAction: onOverflowMenuAction,
-                geom: geom
-            )
-        #endif
+
+        TopBarView(
+            performTabToolbarAction: performTabToolbarAction,
+            onReload: onReload,
+            onSubmit: onSubmit,
+            onShare: onShare,
+            onMenuAction: onMenuAction,
+            newTab: newTab,
+            onCancel: onCancel,
+            onOverflowMenuAction: onOverflowMenuAction,
+            geom: geom
+        )
     }
 }

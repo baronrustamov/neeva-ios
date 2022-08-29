@@ -27,9 +27,6 @@
 /* button to delete a space */
 "delete" = "delete";
 
-/* This is unused string, no translation required*/
-"NFT Search from Neevaxyz" = "NFT Search from Neevaxyz";
-
 "Ad-free search results" = "Ad-free search results";
 
 "Browser without ads or trackers" = "Browser without ads or trackers";

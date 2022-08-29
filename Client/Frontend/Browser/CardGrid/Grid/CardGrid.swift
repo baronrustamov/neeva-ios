@@ -52,7 +52,6 @@ struct CardGrid: View {
     @EnvironmentObject var spaceModel: SpaceCardModel
     @EnvironmentObject var tabCardModel: TabCardModel
     @EnvironmentObject var toastViewManager: ToastViewManager
-    @EnvironmentObject var walletDetailsModel: WalletDetailsModel
 
     @Environment(\.onOpenURLForSpace) var onOpenURLForSpace
     @Environment(\.shareURL) var shareURL
@@ -127,10 +126,6 @@ struct CardGrid: View {
     var body: some View {
         ZStack {
             cardContainer
-                .offset(
-                    x: (!walletDetailsModel.showingWalletDetails)
-                        ? 0 : -(geom.size.width - detailDragOffset) / 5, y: 0
-                )
                 .background(CardGridBackground())
                 .modifier(SwipeToSwitchGridViewGesture())
             NavigationLink(

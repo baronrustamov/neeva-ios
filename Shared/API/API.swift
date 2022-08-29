@@ -3749,111 +3749,6 @@ public enum ResendVerificationEmailResult: RawRepresentable, Equatable, Hashable
   }
 }
 
-/// Input for reportDomainTrustSignal mutation type
-public struct ReportDomainTrustSignalInput: GraphQLMapConvertible {
-  public var graphQLMap: GraphQLMap
-
-  /// - Parameters:
-  ///   - domain
-  ///   - signal
-  public init(domain: Swift.Optional<String?> = nil, signal: Swift.Optional<TrustSignal?> = nil) {
-    graphQLMap = ["domain": domain, "signal": signal]
-  }
-
-  public var domain: Swift.Optional<String?> {
-    get {
-      return graphQLMap["domain"] as? Swift.Optional<String?> ?? Swift.Optional<String?>.none
-    }
-    set {
-      graphQLMap.updateValue(newValue, forKey: "domain")
-    }
-  }
-
-  public var signal: Swift.Optional<TrustSignal?> {
-    get {
-      return graphQLMap["signal"] as? Swift.Optional<TrustSignal?> ?? Swift.Optional<TrustSignal?>.none
-    }
-    set {
-      graphQLMap.updateValue(newValue, forKey: "signal")
-    }
-  }
-}
-
-/// Trust signal
-public enum TrustSignal: RawRepresentable, Equatable, Hashable, CaseIterable, Apollo.JSONDecodable, Apollo.JSONEncodable {
-  public typealias RawValue = String
-  /// Trust signal is unknown
-  case unknown
-  /// Domain is trusted
-  case trusted
-  /// Domain is not yet trusted
-  case notTrusted
-  /// Domain has been marked as having spammy, malicious content
-  case malicious
-  /// Auto generated constant for unknown enum values
-  case __unknown(RawValue)
-
-  public init?(rawValue: RawValue) {
-    switch rawValue {
-      case "Unknown": self = .unknown
-      case "Trusted": self = .trusted
-      case "NotTrusted": self = .notTrusted
-      case "Malicious": self = .malicious
-      default: self = .__unknown(rawValue)
-    }
-  }
-
-  public var rawValue: RawValue {
-    switch self {
-      case .unknown: return "Unknown"
-      case .trusted: return "Trusted"
-      case .notTrusted: return "NotTrusted"
-      case .malicious: return "Malicious"
-      case .__unknown(let value): return value
-    }
-  }
-
-  public static func == (lhs: TrustSignal, rhs: TrustSignal) -> Bool {
-    switch (lhs, rhs) {
-      case (.unknown, .unknown): return true
-      case (.trusted, .trusted): return true
-      case (.notTrusted, .notTrusted): return true
-      case (.malicious, .malicious): return true
-      case (.__unknown(let lhsValue), .__unknown(let rhsValue)): return lhsValue == rhsValue
-      default: return false
-    }
-  }
-
-  public static var allCases: [TrustSignal] {
-    return [
-      .unknown,
-      .trusted,
-      .notTrusted,
-      .malicious,
-    ]
-  }
-}
-
-/// Input for domainTrustSignals query type
-public struct DomainTrustSignalsInput: GraphQLMapConvertible {
-  public var graphQLMap: GraphQLMap
-
-  /// - Parameters:
-  ///   - domains
-  public init(domains: Swift.Optional<[String]?> = nil) {
-    graphQLMap = ["domains": domains]
-  }
-
-  public var domains: Swift.Optional<[String]?> {
-    get {
-      return graphQLMap["domains"] as? Swift.Optional<[String]?> ?? Swift.Optional<[String]?>.none
-    }
-    set {
-      graphQLMap.updateValue(newValue, forKey: "domains")
-    }
-  }
-}
-
 public struct RegisterAppleSubscriptionInput: GraphQLMapConvertible {
   public var graphQLMap: GraphQLMap
 
@@ -7727,327 +7622,6 @@ public final class ResendVerificationEmailMutation: GraphQLMutation {
   }
 }
 
-public final class ReportDomainTrustSignalMutation: GraphQLMutation {
-  /// The raw GraphQL definition of this operation.
-  public let operationDefinition: String =
-    """
-    mutation ReportDomainTrustSignal($input: ReportDomainTrustSignalInput!) {
-      xyzReportDomainTrustSignal(input: $input) {
-        __typename
-        success
-      }
-    }
-    """
-
-  public let operationName: String = "ReportDomainTrustSignal"
-
-  public let operationIdentifier: String? = "04a134b9efa4f74e9d39587a7fcc88cef1de531c84a46e89a8f4d3e8354bbd5e"
-
-  public var input: ReportDomainTrustSignalInput
-
-  public init(input: ReportDomainTrustSignalInput) {
-    self.input = input
-  }
-
-  public var variables: GraphQLMap? {
-    return ["input": input]
-  }
-
-  public struct Data: GraphQLSelectionSet {
-    public static let possibleTypes: [String] = ["Mutation"]
-
-    public static var selections: [GraphQLSelection] {
-      return [
-        GraphQLField("xyzReportDomainTrustSignal", arguments: ["input": GraphQLVariable("input")], type: .object(XyzReportDomainTrustSignal.selections)),
-      ]
-    }
-
-    public private(set) var resultMap: ResultMap
-
-    public init(unsafeResultMap: ResultMap) {
-      self.resultMap = unsafeResultMap
-    }
-
-    public init(xyzReportDomainTrustSignal: XyzReportDomainTrustSignal? = nil) {
-      self.init(unsafeResultMap: ["__typename": "Mutation", "xyzReportDomainTrustSignal": xyzReportDomainTrustSignal.flatMap { (value: XyzReportDomainTrustSignal) -> ResultMap in value.resultMap }])
-    }
-
-    /// Same as reportDomainTrustSignal but for the xyz browser; doesn't require auth'd users
-    public var xyzReportDomainTrustSignal: XyzReportDomainTrustSignal? {
-      get {
-        return (resultMap["xyzReportDomainTrustSignal"] as? ResultMap).flatMap { XyzReportDomainTrustSignal(unsafeResultMap: $0) }
-      }
-      set {
-        resultMap.updateValue(newValue?.resultMap, forKey: "xyzReportDomainTrustSignal")
-      }
-    }
-
-    public struct XyzReportDomainTrustSignal: GraphQLSelectionSet {
-      public static let possibleTypes: [String] = ["ReportDomainTrustSignalResponse"]
-
-      public static var selections: [GraphQLSelection] {
-        return [
-          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-          GraphQLField("success", type: .scalar(Bool.self)),
-        ]
-      }
-
-      public private(set) var resultMap: ResultMap
-
-      public init(unsafeResultMap: ResultMap) {
-        self.resultMap = unsafeResultMap
-      }
-
-      public init(success: Bool? = nil) {
-        self.init(unsafeResultMap: ["__typename": "ReportDomainTrustSignalResponse", "success": success])
-      }
-
-      public var __typename: String {
-        get {
-          return resultMap["__typename"]! as! String
-        }
-        set {
-          resultMap.updateValue(newValue, forKey: "__typename")
-        }
-      }
-
-      public var success: Bool? {
-        get {
-          return resultMap["success"] as? Bool
-        }
-        set {
-          resultMap.updateValue(newValue, forKey: "success")
-        }
-      }
-    }
-  }
-}
-
-public final class GetDomainTrustSignalsQuery: GraphQLQuery {
-  /// The raw GraphQL definition of this operation.
-  public let operationDefinition: String =
-    """
-    query getDomainTrustSignals($input: DomainTrustSignalsInput!) {
-      xyzDomainTrustSignals(input: $input) {
-        __typename
-        domain
-        signal
-      }
-    }
-    """
-
-  public let operationName: String = "getDomainTrustSignals"
-
-  public let operationIdentifier: String? = "d624526d21db75a28ed96c70a79cbdffa4c504a58c96e67603359b5b9f6eac56"
-
-  public var input: DomainTrustSignalsInput
-
-  public init(input: DomainTrustSignalsInput) {
-    self.input = input
-  }
-
-  public var variables: GraphQLMap? {
-    return ["input": input]
-  }
-
-  public struct Data: GraphQLSelectionSet {
-    public static let possibleTypes: [String] = ["Query"]
-
-    public static var selections: [GraphQLSelection] {
-      return [
-        GraphQLField("xyzDomainTrustSignals", arguments: ["input": GraphQLVariable("input")], type: .list(.nonNull(.object(XyzDomainTrustSignal.selections)))),
-      ]
-    }
-
-    public private(set) var resultMap: ResultMap
-
-    public init(unsafeResultMap: ResultMap) {
-      self.resultMap = unsafeResultMap
-    }
-
-    public init(xyzDomainTrustSignals: [XyzDomainTrustSignal]? = nil) {
-      self.init(unsafeResultMap: ["__typename": "Query", "xyzDomainTrustSignals": xyzDomainTrustSignals.flatMap { (value: [XyzDomainTrustSignal]) -> [ResultMap] in value.map { (value: XyzDomainTrustSignal) -> ResultMap in value.resultMap } }])
-    }
-
-    /// Same as domainTrustSignals but for the xyz browser; doesn't require auth'd users
-    public var xyzDomainTrustSignals: [XyzDomainTrustSignal]? {
-      get {
-        return (resultMap["xyzDomainTrustSignals"] as? [ResultMap]).flatMap { (value: [ResultMap]) -> [XyzDomainTrustSignal] in value.map { (value: ResultMap) -> XyzDomainTrustSignal in XyzDomainTrustSignal(unsafeResultMap: value) } }
-      }
-      set {
-        resultMap.updateValue(newValue.flatMap { (value: [XyzDomainTrustSignal]) -> [ResultMap] in value.map { (value: XyzDomainTrustSignal) -> ResultMap in value.resultMap } }, forKey: "xyzDomainTrustSignals")
-      }
-    }
-
-    public struct XyzDomainTrustSignal: GraphQLSelectionSet {
-      public static let possibleTypes: [String] = ["DomainTrustSignal"]
-
-      public static var selections: [GraphQLSelection] {
-        return [
-          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-          GraphQLField("domain", type: .scalar(String.self)),
-          GraphQLField("signal", type: .scalar(TrustSignal.self)),
-        ]
-      }
-
-      public private(set) var resultMap: ResultMap
-
-      public init(unsafeResultMap: ResultMap) {
-        self.resultMap = unsafeResultMap
-      }
-
-      public init(domain: String? = nil, signal: TrustSignal? = nil) {
-        self.init(unsafeResultMap: ["__typename": "DomainTrustSignal", "domain": domain, "signal": signal])
-      }
-
-      public var __typename: String {
-        get {
-          return resultMap["__typename"]! as! String
-        }
-        set {
-          resultMap.updateValue(newValue, forKey: "__typename")
-        }
-      }
-
-      public var domain: String? {
-        get {
-          return resultMap["domain"] as? String
-        }
-        set {
-          resultMap.updateValue(newValue, forKey: "domain")
-        }
-      }
-
-      public var signal: TrustSignal? {
-        get {
-          return resultMap["signal"] as? TrustSignal
-        }
-        set {
-          resultMap.updateValue(newValue, forKey: "signal")
-        }
-      }
-    }
-  }
-}
-
-public final class CryptoWalletQuery: GraphQLQuery {
-  /// The raw GraphQL definition of this operation.
-  public let operationDefinition: String =
-    """
-    query CryptoWallet($query: String!) {
-      cryptoWallet(q: $query) {
-        __typename
-        address
-        ens
-        ownerName
-      }
-    }
-    """
-
-  public let operationName: String = "CryptoWallet"
-
-  public let operationIdentifier: String? = "2bb49a288228f4cb3fc99f793c060f455fd8733666364103aa9536df42ba9786"
-
-  public var query: String
-
-  public init(query: String) {
-    self.query = query
-  }
-
-  public var variables: GraphQLMap? {
-    return ["query": query]
-  }
-
-  public struct Data: GraphQLSelectionSet {
-    public static let possibleTypes: [String] = ["Query"]
-
-    public static var selections: [GraphQLSelection] {
-      return [
-        GraphQLField("cryptoWallet", arguments: ["q": GraphQLVariable("query")], type: .object(CryptoWallet.selections)),
-      ]
-    }
-
-    public private(set) var resultMap: ResultMap
-
-    public init(unsafeResultMap: ResultMap) {
-      self.resultMap = unsafeResultMap
-    }
-
-    public init(cryptoWallet: CryptoWallet? = nil) {
-      self.init(unsafeResultMap: ["__typename": "Query", "cryptoWallet": cryptoWallet.flatMap { (value: CryptoWallet) -> ResultMap in value.resultMap }])
-    }
-
-    /// Get a wallet by ENS or wallet address
-    public var cryptoWallet: CryptoWallet? {
-      get {
-        return (resultMap["cryptoWallet"] as? ResultMap).flatMap { CryptoWallet(unsafeResultMap: $0) }
-      }
-      set {
-        resultMap.updateValue(newValue?.resultMap, forKey: "cryptoWallet")
-      }
-    }
-
-    public struct CryptoWallet: GraphQLSelectionSet {
-      public static let possibleTypes: [String] = ["Wallet"]
-
-      public static var selections: [GraphQLSelection] {
-        return [
-          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
-          GraphQLField("address", type: .scalar(String.self)),
-          GraphQLField("ens", type: .list(.nonNull(.scalar(String.self)))),
-          GraphQLField("ownerName", type: .scalar(String.self)),
-        ]
-      }
-
-      public private(set) var resultMap: ResultMap
-
-      public init(unsafeResultMap: ResultMap) {
-        self.resultMap = unsafeResultMap
-      }
-
-      public init(address: String? = nil, ens: [String]? = nil, ownerName: String? = nil) {
-        self.init(unsafeResultMap: ["__typename": "Wallet", "address": address, "ens": ens, "ownerName": ownerName])
-      }
-
-      public var __typename: String {
-        get {
-          return resultMap["__typename"]! as! String
-        }
-        set {
-          resultMap.updateValue(newValue, forKey: "__typename")
-        }
-      }
-
-      public var address: String? {
-        get {
-          return resultMap["address"] as? String
-        }
-        set {
-          resultMap.updateValue(newValue, forKey: "address")
-        }
-      }
-
-      public var ens: [String]? {
-        get {
-          return resultMap["ens"] as? [String]
-        }
-        set {
-          resultMap.updateValue(newValue, forKey: "ens")
-        }
-      }
-
-      public var ownerName: String? {
-        get {
-          return resultMap["ownerName"] as? String
-        }
-        set {
-          resultMap.updateValue(newValue, forKey: "ownerName")
-        }
-      }
-    }
-  }
-}
-
 public final class RegisterAppleSubscriptionMutation: GraphQLMutation {
   /// The raw GraphQL definition of this operation.
   public let operationDefinition: String =
@@ -8916,7 +8490,7 @@ public final class SearchQuery: GraphQLQuery {
           }
 
           public struct SubResult: GraphQLSelectionSet {
-            public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "CovidBanner", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelFactGroup", "TravelLocation", "TravelShelf", "TravelView", "TravelNavBar", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
+            public static let possibleTypes: [String] = ["AgendaView", "BillsView", "BumblebeeCard", "BumblebeeChat", "BumblebeeEOA", "BumblebeeFAQ", "Computation", "Contact", "CovidBanner", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "JSONResult", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelFactGroup", "TravelLocation", "TravelShelf", "TravelView", "TravelNavBar", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
 
             public static var selections: [GraphQLSelection] {
               return [
@@ -8941,6 +8515,22 @@ public final class SearchQuery: GraphQLQuery {
 
             public static func makeBillsView() -> SubResult {
               return SubResult(unsafeResultMap: ["__typename": "BillsView"])
+            }
+
+            public static func makeBumblebeeCard() -> SubResult {
+              return SubResult(unsafeResultMap: ["__typename": "BumblebeeCard"])
+            }
+
+            public static func makeBumblebeeChat() -> SubResult {
+              return SubResult(unsafeResultMap: ["__typename": "BumblebeeChat"])
+            }
+
+            public static func makeBumblebeeEOA() -> SubResult {
+              return SubResult(unsafeResultMap: ["__typename": "BumblebeeEOA"])
+            }
+
+            public static func makeBumblebeeFAQ() -> SubResult {
+              return SubResult(unsafeResultMap: ["__typename": "BumblebeeFAQ"])
             }
 
             public static func makeComputation() -> SubResult {
@@ -9021,6 +8611,10 @@ public final class SearchQuery: GraphQLQuery {
 
             public static func makeJourney() -> SubResult {
               return SubResult(unsafeResultMap: ["__typename": "Journey"])
+            }
+
+            public static func makeJSONResult() -> SubResult {
+              return SubResult(unsafeResultMap: ["__typename": "JSONResult"])
             }
 
             public static func makeKnowledgeGraphAnswer() -> SubResult {
@@ -9597,7 +9191,7 @@ public final class SearchQuery: GraphQLQuery {
           }
 
           public struct TypeSpecific: GraphQLSelectionSet {
-            public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "CovidBanner", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelFactGroup", "TravelLocation", "TravelShelf", "TravelView", "TravelNavBar", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
+            public static let possibleTypes: [String] = ["AgendaView", "BillsView", "BumblebeeCard", "BumblebeeChat", "BumblebeeEOA", "BumblebeeFAQ", "Computation", "Contact", "CovidBanner", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "JSONResult", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelFactGroup", "TravelLocation", "TravelShelf", "TravelView", "TravelNavBar", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
 
             public static var selections: [GraphQLSelection] {
               return [
@@ -9622,6 +9216,22 @@ public final class SearchQuery: GraphQLQuery {
 
             public static func makeBillsView() -> TypeSpecific {
               return TypeSpecific(unsafeResultMap: ["__typename": "BillsView"])
+            }
+
+            public static func makeBumblebeeCard() -> TypeSpecific {
+              return TypeSpecific(unsafeResultMap: ["__typename": "BumblebeeCard"])
+            }
+
+            public static func makeBumblebeeChat() -> TypeSpecific {
+              return TypeSpecific(unsafeResultMap: ["__typename": "BumblebeeChat"])
+            }
+
+            public static func makeBumblebeeEOA() -> TypeSpecific {
+              return TypeSpecific(unsafeResultMap: ["__typename": "BumblebeeEOA"])
+            }
+
+            public static func makeBumblebeeFAQ() -> TypeSpecific {
+              return TypeSpecific(unsafeResultMap: ["__typename": "BumblebeeFAQ"])
             }
 
             public static func makeComputation() -> TypeSpecific {
@@ -9702,6 +9312,10 @@ public final class SearchQuery: GraphQLQuery {
 
             public static func makeJourney() -> TypeSpecific {
               return TypeSpecific(unsafeResultMap: ["__typename": "Journey"])
+            }
+
+            public static func makeJSONResult() -> TypeSpecific {
+              return TypeSpecific(unsafeResultMap: ["__typename": "JSONResult"])
             }
 
             public static func makeKnowledgeGraphAnswer() -> TypeSpecific {
@@ -17577,7 +17191,7 @@ public final class GetRelatedSpacesQuery: GraphQLQuery {
                   }
 
                   public struct TypeSpecific: GraphQLSelectionSet {
-                    public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "CovidBanner", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelFactGroup", "TravelLocation", "TravelShelf", "TravelView", "TravelNavBar", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
+                    public static let possibleTypes: [String] = ["AgendaView", "BillsView", "BumblebeeCard", "BumblebeeChat", "BumblebeeEOA", "BumblebeeFAQ", "Computation", "Contact", "CovidBanner", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "JSONResult", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelFactGroup", "TravelLocation", "TravelShelf", "TravelView", "TravelNavBar", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
 
                     public static var selections: [GraphQLSelection] {
                       return [
@@ -17602,6 +17216,22 @@ public final class GetRelatedSpacesQuery: GraphQLQuery {
 
                     public static func makeBillsView() -> TypeSpecific {
                       return TypeSpecific(unsafeResultMap: ["__typename": "BillsView"])
+                    }
+
+                    public static func makeBumblebeeCard() -> TypeSpecific {
+                      return TypeSpecific(unsafeResultMap: ["__typename": "BumblebeeCard"])
+                    }
+
+                    public static func makeBumblebeeChat() -> TypeSpecific {
+                      return TypeSpecific(unsafeResultMap: ["__typename": "BumblebeeChat"])
+                    }
+
+                    public static func makeBumblebeeEOA() -> TypeSpecific {
+                      return TypeSpecific(unsafeResultMap: ["__typename": "BumblebeeEOA"])
+                    }
+
+                    public static func makeBumblebeeFAQ() -> TypeSpecific {
+                      return TypeSpecific(unsafeResultMap: ["__typename": "BumblebeeFAQ"])
                     }
 
                     public static func makeComputation() -> TypeSpecific {
@@ -17682,6 +17312,10 @@ public final class GetRelatedSpacesQuery: GraphQLQuery {
 
                     public static func makeJourney() -> TypeSpecific {
                       return TypeSpecific(unsafeResultMap: ["__typename": "Journey"])
+                    }
+
+                    public static func makeJSONResult() -> TypeSpecific {
+                      return TypeSpecific(unsafeResultMap: ["__typename": "JSONResult"])
                     }
 
                     public static func makeKnowledgeGraphAnswer() -> TypeSpecific {
@@ -20032,7 +19666,7 @@ public final class GetSpacesDataQuery: GraphQLQuery {
                 }
 
                 public struct TypeSpecific: GraphQLSelectionSet {
-                  public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "CovidBanner", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelFactGroup", "TravelLocation", "TravelShelf", "TravelView", "TravelNavBar", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
+                  public static let possibleTypes: [String] = ["AgendaView", "BillsView", "BumblebeeCard", "BumblebeeChat", "BumblebeeEOA", "BumblebeeFAQ", "Computation", "Contact", "CovidBanner", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "JSONResult", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelFactGroup", "TravelLocation", "TravelShelf", "TravelView", "TravelNavBar", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
 
                   public static var selections: [GraphQLSelection] {
                     return [
@@ -20057,6 +19691,22 @@ public final class GetSpacesDataQuery: GraphQLQuery {
 
                   public static func makeBillsView() -> TypeSpecific {
                     return TypeSpecific(unsafeResultMap: ["__typename": "BillsView"])
+                  }
+
+                  public static func makeBumblebeeCard() -> TypeSpecific {
+                    return TypeSpecific(unsafeResultMap: ["__typename": "BumblebeeCard"])
+                  }
+
+                  public static func makeBumblebeeChat() -> TypeSpecific {
+                    return TypeSpecific(unsafeResultMap: ["__typename": "BumblebeeChat"])
+                  }
+
+                  public static func makeBumblebeeEOA() -> TypeSpecific {
+                    return TypeSpecific(unsafeResultMap: ["__typename": "BumblebeeEOA"])
+                  }
+
+                  public static func makeBumblebeeFAQ() -> TypeSpecific {
+                    return TypeSpecific(unsafeResultMap: ["__typename": "BumblebeeFAQ"])
                   }
 
                   public static func makeComputation() -> TypeSpecific {
@@ -20137,6 +19787,10 @@ public final class GetSpacesDataQuery: GraphQLQuery {
 
                   public static func makeJourney() -> TypeSpecific {
                     return TypeSpecific(unsafeResultMap: ["__typename": "Journey"])
+                  }
+
+                  public static func makeJSONResult() -> TypeSpecific {
+                    return TypeSpecific(unsafeResultMap: ["__typename": "JSONResult"])
                   }
 
                   public static func makeKnowledgeGraphAnswer() -> TypeSpecific {
@@ -24251,7 +23905,7 @@ public struct SpacesMetadata: GraphQLFragment {
         }
 
         public struct TypeSpecific: GraphQLSelectionSet {
-          public static let possibleTypes: [String] = ["AgendaView", "BillsView", "Computation", "Contact", "CovidBanner", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelFactGroup", "TravelLocation", "TravelShelf", "TravelView", "TravelNavBar", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
+          public static let possibleTypes: [String] = ["AgendaView", "BillsView", "BumblebeeCard", "BumblebeeChat", "BumblebeeEOA", "BumblebeeFAQ", "Computation", "Contact", "CovidBanner", "Currency", "Dictionary", "Doc", "DocView", "Email", "EmailActivity", "Entity", "Event", "EventView", "ExternalSearchProvider", "Flight", "FeedDocsView", "FeedGHView", "Image", "IpAddress", "Issue", "Journey", "JSONResult", "KnowledgeGraphAnswer", "Lyrics", "Message", "MovieList", "MovieShowtimes", "NeevaDefinition", "News", "NewsItem", "NewsletterView", "NoAdsBanner", "PackageTracking", "PersonView", "Place", "PlaceList", "PreviewModeCTA", "PriceFollow", "ProductCategoryOverview", "ProductQNA", "ProductReviews", "ProductClusters", "ProductBrowse", "ProgrammingDoc", "Promo", "ReceiptView", "RecipeResult", "RecipeBlock", "FeaturedRecipeBlock", "FeaturedVideoRecipeBlock", "Redirect", "RelatedSearches", "RelatedQnA", "RichEntity", "PPRanking", "ShippingView", "Social", "SpaceView", "SpaceBlock", "SportsCard", "Stock", "TechDoc", "TechQNA", "TimeCalculation", "Timezone", "TimezoneDifference", "Token", "Translation", "TravelFactGroup", "TravelLocation", "TravelShelf", "TravelView", "TravelNavBar", "Tweet", "Vanity", "Video", "WalletTS", "Weather", "Web", "UGCDiscussion"]
 
           public static var selections: [GraphQLSelection] {
             return [
@@ -24276,6 +23930,22 @@ public struct SpacesMetadata: GraphQLFragment {
 
           public static func makeBillsView() -> TypeSpecific {
             return TypeSpecific(unsafeResultMap: ["__typename": "BillsView"])
+          }
+
+          public static func makeBumblebeeCard() -> TypeSpecific {
+            return TypeSpecific(unsafeResultMap: ["__typename": "BumblebeeCard"])
+          }
+
+          public static func makeBumblebeeChat() -> TypeSpecific {
+            return TypeSpecific(unsafeResultMap: ["__typename": "BumblebeeChat"])
+          }
+
+          public static func makeBumblebeeEOA() -> TypeSpecific {
+            return TypeSpecific(unsafeResultMap: ["__typename": "BumblebeeEOA"])
+          }
+
+          public static func makeBumblebeeFAQ() -> TypeSpecific {
+            return TypeSpecific(unsafeResultMap: ["__typename": "BumblebeeFAQ"])
           }
 
           public static func makeComputation() -> TypeSpecific {
@@ -24356,6 +24026,10 @@ public struct SpacesMetadata: GraphQLFragment {
 
           public static func makeJourney() -> TypeSpecific {
             return TypeSpecific(unsafeResultMap: ["__typename": "Journey"])
+          }
+
+          public static func makeJSONResult() -> TypeSpecific {
+            return TypeSpecific(unsafeResultMap: ["__typename": "JSONResult"])
           }
 
           public static func makeKnowledgeGraphAnswer() -> TypeSpecific {

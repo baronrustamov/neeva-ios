@@ -10,8 +10,6 @@ import Combine
 private let approvedBundleIDs = Set([
     "co.neeva.app.ios.browser",
     "co.neeva.app.ios.browser-dev",
-    "xyz.neeva.app.ios.browser",
-    "xyz.neeva.app.ios.browser-dev",
 ])
 
 // MARK: - GraphQLAPI

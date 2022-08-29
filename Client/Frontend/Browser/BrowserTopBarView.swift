@@ -41,7 +41,6 @@ struct BrowserTopBarView: View {
                 trackingStatsViewModel: bvc.trackingStatsViewModel,
                 chromeModel: bvc.chromeModel,
                 readerModeModel: bvc.readerModeModel,
-                web3Model: bvc.web3Model,
                 geom: geom,
                 newTab: {
                     bvc.openURLInNewTab(nil)

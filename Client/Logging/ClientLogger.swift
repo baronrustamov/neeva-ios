@@ -101,8 +101,7 @@ class ClientLogger {
     private func performLogMutation(_ clientLog: ClientLog) {
         if Defaults[.shouldCollectUsageStats] ?? false {
             let clientLogBase = ClientLogBase(
-                id: NeevaConstants.currentTarget == .xyz
-                    ? "xyz.neeva.app.ios.browser" : "co.neeva.app.ios.browser",
+                id: "co.neeva.app.ios.browser",
                 version: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")
                     as! String, environment: self.env)
 

@@ -6,10 +6,6 @@ import Defaults
 import Shared
 import WebKit
 
-#if XYZ
-    import WalletCore
-#endif
-
 extension TabContentBlocker {
     func clearPageStats() {
         stats = TPPageStats()
@@ -37,10 +33,6 @@ extension TabContentBlocker {
             guard var components = URLComponents(string: urlString) else { return }
             components.scheme = "http"
             guard let url = components.url else { return }
-
-            #if XYZ
-                WalletConnectDetector.shared.detectWalletConnect(for: url, in: mainDocumentUrl)
-            #endif
 
             TPStatsBlocklistChecker.shared.isBlocked(url: url, mainDocumentURL: mainDocumentUrl)
                 .uponQueue(.main) { blocked in

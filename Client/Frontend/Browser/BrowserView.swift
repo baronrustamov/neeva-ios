@@ -158,8 +158,6 @@ struct BrowserView: View {
         .environmentObject(bvc.overlayManager)
         .environmentObject(bvc.simulatedSwipeModel)
         .environmentObject(bvc.tabContainerModel)
-        .environmentObject(bvc.web3Model)
-        .environmentObject(bvc.web3Model.walletDetailsModel)
         .environmentObject(cheatsheetPromoModel)
         .environmentObject(chromeModel)
     }

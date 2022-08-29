@@ -13,7 +13,7 @@ struct BrowserBottomBarView: View {
 
     @ViewBuilder var toolbar: some View {
         if !browserModel.showGrid && !chromeModel.inlineToolbar && !chromeModel.isEditingLocation
-            && (Defaults[.didFirstNavigation] || NeevaConstants.currentTarget == .xyz)
+            && Defaults[.didFirstNavigation]
         {
             TabToolbarContent()
         } else if browserModel.showGrid {

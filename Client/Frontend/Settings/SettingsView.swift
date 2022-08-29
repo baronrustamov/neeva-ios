@@ -48,22 +48,18 @@ struct SettingsView: View {
             NavigationView {
                 ScrollViewReader { reader in
                     List {
-                        if NeevaConstants.currentTarget != .xyz {
-                            Section(header: Text("Neeva")) {
-                                NeevaSettingsSection(dismissVC: dismiss, userInfo: .shared)
-                            }.id("neeva-section")
-                        }
+                        Section(header: Text("Neeva")) {
+                            NeevaSettingsSection(dismissVC: dismiss, userInfo: .shared)
+                        }.id("neeva-section")
 
                         Section(header: Text("General")) {
                             GeneralSettingsSection(
                                 showArchivedTabsSettings: openPage == .archivedTabs)
                         }.id("general-section")
 
-                        if NeevaConstants.currentTarget != .xyz {
-                            Section(header: Text("Appearance")) {
-                                AppearanceSettingsSection()
-                            }.id("appearance-section")
-                        }
+                        Section(header: Text("Appearance")) {
+                            AppearanceSettingsSection()
+                        }.id("appearance-section")
 
                         Section(header: Text("Privacy")) {
                             PrivacySettingsSection(openCookieCutterPage: openPage == .cookieCutter)

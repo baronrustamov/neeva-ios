@@ -91,8 +91,7 @@ struct TopSitesHandler {
         }
     }
 
-    static private let suggestedSites = SuggestedSitesCursor(
-        identifier: NeevaConstants.currentTarget == .xyz ? "web3" : "default")
+    static private let suggestedSites = SuggestedSitesCursor(identifier: "default")
 
     static func defaultTopSites() -> [Site] {
         let suggested = suggestedSites.asArray()

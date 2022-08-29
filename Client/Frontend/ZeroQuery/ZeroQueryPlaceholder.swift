@@ -14,7 +14,7 @@ struct ZeroQueryPlaceholder: View {
             Text(label)
                 .withFont(.bodyMedium)
                 .multilineTextAlignment(.center)
-                .foregroundColorOrGradient(.label)
+                .foregroundColor(.label)
             Spacer()
         }.padding(.vertical, 12)
     }

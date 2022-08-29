@@ -69,7 +69,7 @@ class TabContainerModel: ObservableObject {
     static var defaultType: ContentUIType {
         // TODO(darin): We should get rid of the notion of .blank. We should be showing the empty
         // card grid in this case instead.
-        !Defaults[.didFirstNavigation] && NeevaConstants.currentTarget != .xyz
+        !Defaults[.didFirstNavigation]
             ? .zeroQuery : .blank
     }
 

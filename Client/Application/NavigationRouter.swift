@@ -6,10 +6,6 @@ import Defaults
 import Foundation
 import Shared
 
-#if XYZ
-    import WalletConnectSwift
-#endif
-
 extension URLComponents {
     // Return the first query parameter that matches
     func valueForQuery(_ param: String) -> String? {
@@ -28,9 +24,6 @@ enum NavigationPath {
     case fastTap(String, Bool)
     case configNewsProvider(isIncognito: Bool)
     case openDefaultBrowserEducation
-    #if XYZ
-        case walletConnect(wcURL: WCURL)
-    #endif
 
     init?(url: URL) {
         let urlString = url.absoluteString
@@ -82,14 +75,6 @@ enum NavigationPath {
         } else if urlString.starts(with: "\(scheme)://configure-news-provider") {
             self = .configNewsProvider(isIncognito: Defaults[.lastSessionPrivate])
         } else if urlString.starts(with: "\(scheme)://wc?uri=") {
-            #if XYZ
-                if let wcURL = WCURL(
-                    urlString.dropFirst("\(scheme)://wc?uri=".count).removingPercentEncoding ?? "")
-                {
-                    self = .walletConnect(wcURL: wcURL)
-                    return
-                }
-            #endif
             return nil
 
         } else if urlString.starts(with: "\(scheme)://open-default-browser-education") {
@@ -124,10 +109,6 @@ enum NavigationPath {
                 url: NeevaConstants.configureNewsProviderURL, isIncognito: isIncognito, with: bvc)
         case .openDefaultBrowserEducation:
             NavigationPath.handleOpenDefaultBrowserEducation(with: bvc)
-        #if XYZ
-            case .walletConnect(let wcURL):
-                bvc.connectWallet(to: wcURL)
-        #endif
         case .openSetting(let page):
             NavigationPath.handleOpenSetting(page: page, with: bvc)
         }

@@ -11,10 +11,6 @@ import SwiftyJSON
 import UIKit
 import WebKit
 
-#if XYZ
-    import WalletConnectSwift
-#endif
-
 private let log = Logger.browser
 
 /// List of schemes that are allowed to be opened in new tabs.
@@ -700,22 +696,6 @@ extension BrowserViewController: WKNavigationDelegate {
                     return
                 }
             }
-            #if XYZ
-                if url.lastPathComponent == "wc" {
-                    if url.query == nil {
-                        // If this is only for invoking a wallet app with no params, cancel the navigation.
-                        decisionHandler(.cancel)
-                    } else if let components = URLComponents(string: url.absoluteString),
-                        let uri = components.valueForQuery("uri"),
-                        let wcURL = WCURL(uri.removingPercentEncoding ?? ""),
-                        SceneDelegate.getBVC(with: tabManager.scene).connectWallet(to: wcURL)
-                    {
-                        // If we can establish a connection through existing wallet, cancel the navigation.
-                        decisionHandler(.cancel)
-
-                    }
-                }
-            #endif
             decisionHandler(.allow)
             return
         }
@@ -1038,7 +1018,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // mode, and we will show the preview mode sign up prompt
         // we will show the promp for both incognito and normal mode
         if let url = webView.url, url.origin == NeevaConstants.appURL.origin {
-            if !Defaults[.signedInOnce] && NeevaConstants.currentTarget == .client {
+            if !Defaults[.signedInOnce] {
                 if let query = SearchEngine.current.queryForSearchURL(url),
                     Defaults[.previewModeQueries].count == Defaults[.maxQueryLimit]
                         || Defaults[.previewModeQueries].count % Defaults[.signupPromptInterval]

@@ -338,9 +338,6 @@
 "Browse the web with no ads in your way" = "Naviguez sur le Web sans publicité";
 
 /* No comment provided by engineer. */
-"Browse Web3" = "Parcourir Web3";
-
-/* No comment provided by engineer. */
 "Browser + ad blocker" = "Navigateur + bloqueur de publicités";
 
 /* (No Comment) */
@@ -1005,9 +1002,6 @@
 
 /* No comment provided by engineer. */
 "News alerts" = "Alertes d'actualités";
-
-/* This is unused string, no translation required */
-"NFT Search from Neevaxyz" = "Recherche de NFT depuis Neeva.xyz";
 
 /* No comment provided by engineer. */
 "nil" = "nul";

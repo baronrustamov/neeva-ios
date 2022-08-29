@@ -58,13 +58,6 @@
         "identifier" : "3BFE4B061D342FB800DDF53F",
         "name" : "XCUITests"
       }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Client.xcodeproj",
-        "identifier" : "4A8CE5C327CCA07800735C75",
-        "name" : "WalletCoreTests"
-      }
     }
   ],
   "version" : 1

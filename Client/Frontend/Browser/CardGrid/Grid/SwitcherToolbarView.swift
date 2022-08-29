@@ -53,7 +53,6 @@ struct SwitcherToolbarView: View {
     @EnvironmentObject var toolbarModel: SwitcherToolbarModel
 
     @State var presentingMenu = false
-    @Default(.currentTheme) var currentTheme
 
     var bvc: BrowserViewController {
         SceneDelegate.getBVC(with: browserModel.tabManager.scene)
@@ -196,7 +195,7 @@ struct SwitcherToolbarView: View {
                 Spacer()
             }
         }
-        .defaultBackgroundOrTheme(currentTheme)
+        .background(Color.DefaultBackground.ignoresSafeArea())
         .accessibilityElement(children: .contain)
         .accessibilityLabel("Toolbar")
         .accessibilityHidden(gridModel.showingDetailView)

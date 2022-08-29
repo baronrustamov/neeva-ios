@@ -265,7 +265,6 @@ public enum LogConfig {
         case NoSuggestionQuery
         case NoSuggestionURL
         case FindOnPageSuggestion
-        case XYZSearchSuggestion
         case openSuggestedSearch
         case openSuggestedSite
         case tabSuggestion
@@ -395,17 +394,6 @@ public enum LogConfig {
         case SignInWithAppleFailed
         case ImplicitDeleteCookie
 
-        // MARK: Web3
-        case CreatedWallet
-        case ImportedWallet
-        case ConnectedSite
-        case DisconnectedSite
-        case SwitchedChain
-        case ThemeSet
-        case PersonalSign
-        case TransactionSuccessful
-        case TransactionAttempted
-
         // MARK: Cookie Cutter
         case CookieNoticeHandled
         case ToggleTrackingProtection
@@ -447,7 +435,6 @@ public enum LogConfig {
         case TabGroup = "TabGroup"
         case Feedback = "Feedback"
         case DebugMode = "DebugMode"
-        case Web3 = "Web3"
         case CookieCutter = "CookieCutter"
         case ArchiveTab = "ArchiveTab"
         case Generic = "Generic"
@@ -464,7 +451,6 @@ public enum LogConfig {
         .Stability,
         .DebugMode,
         .PromoCard,
-        .Web3,
         .CookieCutter,
         .UI,
         .OverflowMenu,
@@ -510,7 +496,6 @@ public enum LogConfig {
             .FirstRun,
             .Stability,
             .PromoCard,
-            .Web3,
             .Notification,
             .Cheatsheet,
             .CookieCutter,
@@ -678,7 +663,6 @@ public enum LogConfig {
         case .NoSuggestionQuery: return .Suggestions
         case .LensSuggestion: return .Suggestions
         case .FindOnPageSuggestion: return .Suggestions
-        case .XYZSearchSuggestion: return .Suggestions
         case .openSuggestedSearch: return .Suggestions
         case .openSuggestedSite: return .Suggestions
         case .tabSuggestion: return .Suggestions
@@ -790,17 +774,6 @@ public enum LogConfig {
         case .SignInWithAppleSuccess: return .DebugMode
         case .SignInWithAppleFailed: return .DebugMode
         case .ImplicitDeleteCookie: return .DebugMode
-
-        // MARK: Web3
-        case .CreatedWallet: return .Web3
-        case .ImportedWallet: return .Web3
-        case .ConnectedSite: return .Web3
-        case .DisconnectedSite: return .Web3
-        case .SwitchedChain: return .Web3
-        case .ThemeSet: return .Web3
-        case .PersonalSign: return .Web3
-        case .TransactionSuccessful: return .Web3
-        case .TransactionAttempted: return .Web3
 
         // MARK: Cookie Cutter
         case .CookieNoticeHandled: return .CookieCutter
@@ -1048,13 +1021,6 @@ public enum LogConfig {
 
     public enum TrackingProtectionAttribute {
         public static let toggleProtectionForURL = "ToggleProtectionForURL"
-    }
-
-    public enum Web3Attribute {
-        public static let walletAddress = "WalletAddress"
-        public static let connectedSite = "ConnectedSite"
-        public static let partnerCollection = "PartnerCollection"
-        public static let transactionAmount = "TransactionAmount"
     }
 
     public enum WelcomeFlowAttribute {

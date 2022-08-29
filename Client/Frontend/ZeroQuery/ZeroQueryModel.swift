@@ -145,28 +145,18 @@ class ZeroQueryModel: ObservableObject {
                 Defaults[.didDismissDefaultBrowserCard] = true
             }
         case .shouldTriggerWalletOrSignupPromo:
-            #if XYZ
-                if Defaults[.cryptoPublicKey].isEmpty {
-                    promoCard = .walletPromo {
-                        self.bvc.web3Model.showWalletPanel()
-                    }
-                } else {
-                    promoCard = nil
+            if Defaults[.didFirstNavigation] {
+                promoCard = .previewModeSignUp {
+                    self.handlePromoCard(interaction: .PreviewModePromoSignup)
+                    self.signIn()
+                } onClose: {
+                    self.handlePromoCard(interaction: .ClosePreviewSignUpPromo)
+                    self.promoCard = nil
+                    Defaults[.didDismissPreviewSignUpCard] = true
                 }
-            #else
-                if Defaults[.didFirstNavigation] && NeevaConstants.currentTarget != .xyz {
-                    promoCard = .previewModeSignUp {
-                        self.handlePromoCard(interaction: .PreviewModePromoSignup)
-                        self.signIn()
-                    } onClose: {
-                        self.handlePromoCard(interaction: .ClosePreviewSignUpPromo)
-                        self.promoCard = nil
-                        Defaults[.didDismissPreviewSignUpCard] = true
-                    }
-                } else {
-                    promoCard = nil
-                }
-            #endif
+            } else {
+                promoCard = nil
+            }
         case .shouldTriggerReferralPromo:
             promoCard = .referralPromo {
                 self.handlePromoCard(interaction: .OpenReferralPromo)
@@ -228,8 +218,7 @@ class ZeroQueryModel: ObservableObject {
         let introSeenDuration = Defaults[.introSeenDate]?.hoursBetweenDate(toDate: Date()) ?? 0
 
         // Show default browser promo if the user is not a default browser user for the first three days
-        return NeevaConstants.currentTarget == .client
-            && !Defaults[.didDismissDefaultBrowserCard]
+        return !Defaults[.didDismissDefaultBrowserCard]
             && !Defaults[.didSetDefaultBrowser]
             && Defaults[.didFirstNavigation]
             && introSeenDuration <= DefaultBrowserPromoRules.hoursAfterInterstitialForPromoCard

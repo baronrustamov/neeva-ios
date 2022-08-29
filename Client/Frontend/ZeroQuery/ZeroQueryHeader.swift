@@ -53,7 +53,7 @@ struct ZeroQueryHeader: View {
     private var titleView: some View {
         Text(title)
             .withFont(.headingMedium)
-            .foregroundColorOrGradient(.secondaryLabel)
+            .foregroundColor(.secondaryLabel)
             .minimumScaleFactor(0.6)
             .lineLimit(1)
     }

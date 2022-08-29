@@ -5,21 +5,8 @@
 import Foundation
 import Shared
 
-public enum Target {
-    case client
-    case xyz
-}
-
 extension NeevaConstants {
-    public static var appHomeURL: URL { NeevaConstants.currentTarget == .xyz ? xyzURL : appURL }
-
-    public static var currentTarget: Target {
-        #if XYZ
-            return .xyz
-        #else
-            return .client
-        #endif
-    }
+    public static var appHomeURL: URL { appURL }
 
     public static func isNeevaHome(url: URL?) -> Bool {
         return url?.scheme == NeevaConstants.appHomeURL.scheme
