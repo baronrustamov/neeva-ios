@@ -93,8 +93,13 @@ public class SearchEngine: Identifiable, Hashable {
     public func searchURLFrom(searchQuery: String, queryItems: [URLQueryItem]) -> URL? {
         // Replacing {searchTerms} is redundant here. The only reason why we're doing it is so that
         // the URL is not nil.
-        guard let url = URL(string: searchTemplate
-            .replacingOccurrences(of: "{searchTerms}", with: searchQuery, options: .literal)) else { return nil }
+        guard
+            let url = URL(
+                string:
+                    searchTemplate
+                    .replacingOccurrences(of: "{searchTerms}", with: searchQuery, options: .literal)
+            )
+        else { return nil }
 
         // Add all the query parameters that did not already exist in the URL
         var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
@@ -107,7 +112,8 @@ public class SearchEngine: Identifiable, Hashable {
         components.queryItems = originalQueryItems
 
         // Add back {searchTerms} so that the `interpolate` function will properly encode the query
-        let urlString = components.url!.absoluteString.replacingOccurrences(of: searchQuery, with: "{searchTerms}")
+        let urlString = components.url!.absoluteString.replacingOccurrences(
+            of: searchQuery, with: "{searchTerms}")
         return interpolate(query: searchQuery, into: urlString)
     }
 
