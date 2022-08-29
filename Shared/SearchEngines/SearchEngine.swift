@@ -113,7 +113,7 @@ public class SearchEngine: Identifiable, Hashable {
 
         // Add back {searchTerms} so that the `interpolate` function will properly encode the query
         let urlString = components.url!.absoluteString.replacingOccurrences(
-            of: searchQuery, with: "{searchTerms}")
+            of: searchQuery, with: "{searchTerms}", options: .literal)
         return interpolate(query: searchQuery, into: urlString)
     }
 
