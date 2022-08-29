@@ -1530,6 +1530,8 @@
 		E9EC2603283C5E4F00B9A79B /* FileHasherTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EC2602283C5E4F00B9A79B /* FileHasherTest.swift */; };
 		E9EC2605283EC9B400B9A79B /* CheatsheetSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EC2604283EC9B400B9A79B /* CheatsheetSettingsView.swift */; };
 		E9EC2606283ED06300B9A79B /* CheatsheetSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EC2604283EC9B400B9A79B /* CheatsheetSettingsView.swift */; };
+		E9F05C5428B9ACE900772CD0 /* TabConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9FDC5C228B984C600BC7CB2 /* TabConfig.swift */; };
+		E9FDC5C328B984C600BC7CB2 /* TabConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9FDC5C228B984C600BC7CB2 /* TabConfig.swift */; };
 		EB1C84BF212EFFBF001489DF /* BrowserViewController+ReaderMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1C84B6212EFFBF001489DF /* BrowserViewController+ReaderMode.swift */; };
 		EB7FFFC820A9D38D003E1E34 /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7FFFBF20A9D38C003E1E34 /* AlertController.swift */; };
 		EB8A0A77206ABCE000A9859A /* WebPagesForTesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7A651020699BD200B52A5F /* WebPagesForTesting.swift */; };
@@ -3032,6 +3034,7 @@
 		E9EC25FE283C337F00B9A79B /* CheatsheetUGCIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheatsheetUGCIndicatorView.swift; sourceTree = "<group>"; };
 		E9EC2602283C5E4F00B9A79B /* FileHasherTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHasherTest.swift; sourceTree = "<group>"; };
 		E9EC2604283EC9B400B9A79B /* CheatsheetSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheatsheetSettingsView.swift; sourceTree = "<group>"; };
+		E9FDC5C228B984C600BC7CB2 /* TabConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabConfig.swift; sourceTree = "<group>"; };
 		EB1C84B6212EFFBF001489DF /* BrowserViewController+ReaderMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+ReaderMode.swift"; sourceTree = "<group>"; };
 		EB3A38912032673D004C6E67 /* DatabaseFixtureTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseFixtureTest.swift; sourceTree = "<group>"; };
 		EB63CA4F228F0538005FD0EF /* DesktopModeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DesktopModeTests.swift; sourceTree = "<group>"; };
@@ -3556,6 +3559,7 @@
 				63306D3821103EAE00F25400 /* SavedTab.swift */,
 				1DA3CE6224EEE83200422BB2 /* SavedTab+ConfigureExtension.swift */,
 				D3A994961A3686BD008AD1AC /* Tab.swift */,
+				E9FDC5C228B984C600BC7CB2 /* TabConfig.swift */,
 				C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */,
 				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
 				63306D422110B3CD00F25400 /* TabManagerStore.swift */,
@@ -7534,6 +7538,7 @@
 				4A42C55A27E58487003B9826 /* SuggestionBlocks.swift in Sources */,
 				4A42C55C27E58487003B9826 /* OverflowMenuView.swift in Sources */,
 				20978E732874AE6B0009D346 /* CardDetails.swift in Sources */,
+				E9F05C5428B9ACE900772CD0 /* TabConfig.swift in Sources */,
 				4A42C55D27E58487003B9826 /* DownloadQueue.swift in Sources */,
 				4A42C55E27E58487003B9826 /* NeevaExperimentExtensions.swift in Sources */,
 				4A42C55F27E58487003B9826 /* BackForwardListView.swift in Sources */,
@@ -7770,6 +7775,7 @@
 				C9299E3B2695EA4B00758795 /* TextSizeView.swift in Sources */,
 				D0FCF7F51FE45842004A7995 /* UserScriptManager.swift in Sources */,
 				F815A5EB2899C9FF003FE9A8 /* WelcomeFlowPrivacyAndTermsLinksView.swift in Sources */,
+				E9FDC5C328B984C600BC7CB2 /* TabConfig.swift in Sources */,
 				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
 				4A9F654B27229E3400B7C06E /* BottomSheetView.swift in Sources */,
 				66EA9BF2277644870013DB07 /* BrowserTopBarView.swift in Sources */,

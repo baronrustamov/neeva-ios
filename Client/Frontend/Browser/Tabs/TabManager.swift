@@ -446,9 +446,13 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         bvc: BrowserViewController, parentTab: Tab, configuration: WKWebViewConfiguration
     ) -> Tab {
         let popup = Tab(bvc: bvc, configuration: configuration, isIncognito: parentTab.isIncognito)
-        configureTab(
-            popup, request: nil, afterTab: parentTab, flushToDisk: true, zombie: false,
-            isPopup: true, notify: true)
+        let config = TabConfig(
+            insertLocation: InsertTabLocation(parent: parentTab),
+            flushToDisk: true,
+            zombie: false,
+            isPopup: true
+        )
+        configureTab(popup, tabConfig: config, notify: true)
 
         // Wait momentarily before selecting the new tab, otherwise the parent tab
         // may be unable to set `window.location` on the popup immediately after
@@ -606,7 +610,8 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
 
     // MARK: - AddTab
     @discardableResult func addTabsForURLs(
-        _ urls: [URL], zombie: Bool = true, shouldSelectTab: Bool = true, incognito: Bool = false,
+        _ urls: [URL],
+        zombie: Bool = true, shouldSelectTab: Bool = true, incognito: Bool = false,
         rootUUID: String? = nil
     ) -> [Tab] {
         assert(Thread.isMainThread)
@@ -616,11 +621,15 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         }
 
         var newTabs: [Tab] = []
+        var config = TabConfig(flushToDisk: false, zombie: zombie)
         for url in urls {
-            newTabs.append(
-                self.addTab(
-                    URLRequest(url: url), flushToDisk: false, zombie: zombie,
-                    isIncognito: incognito, notify: false))
+            config.request = URLRequest(url: url)
+            let createdTab = self.addTab(
+                tabConfig: config,
+                isIncognito: incognito,
+                notify: false
+            )
+            newTabs.append(createdTab)
         }
 
         if let rootUUID = rootUUID {
@@ -645,50 +654,24 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         return newTabs
     }
 
-    @discardableResult func addTab(
-        _ request: URLRequest! = nil, configuration: WKWebViewConfiguration! = nil,
-        afterTab: Tab? = nil, isIncognito: Bool = false,
-        query: String? = nil, suggestedQuery: String? = nil,
-        visitType: VisitType? = nil, notify: Bool = true
-    ) -> Tab {
-        return self.addTab(
-            request, configuration: configuration, afterTab: afterTab, flushToDisk: true,
-            zombie: false, isIncognito: isIncognito,
-            query: query, suggestedQuery: suggestedQuery,
-            visitType: visitType, notify: notify
-        )
-    }
-
-    private func addTab(
-        _ request: URLRequest? = nil, webView: WKWebView? = nil,
-        configuration: WKWebViewConfiguration? = nil,
-        atIndex: Int? = nil,
-        afterTab parent: Tab? = nil,
-        keepInParentTabGroup: Bool = true,
-        flushToDisk: Bool, zombie: Bool, isIncognito: Bool = false,
-        query: String? = nil, suggestedQuery: String? = nil,
-        visitType: VisitType? = nil, notify: Bool = true
+    @discardableResult
+    func addTab(
+        webViewConfig: WKWebViewConfiguration? = nil,
+        tabConfig: TabConfig = .default,
+        isIncognito: Bool = false,
+        notify: Bool = true
     ) -> Tab {
         assert(Thread.isMainThread)
 
         // Take the given configuration. Or if it was nil, take our default configuration for the current browsing mode.
         let configuration: WKWebViewConfiguration =
-            configuration ?? (isIncognito ? incognitoConfiguration : self.configuration)
+            webViewConfig ?? (isIncognito ? incognitoConfiguration : self.configuration)
 
         let bvc = SceneDelegate.getBVC(with: scene)
         let tab = Tab(bvc: bvc, configuration: configuration, isIncognito: isIncognito)
         configureTab(
             tab,
-            request: request,
-            webView: webView,
-            atIndex: atIndex,
-            afterTab: parent,
-            keepInParentTabGroup: keepInParentTabGroup,
-            flushToDisk: flushToDisk,
-            zombie: zombie,
-            query: query,
-            suggestedQuery: suggestedQuery,
-            visitType: visitType,
+            tabConfig: tabConfig,
             notify: notify
         )
 
@@ -696,65 +679,64 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     }
 
     private func configureTab(
-        _ tab: Tab, request: URLRequest?, webView: WKWebView? = nil, atIndex: Int? = nil,
-        afterTab parent: Tab? = nil, keepInParentTabGroup: Bool = true,
-        flushToDisk: Bool, zombie: Bool, isPopup: Bool = false,
-        query: String? = nil, suggestedQuery: String? = nil,
-        queryLocation: QueryForNavigation.Query.Location = .suggestion,
-        visitType: VisitType? = nil, notify: Bool
+        _ tab: Tab,
+        tabConfig: TabConfig = .default,
+        notify: Bool
     ) {
         assert(Thread.isMainThread)
 
         // If network is not available webView(_:didCommit:) is not going to be called
         // We should set request url in order to show url in url bar even no network
-        tab.setURL(request?.url)
+        tab.setURL(tabConfig.request?.url)
 
         insertTab(
             tab,
-            atIndex: atIndex,
-            parent: parent,
-            keepInParentTabGroup: keepInParentTabGroup,
+            at: tabConfig.insertLocation,
             notify: notify
         )
 
-        if let webView = webView {
+        if let webView = tabConfig.webView {
             tab.restore(webView)
-        } else if !zombie {
+        } else if !tabConfig.zombie {
             tab.createWebview()
         }
 
         tab.navigationDelegate = self.navDelegate
 
-        if let query = query {
+        if let query = tabConfig.query {
             tab.queryForNavigation.currentQuery = .init(
                 typed: query,
-                suggested: suggestedQuery,
-                location: queryLocation
+                suggested: tabConfig.suggestedQuery,
+                location: tabConfig.queryLocation
             )
         }
 
-        if let request = request {
-            if let nav = tab.loadRequest(request), let visitType = visitType {
+        if let request = tabConfig.request {
+            if let nav = tab.loadRequest(request),
+                let visitType = tabConfig.visitType
+            {
                 tab.browserViewController?.recordNavigationInTab(
-                    navigation: nav, visitType: visitType)
+                    navigation: nav, visitType: visitType
+                )
             }
-        } else if !isPopup {
+        } else if !tabConfig.isPopup {
             let url = InternalURL.baseUrl / "about" / "home"
             tab.loadRequest(PrivilegedRequest(url: url) as URLRequest)
             tab.setURL(url)
         }
 
-        if flushToDisk {
+        if tabConfig.flushToDisk {
             storeChanges()
         }
     }
 
     private func insertTab(
-        _ tab: Tab, atIndex: Int? = nil, parent: Tab? = nil, keepInParentTabGroup: Bool = true,
+        _ tab: Tab,
+        at location: InsertTabLocation = .default,
         notify: Bool
     ) {
-        if let atIndex = atIndex, atIndex <= tabs.count {
-            tabs.insert(tab, at: atIndex)
+        if let index = location.index, index <= tabs.count {
+            tabs.insert(tab, at: index)
         } else {
             var insertIndex: Int?
 
@@ -778,13 +760,15 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             } else {
                 // If the tab wasn't made a parent of a tab group, move
                 // it next to its parent if it has one.
-                if let parent = parent, var insertIndex = tabs.firstIndex(of: parent) {
+                if let parent = location.parent,
+                    var insertIndex = tabs.firstIndex(of: parent)
+                {
                     insertIndex += 1
                     while insertIndex < tabs.count && tabs[insertIndex].isDescendentOf(parent) {
                         insertIndex += 1
                     }
 
-                    if keepInParentTabGroup {
+                    if location.keepInParentTabGroup {
                         tab.rootUUID = parent.rootUUID
                     }
 
@@ -795,7 +779,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
                 }
             }
 
-            if let parent = parent {
+            if let parent = location.parent {
                 tab.parent = parent
                 tab.parentUUID = parent.tabUUID
             }
@@ -809,7 +793,12 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     func duplicateTab(_ tab: Tab, incognito: Bool) {
         guard let url = tab.url else { return }
         let newTab = addTab(
-            URLRequest(url: url), afterTab: tab, isIncognito: incognito)
+            tabConfig: .init(
+                request: URLRequest(url: url),
+                insertLocation: InsertTabLocation(parent: tab)
+            ),
+            isIncognito: incognito
+        )
         selectTab(newTab, notify: true)
     }
 
@@ -873,15 +862,17 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             let urlRequest: URLRequest? = savedTab.url != nil ? URLRequest(url: savedTab.url!) : nil
 
             var tab: Tab
+            var config = TabConfig(request: urlRequest, flushToDisk: false, zombie: true)
             if let tabIndex = savedTab.tabIndex {
-                tab = addTab(
-                    urlRequest, atIndex: tabIndex, flushToDisk: false, zombie: true,
-                    isIncognito: isIncognito, notify: false)
+                config.insertLocation.index = tabIndex
             } else {
-                tab = addTab(
-                    urlRequest, afterTab: getTabForUUID(uuid: savedTab.parentUUID ?? ""),
-                    flushToDisk: false, zombie: true, isIncognito: isIncognito, notify: false)
+                config.insertLocation.parent = getTabForUUID(uuid: savedTab.parentUUID ?? "")
             }
+            tab = addTab(
+                tabConfig: config,
+                isIncognito: isIncognito,
+                notify: false
+            )
 
             savedTab.configureTab(tab, imageStore: store.imageStore)
 
@@ -934,12 +925,14 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         restoreSavedTabs(Array(recentlyClosedTabs.joined()))
     }
 
-    @discardableResult func restore(savedTab: SavedTab, resolveParentRef: Bool = true) -> Tab {
+    @discardableResult
+    func restore(savedTab: SavedTab, resolveParentRef: Bool = true) -> Tab {
         // Provide an empty request to prevent a new tab from loading the home screen.
         // NOTE: tabIndex is ignored here as tabs are assumed to be saved in the order
         // they should be re-inserted.
         let tab = addTab(
-            flushToDisk: false, zombie: true, isIncognito: savedTab.isIncognito,
+            tabConfig: .init(flushToDisk: false, zombie: true),
+            isIncognito: savedTab.isIncognito,
             notify: false)
         savedTab.configureTab(tab, imageStore: store.imageStore)
         if resolveParentRef {
@@ -1204,16 +1197,21 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
 
             return .switchedToExistingTab
         } else {
-            let newTab = addTab(
-                URLRequest(url: url),
-                afterTab: parentTab,
-                keepInParentTabGroup: keepInParentTabGroup,
+            let config = TabConfig(
+                request: URLRequest(url: url),
+                insertLocation: InsertTabLocation(
+                    parent: parentTab,
+                    keepInParentTabGroup: keepInParentTabGroup
+                ),
                 flushToDisk: true,
                 zombie: false,
-                isIncognito: isIncognito,
                 query: query,
                 suggestedQuery: suggestedQuery,
                 visitType: visitType
+            )
+            let newTab = addTab(
+                tabConfig: config,
+                isIncognito: isIncognito
             )
             selectTab(newTab, notify: true)
 
@@ -1235,7 +1233,11 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             return .switchedToExistingTab
         } else {
             let newTab = addTab(
-                URLRequest(url: url), flushToDisk: true, zombie: false, isIncognito: isIncognito)
+                tabConfig: .init(
+                    request: URLRequest(url: url), flushToDisk: true, zombie: false
+                ),
+                isIncognito: isIncognito
+            )
             newTab.parentSpaceID = spaceID
             newTab.rootUUID = spaceID
             selectTab(newTab, notify: true)
@@ -1346,7 +1348,13 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         // Create a new placeholder tab to represent the pinned tab.
         // Should be a zombie with the same session data as
         // the original pinned tab before it navigated.
-        let newPinnedTab = addTab(atIndex: tabIndex, flushToDisk: true, zombie: true)
+        let newPinnedTab = addTab(
+            tabConfig: .init(
+                insertLocation: InsertTabLocation(index: tabIndex),
+                flushToDisk: true,
+                zombie: true
+            )
+        )
         let savedTab = tab.saveSessionDataAndCreateSavedTab(
             isSelected: false, tabIndex: tabIndex, isForPinnedTabPlaceholder: true)
         savedTab.configureTab(newPinnedTab, imageStore: store.imageStore)
@@ -1682,12 +1690,16 @@ extension TabManager {
 
     func configureTabForTesting(_ tab: Tab, afterTab parent: Tab? = nil) {
         assert(AppConstants.IsRunningTest)
+
+        var config: TabConfig = .default
+        config.request = URLRequest(url: tab.url!)
+        config.insertLocation.parent = parent
+        config.flushToDisk = false
+        config.zombie = false
+
         configureTab(
             tab,
-            request: URLRequest(url: tab.url!),
-            afterTab: parent,
-            flushToDisk: false,
-            zombie: false,
+            tabConfig: config,
             notify: true
         )
     }

@@ -482,7 +482,12 @@ class TabManagerTests: XCTestCase {
 
         let testURL = try XCTUnwrap(URL(string: "testURL"))
         let _ = manager.addTab(URLRequest(url: testURL))
-        let tab3 = manager.addTab(URLRequest(url: testURL), afterTab: tab1)
+        let tab3 = manager.addTab(
+            tabConfig: .init(
+                request: URLRequest(url: testURL),
+                insertLocation: .init(parent: tab1)
+            )
+        )
 
         // select tab1
         manager.selectTab(tab1, notify: true)
@@ -495,5 +500,21 @@ class TabManagerTests: XCTestCase {
             return
         }
         XCTAssertEqual(manager.selectedTab, tab3)
+    }
+}
+
+extension TabManager {
+    @discardableResult
+    fileprivate func addTab(afterTab tab: Tab) -> Tab {
+        self.addTab(
+            tabConfig: .init(insertLocation: .init(parent: tab))
+        )
+    }
+
+    @discardableResult
+    fileprivate func addTab(_ request: URLRequest) -> Tab {
+        self.addTab(
+            tabConfig: .init(request: request)
+        )
     }
 }

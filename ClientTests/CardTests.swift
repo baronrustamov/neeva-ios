@@ -557,3 +557,12 @@ class CardTests: XCTestCase {
         XCTAssertEqual(manager.selectedTab, restoredTab)
     }
 }
+
+extension TabManager {
+    @discardableResult
+    fileprivate func addTab(afterTab tab: Tab) -> Tab {
+        self.addTab(
+            tabConfig: .init(insertLocation: .init(parent: tab))
+        )
+    }
+}

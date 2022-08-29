@@ -52,7 +52,8 @@ class TabEventHandlerTests: XCTestCase {
 
         Defaults[.blockPopups] = false
         tabManager.addTab(
-            URLRequest(url: URL(string: "\(webServerBase)/blankpopup")!))
+            tabConfig: .init(request: URLRequest(url: URL(string: "\(webServerBase)/blankpopup")!))
+        )
 
         let exists = NSPredicate { obj, _ in
             let tabManager = obj as! TabManager

@@ -785,10 +785,12 @@ class BrowserViewController: UIViewController, ModalPresenter {
         DispatchQueue.main.async {
             self.tabManager.selectTab(
                 self.tabManager.addTab(
-                    request,
-                    isIncognito: isIncognito,
-                    query: query,
-                    visitType: visitType
+                    tabConfig: .init(
+                        request: request,
+                        query: query,
+                        visitType: visitType
+                    ),
+                    isIncognito: isIncognito
                 ),
                 notify: true
             )
@@ -804,7 +806,11 @@ class BrowserViewController: UIViewController, ModalPresenter {
         let isIncognito = isIncognito == nil ? incognitoModel.isIncognito : isIncognito!
 
         let tab = self.tabManager.addTab(
-            URLRequest(url: url), afterTab: tabManager.selectedTab, isIncognito: isIncognito
+            tabConfig: .init(
+                request: URLRequest(url: url),
+                insertLocation: InsertTabLocation(parent: tabManager.selectedTab)
+            ),
+            isIncognito: isIncognito
         )
 
         var toastLabelText: LocalizedStringKey
