@@ -491,6 +491,17 @@ class BrowserViewController: UIViewController {
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        if !Defaults[.introSeen] {
+            var startScreen: WelcomeFlowScreen?
+
+            if Defaults[.welcomeFlowRestoreToDefaultBrowser] {
+                Defaults[.welcomeFlowRestoreToDefaultBrowser] = false
+                startScreen = .defaultBrowser
+            }
+
+            presentWelcomeFlow(startScreen: startScreen)
+        }
+
         tabManager.selectedTab?.lastExecutedTime = Date.nowMilliseconds()
 
         super.viewDidAppear(animated)
