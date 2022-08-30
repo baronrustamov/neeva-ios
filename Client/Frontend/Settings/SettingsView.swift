@@ -15,6 +15,17 @@ extension EnvironmentValues {
         get { self[PresentIntroKey.self] }
         set { self[PresentIntroKey.self] = newValue }
     }
+
+    private struct PresentSignInOrUpFlowKey: EnvironmentKey {
+        static var defaultValue = { () -> Void in
+            fatalError("Specify an environment value for \\.settingsPresentSignInOrUpFlow")
+        }
+    }
+    public var settingsPresentSignInOrUpFlow: () -> Void {
+        get { self[PresentSignInOrUpFlowKey.self] }
+        set { self[PresentSignInOrUpFlowKey.self] = newValue }
+    }
+
 }
 
 public enum SettingsPage: String {
@@ -144,6 +155,11 @@ class SettingsViewController: UIHostingController<AnyView> {
                         completion: {
                             bvc.dismissEditingAndHideZeroQuery()
                         })
+                }
+            }
+            .environment(\.settingsPresentSignInOrUpFlow) {
+                self.dismiss(animated: true) {
+                    bvc.presentSignInOrUpFlow(startScreen: nil)
                 }
             }
             .environment(\.dismissScreen) {

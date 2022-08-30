@@ -5,10 +5,10 @@
 import Shared
 import SwiftUI
 
-struct WelcomeFlowSignUpView: View {
+struct SignInOrUpFlowSignUpView: View {
     @Environment(\.colorScheme) var colorScheme
 
-    @ObservedObject var model: WelcomeFlowModel
+    @ObservedObject var model: SignInOrUpFlowModel
 
     @State var emailOptIn: Bool
     @State var error = ""
@@ -16,7 +16,7 @@ struct WelcomeFlowSignUpView: View {
 
     var body: some View {
         VStack {
-            WelcomeFlowHeaderView(text: "Create your account")
+            SignInOrUpFlowHeaderView(text: "Create your account")
 
             Spacer()
 

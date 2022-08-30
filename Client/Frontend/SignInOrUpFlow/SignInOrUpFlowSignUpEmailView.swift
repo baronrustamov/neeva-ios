@@ -4,8 +4,8 @@
 
 import SwiftUI
 
-struct WelcomeFlowSignUpEmailView: View {
-    @ObservedObject var model: WelcomeFlowModel
+struct SignInOrUpFlowSignUpEmailView: View {
+    @ObservedObject var model: SignInOrUpFlowModel
 
     @State var email = ""
     @State var password = ""
@@ -13,7 +13,7 @@ struct WelcomeFlowSignUpEmailView: View {
     @State var showError = false
 
     var body: some View {
-        WelcomeFlowHeaderView(text: "Create your account")
+        SignInOrUpFlowHeaderView(text: "Create your account")
             .padding(.bottom, 20)
 
         OktaEmailSignUpFormView(

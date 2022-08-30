@@ -2,36 +2,35 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import CodeScanner
+import Shared
 import SwiftUI
 
-struct WelcomeFlowSignUpEmailView: View {
-    @ObservedObject var model: WelcomeFlowModel
+struct SignInOrUpFlowSignInQRCodeView: View {
+    @ObservedObject var model: SignInOrUpFlowModel
 
-    @State var email = ""
-    @State var password = ""
     @State var error = ""
     @State var showError = false
 
     var body: some View {
-        WelcomeFlowHeaderView(text: "Create your account")
-            .padding(.bottom, 20)
+        VStack {
+            Spacer()
 
-        OktaEmailSignUpFormView(
-            email: $email,
-            password: $password,
-            action: {
-                model.logCounter(.AuthOptionSignupWithEmail)
-                model.authStore.createOktaAccount(
-                    email: self.email, password: self.password,
+            CodeScannerView(codeTypes: [.qr]) { result in
+                model.authStore.signInwithQRCode(
+                    result,
                     onError: { message in
                         self.error = message
                         self.showError = true
-                    }
-                ) {
-                    model.changeScreenTo(.plans)
-                }
+                    },
+                    onSuccess: {
+                        model.clearPreviousScreens()
+                        model.complete()
+                    })
             }
-        )
+
+            Spacer()
+        }
         .alert(isPresented: self.$showError) {
             Alert(
                 title: Text("Error"),
@@ -44,7 +43,5 @@ struct WelcomeFlowSignUpEmailView: View {
         .onAppear {
             model.logCounter(.ScreenImpression)
         }
-
-        Spacer()
     }
 }

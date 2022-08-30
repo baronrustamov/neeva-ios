@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-struct WelcomeFlowAuthButtonView: View {
+struct AuthButtonView: View {
     let icon: Image?
     let label: LocalizedStringKey
     let foregroundColor: Color

@@ -13,6 +13,7 @@ struct NeevaSettingsSection: View {
     @ObservedObject var userInfo: NeevaUserInfo
     @Environment(\.openInNewTab) var openURL
     @Environment(\.settingsPresentIntroViewController) var presentIntroViewController
+    //@Environment(\.settingsPresentSignInOrUpFlow) var presentSignInOrUpFlowView // the new upcoming flow
     @State var showingAccountDetails = false
 
     // Used by FeatureFlag[.inlineAccountSettings] to render inline settings
@@ -107,7 +108,19 @@ struct NeevaSettingsSection: View {
                 ClientLogger.shared.logCounter(
                     .SettingSignin, attributes: EnvironmentHelper.shared.getFirstRunAttributes())
                 presentIntroViewController()
-            }.frame(height: 60 - 12)
+                //presentSignInOrUpFlowView() // the new upcoming flow
+            }
+            .frame(height: 60 - 12)
+            .onAppear {
+                /*
+                 NOTE: Prime the `PremiumStore` products request.
+                 Swift constructs the object lazily, so any access
+                 will trigger initialization.
+                 */
+                if #available(iOS 15.0, *) {
+                    _ = PremiumStore.shared.products.count
+                }
+            }
         }
     }
 }

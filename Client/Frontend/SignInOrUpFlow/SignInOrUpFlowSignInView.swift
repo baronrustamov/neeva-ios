@@ -5,10 +5,10 @@
 import Shared
 import SwiftUI
 
-struct WelcomeFlowSignInView: View {
+struct SignInOrUpFlowSignInView: View {
     @Environment(\.colorScheme) var colorScheme
 
-    @ObservedObject var model: WelcomeFlowModel
+    @ObservedObject var model: SignInOrUpFlowModel
 
     @State var error = ""
     @State var showError = false
@@ -28,7 +28,7 @@ struct WelcomeFlowSignInView: View {
                     self.showError = true
                 }) {
                     model.clearPreviousScreens()
-                    model.changeScreenTo(.defaultBrowser)
+                    model.complete()
                 }
             }
 
@@ -46,7 +46,7 @@ struct WelcomeFlowSignInView: View {
                     }
                 ) {
                     model.clearPreviousScreens()
-                    model.changeScreenTo(.defaultBrowser)
+                    model.complete()
                 }
             }
 
@@ -64,7 +64,7 @@ struct WelcomeFlowSignInView: View {
                     }
                 ) {
                     model.clearPreviousScreens()
-                    model.changeScreenTo(.defaultBrowser)
+                    model.complete()
                 }
             }
 
@@ -82,7 +82,7 @@ struct WelcomeFlowSignInView: View {
                     }
                 ) {
                     model.clearPreviousScreens()
-                    model.changeScreenTo(.defaultBrowser)
+                    model.complete()
                 }
             }
 

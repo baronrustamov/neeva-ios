@@ -5,7 +5,7 @@
 import Shared
 import SwiftUI
 
-struct OktaEmailSignUpForm: View {
+struct OktaEmailSignUpFormView: View {
     @Binding private var email: String
     @Binding private var password: String
     @State private var passwordStrengthLabel: String = ""
