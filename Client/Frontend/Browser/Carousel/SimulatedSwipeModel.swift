@@ -17,6 +17,7 @@ class SimulatedSwipeModel: ObservableObject {
 
     let tabManager: TabManager
     let swipeDirection: SwipeDirection
+    var target: PreferredNavigationTarget? = nil
     var forwardUrlMap = [String: [URL]?]()
     var progressModel = CarouselProgressModel(urls: [], index: 0)
 
@@ -60,7 +61,7 @@ class SimulatedSwipeModel: ObservableObject {
             return
         }
 
-        tab.goBack()
+        tab.goBack(preferredTarget: target)
     }
 
     @discardableResult func goForward() -> Bool {
@@ -95,6 +96,7 @@ class SimulatedSwipeModel: ObservableObject {
     }
 
     private func updateBackVisibility(tab: Tab?) {
+        target = nil
         coordinator?.setPreviewImage(nil)
 
         guard let tab = tab else {
@@ -106,7 +108,14 @@ class SimulatedSwipeModel: ObservableObject {
         // WebView back swipe takes priority over our simulated swipe.
         hidden = !tab.canGoBack || (tab.webView?.canGoBack ?? false)
 
-        if tab.backNavigationSuggestionQuery() == nil, let parent = tab.parent {
+        guard !hidden else {
+            return
+        }
+
+        if tab.backNavigationSuggestionQuery() != nil {
+            target = .suggestionQuery
+        } else if let parent = tab.parent {
+            target = .parent
             coordinator?.setPreviewImage(parent.screenshot)
         }
     }

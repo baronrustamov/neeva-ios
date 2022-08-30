@@ -266,7 +266,7 @@ class ZeroQueryModel: ObservableObject {
         // This can occur if a taps back and the Suggestion UI is shown.
         // If the user cancels out of that UI, we should navigate the tab back, like a complete undo.
         if let bvc = bvc, openedFrom == .backButton, wasCancelled {
-            bvc.tabManager.selectedTab?.goBack(checkBackNavigationSuggestionQuery: false)
+            bvc.tabManager.selectedTab?.goBack(preferredTarget: nil)
         }
 
         isLazyTab = false

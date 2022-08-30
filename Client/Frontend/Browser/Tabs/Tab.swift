@@ -39,6 +39,11 @@ protocol TabDelegate {
     @objc optional func tab(_ tab: Tab, didUpdateWebView webView: WKWebView)
 }
 
+enum PreferredNavigationTarget {
+    case suggestionQuery
+    case parent
+}
+
 class Tab: NSObject, ObservableObject, GenericTab {
     let isIncognito: Bool
     @Published var isPinned: Bool = false
@@ -500,7 +505,7 @@ class Tab: NSObject, ObservableObject, GenericTab {
         }
     }
 
-    func goBack(checkBackNavigationSuggestionQuery: Bool = true) {
+    func goBack(preferredTarget: PreferredNavigationTarget? = .suggestionQuery) {
         let currentIndex =
             webView?.backForwardList.navigationStackIndex ?? sessionData?.navigationStackIndex ?? 0
         let parentIndex =
@@ -527,7 +532,7 @@ class Tab: NSObject, ObservableObject, GenericTab {
             }
 
             browserViewController?.tabManager.removeTab(self, showToast: false)
-        } else if checkBackNavigationSuggestionQuery,
+        } else if case .suggestionQuery = preferredTarget,
             let searchQuery = backNavigationSuggestionQuery(),
             let bvc = browserViewController
         {
@@ -546,7 +551,15 @@ class Tab: NSObject, ObservableObject, GenericTab {
                     bvc.zeroQueryModel.targetTab = .currentTab
                 }
             }
+        } else if case .parent = preferredTarget,
+            self.parent != nil
+        {
+            browserViewController?.tabManager.removeTab(
+                self, showToast: false, selectTabPreferring: .parent
+            )
         } else if let _ = parent, !webViewCanGoBack {
+            // This will update the selected tab, but it will only select the parent tab
+            // if the parent tab is also the most recently used tab
             browserViewController?.tabManager.removeTab(self, showToast: false)
         } else if let id = parentSpaceID, !id.isEmpty, !webViewCanGoBack {
             browserViewController?.browserModel.openSpace(spaceID: id)

@@ -349,7 +349,7 @@ class TabManagerTests: XCTestCase {
             lastUsedTime: Date.nowMilliseconds()
         )
 
-        manager.removeTabs([tab], updateSelectedTab: true)
+        manager.removeTabs([tab])
         manager.restoreAllClosedTabs()
 
         XCTAssertNotEqual(manager.activeTabs.first, tab)
@@ -374,7 +374,7 @@ class TabManagerTests: XCTestCase {
         let tab2 = manager.addTab(afterTab: tab1)
         let initialRootUUID = tab1.rootUUID
 
-        manager.removeTabs([tab1, tab2], updateSelectedTab: true)
+        manager.removeTabs([tab1, tab2])
         manager.restoreAllClosedTabs()
 
         let _ = MethodSpy(functionName: spyRestoredTabs) { tabs in
@@ -408,7 +408,7 @@ class TabManagerTests: XCTestCase {
         let tab2 = manager.addTab(afterTab: tab1)
         let initialParentUUID = tab2.parentUUID
 
-        manager.removeTabs([tab1, tab2], updateSelectedTab: true)
+        manager.removeTabs([tab1, tab2])
         manager.restoreAllClosedTabs()
 
         let _ = MethodSpy(functionName: spyRestoredTabs) { tabs in
