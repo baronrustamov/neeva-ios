@@ -91,30 +91,24 @@ public class SearchEngine: Identifiable, Hashable {
     }
 
     public func searchURLFrom(searchQuery: String, queryItems: [URLQueryItem]) -> URL? {
-        // Replacing {searchTerms} is redundant here. The only reason why we're doing it is so that
-        // the URL is not nil.
-        guard
-            let url = URL(
-                string:
-                    searchTemplate
-                    .replacingOccurrences(of: "{searchTerms}", with: searchQuery, options: .literal)
-            )
-        else { return nil }
+        guard let url = searchURLForQuery(searchQuery) else { return nil }
 
-        // Add all the query parameters that did not already exist in the URL
-        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-        var originalQueryItems = (components.queryItems ?? [])
-        for item in queryItems {
-            if !originalQueryItems.contains(item) {
-                originalQueryItems.append(item)
-            }
-        }
-        components.queryItems = originalQueryItems
+        let urlWithQueryParams = url.withQueryParams(
+            queryItems.filter {
+                if isNeeva {
+                    // Prevent the "src" parameter from being added repeatedly.
+                    return $0.name != searchQueryComponentKey && $0.name != "src"
+                }
+                return $0.name != searchQueryComponentKey
+            })
 
-        // Add back {searchTerms} so that the `interpolate` function will properly encode the query
-        let urlString = components.url!.absoluteString.replacingOccurrences(
-            of: searchQuery, with: "{searchTerms}", options: .literal)
-        return interpolate(query: searchQuery, into: urlString)
+        // `withQueryParams` unencodes the plus sign, so we need to re-encode it.
+        // Prevents an issue when someone sends a query like "c++"
+        var components = URLComponents(url: urlWithQueryParams, resolvingAgainstBaseURL: false)!
+        components.percentEncodedQuery = components.percentEncodedQuery?
+            .replacingOccurrences(of: "+", with: "%2B")
+
+        return components.url!
     }
 
     // MARK: - Internal properties & initializers

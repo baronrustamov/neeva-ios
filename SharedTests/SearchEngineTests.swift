@@ -38,10 +38,5 @@ class SearchEngineTests: XCTestCase {
             searchEngine.searchURLFrom(
                 searchQuery: "c++", queryItems: [URLQueryItem(name: "abc", value: "def")]),
             URL(string: "https://\(NeevaConstants.appHost)/search?q=c%2B%2B&src=nvobar&abc=def"))
-
-        // Make sure a search query that equals part of the URL doesn't break anything
-        XCTAssertEqual(
-            searchEngine.searchURLFrom(searchQuery: "http", queryItems: []),
-            URL(string: "https://\(NeevaConstants.appHost)/search?q=http&src=nvobar"))
     }
 }
