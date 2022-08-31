@@ -173,7 +173,7 @@ public class SearchEngine: Identifiable, Hashable {
     private let placeholder = "PLACEHOLDER"
     private lazy var searchQueryURL: URL = searchURLForQuery(placeholder)!
     /// Return the arg that we use for searching for this engine
-    private lazy var searchQueryComponentKey: String? = {
+    public lazy var searchQueryComponentKey: String? = {
         let components = URLComponents(url: searchQueryURL, resolvingAgainstBaseURL: false)
 
         if let retVal = extractQueryArg(in: components?.queryItems, for: placeholder) {
