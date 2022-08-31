@@ -41,7 +41,7 @@ extension BrowserViewController: TopBarDelegate {
             var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 
             if let queryKey = SearchEngine.current.searchQueryComponentKey,
-                let encodedOldQuery = queryItems.first(where: { $0.name == "q" })?
+                let encodedOldQuery = queryItems.first(where: { $0.name == queryKey })?
                     .value?
                     .addingPercentEncoding(withAllowedCharacters: .SearchTermsAllowed),
                 let encodedNewQuery = text.addingPercentEncoding(
