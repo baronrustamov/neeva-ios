@@ -93,22 +93,7 @@ public class SearchEngine: Identifiable, Hashable {
     public func searchURLFrom(searchQuery: String, queryItems: [URLQueryItem]) -> URL? {
         guard let url = searchURLForQuery(searchQuery) else { return nil }
 
-        let urlWithQueryParams = url.withQueryParams(
-            queryItems.filter {
-                if isNeeva {
-                    // Prevent the "src" parameter from being added repeatedly.
-                    return $0.name != searchQueryComponentKey && $0.name != "src"
-                }
-                return $0.name != searchQueryComponentKey
-            })
-
-        // `withQueryParams` unencodes the plus sign, so we need to re-encode it.
-        // Prevents an issue when someone sends a query like "c++"
-        var components = URLComponents(url: urlWithQueryParams, resolvingAgainstBaseURL: false)!
-        components.percentEncodedQuery = components.percentEncodedQuery?
-            .replacingOccurrences(of: "+", with: "%2B")
-
-        return components.url!
+        return url.withQueryParams(queryItems.filter { $0.name != searchQueryComponentKey })
     }
 
     // MARK: - Internal properties & initializers
