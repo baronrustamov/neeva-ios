@@ -25,6 +25,7 @@ struct GeneralSettingsSection: View {
     @Default(.blockPopups) var blockPopups
     @Default(.contextMenuShowLinkPreviews) var showLinkPreviews
     @Default(.confirmCloseAllTabs) var confirmCloseAllTabs
+    @Default(.archivedTabsDuration) var archivedTabsDuration
     @EnvironmentObject var browserModel: BrowserModel
 
     var body: some View {
@@ -68,7 +69,12 @@ struct GeneralSettingsSection: View {
         NavigationLink(isActive: $showArchivedTabsSettings) {
             ArchivedTabSettings()
         } label: {
-            Text("Auto Archive Tabs")
+            HStack {
+                Text("Archive Tabs")
+                Spacer()
+                Text(archivedTabsDuration.label)
+                    .foregroundColor(.secondary)
+            }
         }.id("archived-tabs-setting")
     }
 }

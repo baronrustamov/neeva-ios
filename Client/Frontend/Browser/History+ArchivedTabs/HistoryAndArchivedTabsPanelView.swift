@@ -39,17 +39,6 @@ struct HistoryAndArchivedTabsPanelView: View {
         }.pickerStyle(SegmentedPickerStyle()).padding(.horizontal)
     }
 
-    var archivedTabsAfterLabel: LocalizedStringKey {
-        switch archivedTabsDuration {
-        case .week:
-            return "After 7 Days"
-        case .month:
-            return "After 30 Days"
-        case .forever:
-            return "Never"
-        }
-    }
-
     var body: some View {
         NavigationView {
             GeometryReader { geom in
@@ -78,14 +67,16 @@ struct HistoryAndArchivedTabsPanelView: View {
                                 showArchivedTabSettings = true
                             } label: {
                                 HStack {
-                                    Text("Auto Archive Tabs")
+                                    Text("Archive Tabs")
                                     Spacer()
 
                                     Label {
                                         Symbol(decorative: .chevronRight)
                                     } icon: {
-                                        Text(archivedTabsAfterLabel)
-                                            .foregroundColor(.secondaryLabel)
+                                        Text(
+                                            archivedTabsDuration.label
+                                        )
+                                        .foregroundColor(.secondaryLabel)
                                     }
                                 }
                             }
