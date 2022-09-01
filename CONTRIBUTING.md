@@ -20,13 +20,6 @@ If you find a bug in the source code or a mistake in the documentation, you can 
 
 - All pull requests must be associated with a specific Issue. If an issue doesn't exist please first create it.
 - Before you submit your pull request, search the repository for an open or closed Pull Request that relates to your submission. You don't want to duplicate effort. 
-- For commiting in your Pull Request, you can checkout [Commits](#commits) for more.
-
-## Commits
-
-- Each commit should have a single clear purpose. If a commit contains multiple unrelated changes, those changes should be split into separate commits.
-- If a commit requires another commit to build properly, those commits should be squashed.
-- Follow-up commits for any review comments should be squashed. Do not include "Fixed PR comments", merge commits, or other "temporary" commits in pull requests.
 
 ## Tests
 
