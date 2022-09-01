@@ -36,24 +36,11 @@ extension BrowserViewController: TopBarDelegate {
             return
         }
 
-        // User is editing the current query, should preserve the parameters from their original query
-        if let queryItems = searchQueryModel.queryItems, let url = currentTab?.url {
-            var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-
-            if let queryKey = SearchEngine.current.searchQueryComponentKey,
-                let encodedOldQuery = queryItems.first(where: { $0.name == queryKey })?
-                    .value?
-                    .addingPercentEncoding(withAllowedCharacters: .SearchTermsAllowed),
-                let encodedNewQuery = text.addingPercentEncoding(
-                    withAllowedCharacters: .SearchTermsAllowed)
-            {
-                components.percentEncodedQuery = components.percentEncodedQuery?
-                    .replacingOccurrences(
-                        of: "\(queryKey)=\(encodedOldQuery)", with: "\(queryKey)=\(encodedNewQuery)"
-                    )
-            }
-
-            finishEditingAndSubmit(components.url!, visitType: VisitType.typed, forTab: currentTab)
+        /// The user is editing the current query when `searchQueryModel.queryItems != nil`
+        if let _ = searchQueryModel.queryItems, let url = currentTab?.url {
+            finishEditingAndSubmit(
+                SearchEngine.current.updateSearchQuery(url, newQuery: text),
+                visitType: VisitType.typed, forTab: currentTab)
             searchQueryModel.queryItems = nil
             return
         }

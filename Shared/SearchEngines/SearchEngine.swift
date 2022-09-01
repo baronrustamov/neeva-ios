@@ -96,6 +96,28 @@ public class SearchEngine: Identifiable, Hashable {
         return url.withQueryParams(queryItems.filter { $0.name != searchQueryComponentKey })
     }
 
+    public func updateSearchQuery(_ url: URL, newQuery: String) -> URL {
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+
+        if let queryKey = searchQueryComponentKey,
+            let encodedOldQuery = components.queryItems?.first(where: {
+                $0.name == queryKey
+            })?
+            .value?
+            .addingPercentEncoding(withAllowedCharacters: .SearchTermsAllowed),
+            let encodedNewQuery = newQuery.addingPercentEncoding(
+                withAllowedCharacters: .SearchTermsAllowed)
+        {
+            components.percentEncodedQuery = components.percentEncodedQuery?
+                .replacingOccurrences(
+                    of: "\(queryKey)=\(encodedOldQuery)",
+                    with: "\(queryKey)=\(encodedNewQuery)"
+                )
+        }
+
+        return components.url!
+    }
+
     // MARK: - Internal properties & initializers
     private let suggestTemplate: String?
     private let customSearchTemplate: String
@@ -158,7 +180,7 @@ public class SearchEngine: Identifiable, Hashable {
     private let placeholder = "PLACEHOLDER"
     private lazy var searchQueryURL: URL = searchURLForQuery(placeholder)!
     /// Return the arg that we use for searching for this engine
-    public lazy var searchQueryComponentKey: String? = {
+    private lazy var searchQueryComponentKey: String? = {
         let components = URLComponents(url: searchQueryURL, resolvingAgainstBaseURL: false)
 
         if let retVal = extractQueryArg(in: components?.queryItems, for: placeholder) {
