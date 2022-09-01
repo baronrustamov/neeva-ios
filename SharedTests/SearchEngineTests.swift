@@ -9,8 +9,13 @@ import XCTest
 class SearchEngineTests: XCTestCase {
     func testUpdateSearchQuery() throws {
         let originalQuery = SearchEngine.neeva.searchURLForQuery("c++")!
+
         XCTAssertEqual(
             originalQuery.absoluteString,
             SearchEngine.neeva.updateSearchQuery(originalQuery, newQuery: "c++").absoluteString)
+
+        XCTAssertNotEqual(
+            originalQuery.absoluteString,
+            SearchEngine.neeva.updateSearchQuery(originalQuery, newQuery: "abc").absoluteString)
     }
 }

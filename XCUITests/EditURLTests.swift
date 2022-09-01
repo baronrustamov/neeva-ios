@@ -30,7 +30,7 @@ class EditURLTests: BaseTestCase {
 
     // Prevents regression of:
     // Editing search for "c++" results in dropping the "++" part and just searching for "c" #4216
-    func testEditQueryIsProperlyEncoded() {
+    func testEditQueryIsIdempotent() {
         performSearch(text: "c++")
 
         waitForExistence(app.buttons["Address Bar"])
