@@ -127,7 +127,7 @@ public class SearchEngine: Identifiable, Hashable {
             : customSearchTemplate
     }
 
-    init(
+    private init(
         id: String, label: String, icon: URL?, suggestTemplate: String?, searchTemplate: String,
         isNeeva: Bool = false
     ) {
