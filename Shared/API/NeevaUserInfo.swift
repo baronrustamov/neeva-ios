@@ -122,6 +122,8 @@ public class NeevaUserInfo: ObservableObject {
     }
 
     public func setLoginCookie(_ value: String) {
+        Defaults[.signedInOnce] = true
+
         // check if token has changed, when different, save new token
         // and fetch user info
         if self.getLoginCookie() == value {

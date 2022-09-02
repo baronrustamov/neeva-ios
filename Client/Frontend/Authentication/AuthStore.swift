@@ -30,12 +30,7 @@ class AuthStore: NSObject, ObservableObject {
 
         let httpCookieStore = self.bvc.tabManager.configuration.websiteDataStore.httpCookieStore
 
-        httpCookieStore.setCookie(NeevaConstants.loginCookie(for: token)) {
-            DispatchQueue.main.async {
-                // NOTE: there's some dependency on loading a neeva.com URL to fully realize authenticating
-                self.bvc.openURLInBackground(NeevaConstants.appSearchURL, showToast: false)
-            }
-        }
+        httpCookieStore.setCookie(NeevaConstants.loginCookie(for: token))
     }
 
     // MARK: - Auth Initializers
@@ -137,10 +132,36 @@ class AuthStore: NSObject, ObservableObject {
                 marketingEmailOptOut: self.marketingEmailOptOut,
                 signup: true)
 
-            self.bvc.openURLInBackground(authURL, showToast: false)
-        }
+            // complete the handshake
+            tokenFromHandshakeURL(authURL) { token in
+                if let token = token {
+                    self.setLoginToken(token: token)
+                    self.finalizeAuthentication()
+                    return
+                }
 
-        self.finalizeAuthentication()
+                self.onError?("Apple auth handshake failed.")
+            }
+        }
+    }
+
+    private func tokenFromHandshakeURL(_ url: URL, callback: @escaping ((String?) -> Void)) {
+        let req = NoRedirectReq()
+        req.dataTask(url: url) { (data, response, error) in
+            guard error == nil else {
+                callback(nil)
+                return
+            }
+
+            var token: String? = nil
+            req.session?.configuration.httpCookieStorage?.cookies?.forEach { cookie in
+                if cookie.name == "httpd~login" {
+                    token = cookie.value
+                }
+            }
+
+            callback(token)
+        }
     }
 
     private func handleOauthWithProvider(token: String) {
@@ -413,37 +434,65 @@ extension AuthStore {
 
     public func signInwithQRCode(
         _ scanResult: Result<ScanResult, ScanError>,
-        onError: ((_ message: String) -> Void),
+        onError: @escaping ((_ message: String) -> Void),
         onSuccess: @escaping (() -> Void)
     ) {
+        self.onError = onError
+        self.onSuccess = onSuccess
+
         switch scanResult {
         case .success(let result):
             guard let url = URL(string: result.string) else { return }
 
             if let token = self.signInTokenFromQRCodeURL(url) {
-                DispatchQueue.main.async { [self] in
-                    let signInURL = URL(
-                        string: "https://\(NeevaConstants.appHost)/login/qr/finish?q=\(token)")!
+                let signInURL = URL(
+                    string: "https://\(NeevaConstants.appHost)/login/qr/finish?q=\(token)")!
 
-                    /*
-                     NOTE: At the time of writing, the happy path works as expected. However,
-                     if the sign-in token was invalid, our app detects the login screen and
-                     will overlay the native sign-in flow, which interrupts the welcome flow.
-                     */
-                    self.bvc.openURLInBackground(signInURL, showToast: false)
+                // complete the handshake
+                tokenFromHandshakeURL(signInURL) { token in
+                    if let token = token {
+                        self.setLoginToken(token: token)
+                        self.finalizeAuthentication()
+                        return
+                    }
 
-                    /*
-                     NOTE: Success here doesn't mean the user has fully authenticated,
-                     it just means we found what looks like a sign-in token in the URL
-                     (built from the scan result) and opened it in the background.
-                     */
-                    onSuccess()
+                    self.onError?("QR Code auth handshake failed.")
                 }
             } else {
-                onError("Invalid QR Code")
+                self.onError?("Invalid QR Code")
             }
         case .failure(let error):
-            onError("QR Code: \(error.localizedDescription)")
+            self.onError?("QR Code: \(error.localizedDescription)")
         }
+    }
+}
+
+private class NoRedirectReq: NSObject {
+    var session: URLSession?
+
+    override init() {
+        super.init()
+        session = URLSession(configuration: .default, delegate: self, delegateQueue: .main)
+    }
+
+    func dataTask(url: URL, completionHandler: (@escaping (Data?, URLResponse?, Error?) -> Void)) {
+        let task = self.session?.dataTask(with: url) { (data, response, error) in
+            guard let data = data else {
+                return
+            }
+            completionHandler(data, response, error)
+        }
+        task?.resume()
+    }
+}
+
+extension NoRedirectReq: URLSessionDelegate, URLSessionTaskDelegate {
+    func urlSession(
+        _ session: URLSession, task: URLSessionTask,
+        willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest,
+        completionHandler: @escaping (URLRequest?) -> Void
+    ) {
+        // Stops the redirection, and returns (internally) the response body.
+        completionHandler(nil)
     }
 }

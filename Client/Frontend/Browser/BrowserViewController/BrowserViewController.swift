@@ -758,7 +758,7 @@ class BrowserViewController: UIViewController {
         self.openURLInNewTab(url, isIncognito: incognitoModel.isIncognito)
     }
 
-    func openURLInBackground(_ url: URL, isIncognito: Bool? = nil, showToast: Bool? = true) {
+    func openURLInBackground(_ url: URL, isIncognito: Bool? = nil) {
         let isIncognito = isIncognito == nil ? incognitoModel.isIncognito : isIncognito!
 
         let tab = self.tabManager.addTab(
@@ -777,15 +777,13 @@ class BrowserViewController: UIViewController {
             toastLabelText = "New Tab opened"
         }
 
-        if showToast == nil || showToast == true {
-            toastViewManager.makeToast(
-                text: toastLabelText,
-                buttonText: "Switch",
-                buttonAction: {
-                    self.tabManager.selectTab(tab, notify: true)
-                }
-            )
-        }
+        toastViewManager.makeToast(
+            text: toastLabelText,
+            buttonText: "Switch",
+            buttonAction: {
+                self.tabManager.selectTab(tab, notify: true)
+            }
+        )
     }
 
     func openLazyTab(
