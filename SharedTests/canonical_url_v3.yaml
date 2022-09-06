@@ -120,3 +120,7 @@
   out: https://www.target.com/s?searchTerm=blue+cloth
 - url: https://stackoverflow.com/questions/tagged/tqdm
   out: https://stackoverflow.com/questions/tagged/tqdm
+- url: https://www.amazon.com/pearl-necklaces/s?k=pearl+necklaces&page=2
+  out: https://www.amazon.com/s?k=pearl+necklaces&page=2
+- url: https://www.amazon.com/pearl-necklaces/s?k=pearl+necklaces
+  out: https://www.amazon.com/s?k=pearl+necklaces
