@@ -24,8 +24,16 @@ private struct SiteRowButton: View {
         Button(action: action) {
             HStack {
                 if let url = url {
+                    let roundedRectangle = RoundedRectangle(cornerRadius: 8)
+
                     FaviconView(forSiteUrl: url)
-                        .frame(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize)
+                        .frame(width: 32, height: 32)
+                        .clipShape(roundedRectangle)
+                        .overlay(
+                            roundedRectangle
+                                .stroke(lineWidth: 0.5)
+                                .foregroundColor(.quaternaryLabel)
+                        )
                         .padding(.trailing, SiteRowViewUX.padding)
                 }
 
@@ -42,8 +50,7 @@ private struct SiteRowButton: View {
             }
             .padding(.trailing, -6)
             .padding(.horizontal, GroupedCellUX.padding)
-            .padding(.vertical, 10)
-            .frame(minHeight: GroupedCellUX.minCellHeight)
+            .padding(.vertical, 9)
         }
     }
 }

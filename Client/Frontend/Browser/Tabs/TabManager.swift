@@ -1696,6 +1696,7 @@ extension TabManager {
         // Don't update anything else so we can use this as a way to test out how the
         // code handles this scenario.
         tabs.forEach { $0.lastExecutedTime = 0 }
+        updateAllTabDataAndSendNotifications(notify: true)
     }
 }
 

@@ -15,11 +15,14 @@ public struct DateSectionHeaderView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.leading)
-        .padding(.vertical, 8)
+        .padding(.top, 8)
     }
 
     public var body: some View {
-        title.background(Color.groupedBackground)
+        VStack {
+            Color.groupedBackground.frame(height: 8)
+            title
+        }
     }
 
     public init(text: String) {

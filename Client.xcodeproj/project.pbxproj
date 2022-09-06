@@ -106,9 +106,10 @@
 		2097EC152835B4EB00A41DD8 /* SceneUIState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2097EC142835B4EB00A41DD8 /* SceneUIState.swift */; };
 		209CD9A327DBF9F20069675C /* TabGroupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209CD9A227DBF9F20069675C /* TabGroupTests.swift */; };
 		209E030528A4623B00ED5F5B /* PinnedTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209E030428A4623B00ED5F5B /* PinnedTabTests.swift */; };
+		209F2B3C28BD710100D2E98C /* NewArchivedTabsRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209F2B3B28BD710100D2E98C /* NewArchivedTabsRowView.swift */; };
 		209F3F4F28A7247B00B6AB9E /* CardStripTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209F3F4E28A7247B00B6AB9E /* CardStripTests.swift */; };
 		20A5D15327F6A43E00DB88FE /* HistoryPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A5D15227F6A43E00DB88FE /* HistoryPanelView.swift */; };
-		20AD48C928A5AA46001011B1 /* ArchivedTabsPanelRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20AD48C828A5AA46001011B1 /* ArchivedTabsPanelRowView.swift */; };
+		20AD48C928A5AA46001011B1 /* ArchivedTabsCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20AD48C828A5AA46001011B1 /* ArchivedTabsCardView.swift */; };
 		20B2DC5928501D870095ED46 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = 20B2DC5528501D870095ED46 /* popup.js */; };
 		20B2DC5B28501D870095ED46 /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = 20B2DC5728501D870095ED46 /* popup.html */; };
 		20B2DC5C28501D870095ED46 /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = 20B2DC5828501D870095ED46 /* popup.css */; };
@@ -1420,9 +1421,10 @@
 		2097EC142835B4EB00A41DD8 /* SceneUIState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneUIState.swift; sourceTree = "<group>"; };
 		209CD9A227DBF9F20069675C /* TabGroupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupTests.swift; sourceTree = "<group>"; };
 		209E030428A4623B00ED5F5B /* PinnedTabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedTabTests.swift; sourceTree = "<group>"; };
+		209F2B3B28BD710100D2E98C /* NewArchivedTabsRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewArchivedTabsRowView.swift; sourceTree = "<group>"; };
 		209F3F4E28A7247B00B6AB9E /* CardStripTests.swift */ = {isa = PBXFileReference; indentWidth = 3; lastKnownFileType = sourcecode.swift; path = CardStripTests.swift; sourceTree = "<group>"; };
 		20A5D15227F6A43E00DB88FE /* HistoryPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPanelView.swift; sourceTree = "<group>"; };
-		20AD48C828A5AA46001011B1 /* ArchivedTabsPanelRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedTabsPanelRowView.swift; sourceTree = "<group>"; };
+		20AD48C828A5AA46001011B1 /* ArchivedTabsCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedTabsCardView.swift; sourceTree = "<group>"; };
 		20B2DC5528501D870095ED46 /* popup.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = popup.js; sourceTree = "<group>"; };
 		20B2DC5728501D870095ED46 /* popup.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = popup.html; sourceTree = "<group>"; };
 		20B2DC5828501D870095ED46 /* popup.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = popup.css; sourceTree = "<group>"; };
@@ -2758,12 +2760,13 @@
 		2052675A28779DFC000550A1 /* ArchivedTabs */ = {
 			isa = PBXGroup;
 			children = (
+				20AD48C828A5AA46001011B1 /* ArchivedTabsCardView.swift */,
 				2028A4C428B8060400618EFD /* ArchivedTabsGroupedDataModel.swift */,
 				8A72F7AC280F33F100CC0FDB /* ArchivedTabsPanelModel.swift */,
-				20AD48C828A5AA46001011B1 /* ArchivedTabsPanelRowView.swift */,
 				8A35CEF6282891EC00E71CD1 /* ArchivedTabsPanelSectionView.swift */,
 				8A72F7A6280F331700CC0FDB /* ArchivedTabsPanelView.swift */,
 				8A72F7A9280F336400CC0FDB /* ArchivedTabsPanelViewController.swift */,
+				209F2B3B28BD710100D2E98C /* NewArchivedTabsRowView.swift */,
 				8AC7A592280D2B5F00176E7E /* OpenArchivedTabsPanelButton.swift */,
 			);
 			path = ArchivedTabs;
@@ -6476,7 +6479,7 @@
 				4A42C54227E58487003B9826 /* CheatsheetOverlayContent.swift in Sources */,
 				4A42C54327E58487003B9826 /* ContentBlocker+Safelist.swift in Sources */,
 				4A42C54427E58487003B9826 /* PublisherExtensions.swift in Sources */,
-				20AD48CB28A5C00C001011B1 /* ArchivedTabsPanelRowView.swift in Sources */,
+				20AD48CB28A5C00C001011B1 /* ArchivedTabsCardView.swift in Sources */,
 				4A42C54527E58487003B9826 /* Tab.swift in Sources */,
 				4A42C54627E58487003B9826 /* FaviconSupport.swift in Sources */,
 				4A42C54727E58487003B9826 /* CloseButton.swift in Sources */,
@@ -6923,7 +6926,7 @@
 				C9C18E6526559B9C004710CD /* LogConfig.swift in Sources */,
 				C832BF5B26E0A7A400B9A1F8 /* OpenInAppOverlayContent.swift in Sources */,
 				4AC6658F26C20A5A00019C24 /* ZeroQueryModel.swift in Sources */,
-				20AD48C928A5AA46001011B1 /* ArchivedTabsPanelRowView.swift in Sources */,
+				20AD48C928A5AA46001011B1 /* ArchivedTabsCardView.swift in Sources */,
 				EBB8950C21939E4100EB91A0 /* NeevaTabContentBlocker.swift in Sources */,
 				BCF864CD276C5FDC00E94B3A /* BuyingGuideView.swift in Sources */,
 				BC93328E2715324700B9BE1C /* OktaAuth.swift in Sources */,
@@ -6975,6 +6978,7 @@
 				8AA97E4026AF36F300ACCCCF /* ZeroQueryCommonContextMenuActions.swift in Sources */,
 				6670187126BB678700960CF3 /* SuggestionModel.swift in Sources */,
 				665CA48826F054CC006E2F4D /* NotificationRow.swift in Sources */,
+				209F2B3C28BD710100D2E98C /* NewArchivedTabsRowView.swift in Sources */,
 				F880C5A8289B588B00C53D1E /* WelcomeFlowSignUpEmailView.swift in Sources */,
 				F564D05728ADB4AF00A033CA /* WelcomeFlowSignInQRCodeView.swift in Sources */,
 				673AF3FF289CDE8D00F62A80 /* QuickLinkSelection.intentdefinition in Sources */,
