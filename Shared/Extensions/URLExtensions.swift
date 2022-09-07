@@ -134,9 +134,9 @@ extension URL {
         components.percentEncodedQuery = items.map {
             $0 + "="
                 + ($0 == searchKey
-                   // This should never fail.
-                    ? $1.addingPercentEncoding(withAllowedCharacters: .SearchTermsAllowed)!
-                    : $1.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
+                // This should never fail.
+                ? $1.addingPercentEncoding(withAllowedCharacters: .SearchTermsAllowed)!
+                : $1.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
         }.joined(separator: "&")
 
         return components.url!

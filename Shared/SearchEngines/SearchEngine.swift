@@ -90,7 +90,9 @@ public class SearchEngine: Identifiable, Hashable {
     public func searchURLFrom(searchQuery: String, queryItems: [URLQueryItem]) -> URL? {
         guard let url = searchURLForQuery(searchQuery) else { return nil }
 
-        return url.withQueryParams(queryItems.filter { $0.name != searchQueryComponentKey }, searchKey: searchQueryComponentKey)
+        return url.withQueryParams(
+            queryItems.filter { $0.name != searchQueryComponentKey },
+            searchKey: searchQueryComponentKey)
     }
 
     public func updateSearchQuery(_ url: URL, newQuery: String) -> URL? {
