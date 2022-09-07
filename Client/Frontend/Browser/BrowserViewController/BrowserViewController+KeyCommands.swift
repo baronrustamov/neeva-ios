@@ -33,6 +33,7 @@ extension BrowserViewController {
     @objc func selectLocationBarKeyCommand() {
         browserModel.scrollingControlModel.showToolbars(animated: true)
         chromeModel.triggerOverlay()
+        zeroQueryModel.targetTab = .currentTab
     }
 
     @objc func newTabKeyCommand() {
