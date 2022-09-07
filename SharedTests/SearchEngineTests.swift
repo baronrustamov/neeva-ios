@@ -12,10 +12,10 @@ class SearchEngineTests: XCTestCase {
 
         XCTAssertEqual(
             originalQuery.absoluteString,
-            SearchEngine.neeva.updateSearchQuery(originalQuery, newQuery: "c++").absoluteString)
+            SearchEngine.neeva.updateSearchQuery(originalQuery, newQuery: "c++")!.absoluteString)
 
         XCTAssertNotEqual(
             originalQuery.absoluteString,
-            SearchEngine.neeva.updateSearchQuery(originalQuery, newQuery: "abc").absoluteString)
+            SearchEngine.neeva.updateSearchQuery(originalQuery, newQuery: "abc")!.absoluteString)
     }
 }
