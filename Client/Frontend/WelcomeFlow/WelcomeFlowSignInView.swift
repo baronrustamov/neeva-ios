@@ -17,7 +17,7 @@ struct WelcomeFlowSignInView: View {
         VStack {
             Spacer()
 
-            WelcomeFlowAuthButtonView(
+            AuthButtonView(
                 icon: Image(systemSymbol: .applelogo),
                 label: "Sign in with Apple",
                 foregroundColor: colorScheme == .light ? .white : .black,
@@ -32,7 +32,7 @@ struct WelcomeFlowSignInView: View {
                 }
             }
 
-            WelcomeFlowAuthButtonView(
+            AuthButtonView(
                 icon: Image(systemSymbol: .envelope),
                 label: "Sign in with email",
                 foregroundColor: .primary,
@@ -50,7 +50,7 @@ struct WelcomeFlowSignInView: View {
                 }
             }
 
-            WelcomeFlowAuthButtonView(
+            AuthButtonView(
                 icon: Image("google_icon"),
                 label: "Sign in with Google",
                 foregroundColor: .primary,
@@ -68,7 +68,7 @@ struct WelcomeFlowSignInView: View {
                 }
             }
 
-            WelcomeFlowAuthButtonView(
+            AuthButtonView(
                 icon: Image("microsoft"),
                 label: "Sign in with Microsoft",
                 foregroundColor: .primary,
@@ -87,7 +87,7 @@ struct WelcomeFlowSignInView: View {
             }
 
             if FeatureFlag[.qrCodeSignIn] {
-                WelcomeFlowAuthButtonView(
+                AuthButtonView(
                     icon: Image(systemSymbol: .qrcode),
                     label: "Sign in with QR Code",
                     foregroundColor: .primary,

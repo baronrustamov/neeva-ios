@@ -201,20 +201,6 @@ extension Defaults.Keys {
     public static let signupPromptInterval = Defaults.Key<Int>("signupPromptInterval", default: 5)
     public static let maxQueryLimit = Defaults.Key<Int>("maxQueryLimit", default: 25)
 
-    // crypto wallet
-    public static let cryptoPublicKey = Defaults.Key<String>("cryptoPublicKey", default: "")
-    public static let cryptoTransactionHashStore = Defaults.Key<Set<String>>(
-        "cryptoTransactionHashStore", default: [])
-    public static let sessionsPeerIDs = Defaults.Key<Set<String>>(
-        "web3SessionsPeerIDs", default: [])
-    public static let tickerResponse = Defaults.Key<Data?>("tickerResponse", default: nil)
-    public static let walletIntroSeen = Defaults.BoolKey("seenWalletIntro")
-    public static let walletOnboardingDone = Defaults.BoolKey("walletOnboardingDone")
-    public static let currentTheme = Defaults.Key<String>("currentTheme", default: "")
-    public static let showGasFeeInToolbar = Defaults.Key<Bool>("gasFeeToolbar", default: false)
-    public static let walletProfilePictureAssetId = Defaults.Key<Int?>(
-        "walletProfilePictureAssetId", default: nil)
-
     // MARK: - welcome flow
     public static let welcomeFlowRestoreToDefaultBrowser = Defaults.BoolKey(
         "profile.welcomeFlowRestoreToDefaultBrowser")

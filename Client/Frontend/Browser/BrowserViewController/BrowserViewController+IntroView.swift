@@ -149,8 +149,49 @@ extension BrowserViewController {
     }
 }
 
+// MARK: - Sign In or Up
+extension BrowserViewController {
+    func presentSignInOrUpFlow(startScreen: SignInOrUpFlowScreen?) {
+        let signInOrUpFlowModel = SignInOrUpFlowModel(
+            authStore: AuthStore(bvc: self),
+            onCloseAction: {
+                self.overlayManager.hideCurrentOverlay()
+            }
+        )
+
+        if #unavailable(iOS 15.0) {
+            signInOrUpFlowModel.currentPremiumPlan = nil
+        }
+
+        if let startScreen = startScreen {
+            signInOrUpFlowModel.currentScreen = startScreen
+        }
+
+        overlayManager.presentFullScreenCover(
+            content: AnyView(
+                SignInOrUpFlowView(model: signInOrUpFlowModel)
+                    .onAppear {
+                        /*
+                         NOTE: orientation locking does not work on iPads
+                         without breaking multitasking support
+                         https://stackoverflow.com/a/55528118
+                        */
+                        AppDelegate.setRotationLock(to: .portrait)
+                    }
+                    .onDisappear {
+                        AppDelegate.setRotationLock(to: .all)
+                    }
+            ),
+            ignoreSafeArea: true
+        ) {
+            // noop
+        }
+    }
+}
+
 // MARK: - Default Browser
 extension BrowserViewController {
+    // TODO: clean up unused code paths in favor of new welcome flow
     func presentDefaultBrowserFirstRun() {
         let interstitialModel = InterstitialViewModel(
             onCloseAction: {

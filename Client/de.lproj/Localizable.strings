@@ -61,6 +61,12 @@
 /* No comment provided by engineer. */
 "@%@" = "@%@";
 
+/* Price per month */
+"/month" = "/Monat";
+
+/* Price per year */
+"/year" = "/Jahr";
+
 /* No comment provided by engineer. */
 "%@" = "%@";
 
@@ -275,12 +281,6 @@
 "Appearance" = "Erscheinungsbild";
 
 /* No comment provided by engineer. */
-"Archive tabs" = "Tabs archivieren";
-
-/* No comment provided by engineer. */
-"Archive Tabs" = "Tabs archivieren";
-
-/* No comment provided by engineer. */
 "Archived Tabs" = "Archivierte Tabs";
 
 /* No comment provided by engineer. */
@@ -294,6 +294,9 @@
 
 /* No comment provided by engineer. */
 "arrows" = "Pfeile";
+
+/* No comment provided by engineer. */
+"Auto Archive Tabs" = "Auto Archive Tabs";
 
 /* No comment provided by engineer. */
 "Automatically send usage statistics to Neeva" = "Automatisch Nutzungsstatistiken an Neeva senden";
@@ -338,9 +341,6 @@
 "Browse the web with no ads in your way" = "Surfen Sie im Internet, ohne dass Ihnen Werbung im Weg steht";
 
 /* No comment provided by engineer. */
-"Browse Web3" = "Web3 durchsuchen";
-
-/* No comment provided by engineer. */
 "Browser + ad blocker" = "Browser + Werbeblocker";
 
 /* (No Comment) */
@@ -382,8 +382,8 @@
 /* No comment provided by engineer. */
 "Cancel" = "Abbrechen";
 
-/* No comment provided by engineer. */
-"Choose Your Plan" = "Wählen Sie Ihren Tarif";
+/* Text to tell user they can cancel our service any time */
+"Cancel anytime" = "Kündigung jederzeit möglich";
 
 /* No comment provided by engineer. */
 "Clear" = "Löschen";
@@ -413,9 +413,6 @@
 "Close" = "Schließen";
 
 /* No comment provided by engineer. */
-"Close %@" = "%@ schließen";
-
-/* No comment provided by engineer. */
 "Close %@ %@%@" = "%1$@ %2$@%3$@ schließen";
 
 /* No comment provided by engineer. */
@@ -435,6 +432,9 @@
 
 /* No comment provided by engineer. */
 "Close All Tabs" = "Alle Tabs schließen";
+
+/* No comment provided by engineer. */
+"Close Card Strip Tab %@" = "Kartenstreifen-Tab schließen %@";
 
 /* No comment provided by engineer. */
 "Close Incognito Tabs" = "Inkognito-Tabs schließen";
@@ -503,7 +503,7 @@
 "Cookie Popups" = "Cookie-Pop-ups";
 
 /* No comment provided by engineer. */
-"COOKIE POPUPS" = "Cookie-Pop-ups";
+"COOKIE POPUPS" = "COOKIE-POP-UPS";
 
 /* No comment provided by engineer. */
 "Cookies" = "Cookies";
@@ -772,6 +772,9 @@
 /* No comment provided by engineer. */
 "General" = "Allgemein";
 
+/* Button to get the free plan for our product */
+"Get FREE" = "Holen Sie sich den KOSTENLOSEN TARIF";
+
 /* No comment provided by engineer. */
 "Get Premium for maximum privacy" = "Holen Sie sich Premium und profitieren Sie von maximalem Datenschutz";
 
@@ -928,8 +931,14 @@
 /* No comment provided by engineer. */
 "Make Neeva your Default Browser" = "Machen Sie Neeva zu Ihrem Standardbrowser";
 
+/* Button to manager/configure your monthly subscription plan */
+"Manage Monthly" = "Monatlich verwalten";
+
 /* No comment provided by engineer. */
 "Manage Neeva Memory" = "Neeva-Speicher verwalten";
+
+/* Button to manager/configure your yearly subscription plan */
+"Manage Yearly" = "Jährlich verwalten";
 
 /* No comment provided by engineer. */
 "Marketing Cookies" = "Marketing-Cookies";
@@ -1005,9 +1014,6 @@
 
 /* No comment provided by engineer. */
 "News alerts" = "Nachrichtenbenachrichtigungen";
-
-/* This is unused string, no translation required */
-"NFT Search from Neevaxyz" = "NFT-Suche von Neevaxyz";
 
 /* No comment provided by engineer. */
 "nil" = "null";
@@ -1145,7 +1151,7 @@
 "Pin" = "Anheften";
 
 /* No comment provided by engineer. */
-"Pin tab" = "Tab anheften";
+"Pin Tab" = "Tab anheften";
 
 /* No comment provided by engineer. */
 "Pin/unpin not yet implemented" = "Anheften/Anheften aufheben noch nicht implementiert";
@@ -1172,19 +1178,10 @@
 "Preference saved!" = "Einstellung gespeichert!";
 
 /* No comment provided by engineer. */
-"Premium" = "Premium";
-
-/* No comment provided by engineer. */
 "Premium\nAnnual" = "Premium\njährlich";
 
 /* No comment provided by engineer. */
 "Premium\nMonthly" = "Premium\nmonatlich";
-
-/* No comment provided by engineer. */
-"Premium Annual Plan" = "Premium – Jahresplan";
-
-/* No comment provided by engineer. */
-"Premium Monthly Plan" = "Premium – Monatsplan";
 
 /* No comment provided by engineer. */
 "Price History" = "Preishistorie";
@@ -1287,6 +1284,9 @@
 
 /* No comment provided by engineer. */
 "Save" = "Speichern";
+
+/* save 16% discount in our product's subscription price */
+"Save 16%" = "16 % sparen";
 
 /* No comment provided by engineer. */
 "Save and share instantly. Stay organized by adding images, websites, documents to a Space today" = "Speichern und sofort teilen. Bleiben Sie gut organisiert: Fügen Sie noch heute Bilder, Websites und Dokumente zu einem Bereich hinzu.";
@@ -1486,8 +1486,11 @@
 /* No comment provided by engineer. */
 "Submit" = "Einreichen";
 
-/* No comment provided by engineer. */
-"Subscription products not found." = "Abonnementprodukte nicht gefunden.";
+/* Button to subscribe a monthly subscription */
+"Subscribe Monthly" = "Monatlich abonnieren";
+
+/* Button to subscribe an annual subscription */
+"Subscribe Yearly" = "Jährlich abonnieren";
 
 /* No comment provided by engineer. */
 "Success! Space shared with %lld people" = "Erfolg! Bereich mit %lld Personen geteilt";
@@ -1577,9 +1580,6 @@
 "TRACKERS" = "Tracker";
 
 /* No comment provided by engineer. */
-"Tracking prevention" = "Verhindern von Tracking";
-
-/* No comment provided by engineer. */
 "Tracking Protection" = "Tracking-Schutz";
 
 /* No comment provided by engineer. */
@@ -1617,9 +1617,6 @@
 
 /* No comment provided by engineer. */
 "Unknown" = "Unbekannt";
-
-/* No comment provided by engineer. */
-"Unlimited ad-free, private search" = "Unbegrenzte werbefreie, private Suche";
 
 /* No comment provided by engineer. */
 "Unpin" = "Nicht mehr anheften";

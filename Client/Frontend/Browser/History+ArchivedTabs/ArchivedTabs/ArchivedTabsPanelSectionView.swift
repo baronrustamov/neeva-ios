@@ -19,7 +19,7 @@ struct ArchivedTabsListSectionView: View {
                 ForEach(rows, id: \.id) { row in
                     switch row {
                     case .tab(let tab):
-                        ArchivedTabsRowView(tab: tab, tabManager: tabManager)
+                        ArchivedTabsCardView(tab: tab, tabManager: tabManager, width: 0)
                     case .tabGroup(let group):
                         LazyVStack(spacing: 0) {
                             HStack {
@@ -35,7 +35,7 @@ struct ArchivedTabsListSectionView: View {
                             ForEach(
                                 group.children, id: \.self
                             ) { tab in
-                                ArchivedTabsRowView(tab: tab, tabManager: tabManager)
+                                ArchivedTabsCardView(tab: tab, tabManager: tabManager, width: 0)
                             }
                         }
                         .background(

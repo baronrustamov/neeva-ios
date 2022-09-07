@@ -27,6 +27,15 @@ enum ArchivedTabRow: Equatable {
         }
     }
 
+    var isTabGroup: Bool {
+        switch self {
+        case .tab(let archivedTab):
+            return false
+        case .tabGroup(let archivedTabGroup):
+            return true
+        }
+    }
+
     static func == (lhs: ArchivedTabRow, rhs: ArchivedTabRow) -> Bool {
         switch (lhs, rhs) {
         case (.tab(let tabLhs), .tab(let tabRhs)):

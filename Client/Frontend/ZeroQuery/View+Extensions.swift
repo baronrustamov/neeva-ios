@@ -5,61 +5,13 @@
 import Shared
 import SwiftUI
 
-#if XYZ
-    import WalletCore
-#endif
-
-extension View {
-    @ViewBuilder
-    func foregroundColorOrGradient(_ color: Color) -> some View {
-        #if XYZ
-            self.gradientForeground()
-        #else
-            self.foregroundColor(color)
-        #endif
-    }
-
-    @ViewBuilder
-    func backgroundColorOrGradient(_ color: Color? = nil) -> some View {
-        #if XYZ
-            self.background(WalletTheme.gradient.opacity(0.1))
-        #else
-            if let color = color {
-                self.background(color)
-            } else {
-                self
-            }
-        #endif
-    }
-
-    @ViewBuilder
-    func defaultBackgroundOrTheme(_ currentTheme: String?) -> some View {
-        #if XYZ
-            self.background(Web3Theme(with: currentTheme).tabBar.ignoresSafeArea())
-        #else
-            self.background(Color.DefaultBackground.ignoresSafeArea())
-        #endif
-    }
-
-}
-
 extension View {
     @ViewBuilder
     public func hexagonClip(with size: CGFloat) -> some View {
-        #if XYZ
-            self
-                .frame(width: size * 4 / 5, height: size * 4 / 5)
-                .background(Color.white)
-                .clipShape(Hexagon())
-                .frame(width: size, height: size)
-                .background(WalletTheme.gradient.opacity(0.2))
-                .clipShape(Hexagon())
-        #else
-            self
-                .frame(width: size, height: size)
-                .background(Color.white)
-                .clipShape(Hexagon())
-        #endif
+        self
+            .frame(width: size, height: size)
+            .background(Color.white)
+            .clipShape(Hexagon())
     }
 }
 

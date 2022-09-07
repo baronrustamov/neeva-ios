@@ -16,7 +16,7 @@ struct WelcomeFlowSignUpEmailView: View {
         WelcomeFlowHeaderView(text: "Create your account")
             .padding(.bottom, 20)
 
-        OktaEmailSignUpForm(
+        OktaEmailSignUpFormView(
             email: $email,
             password: $password,
             action: {

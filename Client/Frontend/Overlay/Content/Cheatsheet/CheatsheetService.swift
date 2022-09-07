@@ -165,14 +165,23 @@ final class CheatsheetServiceProvider: CheatsheetDataService {
             if case .failure(let failure) = result,
                 failure.isAuthError
             {
-                self.fetchPreviewResults(
-                    query: query,
-                    // Ping "preview" to get new cookie on retry
-                    forceFetchCookie: true,
-                    // Max 1 retry
-                    retryOnAuthError: false,
-                    completion: completion
-                )
+                let callFetchPreviewResults = { [self] in
+                    self.fetchPreviewResults(
+                        query: query,
+                        // Ping "preview" to get new cookie on retry
+                        forceFetchCookie: true,
+                        // Max 1 retry
+                        retryOnAuthError: false,
+                        completion: completion
+                    )
+                }
+                if Thread.isMainThread {
+                    callFetchPreviewResults()
+                } else {
+                    DispatchQueue.main.async {
+                        callFetchPreviewResults()
+                    }
+                }
             } else {
                 completion(result)
             }
@@ -323,6 +332,10 @@ private class PreviewCookieFetcher {
         receiveOn queue: DispatchQueue? = nil,
         completion: @escaping (Result<HTTPCookie, Error>) -> Void
     ) {
+        // Read app host URL at invocation before scheduling onto queue
+        precondition(Thread.isMainThread)
+        let url = NeevaConstants.buildAppURL("preview?pid=neeva_scope")
+
         // This call must be `async` in case the caller is on a concurrent queue which will cause
         // a thread explostion
         self.queue.async { [weak self] in
@@ -334,7 +347,6 @@ private class PreviewCookieFetcher {
             self.session.configuration.httpCookieStorage?.removeCookies(since: .distantPast)
 
             // Pin endpoint to get new cookie synchronously
-            let url = URL(string: "https://neeva.com/preview?pid=neeva_scope")!
             let (_, _, error) = self.session.dataTaskSync(url: url, timeout: .distantFuture)
 
             // Create result object

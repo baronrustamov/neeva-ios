@@ -1,3 +1,4 @@
+import Defaults
 import Shared
 import WebKit
 
@@ -53,7 +54,8 @@ class WebUIMessageHelper: TabContentScript {
         else { return }
 
         let tourStep = TourStep(rawValue: name) ?? .unknown
-        if tourStep == .skipTour || tourStep == .completeTour {
+        // only show notification permission prompt after user went through the first run flow
+        if (tourStep == .skipTour || tourStep == .completeTour) && Defaults[.introSeen] {
             handleShouldShowNotificationPrompt(id: id, tourStep: tourStep)
         }
 

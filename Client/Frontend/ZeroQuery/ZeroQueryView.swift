@@ -54,7 +54,7 @@ extension EnvironmentValues {
 extension Defaults.Keys {
     fileprivate static let expandSuggestedSites = Defaults.Key<TriState>(
         "profile.home.suggestedSites.expanded",
-        default: NeevaConstants.currentTarget == .xyz ? .expanded : .compact
+        default: .compact
     )
     fileprivate static let expandSearches = Defaults.Key<Bool>(
         "profile.home.searches.expanded", default: true)
@@ -75,7 +75,6 @@ struct ZeroQueryView: View {
     @Default(.expandSearches) private var expandSearches
     @Default(.expandSpaces) private var expandSpaces
     @Default(.expandSuggestedSpace) private var expandSuggestedSpace
-    @Default(.cryptoPublicKey) private var cryptoPublicKey: String
 
     @State var url: URL?
     @State var tab: Tab?
@@ -151,20 +150,11 @@ struct ZeroQueryView: View {
 
     @ViewBuilder
     private func contentView(_ parentGeom: GeometryProxy) -> some View {
-        #if XYZ
-            suggestedSitesView(parentGeom)
-            if FeatureFlag[.newWeb3Features] {
-                browseNFTsView
-                yourCollectionsView
-            }
-            searchesView
-        #else
-            promoCardView(parentGeom)
-            suggestedSitesView(parentGeom)
-            searchesView
-            spacesView
-            firstRunBranding
-        #endif
+        promoCardView(parentGeom)
+        suggestedSitesView(parentGeom)
+        searchesView
+        spacesView
+        firstRunBranding
     }
 
     @ViewBuilder private var firstRunBranding: some View {
@@ -241,9 +231,7 @@ struct ZeroQueryView: View {
             ratingsCard(parentGeom.size.width)
         }
 
-        if (Defaults[.didFirstNavigation] && viewModel.suggestedSitesViewModel.sites.count > 0)
-            || NeevaConstants.currentTarget == .xyz
-        {
+        if Defaults[.didFirstNavigation] && viewModel.suggestedSitesViewModel.sites.count > 0 {
             ZeroQueryHeader(
                 title: "Suggested sites",
                 action: { expandSuggestedSites.advance() },
@@ -276,14 +264,7 @@ struct ZeroQueryView: View {
         )
 
         if expandSearches {
-            if NeevaConstants.currentTarget == .xyz {
-                SuggestedXYZSearchesView()
-                    .onChange(of: cryptoPublicKey) { _ in
-                        viewModel.updateState()
-                    }
-            } else {
-                SuggestedSearchesView(profile: viewModel.profile)
-            }
+            SuggestedSearchesView(profile: viewModel.profile)
         }
     }
 
@@ -308,27 +289,4 @@ struct ZeroQueryView: View {
             }
         }
     }
-
-    @ViewBuilder
-    private var browseNFTsView: some View {
-        ZeroQueryHeader(
-            title: "Browse Web3",
-            hideToggle: !Defaults[.didFirstNavigation]
-        )
-        SuggestedSitesView(
-            isExpanded: false,
-            withHome: false,
-            viewModel: Web3SuggestedSitesViewModel())
-    }
-
-    #if XYZ
-        @ViewBuilder
-        private var yourCollectionsView: some View {
-            ZeroQueryHeader(
-                title: "Your Collections",
-                hideToggle: !Defaults[.didFirstNavigation]
-            )
-            YourCollectionsView(bvc: viewModel.bvc)
-        }
-    #endif
 }

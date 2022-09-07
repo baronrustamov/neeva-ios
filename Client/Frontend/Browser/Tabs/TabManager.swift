@@ -12,6 +12,20 @@ import XCGLogger
 
 private let log = Logger.browser
 
+enum PreferredSelectTabTarget {
+    case parent
+    case mostRecent
+    case noPreference
+    case doNotSelect
+
+    var shouldSelect: Bool {
+        if case .doNotSelect = self {
+            return false
+        }
+        return true
+    }
+}
+
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
 class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     private let tabEventHandlers: [TabEventHandler]
@@ -406,25 +420,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
                 fromTabTray: fromTabTray, clearSelectedTab: clearSelectedTab,
                 openLazyTab: openLazyTab)
         }
-    }
-
-    // Select the most recently visited tab, IFF it is also the parent tab of the closed tab.
-    private func selectParentTab(afterRemoving tab: Tab) -> Bool {
-        let viableTabs = (tab.isIncognito ? incognitoTabs : normalTabs).filter { $0 != tab }
-        guard let parentTab = tab.parent, parentTab != tab, !viableTabs.isEmpty,
-            viableTabs.contains(parentTab)
-        else { return false }
-
-        let parentTabIsMostRecentUsed = mostRecentTab(inTabs: viableTabs) == parentTab
-
-        // If the parentTab is pinned we should return to it regardless of it being
-        // the most recently used to pass back the WebView and navigation stack.
-        if parentTabIsMostRecentUsed || parentTab.isPinned {
-            selectTab(parentTab, previous: tab, notify: true)
-            return true
-        }
-
-        return false
     }
 
     @objc private func prefsDidChange() {
@@ -958,7 +953,13 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     }
 
     // MARK: - CloseTabs
-    func removeTab(_ tab: Tab?, showToast: Bool = false, updateSelectedTab: Bool = true) {
+    /// - Parameters:
+    ///     - selectTabPreferring preference: Preference for how the new tab should be picked. pass `nil` to not select a new tab
+    func removeTab(
+        _ tab: Tab?,
+        showToast: Bool = false,
+        selectTabPreferring preference: PreferredSelectTabTarget = .noPreference
+    ) {
         guard let tab = tab else {
             return
         }
@@ -979,14 +980,24 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         addTabsToRecentlyClosed([tab], showToast: showToast)
         removeTab(tab, flushToDisk: true, notify: true)
 
-        if (selectedTab?.isIncognito ?? false) == tab.isIncognito, updateSelectedTab {
-            updateSelectedTabAfterRemovalOf(tab, deletedIndex: index, notify: true)
+        if (selectedTab?.isIncognito ?? false) == tab.isIncognito,
+            preference.shouldSelect
+        {
+            updateSelectedTabAfterRemovalOf(
+                tab,
+                deletedIndex: index,
+                with: preference,
+                notify: true
+            )
         }
     }
 
     func removeTabs(
-        _ tabsToBeRemoved: [Tab], showToast: Bool = true,
-        updateSelectedTab: Bool = true, dontAddToRecentlyClosed: Bool = false, notify: Bool = true
+        _ tabsToBeRemoved: [Tab],
+        showToast: Bool = true,
+        updateSelectedTab: Bool = true,
+        dontAddToRecentlyClosed: Bool = false,
+        notify: Bool = true
     ) {
         guard tabsToBeRemoved.count > 0 else {
             return
@@ -996,7 +1007,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             addTabsToRecentlyClosed(tabsToBeRemoved, showToast: showToast)
         }
 
-        let previous = selectedTab
         let lastTab = tabsToBeRemoved[tabsToBeRemoved.count - 1]
         let lastTabIndex = tabs.firstIndex(of: lastTab)
         let tabsToKeep = self.tabs.filter { !tabsToBeRemoved.contains($0) }
@@ -1047,44 +1057,84 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     }
 
     private func updateSelectedTabAfterRemovalOf(
-        _ tab: Tab, deletedIndex: Int?, notify: Bool
+        _ tab: Tab,
+        deletedIndex: Int?,
+        with targetPreference: PreferredSelectTabTarget = .noPreference,
+        notify: Bool
     ) {
-        let closedLastNormalTab = !tab.isIncognito && normalTabs.isEmpty
-        let closedLastIncognitoTab = tab.isIncognito && incognitoTabs.isEmpty
-        // In time-based switcher, the normalTabs gets filtered to make sure we only
-        // select tab in today section.
+        guard targetPreference.shouldSelect else {
+            return
+        }
+        // Check that there are viable tab targets
+
+        // Based on if the closed tab is incognito, create an ordered set of viable tabs
+        // In time-based switcher, the we only selected tabs in the `Today` section
         let viableTabs: [Tab] =
             tab.isIncognito
             ? incognitoTabs
             : normalTabs.filter {
-                $0.isIncluded(in: .today)
+                $0.isIncluded(in: [.pinned, .today])
             }
-        let bvc = SceneDelegate.getBVC(with: scene)
 
-        if let selectedTab = selectedTab, viableTabs.contains(selectedTab) {
-            // The selectedTab still exists, no need to find another tab to select.
+        // If the currently selected tab is still a viable selection target, no work needs to be done
+        if let selectedTab = selectedTab,
+            viableTabs.contains(selectedTab)
+        {
             return
         }
 
-        if closedLastNormalTab || closedLastIncognitoTab
-            || viableTabs.isEmpty
-        {
+        let bvc = SceneDelegate.getBVC(with: scene)
+        // If no viable tabs are left, show tab grid
+        guard !viableTabs.isEmpty else {
             DispatchQueue.main.async {
                 self.selectTab(nil, notify: notify)
                 bvc.browserModel.showGridWithNoAnimation()
             }
-        } else if let selectedTab = selectedTab, let deletedIndex = deletedIndex {
-            if !selectParentTab(afterRemoving: selectedTab) {
-                if let rightOrLeftTab = viableTabs[safe: deletedIndex]
-                    ?? viableTabs[safe: deletedIndex - 1]
-                {
-                    selectTab(rightOrLeftTab, previous: selectedTab, notify: notify)
-                } else {
-                    selectTab(
-                        mostRecentTab(inTabs: viableTabs) ?? viableTabs.last, previous: selectedTab,
-                        notify: notify)
-                }
+            return
+        }
+
+        // Perform selection by prioritizing preference
+        var tabToSelect: Tab?
+
+        switch targetPreference {
+        case .parent:
+            // Select parent without recency or pinned checks
+            // allow selecting parent tabs from not `Today` section
+            let availableTabs = tab.isIncognito ? incognitoTabs : normalTabs
+            if let parentTab = tab.parent,
+                parentTab != tab,
+                availableTabs.contains(parentTab)
+            {
+                tabToSelect = parentTab
             }
+        case .mostRecent:
+            // Select most recent tab without checking parent
+            tabToSelect = mostRecentTab(inTabs: viableTabs) ?? viableTabs.last
+        case .noPreference:
+            // Default flow
+            // Select parent tab if it is most recent or pinned
+            // else select adjacent tab (prefer higher index) in viable tabs
+            // else select most recent or last viable tab
+            if let parentTab = tab.parent,
+                parentTab != tab,
+                mostRecentTab(inTabs: viableTabs) == parentTab || parentTab.isPinned
+            {
+                tabToSelect = parentTab
+            } else if let deletedIndex = deletedIndex,
+                let adjacentTab = viableTabs[safe: deletedIndex]
+                    ?? viableTabs[safe: deletedIndex - 1]
+            {
+                tabToSelect = adjacentTab
+            } else {
+                tabToSelect = mostRecentTab(inTabs: viableTabs) ?? viableTabs.last
+            }
+        default:
+            break
+        }
+
+        // Perform selection
+        if let tabToSelect = tabToSelect {
+            selectTab(tabToSelect, previous: selectedTab, notify: notify)
         } else {
             selectTab(nil, notify: notify)
             bvc.browserModel.showGridWithNoAnimation()
@@ -1097,7 +1147,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     }
 
     func removeAllIncognitoTabs() {
-        removeTabs(incognitoTabs, updateSelectedTab: true)
+        removeTabs(incognitoTabs)
         incognitoConfiguration = TabManager.makeWebViewConfig(isIncognito: true)
     }
 
@@ -1330,6 +1380,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         ]
 
         if tab.isPinned,
+            !(tab.backList?.first?.url.equals(url, with: options) ?? false),
             !(tab.url?.equals(url, with: options) ?? false),
             !(InternalURL(tab.url)?.isSessionRestore ?? false),
             !(InternalURL(url)?.isSessionRestore ?? false)
@@ -1645,6 +1696,7 @@ extension TabManager {
         // Don't update anything else so we can use this as a way to test out how the
         // code handles this scenario.
         tabs.forEach { $0.lastExecutedTime = 0 }
+        updateAllTabDataAndSendNotifications(notify: true)
     }
 }
 

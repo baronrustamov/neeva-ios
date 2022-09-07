@@ -13,16 +13,6 @@ import StoreKit
 extension SearchEngine {
     public static var current: SearchEngine {
         let autoEngine = Defaults[.customSearchEngine].flatMap { all[$0] }
-
-        if NeevaConstants.currentTarget == .xyz {
-            let countryCode = SKPaymentQueue.default().storefront?.countryCode
-            let defaultEngine: SearchEngine =
-                countryCode == "USA"
-                ? .neeva
-                : .google
-            return autoEngine ?? defaultEngine
-        }
-
         return autoEngine ?? .neeva
     }
 }

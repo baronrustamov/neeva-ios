@@ -25,7 +25,6 @@ enum PromoCardType {
     case defaultBrowser(action: () -> Void, onClose: () -> Void)
     case referralPromo(action: () -> Void, onClose: () -> Void)
     case notificationPermission(action: () -> Void, onClose: () -> Void)
-    case walletPromo(action: () -> Void)
 
     var action: () -> Void {
         switch self {
@@ -36,8 +35,6 @@ enum PromoCardType {
         case .referralPromo(let action, _):
             return action
         case .notificationPermission(let action, _):
-            return action
-        case .walletPromo(let action):
             return action
         }
     }
@@ -57,8 +54,6 @@ enum PromoCardType {
                 .fixedSize(horizontal: false, vertical: true)
         case .notificationPermission:
             Text("From news to shopping,\nget the best of the web\ndelivered right to you")
-        case .walletPromo:
-            Text(verbatim: "Experience Web3,\n with clarity and safety")
         }
     }
 
@@ -88,8 +83,6 @@ enum PromoCardType {
             }
         case .notificationPermission:
             Text("Enable Notifications")
-        case .walletPromo:
-            Text(verbatim: "Create / Import Wallet")
         }
     }
 
@@ -99,8 +92,6 @@ enum PromoCardType {
             return .brand.adaptive.polar
         case .referralPromo:
             return Color(light: .hex(0xFFEAD1), dark: .hex(0xF8C991))
-        case .walletPromo:
-            return .quaternarySystemFill
         }
     }
 
@@ -125,8 +116,6 @@ enum PromoCardType {
             return "referralPromo"
         case .notificationPermission:
             return "notificationPermission"
-        case .walletPromo:
-            return "walletPromo"
         }
     }
 }
@@ -140,34 +129,26 @@ struct PromoCard: View {
 
     @ViewBuilder
     var button: some View {
-        #if XYZ
-            Button(action: type.action) {
-                type
-                    .buttonLabel
-                    .frame(maxWidth: .infinity)
-            }.buttonStyle(.wallet(.primary))
-        #else
-            Button(action: type.action) {
-                if type.isCompact {
-                    HStack {
-                        type.buttonLabel
-                        Spacer()
-                    }
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(Color.brand.blue)
-                } else {
-                    HStack {
-                        Spacer()
-                        type.buttonLabel
-                        Spacer()
-                    }
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(.white)
-                    .frame(height: 48)
-                    .background(Capsule().fill(Color.brand.blue))
+        Button(action: type.action) {
+            if type.isCompact {
+                HStack {
+                    type.buttonLabel
+                    Spacer()
                 }
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundColor(Color.brand.blue)
+            } else {
+                HStack {
+                    Spacer()
+                    type.buttonLabel
+                    Spacer()
+                }
+                .font(.system(size: 16, weight: .medium))
+                .foregroundColor(.white)
+                .frame(height: 48)
+                .background(Capsule().fill(Color.brand.blue))
             }
-        #endif
+        }
     }
 
     @ViewBuilder
@@ -178,7 +159,7 @@ struct PromoCard: View {
         type.title
             .font(.roobert(.regular, size: size))
             .lineSpacing(lineSpacing)
-            .foregroundColorOrGradient(.hex(0x131415))
+            .foregroundColor(.hex(0x131415))
             .padding(.vertical, type.isCompact ? 0 : lineSpacing)
     }
 

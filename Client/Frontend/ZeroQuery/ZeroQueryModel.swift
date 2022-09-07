@@ -145,28 +145,18 @@ class ZeroQueryModel: ObservableObject {
                 Defaults[.didDismissDefaultBrowserCard] = true
             }
         case .shouldTriggerWalletOrSignupPromo:
-            #if XYZ
-                if Defaults[.cryptoPublicKey].isEmpty {
-                    promoCard = .walletPromo {
-                        self.bvc.web3Model.showWalletPanel()
-                    }
-                } else {
-                    promoCard = nil
+            if Defaults[.didFirstNavigation] {
+                promoCard = .previewModeSignUp {
+                    self.handlePromoCard(interaction: .PreviewModePromoSignup)
+                    self.signIn()
+                } onClose: {
+                    self.handlePromoCard(interaction: .ClosePreviewSignUpPromo)
+                    self.promoCard = nil
+                    Defaults[.didDismissPreviewSignUpCard] = true
                 }
-            #else
-                if Defaults[.didFirstNavigation] && NeevaConstants.currentTarget != .xyz {
-                    promoCard = .previewModeSignUp {
-                        self.handlePromoCard(interaction: .PreviewModePromoSignup)
-                        self.signIn()
-                    } onClose: {
-                        self.handlePromoCard(interaction: .ClosePreviewSignUpPromo)
-                        self.promoCard = nil
-                        Defaults[.didDismissPreviewSignUpCard] = true
-                    }
-                } else {
-                    promoCard = nil
-                }
-            #endif
+            } else {
+                promoCard = nil
+            }
         case .shouldTriggerReferralPromo:
             promoCard = .referralPromo {
                 self.handlePromoCard(interaction: .OpenReferralPromo)
@@ -228,8 +218,7 @@ class ZeroQueryModel: ObservableObject {
         let introSeenDuration = Defaults[.introSeenDate]?.hoursBetweenDate(toDate: Date()) ?? 0
 
         // Show default browser promo if the user is not a default browser user for the first three days
-        return NeevaConstants.currentTarget == .client
-            && !Defaults[.didDismissDefaultBrowserCard]
+        return !Defaults[.didDismissDefaultBrowserCard]
             && !Defaults[.didSetDefaultBrowser]
             && Defaults[.didFirstNavigation]
             && introSeenDuration <= DefaultBrowserPromoRules.hoursAfterInterstitialForPromoCard
@@ -277,7 +266,7 @@ class ZeroQueryModel: ObservableObject {
         // This can occur if a taps back and the Suggestion UI is shown.
         // If the user cancels out of that UI, we should navigate the tab back, like a complete undo.
         if let bvc = bvc, openedFrom == .backButton, wasCancelled {
-            bvc.tabManager.selectedTab?.goBack(checkBackNavigationSuggestionQuery: false)
+            bvc.tabManager.selectedTab?.goBack(preferredTarget: nil)
         }
 
         isLazyTab = false

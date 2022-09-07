@@ -41,7 +41,7 @@ struct SuggestionsSection<Content: View>: View {
                     bottom: SuggestionBlockUX.HeaderBottomPadding,
                     trailing: 0)
             )
-            .foregroundColorOrGradient(.label)
+            .foregroundColor(.label)
             .background(Color.secondaryBackground.ignoresSafeArea())
     }
 

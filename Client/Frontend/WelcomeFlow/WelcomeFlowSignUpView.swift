@@ -20,7 +20,7 @@ struct WelcomeFlowSignUpView: View {
 
             Spacer()
 
-            WelcomeFlowAuthButtonView(
+            AuthButtonView(
                 icon: Image(systemSymbol: .applelogo),
                 label: "Sign up with Apple",
                 foregroundColor: colorScheme == .light ? .white : .black,
@@ -37,7 +37,7 @@ struct WelcomeFlowSignUpView: View {
             }
 
             if !model.showAllSignUpOptions {
-                WelcomeFlowAuthButtonView(
+                AuthButtonView(
                     icon: nil,
                     label: "Other Sign-up Options",
                     foregroundColor: .white,
@@ -47,7 +47,7 @@ struct WelcomeFlowSignUpView: View {
                     model.showAllSignUpOptions.toggle()
                 }
             } else {
-                WelcomeFlowAuthButtonView(
+                AuthButtonView(
                     icon: Image(systemSymbol: .envelope),
                     label: "Sign up with email",
                     foregroundColor: .primary,
@@ -57,7 +57,7 @@ struct WelcomeFlowSignUpView: View {
                     model.changeScreenTo(.signUpEmail)
                 }
 
-                WelcomeFlowAuthButtonView(
+                AuthButtonView(
                     icon: Image("google_icon"),
                     label: "Sign up with Google",
                     foregroundColor: .primary,
@@ -76,7 +76,7 @@ struct WelcomeFlowSignUpView: View {
                     }
                 }
 
-                WelcomeFlowAuthButtonView(
+                AuthButtonView(
                     icon: Image("microsoft"),
                     label: "Sign up with Microsoft",
                     foregroundColor: .primary,

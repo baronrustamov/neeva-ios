@@ -9,6 +9,17 @@ enum ArchivedTabsDuration: CaseIterable, Encodable, Decodable {
     case week
     case month
     case forever
+
+    var label: LocalizedStringKey {
+        switch self {
+        case .week:
+            return "After 7 days"
+        case .month:
+            return "After 30 days"
+        case .forever:
+            return "Never"
+        }
+    }
 }
 
 extension Defaults.Keys {
@@ -28,12 +39,16 @@ struct ArchivedTabSettings: View {
                     Text("After 30 Days").tag(ArchivedTabsDuration.month)
                     Text("Never").tag(ArchivedTabsDuration.forever)
                 }.labelsHidden()
+            } footer: {
+                Text(
+                    "Let Neeva automatically archive tabs that haven't recently been viewed.",
+                    comment: "Describe the purpose of the options in the archive tab settings")
             }
         }
         .listStyle(.insetGrouped)
         .pickerStyle(.inline)
         .applyToggleStyle()
-        .navigationTitle(Text("Auto Archive Tabs"))
+        .navigationTitle(Text("Archive Tabs"))
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {

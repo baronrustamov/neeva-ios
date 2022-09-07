@@ -202,7 +202,7 @@ public struct CanonicalURL {
             }
 
             let allowedParams = Set([
-                "docId", "id", "k", "me", "messageID", "node", "nodeId", "seller", "srs",
+                "docId", "id", "k", "me", "messageID", "node", "nodeId", "page", "seller", "srs",
                 "threadID", "rh", "zipcode",
             ])
             let filterFunc: (URLQueryItem) -> Bool = { item in
@@ -353,7 +353,7 @@ public struct CanonicalURL {
 
         if components.host == "www.amazon.com" {
             let allowedParams = Set([
-                "docId", "id", "k", "me", "messageID", "node", "nodeId", "seller", "srs",
+                "docId", "id", "k", "me", "messageID", "node", "nodeId", "page", "seller", "srs",
                 "threadID", "rh", "zipcode",
             ])
             let transformFunc: (URLQueryItem) -> URLQueryItem? = { item in

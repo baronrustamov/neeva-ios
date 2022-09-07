@@ -260,9 +260,7 @@ extension ContentBlocker {
 
     func compileListsNotInStore(completion: @escaping () -> Void) {
         var blocklists = [String]()
-        if NeevaConstants.currentTarget == .xyz {
-            blocklists = [BlocklistFileName.easyPrivacyStrict.filename]
-        } else if #available(iOS 15.0, *) {
+        if #available(iOS 15.0, *) {
             blocklists = BlocklistFileName.allCases.map { $0.filename }
         } else {
             blocklists = [

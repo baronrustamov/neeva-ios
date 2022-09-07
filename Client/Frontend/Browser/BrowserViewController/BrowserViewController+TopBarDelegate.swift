@@ -45,9 +45,7 @@ extension BrowserViewController: TopBarDelegate {
             return
         }
 
-        let searchEngine =
-            NeevaConstants.currentTarget == .xyz && FeatureFlag[.newWeb3Features]
-                && !isSearchQuerySuggestion ? SearchEngine.nft : SearchEngine.current
+        let searchEngine = SearchEngine.current
         // We couldn't build a URL, so check for a matching search keyword.
         let trimmedText = text.trimmingCharacters(in: .whitespaces)
         guard trimmedText.firstIndex(of: " ") != nil else {

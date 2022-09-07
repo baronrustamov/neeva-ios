@@ -16,17 +16,6 @@ struct ArchivedTabsPanelView: View {
     let onDismiss: () -> Void
     private let clearAllArchiveButtonTitle = "Are you sure you want to close all archived tabs?"
 
-    var archivedTabsLabel: LocalizedStringKey {
-        switch archivedTabsDuration {
-        case .week:
-            return "After 7 Days"
-        case .month:
-            return "After 30 Days"
-        case .forever:
-            return "Never"
-        }
-    }
-
     var clearAllArchivesButton: some View {
         GroupedRowButtonView(
             label: "Clear All Archived Tabs", symbol: .trash
@@ -46,7 +35,8 @@ struct ArchivedTabsPanelView: View {
             GroupedCell.Decoration {
                 VStack(spacing: 0) {
                     GroupedRowButtonView(
-                        label: "Auto Archive Tabs", symbolLabel: archivedTabsLabel,
+                        label: "Archive Tabs",
+                        symbolLabel: archivedTabsDuration.label,
                         symbol: .chevronRight
                     ) {
                         showArchivedTabsSettings = true

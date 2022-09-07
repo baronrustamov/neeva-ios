@@ -168,27 +168,6 @@ mutation ResendVerificationEmail {
     }
 }
 
-mutation ReportDomainTrustSignal($input: ReportDomainTrustSignalInput!)  {
-  xyzReportDomainTrustSignal(input: $input) {
-    success
-  }
-}
-
-query getDomainTrustSignals($input: DomainTrustSignalsInput!) {
-  xyzDomainTrustSignals(input: $input) {
-    domain
-    signal
-  }
-}
-
-query CryptoWallet($query: String!) {
-  cryptoWallet(q: $query) {
-    address
-    ens
-    ownerName
-  }
-}
-
 mutation RegisterAppleSubscription($input: RegisterAppleSubscriptionInput!)  {
   registerAppleSubscription(input: $input) {
     succeeded

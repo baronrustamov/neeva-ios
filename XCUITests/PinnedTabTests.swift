@@ -131,4 +131,32 @@ class PinnedTabTests: BaseTestCase {
 
         confirmOnlyPinnedTabExists()
     }
+
+    func testBackNavigationDoesntCreateNewTab() {
+        // Open tab and navigate somewhere.
+        openURL()
+        waitForExistence(app.links["More information..."])
+        app.links["More information..."].tap()
+
+        // Pin the tab.
+        goToTabTray()
+        waitForExistence(app.buttons["IANA-managed Reserved Domains, Tab"])
+        app.buttons["IANA-managed Reserved Domains, Tab"].press(forDuration: 1)
+
+        waitForExistence(app.buttons["Pin Tab"])
+        app.buttons["Pin Tab"].tap()
+        waitForNoExistence(app.buttons["Pin Tab"])
+
+        // Second tab is placeholder.
+        XCTAssertEqual(getNumberOfTabs(openTabTray: false), 2)
+
+        // Go back.
+        app.buttons["IANA-managed Reserved Domains, Tab"].tap(force: true)
+        waitForExistence(app.buttons["Back"])
+        app.buttons["Back"].tap()
+        waitForExistence(app.links["More information..."])
+
+        // Verify only one tab still exists (+ placeholder).
+        XCTAssertEqual(getNumberOfTabs(), 2)
+    }
 }

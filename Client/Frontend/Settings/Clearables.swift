@@ -97,18 +97,6 @@ class TrackingProtectionClearable: Clearable {
     }
 }
 
-#if XYZ
-    class ConnectedDAppsClearable: Clearable {
-        func clear() -> Success {
-            for session in Defaults[.sessionsPeerIDs] {
-                Defaults[.dAppsSession(session)] = nil
-            }
-            Defaults[.sessionsPeerIDs].removeAll()
-            return succeed()
-        }
-    }
-#endif
-
 class CookieCutterExclusionsClearable: Clearable {
     func clear() -> Success {
         // Since Cookie Cutter uses the Tracking Protection exclusion list,

@@ -30,9 +30,6 @@ struct GenericTabGroup<TabType: GenericTab> {
         if let spaceID = children.first?.parentSpaceID, spaceID == children.first?.rootUUID {
             if let spaceTitle = SpaceStore.shared.get(for: spaceID)?.displayTitle {
                 return spaceTitle
-            } else if NeevaConstants.currentTarget == .xyz && spaceID == Defaults[.cryptoPublicKey]
-            {
-                return "Your NFTs"
             }
         }
         return children.first?.displayTitle

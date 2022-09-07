@@ -60,12 +60,9 @@ class NeevaTabContentBlocker: TabContentBlocker, TabContentScript {
     func setupForTab() {
         guard let tab = tab else { return }
         var strength: BlockingStrength = .easyPrivacy
-        if NeevaConstants.currentTarget == .xyz {
-            strength = .easyPrivacyStrict
-        } else {
-            if let strEnum = BlockingStrength(rawValue: Defaults[.contentBlockingStrength]) {
-                strength = strEnum
-            }
+
+        if let strEnum = BlockingStrength(rawValue: Defaults[.contentBlockingStrength]) {
+            strength = strEnum
         }
 
         let rules = BlocklistFileName.listsForMode(strength: strength)

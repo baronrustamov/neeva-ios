@@ -61,6 +61,12 @@
 /* No comment provided by engineer. */
 "@%@" = "@%@";
 
+/* Price per month */
+"/month" = "/mois";
+
+/* Price per year */
+"/year" = "/an";
+
 /* No comment provided by engineer. */
 "%@" = "%@";
 
@@ -275,12 +281,6 @@
 "Appearance" = "Apparence";
 
 /* No comment provided by engineer. */
-"Archive tabs" = "Archiver les onglets";
-
-/* No comment provided by engineer. */
-"Archive Tabs" = "Archiver les onglets";
-
-/* No comment provided by engineer. */
 "Archived Tabs" = "Onglets archivés";
 
 /* No comment provided by engineer. */
@@ -294,6 +294,9 @@
 
 /* No comment provided by engineer. */
 "arrows" = "flèches";
+
+/* No comment provided by engineer. */
+"Auto Archive Tabs" = "Auto Archive Tabs";
 
 /* No comment provided by engineer. */
 "Automatically send usage statistics to Neeva" = "Envoyer automatiquement les statistiques d'utilisation à Neeva";
@@ -338,9 +341,6 @@
 "Browse the web with no ads in your way" = "Naviguez sur le Web sans publicité";
 
 /* No comment provided by engineer. */
-"Browse Web3" = "Parcourir Web3";
-
-/* No comment provided by engineer. */
 "Browser + ad blocker" = "Navigateur + bloqueur de publicités";
 
 /* (No Comment) */
@@ -382,8 +382,8 @@
 /* No comment provided by engineer. */
 "Cancel" = "Annuler";
 
-/* No comment provided by engineer. */
-"Choose Your Plan" = "Choisissez votre forfait";
+/* Text to tell user they can cancel our service any time */
+"Cancel anytime" = "Annulez à tout moment";
 
 /* No comment provided by engineer. */
 "Clear" = "Effacer";
@@ -413,9 +413,6 @@
 "Close" = "Fermer";
 
 /* No comment provided by engineer. */
-"Close %@" = "Fermer %@";
-
-/* No comment provided by engineer. */
 "Close %@ %@%@" = "Fermer %1$@ %2$@%3$@";
 
 /* No comment provided by engineer. */
@@ -435,6 +432,9 @@
 
 /* No comment provided by engineer. */
 "Close All Tabs" = "Fermer tous les onglets";
+
+/* No comment provided by engineer. */
+"Close Card Strip Tab %@" = "Fermer la fiche de l'onglet %@";
 
 /* No comment provided by engineer. */
 "Close Incognito Tabs" = "Fermer les onglets de navigation privée";
@@ -772,6 +772,9 @@
 /* No comment provided by engineer. */
 "General" = "Général";
 
+/* Button to get the free plan for our product */
+"Get FREE" = "Profitez-en GRATUITEMENT";
+
 /* No comment provided by engineer. */
 "Get Premium for maximum privacy" = "Devenez membre Premium et profitez d'une confidentialité maximale";
 
@@ -928,8 +931,14 @@
 /* No comment provided by engineer. */
 "Make Neeva your Default Browser" = "Faites de Neeva votre navigateur par défaut";
 
+/* Button to manager/configure your monthly subscription plan */
+"Manage Monthly" = "Gérer mensuellement";
+
 /* No comment provided by engineer. */
 "Manage Neeva Memory" = "Gérer la mémoire Neeva";
+
+/* Button to manager/configure your yearly subscription plan */
+"Manage Yearly" = "Gérer annuellement";
 
 /* No comment provided by engineer. */
 "Marketing Cookies" = "Cookies marketing";
@@ -1005,9 +1014,6 @@
 
 /* No comment provided by engineer. */
 "News alerts" = "Alertes d'actualités";
-
-/* This is unused string, no translation required */
-"NFT Search from Neevaxyz" = "Recherche de NFT depuis Neeva.xyz";
 
 /* No comment provided by engineer. */
 "nil" = "nul";
@@ -1172,19 +1178,10 @@
 "Preference saved!" = "Préférence enregistrée !";
 
 /* No comment provided by engineer. */
-"Premium" = "Premium";
-
-/* No comment provided by engineer. */
 "Premium\nAnnual" = "Premium\nannuel";
 
 /* No comment provided by engineer. */
 "Premium\nMonthly" = "Premium\nmensuel";
-
-/* No comment provided by engineer. */
-"Premium Annual Plan" = "Forfait annuel Premium";
-
-/* No comment provided by engineer. */
-"Premium Monthly Plan" = "Forfait mensuel Premium";
 
 /* No comment provided by engineer. */
 "Price History" = "Historique des prix";
@@ -1287,6 +1284,9 @@
 
 /* No comment provided by engineer. */
 "Save" = "Enregistrer";
+
+/* save 16% discount in our product's subscription price */
+"Save 16%" = "Économisez 16 %";
 
 /* No comment provided by engineer. */
 "Save and share instantly. Stay organized by adding images, websites, documents to a Space today" = "Enregistrez et partagez instantanément. Faites du tri en ajoutant des images, des sites Web et des documents à un espace dès aujourd'hui.";
@@ -1486,8 +1486,11 @@
 /* No comment provided by engineer. */
 "Submit" = "Envoyer";
 
-/* No comment provided by engineer. */
-"Subscription products not found." = "Produits d'abonnement non trouvés.";
+/* Button to subscribe a monthly subscription */
+"Subscribe Monthly" = "Abonnement mensuel";
+
+/* Button to subscribe an annual subscription */
+"Subscribe Yearly" = "Abonnement annuel";
 
 /* No comment provided by engineer. */
 "Success! Space shared with %lld people" = "Bravo ! Espace partagé avec %lld personnes";
@@ -1577,9 +1580,6 @@
 "TRACKERS" = "Traqueurs";
 
 /* No comment provided by engineer. */
-"Tracking prevention" = "Blocage des traqueurs";
-
-/* No comment provided by engineer. */
 "Tracking Protection" = "Blocage des traqueurs";
 
 /* No comment provided by engineer. */
@@ -1617,9 +1617,6 @@
 
 /* No comment provided by engineer. */
 "Unknown" = "Inconnu";
-
-/* No comment provided by engineer. */
-"Unlimited ad-free, private search" = "Recherche privée illimitée sans publicité";
 
 /* No comment provided by engineer. */
 "Unpin" = "Supprimer";

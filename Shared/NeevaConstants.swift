@@ -63,10 +63,6 @@ public struct NeevaConstants {
 
     public static var neevaTokenApiURL: URL { buildAppURL("app-lifecycle/aaa-token") }
 
-    public static var xyzURL: URL {
-        URL(string: "https://neeva.xyz/\(Defaults[.cryptoPublicKey])") ?? "https://neeva.xyz/"
-    }
-
     /// The keychain key to store the Neeva login cookie into
     public static var loginKeychainKey: String { "neevaHttpdLogin-\(appHost)" }
     public static var previewKeychainKey: String { "neevaHttpdPreview-\(appHost)" }

@@ -28,7 +28,6 @@ struct TabLocationView: View {
     @EnvironmentObject private var model: LocationViewModel
     @EnvironmentObject private var chromeModel: TabChromeModel
     @EnvironmentObject private var readerModeModel: ReaderModeModel
-    @EnvironmentObject private var web3Model: Web3Model
     @EnvironmentObject private var queryModel: SearchQueryModel
     @EnvironmentObject private var trackingStatsModel: TrackingStatsViewModel
 
@@ -123,17 +122,10 @@ struct TabLocationView: View {
                 } trailing: {
                     Group {
                         if let url = model.url, !InternalURL.isValid(url: url) {
-                            #if XYZ
-                                if let dAppSession = web3Model.currentSession {
-                                    SessionInfoButton(dAppSession: dAppSession)
-                                } else if readerModeModel.state != .unavailable {
-                                    readerButton
-                                }
-                            #else
-                                if readerModeModel.state != .unavailable {
-                                    readerButton
-                                }
-                            #endif
+
+                            if readerModeModel.state != .unavailable {
+                                readerButton
+                            }
 
                             LocationViewShareButton(url: model.url, onTap: onShare)
                         }

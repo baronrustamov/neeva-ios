@@ -14,10 +14,6 @@ enum ClearableDataType: String, Identifiable, Codable, CaseIterable {
     case cookies = "Cookies"
     case cookieCutterExclusions = "Cookie Cutter Exclusions"
 
-    #if XYZ
-        case dapps = "Connected dApps"
-    #endif
-
     var id: String { rawValue }
 
     // duplication is currently unavoidable :(
@@ -28,9 +24,6 @@ enum ClearableDataType: String, Identifiable, Codable, CaseIterable {
         case .cache: return "Cache"
         case .cookies: return "Cookies"
         case .cookieCutterExclusions: return "Cookie Cutter Exclusions"
-        #if XYZ
-            case .dapps: return "Connected dApps"
-        #endif
         }
     }
 
@@ -57,10 +50,6 @@ enum ClearableDataType: String, Identifiable, Codable, CaseIterable {
             return CookiesClearable()
         case .cookieCutterExclusions:
             return CookieCutterExclusionsClearable()
-        #if XYZ
-            case .dapps:
-                return ConnectedDAppsClearable()
-        #endif
         }
     }
 }
@@ -97,10 +86,6 @@ struct DataManagementView: View {
                 ForEach(
                     ClearableDataType.allCases.filter {
                         switch $0 {
-                        #if XYZ
-                            case .dapps:
-                                return NeevaConstants.currentTarget == .xyz
-                        #endif
                         default:
                             return true
                         }

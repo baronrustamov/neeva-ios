@@ -2,45 +2,132 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import Shared
+import Storage
 import SwiftUI
 
-struct GroupedDataPanelView<Model: GroupedDataPanelModel, NavigationButton: View>: View {
-    let model: Model
-    let navigationButton: NavigationButton
+struct GroupedDataPanelView<Model: GroupedDataPanelModel, NavigationButtons: View>: View {
+    @EnvironmentObject var browserModel: BrowserModel
+    @ObservedObject var model: Model
+    let navigationButtons: NavigationButtons
 
     var optionSections: some View {
         VStack {
             Color.groupedBackground.frame(height: 8)
-
-            navigationButton
-                .foregroundColor(.label).padding(16)
-
-            Color.groupedBackground.frame(height: 1)
-
-            Button {
-
-            } label: {
-                HStack {
-                    Text("Clear Browsing Data")
-
-                    Spacer()
-                }
-            }.foregroundColor(.red).padding(16)
-
-            Color.groupedBackground.frame(height: 8)
+            navigationButtons
         }
     }
 
     var body: some View {
-        VStack {
-            optionSections
+        ScrollView(showsIndicators: false) {
+            LazyVStack(spacing: 0) {
+                optionSections
+
+                ForEach(DateGroupedTableDataSection.allCases, id: \.self) { section in
+                    buildDaySections(section: section)
+                }
+            }
         }
         .animation(.interactiveSpring())
         .transition(.identity)
     }
 
-    init(model: Model, @ViewBuilder navigationButton: () -> NavigationButton) {
+    @ViewBuilder
+    private func buildDaySections(section: DateGroupedTableDataSection) -> some View {
+        Group {
+            // TODO: (Evan) Add filtering here.
+            let itemsInSection = model.groupedData.itemsForSection(section)
+
+            switch section {
+            case .today, .yesterday:
+                buildSection(
+                    with: Array(itemsInSection[0].data), in: section,
+                    sectionHeaderTitle: section.rawValue)
+            case .older:
+                ForEach(itemsInSection, id: \.self) { item in
+                    if let sites = item.data {
+                        buildSection(
+                            with: sites, in: section, sectionHeaderTitle: item.dateString)
+                    }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func buildSection(
+        with data: [Model.T], in section: DateGroupedTableDataSection, sectionHeaderTitle: String
+    ) -> some View {
+        Group {
+            if data.count > 0 {
+                Section(header: DateSectionHeaderView(text: sectionHeaderTitle)) {
+                    if let model = model as? ArchivedTabsGroupedDataModel,
+                        let data = data as? [ArchivedTabRow]
+                    {
+                        let (rows, tabGroups) = model.buildRows(with: data, for: section)
+
+                        ForEach(rows, id: \.self) { tabs in
+                            let tabGroup: ArchivedTabGroup? = tabGroups[tabs.first?.rootUUID ?? ""]
+                            let isTopRow: Bool =
+                                tabs.first == nil
+                                ? false
+                                : tabGroups[tabs.first!.rootUUID]?.children.first == tabs.first
+                            let isBottomRow: Bool =
+                                tabs.last == nil
+                                ? false : tabGroups[tabs.last!.rootUUID]?.children.last == tabs.last
+
+                            let corners: CornerSet = {
+                                var corners: CornerSet = []
+
+                                if isTopRow {
+                                    corners.insert(.top)
+                                }
+
+                                if isBottomRow {
+                                    corners.insert(.bottom)
+                                }
+
+                                return corners
+                            }()
+
+                            NewArchivedTabsRowView(
+                                tabs: tabs,
+                                tabManager: browserModel.tabManager,
+                                tabGroup: tabGroup,
+                                corners: corners,
+                                isTopRow: isTopRow,
+                                isBottomRow: isBottomRow
+                            )
+                        }
+                    } else if let model = model as? HistoryGroupedDataModel,
+                        let data = data as? [Site]
+                    {
+                        let rows = model.buildRows(with: data, for: section)
+
+                        ForEach(
+                            Array(rows), id: \.element
+                        ) { index, site in
+                            SiteRowView(
+                                // TODO: (Evan) Add delete site support
+                                tabManager: browserModel.tabManager, data: .site(site, { _ in })
+                            ) {
+                                // tappedItemAtIndex(index + countOfPreviousSites(section: section))
+                            }.onAppear {
+                                model.loadNextItemsIfNeeded(
+                                    from: index + model.countOfPreviousSites(section: section))
+                            }
+                        }.padding(.top, 8)
+                    }
+                }
+            }
+        }
+    }
+
+    init(
+        model: Model,
+        @ViewBuilder navigationButtons: () -> NavigationButtons
+    ) {
         self.model = model
-        self.navigationButton = navigationButton()
+        self.navigationButtons = navigationButtons()
     }
 }

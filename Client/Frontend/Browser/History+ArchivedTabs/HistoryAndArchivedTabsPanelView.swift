@@ -13,10 +13,25 @@ enum HistoryAndArchivedTabsPanelState {
 
 struct HistoryAndArchivedTabsPanelView: View {
     @EnvironmentObject var browserModel: BrowserModel
+    @EnvironmentObject var tabCardModel: TabCardModel
+
     @Default(.archivedTabsDuration) var archivedTabsDuration
     @State var currentView: HistoryAndArchivedTabsPanelState
     @State private var showArchivedTabSettings = false
     @State private var showRecentlyClosedTabs = false
+    @State private var showClearBrowsingData = false
+    @State private var showCloseArchivedTabs = false
+
+    var archivedTabsAfterLabel: LocalizedStringKey {
+        switch archivedTabsDuration {
+        case .week:
+            return "After 7 Days"
+        case .month:
+            return "After 30 Days"
+        case .forever:
+            return "Never"
+        }
+    }
 
     var dragGesture: some Gesture {
         DragGesture()
@@ -39,14 +54,81 @@ struct HistoryAndArchivedTabsPanelView: View {
         }.pickerStyle(SegmentedPickerStyle()).padding(.horizontal)
     }
 
-    var archivedTabsAfterLabel: LocalizedStringKey {
-        switch archivedTabsDuration {
-        case .week:
-            return "After 7 Days"
-        case .month:
-            return "After 30 Days"
-        case .forever:
-            return "Never"
+    var divider: some View {
+        Color.groupedBackground.frame(height: 1)
+    }
+
+    var historyView: some View {
+        GroupedDataPanelView(model: HistoryGroupedDataModel(tabManager: browserModel.tabManager)) {
+            VStack {
+                Button {
+                    showRecentlyClosedTabs = true
+                } label: {
+                    HStack {
+                        Text("Recently Closed Tabs")
+                        Spacer()
+                        Symbol(decorative: .chevronRight)
+                    }
+                }
+                .foregroundColor(.label)
+                .padding(16)
+
+                divider
+
+                Button {
+                    showClearBrowsingData = true
+                } label: {
+                    HStack {
+                        Text("Clear Browsing Data")
+
+                        Spacer()
+                    }
+                }
+                .foregroundColor(.red)
+                .padding(16)
+            }
+        }
+    }
+
+    @ViewBuilder
+    var archivedTabsView: some View {
+        let archivedTabsModel = ArchivedTabsGroupedDataModel(
+            tabCardModel: tabCardModel, tabManager: browserModel.tabManager)
+
+        GroupedDataPanelView(model: archivedTabsModel) {
+            VStack {
+                Button {
+                    showArchivedTabSettings = true
+                } label: {
+                    HStack {
+                        Text("Auto Archive Tabs")
+                        Spacer()
+
+                        Label {
+                            Symbol(decorative: .chevronRight)
+                        } icon: {
+                            Text(archivedTabsAfterLabel)
+                                .foregroundColor(.secondaryLabel)
+                        }
+                    }
+                }
+                .foregroundColor(.label)
+                .padding(16)
+
+                divider
+
+                Button {
+                    showCloseArchivedTabs = true
+                } label: {
+                    HStack {
+                        Text("Clear All Archived Tabs")
+
+                        Spacer()
+                    }
+                }
+                .foregroundColor(.red)
+                .padding(16)
+            }
         }
     }
 
@@ -57,39 +139,11 @@ struct HistoryAndArchivedTabsPanelView: View {
                     picker
 
                     ZStack {
-                        GroupedDataPanelView(
-                            model: HistoryGroupedDataModel(tabManager: browserModel.tabManager)
-                        ) {
-                            Button {
-                                showRecentlyClosedTabs = true
-                            } label: {
-                                HStack {
-                                    Text("Recently Closed Tabs")
-                                    Spacer()
-                                    Symbol(decorative: .chevronRight)
-                                }
-                            }
-                        }.offset(x: currentView == .history ? 0 : -geom.size.width)
+                        historyView
+                            .offset(x: currentView == .history ? 0 : -geom.size.width)
 
-                        GroupedDataPanelView(
-                            model: ArchivedTabsGroupedDataModel(tabManager: browserModel.tabManager)
-                        ) {
-                            Button {
-                                showArchivedTabSettings = true
-                            } label: {
-                                HStack {
-                                    Text("Auto Archive Tabs")
-                                    Spacer()
-
-                                    Label {
-                                        Symbol(decorative: .chevronRight)
-                                    } icon: {
-                                        Text(archivedTabsAfterLabel)
-                                            .foregroundColor(.secondaryLabel)
-                                    }
-                                }
-                            }
-                        }.offset(x: currentView == .archivedTabs ? 0 : geom.size.width)
+                        archivedTabsView
+                            .offset(x: currentView == .archivedTabs ? 0 : geom.size.width)
                     }
 
                     Spacer()

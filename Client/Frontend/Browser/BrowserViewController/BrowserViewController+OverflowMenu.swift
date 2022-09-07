@@ -137,7 +137,7 @@ extension BrowserViewController {
             if FeatureFlag[.archivedTabsRedesign] {
                 overlayManager.show(
                     overlay: .fullScreenSheet(
-                        AnyView(HistoryAndArchivedTabsPanelView(currentView: .archivedTabs))))
+                        AnyView(HistoryAndArchivedTabsPanelView(currentView: .history))))
             } else {
                 present(HistoryPanelViewController(bvc: self), animated: true)
             }

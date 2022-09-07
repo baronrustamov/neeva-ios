@@ -15,12 +15,8 @@ struct SuggestionsList: View {
     @EnvironmentObject private var suggestionModel: SuggestionModel
 
     var searchSuggestionLabel: String {
-        if NeevaConstants.currentTarget == .xyz {
-            return "Web Search from \(SearchEngine.current.label)"
-        } else {
-            return SearchEngine.current.isNeeva
-                ? "Neeva Search" : "\(SearchEngine.current.label) Suggestions"
-        }
+        return SearchEngine.current.isNeeva
+            ? "Neeva Search" : "\(SearchEngine.current.label) Suggestions"
     }
 
     private var content: some View {
@@ -46,18 +42,7 @@ struct SuggestionsList: View {
             } else {
                 TabSuggestionsList()
 
-                if NeevaConstants.currentTarget != .xyz {
-                    AutocompleteSuggestionView()
-                }
-
-                if !suggestionModel.xyzQuerySuggestions.isEmpty {
-                    SuggestionsSection(header: "NFT Search from Neevaxyz") {
-                        ForEach(Array(suggestionModel.xyzQuerySuggestions.enumerated()), id: \.0) {
-                            _, suggestion in
-                            SearchSuggestionView(suggestion)
-                        }
-                    }
-                }
+                AutocompleteSuggestionView()
 
                 if suggestionModel.shouldShowSearchSuggestions {
                     SuggestionsSection(

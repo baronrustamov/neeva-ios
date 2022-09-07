@@ -61,6 +61,12 @@
 /* No comment provided by engineer. */
 "@%@" = "@%@";
 
+/* Price per month */
+"/month" = "/month";
+
+/* Price per year */
+"/year" = "/year";
+
 /* No comment provided by engineer. */
 "%@" = "%@";
 
@@ -275,12 +281,6 @@
 "Appearance" = "Appearance";
 
 /* No comment provided by engineer. */
-"Archive tabs" = "Archive tabs";
-
-/* No comment provided by engineer. */
-"Archive Tabs" = "Archive Tabs";
-
-/* No comment provided by engineer. */
 "Archived Tabs" = "Archived Tabs";
 
 /* No comment provided by engineer. */
@@ -294,6 +294,9 @@
 
 /* No comment provided by engineer. */
 "arrows" = "arrows";
+
+/* No comment provided by engineer. */
+"Auto Archive Tabs" = "Auto Archive Tabs";
 
 /* No comment provided by engineer. */
 "Automatically send usage statistics to Neeva" = "Automatically send usage statistics to Neeva";
@@ -338,9 +341,6 @@
 "Browse the web with no ads in your way" = "Browse the web with no ads in your way";
 
 /* No comment provided by engineer. */
-"Browse Web3" = "Browse Web3";
-
-/* No comment provided by engineer. */
 "Browser + ad blocker" = "Browser + ad blocker";
 
 /* (No Comment) */
@@ -382,8 +382,8 @@
 /* No comment provided by engineer. */
 "Cancel" = "Cancel";
 
-/* No comment provided by engineer. */
-"Choose Your Plan" = "Choose Your Plan";
+/* Text to tell user they can cancel our service any time */
+"Cancel anytime" = "Cancel anytime";
 
 /* No comment provided by engineer. */
 "Clear" = "Clear";
@@ -413,9 +413,6 @@
 "Close" = "Close";
 
 /* No comment provided by engineer. */
-"Close %@" = "Close %@";
-
-/* No comment provided by engineer. */
 "Close %@ %@%@" = "Close %1$@ %2$@%3$@";
 
 /* No comment provided by engineer. */
@@ -435,6 +432,9 @@
 
 /* No comment provided by engineer. */
 "Close All Tabs" = "Close All Tabs";
+
+/* No comment provided by engineer. */
+"Close Card Strip Tab %@" = "Close Card Strip Tab %@";
 
 /* No comment provided by engineer. */
 "Close Incognito Tabs" = "Close Incognito Tabs";
@@ -772,6 +772,9 @@
 /* No comment provided by engineer. */
 "General" = "General";
 
+/* Button to get the free plan for our product */
+"Get FREE" = "Get FREE";
+
 /* No comment provided by engineer. */
 "Get Premium for maximum privacy" = "Get Premium for maximum privacy";
 
@@ -928,8 +931,14 @@
 /* No comment provided by engineer. */
 "Make Neeva your Default Browser" = "Make Neeva your Default Browser";
 
+/* Button to manager/configure your monthly subscription plan */
+"Manage Monthly" = "Manage Monthly";
+
 /* No comment provided by engineer. */
 "Manage Neeva Memory" = "Manage Neeva Memory";
+
+/* Button to manager/configure your yearly subscription plan */
+"Manage Yearly" = "Manage Yearly";
 
 /* No comment provided by engineer. */
 "Marketing Cookies" = "Marketing Cookies";
@@ -1005,9 +1014,6 @@
 
 /* No comment provided by engineer. */
 "News alerts" = "News alerts";
-
-/* This is unused string, no translation required */
-"NFT Search from Neevaxyz" = "NFT Search from Neevaxyz";
 
 /* No comment provided by engineer. */
 "nil" = "nil";
@@ -1172,19 +1178,10 @@
 "Preference saved!" = "Preference saved!";
 
 /* No comment provided by engineer. */
-"Premium" = "Premium";
-
-/* No comment provided by engineer. */
 "Premium\nAnnual" = "Premium\nAnnual";
 
 /* No comment provided by engineer. */
 "Premium\nMonthly" = "Premium\nMonthly";
-
-/* No comment provided by engineer. */
-"Premium Annual Plan" = "Premium Annual Plan";
-
-/* No comment provided by engineer. */
-"Premium Monthly Plan" = "Premium Monthly Plan";
 
 /* No comment provided by engineer. */
 "Price History" = "Price History";
@@ -1287,6 +1284,9 @@
 
 /* No comment provided by engineer. */
 "Save" = "Save";
+
+/* save 16% discount in our product's subscription price */
+"Save 16%" = "Save 16%";
 
 /* No comment provided by engineer. */
 "Save and share instantly. Stay organized by adding images, websites, documents to a Space today" = "Save and share instantly. Stay organised by adding images, websites, documents to a Space today";
@@ -1486,8 +1486,11 @@
 /* No comment provided by engineer. */
 "Submit" = "Submit";
 
-/* No comment provided by engineer. */
-"Subscription products not found." = "Subscription products not found.";
+/* Button to subscribe a monthly subscription */
+"Subscribe Monthly" = "Subscribe Monthly";
+
+/* Button to subscribe an annual subscription */
+"Subscribe Yearly" = "Subscribe Yearly";
 
 /* No comment provided by engineer. */
 "Success! Space shared with %lld people" = "Success! Space shared with %lld people";
@@ -1577,9 +1580,6 @@
 "TRACKERS" = "TRACKERS";
 
 /* No comment provided by engineer. */
-"Tracking prevention" = "Tracking prevention";
-
-/* No comment provided by engineer. */
 "Tracking Protection" = "Tracking Protection";
 
 /* No comment provided by engineer. */
@@ -1617,9 +1617,6 @@
 
 /* No comment provided by engineer. */
 "Unknown" = "Unknown";
-
-/* No comment provided by engineer. */
-"Unlimited ad-free, private search" = "Unlimited ad-free, private search";
 
 /* No comment provided by engineer. */
 "Unpin" = "Unpin";

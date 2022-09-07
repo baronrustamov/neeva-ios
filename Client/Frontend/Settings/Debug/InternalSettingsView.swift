@@ -9,8 +9,6 @@ import SwiftUI
 struct InternalSettingsView: View {
     @Default(.searchInputPromptDismissed) var searchInputPromptDismissed
     @Default(.introSeen) var introSeen
-    @Default(.walletIntroSeen) var walletintroSeen
-    @Default(.walletOnboardingDone) var walletOnboardingDone
     @Default(.didFirstNavigation) var didFirstNavigation
     @Default(.seenSpacesIntro) var seenSpacesIntro
     @Default(.seenSpacesShareIntro) var seenSpacesShareIntro
@@ -59,8 +57,6 @@ struct InternalSettingsView: View {
             Section(header: Text(verbatim: "First Run")) {
                 Toggle(String("searchInputPromptDismissed"), isOn: $searchInputPromptDismissed)
                 Toggle(String("introSeen"), isOn: $introSeen)
-                Toggle(String("walletintroSeen"), isOn: $walletintroSeen)
-                Toggle(String("walletOnboardingDone"), isOn: $walletOnboardingDone)
                 Toggle(String("didFirstNavigation"), isOn: $didFirstNavigation)
                 Toggle(String("signedInOnce"), isOn: $signedInOnce)
                 Toggle(String("firstRunImpressionLogged"), isOn: $firstRunImpressionLogged)

@@ -7,10 +7,6 @@ import SFSafeSymbols
 import Shared
 import SwiftUI
 
-#if XYZ
-    import WalletCore
-#endif
-
 struct TabToolbarButton<Content: View>: View {
     let label: Content
     let action: () -> Void
@@ -45,7 +41,6 @@ enum TabToolbarButtons {
         let onLongPress: () -> Void
 
         @EnvironmentObject private var model: TabChromeModel
-        @Default(.currentTheme) var currentTheme
 
         var body: some View {
             TabToolbarButton(
@@ -58,15 +53,11 @@ enum TabToolbarButtons {
         }
 
         @ViewBuilder private var label: some View {
-            #if XYZ
-                Web3Theme(with: currentTheme).backButton
-            #else
-                Symbol(
-                    .arrowBackward,
-                    size: 20,
-                    weight: weight,
-                    label: .TabToolbarBackAccessibilityLabel)
-            #endif
+            Symbol(
+                .arrowBackward,
+                size: 20,
+                weight: weight,
+                label: .TabToolbarBackAccessibilityLabel)
         }
     }
 
@@ -130,7 +121,6 @@ enum TabToolbarButtons {
         let weight: Font.Weight
         let action: () -> Void
         let identifier: String
-        @Default(.currentTheme) var currentTheme
 
         init(weight: Font.Weight, action: @escaping () -> Void, identifier: String = "") {
             self.weight = weight
@@ -147,15 +137,11 @@ enum TabToolbarButtons {
         }
 
         @ViewBuilder private var label: some View {
-            #if XYZ
-                Web3Theme(with: currentTheme).overflowButton
-            #else
-                Symbol(
-                    .ellipsisCircle,
-                    size: 20,
-                    weight: weight,
-                    label: .TabToolbarMoreAccessibilityLabel)
-            #endif
+            Symbol(
+                .ellipsisCircle,
+                size: 20,
+                weight: weight,
+                label: .TabToolbarMoreAccessibilityLabel)
         }
     }
 
@@ -225,37 +211,6 @@ enum TabToolbarButtons {
         }
     }
 
-    #if XYZ
-        struct NeevaWallet: View {
-            @ObservedObject var assetStore: AssetStore
-            @EnvironmentObject var model: Web3Model
-            @Default(.currentTheme) var currentTheme
-            @ObservedObject var gasFeeModel: GasFeeModel
-
-            var body: some View {
-                TabToolbarButton(
-                    label: Web3Theme(with: currentTheme).walletButton(
-                        with: gasFeeModel.gasFeeState.tintColor),
-                    action: model.showWalletPanel
-                )
-            }
-        }
-    #endif
-
-    #if XYZ
-        struct HomeButton: View {
-            let action: () -> Void
-            @Default(.currentTheme) var currentTheme
-
-            var body: some View {
-                TabToolbarButton(
-                    label: Web3Theme(with: currentTheme).homeButton,
-                    action: action
-                )
-            }
-        }
-    #endif
-
     struct CloseTab: View {
         let action: () -> Void
 
@@ -294,24 +249,16 @@ enum TabToolbarButtons {
     struct ShowTabs: View {
         let weight: Font.Weight
         let action: () -> Void
-        @Default(.currentTheme) var currentTheme
 
         @EnvironmentObject var browserModel: BrowserModel
         @EnvironmentObject var gridModel: GridModel
 
         var button: some View {
-            #if XYZ
-                TabToolbarButton(
-                    label: Web3Theme(with: currentTheme).tabsImage,
-                    action: action
-                )
-            #else
-                TabToolbarButton(
-                    label: Symbol(
-                        .squareOnSquare, size: 20, weight: weight, label: "Show Tabs"),
-                    action: action
-                )
-            #endif
+            TabToolbarButton(
+                label: Symbol(
+                    .squareOnSquare, size: 20, weight: weight, label: "Show Tabs"),
+                action: action
+            )
         }
 
         @ViewBuilder
