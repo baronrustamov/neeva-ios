@@ -528,14 +528,12 @@ class NSURLExtensionsTests: XCTestCase {
             XCTAssertEqual(
                 newURLParams[$0], $1, "The values in params should be the same in newURLParams")
         }
-    }
 
-    func testWithQueryParam() {
         let urlA = URL(string: "http://foo.com/bar/")!
         let urlB = URL(string: "http://bar.com/noo")!
-        let urlC = urlA.withQueryParam("ppp", value: "123")
-        let urlD = urlB.withQueryParam("qqq", value: "123")
-        let urlE = urlC.withQueryParam("rrr", value: "aaa")
+        let urlC = urlA.withQueryParams([URLQueryItem(name: "ppp", value: "123")])
+        let urlD = urlB.withQueryParams([URLQueryItem(name: "qqq", value: "123")])
+        let urlE = urlC.withQueryParams([URLQueryItem(name: "rrr", value: "aaa")])
 
         XCTAssertEqual("http://foo.com/bar/?ppp=123", urlC.absoluteString)
         XCTAssertEqual("http://bar.com/noo?qqq=123", urlD.absoluteString)

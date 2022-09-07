@@ -135,7 +135,7 @@ public class Space: Hashable, Identifiable {
     }
 
     public var urlWithAddedItem: URL {
-        url.withQueryParam("hid", value: contentData?.first?.id ?? "")
+        url.withQueryParams([URLQueryItem(name: "hid", value: contentData?.first?.id ?? "")])
     }
 
     public var contentURLs: Set<URL>?

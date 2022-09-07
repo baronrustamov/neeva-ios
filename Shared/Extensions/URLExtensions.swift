@@ -2,6 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import OrderedCollections
+
 // MARK: Well Known URLs
 extension URL {
     public static let aboutBlank: URL = "about:blank"
@@ -119,21 +121,24 @@ private let permanentURISchemes = [
 ]
 
 extension URL {
-
-    public func withQueryParams(_ params: [URLQueryItem]) -> URL {
+    // Adds query parameters to the URL. If `searchKey` is given, use a separate allowed
+    // character set to encode its corresponding value.
+    public func withQueryParams(_ params: [URLQueryItem], searchKey: String? = nil) -> URL {
         var components = URLComponents(url: self, resolvingAgainstBaseURL: false)!
+
+        // Remove duplicate keys and maintain ordering.
         var items = (components.queryItems ?? [])
-        for param in params {
-            items.append(param)
-        }
-        components.queryItems = items
-        return components.url!
-    }
+            .reduce(into: OrderedDictionary<String, String>()) { $0[$1.name] = $1.value }
+        params.forEach { items[$0.name] = $0.value }
 
-    public func withQueryParam(_ name: String, value: String) -> URL {
-        var components = URLComponents(url: self, resolvingAgainstBaseURL: false)!
-        let item = URLQueryItem(name: name, value: value)
-        components.queryItems = (components.queryItems ?? []) + [item]
+        components.percentEncodedQuery = items.map {
+            $0 + "="
+                + ($0 == searchKey
+                   // This should never fail.
+                    ? $1.addingPercentEncoding(withAllowedCharacters: .SearchTermsAllowed)!
+                    : $1.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
+        }.joined(separator: "&")
+
         return components.url!
     }
 
