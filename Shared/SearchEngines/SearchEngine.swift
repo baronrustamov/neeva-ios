@@ -93,8 +93,10 @@ public class SearchEngine: Identifiable, Hashable {
         return url.withQueryParams(queryItems.filter { $0.name != searchQueryComponentKey })
     }
 
-    public func updateSearchQuery(_ url: URL, newQuery: String) -> URL {
-        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+    public func updateSearchQuery(_ url: URL, newQuery: String) -> URL? {
+        guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+            return nil
+        }
 
         if let queryKey = searchQueryComponentKey,
             let encodedOldQuery = components.queryItems?.first(where: {

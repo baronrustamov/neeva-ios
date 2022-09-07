@@ -37,9 +37,11 @@ extension BrowserViewController: TopBarDelegate {
         }
 
         /// The user is editing the current query when `searchQueryModel.queryItems != nil`
-        if let _ = searchQueryModel.queryItems, let url = currentTab?.url {
+        if let _ = searchQueryModel.queryItems, let url = currentTab?.url,
+            let newURL = SearchEngine.current.updateSearchQuery(url, newQuery: text)
+        {
             finishEditingAndSubmit(
-                SearchEngine.current.updateSearchQuery(url, newQuery: text),
+                newURL,
                 visitType: VisitType.typed, forTab: currentTab)
             searchQueryModel.queryItems = nil
             return
