@@ -469,6 +469,7 @@
 		9B32E19B28258E1A00A169EE /* SpaceServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32E19A28258E1A00A169EE /* SpaceServiceProvider.swift */; };
 		9B489597286528A70017FA57 /* SpacePublicAclTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B489596286528A70017FA57 /* SpacePublicAclTests.swift */; };
 		9B6FD8B6285D10EF005C6999 /* SpaceEntityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6FD8B5285D10EF005C6999 /* SpaceEntityTests.swift */; };
+		9B773B5128C956280085AA49 /* SearchEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B773B5028C956280085AA49 /* SearchEngineTests.swift */; };
 		9B99C5322825C1DF006D390D /* SpaceServiceProd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B99C5312825C1DF006D390D /* SpaceServiceProd.swift */; };
 		9B99C5342825C63F006D390D /* SpaceServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B99C5332825C63F006D390D /* SpaceServiceMock.swift */; };
 		9B9F4AF828C94F9300722625 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 9B9F4AF728C94F9300722625 /* OrderedCollections */; };
@@ -1843,6 +1844,7 @@
 		9B489596286528A70017FA57 /* SpacePublicAclTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacePublicAclTests.swift; sourceTree = "<group>"; };
 		9B570A59283808E600695949 /* Client.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = Client.xctestplan; path = Client.xcodeproj/Client.xctestplan; sourceTree = "<group>"; };
 		9B6FD8B5285D10EF005C6999 /* SpaceEntityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceEntityTests.swift; sourceTree = "<group>"; };
+		9B773B5028C956280085AA49 /* SearchEngineTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEngineTests.swift; sourceTree = "<group>"; };
 		9B99C5312825C1DF006D390D /* SpaceServiceProd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceServiceProd.swift; sourceTree = "<group>"; };
 		9B99C5332825C63F006D390D /* SpaceServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceServiceMock.swift; sourceTree = "<group>"; };
 		9BB796DC282EAD21001E577C /* AddToSpaceSheetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToSpaceSheetTests.swift; sourceTree = "<group>"; };
@@ -4351,6 +4353,7 @@
 				E6F9653B1B2F1D5D0034B023 /* NSURLExtensionsTests.swift */,
 				2FEBABAE1AB3659000DB5728 /* ResultTests.swift */,
 				E61453BD1B750A1700C3F9D7 /* RollingFileLoggerTests.swift */,
+				9B773B5028C956280085AA49 /* SearchEngineTests.swift */,
 				E6F9650E1B2F1CF20034B023 /* Supporting Files */,
 				28A6CE891AC082E200C1A2D4 /* UtilsTests.swift */,
 			);
@@ -6167,6 +6170,7 @@
 				E4E25CCB1CA99E7400D0F088 /* HexExtensionsTests.swift in Sources */,
 				28532BE91C471FFB000072D9 /* ResultTests.swift in Sources */,
 				E6F9653C1B2F1D5D0034B023 /* NSURLExtensionsTests.swift in Sources */,
+				9B773B5128C956280085AA49 /* SearchEngineTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
