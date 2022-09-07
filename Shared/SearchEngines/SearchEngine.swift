@@ -87,36 +87,13 @@ public class SearchEngine: Identifiable, Hashable {
         return nil
     }
 
-    public func searchURLFrom(searchQuery: String, queryItems: [URLQueryItem]) -> URL? {
-        guard let url = searchURLForQuery(searchQuery) else { return nil }
-
-        return url.withQueryParams(
-            queryItems.filter { $0.name != searchQueryComponentKey },
-            searchKey: searchQueryComponentKey)
-    }
-
     public func updateSearchQuery(_ url: URL, newQuery: String) -> URL? {
-        guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
-            return nil
+        if let searchKey = searchQueryComponentKey {
+            return url.withQueryParams(
+                [URLQueryItem(name: searchKey, value: newQuery)], searchKey: searchKey
+            )
         }
-
-        if let queryKey = searchQueryComponentKey,
-            let encodedOldQuery = components.queryItems?.first(where: {
-                $0.name == queryKey
-            })?
-            .value?
-            .addingPercentEncoding(withAllowedCharacters: .SearchTermsAllowed),
-            let encodedNewQuery = newQuery.addingPercentEncoding(
-                withAllowedCharacters: .SearchTermsAllowed)
-        {
-            components.percentEncodedQuery = components.percentEncodedQuery?
-                .replacingOccurrences(
-                    of: "\(queryKey)=\(encodedOldQuery)",
-                    with: "\(queryKey)=\(encodedNewQuery)"
-                )
-        }
-
-        return components.url!
+        return nil
     }
 
     // MARK: - Internal properties & initializers
