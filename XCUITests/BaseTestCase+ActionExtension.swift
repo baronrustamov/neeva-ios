@@ -60,7 +60,7 @@ extension BaseTestCase {
             goToClearData()
         }
 
-        app.cells["Clear Selected Data on This Device"].tap()
+        app.buttons["Clear Selected Data on This Device"].tap()
 
         waitForExistence(app.buttons["Clear Data"])
         app.buttons["Clear Data"].tap()

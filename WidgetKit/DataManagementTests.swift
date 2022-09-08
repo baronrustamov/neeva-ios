@@ -8,8 +8,8 @@ class DataManagementTests: BaseTestCase {
     func testWebSiteDataEnterFirstTime() {
         openURL()
         goToClearData()
-        app.tables.cells["Website Data"].tap()
-        XCTAssertTrue(app.tables.cells["example.com"].exists)
+        app.buttons["Website Data"].tap()
+        waitForExistence(app.staticTexts["example.com"])
     }
     /* Disabled failing on BR
     // Testing the search bar, search results and 'Show More' option.

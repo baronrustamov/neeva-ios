@@ -27,7 +27,6 @@ class PinnedTabTests: BaseTestCase {
             // Create the placeholder tab.
             waitForExistence(app.links["More information..."])
             app.links["More information..."].tap()
-
         }
     }
 
