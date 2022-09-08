@@ -63,10 +63,6 @@
 		2028A4C328B8014B00618EFD /* GroupedDataPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2028A4C228B8014B00618EFD /* GroupedDataPanelView.swift */; };
 		2028A4C528B8060400618EFD /* ArchivedTabsGroupedDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2028A4C428B8060400618EFD /* ArchivedTabsGroupedDataModel.swift */; };
 		2028A4C728B8070000618EFD /* HistoryGroupedDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2028A4C628B8070000618EFD /* HistoryGroupedDataModel.swift */; };
-		2028A4C828B810EA00618EFD /* GroupedDataPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2028A4C228B8014B00618EFD /* GroupedDataPanelView.swift */; };
-		2028A4C928B810EE00618EFD /* HistoryGroupedDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2028A4C628B8070000618EFD /* HistoryGroupedDataModel.swift */; };
-		2028A4CA28B810F000618EFD /* ArchivedTabsGroupedDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2028A4C428B8060400618EFD /* ArchivedTabsGroupedDataModel.swift */; };
-		2028A4CB28B8164800618EFD /* GroupedDataPanelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2028A4BF28B7FD5200618EFD /* GroupedDataPanelModel.swift */; };
 		20318F252823786A003B03C1 /* DebounceObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20318F242823786A003B03C1 /* DebounceObject.swift */; };
 		2034988E2843307C00799544 /* OrientationDependentStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2034988D2843307C00799544 /* OrientationDependentStack.swift */; };
 		203A9381283F1E0E00FA4E73 /* GridPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203A9380283F1E0E00FA4E73 /* GridPicker.swift */; };
@@ -77,9 +73,7 @@
 		20469125288782A400069C16 /* CardDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20469124288782A400069C16 /* CardDropDelegate.swift */; };
 		204691282887833900069C16 /* FittedCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204691272887833900069C16 /* FittedCard.swift */; };
 		2046912B2887836A00069C16 /* DragAndDropModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2046912A2887836A00069C16 /* DragAndDropModifier.swift */; };
-		2046912C2887836A00069C16 /* DragAndDropModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2046912A2887836A00069C16 /* DragAndDropModifier.swift */; };
 		2049D22028B6CF5400110C47 /* HistoryAndArchivedTabsPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2049D21F28B6CF5400110C47 /* HistoryAndArchivedTabsPanelView.swift */; };
-		2049D22128B6CF5A00110C47 /* HistoryAndArchivedTabsPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2049D21F28B6CF5400110C47 /* HistoryAndArchivedTabsPanelView.swift */; };
 		204A9B3D286B85EA00E7E931 /* scripts in Resources */ = {isa = PBXBuildFile; fileRef = 204A9B3C286B85E900E7E931 /* scripts */; };
 		204A9B40286B8A4800E7E931 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 204A9B3F286B8A4800E7E931 /* background.js */; };
 		204A9B41286B8A4800E7E931 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = 204A9B3E286B8A4800E7E931 /* content.js */; };
@@ -108,6 +102,7 @@
 		209E030528A4623B00ED5F5B /* PinnedTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209E030428A4623B00ED5F5B /* PinnedTabTests.swift */; };
 		209F2B3C28BD710100D2E98C /* NewArchivedTabsRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209F2B3B28BD710100D2E98C /* NewArchivedTabsRowView.swift */; };
 		209F3F4F28A7247B00B6AB9E /* CardStripTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209F3F4E28A7247B00B6AB9E /* CardStripTests.swift */; };
+		20A5CD0728C986CC000FD646 /* RecentlyClosedTabsPanelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A5CD0628C986CC000FD646 /* RecentlyClosedTabsPanelModel.swift */; };
 		20A5D15327F6A43E00DB88FE /* HistoryPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A5D15227F6A43E00DB88FE /* HistoryPanelView.swift */; };
 		20AD48C928A5AA46001011B1 /* ArchivedTabsCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20AD48C828A5AA46001011B1 /* ArchivedTabsCardView.swift */; };
 		20B2DC5928501D870095ED46 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = 20B2DC5528501D870095ED46 /* popup.js */; };
@@ -953,8 +948,6 @@
 		E9EC25FF283C337F00B9A79B /* CheatsheetUGCIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EC25FE283C337F00B9A79B /* CheatsheetUGCIndicatorView.swift */; };
 		E9EC2603283C5E4F00B9A79B /* FileHasherTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EC2602283C5E4F00B9A79B /* FileHasherTest.swift */; };
 		E9EC2605283EC9B400B9A79B /* CheatsheetSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EC2604283EC9B400B9A79B /* CheatsheetSettingsView.swift */; };
-		E9EC2606283ED06300B9A79B /* CheatsheetSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9EC2604283EC9B400B9A79B /* CheatsheetSettingsView.swift */; };
-		E9F05C5428B9ACE900772CD0 /* TabConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9FDC5C228B984C600BC7CB2 /* TabConfig.swift */; };
 		E9FDC5C328B984C600BC7CB2 /* TabConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9FDC5C228B984C600BC7CB2 /* TabConfig.swift */; };
 		EB1C84BF212EFFBF001489DF /* BrowserViewController+ReaderMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1C84B6212EFFBF001489DF /* BrowserViewController+ReaderMode.swift */; };
 		EB7FFFC820A9D38D003E1E34 /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7FFFBF20A9D38C003E1E34 /* AlertController.swift */; };
@@ -983,7 +976,6 @@
 		F35B8D2B1D6380EA008E3D61 /* SessionRestore.html in Resources */ = {isa = PBXBuildFile; fileRef = F35B8D2A1D6380EA008E3D61 /* SessionRestore.html */; };
 		F35B8D2D1D6383E9008E3D61 /* SessionRestoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F35B8D2C1D6383E9008E3D61 /* SessionRestoreHelper.swift */; };
 		F564D05728ADB4AF00A033CA /* WelcomeFlowSignInQRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D05628ADB4AF00A033CA /* WelcomeFlowSignInQRCodeView.swift */; };
-		F564D05828ADEA4800A033CA /* WelcomeFlowSignInQRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D05628ADB4AF00A033CA /* WelcomeFlowSignInQRCodeView.swift */; };
 		F564D05B28AEEA5900A033CA /* SignInOrUpFlowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D05A28AEEA5900A033CA /* SignInOrUpFlowModel.swift */; };
 		F564D05D28AEEC0200A033CA /* SignInOrUpFlowHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D05C28AEEC0200A033CA /* SignInOrUpFlowHeaderView.swift */; };
 		F564D05F28AEEC9300A033CA /* SignInOrUpFlowPlansView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D05E28AEEC9300A033CA /* SignInOrUpFlowPlansView.swift */; };
@@ -993,16 +985,6 @@
 		F564D06728AEEDA100A033CA /* SignInOrUpFlowSignUpEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D06628AEEDA100A033CA /* SignInOrUpFlowSignUpEmailView.swift */; };
 		F564D06928AEEE2E00A033CA /* SignInOrUpFlowSignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D06828AEEE2E00A033CA /* SignInOrUpFlowSignUpView.swift */; };
 		F564D06B28AEEE5F00A033CA /* SignInOrUpFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D06A28AEEE5F00A033CA /* SignInOrUpFlowView.swift */; };
-		F564D06C28AF061500A033CA /* SignInOrUpFlowHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D05C28AEEC0200A033CA /* SignInOrUpFlowHeaderView.swift */; };
-		F564D06D28AF061700A033CA /* SignInOrUpFlowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D05A28AEEA5900A033CA /* SignInOrUpFlowModel.swift */; };
-		F564D06E28AF061900A033CA /* SignInOrUpFlowPlansView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D05E28AEEC9300A033CA /* SignInOrUpFlowPlansView.swift */; };
-		F564D06F28AF061B00A033CA /* SignInOrUpFlowPrivacyAndTermsLinksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D06028AEECF100A033CA /* SignInOrUpFlowPrivacyAndTermsLinksView.swift */; };
-		F564D07028AF061E00A033CA /* SignInOrUpFlowSignInQRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D06228AEED1E00A033CA /* SignInOrUpFlowSignInQRCodeView.swift */; };
-		F564D07128AF062000A033CA /* SignInOrUpFlowSignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D06428AEED6200A033CA /* SignInOrUpFlowSignInView.swift */; };
-		F564D07228AF062200A033CA /* SignInOrUpFlowSignUpEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D06628AEEDA100A033CA /* SignInOrUpFlowSignUpEmailView.swift */; };
-		F564D07328AF062400A033CA /* SignInOrUpFlowSignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D06828AEEE2E00A033CA /* SignInOrUpFlowSignUpView.swift */; };
-		F564D07428AF062600A033CA /* SignInOrUpFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D06A28AEEE5F00A033CA /* SignInOrUpFlowView.swift */; };
-		F801D2B128852F0E00E6899F /* NeevaPremiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F360342874DA6700736740 /* NeevaPremiumView.swift */; };
 		F805A79F2840187D00372451 /* Black@3x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = F805A79B2840187D00372451 /* Black@3x~ipad.png */; };
 		F805A7A02840187D00372451 /* System@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = F805A79C2840187D00372451 /* System@2x~ipad.png */; };
 		F805A7A12840187D00372451 /* Black@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = F805A79D2840187D00372451 /* Black@2x~ipad.png */; };
@@ -1033,21 +1015,6 @@
 		F880C5A8289B588B00C53D1E /* WelcomeFlowSignUpEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5A7289B588B00C53D1E /* WelcomeFlowSignUpEmailView.swift */; };
 		F880C5AB289B7B4B00C53D1E /* AuthStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5AA289B7B4B00C53D1E /* AuthStore.swift */; };
 		F880C5AD289BA28C00C53D1E /* OktaEmailSignUpFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5AC289BA28C00C53D1E /* OktaEmailSignUpFormView.swift */; };
-		F880C5AE289BA7BB00C53D1E /* OktaAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC93328D2715324700B9BE1C /* OktaAuth.swift */; };
-		F880C5AF289C53F400C53D1E /* WelcomeFlowSignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F815A5E62899C57A003FE9A8 /* WelcomeFlowSignInView.swift */; };
-		F880C5B0289C53F400C53D1E /* WelcomeFlowSignUpEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5A7289B588B00C53D1E /* WelcomeFlowSignUpEmailView.swift */; };
-		F880C5B1289C53F400C53D1E /* WelcomeFlowSignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5A3289A124100C53D1E /* WelcomeFlowSignUpView.swift */; };
-		F880C5B2289C53F400C53D1E /* WelcomeFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87F47992899A0F70076B95C /* WelcomeFlowView.swift */; };
-		F880C5B3289C53F400C53D1E /* AuthButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5A5289B4BDA00C53D1E /* AuthButtonView.swift */; };
-		F880C5B4289C53F400C53D1E /* WelcomeFlowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87F479528999FCF0076B95C /* WelcomeFlowModel.swift */; };
-		F880C5B5289C53F400C53D1E /* WelcomeFlowPrivacyAndTermsLinksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F815A5EA2899C9FF003FE9A8 /* WelcomeFlowPrivacyAndTermsLinksView.swift */; };
-		F880C5B6289C53F400C53D1E /* WelcomeFlowDefaultBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5A12899FEE600C53D1E /* WelcomeFlowDefaultBrowserView.swift */; };
-		F880C5B7289C53F400C53D1E /* WelcomeFlowPlansView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F815A5E82899C68A003FE9A8 /* WelcomeFlowPlansView.swift */; };
-		F880C5B8289C53F400C53D1E /* WelcomeFlowIntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87F47972899A01A0076B95C /* WelcomeFlowIntroView.swift */; };
-		F880C5B9289C53FB00C53D1E /* AuthStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5AA289B7B4B00C53D1E /* AuthStore.swift */; };
-		F880C5BA289C53FE00C53D1E /* OktaEmailSignUpFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5AC289BA28C00C53D1E /* OktaEmailSignUpFormView.swift */; };
-		F880C5BB289C541400C53D1E /* PremiumStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C59F2899E8FE00C53D1E /* PremiumStore.swift */; };
-		F880C5AD289BA28C00C53D1E /* OktaEmailSignUpForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5AC289BA28C00C53D1E /* OktaEmailSignUpForm.swift */; };
 		F880C5BD289C642D00C53D1E /* WelcomeFlowHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F880C5BC289C642D00C53D1E /* WelcomeFlowHeaderView.swift */; };
 		F8F360332874D9B800736740 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8F360322874D9B800736740 /* StoreKit.framework */; };
 		F8F360352874DA6700736740 /* NeevaPremiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F360342874DA6700736740 /* NeevaPremiumView.swift */; };
@@ -1423,6 +1390,7 @@
 		209E030428A4623B00ED5F5B /* PinnedTabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedTabTests.swift; sourceTree = "<group>"; };
 		209F2B3B28BD710100D2E98C /* NewArchivedTabsRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewArchivedTabsRowView.swift; sourceTree = "<group>"; };
 		209F3F4E28A7247B00B6AB9E /* CardStripTests.swift */ = {isa = PBXFileReference; indentWidth = 3; lastKnownFileType = sourcecode.swift; path = CardStripTests.swift; sourceTree = "<group>"; };
+		20A5CD0628C986CC000FD646 /* RecentlyClosedTabsPanelModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyClosedTabsPanelModel.swift; sourceTree = "<group>"; };
 		20A5D15227F6A43E00DB88FE /* HistoryPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPanelView.swift; sourceTree = "<group>"; };
 		20AD48C828A5AA46001011B1 /* ArchivedTabsCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedTabsCardView.swift; sourceTree = "<group>"; };
 		20B2DC5528501D870095ED46 /* popup.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = popup.js; sourceTree = "<group>"; };
@@ -2792,6 +2760,15 @@
 			path = History;
 			sourceTree = "<group>";
 		};
+		20A5CD0528C986B4000FD646 /* RecentlyClosedTabs */ = {
+			isa = PBXGroup;
+			children = (
+				20A5CD0628C986CC000FD646 /* RecentlyClosedTabsPanelModel.swift */,
+				206954A727FF449E000360D6 /* RecentlyClosedTabsPanelView.swift */,
+			);
+			path = RecentlyClosedTabs;
+			sourceTree = "<group>";
+		};
 		20B2DC5428501D870095ED46 /* popup */ = {
 			isa = PBXGroup;
 			children = (
@@ -3992,10 +3969,10 @@
 			children = (
 				2052675A28779DFC000550A1 /* ArchivedTabs */,
 				206954A927FF44A2000360D6 /* History */,
+				20A5CD0528C986B4000FD646 /* RecentlyClosedTabs */,
 				2028A4BF28B7FD5200618EFD /* GroupedDataPanelModel.swift */,
 				2028A4C228B8014B00618EFD /* GroupedDataPanelView.swift */,
 				2049D21F28B6CF5400110C47 /* HistoryAndArchivedTabsPanelView.swift */,
-				206954A727FF449E000360D6 /* RecentlyClosedTabsPanelView.swift */,
 			);
 			path = "History+ArchivedTabs";
 			sourceTree = "<group>";
@@ -6078,539 +6055,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4A42C40C27E58487003B9826 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4A42C40D27E58487003B9826 /* FrontViewController.swift in Sources */,
-				4A42C40E27E58487003B9826 /* SignUpOneButtonPromptView.swift in Sources */,
-				4A42C40F27E58487003B9826 /* TabToolbarHost.swift in Sources */,
-				4A42C41027E58487003B9826 /* FeatureFlagSettingsView.swift in Sources */,
-				4A42C41127E58487003B9826 /* TemporaryDocument.swift in Sources */,
-				4A42C41227E58487003B9826 /* FaviconView.swift in Sources */,
-				4A42C41327E58487003B9826 /* LocationLabel.swift in Sources */,
-				205267672877AA0D000550A1 /* (null) in Sources */,
-				2046912C2887836A00069C16 /* DragAndDropModifier.swift in Sources */,
-				4A42C41527E58487003B9826 /* WalletDashboard.swift in Sources */,
-				4A42C41627E58487003B9826 /* TextSizeView.swift in Sources */,
-				4A42C41827E58487003B9826 /* UserScriptManager.swift in Sources */,
-				4A42C41927E58487003B9826 /* ReaderModeUtils.swift in Sources */,
-				4A42C41A27E58487003B9826 /* BottomSheetView.swift in Sources */,
-				4A42C41B27E58487003B9826 /* BrowserTopBarView.swift in Sources */,
-				4A42C41D27E58487003B9826 /* PanelDataObservers.swift in Sources */,
-				20978E742874AE6B0009D346 /* CardGroupView.swift in Sources */,
-				4A42C41E27E58487003B9826 /* GroupedButtonView.swift in Sources */,
-				4A42C41F27E58487003B9826 /* LocalNotificiations.swift in Sources */,
-				4A42C42027E58487003B9826 /* SceneDelegate.swift in Sources */,
-				4A42C42127E58487003B9826 /* LocationTextFieldIcon.swift in Sources */,
-				4A42C42227E58487003B9826 /* BaseNotification.swift in Sources */,
-				4A42C42327E58487003B9826 /* ShareAddedSpaceView.swift in Sources */,
-				B66E1A8728AEB9B200F218B5 /* TabSection.swift in Sources */,
-				4A42C42427E58487003B9826 /* LocationEditView.swift in Sources */,
-				4A42C42727E58487003B9826 /* HTTPAuthPromptOverlayView.swift in Sources */,
-				4A42C42827E58487003B9826 /* ClientLogger.swift in Sources */,
-				4A42C42927E58487003B9826 /* IncognitoModel.swift in Sources */,
-				4A42C42A27E58487003B9826 /* Popover.swift in Sources */,
-				4A42C42B27E58487003B9826 /* LoggingSettingsView.swift in Sources */,
-				F880C5B2289C53F400C53D1E /* WelcomeFlowView.swift in Sources */,
-				4A42C42C27E58487003B9826 /* NotificationList.swift in Sources */,
-				4A42C42D27E58487003B9826 /* FindInPageHelper.swift in Sources */,
-				4A42C42F27E58487003B9826 /* PrivacySettingsSection.swift in Sources */,
-				4A42C43027E58487003B9826 /* BrowserViewController+ReaderMode.swift in Sources */,
-				E677D1D12800E88E0060869F /* HistoryPanelViewController.swift in Sources */,
-				F564D05828ADEA4800A033CA /* WelcomeFlowSignInQRCodeView.swift in Sources */,
-				4A42C43127E58487003B9826 /* TabContainer.swift in Sources */,
-				8AC5D2C028468E9200E44B04 /* CardTransitionModel.swift in Sources */,
-				8A35CEF8282891EC00E71CD1 /* ArchivedTabsPanelSectionView.swift in Sources */,
-				4A42C43227E58487003B9826 /* SingleLevelTabCardsView.swift in Sources */,
-				4A42C43327E58487003B9826 /* OverlayStepperModifier.swift in Sources */,
-				4A42C43427E58487003B9826 /* Suggestion.swift in Sources */,
-				671208D827F147B60084C1C8 /* ContentVisibilityModel.swift in Sources */,
-				4A42C43627E58487003B9826 /* LocalRequestHelper.swift in Sources */,
-				4A42C43727E58487003B9826 /* CryptoWalletView.swift in Sources */,
-				4A42C43827E58487003B9826 /* TopBarHost.swift in Sources */,
-				4A42C43927E58487003B9826 /* SearchQueryModel.swift in Sources */,
-				4A42C43A27E58487003B9826 /* NotificationViewManager.swift in Sources */,
-				4A42C43B27E58487003B9826 /* KeyboardListener.swift in Sources */,
-				20978E702874AE6B0009D346 /* CardListViews.swift in Sources */,
-				4A42C43C27E58487003B9826 /* RelatedRecipeView.swift in Sources */,
-				4A42C43D27E58487003B9826 /* FaviconResolver.swift in Sources */,
-				E677D1D52800E8C10060869F /* SiteListView.swift in Sources */,
-				4A42C43E27E58487003B9826 /* ReaderModeHandlers.swift in Sources */,
-				E6EA734C27F610B100845FFB /* SearchEngineExtensions.swift in Sources */,
-				F564D06D28AF061700A033CA /* SignInOrUpFlowModel.swift in Sources */,
-				4A42C44027E58487003B9826 /* TopBarView.swift in Sources */,
-				4A42C44127E58487003B9826 /* TabToolbarButtons.swift in Sources */,
-				4A42C44227E58487003B9826 /* TabChromeModel.swift in Sources */,
-				4A42C44327E58487003B9826 /* TopSitesManager.swift in Sources */,
-				E6837939282040BA005736D4 /* Web3TopBarView.swift in Sources */,
-				4A42C44427E58487003B9826 /* OpenInAppOverlayView.swift in Sources */,
-				E67B0B3F2809BC75008D1CCD /* WalletStyleModifier.swift in Sources */,
-				4A42C44527E58487003B9826 /* ShareSpaceView.swift in Sources */,
-				4A42C44627E58487003B9826 /* SimulatedSwipeViewRepresentable.swift in Sources */,
-				4A42C44727E58487003B9826 /* DownloadOverlayView.swift in Sources */,
-				4A42C44827E58487003B9826 /* SpaceListContentView.swift in Sources */,
-				4A42C44927E58487003B9826 /* SocialShare.swift in Sources */,
-				4A42C44A27E58487003B9826 /* ReaderModeModel.swift in Sources */,
-				4A42C44B27E58487003B9826 /* PageActionMenu.swift in Sources */,
-				4A42C44C27E58487003B9826 /* DownloadContentScript.swift in Sources */,
-				4A42C44D27E58487003B9826 /* ScapeImageEntityView.swift in Sources */,
-				F880C5AF289C53F400C53D1E /* WelcomeFlowSignInView.swift in Sources */,
-				4A42C44E27E58487003B9826 /* SpaceTopView.swift in Sources */,
-				4A42C44F27E58487003B9826 /* TabEventHandlers.swift in Sources */,
-				E942D4352810962400B4A3EC /* KnowledgeCardView.swift in Sources */,
-				4A42C45027E58487003B9826 /* SpaceEntityDetailView.swift in Sources */,
-				4A42C45127E58487003B9826 /* AssetView.swift in Sources */,
-				E63B18DC27F79368001BA0B0 /* CookieCutterSettings.swift in Sources */,
-				4A42C45227E58487003B9826 /* Punycode.swift in Sources */,
-				4A42C45327E58487003B9826 /* WithPopover.swift in Sources */,
-				4A42C45527E58487003B9826 /* ExperimentSettingsView.swift in Sources */,
-				4A42C45627E58487003B9826 /* QueryForNavigation.swift in Sources */,
-				204691292887833F00069C16 /* FittedCard.swift in Sources */,
-				4A42C45727E58487003B9826 /* SpaceEntityThumbnailView.swift in Sources */,
-				4A42C45827E58487003B9826 /* IntroFirstRunView.swift in Sources */,
-				F880C5B6289C53F400C53D1E /* WelcomeFlowDefaultBrowserView.swift in Sources */,
-				4A42C45927E58487003B9826 /* DataManagementView.swift in Sources */,
-				4A42C45A27E58487003B9826 /* ZeroQuerySuggestionModels.swift in Sources */,
-				4A42C45B27E58487003B9826 /* SearchBarTourPromptViewController.swift in Sources */,
-				4A42C45C27E58487003B9826 /* CompletionForAnimation.swift in Sources */,
-				203203EF28879D7B00405C07 /* CardStripCard.swift in Sources */,
-				4A42C45D27E58487003B9826 /* LocationTextField.swift in Sources */,
-				4A42C45E27E58487003B9826 /* CardGrid.swift in Sources */,
-				4A42C45F27E58487003B9826 /* BrowserViewController+FindInPage.swift in Sources */,
-				4A42C46027E58487003B9826 /* ProductClusterView.swift in Sources */,
-				4A42C46127E58487003B9826 /* AuthButton.swift in Sources */,
-				F564D06F28AF061B00A033CA /* SignInOrUpFlowPrivacyAndTermsLinksView.swift in Sources */,
-				4A42C46227E58487003B9826 /* TabContentBlocker+ContentScript.swift in Sources */,
-				4A42C46327E58487003B9826 /* TestAppDelegate.swift in Sources */,
-				4A42C46427E58487003B9826 /* SuggestionPositionInfo.swift in Sources */,
-				B66E1A8928AEB9C300F218B5 /* GenericTab.swift in Sources */,
-				4A42C46527E58487003B9826 /* SupportSettingsSection.swift in Sources */,
-				4A42C46627E58487003B9826 /* SpaceDetailList.swift in Sources */,
-				2011A43E283D8DC500947E6B /* BrowserViewController+ShowModal.swift in Sources */,
-				F564D06E28AF061900A033CA /* SignInOrUpFlowPlansView.swift in Sources */,
-				4A42C46727E58487003B9826 /* SuggestionsList.swift in Sources */,
-				4A42C46827E58487003B9826 /* UIApplicationExtensions.swift in Sources */,
-				4A42C46927E58487003B9826 /* IncognitoDescriptionView.swift in Sources */,
-				4A42C46A27E58487003B9826 /* Clearables.swift in Sources */,
-				4A42C46B27E58487003B9826 /* TopBarButtons.swift in Sources */,
-				4A42C46C27E58487003B9826 /* TabLocationView.swift in Sources */,
-				4A42C46D27E58487003B9826 /* TabPrintPageRenderer.swift in Sources */,
-				4A42C46E27E58487003B9826 /* ReaderMode.swift in Sources */,
-				4A42C46F27E58487003B9826 /* SessionData.swift in Sources */,
-				F880C5BB289C541400C53D1E /* PremiumStore.swift in Sources */,
-				E67CD27027F33BB5007BFE58 /* RecommendedSpacesView.swift in Sources */,
-				E67B0B3B2809B9D3008D1CCD /* OpenSessionsView.swift in Sources */,
-				4A42C47027E58487003B9826 /* SettingsView.swift in Sources */,
-				4A42C47127E58487003B9826 /* SessionInfoView.swift in Sources */,
-				4A42C47227E58487003B9826 /* CarouselProgressView.swift in Sources */,
-				4A42C47327E58487003B9826 /* NeevaUserFlagSettingsView.swift in Sources */,
-				4A42C47527E58487003B9826 /* ToastDefaults.swift in Sources */,
-				4A42C47627E58487003B9826 /* FocusHelper.swift in Sources */,
-				4A42C47727E58487003B9826 /* BrowserPrimitive.swift in Sources */,
-				4A42C47927E58487003B9826 /* TabLocationAligner.swift in Sources */,
-				4A42C47A27E58487003B9826 /* SessionRestoreHandler.swift in Sources */,
-				E677D1D42800E8B00060869F /* RecentlyClosedTabsPanelView.swift in Sources */,
-				4A42C47B27E58487003B9826 /* UIMenuHelpers.swift in Sources */,
-				4A42C47C27E58487003B9826 /* NotificationManager.swift in Sources */,
-				4A42C47D27E58487003B9826 /* QuickActions.swift in Sources */,
-				4A42C47E27E58487003B9826 /* CustomThumbnails.swift in Sources */,
-				E63B18DB27F79348001BA0B0 /* CookieCutterModel.swift in Sources */,
-				E910925E280510B100EE0109 /* PlaceViews.swift in Sources */,
-				E67B0B392809B30E008D1CCD /* AccountInfoView.swift in Sources */,
-				4A42C48027E58487003B9826 /* AddOrUpdateSpaceView.swift in Sources */,
-				4A42C48127E58487003B9826 /* ViewRef.swift in Sources */,
-				E92DE20D28875FBE0034446D /* CheatsheetService.swift in Sources */,
-				4A42C48227E58487003B9826 /* OverlayModifiers.swift in Sources */,
-				4A42C48327E58487003B9826 /* TrackingMenuSettingsView.swift in Sources */,
-				2049D22128B6CF5A00110C47 /* HistoryAndArchivedTabsPanelView.swift in Sources */,
-				677DFDB92838C0EF00E879D3 /* DefaultBrowserInterstitialWelcomeView.swift in Sources */,
-				4A42C48427E58487003B9826 /* OverlaySheetView.swift in Sources */,
-				4A42C48527E58487003B9826 /* NeevaAccountRow.swift in Sources */,
-				E677D1D928069A050060869F /* GasFeeView.swift in Sources */,
-				4A42C48627E58487003B9826 /* DomainAllowList.swift in Sources */,
-				4A42C48727E58487003B9826 /* MetadataParserHelper.swift in Sources */,
-				4A42C48827E58487003B9826 /* Environment.swift in Sources */,
-				4A42C48927E58487003B9826 /* BrowserViewController+UIDropInteractionDelegate.swift in Sources */,
-				4A42C48A27E58487003B9826 /* PrivilegedRequest.swift in Sources */,
-				E67B0B372809B210008D1CCD /* BalancesView.swift in Sources */,
-				4A42C48B27E58487003B9826 /* SendFeedbackPanel.swift in Sources */,
-				E97149902849564700A6A1FC /* CheatsheetLoadingView.swift in Sources */,
-				4A42C48C27E58487003B9826 /* DownloadOverlayContent.swift in Sources */,
-				F880C5B9289C53FB00C53D1E /* AuthStore.swift in Sources */,
-				4A42C48D27E58487003B9826 /* (null) in Sources */,
-				4A42C48E27E58487003B9826 /* TransitionExtensions.swift in Sources */,
-				4AB8160627EA662E0017203D /* ScreenCaptureHelper.swift in Sources */,
-				F564D07428AF062600A033CA /* SignInOrUpFlowView.swift in Sources */,
-				4A42C48F27E58487003B9826 /* OverlayGenerics.swift in Sources */,
-				4A42C49027E58487003B9826 /* GroupedRowButtonView.swift in Sources */,
-				E67B0B412809BC8C008D1CCD /* WalletListSeparatorModifier.swift in Sources */,
-				E67B0B432809BCA9008D1CCD /* SessionActionsModifier.swift in Sources */,
-				2028A4C828B810EA00618EFD /* GroupedDataPanelView.swift in Sources */,
-				F880C5B8289C53F400C53D1E /* WelcomeFlowIntroView.swift in Sources */,
-				E67CD27427F33BCA007BFE58 /* ZeroQueryPlaceholder.swift in Sources */,
-				E67B0B3D2809BBDC008D1CCD /* YourNFTsView.swift in Sources */,
-				4A42C49327E58487003B9826 /* TrackingPreventionUtils.swift in Sources */,
-				4A42C49427E58487003B9826 /* NavSuggestionView.swift in Sources */,
-				4A42C49527E58487003B9826 /* ZeroQueryView.swift in Sources */,
-				2011A43B283D480800947E6B /* SceneUIState.swift in Sources */,
-				322334BC2881D4BA001DDE02 /* CheatsheetDataStore.swift in Sources */,
-				4A42C49627E58487003B9826 /* IntroViewModel.swift in Sources */,
-				4A42C49727E58487003B9826 /* AddToSpaceOverlayContent.swift in Sources */,
-				4A42C49827E58487003B9826 /* ToastView.swift in Sources */,
-				4A42C49927E58487003B9826 /* BrightnessModel.swift in Sources */,
-				4A42C49A27E58487003B9826 /* NeevaAccountInfoView.swift in Sources */,
-				4A42C49B27E58487003B9826 /* CollapsibleCardGroupView.swift in Sources */,
-				4AB8160F27EBC3040017203D /* Web3Toolbar.swift in Sources */,
-				E67B0B3228088242008D1CCD /* WalletHeader.swift in Sources */,
-				4A42C49C27E58487003B9826 /* EnvironmentHelper.swift in Sources */,
-				4A42C49D27E58487003B9826 /* ScheduleNotificationView.swift in Sources */,
-				E954FD852845DB13009B534A /* UGCDiscussionView.swift in Sources */,
-				4A42C49E27E58487003B9826 /* QueryButtonView.swift in Sources */,
-				4A42C49F27E58487003B9826 /* ContextMenuHelper.swift in Sources */,
-				4A42C4A027E58487003B9826 /* TabLocationBarButton.swift in Sources */,
-				E63B18E727FDEBCF001BA0B0 /* BrowserViewController+IntroView.swift in Sources */,
-				E9EC2600283C337F00B9A79B /* CheatsheetUGCIndicatorView.swift in Sources */,
-				4A42C4A427E58487003B9826 /* TrackingEntity.swift in Sources */,
-				67724FE22859217B00680F6B /* LoopingPlayer.swift in Sources */,
-				4A42C4A627E58487003B9826 /* SavedTab+ConfigureExtension.swift in Sources */,
-				F880C5B5289C53F400C53D1E /* WelcomeFlowPrivacyAndTermsLinksView.swift in Sources */,
-				F564D07228AF062200A033CA /* SignInOrUpFlowSignUpEmailView.swift in Sources */,
-				4A42C4A727E58487003B9826 /* FeedbackHelper.swift in Sources */,
-				4A42C4A827E58487003B9826 /* OpenInHelper.swift in Sources */,
-				4A42C4A927E58487003B9826 /* CommunitySubmissionView.swift in Sources */,
-				4A42C4AA27E58487003B9826 /* ReaderModeCache.swift in Sources */,
-				E69F325628401CB300279DD4 /* ImageContextMenu.swift in Sources */,
-				E67CD27527F33BCD007BFE58 /* ZeroQueryUX.swift in Sources */,
-				4A42C4AB27E58487003B9826 /* PromoCard.swift in Sources */,
-				F564D07028AF061E00A033CA /* SignInOrUpFlowSignInQRCodeView.swift in Sources */,
-				4AE5FC6A27ED9492005E6E9A /* ImpressionLoggerModifier.swift in Sources */,
-				4A42C4AC27E58487003B9826 /* NavSuggestion.swift in Sources */,
-				20D86CAF2866E1F2001ED834 /* DragToCloseInteraction.swift in Sources */,
-				4A42C4AE27E58487003B9826 /* RecipeView.swift in Sources */,
-				4A42C4AF27E58487003B9826 /* LogConfig.swift in Sources */,
-				4A42C4B027E58487003B9826 /* OpenInAppOverlayContent.swift in Sources */,
-				E677D1D32800E8A50060869F /* HistoryPanelModel.swift in Sources */,
-				4A42C4B127E58487003B9826 /* ZeroQueryModel.swift in Sources */,
-				E683793728200E8B005736D4 /* SpacesProfileView.swift in Sources */,
-				4A42C4B227E58487003B9826 /* NeevaTabContentBlocker.swift in Sources */,
-				E677D1D62800E8CD0060869F /* SiteRowView.swift in Sources */,
-				4A42C4B327E58487003B9826 /* BuyingGuideView.swift in Sources */,
-				4A42C4B527E58487003B9826 /* TourPromptViewController.swift in Sources */,
-				4A42C4B627E58487003B9826 /* WebViewContainer.swift in Sources */,
-				4A42C4B727E58487003B9826 /* TrackingMenuView.swift in Sources */,
-				205267682877AA0D000550A1 /* (null) in Sources */,
-				205267682877AA0D000550A1 /* (null) in Sources */,
-				20E51A112819D8BB00394720 /* CookieCutterHelper.swift in Sources */,
-				B66E1A8828AEB9C000F218B5 /* ArchivedTab.swift in Sources */,
-				4A42C4B927E58487003B9826 /* OverflowMenuOverlayContent.swift in Sources */,
-				4A42C4BA27E58487003B9826 /* AppDelegate+UNUserNotificationCenterDelegate.swift in Sources */,
-				4A42C4BB27E58487003B9826 /* DebugSettingsRestartPromptView.swift in Sources */,
-				4A42C4BC27E58487003B9826 /* SpaceContainerView.swift in Sources */,
-				4A42C4BE27E58487003B9826 /* SimulatedSwipeModel.swift in Sources */,
-				4A42C4BF27E58487003B9826 /* SpaceContentSheet.swift in Sources */,
-				E67B0B45280EFA07008D1CCD /* YourCollectionsView.swift in Sources */,
-				8AB284B7280DE564008027D2 /* ArchivedTabSettings.swift in Sources */,
-				4A42C4C127E58487003B9826 /* SimulatedSwipeController.swift in Sources */,
-				4A42C4C227E58487003B9826 /* GenericSuggestion.swift in Sources */,
-				E9714993284959F500A6A1FC /* CheatsheetPromoModel.swift in Sources */,
-				4A42C4C327E58487003B9826 /* PrintHelper.swift in Sources */,
-				4A42C4C427E58487003B9826 /* NotificationBadge.swift in Sources */,
-				4A42C4C527E58487003B9826 /* FormatDateTime.swift in Sources */,
-				4A42C4C627E58487003B9826 /* BoldSpanView.swift in Sources */,
-				4A42C4C727E58487003B9826 /* ReaderModeColorPicker.swift in Sources */,
-				4A42C4C827E58487003B9826 /* TextSizeModel.swift in Sources */,
-				4A42C4C927E58487003B9826 /* WebUIMessageHelper.swift in Sources */,
-				4A42C4CB27E58487003B9826 /* CardsContainer.swift in Sources */,
-				20167FCD2824601700223B9E /* FindInCardGridView.swift in Sources */,
-				4A42C4CC27E58487003B9826 /* BrowserViewController+DownloadQueueDelegate.swift in Sources */,
-				4A42C4CD27E58487003B9826 /* SearchResults.swift in Sources */,
-				4A42C4CE27E58487003B9826 /* AppClipHelper.swift in Sources */,
-				2052676A2877AA0D000550A1 /* (null) in Sources */,
-				2028A4CB28B8164800618EFD /* GroupedDataPanelModel.swift in Sources */,
-				4A42C4CF27E58487003B9826 /* QueuedViewManager.swift in Sources */,
-				4A42C4D027E58487003B9826 /* UserActivityHandler.swift in Sources */,
-				4A42C4D127E58487003B9826 /* CardTransitionModifier.swift in Sources */,
-				4A42C4D227E58487003B9826 /* BrowserViewController+OverflowMenu.swift in Sources */,
-				E97149872849281700A6A1FC /* CheatsheetResultView.swift in Sources */,
-				4A42C4D327E58487003B9826 /* AnnotationType.swift in Sources */,
-				4A42C4D427E58487003B9826 /* BrowserView.swift in Sources */,
-				F564D07328AF062400A033CA /* SignInOrUpFlowSignUpView.swift in Sources */,
-				4A42C4D527E58487003B9826 /* SignUpTwoButtonsPromptView.swift in Sources */,
-				4A42C4D627E58487003B9826 /* SpaceGeneratorView.swift in Sources */,
-				4A42C4D727E58487003B9826 /* Action.swift in Sources */,
-				4A42C4D827E58487003B9826 /* ZeroQueryCommonContextMenuActions.swift in Sources */,
-				4AB8160927EA9A150017203D /* Web3Toolbar.swift in Sources */,
-				4A42C4D927E58487003B9826 /* SuggestionModel.swift in Sources */,
-				4A42C4DA27E58487003B9826 /* NotificationRow.swift in Sources */,
-				4A42C4DB27E58487003B9826 /* Web3Model.swift in Sources */,
-				673AF401289CDE8D00F62A80 /* QuickLinkSelection.intentdefinition in Sources */,
-				4A42C4DD27E58487003B9826 /* UIViewExtensions.swift in Sources */,
-				20D21E372820C1A800A7C384 /* CookieCutterOnboardingView.swift in Sources */,
-				F801D2B128852F0E00E6899F /* NeevaPremiumView.swift in Sources */,
-				4A42C4DE27E58487003B9826 /* BrowserViewController+WebViewDelegates.swift in Sources */,
-				671B91F028384CFF000197C4 /* DefaultBrowserInterstitialView.swift in Sources */,
-				4A42C4DF27E58487003B9826 /* DebugSettingsSection.swift in Sources */,
-				E67B0B352809AF0E008D1CCD /* UnlockedThemesView.swift in Sources */,
-				4A42C4E127E58487003B9826 /* SpaceNoteEntityView.swift in Sources */,
-				4A42C4E227E58487003B9826 /* AppDelegate.swift in Sources */,
-				4A42C4E427E58487003B9826 /* UIImageViewAligned.m in Sources */,
-				4A42C4E527E58487003B9826 /* DebugLocaleSetting.swift in Sources */,
-				4A42C4E627E58487003B9826 /* BrowserPrompts.swift in Sources */,
-				4A42C4E727E58487003B9826 /* NavigationRouter+MaybeRewriteURL.swift in Sources */,
-				F880C5B0289C53F400C53D1E /* WelcomeFlowSignUpEmailView.swift in Sources */,
-				4A42C4E827E58487003B9826 /* WebResultView.swift in Sources */,
-				4A50D5B427F2E638006C9A39 /* GenericTabGroup.swift in Sources */,
-				4A42C4E927E58487003B9826 /* WidgetKitTopSiteModel.swift in Sources */,
-				4A42C4EB27E58487003B9826 /* SpaceHeaderView.swift in Sources */,
-				4A42C4EC27E58487003B9826 /* SearchBar.swift in Sources */,
-				E6EA734D27F610B300845FFB /* NeevaConstantsExtensions.swift in Sources */,
-				4A42C4EE27E58487003B9826 /* NewsResultsView.swift in Sources */,
-				4A42C4EF27E58487003B9826 /* UIPasteboardExtensions.swift in Sources */,
-				4A42C4F027E58487003B9826 /* NavigationRouter.swift in Sources */,
-				4A42C4F127E58487003B9826 /* FormPostHelper.swift in Sources */,
-				20978E722874AE6B0009D346 /* Card.swift in Sources */,
-				4A42C4F227E58487003B9826 /* TitleActivityItemProvider.swift in Sources */,
-				4A42C4F427E58487003B9826 /* ViewExtensions.swift in Sources */,
-				4A42C4F527E58487003B9826 /* PerformanceLogger.swift in Sources */,
-				4A42C4F627E58487003B9826 /* TrackingPreventionRules.swift in Sources */,
-				4A42C4F727E58487003B9826 /* AboutHomeHandler.swift in Sources */,
-				4A42C4F827E58487003B9826 /* CheatsheetMenuViewModel.swift in Sources */,
-				206C58AA28448E2E00216F65 /* OrientationDependentStack.swift in Sources */,
-				4A42C4F927E58487003B9826 /* SuggestedSpaceViews.swift in Sources */,
-				4A42C4FA27E58487003B9826 /* EmptyCardGrid.swift in Sources */,
-				4A42C4FB27E58487003B9826 /* MenuHelper.swift in Sources */,
-				205267692877AA0D000550A1 /* (null) in Sources */,
-				4A42C4FD27E58487003B9826 /* NavigationLinkButton.swift in Sources */,
-				4AB8160727EA663A0017203D /* ServerLoggingSettingsView.swift in Sources */,
-				4A42C4FE27E58487003B9826 /* ToastViewManager.swift in Sources */,
-				4A42C4FF27E58487003B9826 /* BrowserModel.swift in Sources */,
-				4AE5FC6B27ED94F7005E6E9A /* CheatsheetInfoView.swift in Sources */,
-				4A42C50027E58487003B9826 /* ZeroQueryContent.swift in Sources */,
-				4A42C50127E58487003B9826 /* ReaderModeBlocklist.swift in Sources */,
-				4A42C50227E58487003B9826 /* NSItemProviderExtensions.swift in Sources */,
-				4A42C50327E58487003B9826 /* TabEventHandler.swift in Sources */,
-				4A42C50427E58487003B9826 /* SearchSuggestionViews.swift in Sources */,
-				4A42C50527E58487003B9826 /* PageProgressBar.swift in Sources */,
-				4A42C50627E58487003B9826 /* SpaceEntitySummaryView.swift in Sources */,
-				4A42C50727E58487003B9826 /* CheatsheetMenuView.swift in Sources */,
-				4A42C50827E58487003B9826 /* ContentBlocker.swift in Sources */,
-				E67CD27727F33C3B007BFE58 /* GenericTabGroup.swift in Sources */,
-				F880C5B4289C53F400C53D1E /* WelcomeFlowModel.swift in Sources */,
-				4A42C50927E58487003B9826 /* NeevaSettingsSection.swift in Sources */,
-				E67CD27127F33BBE007BFE58 /* View+Extensions.swift in Sources */,
-				4A42C50B27E58487003B9826 /* AboutSettingsSection.swift in Sources */,
-				4A42C50C27E58487003B9826 /* DraggableBannerModifier.swift in Sources */,
-				4A42C50D27E58487003B9826 /* CreateSpaceOverlayContent.swift in Sources */,
-				9BFBDAC6289898F200865763 /* Web3SuggestedSitesViewModel.swift in Sources */,
-				4A42C50E27E58487003B9826 /* NFTSuggestionResult.swift in Sources */,
-				4A42C50F27E58487003B9826 /* SpaceContentSheetModel.swift in Sources */,
-				4A42C51027E58487003B9826 /* ProfileView.swift in Sources */,
-				4A42C51127E58487003B9826 /* SpaceEntityDescriptionView.swift in Sources */,
-				4A42C51227E58487003B9826 /* OtherOptionsPage.swift in Sources */,
-				4A42C51327E58487003B9826 /* OverlaySheetModel.swift in Sources */,
-				8AC5D2C228468E9200E44B04 /* SwitcherToolbarView.swift in Sources */,
-				4A42C51427E58487003B9826 /* TabManagerStore.swift in Sources */,
-				4A42C51527E58487003B9826 /* KMCGeigerCounter.m in Sources */,
-				E9EC2606283ED06300B9A79B /* CheatsheetSettingsView.swift in Sources */,
-				E9EC2601283C598B00B9A79B /* BloomFilterManager.swift in Sources */,
-				F880C5B1289C53F400C53D1E /* WelcomeFlowSignUpView.swift in Sources */,
-				4A42C51727E58487003B9826 /* FaviconHandler.swift in Sources */,
-				4A42C51827E58487003B9826 /* InternalSchemeHandler.swift in Sources */,
-				4A42C51927E58487003B9826 /* TrackingMenuProtectionRowButton.swift in Sources */,
-				F564D06C28AF061500A033CA /* SignInOrUpFlowHeaderView.swift in Sources */,
-				F80983C62838A0630039FCBD /* AppearanceSettingsSection.swift in Sources */,
-				4A42C51A27E58487003B9826 /* GeneralSettingsSection.swift in Sources */,
-				4A42C51B27E58487003B9826 /* ToastProgressView.swift in Sources */,
-				4A42C51C27E58487003B9826 /* SpotlightSettingsView.swift in Sources */,
-				4A42C51E27E58487003B9826 /* ErrorPageHelper.swift in Sources */,
-				4A42C51F27E58487003B9826 /* ReaderModePopover.swift in Sources */,
-				E67CD27327F33BC6007BFE58 /* ZeroQueryHeader.swift in Sources */,
-				673AF3EB289CDE4300F62A80 /* WidgetIntents.intentdefinition in Sources */,
-				203203ED28879D7B00405C07 /* CardStripTabGroupCardView.swift in Sources */,
-				4A42C52127E58487003B9826 /* SavedTab.swift in Sources */,
-				F564D07128AF062000A033CA /* SignInOrUpFlowSignInView.swift in Sources */,
-				4A42C52227E58487003B9826 /* SuggestedSitesViews.swift in Sources */,
-				4A42C52427E58487003B9826 /* NotificationPromptView.swift in Sources */,
-				4A42C52527E58487003B9826 /* Profile.swift in Sources */,
-				8AB284B6280DE533008027D2 /* OpenArchivedTabsPanelButton.swift in Sources */,
-				4A42C52627E58487003B9826 /* CardGridOverflowMenuView.swift in Sources */,
-				4A42C52727E58487003B9826 /* SpaceComments.swift in Sources */,
-				F8418EE3282B6D6A004F1305 /* SpacesLoginRequiredView.swift in Sources */,
-				4A42C52827E58487003B9826 /* Roobert.swift in Sources */,
-				20469126288782CF00069C16 /* CardDropDelegate.swift in Sources */,
-				E6EA734E27F610B600845FFB /* URLExtensions.swift in Sources */,
-				4A42C52927E58487003B9826 /* NotificationSettingsView.swift in Sources */,
-				677DFDB62838A9F500E879D3 /* InterstitialVIewModel.swift in Sources */,
-				4AB8161027EBC3190017203D /* ConversionLogger.swift in Sources */,
-				4A42C52A27E58487003B9826 /* DynamicFontHelper.swift in Sources */,
-				4A42C52B27E58487003B9826 /* SpacesIntro.swift in Sources */,
-				203A9385283F221900FA4E73 /* GridPicker.swift in Sources */,
-				4A42C52C27E58487003B9826 /* Tab+ChangeUserAgent.swift in Sources */,
-				20D86CB02866E207001ED834 /* BorderTreatment.swift in Sources */,
-				4A42C52D27E58487003B9826 /* TabToolbarView.swift in Sources */,
-				4A42C52E27E58487003B9826 /* LocationViewModel.swift in Sources */,
-				4A42C52F27E58487003B9826 /* ScrollingControlModel.swift in Sources */,
-				E63B18DD27F7937A001BA0B0 /* NonEssentialCookieSettings.swift in Sources */,
-				4A42C53027E58487003B9826 /* SimulatedSwipeAnimator.swift in Sources */,
-				4A42C53127E58487003B9826 /* Icons.swift in Sources */,
-				4A42C53227E58487003B9826 /* DebugDBSettingsSection.swift in Sources */,
-				4A42C53327E58487003B9826 /* BrowserViewController+TabToolbarDelegate.swift in Sources */,
-				4A42C53427E58487003B9826 /* ArithmeticExtensions.swift in Sources */,
-				4A42C53527E58487003B9826 /* TrackingProtectionPageStats.swift in Sources */,
-				4A42C53627E58487003B9826 /* ScreenshotHelper.swift in Sources */,
-				E910925F280510B400EE0109 /* PlaceViewModels.swift in Sources */,
-				20D21E362820C19800A7C384 /* SheetHeader.swift in Sources */,
-				4A42C53727E58487003B9826 /* PopoverView.swift in Sources */,
-				4A42C53827E58487003B9826 /* AppHostSetting.swift in Sources */,
-				4A42C53927E58487003B9826 /* SwiftUIHelpers.swift in Sources */,
-				4A42C53A27E58487003B9826 /* SystemsHelper.swift in Sources */,
-				8A72F7AB280F336400CC0FDB /* ArchivedTabsPanelViewController.swift in Sources */,
-				4A42C53C27E58487003B9826 /* TabManager.swift in Sources */,
-				4A42C53D27E58487003B9826 /* DismissBackgroundView.swift in Sources */,
-				2028A4CA28B810F000618EFD /* ArchivedTabsGroupedDataModel.swift in Sources */,
-				8A72F7A8280F331700CC0FDB /* ArchivedTabsPanelView.swift in Sources */,
-				4A42C53E27E58487003B9826 /* PressReportingButtonStyle.swift in Sources */,
-				E63B18E627FB69DF001BA0B0 /* WalletServerManager.swift in Sources */,
-				4A42C53F27E58487003B9826 /* FindInPageView.swift in Sources */,
-				4A42C54027E58487003B9826 /* PinToTopSitesActivity.swift in Sources */,
-				4A42C54127E58487003B9826 /* UIConstants.swift in Sources */,
-				671208D727F147B00084C1C8 /* IntentHelper.swift in Sources */,
-				4A42C54227E58487003B9826 /* CheatsheetOverlayContent.swift in Sources */,
-				4A42C54327E58487003B9826 /* ContentBlocker+Safelist.swift in Sources */,
-				4A42C54427E58487003B9826 /* PublisherExtensions.swift in Sources */,
-				20AD48CB28A5C00C001011B1 /* ArchivedTabsCardView.swift in Sources */,
-				4A42C54527E58487003B9826 /* Tab.swift in Sources */,
-				4A42C54627E58487003B9826 /* FaviconSupport.swift in Sources */,
-				4A42C54727E58487003B9826 /* CloseButton.swift in Sources */,
-				4A42C54827E58487003B9826 /* DefaultBrowserIntestitialOnboardingView.swift in Sources */,
-				4A42C54927E58487003B9826 /* HTTPAuthPromptOverlayContent.swift in Sources */,
-				F880C5BE289C650D00C53D1E /* WelcomeFlowHeaderView.swift in Sources */,
-				E677D1D22800E89E0060869F /* HistoryPanelView.swift in Sources */,
-				F880C5B7289C53F400C53D1E /* WelcomeFlowPlansView.swift in Sources */,
-				4A42C54A27E58487003B9826 /* URLFixup.swift in Sources */,
-				203203EC28879D7B00405C07 /* CardStripModel.swift in Sources */,
-				E67CD27627F33BD1007BFE58 /* SuggestedXYZSearchesView.swift in Sources */,
-				4A42C54B27E58487003B9826 /* CheatsheetTooltipPopoverView.swift in Sources */,
-				4A42C54C27E58487003B9826 /* ReadabilityService.swift in Sources */,
-				4A42C54D27E58487003B9826 /* main.swift in Sources */,
-				4A42C54E27E58487003B9826 /* BrowserHost.swift in Sources */,
-				4A42C55027E58487003B9826 /* WebPagesForTesting.swift in Sources */,
-				E67B0B48280F0296008D1CCD /* YourCollectionDetailView.swift in Sources */,
-				4A42C55227E58487003B9826 /* BrowserViewController.swift in Sources */,
-				20167FCE2824601900223B9E /* FindView.swift in Sources */,
-				F880C5AE289BA7BB00C53D1E /* OktaAuth.swift in Sources */,
-				20978E712874AE6B0009D346 /* CardModels.swift in Sources */,
-				4A42C55327E58487003B9826 /* SuggestionsContent.swift in Sources */,
-				4A42C55427E58487003B9826 /* SpacesFilterView.swift in Sources */,
-				4A42C55527E58487003B9826 /* NeevaScopeLoadingKeyFrameView.swift in Sources */,
-				4A42C55627E58487003B9826 /* SuggestedSearchViews.swift in Sources */,
-				4A42C55727E58487003B9826 /* NeevaScopeLoadingTimeline.swift in Sources */,
-				4A42C55827E58487003B9826 /* TrackingPreventionConfig.swift in Sources */,
-				4A42C55927E58487003B9826 /* BrowserViewController+SKStoreProductViewControllerDelegate.swift in Sources */,
-				4A42C55A27E58487003B9826 /* SuggestionBlocks.swift in Sources */,
-				4A42C55C27E58487003B9826 /* OverflowMenuView.swift in Sources */,
-				20978E732874AE6B0009D346 /* CardDetails.swift in Sources */,
-				E9F05C5428B9ACE900772CD0 /* TabConfig.swift in Sources */,
-				4A42C55D27E58487003B9826 /* DownloadQueue.swift in Sources */,
-				4A42C55E27E58487003B9826 /* NeevaExperimentExtensions.swift in Sources */,
-				4A42C55F27E58487003B9826 /* BackForwardListView.swift in Sources */,
-				4A42C56027E58487003B9826 /* MenuBuilder.swift in Sources */,
-				4A42C56127E58487003B9826 /* InlineSearchProductView.swift in Sources */,
-				4A42C56327E58487003B9826 /* InternalSettingsView.swift in Sources */,
-				4A42C56427E58487003B9826 /* NeevaScopeLoadingView.swift in Sources */,
-				E971498F2849564300A6A1FC /* CheatsheetNoResultView.swift in Sources */,
-				4A42C56527E58487003B9826 /* EntityInfoView.swift in Sources */,
-				4A42C56627E58487003B9826 /* FadingHorizontalScrollView.swift in Sources */,
-				4A42C56727E58487003B9826 /* OverlayManager.swift in Sources */,
-				4A42C56827E58487003B9826 /* ShareExtensionHelper.swift in Sources */,
-				673AF3F6289CDE6C00F62A80 /* Intents.intentdefinition in Sources */,
-				4A42C56A27E58487003B9826 /* SessionRestoreHelper.swift in Sources */,
-				4A42C56C27E58487003B9826 /* GeometryExtensions.swift in Sources */,
-				4A42C56E27E58487003B9826 /* NeevaFeatureFlagSettingsView.swift in Sources */,
-				20BB666E28220F11001FA7E9 /* ChangeNotificationPreferenceDialogView.swift in Sources */,
-				F880C5BA289C53FE00C53D1E /* OktaEmailSignUpFormView.swift in Sources */,
-				4A42C57027E58487003B9826 /* OverlayView.swift in Sources */,
-				4A42C57127E58487003B9826 /* NotificationPermissionHelper.swift in Sources */,
-				4A42C57227E58487003B9826 /* LocationViewTouchHandler.swift in Sources */,
-				8A72F7AE280F33F100CC0FDB /* ArchivedTabsPanelModel.swift in Sources */,
-				4A42C57327E58487003B9826 /* GridModel.swift in Sources */,
-				20318F2628237A43003B03C1 /* DebounceObject.swift in Sources */,
-				4A42C57427E58487003B9826 /* FindInPageModel.swift in Sources */,
-				4A42C57527E58487003B9826 /* WebsiteDataView.swift in Sources */,
-				4A42C57627E58487003B9826 /* TourPromptView.swift in Sources */,
-				4A42C57727E58487003B9826 /* OverlayStyle.swift in Sources */,
-				4A42C57827E58487003B9826 /* TextSizeStepper.swift in Sources */,
-				4A42C57B27E58487003B9826 /* UIImage+ImageEffects.m in Sources */,
-				4A42C57C27E58487003B9826 /* WalletSequenceContent.swift in Sources */,
-				4A42C57D27E58487003B9826 /* TabContentBlocker.swift in Sources */,
-				4A42C57E27E58487003B9826 /* BrowserBottomBarView.swift in Sources */,
-				4A42C57F27E58487003B9826 /* RelatedSearchesView.swift in Sources */,
-				4A42C58027E58487003B9826 /* BrowserViewController+TopBarDelegate.swift in Sources */,
-				F880C5B3289C53F400C53D1E /* AuthButtonView.swift in Sources */,
-				4A42C58127E58487003B9826 /* SpotlightLogger.swift in Sources */,
-				2028A4C928B810EE00618EFD /* HistoryGroupedDataModel.swift in Sources */,
-				4A42C58227E58487003B9826 /* BrowserViewController+KeyCommands.swift in Sources */,
-				E971498A2849382D00A6A1FC /* PriceHistoryView.swift in Sources */,
-				4A42C58327E58487003B9826 /* SearchEngineSettings.swift in Sources */,
-				4A42C58427E58487003B9826 /* RatingsCard.swift in Sources */,
-				203203EE28879D7B00405C07 /* CardStripView.swift in Sources */,
-				4A42C58727E58487003B9826 /* WebServer.swift in Sources */,
-				4A42C58927E58487003B9826 /* BrowserViewController+WalletConnectPresenter.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4A8CE5B727CCA07700735C75 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4A8CE60527CD43AB00735C75 /* TransactionData.swift in Sources */,
-				4A8CE5F727CD41C000735C75 /* CryptoConfig.swift in Sources */,
-				4A8CE5F827CD41C000735C75 /* CurrencyStore.swift in Sources */,
-				E67B0B312807221D008D1CCD /* GasFeeModel.swift in Sources */,
-				3FC15D7427E922C3005F71CE /* CurrencyStoreAPI.swift in Sources */,
-				4A447A6E27CDC2A200B141F6 /* EIP712.swift in Sources */,
-				4A8CE5F927CD41C000735C75 /* ImportWalletView.swift in Sources */,
-				3FC15D6A27E915BA005F71CE /* Web3NetworkProvider.swift in Sources */,
-				4A8CE5FA27CD41C000735C75 /* ScannerView.swift in Sources */,
-				4AB8160B27EADCEF0017203D /* XYZIntroView.swift in Sources */,
-				4A8CE5FB27CD41C000735C75 /* SendForm.swift in Sources */,
-				4A8CE5FD27CD41C000735C75 /* ShowPhrasesView.swift in Sources */,
-				3FC15D6F27E91A31005F71CE /* NetworkError.swift in Sources */,
-				3FC15D7227E91A8D005F71CE /* OpenSeaAPI.swift in Sources */,
-				4A8CE5FE27CD41C000735C75 /* TransactionFee.swift in Sources */,
-				4A8CE60027CD41C000735C75 /* WalletAccessor.swift in Sources */,
-				4AD1C68C280A13480004955F /* CryptoWalletQuery.swift in Sources */,
-				4A8CE60127CD41C000735C75 /* WalletCore.h in Sources */,
-				4A8CE5EA27CCA36900735C75 /* NeevaWalletStyle.swift in Sources */,
-				4A8CE60927CD802C00735C75 /* WalletConnectHandlers.swift in Sources */,
-				4A8CE60727CD44AD00735C75 /* OnboardingModel.swift in Sources */,
-				3FCCFF9827E943390058A055 /* Web3Theme.swift in Sources */,
-				4A8CE60827CD7AC600735C75 /* TransactionHistoryView.swift in Sources */,
-				E6DDE2502818957600D58197 /* WalletProfilePicture.swift in Sources */,
-				4A8CE5E627CCA1DD00735C75 /* AssetStore.swift in Sources */,
-				4A8CE5E827CCA22100735C75 /* ConnectWallet.swift in Sources */,
-				4A8CE5E927CCA22100735C75 /* CommunitySubmissionRequest.swift in Sources */,
-				4A8CE60F27CD8ACC00735C75 /* WelcomeStarterView.swift in Sources */,
-				4A8CE5F427CD3F2D00735C75 /* TransactionViews.swift in Sources */,
-				3FC15D6C27E91A0E005F71CE /* URLRequestBuilder.swift in Sources */,
-				4A8CE5E427CCA1DD00735C75 /* Collection.swift in Sources */,
-				4A8CE61127CD8B0F00735C75 /* Confetti.swift in Sources */,
-				4A8CE5E327CCA1DD00735C75 /* Asset.swift in Sources */,
-				4A8CE5E527CCA1DD00735C75 /* CollectionViews.swift in Sources */,
-				4A8CE5F227CCC74100735C75 /* WalletSequenceHeader.swift in Sources */,
-				4A8CE5BF27CCA07700735C75 /* WalletCore.docc in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4A8CE5C027CCA07800735C75 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4A8CE5CC27CCA07800735C75 /* WalletCoreTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		661519CE26A9C3A6008E2725 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -6972,6 +6416,7 @@
 				C8B109A5275E9CE60010EBE4 /* BrowserView.swift in Sources */,
 				F8418EDE282B2EBA004F1305 /* SpacesLoginRequiredView.swift in Sources */,
 				BC6239E027476BC8004A036F /* SignUpTwoButtonsPromptView.swift in Sources */,
+				20A5CD0728C986CC000FD646 /* RecentlyClosedTabsPanelModel.swift in Sources */,
 				4AD771B827387B1F00B6769D /* SpaceGeneratorView.swift in Sources */,
 				2026EC1F27F3E51400817053 /* CookieCutterModel.swift in Sources */,
 				C9C18DDE26558FF3004710CD /* Action.swift in Sources */,

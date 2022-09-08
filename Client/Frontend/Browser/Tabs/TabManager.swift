@@ -556,6 +556,8 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         if notify {
             tabsUpdatedPublisher.send()
         }
+        
+        storeChanges()
     }
 
     // Tab Group related functions

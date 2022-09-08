@@ -86,6 +86,20 @@ struct HistoryAndArchivedTabsPanelView: View {
                 }
                 .foregroundColor(.red)
                 .padding(16)
+                
+                NavigationLink(isActive: $showRecentlyClosedTabs) {
+                    RecentlyClosedTabsPanelView(model: RecentlyClosedTabsPanelModel(tabManager: browserModel.tabManager), onDismiss: {
+                        browserModel.overlayManager.hide(overlay: .fullScreenSheet(AnyView(self)))
+                    })
+                } label: {
+                    EmptyView()
+                }
+                
+                NavigationLink(isActive: $showClearBrowsingData) {
+                    DataManagementView()
+                } label: {
+                    EmptyView()
+                }
             }
         }
     }
@@ -94,7 +108,24 @@ struct HistoryAndArchivedTabsPanelView: View {
     var archivedTabsView: some View {
         let archivedTabsModel = ArchivedTabsGroupedDataModel(
             tabCardModel: tabCardModel, tabManager: browserModel.tabManager)
+        let clearAllArchiveButtonTitle = "Are you sure you want to close all archived tabs?"
+        let clearAllArchiveButtonText = "Close \(archivedTabsModel.numOfArchivedTabs) \(archivedTabsModel.numOfArchivedTabs > 1 ? "Tabs" : "Tab")"
+        let clearAllArchivedTabsButton: some View = {
+            Button {
+                showCloseArchivedTabs = true
+            } label: {
+                HStack {
+                    Text("Clear All Archived Tabs")
+                        .foregroundColor(archivedTabsModel.numOfArchivedTabs < 1 ? .tertiaryLabel : .red)
 
+                    Spacer()
+                }
+            }
+            .foregroundColor(.red)
+            .padding(16)
+            .disabled(archivedTabsModel.numOfArchivedTabs < 1)
+        }()
+        
         GroupedDataPanelView(model: archivedTabsModel) {
             VStack {
                 Button {
@@ -116,18 +147,43 @@ struct HistoryAndArchivedTabsPanelView: View {
                 .padding(16)
 
                 divider
-
-                Button {
-                    showCloseArchivedTabs = true
-                } label: {
-                    HStack {
-                        Text("Clear All Archived Tabs")
-
-                        Spacer()
-                    }
+                
+                if #available(iOS 15.0, *) {
+                    clearAllArchivedTabsButton
+                        .confirmationDialog(
+                            clearAllArchiveButtonTitle,
+                            isPresented: $showCloseArchivedTabs,
+                            titleVisibility: .visible
+                        ) {
+                            Button(
+                                clearAllArchiveButtonText,
+                                role: .destructive
+                            ) {
+                                archivedTabsModel.clearArchivedTabs()
+                            }
+                        }
+                } else {
+                    clearAllArchivedTabsButton
+                        .actionSheet(isPresented: $showCloseArchivedTabs) {
+                            ActionSheet(
+                                title: Text(clearAllArchiveButtonTitle),
+                                buttons: [
+                                    .destructive(
+                                        Text(clearAllArchiveButtonText)
+                                    ) {
+                                        archivedTabsModel.clearArchivedTabs()
+                                    },
+                                    .cancel(),
+                                ]
+                            )
+                        }
                 }
-                .foregroundColor(.red)
-                .padding(16)
+                
+                NavigationLink(isActive: $showArchivedTabSettings) {
+                    ArchivedTabSettings()
+                } label: {
+                    EmptyView()
+                }
             }
         }
     }
@@ -141,15 +197,18 @@ struct HistoryAndArchivedTabsPanelView: View {
                     ZStack {
                         historyView
                             .offset(x: currentView == .history ? 0 : -geom.size.width)
+                            .accessibilityHidden(currentView == .archivedTabs)
 
                         archivedTabsView
                             .offset(x: currentView == .archivedTabs ? 0 : geom.size.width)
+                            .accessibilityHidden(currentView == .history)
                     }
 
                     Spacer()
                 }
             }
             .highPriorityGesture(dragGesture)
+            .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(
                 Text(currentView == .history ? "History" : "Archived Tabs")
             ).toolbar {
@@ -158,18 +217,9 @@ struct HistoryAndArchivedTabsPanelView: View {
                 } label: {
                     Text("Done")
                 }
-            }.navigationBarTitleDisplayMode(.inline)
-
-            NavigationLink(isActive: $showArchivedTabSettings) {
-                // TODO: (Evan) Navigate to ArchivedTabSettings.
-            } label: {
-                EmptyView()
             }
-
-            NavigationLink(isActive: $showRecentlyClosedTabs) {
-                // TODO: (Evan) Navigate to RecentlyClosedTabsPanelView.
-            } label: {
-                EmptyView()
+            .environment(\.onOpenURL) { url in
+                browserModel.tabManager.createOrSwitchToTab(for: url)
             }
         }
     }

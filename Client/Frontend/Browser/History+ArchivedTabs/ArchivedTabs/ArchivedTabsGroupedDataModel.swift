@@ -12,7 +12,6 @@ class ArchivedTabsGroupedDataModel: GroupedDataPanelModel {
     typealias Rows = ([[ArchivedTab]], [String: ArchivedTabGroup])
 
     @Published var groupedData = DateGroupedTableData<T>()
-    @Published var filteredGroupedData = DateGroupedTableData<T>()
 
     let tabCardModel: TabCardModel
     let tabManager: TabManager
@@ -20,11 +19,17 @@ class ArchivedTabsGroupedDataModel: GroupedDataPanelModel {
         return tabManager.archivedTabs.count
     }
 
-    @discardableResult func loadData() -> Deferred<Maybe<Cursor<T?>>> {
+    // MARK: - GroupedDataPanelModel Methods
+    @discardableResult func loadData(filter query: String? = nil) -> Deferred<Maybe<Cursor<T?>>> {
         groupedData = DateGroupedTableData<T>()
 
         tabManager.archivedTabGroups.forEach {
             let tabGroup = $0.value
+            
+            if let query = query, !query.isEmpty, !tabGroup.displayTitle.contains(query) {
+                return
+            }
+            
             // lastExecutedTime is in milliseconds, needs to be converted to seconds.
             let lastExecutedTimeSeconds = tabGroup.lastExecutedTime / 1000
             groupedData.add(
@@ -34,6 +39,10 @@ class ArchivedTabsGroupedDataModel: GroupedDataPanelModel {
 
         // Add the rest of the tabs as long as they weren't already added with a TabGroup.
         tabManager.archivedTabs.forEach {
+            if let query = query, !query.isEmpty, !$0.displayTitle.contains(query) {
+                return
+            }
+            
             if tabManager.archivedTabGroups[$0.rootUUID] == nil {
                 let lastExecutedTimeSeconds = $0.lastExecutedTime / 1000
                 groupedData.add(
@@ -41,13 +50,6 @@ class ArchivedTabsGroupedDataModel: GroupedDataPanelModel {
                     date: Date(timeIntervalSince1970: TimeInterval(lastExecutedTimeSeconds)))
             }
         }
-
-        return .init()
-    }
-
-    @discardableResult func loadData(filter query: String) -> Deferred<Maybe<Cursor<T?>>> {
-        // TODO: (Evan) Load data from TabManager filtering by title/URL.
-        // No current implementation but similar to FindInGrid.
 
         return .init()
     }
@@ -91,7 +93,20 @@ class ArchivedTabsGroupedDataModel: GroupedDataPanelModel {
 
         return (rows, tabGroups)
     }
+    
+    // MARK: - Archived Tab Methods
+    func clearArchivedTabs() {
+        tabManager.remove(archivedTabs: tabManager.archivedTabs)
+        loadData()
+        
+        ClientLogger.shared.logCounter(
+            .clearArchivedTabs,
+            attributes: EnvironmentHelper.shared.getAttributes())
+        
+        self.objectWillChange.send()
+    }
 
+    // MARK: - init
     init(tabCardModel: TabCardModel, tabManager: TabManager) {
         self.tabCardModel = tabCardModel
         self.tabManager = tabManager

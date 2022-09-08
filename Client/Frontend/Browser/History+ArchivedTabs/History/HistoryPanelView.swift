@@ -55,7 +55,7 @@ struct HistoryPanelView: View {
                     }
 
                     NavigationLink(isActive: $showRecentlyClosedTabs) {
-                        RecentlyClosedTabsPanelView(model: model, onDismiss: onDismiss)
+                        RecentlyClosedTabsPanelView(model: RecentlyClosedTabsPanelModel(tabManager: model.tabManager), onDismiss: onDismiss)
                     } label: {
                         EmptyView()
                     }

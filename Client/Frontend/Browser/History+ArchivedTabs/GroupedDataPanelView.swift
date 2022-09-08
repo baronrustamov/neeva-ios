@@ -9,12 +9,28 @@ import SwiftUI
 struct GroupedDataPanelView<Model: GroupedDataPanelModel, NavigationButtons: View>: View {
     @EnvironmentObject var browserModel: BrowserModel
     @ObservedObject var model: Model
+    @StateObject var searchQuery = DebounceObject()
     let navigationButtons: NavigationButtons
 
     var optionSections: some View {
         VStack {
+            SingleLineTextField(
+                icon: Symbol(decorative: .magnifyingglass, style: .labelLarge),
+                placeholder: "Search", text: $searchQuery.text
+            )
+            .padding(.horizontal)
+            .padding(.vertical, 4)
+            .accessibilityLabel(Text("Search TextField"))
+            .onChange(of: searchQuery.debouncedText) { newValue in
+                model.loadData(filter: newValue)
+            }
+            
             Color.groupedBackground.frame(height: 8)
             navigationButtons
+            
+            if model.groupedData.isEmpty {
+                Color.groupedBackground.frame(height: 8)
+            }
         }
     }
 
@@ -108,10 +124,11 @@ struct GroupedDataPanelView<Model: GroupedDataPanelModel, NavigationButtons: Vie
                             Array(rows), id: \.element
                         ) { index, site in
                             SiteRowView(
-                                // TODO: (Evan) Add delete site support
-                                tabManager: browserModel.tabManager, data: .site(site, { _ in })
+                                tabManager: browserModel.tabManager, data: .site(site, { site in
+                                    model.removeItemFromHistory(site: site)
+                                })
                             ) {
-                                // tappedItemAtIndex(index + countOfPreviousSites(section: section))
+                               // Nothing to do here. Should eventually remove this.
                             }.onAppear {
                                 model.loadNextItemsIfNeeded(
                                     from: index + model.countOfPreviousSites(section: section))
