@@ -48,7 +48,11 @@ class ToastDefaults: NSObject {
                     buttonText: "restore",
                     buttonAction: {
                         let bvc = SceneDelegate.getBVC(with: tabManager.scene)
-                        bvc.tabManager.restoreSavedTabs(savedTabs)
+                        // override selected tab if we are viewing a tab
+                        bvc.tabManager.restoreSavedTabs(
+                            savedTabs,
+                            overrideSelectedTab: bvc.browserModel.contentVisibilityModel.showContent
+                        )
                     },
                     keyboardShortcut: KeyboardShortcut("t", modifiers: [.command, .shift])
                 )

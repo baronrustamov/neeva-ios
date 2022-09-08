@@ -31,7 +31,7 @@ class HistoryPanelModel: ObservableObject {
     @Published var filteredSites = DateGroupedTableData<Site>()
 
     var recentlyClosedTabs: [SavedTab] {
-        Array(tabManager.recentlyClosedTabs.joined())
+        tabManager.recentlyClosedTabsFlattened
     }
 
     // MARK: - Data
@@ -136,7 +136,7 @@ class HistoryPanelModel: ObservableObject {
 
     // Recently Closed Tabs
     func restoreTab(at index: Int) {
-        tabManager.restoreSavedTabs([recentlyClosedTabs[index]])
+        tabManager.restoreSavedTabs([recentlyClosedTabs[index]], overrideSelectedTab: true)
     }
 
     func deleteRecentlyClosedTabs() {

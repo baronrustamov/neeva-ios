@@ -550,7 +550,7 @@ class CardTests: XCTestCase {
 
         // Close and then restore tab
         manager.removeTab(tab1)
-        let restoredTab = manager.restoreSavedTabs(Array(manager.recentlyClosedTabs.joined()))
+        let restoredTab = manager.restoreSavedTabs(manager.recentlyClosedTabs.flatMap { $0 })
 
         // Verify tab is in today section
         XCTAssertEqual(tabCardModel.timeBasedNormalRows[.today]?.count, 2)
