@@ -523,7 +523,6 @@
 		BC86023B26E9B7F300D1C188 /* ProductClusterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC86023A26E9B7F300D1C188 /* ProductClusterView.swift */; };
 		BC8ABEA226D88F2500E4A415 /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8ABEA126D88F2500E4A415 /* SearchController.swift */; };
 		BC8EE02C271A3CBB00D6BE2A /* PreferredProviderRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8EE02B271A3CBB00D6BE2A /* PreferredProviderRequest.swift */; };
-		BC8EE06B271CEA6A00D6BE2A /* DomainAllowList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8EE06A271CEA6A00D6BE2A /* DomainAllowList.swift */; };
 		BC93328E2715324700B9BE1C /* OktaAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC93328D2715324700B9BE1C /* OktaAuth.swift */; };
 		BC93EE862654E31300D1AA07 /* Color.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BC93EE852654E31300D1AA07 /* Color.xcassets */; };
 		BCA4D73127226E8000AE5A15 /* RelatedRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA4D73027226E8000AE5A15 /* RelatedRecipeView.swift */; };
@@ -1924,7 +1923,6 @@
 		BC86023A26E9B7F300D1C188 /* ProductClusterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductClusterView.swift; sourceTree = "<group>"; };
 		BC8ABEA126D88F2500E4A415 /* SearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
 		BC8EE02B271A3CBB00D6BE2A /* PreferredProviderRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredProviderRequest.swift; sourceTree = "<group>"; };
-		BC8EE06A271CEA6A00D6BE2A /* DomainAllowList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainAllowList.swift; sourceTree = "<group>"; };
 		BC93328D2715324700B9BE1C /* OktaAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaAuth.swift; sourceTree = "<group>"; };
 		BC93EE852654E31300D1AA07 /* Color.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Color.xcassets; sourceTree = "<group>"; };
 		BCA4D73027226E8000AE5A15 /* RelatedRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelatedRecipeView.swift; sourceTree = "<group>"; };
@@ -3555,7 +3553,6 @@
 				BC07524B26C3B98F008B607A /* CheatsheetMenuView.swift */,
 				C832BF8026E1566E00B9A1F8 /* CheatsheetOverlayContent.swift */,
 				322334B92881D0F9001DDE02 /* CheatsheetService.swift */,
-				BC8EE06A271CEA6A00D6BE2A /* DomainAllowList.swift */,
 				E97D7E822834A8FF00944EF5 /* BloomFilter */,
 				E9B510B2284839F1008250B4 /* Content */,
 				E9B510B328483A63008250B4 /* Menu */,
@@ -6881,7 +6878,6 @@
 				8AC7A593280D2B5F00176E7E /* OpenArchivedTabsPanelButton.swift in Sources */,
 				F80983B9283848450039FCBD /* AppearanceSettingsSection.swift in Sources */,
 				C9B2D28226612EF7005EF5AD /* NeevaAccountRow.swift in Sources */,
-				BC8EE06B271CEA6A00D6BE2A /* DomainAllowList.swift in Sources */,
 				D0C95E36200FDC5500E4E51C /* MetadataParserHelper.swift in Sources */,
 				C9E5F2B52673EF1D00025A7F /* Environment.swift in Sources */,
 				E92DE20C28875FBE0034446D /* CheatsheetService.swift in Sources */,

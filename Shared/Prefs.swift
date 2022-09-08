@@ -144,8 +144,10 @@ extension Defaults.Keys {
         default: 5
     )
     public static let showTryCheatsheetPopover = Defaults.BoolKey("showTryCheatsheetPopover")
+    @available(*, deprecated, message: "Recipe-Onboarding Feature retired.")
     public static let seenTryCheatsheetPopoverOnRecipe = Defaults.BoolKey(
-        "seenTryCheatsheetPopoverOnRecipe")
+        "seenTryCheatsheetPopoverOnRecipe"
+    )
     public static let cheatsheetDebugQuery = Defaults.BoolKey("cheatsheetDebugQuery")
     public static let useCheatsheetBloomFilters = Defaults.BoolKey(
         "useCheatsheetBloomFilters", default: true
