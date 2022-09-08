@@ -66,7 +66,7 @@ public struct SendFeedbackView: View {
                                 .withFont(.bodyLarge)
                                 .foregroundColor(.label)
                             Button(action: {
-                                onOpenURL(NeevaConstants.appFAQURL)
+                                onOpenURL(NeevaConstants.appHelpCenterURL)
                                 if let onDismiss = onDismiss {
                                     onDismiss()
                                 }
