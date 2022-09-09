@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import Defaults
 import Foundation
 import Shared
 import Storage
@@ -25,8 +26,11 @@ class ArchivedTabsGroupedDataModel: GroupedDataPanelModel {
 
         tabManager.archivedTabGroups.forEach {
             let tabGroup = $0.value
+            let name = Defaults[.tabGroupNames][$0.key]
 
-            if let query = query, !query.isEmpty, !tabGroup.displayTitle.contains(query) {
+            if let query = query, !query.isEmpty, let name = name?.lowercased(),
+                !name.contains(query.lowercased())
+            {
                 return
             }
 
@@ -39,7 +43,9 @@ class ArchivedTabsGroupedDataModel: GroupedDataPanelModel {
 
         // Add the rest of the tabs as long as they weren't already added with a TabGroup.
         tabManager.archivedTabs.forEach {
-            if let query = query, !query.isEmpty, !$0.displayTitle.contains(query) {
+            if let query = query, !query.isEmpty,
+                !$0.displayTitle.lowercased().contains(query.lowercased())
+            {
                 return
             }
 

@@ -8,11 +8,11 @@ class RecentlyClosedTabsPanelModel {
     let tabManager: TabManager
 
     var recentlyClosedTabs: [SavedTab] {
-        Array(tabManager.recentlyClosedTabs.joined())
+        tabManager.recentlyClosedTabsFlattened
     }
 
     func restoreTab(at index: Int) {
-        tabManager.restoreSavedTabs([recentlyClosedTabs[index]])
+        tabManager.restoreSavedTabs([recentlyClosedTabs[index]], overrideSelectedTab: true)
     }
 
     func deleteRecentlyClosedTabs() {
