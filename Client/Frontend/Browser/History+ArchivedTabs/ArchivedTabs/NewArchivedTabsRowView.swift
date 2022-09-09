@@ -6,9 +6,12 @@ import Shared
 import SwiftUI
 
 struct NewArchivedTabsRowView: View {
+    @Environment(\.selectionCompletion) private var selectionCompletion: () -> Void
+    
     let tabs: [ArchivedTab]
     let tabManager: TabManager
     let tabGroup: ArchivedTabGroup?
+    let archivedTabModel: ArchivedTabsGroupedDataModel
 
     let corners: CornerSet
     let isTopRow: Bool
@@ -25,7 +28,28 @@ struct NewArchivedTabsRowView: View {
             if let tabGroup = tabGroup, isTopRow {
                 HStack {
                     Menu {
-                        // TODO: (Evan) Add this menu.
+                        Button {
+                            tabManager.restore(archivedTabGroup: tabGroup)
+                            selectionCompletion()
+                        } label: {
+                            Label("Restore Tab Group", systemSymbol: .plusApp)
+                        }
+                        
+                        if #available(iOS 15.0, *) {
+                            Button(role: .destructive) {
+                                tabManager.remove(archivedTabGroup: tabGroup)
+                                archivedTabModel.loadData()
+                            } label: {
+                                Label("Delete Tab Group", systemSymbol: .trash)
+                            }
+                        } else {
+                            Button {
+                                tabManager.remove(archivedTabGroup: tabGroup)
+                                archivedTabModel.loadData()
+                            } label: {
+                                Label("Delete Tab Group", systemSymbol: .trash)
+                            }
+                        }
                     } label: {
                         Label("ellipsis", systemImage: "ellipsis")
                             .foregroundColor(.label)

@@ -15,15 +15,19 @@ struct GroupedDataPanelView<Model: GroupedDataPanelModel, NavigationButtons: Vie
     var optionSections: some View {
         VStack {
             SingleLineTextField(
+                useCapsuleBackground: false,
                 icon: Symbol(decorative: .magnifyingglass, style: .labelLarge),
-                placeholder: "Search", text: $searchQuery.text
+                placeholder: "Search",
+                text: $searchQuery.text
             )
-            .padding(.horizontal)
-            .padding(.vertical, 4)
             .accessibilityLabel(Text("Search TextField"))
             .onChange(of: searchQuery.debouncedText) { newValue in
                 model.loadData(filter: newValue)
             }
+            .padding(.horizontal)
+            .background(RoundedRectangle(cornerRadius: 8).foregroundColor(Color.tertiarySystemFill))
+            .padding(.horizontal)
+            .padding(.vertical, 4)
             
             Color.groupedBackground.frame(height: 8)
             navigationButtons
@@ -36,9 +40,9 @@ struct GroupedDataPanelView<Model: GroupedDataPanelModel, NavigationButtons: Vie
 
     var body: some View {
         ScrollView(showsIndicators: false) {
-            LazyVStack(spacing: 0) {
+            VStack(spacing: 0) {
                 optionSections
-
+                
                 ForEach(DateGroupedTableDataSection.allCases, id: \.self) { section in
                     buildDaySections(section: section)
                 }
@@ -51,9 +55,8 @@ struct GroupedDataPanelView<Model: GroupedDataPanelModel, NavigationButtons: Vie
     @ViewBuilder
     private func buildDaySections(section: DateGroupedTableDataSection) -> some View {
         Group {
-            // TODO: (Evan) Add filtering here.
             let itemsInSection = model.groupedData.itemsForSection(section)
-
+            
             switch section {
             case .today, .yesterday:
                 buildSection(
@@ -74,7 +77,7 @@ struct GroupedDataPanelView<Model: GroupedDataPanelModel, NavigationButtons: Vie
     private func buildSection(
         with data: [Model.T], in section: DateGroupedTableDataSection, sectionHeaderTitle: String
     ) -> some View {
-        Group {
+        LazyVStack(spacing: 0) {
             if data.count > 0 {
                 Section(header: DateSectionHeaderView(text: sectionHeaderTitle)) {
                     if let model = model as? ArchivedTabsGroupedDataModel,
@@ -110,6 +113,7 @@ struct GroupedDataPanelView<Model: GroupedDataPanelModel, NavigationButtons: Vie
                                 tabs: tabs,
                                 tabManager: browserModel.tabManager,
                                 tabGroup: tabGroup,
+                                archivedTabModel: model,
                                 corners: corners,
                                 isTopRow: isTopRow,
                                 isBottomRow: isBottomRow
