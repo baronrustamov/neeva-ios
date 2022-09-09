@@ -25,10 +25,12 @@ struct CardStripView: View {
     }
 
     var selectedRowId: TabCardModel.Row.ID? {
-        if let row = tabCardModel.getRows(incognito: incognitoModel.isIncognito).first(where: {
-            row in
-            row.cells.contains(where: \.isSelected)
-        }) {
+        if let row = tabCardModel.getRows(for: .all, incognito: incognitoModel.isIncognito).first(
+            where: {
+                row in
+                row.cells.contains(where: \.isSelected)
+            })
+        {
             return row.id
         }
 

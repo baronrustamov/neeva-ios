@@ -160,7 +160,7 @@ public class TabCardDetails: CardDropDelegate, CardDetails, AccessingManagerProv
         self.manager.selectedTab?.tabUUID == id
     }
 
-    var rootID: String? {
+    var rootID: String {
         tab.rootUUID
     }
 
@@ -170,6 +170,10 @@ public class TabCardDetails: CardDropDelegate, CardDetails, AccessingManagerProv
 
     var thumbnailDrawsHeader: Bool {
         false
+    }
+
+    var isIncognito: Bool {
+        tab.isIncognito
     }
 
     // Override Equatable implementation since we store a Tab instance, and as a result of
@@ -239,6 +243,10 @@ public class TabCardDetails: CardDropDelegate, CardDetails, AccessingManagerProv
         if !tab.isPinned {
             manager.close(tab)
         }
+    }
+
+    func isIncluded(in section: TabSection) -> Bool {
+        tab.isIncluded(in: section)
     }
 
     @ViewBuilder func contextMenu() -> some View {

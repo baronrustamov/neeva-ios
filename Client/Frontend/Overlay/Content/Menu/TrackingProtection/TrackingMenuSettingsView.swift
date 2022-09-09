@@ -48,10 +48,10 @@ struct TrackingSettingsSectionBlock: View {
             header: Text("TRACKERS"),
             footer: contentBlockingStrength == BlockingStrength.easyPrivacy.rawValue
                 ? Text(
-                    "Blocks many ads and trackers. Minimizes disruption to ads and other functionality."
+                    "Blocks most trackers. Minimizes disruption to ads and other functionality."
                 )
                 : Text(
-                    "Blocks more ads and trackers. May break ads and other functionality on some sites."
+                    "Blocks more trackers. May disrupt ads and other functionality on some sites."
                 )
         ) {
             Picker("Protection Mode", selection: $contentBlockingStrength) {

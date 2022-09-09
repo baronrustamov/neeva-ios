@@ -84,12 +84,12 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
 
     // Enables undo of recently closed tabs
     /// Supports closing/restoring a group of tabs or a single tab (alone in an array)
-    var recentlyClosedTabs = [[SavedTab]]()
-    var recentlyClosedTabsFlattened: [SavedTab] {
-        Array(recentlyClosedTabs.joined()).filter {
-            !InternalURL.isValid(url: ($0.url ?? URL(string: "")))
+    var recentlyClosedTabs = [[SavedTab]]() {
+        didSet {
+            recentlyClosedTabsFlattened = recentlyClosedTabs.flatMap { $0 }
         }
     }
+    var recentlyClosedTabsFlattened: [SavedTab] = []
 
     // groups tabs closed together in a certain amount of time into one Toast
     private let toastGroupTimerInterval: TimeInterval = 1.5
@@ -850,7 +850,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     ) -> Tab? {
         // makes sure at least one tab is selected
         // if no tab selected, select the last one (most recently closed)
-        var selectedSavedTab: Tab?
         var restoredTabs = [Tab]()
         restoredTabs.reserveCapacity(savedTabs.count)
 
@@ -874,12 +873,15 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             savedTab.configureTab(tab, imageStore: store.imageStore)
 
             restoredTabs.append(tab)
+        }
 
-            if savedTab.isSelected {
-                selectedSavedTab = tab
-            } else if index == savedTabs.count - 1 && selectedSavedTab == nil {
-                selectedSavedTab = tab
-            }
+        // Select the last restored tab that was selected,
+        // if none of the restored tabs was selected, select the last restored tab
+        var selectedSavedTab: Tab?
+        if let restoredSelectedTabIndex = savedTabs.lastIndex(where: { $0.isSelected }) {
+            selectedSavedTab = restoredTabs[restoredSelectedTabIndex]
+        } else if let lastTab = restoredTabs.last {
+            selectedSavedTab = lastTab
         }
 
         resolveParentRef(for: restoredTabs, restrictToActiveTabs: true)
@@ -893,33 +895,27 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             self.selectTab(selectedSavedTab, notify: true)
         }
 
-        for savedTab in savedTabs {
-            // Find the group that contains the SavedTab.
-            guard let groupIndex = recentlyClosedTabs.firstIndex(where: { $0.contains(savedTab) })
-            else {
-                continue
+        // remove all tabs in `savedTabs` from `recentlyClosedTabs` and clean up any empty collections
+        let tabsToFilter = Set(savedTabs)
+        recentlyClosedTabs = recentlyClosedTabs.compactMap { group -> [SavedTab]? in
+            let filteredGroup = group.filter { tab in
+                // this test compares by `Hashable` protocol
+                !tabsToFilter.contains(tab)
             }
-
-            // Remove the SavedTab from the group.
-            var group = recentlyClosedTabs[groupIndex]
-            group.removeAll { $0 == savedTab }
-
-            // Reinsert or delete the group
-            if group.count > 0 {
-                recentlyClosedTabs[groupIndex] = group
-            } else {
-                recentlyClosedTabs.remove(at: groupIndex)
+            guard !filteredGroup.isEmpty else {
+                return nil
             }
+            return filteredGroup
         }
 
-        closedTabsToShowToastFor.removeAll { savedTabs.contains($0) }
+        closedTabsToShowToastFor.removeAll { tabsToFilter.contains($0) }
         updateAllTabDataAndSendNotifications(notify: true)
 
         return selectedSavedTab
     }
 
     func restoreAllClosedTabs() {
-        restoreSavedTabs(Array(recentlyClosedTabs.joined()))
+        restoreSavedTabs(recentlyClosedTabsFlattened)
     }
 
     @discardableResult
@@ -1156,7 +1152,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     // MARK: Recently Closed Tabs
     func getRecentlyClosedTabForURL(_ url: URL) -> SavedTab? {
         assert(Thread.isMainThread)
-        return recentlyClosedTabs.joined().filter({ $0.url == url }).first
+        return recentlyClosedTabsFlattened.filter({ $0.url == url }).first
     }
 
     func addTabsToRecentlyClosed(_ tabs: [Tab], showToast: Bool) {

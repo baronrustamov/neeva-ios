@@ -9,7 +9,6 @@ import SwiftUI
 struct CheatsheetSettingsView: View {
     @Default(.seenCheatsheetIntro) var seenCheatsheetIntro
     @Default(.showTryCheatsheetPopover) var showTryCheatsheetPopover
-    @Default(.seenTryCheatsheetPopoverOnRecipe) var seenTryCheatsheetPopoverOnRecipe
     @Default(.tryCheatsheetPopoverCount) var tryCheatsheetPopoverCount
     @Default(.cheatsheetDebugQuery) var cheatsheetDebugQuery
     @Default(.useCheatsheetBloomFilters) var useCheatsheetBloomFilters
@@ -18,10 +17,6 @@ struct CheatsheetSettingsView: View {
         Section(header: Text(verbatim: "Cheatsheet")) {
             Toggle(String("cheatsheetIntroSeen"), isOn: $seenCheatsheetIntro)
             Toggle(String("showTryCheatsheetPopover"), isOn: $showTryCheatsheetPopover)
-            Toggle(
-                String("seenTryCheatsheetPopoverOnRecipe"),
-                isOn: $seenTryCheatsheetPopoverOnRecipe
-            )
             NumberField(
                 String("tryCheatsheetPopoverCount"),
                 number: $tryCheatsheetPopoverCount

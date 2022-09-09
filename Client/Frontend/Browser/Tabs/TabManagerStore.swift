@@ -51,9 +51,13 @@ class TabManagerStore {
         return url.path
     }
 
+    /// - Parameters:
+    ///  - update existingSavedTabs: A collection of SavedTab objects whose screenshot images need to be updated in image store. These tabs are not included in the return value.
     fileprivate func prepareSavedTabs(
-        fromTabs tabs: [Tab], fromArchivedTabs archivedTabs: [ArchivedTab],
-        existingSavedTabs: [SavedTab], selectedTab: Tab?
+        fromTabs tabs: [Tab],
+        fromArchivedTabs archivedTabs: [ArchivedTab],
+        update existingSavedTabs: [SavedTab],
+        selectedTab: Tab?
     ) -> [SavedTab]? {
         var savedTabs = [SavedTab]()
         var screenshots: [DiskImageStore.Entry] = []
@@ -103,8 +107,11 @@ class TabManagerStore {
 
         guard
             let savedTabs = prepareSavedTabs(
-                fromTabs: tabs, fromArchivedTabs: archivedTabs,
-                existingSavedTabs: existingSavedTabs, selectedTab: selectedTab),
+                fromTabs: tabs,
+                fromArchivedTabs: archivedTabs,
+                update: existingSavedTabs,
+                selectedTab: selectedTab
+            ),
             let path = tabSavePath(withId: scene.session.persistentIdentifier)
         else {
             clearArchive(for: scene)

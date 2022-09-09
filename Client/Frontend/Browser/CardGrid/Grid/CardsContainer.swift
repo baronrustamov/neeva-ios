@@ -35,17 +35,15 @@ struct TabGridContainer: View {
     @State var cardStackGeom: CGSize = CGSize.zero
 
     var selectedRowId: TabCardModel.Row.ID? {
-        let rows = tabModel.getRows(incognito: isIncognito)
+        let rows = tabModel.getRows(for: .all, incognito: isIncognito)
         if let row = rows.first(where: { row in
             row.cells.contains(where: \.isSelected)
         }) {
-            if row.index == 2 {
-                // Scroll to corresponding header to ensure that the resulting scroll offset is 0.
-                // NOTE: `row.index` is 1-based.
+            if row.index == 1 {
                 return rows[0].id
-            } else {
-                return row.id
             }
+
+            return row.id
         }
 
         return nil
@@ -56,7 +54,7 @@ struct TabGridContainer: View {
             LazyVStack(alignment: .leading, spacing: 0) {
                 // When there aren't enough tabs to make the scroll view scrollable, we build a VStack
                 // with spacer to pin ArchivedTabsView at the bottom of the scrollView.
-                SingleLevelTabCardsView(containerGeometry: geom, incognito: isIncognito)
+                TabGridCardView(containerGeometry: geom)
             }.background(
                 GeometryReader { proxy in
                     Color.clear
@@ -195,6 +193,9 @@ struct CardsContainer: View {
                                 scrollProxy: scrollProxy
                             )
                             .zIndex(1)
+                            .accessibilityHidden(
+                                gridModel.switcherState != .tabs || incognitoModel.isIncognito)
+
                             OpenArchivedTabsPanelButton(containerGeometry: geom.size)
                         }.onAppear {
                             gridModel.scrollToSelectedTab()
@@ -209,7 +210,6 @@ struct CardsContainer: View {
                 .accessibilityElement(children: .contain)
                 .accessibilityLabel("Tabs")
                 .accessibilityValue(Text("\(tabModel.manager.activeNormalTabs.count) tabs"))
-                .accessibilityHidden(gridModel.switcherState != .tabs || incognitoModel.isIncognito)
 
                 // Incognito Tabs
                 ZStack {
@@ -223,6 +223,8 @@ struct CardsContainer: View {
 
                     CardScrollContainer(columns: columns) { scrollProxy in
                         TabGridContainer(isIncognito: true, geom: geom, scrollProxy: scrollProxy)
+                            .accessibilityHidden(
+                                gridModel.switcherState != .tabs || !incognitoModel.isIncognito)
                     }.onAppear {
                         gridModel.scrollToSelectedTab()
                     }
@@ -236,8 +238,6 @@ struct CardsContainer: View {
                 .accessibilityElement(children: .contain)
                 .accessibilityLabel("Incognito Tabs")
                 .accessibilityValue(Text("\(tabModel.manager.incognitoTabs.count) tabs"))
-                .accessibilityHidden(
-                    gridModel.switcherState != .tabs || !incognitoModel.isIncognito)
             }
             .useEffect(deps: geom.size) { newValue in
                 containerGeom = newValue

@@ -129,7 +129,7 @@ class HistoryPanelModel: ObservableObject {
             self.groupedSites.remove(site)
         }
     }
-
+   
     // MARK: - init
     init(tabManager: TabManager) {
         self.profile = tabManager.profile
