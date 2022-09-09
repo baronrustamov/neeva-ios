@@ -556,7 +556,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         if notify {
             tabsUpdatedPublisher.send()
         }
-        
+
         storeChanges()
     }
 
@@ -1682,23 +1682,23 @@ extension TabManager {
         }
         selectTab(restore(savedTab: archivedTab.savedTab), notify: true)
     }
-    
+
     func restore(archivedTabGroup: ArchivedTabGroup) {
         var restoredTabs: [Tab] = []
-        
+
         for tab in archivedTabGroup.children {
             let restoredTab = restore(savedTab: tab.savedTab)
             restoredTab.shouldPerformHeavyUpdatesUponSelect = false
             restoredTabs.append(restoredTab)
-            
+
             selectTab(restoredTab, notify: false)
         }
-        
+
         if let tabToSelect = restoredTabs.first {
             tabToSelect.shouldPerformHeavyUpdatesUponSelect = true
             selectTab(tabToSelect, notify: true)
         }
-        
+
         remove(archivedTabGroup: archivedTabGroup)
     }
 
@@ -1706,7 +1706,7 @@ extension TabManager {
         archivedTabs = archivedTabs.filter { !toBeRemoved.contains($0) }
         updateAllTabDataAndSendNotifications(notify: true)
     }
-    
+
     func remove(archivedTabGroup: ArchivedTabGroup) {
         archivedTabs = archivedTabs.filter { !archivedTabGroup.children.contains($0) }
         updateAllTabDataAndSendNotifications(notify: true)

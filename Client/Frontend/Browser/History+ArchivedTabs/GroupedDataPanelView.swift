@@ -28,10 +28,10 @@ struct GroupedDataPanelView<Model: GroupedDataPanelModel, NavigationButtons: Vie
             .background(RoundedRectangle(cornerRadius: 8).foregroundColor(Color.tertiarySystemFill))
             .padding(.horizontal)
             .padding(.vertical, 4)
-            
+
             Color.groupedBackground.frame(height: 8)
             navigationButtons
-            
+
             if model.groupedData.isEmpty {
                 Color.groupedBackground.frame(height: 8)
             }
@@ -42,7 +42,7 @@ struct GroupedDataPanelView<Model: GroupedDataPanelModel, NavigationButtons: Vie
         ScrollView(showsIndicators: false) {
             VStack(spacing: 0) {
                 optionSections
-                
+
                 ForEach(DateGroupedTableDataSection.allCases, id: \.self) { section in
                     buildDaySections(section: section)
                 }
@@ -56,7 +56,7 @@ struct GroupedDataPanelView<Model: GroupedDataPanelModel, NavigationButtons: Vie
     private func buildDaySections(section: DateGroupedTableDataSection) -> some View {
         Group {
             let itemsInSection = model.groupedData.itemsForSection(section)
-            
+
             switch section {
             case .today, .yesterday:
                 buildSection(
@@ -128,11 +128,14 @@ struct GroupedDataPanelView<Model: GroupedDataPanelModel, NavigationButtons: Vie
                             Array(rows), id: \.element
                         ) { index, site in
                             SiteRowView(
-                                tabManager: browserModel.tabManager, data: .site(site, { site in
-                                    model.removeItemFromHistory(site: site)
-                                })
+                                tabManager: browserModel.tabManager,
+                                data: .site(
+                                    site,
+                                    { site in
+                                        model.removeItemFromHistory(site: site)
+                                    })
                             ) {
-                               // Nothing to do here. Should eventually remove this.
+                                // Nothing to do here. Should eventually remove this.
                             }.onAppear {
                                 model.loadNextItemsIfNeeded(
                                     from: index + model.countOfPreviousSites(section: section))

@@ -6,11 +6,11 @@ import Foundation
 
 class RecentlyClosedTabsPanelModel {
     let tabManager: TabManager
-    
+
     var recentlyClosedTabs: [SavedTab] {
         Array(tabManager.recentlyClosedTabs.joined())
     }
-    
+
     func restoreTab(at index: Int) {
         tabManager.restoreSavedTabs([recentlyClosedTabs[index]])
     }
@@ -18,7 +18,7 @@ class RecentlyClosedTabsPanelModel {
     func deleteRecentlyClosedTabs() {
         tabManager.recentlyClosedTabs.removeAll()
     }
-    
+
     // MARK: - init
     init(tabManager: TabManager) {
         self.tabManager = tabManager

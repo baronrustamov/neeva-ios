@@ -86,15 +86,18 @@ struct HistoryAndArchivedTabsPanelView: View {
                 }
                 .foregroundColor(.red)
                 .padding(16)
-                
+
                 NavigationLink(isActive: $showRecentlyClosedTabs) {
-                    RecentlyClosedTabsPanelView(model: RecentlyClosedTabsPanelModel(tabManager: browserModel.tabManager), onDismiss: {
-                        browserModel.overlayManager.hide(overlay: .fullScreenSheet(AnyView(self)))
-                    })
+                    RecentlyClosedTabsPanelView(
+                        model: RecentlyClosedTabsPanelModel(tabManager: browserModel.tabManager),
+                        onDismiss: {
+                            browserModel.overlayManager.hide(
+                                overlay: .fullScreenSheet(AnyView(self)))
+                        })
                 } label: {
                     EmptyView()
                 }
-                
+
                 NavigationLink(isActive: $showClearBrowsingData) {
                     DataManagementView()
                 } label: {
@@ -109,14 +112,16 @@ struct HistoryAndArchivedTabsPanelView: View {
         let archivedTabsModel = ArchivedTabsGroupedDataModel(
             tabCardModel: tabCardModel, tabManager: browserModel.tabManager)
         let clearAllArchiveButtonTitle = "Are you sure you want to close all archived tabs?"
-        let clearAllArchiveButtonText = "Close \(archivedTabsModel.numOfArchivedTabs) \(archivedTabsModel.numOfArchivedTabs > 1 ? "Tabs" : "Tab")"
+        let clearAllArchiveButtonText =
+            "Close \(archivedTabsModel.numOfArchivedTabs) \(archivedTabsModel.numOfArchivedTabs > 1 ? "Tabs" : "Tab")"
         let clearAllArchivedTabsButton: some View = {
             Button {
                 showCloseArchivedTabs = true
             } label: {
                 HStack {
                     Text("Clear All Archived Tabs")
-                        .foregroundColor(archivedTabsModel.numOfArchivedTabs < 1 ? .tertiaryLabel : .red)
+                        .foregroundColor(
+                            archivedTabsModel.numOfArchivedTabs < 1 ? .tertiaryLabel : .red)
 
                     Spacer()
                 }
@@ -125,7 +130,7 @@ struct HistoryAndArchivedTabsPanelView: View {
             .padding(16)
             .disabled(archivedTabsModel.numOfArchivedTabs < 1)
         }()
-        
+
         GroupedDataPanelView(model: archivedTabsModel) {
             VStack {
                 Button {
@@ -147,7 +152,7 @@ struct HistoryAndArchivedTabsPanelView: View {
                 .padding(16)
 
                 divider
-                
+
                 if #available(iOS 15.0, *) {
                     clearAllArchivedTabsButton
                         .confirmationDialog(
@@ -178,7 +183,7 @@ struct HistoryAndArchivedTabsPanelView: View {
                             )
                         }
                 }
-                
+
                 NavigationLink(isActive: $showArchivedTabSettings) {
                     ArchivedTabSettings()
                 } label: {

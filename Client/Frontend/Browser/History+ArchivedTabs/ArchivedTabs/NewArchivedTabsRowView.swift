@@ -7,7 +7,7 @@ import SwiftUI
 
 struct NewArchivedTabsRowView: View {
     @Environment(\.selectionCompletion) private var selectionCompletion: () -> Void
-    
+
     let tabs: [ArchivedTab]
     let tabManager: TabManager
     let tabGroup: ArchivedTabGroup?
@@ -34,7 +34,7 @@ struct NewArchivedTabsRowView: View {
                         } label: {
                             Label("Restore Tab Group", systemSymbol: .plusApp)
                         }
-                        
+
                         if #available(iOS 15.0, *) {
                             Button(role: .destructive) {
                                 tabManager.remove(archivedTabGroup: tabGroup)

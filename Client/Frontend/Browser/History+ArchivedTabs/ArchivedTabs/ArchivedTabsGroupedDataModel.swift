@@ -25,11 +25,11 @@ class ArchivedTabsGroupedDataModel: GroupedDataPanelModel {
 
         tabManager.archivedTabGroups.forEach {
             let tabGroup = $0.value
-            
+
             if let query = query, !query.isEmpty, !tabGroup.displayTitle.contains(query) {
                 return
             }
-            
+
             // lastExecutedTime is in milliseconds, needs to be converted to seconds.
             let lastExecutedTimeSeconds = tabGroup.lastExecutedTime / 1000
             groupedData.add(
@@ -42,7 +42,7 @@ class ArchivedTabsGroupedDataModel: GroupedDataPanelModel {
             if let query = query, !query.isEmpty, !$0.displayTitle.contains(query) {
                 return
             }
-            
+
             if tabManager.archivedTabGroups[$0.rootUUID] == nil {
                 let lastExecutedTimeSeconds = $0.lastExecutedTime / 1000
                 groupedData.add(
@@ -93,16 +93,16 @@ class ArchivedTabsGroupedDataModel: GroupedDataPanelModel {
 
         return (rows, tabGroups)
     }
-    
+
     // MARK: - Archived Tab Methods
     func clearArchivedTabs() {
         tabManager.remove(archivedTabs: tabManager.archivedTabs)
         loadData()
-        
+
         ClientLogger.shared.logCounter(
             .clearArchivedTabs,
             attributes: EnvironmentHelper.shared.getAttributes())
-        
+
         self.objectWillChange.send()
     }
 

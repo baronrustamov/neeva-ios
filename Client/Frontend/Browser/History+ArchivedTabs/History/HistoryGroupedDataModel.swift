@@ -20,7 +20,7 @@ class HistoryGroupedDataModel: GroupedDataPanelModel {
 
     @Published var isFetchInProgress = false
     @Published var groupedData = DateGroupedTableData<Site>()
-    
+
     // Set groupedData with these depending on if the user is searching.
     private var loadedGroupedData = DateGroupedTableData<Site>()
     private var filteredGroupedData = DateGroupedTableData<Site>()
@@ -52,7 +52,7 @@ class HistoryGroupedDataModel: GroupedDataPanelModel {
                 self.loadedGroupedData.add(site, date: date)
             }
         }
-        
+
         groupedData = loadedGroupedData
     }
 
@@ -78,7 +78,7 @@ class HistoryGroupedDataModel: GroupedDataPanelModel {
                 return deferMaybe(result)
             }
         }
-        
+
         searchSitesFromProfile(filter: query).uponQueue(.main) { result in
             self.filteredGroupedData = DateGroupedTableData<Site>()
 
@@ -94,7 +94,7 @@ class HistoryGroupedDataModel: GroupedDataPanelModel {
                     self.filteredGroupedData.add(site, date: date)
                 }
             }
-            
+
             self.groupedData = self.filteredGroupedData
         }
     }
@@ -120,7 +120,7 @@ class HistoryGroupedDataModel: GroupedDataPanelModel {
         }
 
         isFetchInProgress = true
-        
+
         if let query = query, !query.isEmpty {
             searchForSites(with: query)
             return .init()
@@ -144,7 +144,7 @@ class HistoryGroupedDataModel: GroupedDataPanelModel {
     func buildRows(with data: [Site], for section: DateGroupedTableDataSection) -> Rows {
         return data.enumerated()
     }
-    
+
     // MARK: - User Action
     // History Items
     func removeItemFromHistory(site: Site) {
