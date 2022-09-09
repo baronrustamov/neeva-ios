@@ -5,6 +5,9 @@
 import Shared
 import StoreKit
 import SwiftUI
+import XCGLogger
+
+private let log = Logger.browser
 
 struct NeevaAccountInfoView: View {
     @EnvironmentObject var browserModel: BrowserModel
@@ -105,11 +108,17 @@ struct NeevaAccountInfoView: View {
         if let storefront = SKPaymentQueue.default().storefront {
             // NOTE: currently only the U.S. but as we expand we'll maintain a list of valid country codes
             // https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
+
+            log.info(
+                "Storefront country code: \(storefront.countryCode), subscriptionType: \(String(describing: userInfo.subscriptionType)), subscriptionSource: \(String(describing: userInfo.subscription?.source))"
+            )
             if storefront.countryCode == "USA" {
                 return true
             }
 
             return false
+        } else {
+            log.info("No Storefront, PaymentQueue default: \(SKPaymentQueue.default())")
         }
 
         return false
