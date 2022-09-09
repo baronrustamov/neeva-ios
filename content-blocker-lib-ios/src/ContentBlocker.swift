@@ -5,7 +5,11 @@
 import Defaults
 import Foundation
 import Shared
+import StoreKit
 import WebKit
+import XCGLogger
+
+private let log = Logger.browser
 
 enum BlocklistCategory: CaseIterable {
     case easyPrivacy
@@ -24,12 +28,34 @@ enum BlocklistCategory: CaseIterable {
     }
 }
 
-enum BlocklistFileName: String, CaseIterable {
-    case easyPrivacy = "easy_privacy"
-    case easyPrivacyStrict = "easy_privacy_strict"
-    case easyListAdBlock = "easy_list"
+enum BlocklistFileName: CaseIterable {
+    case easyPrivacy
+    case easyPrivacyStrict
+    case easyListAdBlock
 
-    var filename: String { return self.rawValue }
+    static let easyListCountryMap = [
+        "DEU": "german",
+        "FRA": "french",
+    ]
+
+    var filename: String {
+        switch self {
+        case .easyPrivacy:
+            return "easy_privacy"
+        case .easyPrivacyStrict:
+            return "easy_privacy_strict"
+        case .easyListAdBlock:
+            var suffix = ""
+            if let countryCode = SKPaymentQueue.default().storefront?.countryCode,
+                let language = Self.easyListCountryMap[countryCode]
+            {
+                suffix = "_\(language)"
+            }
+            let easylistAdBlockFilename = "easy_list" + suffix
+            log.debug("ad blocker rule filename: \(easylistAdBlockFilename)")
+            return easylistAdBlockFilename
+        }
+    }
 
     static var easyPrivacyStrength: [BlocklistFileName] { return [.easyPrivacy] }
 

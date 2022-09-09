@@ -391,6 +391,8 @@
 		67462B2C27D8363D00141379 /* DefaultBrowserIntestitialOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67462B2B27D8363D00141379 /* DefaultBrowserIntestitialOnboardingView.swift */; };
 		6751BAB926AA08FB007FC7EA /* NavSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6751BAB826AA08FB007FC7EA /* NavSuggestion.swift */; };
 		6751BABB26AA173D007FC7EA /* NavSuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6751BABA26AA173D007FC7EA /* NavSuggestionView.swift */; };
+		6752DD8328C2A95A00901FB9 /* easy_list_french.json in Resources */ = {isa = PBXBuildFile; fileRef = 6752DD8128C2A95900901FB9 /* easy_list_french.json */; };
+		6752DD8428C2A95A00901FB9 /* easy_list_german.json in Resources */ = {isa = PBXBuildFile; fileRef = 6752DD8228C2A95900901FB9 /* easy_list_german.json */; };
 		6758FBD727F3A403000709AC /* AppConfig.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 6758FBD627F3A403000709AC /* AppConfig.xcconfig */; };
 		675EEDD326D9AF1700473332 /* LongPressButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 675EEDD226D9AF1700473332 /* LongPressButton.swift */; };
 		676685C527E50EAF003CEA6D /* ServerLoggingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676685C427E50EAF003CEA6D /* ServerLoggingSettingsView.swift */; };
@@ -1717,6 +1719,8 @@
 		67462B2B27D8363D00141379 /* DefaultBrowserIntestitialOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBrowserIntestitialOnboardingView.swift; sourceTree = "<group>"; };
 		6751BAB826AA08FB007FC7EA /* NavSuggestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavSuggestion.swift; sourceTree = "<group>"; };
 		6751BABA26AA173D007FC7EA /* NavSuggestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavSuggestionView.swift; sourceTree = "<group>"; };
+		6752DD8128C2A95900901FB9 /* easy_list_french.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = easy_list_french.json; sourceTree = "<group>"; };
+		6752DD8228C2A95900901FB9 /* easy_list_german.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = easy_list_german.json; sourceTree = "<group>"; };
 		6758FBD627F3A403000709AC /* AppConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = AppConfig.xcconfig; path = Client/AppConfig.xcconfig; sourceTree = "<group>"; };
 		675EEDD226D9AF1700473332 /* LongPressButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongPressButton.swift; sourceTree = "<group>"; };
 		676685C427E50EAF003CEA6D /* ServerLoggingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerLoggingSettingsView.swift; sourceTree = "<group>"; };
@@ -4473,6 +4477,8 @@
 		EBB894F4219398E500EB91A0 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				6752DD8128C2A95900901FB9 /* easy_list_french.json */,
+				6752DD8228C2A95900901FB9 /* easy_list_german.json */,
 				6790EFC4281098AC0033F5FD /* easy_privacy_strict.json */,
 				672D1C57280A0A3A0043F4E6 /* easy_list.json */,
 				679BB17B2714D069002F60FE /* easy_privacy.json */,
@@ -5653,6 +5659,7 @@
 				7B42406E1CA04CAC009B5C28 /* Menu.xcassets in Resources */,
 				23BEA767251A99ED00A014BF /* NewYorkMedium-Bold.otf in Resources */,
 				2328616825C9BD3D0015EA47 /* DefaultBrowserOnboarding.xcassets in Resources */,
+				6752DD8428C2A95A00901FB9 /* easy_list_german.json in Resources */,
 				C9AFE6E126582ACE000C5A03 /* Error.css in Resources */,
 				3BC659591E5BA505006D560F /* top_sites.json in Resources */,
 				BC6D34842622D4DE0050DEC4 /* Roobert-Bold.otf in Resources */,
@@ -5709,6 +5716,7 @@
 				F80983BD283849E00039FCBD /* Black@2x.png in Resources */,
 				2F44FB2D1A9D5D8500FD20CC /* FiraSans-BoldItalic.ttf in Resources */,
 				67FBEE3A288B6FC6002AE6B7 /* Localizable.strings in Resources */,
+				6752DD8328C2A95A00901FB9 /* easy_list_french.json in Resources */,
 				C9AFE6E326582BCB000C5A03 /* OfflineError.html in Resources */,
 				23BEA769251A99ED00A014BF /* NewYorkMedium-Regular.otf in Resources */,
 				D03F8F23200EAC1F003C2224 /* AllFramesAtDocumentStart.js in Resources */,
