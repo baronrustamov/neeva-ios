@@ -13,9 +13,26 @@ class CardStripModel: ObservableObject {
     @Published var shouldEmbedInScrollView = false
 
     var cells: [TabCell] {
+        func filterHandledTabGroupsFromCells(cells: inout [TabCell]) {
+            cells = cells.filter {
+                if let id = $0.tabGroupId {
+                    if handledTabGroups.contains(id) {
+                        return false
+                    }
+
+                    handledTabGroups.append(id)
+                }
+
+                return true
+            }
+        }
+
+        var handledTabGroups: [String] = []
+
         // Normal pinned tabs.
         let pinnedRows = tabCardModel.timeBasedNormalRows[.pinned] ?? []
-        let pinnedCells: [TabCell] = Array(pinnedRows.map({ $0.cells }).joined())
+        var pinnedCells: [TabCell] = Array(pinnedRows.map({ $0.cells }).joined())
+        filterHandledTabGroupsFromCells(cells: &pinnedCells)
         // Use the binaryValue (0/1) instead of Bool for sorting.
         // Makes sure singular pinned tabs appear before those in a TabGroup.
         let pinnedCellsSorted = pinnedCells.sorted {
@@ -24,11 +41,13 @@ class CardStripModel: ObservableObject {
 
         // Normal tabs.
         let regularRows = tabCardModel.timeBasedNormalRows[.today] ?? []
-        let regularCells: [TabCell] = Array(regularRows.map({ $0.cells }).joined())
+        var regularCells: [TabCell] = Array(regularRows.map({ $0.cells }).joined())
+        filterHandledTabGroupsFromCells(cells: &regularCells)
 
         // Incognito tabs.
         let incognitoRows = tabCardModel.incognitoRows
-        let incognitoCells: [TabCell] = Array(incognitoRows.map({ $0.cells }).joined())
+        var incognitoCells: [TabCell] = Array(incognitoRows.map({ $0.cells }).joined())
+        filterHandledTabGroupsFromCells(cells: &incognitoCells)
 
         return incognitoModel.isIncognito ? incognitoCells : pinnedCellsSorted + regularCells
     }
@@ -47,6 +66,7 @@ class CardStripModel: ObservableObject {
         return tabChromeModel.inlineToolbar
             && !tabChromeModel.isEditingLocation
             && detailCount > 1
+            && todayTabsExists
     }
 
     init(

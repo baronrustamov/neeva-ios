@@ -68,8 +68,8 @@ extension BaseTestCase {
     func goToClearData() {
         goToSettings()
 
-        waitForExistence(app.tables.cells["Clear Browsing Data"])
-        app.tables.cells["Clear Browsing Data"].tap()
+        waitForExistence(app.buttons["Clear Browsing Data"])
+        app.buttons["Clear Browsing Data"].tap()
     }
 
     /// Launches from tab page

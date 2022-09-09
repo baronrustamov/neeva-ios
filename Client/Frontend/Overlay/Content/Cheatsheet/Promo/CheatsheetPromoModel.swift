@@ -221,15 +221,7 @@ class CheatsheetPromoModel: ObservableObject {
                 return
             }
 
-            var showIntroPopover: Bool = showPopover.newValue
-            // Show intro on recipe pages for the first time
-            if !Defaults[.seenTryCheatsheetPopoverOnRecipe],
-                DomainAllowList.isRecipeAllowed(url: url)
-            {
-                showIntroPopover = true
-            }
-
-            if showIntroPopover {
+            if showPopover.newValue {
                 if Defaults[.tryCheatsheetPopoverCount] > 0 {
                     self?.scheduleSetDisplayedStateForTryCheatsheet()
                 } else {
@@ -310,11 +302,6 @@ class CheatsheetPromoModel: ObservableObject {
                 self.stateStorage?.performTransition(on: url, transition: .dismissPromo)
             }
             Defaults[.showTryCheatsheetPopover] = false
-            if let currentURL = url,
-                DomainAllowList.isRecipeAllowed(url: currentURL)
-            {
-                Defaults[.seenTryCheatsheetPopoverOnRecipe] = true
-            }
             scheduleClearDisplayedStates()
         case .UGC:
             // transition straight to dismiss bubble

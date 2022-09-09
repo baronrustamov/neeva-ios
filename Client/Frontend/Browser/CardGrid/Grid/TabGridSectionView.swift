@@ -13,42 +13,65 @@ enum SingleLevelTabCardsViewUX {
     static let TabGroupCarouselTabSpacing: CGFloat = 12
 }
 
-struct SingleLevelTabCardsView: View {
-    @EnvironmentObject var tabModel: TabCardModel
+struct TabGridSectionHeaderView: View {
+    let section: TabSection
+
+    var body: some View {
+        VStack {
+            Color.secondarySystemFill
+                .frame(height: 8)
+                .padding(.horizontal, -CardGridUX.GridSpacing)
+
+            HStack {
+                Text(LocalizedStringKey(section.rawValue))
+                    .withFont(.labelLarge)
+                    .foregroundColor(.label)
+                    .padding(.top, 12)
+                    .padding(.bottom, 8)
+
+                Spacer()
+            }
+        }
+    }
+}
+
+struct TabGridSectionView: View {
     @EnvironmentObject private var browserModel: BrowserModel
 
     let containerGeometry: GeometryProxy
-    let incognito: Bool
+    let section: TabSection
+    let rows: [Row]
 
     var body: some View {
-        ForEach(
-            tabModel.getRows(incognito: incognito)
-        ) { row in
+        ForEach(rows) { row in
             HStack(spacing: CardGridUX.GridSpacing) {
                 ForEach(Array(row.cells.enumerated()), id: \.0) { index, details in
                     switch details {
                     case .tabGroupInline(let groupDetails):
                         CollapsedCardGroupView(
-                            groupDetails: groupDetails, containerGeometry: containerGeometry,
+                            groupDetails: groupDetails,
+                            containerGeometry: containerGeometry,
                             row: row, cellIndex: index
                         )
                         .padding(.horizontal, -CardGridUX.GridSpacing)
                         .padding(.bottom, CardGridUX.GridSpacing)
-                        .zIndex(groupDetails.allDetails.contains(where: \.isSelected) ? 1 : 0)
                     case .tabGroupGridRow(let groupDetails, let range):
                         ExpandedCardGroupRowView(
-                            groupDetails: groupDetails, containerGeometry: containerGeometry,
+                            groupDetails: groupDetails,
+                            containerGeometry: containerGeometry,
                             range: range, row: row, cellIndex: index
                         )
                         .padding(.horizontal, -CardGridUX.GridSpacing)
                         .padding(
                             .bottom,
-                            lastRowTabGroup(range, groupDetails) ? CardGridUX.GridSpacing : 0)
+                            lastRowTabGroup(range, groupDetails)
+                                ? CardGridUX.GridSpacing : 0)
                     case .tab(let tabDetails):
                         FittedCard(details: tabDetails)
                             .modifier(
                                 CardTransitionModifier(
-                                    details: tabDetails, containerGeometry: containerGeometry)
+                                    details: tabDetails,
+                                    containerGeometry: containerGeometry)
                             )
                             .padding(.top, 8)
                             .padding(.bottom, CardGridUX.GridSpacing)
@@ -57,34 +80,30 @@ struct SingleLevelTabCardsView: View {
                                     .SelectTab,
                                     attributes: getLogCounterAttributesForTabs(
                                         tab: tabDetails.tab))
-                                browserModel.hideGridWithAnimation(tabToBeSelected: tabDetails.tab)
+                                browserModel.hideGridWithAnimation(
+                                    tabToBeSelected: tabDetails.tab)
                             }
-                    case .sectionHeader(let byTime):
-                        VStack {
-                            Color.secondarySystemFill
-                                .frame(height: 8)
-                                .padding(.horizontal, -CardGridUX.GridSpacing)
-
-                            HStack {
-                                Text(LocalizedStringKey(byTime.rawValue))
-                                    .withFont(.labelLarge)
-                                    .foregroundColor(.label)
-                                    .padding(.top, 12)
-                                    .padding(.bottom, 8)
-                                Spacer()
-                            }
-                        }
+                    case .sectionHeader(let section):
+                        TabGridSectionHeaderView(section: section)
+                            .id(row.id)
                     }
                 }
-            }
-            .padding(.horizontal, CardGridUX.GridSpacing)
-            .background(Color.background)
-            .zIndex(row.cells.contains(where: \.isSelected) ? 1 : 0)
-            .onDrop(of: ["public.url", "public.text"], delegate: tabModel)
+            }.zIndex(row.cells.contains(where: \.isSelected) ? 1 : 0)
         }
     }
 
     func lastRowTabGroup(_ rowInfo: Range<Int>, _ groupDetails: TabGroupCardDetails) -> Bool {
         return rowInfo.last == groupDetails.allDetails.count - 1
+    }
+
+    init(
+        tabModel: TabCardModel,
+        containerGeometry: GeometryProxy,
+        section: TabSection,
+        incognito: Bool
+    ) {
+        self.containerGeometry = containerGeometry
+        self.section = section
+        self.rows = tabModel.getRows(for: section, incognito: incognito)
     }
 }

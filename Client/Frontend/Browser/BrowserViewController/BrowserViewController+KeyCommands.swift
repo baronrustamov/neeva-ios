@@ -91,8 +91,12 @@ extension BrowserViewController {
     }
 
     @objc func restoreTabKeyCommand() {
-        if tabManager.recentlyClosedTabs.count > 0 {
-            tabManager.restoreSavedTabs(tabManager.recentlyClosedTabs[0])
+        if let tabToRestore = tabManager.recentlyClosedTabs.first {
+            // override selected tab if we are viewing a tab
+            tabManager.restoreSavedTabs(
+                tabToRestore,
+                overrideSelectedTab: browserModel.contentVisibilityModel.showContent
+            )
         }
     }
 

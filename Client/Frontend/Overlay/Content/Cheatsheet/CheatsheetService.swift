@@ -223,8 +223,6 @@ final class CheatsheetServiceProvider: CheatsheetDataService {
         var results: [CheatsheetResultData] = []
 
         if let recipe = cheatsheetInfo.recipe,
-            let pageURL = URL(string: inputURL),
-            DomainAllowList.isRecipeAllowed(url: pageURL),
             let ingredients = recipe.ingredients,
             !ingredients.isEmpty,
             let instructions = recipe.instructions,

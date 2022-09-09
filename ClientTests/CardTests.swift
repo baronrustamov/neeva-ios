@@ -14,7 +14,7 @@ extension CardGrid: Inspectable {}
 extension CardsContainer: Inspectable {}
 extension TabGridContainer: Inspectable {}
 extension CardScrollContainer: Inspectable {}
-extension SingleLevelTabCardsView: Inspectable {}
+extension TabGridSectionView: Inspectable {}
 extension GridPicker: Inspectable {}
 extension FaviconView: Inspectable {}
 extension SwitcherToolbarView: Inspectable {}
@@ -143,9 +143,8 @@ class CardTests: XCTestCase {
     func testBuildRowsTwoColumns() throws {
         /*
          The following test constructs the tab in the follwing order:
-         [individual tab]
+         [individual tab, individual tab]
          [child tab (hub site), child tab]
-         [individual tab]
 
          But to save spaces, it should be converted to:
          [individual tab. individual tab]
@@ -159,17 +158,17 @@ class CardTests: XCTestCase {
 
         let buildRowsPromotetab4 = tabCardModel.buildRowsForTesting()
 
-        // Three rows in total (including "today" section header)
-        XCTAssertEqual(buildRowsPromotetab4.count, 3)
+        // Two rows in total.
+        XCTAssertEqual(buildRowsPromotetab4.count, 2)
 
-        // Second row has 2 cells
-        XCTAssertEqual(buildRowsPromotetab4[1].cells.count, 2)
+        // First row has 2 cells.
+        XCTAssertEqual(buildRowsPromotetab4[0].cells.count, 2)
 
-        // Third row has 1 cell
-        XCTAssertEqual(buildRowsPromotetab4[2].cells.count, 1)
+        // Second row has 1 cell.
+        XCTAssertEqual(buildRowsPromotetab4[1].cells.count, 1)
 
-        // Second cell of the second row should be tab 4
-        XCTAssertEqual(buildRowsPromotetab4[1].cells[1].id, tab4.id)
+        // Second cell of the first row should be tab 4
+        XCTAssertEqual(buildRowsPromotetab4[0].cells[1].id, tab4.id)
 
         /*
          All tabGroupGridRow should occupy a row by itself. The following test makes sure
@@ -189,15 +188,15 @@ class CardTests: XCTestCase {
 
         let buildRowsDontPromotetab6 = tabCardModel.buildRowsForTesting()
 
-        // There should be five rows in total (including "today" section header)
-        XCTAssertEqual(buildRowsDontPromotetab6.count, 5)
+        // There should be four rows in total.
+        XCTAssertEqual(buildRowsDontPromotetab6.count, 4)
 
-        // Fourth row should only have 1 tab
-        XCTAssertEqual(buildRowsDontPromotetab6[3].numTabsInRow, 1)
+        // Third row should only have 1 tab
+        XCTAssertEqual(buildRowsDontPromotetab6[2].numTabsInRow, 1)
 
-        // Fifth row should only have 1 tab, and it will be tab6
-        XCTAssertEqual(buildRowsDontPromotetab6[4].cells.count, 1)
-        XCTAssertEqual(buildRowsDontPromotetab6[4].cells[0].id, tab6.id)
+        // Fourth row should only have 1 tab, and it will be tab6
+        XCTAssertEqual(buildRowsDontPromotetab6[3].cells.count, 1)
+        XCTAssertEqual(buildRowsDontPromotetab6[3].cells[0].id, tab6.id)
 
         tabGroupExpanded.remove(tab2.rootUUID)
     }
@@ -224,17 +223,17 @@ class CardTests: XCTestCase {
         tabCardModel.columnCount = 3
         let buildRowsAllSameRow = tabCardModel.buildRowsForTesting()
 
-        // There should be three rows (including "today" section header)
+        // There should be two rows.
         XCTAssertEqual(buildRowsAllSameRow.count, 3)
 
-        // Second row should only have two cells
-        XCTAssertEqual(buildRowsAllSameRow[1].cells.count, 2)
+        // First row should have one tab.
+        XCTAssertEqual(buildRowsAllSameRow[0].cells.count, 1)
 
-        // First cell of the second row should have 1 tab
-        XCTAssertEqual(buildRowsAllSameRow[1].cells[0].numTabs, 1)
+        // Second row should have three tabs.
+        XCTAssertEqual(buildRowsAllSameRow[1].cells[0].numTabs, 3)
 
-        // Second cell of the second row should have two tabs
-        XCTAssertEqual(buildRowsAllSameRow[1].cells[1].numTabs, 2)
+        // Third row should have two tabs.
+        XCTAssertEqual(buildRowsAllSameRow[2].cells[0].numTabs, 2)
 
         /*
          All tabGroupGridRow should occupy a row by itself. The following test makes sure
@@ -246,7 +245,7 @@ class CardTests: XCTestCase {
          [individual tab]
          */
 
-        let tab7 = manager.addTab(afterTab: tab4)
+        _ = manager.addTab(afterTab: tab4)
         let tab8 = manager.addTab()
 
         // Make the tab group expanded
@@ -255,21 +254,19 @@ class CardTests: XCTestCase {
         tabCardModel.columnCount = 3
         let buildRowsDontPromotetab8 = tabCardModel.buildRowsForTesting()
 
-        // There should be five rows in total (including "today" section header)
-        XCTAssertEqual(buildRowsDontPromotetab8.count, 5)
+        // There should be four rows in total.
+        XCTAssertEqual(buildRowsDontPromotetab8.count, 4)
 
-        // Fourth row should only have 1 tab
-        XCTAssertEqual(buildRowsDontPromotetab8[3].numTabsInRow, 1)
+        // Third row should only have 1 tab.
+        XCTAssertEqual(buildRowsDontPromotetab8[2].numTabsInRow, 1)
 
-        // Fifth row should only have 1 tab, and it will be tab8
-        XCTAssertEqual(buildRowsDontPromotetab8[4].cells.count, 1)
-        XCTAssertEqual(buildRowsDontPromotetab8[4].cells[0].id, tab8.id)
+        // Fourth row should only have 1 tab, and it will be tab8
+        XCTAssertEqual(buildRowsDontPromotetab8[3].cells.count, 1)
 
         tabGroupExpanded.remove(tab2.rootUUID)
     }
 
     func testPinnedTabIsInCorrectSection() throws {
-
         /*
          Create two tabs. Pin the second tab and test if the
          second tab gets promoted to the front.
@@ -282,7 +279,9 @@ class CardTests: XCTestCase {
         tab2.pinnedTime = Date().timeIntervalSinceReferenceDate
         tabCardModel.onDataUpdated()
 
-        let buildRowsTwoTabs = tabCardModel.buildRowsForTesting()
+        let buildRowsTwoTabs =
+            tabCardModel.getRows(for: .pinned, incognito: false)
+            + tabCardModel.getRows(for: .today, incognito: false)
 
         // Confirm pinned tab is in pinned tab section.
         XCTAssertEqual(buildRowsTwoTabs[1].cells.count, 1)
@@ -308,7 +307,9 @@ class CardTests: XCTestCase {
         tab5.pinnedTime = Date().timeIntervalSinceReferenceDate
         tabCardModel.onDataUpdated()
 
-        let buildRowsThreeTabs = tabCardModel.buildRowsForTesting()
+        let buildRowsThreeTabs =
+            tabCardModel.getRows(for: .pinned, incognito: false)
+            + tabCardModel.getRows(for: .today, incognito: false)
 
         XCTAssertEqual(buildRowsThreeTabs[1].numTabsInRow, 2)
         XCTAssertNotEqual(buildRowsThreeTabs[1].cells[0].id, tab5.id)
@@ -549,7 +550,7 @@ class CardTests: XCTestCase {
 
         // Close and then restore tab
         manager.removeTab(tab1)
-        let restoredTab = manager.restoreSavedTabs(Array(manager.recentlyClosedTabs.joined()))
+        let restoredTab = manager.restoreSavedTabs(manager.recentlyClosedTabs.flatMap { $0 })
 
         // Verify tab is in today section
         XCTAssertEqual(tabCardModel.timeBasedNormalRows[.today]?.count, 2)

@@ -55,7 +55,7 @@ public struct NeevaConstants {
     public static var verificationRequiredURL: URL { buildAppURL("p/signup/verification-required") }
 
     public static let appMarketingURL: URL = "https://neeva.com/"
-    public static let appHelpCenterURL: URL = "https://help.neeva.com/"
+    public static let appHelpCenterURL: URL = "https://help.neeva.com/hc"
     public static let appPrivacyURL = appMarketingURL / "privacy"
     public static let appTermsURL = appMarketingURL / "terms"
     public static let cookieCutterHelpURL: URL =

@@ -43,16 +43,10 @@ class TabCardModel: CardDropDelegate, CardModel {
     // Tab Group related members
     private(set) var representativeTabs: [Tab] = []
     private(set) var allTabGroupDetails: [TabGroupCardDetails] = []
+    private(set) var tabsDidChange = false
 
     @Default(.tabGroupExpanded) private var tabGroupExpanded: Set<String>
     var needsUpdateRows: Bool = false
-
-    static let pinnedRowHeaderID: String = "pinned-header"
-    static let todayRowHeaderID: String = "today-header"
-    static let yesterdayRowHeaderID: String = "yesterday-header"
-    static let lastweekRowHeaderID: String = "lastWeek-header"
-    static let lastMonthRowHeaderID: String = "lastMonth-header"
-    static let olderRowHeaderID: String = "older-header"
 
     // Find Tab
     @Published var isSearchingForTabs: Bool = false {
@@ -69,111 +63,19 @@ class TabCardModel: CardDropDelegate, CardModel {
         }
     }
 
-    private(set) var tabsDidChange = false
-
-    private func updateRows() {
-        needsUpdateRows = false
-
-        timeBasedNormalRows[.pinned] = buildRows(incognito: false, for: .pinned)
-        timeBasedNormalRows[.today] = buildRows(incognito: false, for: .today)
-        timeBasedNormalRows[.yesterday] = buildRows(incognito: false, for: .yesterday)
-        timeBasedNormalRows[.lastWeek] = buildRows(incognito: false, for: .lastWeek)
-
-        if Defaults[.archivedTabsDuration] == .month {
-            timeBasedNormalRows[.lastMonth] = buildRows(incognito: false, for: .lastMonth)
-        } else if Defaults[.archivedTabsDuration] == .forever {
-            timeBasedNormalRows[.lastMonth] = buildRows(incognito: false, for: .lastMonth)
-            timeBasedNormalRows[.overAMonth] = buildRows(incognito: false, for: .overAMonth)
-        }
-
-        // TODO: in the future, we might apply time-based treatments to incognito mode.
-        incognitoRows = buildRows(incognito: true, for: .all)
-
-        // Defer signaling until after we have finished updating. This way our state is
-        // completely consistent with TabManager prior to accessing allDetails, etc.
-        self.objectWillChange.send()
-    }
-
-    func updateIfNeeded(forceUpdateRows: Bool = false) {
-        if needsUpdateRows || forceUpdateRows {
-            updateRows()
-        }
-    }
-
-    func getRows(incognito: Bool) -> [Row] {
-        var returnValue: [Row] = []
-
-        func getOlderRows() -> [Row] {
-            if Defaults[.archivedTabsDuration] == .month {
-                return (timeBasedNormalRows[.lastMonth] ?? [])
-            }
-
-            if Defaults[.archivedTabsDuration] == .forever {
-                return (timeBasedNormalRows[.lastMonth] ?? [])
-                    + (timeBasedNormalRows[.overAMonth] ?? [])
-            }
-            return []
-        }
-
-        if incognito {
-            returnValue =
-                // TODO: in the future, we might apply time-based treatments to incognito mode.
-                incognitoRows
-        } else {
-            let pinnedAndToday: [Row] =
-                (timeBasedNormalRows[.pinned] ?? []) + (timeBasedNormalRows[.today] ?? [])
-            let yesterdayAndLastWeek: [Row] =
-                (timeBasedNormalRows[.yesterday] ?? []) + (timeBasedNormalRows[.lastWeek] ?? [])
-
-            returnValue =
-                pinnedAndToday
-                + yesterdayAndLastWeek
-                + getOlderRows()
-        }
-
-        for id in 0..<returnValue.count {
-            returnValue[id].index = id + 1
-        }
-
-        return returnValue
-    }
-
-    // Details
-    var normalDetails: [TabCardDetails] {
-        allDetails.filter {
-            !$0.tab.isIncognito
-        }
-    }
-
-    var incognitoDetails: [TabCardDetails] {
-        allDetails.filter {
-            $0.tab.isIncognito
-        }
-    }
-
-    func tabIncludedInSearch(_ details: TabCardDetails) -> Bool {
-        let tabSeachFilter = tabSearchFilter.lowercased()
-        return
-            (details.title.lowercased().contains(tabSeachFilter)
-            || (details.url?.absoluteString.lowercased().contains(tabSeachFilter) ?? false)
-            || tabSeachFilter.isEmpty)
-    }
-
     struct Row: Identifiable {
-        var id: Set<String> { Set(cells.map(\.id)) }
-        var numTabsInRow: Int {
-            cells.reduce(
-                0,
-                { total, cell in
-                    total + cell.numTabs
-                })
-        }
-
         enum Cell: Identifiable {
             case tab(TabCardDetails)
             case tabGroupInline(TabGroupCardDetails)
             case tabGroupGridRow(TabGroupCardDetails, Range<Int>)
             case sectionHeader(TabSection)
+
+            static let pinnedRowHeaderID: String = "pinned-header"
+            static let todayRowHeaderID: String = "today-header"
+            static let yesterdayRowHeaderID: String = "yesterday-header"
+            static let lastweekRowHeaderID: String = "lastWeek-header"
+            static let lastMonthRowHeaderID: String = "lastMonth-header"
+            static let olderRowHeaderID: String = "older-header"
 
             var id: String {
                 switch self {
@@ -183,23 +85,23 @@ class TabCardModel: CardDropDelegate, CardModel {
                     return details.id
                 case .tabGroupGridRow(let details, let range):
                     return details.allDetails[range].reduce("") { $0 + $1.id + ":" }
-                case .sectionHeader(let timeFilter):
-                    switch timeFilter {
+                case .sectionHeader(let section):
+                    switch section {
                     case .all:
                         // No id for all.
                         return ""
                     case .pinned:
-                        return TabCardModel.pinnedRowHeaderID
+                        return Self.pinnedRowHeaderID
                     case .today:
-                        return TabCardModel.todayRowHeaderID
+                        return Self.todayRowHeaderID
                     case .yesterday:
-                        return TabCardModel.yesterdayRowHeaderID
+                        return Self.yesterdayRowHeaderID
                     case .lastWeek:
-                        return lastweekRowHeaderID
+                        return Self.lastweekRowHeaderID
                     case .lastMonth:
-                        return lastMonthRowHeaderID
+                        return Self.lastMonthRowHeaderID
                     case .overAMonth:
-                        return olderRowHeaderID
+                        return Self.olderRowHeaderID
                     }
                 }
             }
@@ -238,172 +140,236 @@ class TabCardModel: CardDropDelegate, CardModel {
                     return false
                 }
             }
+
+            var tabGroupId: String? {
+                switch self {
+                case .tabGroupInline(let groupDetails):
+                    return groupDetails.id
+                case .tabGroupGridRow(let groupDetails, _):
+                    return groupDetails.id
+                default:
+                    return nil
+                }
+            }
         }
+
+        var id: Set<String> { Set(cells.map(\.id)) }
         var cells: [Cell]
-        var index: Int?
+        var index: Int
         var multipleCellTypes: Bool = false
+
+        var numTabsInRow: Int {
+            cells.reduce(
+                0,
+                { total, cell in
+                    total + cell.numTabs
+                })
+        }
     }
 
-    func buildRows(incognito: Bool, for section: TabSection) -> [Row] {
-        var rows: [Row] = []
+    // MARK: Update Rows
+    func updateIfNeeded(forceUpdateRows: Bool = false) {
+        if needsUpdateRows || forceUpdateRows {
+            updateRows()
+        }
+    }
 
-        // Get all the tabs matching the section,
-        // incognito state, and search filter (if active).
-        var allDetailsFiltered = allDetails.filter { tabCard in
-            let tab = tabCard.tab
-            let incognitoMatches = tab.isIncognito == incognito
-            let includedInSection = tab.isIncluded(in: section)
-            let includedInSearch = tabIncludedInSearch(tabCard)
+    private func updateRows() {
+        needsUpdateRows = false
 
-            guard incognitoMatches, includedInSearch else {
+        timeBasedNormalRows[.all] = buildRows(for: .all, incognito: false)
+        timeBasedNormalRows[.pinned] = buildRows(for: .pinned, incognito: false)
+        timeBasedNormalRows[.today] = buildRows(for: .today, incognito: false)
+        timeBasedNormalRows[.yesterday] = buildRows(for: .yesterday, incognito: false)
+        timeBasedNormalRows[.lastWeek] = buildRows(for: .lastWeek, incognito: false)
+
+        if Defaults[.archivedTabsDuration] == .month {
+            timeBasedNormalRows[.lastMonth] = buildRows(for: .lastMonth, incognito: false)
+        } else if Defaults[.archivedTabsDuration] == .forever {
+            timeBasedNormalRows[.lastMonth] = buildRows(for: .lastMonth, incognito: false)
+            timeBasedNormalRows[.overAMonth] = buildRows(for: .overAMonth, incognito: false)
+        }
+
+        // TODO: in the future, we might apply time-based treatments to incognito mode.
+        incognitoRows = buildRows(for: .all, incognito: true)
+
+        // Defer signaling until after we have finished updating. This way our state is
+        // completely consistent with TabManager prior to accessing allDetails, etc.
+        self.objectWillChange.send()
+    }
+
+    // MARK: Get Rows
+    func getRows(for section: TabSection, incognito: Bool) -> [Row] {
+        if incognito {
+            return incognitoRows
+        }
+
+        return timeBasedNormalRows[section, default: []]
+    }
+
+    func getRowSectionsNeeded(incognito: Bool) -> [TabSection] {
+        if incognito {
+            return [.all]
+        }
+
+        var sections: [TabSection] = [.pinned, .today, .yesterday, .lastWeek]
+
+        if Defaults[.archivedTabsDuration] == .month {
+            sections.append(.lastMonth)
+        }
+
+        if Defaults[.archivedTabsDuration] == .forever {
+            sections.append(.overAMonth)
+        }
+
+        return sections
+    }
+
+    // MARK: Build Rows
+    private func buildRows(for section: TabSection, incognito: Bool) -> [Row] {
+        func numberOfCellsInRow(row: Row) -> Int {
+            row.cells.map { $0.numTabs }.reduce(0, +)
+        }
+
+        func addItemToRowOrCreateNewRowIfNeeded(rows: inout [Row], item: TabCell) {
+            let lastRowIndex = rows.count - 1
+
+            if numberOfCellsInRow(row: rows[lastRowIndex]) < columnCount {
+                rows[lastRowIndex].cells.append(item)
+            } else {
+                rows.append(Row(cells: [item], index: rows.count))
+            }
+        }
+
+        func willTabGroupFitInRow(tabGroup: TabGroupCardDetails) -> Bool {
+            numberOfCellsInRow(row: rows[rows.count - 1]) + tabGroup.allDetails.count <= columnCount
+        }
+
+        func fillEmptySpotsInLastRow() {
+            for key in singleTabs.keys {
+                if numberOfCellsInRow(row: rows[rows.count - 1]) == columnCount {
+                    return
+                }
+
+                addItemToRowOrCreateNewRowIfNeeded(rows: &rows, item: .tab(singleTabs[key]!))
+                singleTabs.removeValue(forKey: key)
+            }
+
+            if numberOfCellsInRow(row: rows[rows.count - 1]) < columnCount {
+                // If there weren't enough tabs to fill the row,
+                // make sure the next tabs start on a new line.
+                rows.append(Row(cells: [], index: rows.count))
+            }
+        }
+
+        let addSectionHeader = !incognito && section != .all
+        var rows: [Row] = [Row(cells: [], index: addSectionHeader ? 1 : 0)]
+        var singleTabs: [String: TabCardDetails] = [:]
+
+        if addSectionHeader {
+            rows.insert(Row(cells: [.sectionHeader(section)], index: 0), at: 0)
+        }
+
+        let filteredDetails = allDetails.filter { detail in
+            if !detail.isIncluded(in: section) || !tabIncludedInSearch(detail)
+                || detail.isIncognito != incognito
+            {
                 return false
             }
 
-            // Check to see if the detail is in a TabGroup.
-            if let tabGroup = manager.getTabGroup(for: tab) {
-                /* Prevents the TabGroup from being added multiple times to the grid
-                 * by only adding the first or "representative" tab to the filtered list. */
-                let isRepresentativeTab = isRepresentativeTab(tab, in: tabGroup)
-
-                /* Check if the most recently used tab in TabGroup is
-                 * a part of the section. Or if a tab in the TabGroup is pinned.
-                 * This can differ from tabCard since it may not be the
-                 * most recently used tab in the TabGroup. */
-                let tabGroupIncludedInSection = tabGroup.isIncluded(in: section)
-
-                return isRepresentativeTab && tabGroupIncludedInSection
-            }
-
-            // If tabCard isn't a TabGroup, can just check if it is included in the section.
-            return includedInSection
-        }
-
-        modifyAllDetailsFilteredPromotingPinnedTabs(&allDetailsFiltered)
-
-        let lastPinnedIndex = allDetailsFiltered.lastIndex(where: { $0.isPinned })
-
-        // An array to keep track of whether a CardDetail has been processed. This allows us to skip
-        // the CardDetail that are pre-processed due to lookahead.
-        var processed = Array(repeating: false, count: allDetailsFiltered.count)
-
-        // This functions performs lookahead and checks if there are tab/tab groups that can be inserted
-        // in the current row before a new row gets inserted.
-        func PromoteCellsAfterIndex(currDetail: TabCardDetails, row: inout Row, index: Int) {
-            var didPromote = false
-            var id = index
-
-            while id < allDetailsFiltered.count && row.numTabsInRow < columnCount {
-                let details = allDetailsFiltered[id]
-
-                // don't promote non-pinned tabs if we're still in pinned section
-                if let lastPinnedIndex = lastPinnedIndex {
-                    if let tabGroup = allTabGroupDetails.first(where: {
-                        $0.id == currDetail.rootID
-                    }), tabGroup.isPinned && index > lastPinnedIndex {
-                        return
-                    }
-                    if currDetail.isPinned && index > lastPinnedIndex {
-                        return
-                    }
-                }
-
-                if let tabGroup = allTabGroupDetails.first(where: { $0.id == details.rootID }) {
-                    // Expanded tab group won't get promoted
-                    if !tabGroup.isExpanded
-                        && (tabGroup.allDetails.count + row.numTabsInRow)
-                            <= columnCount
-                    {
-                        row.cells.append(.tabGroupInline(tabGroup))
-                        didPromote = true
-                        processed[id] = true
-                    }
-                } else {
-                    row.cells.append(.tab(details))
-                    didPromote = true
-                    processed[id] = true
-                }
-
-                id = id + 1
-            }
-
-            // Row.multipleCelltypes is needed for the UI to create spacing between different types of cells.
-            // This value won't be evaluated in the UI if the row contains only individual tabs. So, it's
-            // set to true as long as some tab/tab group is promoted.
-            if didPromote {
-                row.multipleCellTypes = true
-            }
-        }
-
-        for (index, details) in allDetailsFiltered.enumerated() {
-            if processed[index] { continue }
-            let tabGroup = allTabGroupDetails.first(where: { $0.id == details.rootID })
-            if rows.isEmpty || rows.last!.numTabsInRow >= columnCount
-                || tabGroup != nil
-            {
-                if let tabGroup = tabGroup {
-                    if tabGroup.isExpanded {
-                        // Perform lookahead before we insert a new row.
-                        if !rows.isEmpty {
-                            PromoteCellsAfterIndex(
-                                currDetail: allDetailsFiltered[index],
-                                row: &rows[rows.endIndex - 1], index: index + 1)
-                        }
-                        // tabGroupGridRow always occupies a row by itself.
-                        for index in stride(
-                            from: 0, to: tabGroup.allDetails.count, by: columnCount)
-                        {
-                            var max = index + columnCount
-                            if max > tabGroup.allDetails.count {
-                                max = tabGroup.allDetails.count
-                            }
-                            let range = index..<max
-                            rows.append(
-                                Row(cells: [Row.Cell.tabGroupGridRow(tabGroup, range)]))
-                        }
-                    } else {
-                        // If there's enough remaining columns, fit the tab group in the same row with individual tabs.
-                        // Otherwise, build a horizontal scroll view in the next row.
-                        if (tabGroup.allDetails.count + (rows.last?.numTabsInRow ?? 0))
-                            <= columnCount && !rows.isEmpty
-                            && !(!details.isPinned && allDetailsFiltered[index - 1].isPinned)
-                        {
-                            rows[rows.endIndex - 1].cells.append(
-                                .tabGroupInline(tabGroup))
-                            rows[rows.endIndex - 1].multipleCellTypes = true
-                        } else {
-                            // Perform lookahead before we insert a new row.
-                            if !rows.isEmpty {
-                                PromoteCellsAfterIndex(
-                                    currDetail: allDetailsFiltered[index],
-                                    row: &rows[rows.endIndex - 1],
-                                    index: index + 1)
-                            }
-                            rows.append(
-                                Row(cells: [Row.Cell.tabGroupInline(tabGroup)]))
-                        }
-                    }
-                } else {
-                    rows.append(Row(cells: [.tab(details)]))
-                }
-                // Insert a new row (following expanded tab group) for individual tabs
-                if tabGroup != nil && tabGroup!.isExpanded {
-                    rows.append(Row(cells: []))
-                }
+            // Check if the tab is the "representative" or first tab in the TabGroup.
+            // Makes sure the group is only added once, and that the group is included in the section.
+            if let tabGroupDetails = allTabGroupDetails.first(where: { $0.id == detail.rootID }) {
+                return detail == tabGroupDetails.allDetails.first
             } else {
-                rows[rows.endIndex - 1].cells.append(.tab(details))
-                rows[rows.endIndex - 1].multipleCellTypes = true
+                singleTabs[detail.id] = detail
             }
+
+            return true
         }
 
-        rows = rows.filter {
-            !$0.cells.isEmpty
+        if filteredDetails.count == 0 {
+            // If there aren't any tabs to create rows with, return early.
+            return []
         }
 
-        if !rows.isEmpty, section != .all {
-            rows.insert(Row(cells: [Row.Cell.sectionHeader(section)]), at: 0)
+        filteredDetails.forEach { detail in
+            let rootID = detail.rootID
+            if let tabGroupDetails = allTabGroupDetails.first(where: { $0.id == rootID }) {
+                let isExpanded = Defaults[.tabGroupExpanded].contains(rootID)
+
+                // If the tab group was expanded, or if it the tabs will fit in a row, expanded it.
+                if isExpanded || tabGroupDetails.allDetails.count <= columnCount {
+                    if !willTabGroupFitInRow(tabGroup: tabGroupDetails) {
+                        fillEmptySpotsInLastRow()
+                    }
+
+                    var rowsAdded = 0
+
+                    for index in stride(
+                        from: 0, to: tabGroupDetails.allDetails.count, by: columnCount)
+                    {
+                        var max = index + columnCount
+                        if max > tabGroupDetails.allDetails.count {
+                            max = tabGroupDetails.allDetails.count
+                        }
+
+                        let range = index..<max
+                        addItemToRowOrCreateNewRowIfNeeded(
+                            rows: &rows, item: .tabGroupGridRow(tabGroupDetails, range))
+
+                        rowsAdded += 1
+                    }
+
+                    if rowsAdded > 1 {
+                        // Add other tabs to a new row so the don't appear in the last row of the `ExpandedCardGroupView`.
+                        rows.append(Row(cells: [], index: rows.count))
+                    }
+                } else {
+                    if columnCount - rows[rows.count - 1].cells.count <= 1 {
+                        fillEmptySpotsInLastRow()
+                    }
+
+                    addItemToRowOrCreateNewRowIfNeeded(
+                        rows: &rows, item: .tabGroupInline(tabGroupDetails))
+                }
+            } else if singleTabs[detail.id] != nil {  // Make sure tab hasn't already been used.
+                singleTabs.removeValue(forKey: detail.id)
+                addItemToRowOrCreateNewRowIfNeeded(rows: &rows, item: .tab(detail))
+            }
         }
 
         return rows
+    }
+
+    func buildRowsForTesting() -> [Row] {
+        timeBasedNormalRows[.pinned] = buildRows(for: .pinned, incognito: false)
+        timeBasedNormalRows[.today] = buildRows(for: .today, incognito: false)
+        timeBasedNormalRows[.yesterday] = buildRows(for: .yesterday, incognito: false)
+        timeBasedNormalRows[.lastWeek] = buildRows(for: .lastWeek, incognito: false)
+
+        return getRows(for: .all, incognito: false)
+    }
+
+    // MARK: Details
+    var normalDetails: [TabCardDetails] {
+        allDetails.filter {
+            !$0.tab.isIncognito
+        }
+    }
+
+    var incognitoDetails: [TabCardDetails] {
+        allDetails.filter {
+            $0.tab.isIncognito
+        }
+    }
+
+    func tabIncludedInSearch(_ details: TabCardDetails) -> Bool {
+        let tabSeachFilter = tabSearchFilter.lowercased()
+        return
+            (details.title.lowercased().contains(tabSeachFilter)
+            || (details.url?.absoluteString.lowercased().contains(tabSeachFilter) ?? false)
+            || tabSeachFilter.isEmpty)
     }
 
     func onDataUpdated() {
@@ -427,48 +393,6 @@ class TabCardModel: CardDropDelegate, CardModel {
         }
 
         updateRows()
-    }
-
-    private func isRepresentativeTab(_ tab: Tab, in group: TabGroup) -> Bool {
-        return group.children.first == tab
-    }
-
-    private func modifyAllDetailsFilteredPromotingPinnedTabs(
-        _ allDetailsFiltered: inout [TabCardDetails]
-    ) {
-        allDetailsFiltered = allDetailsFiltered.sorted(by: { lhs, rhs in
-            let lhsPinnedTime = findDetailPinnedTime(lhs)
-            let rhsPinnedTime = findDetailPinnedTime(rhs)
-            if lhsPinnedTime == nil && rhsPinnedTime != nil {
-                return false
-            } else if lhsPinnedTime != nil && rhsPinnedTime == nil {
-                return true
-            } else if lhsPinnedTime != nil && rhsPinnedTime != nil {
-                return lhsPinnedTime! < rhsPinnedTime!
-            }
-            return false
-        })
-    }
-
-    private func findDetailPinnedTime(_ detail: TabCardDetails)
-        -> Double?
-    {
-        if let tabGroup = allTabGroupDetails.first(where: { $0.id == detail.rootID }) {
-            return tabGroup.pinnedTime
-        } else {
-            return detail.pinnedTime
-        }
-    }
-
-    func rearrangeAllDetails(fromIndex: Int, toIndex: Int) {
-        allDetails.rearrange(from: fromIndex, to: toIndex)
-        updateRows()
-    }
-
-    func buildRowsForTesting() -> [Row] {
-        timeBasedNormalRows[.today] = buildRows(incognito: false, for: .today)
-        timeBasedNormalRows[.lastWeek] = buildRows(incognito: false, for: .lastWeek)
-        return getRows(incognito: false)
     }
 
     override func dropEntered(info: DropInfo) {
