@@ -58,6 +58,7 @@ struct HistoryAndArchivedTabsPanelView: View {
         Color.groupedBackground.frame(height: 1)
     }
 
+    @ViewBuilder
     var historyView: some View {
         GroupedDataPanelView(model: HistoryGroupedDataModel(tabManager: browserModel.tabManager)) {
             VStack {
@@ -108,28 +109,27 @@ struct HistoryAndArchivedTabsPanelView: View {
     }
 
     @ViewBuilder
+    var clearAllArchivedTabsButton: some View {
+        Button {
+            showCloseArchivedTabs = true
+        } label: {
+            HStack {
+                Text("Clear All Archived Tabs")
+
+                Spacer()
+            }
+        }
+        .foregroundColor(.red)
+        .padding(16)
+    }
+
+    @ViewBuilder
     var archivedTabsView: some View {
         let archivedTabsModel = ArchivedTabsGroupedDataModel(
             tabCardModel: tabCardModel, tabManager: browserModel.tabManager)
         let clearAllArchiveButtonTitle = "Are you sure you want to close all archived tabs?"
         let clearAllArchiveButtonText =
             "Close \(archivedTabsModel.numOfArchivedTabs) \(archivedTabsModel.numOfArchivedTabs > 1 ? "Tabs" : "Tab")"
-        let clearAllArchivedTabsButton: some View = {
-            Button {
-                showCloseArchivedTabs = true
-            } label: {
-                HStack {
-                    Text("Clear All Archived Tabs")
-                        .foregroundColor(
-                            archivedTabsModel.numOfArchivedTabs < 1 ? .tertiaryLabel : .red)
-
-                    Spacer()
-                }
-            }
-            .foregroundColor(.red)
-            .padding(16)
-            .disabled(archivedTabsModel.numOfArchivedTabs < 1)
-        }()
 
         GroupedDataPanelView(model: archivedTabsModel) {
             VStack {
@@ -153,36 +153,42 @@ struct HistoryAndArchivedTabsPanelView: View {
 
                 divider
 
-                if #available(iOS 15.0, *) {
-                    clearAllArchivedTabsButton
-                        .confirmationDialog(
-                            clearAllArchiveButtonTitle,
-                            isPresented: $showCloseArchivedTabs,
-                            titleVisibility: .visible
-                        ) {
-                            Button(
-                                clearAllArchiveButtonText,
-                                role: .destructive
+                Group {
+                    if #available(iOS 15.0, *) {
+                        clearAllArchivedTabsButton
+                            .confirmationDialog(
+                                clearAllArchiveButtonTitle,
+                                isPresented: $showCloseArchivedTabs,
+                                titleVisibility: .visible
                             ) {
-                                archivedTabsModel.clearArchivedTabs()
+                                Button(
+                                    clearAllArchiveButtonText,
+                                    role: .destructive
+                                ) {
+                                    archivedTabsModel.clearArchivedTabs()
+                                }
                             }
-                        }
-                } else {
-                    clearAllArchivedTabsButton
-                        .actionSheet(isPresented: $showCloseArchivedTabs) {
-                            ActionSheet(
-                                title: Text(clearAllArchiveButtonTitle),
-                                buttons: [
-                                    .destructive(
-                                        Text(clearAllArchiveButtonText)
-                                    ) {
-                                        archivedTabsModel.clearArchivedTabs()
-                                    },
-                                    .cancel(),
-                                ]
-                            )
-                        }
+                    } else {
+                        clearAllArchivedTabsButton
+                            .actionSheet(isPresented: $showCloseArchivedTabs) {
+                                ActionSheet(
+                                    title: Text(clearAllArchiveButtonTitle),
+                                    buttons: [
+                                        .destructive(
+                                            Text(clearAllArchiveButtonText)
+                                        ) {
+                                            archivedTabsModel.clearArchivedTabs()
+                                        },
+                                        .cancel(),
+                                    ]
+                                )
+                            }
+                    }
                 }
+                .foregroundColor(
+                    archivedTabsModel.numOfArchivedTabs < 1 ? .tertiaryLabel : .red
+                )
+                .disabled(archivedTabsModel.numOfArchivedTabs < 1)
 
                 NavigationLink(isActive: $showArchivedTabSettings) {
                     ArchivedTabSettings()
