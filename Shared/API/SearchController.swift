@@ -439,8 +439,7 @@ public enum NeevaScopeSearch {
 
             guard let faviconURL = web.favIconUrl,
                 let title = result.title,
-                let hostname = web.structuredUrl?.hostname,
-                let paths = web.structuredUrl?.paths
+                let hostname = web.structuredUrl?.hostname
             else {
                 return PartialResult()
             }
@@ -452,7 +451,7 @@ public enum NeevaScopeSearch {
             var skippedItem = false
 
             let displayURLHost = hostname
-            let displayURLPath = paths.joined(separator: " > ")
+            let displayURLPath = (web.structuredUrl?.paths ?? []).joined(separator: " > ")
 
             let snippet = web.highlightedSnippet?.segments?.compactMap { segment in
                 return segment.text
