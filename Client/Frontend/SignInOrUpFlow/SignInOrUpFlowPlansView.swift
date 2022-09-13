@@ -226,6 +226,7 @@ struct SignInOrUpFlowPlansView: View {
                                         product, reloadUserInfo: true,
                                         onPending: self.onPurchasePending,
                                         onCancelled: self.onPurchaseCancelled,
+                                        onError: self.onPurchaseError,
                                         onSuccess: self.onPurchaseSuccess)
                                 }
                             }
@@ -280,6 +281,7 @@ struct SignInOrUpFlowPlansView: View {
                         product, reloadUserInfo: true,
                         onPending: self.onPurchasePending,
                         onCancelled: self.onPurchaseCancelled,
+                        onError: self.onPurchaseError,
                         onSuccess: self.onPurchaseSuccess)
                 }
             }
@@ -307,6 +309,20 @@ struct SignInOrUpFlowPlansView: View {
                     value: model.premiumPlanLogAttributeValue()
                 )
             ])
+    }
+
+    func onPurchaseError(_ type: PremiumPurchaseErrorType) {
+        model.logCounter(
+            .PremiumPurchaseError,
+            attributes: [
+                ClientLogCounterAttribute(
+                    key: LogConfig.Attribute.subscriptionPlan,
+                    value: model.premiumPlanLogAttributeValue()
+                )
+            ])
+
+        model.clearPreviousScreens()
+        model.complete()
     }
 
     func onPurchaseSuccess(_ type: PremiumPurchaseSuccessType) {

@@ -111,6 +111,8 @@ public enum LogConfig {
         case SettingPremiumPurchasePending
         /// Purchase unverified
         case SettingPremiumPurchaseUnverified
+        /// Purchase error
+        case SettingPremiumPurchaseError
         /// Click Data Management in setting
         case ViewDataManagement
         /// Click Tracking Protection in setting
@@ -408,6 +410,7 @@ public enum LogConfig {
         case PremiumPurchasePending
         case PremiumPurchaseUnverified
         case PremiumPurchaseVerified
+        case PremiumPurchaseError
         case PreviousScreenClick
         case ScreenImpression
         case SignInClick
@@ -572,6 +575,7 @@ public enum LogConfig {
         case .SettingPremiumPurchaseComplete: return .Settings
         case .SettingPremiumPurchasePending: return .Settings
         case .SettingPremiumPurchaseUnverified: return .Settings
+        case .SettingPremiumPurchaseError: return .Settings
         case .ViewDataManagement: return .Settings
         case .ViewTrackingProtection: return .Settings
         case .ViewPrivacyPolicy: return .Settings
@@ -789,6 +793,7 @@ public enum LogConfig {
         case .PremiumPurchasePending: return .Generic
         case .PremiumPurchaseUnverified: return .Generic
         case .PremiumPurchaseVerified: return .Generic
+        case .PremiumPurchaseError: return .Generic
         case .PreviousScreenClick: return .Generic
         case .ScreenImpression: return .Generic
         case .SignInClick: return .Generic

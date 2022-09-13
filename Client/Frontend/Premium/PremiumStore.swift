@@ -20,6 +20,11 @@ enum PremiumPurchaseSuccessType {
     case unverified
 }
 
+enum PremiumPurchaseErrorType {
+    case uuid
+    case unknown
+}
+
 @available(iOS 15.0, *)
 class PremiumStore: ObservableObject {
     static let shared = PremiumStore()
@@ -33,6 +38,9 @@ class PremiumStore: ObservableObject {
     @Published var loadingProducts = false
     @Published var loadingPurchase = false
     @Published var loadingMutation = false
+    @Published var loadingUUIDPrimer = false
+
+    var appleUUID: String? = nil
 
     init() {
         Task {
@@ -42,13 +50,7 @@ class PremiumStore: ObservableObject {
                     PremiumPlan.monthly.rawValue, PremiumPlan.annual.rawValue,
                 ])
             } catch {
-                // TODO: log
-                /*
-                 ClientLogger.shared.logCounter(
-                 .PremiumStoreFetchException,
-                 attributes: EnvironmentHelper.shared.getAttributes()
-                 )
-                 */
+                // TODO: log?
             }
             self.loadingProducts = false
         }
@@ -59,11 +61,39 @@ class PremiumStore: ObservableObject {
             if PremiumStore.countries.contains(storefront.countryCode) {
                 return true
             }
-
-            return false
         }
 
         return false
+    }
+
+    func primeUUID() async -> String? {
+        await withCheckedContinuation { continuation in
+            if self.appleUUID != nil {
+                continuation.resume(returning: self.appleUUID)
+                return
+            }
+
+            self.loadingUUIDPrimer = true
+
+            DispatchQueue.main.async {
+                GraphQLAPI.shared.perform(
+                    mutation: InitializeAppleSubscriptionMutation()
+                ) { result in
+                    switch result {
+                    case .success(let data):
+                        self.appleUUID = data.initializeAppleSubscription?.appleUuid
+                        break
+                    case .failure:
+                        break
+                    }
+
+                    self.loadingUUIDPrimer = false
+
+                    continuation.resume(returning: self.appleUUID)
+                }
+            }
+        }
+
     }
 
     func getProductForPlan(_ plan: PremiumPlan?) -> Product? {
@@ -87,15 +117,26 @@ class PremiumStore: ObservableObject {
     func purchase(
         _ product: Product, reloadUserInfo: Bool, onPending: (@escaping () -> Void),
         onCancelled: (@escaping () -> Void),
+        onError: (@escaping (_ successType: PremiumPurchaseErrorType) -> Void),
         onSuccess: (@escaping (_ successType: PremiumPurchaseSuccessType) -> Void)
     ) {
         DispatchQueue.main.async {
             Task {
-                var appleUUID = UUID()
-                if let existingUUID = UUID(
-                    uuidString: NeevaUserInfo.shared.subscription?.apple?.uuid ?? "")
+                _ = await self.primeUUID()
+
+                /*
+                 NOTE: We won't use this value, if we can't initialize
+                 the UUID given by the server, we bail early.
+                 */
+                var uuid = UUID()
+                if let appleUUID = UUID(
+                    uuidString: self.appleUUID ?? NeevaUserInfo.shared.subscription?.apple?.uuid
+                        ?? "")
                 {
-                    appleUUID = existingUUID
+                    uuid = appleUUID
+                } else {
+                    onError(PremiumPurchaseErrorType.uuid)
+                    return
                 }
 
                 /*
@@ -106,7 +147,7 @@ class PremiumStore: ObservableObject {
                  user info is refreshed in app, premium entitlement will be in sync.
                  */
                 self.loadingPurchase = true
-                let result = try await product.purchase(options: [.appAccountToken(appleUUID)])
+                let result = try await product.purchase(options: [.appAccountToken(uuid)])
                 self.loadingPurchase = false
 
                 switch result {
@@ -130,7 +171,7 @@ class PremiumStore: ObservableObject {
                             mutation: RegisterAppleSubscriptionMutation(
                                 input: RegisterAppleSubscriptionInput(
                                     originalTransactionId: transaction.originalID.description,
-                                    userUuid: appleUUID.uuidString,
+                                    userUuid: uuid.uuidString,
                                     plan: product.id == PremiumPlan.monthly.rawValue
                                         ? AppleSubscriptionPlan.monthly
                                         : AppleSubscriptionPlan.annual,
@@ -167,6 +208,7 @@ class PremiumStore: ObservableObject {
                         break
                     }
                 @unknown default:
+                    onError(PremiumPurchaseErrorType.unknown)
                     break
                 }
             }

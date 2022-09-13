@@ -174,3 +174,11 @@ mutation RegisterAppleSubscription($input: RegisterAppleSubscriptionInput!)  {
     error
   }
 }
+
+mutation InitializeAppleSubscription  {
+  initializeAppleSubscription {
+    subscriptionStatus
+    appleUUID
+    error
+  }
+}

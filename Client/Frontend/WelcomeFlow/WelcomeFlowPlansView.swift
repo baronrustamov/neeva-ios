@@ -226,6 +226,7 @@ struct WelcomeFlowPlansView: View {
                                         product, reloadUserInfo: true,
                                         onPending: self.onPurchasePending,
                                         onCancelled: self.onPurchaseCancelled,
+                                        onError: self.onPurchaseError,
                                         onSuccess: self.onPurchaseSuccess)
                                 }
                             }
@@ -272,8 +273,8 @@ struct WelcomeFlowPlansView: View {
             model.logCounter(.ScreenImpression)
 
             /*
-             if this screen is showing and we have a login cookie,
-             we trigger the purchase based on the users original choice
+             if this screen appears and we have a login cookie, we
+             trigger the purchase based on the users original choice
              */
             if NeevaUserInfo.shared.hasLoginCookie() {
                 if #available(iOS 15.0, *),
@@ -283,6 +284,7 @@ struct WelcomeFlowPlansView: View {
                         product, reloadUserInfo: true,
                         onPending: self.onPurchasePending,
                         onCancelled: self.onPurchaseCancelled,
+                        onError: self.onPurchaseError,
                         onSuccess: self.onPurchaseSuccess)
                 }
             }
@@ -312,6 +314,20 @@ struct WelcomeFlowPlansView: View {
                     value: model.premiumPlanLogAttributeValue()
                 )
             ])
+    }
+
+    func onPurchaseError(_ type: PremiumPurchaseErrorType) {
+        model.logCounter(
+            .PremiumPurchaseError,
+            attributes: [
+                ClientLogCounterAttribute(
+                    key: LogConfig.Attribute.subscriptionPlan,
+                    value: model.premiumPlanLogAttributeValue()
+                )
+            ])
+
+        model.clearPreviousScreens()
+        model.changeScreenTo(.defaultBrowser)
     }
 
     func onPurchaseSuccess(_ type: PremiumPurchaseSuccessType) {

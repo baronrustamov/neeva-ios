@@ -198,6 +198,7 @@ struct NeevaPremiumView: View {
                                 product, reloadUserInfo: true,
                                 onPending: self.onPurchasePending,
                                 onCancelled: self.onPurchaseCancelled,
+                                onError: self.onPurchaseError,
                                 onSuccess: self.onPurchaseSuccess)
                         }
                     },
@@ -236,6 +237,10 @@ struct NeevaPremiumView: View {
 
     func onPurchaseCancelled() {
         self.logCounter(.SettingPremiumPurchaseCanceled)
+    }
+
+    func onPurchaseError(_ type: PremiumPurchaseErrorType) {
+        self.logCounter(.SettingPremiumPurchaseError)
     }
 
     func onPurchaseSuccess(_ type: PremiumPurchaseSuccessType) {
