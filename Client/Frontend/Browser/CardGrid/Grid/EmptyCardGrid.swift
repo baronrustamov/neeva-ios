@@ -7,10 +7,14 @@ import SwiftUI
 
 struct EmptyCardGrid: View {
     let isIncognito: Bool
-    let isTopBar: Bool
     let showArchivedTabsView: Bool
 
+    @EnvironmentObject var chromeModel: TabChromeModel
     @State var containerGeom: CGSize = CGSize.zero
+
+    var isTopBar: Bool {
+        chromeModel.inlineToolbar
+    }
 
     var body: some View {
         VStack {
@@ -42,8 +46,10 @@ struct EmptyCardGrid: View {
 struct EmptyCardGrid_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            EmptyCardGrid(isIncognito: false, isTopBar: false, showArchivedTabsView: false)
-            EmptyCardGrid(isIncognito: true, isTopBar: true, showArchivedTabsView: false)
+            EmptyCardGrid(isIncognito: false, showArchivedTabsView: false)
+                .environmentObject(TabChromeModel())
+            EmptyCardGrid(isIncognito: true, showArchivedTabsView: false)
+                .environmentObject(TabChromeModel())
         }
     }
 }

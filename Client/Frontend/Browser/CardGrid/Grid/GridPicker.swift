@@ -9,6 +9,7 @@ struct GridPicker: View {
     var isInToolbar = false
 
     @EnvironmentObject var gridModel: GridModel
+    @EnvironmentObject var gridSwitcherModel: GridSwitcherModel
     @EnvironmentObject var incognitoModel: IncognitoModel
     @EnvironmentObject var switcherToolbarModel: SwitcherToolbarModel
     @EnvironmentObject var browserModel: BrowserModel
@@ -20,7 +21,7 @@ struct GridPicker: View {
     }
 
     var segments: [Segment] {
-        var segments = [
+        let segments = [
             Segment(
                 symbol: Symbol(.incognito, weight: .medium, label: "Incognito Tabs"),
                 selectedIconColor: .background,
@@ -48,9 +49,9 @@ struct GridPicker: View {
             SegmentedPicker(
                 segments: segments,
                 selectedSegmentIndex: $selectedIndex, dragOffset: switcherToolbarModel.dragOffset,
-                canAnimate: !gridModel.switchModeWithoutAnimation
-            ).useEffect(deps: gridModel.switcherState) { _ in
-                switch gridModel.switcherState {
+                canAnimate: !gridSwitcherModel.switchModeWithoutAnimation
+            ).useEffect(deps: gridSwitcherModel.state) { _ in
+                switch gridSwitcherModel.state {
                 case .tabs:
                     if switcherToolbarModel.dragOffset == nil {
                         selectedIndex = 1
@@ -66,7 +67,7 @@ struct GridPicker: View {
                     }
                 }
             }.useEffect(deps: incognitoModel.isIncognito) { isIncognito in
-                if gridModel.switcherState == .tabs && switcherToolbarModel.dragOffset == nil {
+                if gridSwitcherModel.state == .tabs && switcherToolbarModel.dragOffset == nil {
                     selectedIndex = isIncognito ? 0 : 1
                 }
             }.opacity(isSearchingForTabs ? 0.5 : 1)

@@ -39,7 +39,6 @@ class ScreenshotHelper {
             // tab continue using whatever screenshot it used to have.
             if let image = image, image.size.width != .zero && image.size.height != .zero {
                 tab?.setScreenshot(image)
-                self.controller?.tabContainerModel.tabCardModel.onDataUpdated()
             } else if let error = error {
                 log.error("Tab snapshot error: \(error.localizedDescription)")
             } else {

@@ -15,7 +15,10 @@ struct CollapsedCardGroupView: View {
     let nextCell: TabCell?
 
     @EnvironmentObject var browserModel: BrowserModel
-    @EnvironmentObject private var gridModel: GridModel
+
+    var gridScrollModel: GridScrollModel {
+        browserModel.gridModel.scrollModel
+    }
 
     @State private var isFirstVisible = true
     @State private var isLastVisible = false
@@ -102,14 +105,10 @@ struct CollapsedCardGroupView: View {
                 // in TabGridContainer is set to pin ArchivedTabsView at the bottom.
                 .fixedSize()
             }
-            .useEffect(deps: gridModel.needsScrollToSelectedTab) { _ in
-                if groupDetails.allDetails.contains(where: \.isSelected) {
-                    withAnimation(nil) {
-                        scrollProxy.scrollTo(
-                            groupDetails.allDetails.first(where: \.isSelected)?.id)
-                    }
-                    DispatchQueue.main.async { gridModel.didHorizontalScroll += 1 }
-                }
+            // NOTE: Observing just this specific published var and not all of GridScrollModel
+            // to avoid spurious updates.
+            .useEffect(gridScrollModel.$needsScrollToSelectedTab) {
+                scrollToSelectedCard(scrollProxy: scrollProxy)
             }
             .introspectScrollView { scrollView in
                 // Hack: trigger SwiftUI to run this code each time an instance of this View type is
@@ -132,6 +131,16 @@ struct CollapsedCardGroupView: View {
         self.rowIndex = row.index
         self.previousCell = row.cells.previousItem(before: cellIndex)
         self.nextCell = row.cells.nextItem(after: cellIndex)
+    }
+
+    func scrollToSelectedCard(scrollProxy: ScrollViewProxy) {
+        if groupDetails.allDetails.contains(where: \.isSelected) {
+            withAnimation(nil) {
+                scrollProxy.scrollTo(
+                    groupDetails.allDetails.first(where: \.isSelected)?.id)
+            }
+            DispatchQueue.main.async { gridScrollModel.didHorizontalScroll += 1 }
+        }
     }
 }
 

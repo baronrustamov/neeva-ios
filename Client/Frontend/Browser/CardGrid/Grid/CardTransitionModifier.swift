@@ -2,10 +2,37 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import Shared
 import SwiftUI
 
 struct CardTransitionUX {
     static let animation = Animation.interpolatingSpring(stiffness: 425, damping: 30)
+}
+
+struct ScrollToCompletionModifier<Details: CardDetails>: ViewModifier {
+    let details: Details
+    let gridScrollModel: GridScrollModel
+
+    func runCompletion() {
+        if details.isSelected, let completion = gridScrollModel.scrollToCompletion {
+            gridScrollModel.scrollToCompletion = nil
+            DispatchQueue.main.async(execute: completion)
+        }
+    }
+
+    func body(content: Content) -> some View {
+        content
+            // NOTE: There is potential for a race condition here when `didHorizontalScroll`
+            // is signaled after vertically scrolling the `CardGrid`. We might end up
+            // triggering `scrollCompletion` early in some cases as a result. The async
+            // execution of `completion` helps mask that issue, but unclear if it is a
+            // robust solution.
+            // NOTE: Observing just these specific published vars and not all of GridScrollModel
+            // to avoid spurious updates.
+            .useEffect(gridScrollModel.$didHorizontalScroll, gridScrollModel.$didVerticalScroll) {
+                runCompletion()
+            }
+    }
 }
 
 struct CardTransitionModifier<Details: CardDetails>: ViewModifier {
@@ -15,7 +42,6 @@ struct CardTransitionModifier<Details: CardDetails>: ViewModifier {
 
     @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var cardTransitionModel: CardTransitionModel
-    @EnvironmentObject var gridModel: GridModel
 
     func body(content: Content) -> some View {
         content
@@ -23,17 +49,9 @@ struct CardTransitionModifier<Details: CardDetails>: ViewModifier {
             .opacity(details.isSelected && cardTransitionModel.state != .hidden ? 0 : 1)
             .animation(nil)
             .overlay(overlay)
-            .useEffect(deps: gridModel.didVerticalScroll, gridModel.didHorizontalScroll) { _, _ in
-                // Note, there is potential for a race condition here when `didHorizontalScroll`
-                // is signaled after vertically scrolling the `CardGrid`. We might end up
-                // triggering `scrollCompletion` early in some cases as a result. The async
-                // execution of `completion` helps mask that issue, but unclear if it is a
-                // robust solution.
-                if details.isSelected, let completion = gridModel.scrollToCompletion {
-                    gridModel.scrollToCompletion = nil
-                    DispatchQueue.main.async(execute: completion)
-                }
-            }
+            .modifier(
+                ScrollToCompletionModifier(
+                    details: details, gridScrollModel: browserModel.gridModel.scrollModel))
     }
 
     var overlay: some View {

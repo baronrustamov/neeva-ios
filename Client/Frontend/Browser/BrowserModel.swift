@@ -33,15 +33,15 @@ class BrowserModel: ObservableObject {
 
     // MARK: - Methods
     func showGridWithAnimation() {
-        gridModel.setSwitcherState(to: .tabs)
-        gridModel.switchModeWithoutAnimation = true
+        gridModel.switcherModel.update(state: .tabs)
+        gridModel.switcherModel.update(switchModeWithoutAnimation: true)
         gridModel.tabCardModel.updateIfNeeded()
 
         if tabManager.selectedTab?.isIncognito != incognitoModel.isIncognito {
             showGridWithNoAnimation()
         } else {
             overlayManager.hideCurrentOverlay(ofPriority: .modal)
-            gridModel.scrollToSelectedTab { [self] in
+            gridModel.scrollModel.scrollToSelectedTab { [self] in
                 cardTransitionModel.update(to: .visibleForTrayShow)
                 contentVisibilityModel.update(showContent: false)
                 updateSpaces()
@@ -50,7 +50,7 @@ class BrowserModel: ObservableObject {
     }
 
     func showGridWithNoAnimation() {
-        gridModel.scrollToSelectedTab()
+        gridModel.scrollModel.scrollToSelectedTab()
         cardTransitionModel.update(to: .hidden)
         contentVisibilityModel.update(showContent: false)
         overlayManager.hideCurrentOverlay(ofPriority: .modal)
@@ -64,7 +64,7 @@ class BrowserModel: ObservableObject {
 
     func showSpaces(forceUpdate: Bool = true) {
         showGridWithNoAnimation()
-        gridModel.setSwitcherState(to: .spaces)
+        gridModel.switcherModel.update(state: .spaces)
 
         if forceUpdate {
             updateSpaces()
@@ -78,19 +78,19 @@ class BrowserModel: ObservableObject {
         tabToBeSelected?.shouldPerformHeavyUpdatesUponSelect = false
 
         if let tabToBeSelected = tabToBeSelected {
-            gridModel.switchModeWithoutAnimation = true
+            gridModel.switcherModel.update(switchModeWithoutAnimation: true)
             incognitoModel.update(isIncognito: tabToBeSelected.isIncognito)
         }
 
         overlayManager.hideCurrentOverlay(ofPriority: .modal)
-        gridModel.scrollToSelectedTab { [self] in
+        gridModel.scrollModel.scrollToSelectedTab { [self] in
             cardTransitionModel.update(to: .visibleForTrayHidden)
             gridModel.closeDetailView()
         }
     }
 
     func hideGridWithNoAnimation() {
-        gridModel.scrollToSelectedTab()
+        gridModel.scrollModel.scrollToSelectedTab()
         cardTransitionModel.update(to: .hidden)
 
         if showGrid {
@@ -100,13 +100,13 @@ class BrowserModel: ObservableObject {
         overlayManager.hideCurrentOverlay(ofPriority: .modal)
         contentVisibilityModel.update(showContent: true)
 
-        gridModel.setSwitcherState(to: .tabs)
+        gridModel.switcherModel.update(state: .tabs)
         gridModel.closeDetailView()
 
         tabManager.updateSelectedTabDataPostAnimation()
 
         SceneDelegate.getCurrentSceneDelegate(with: tabManager.scene)?.setSceneUIState(to: .tab)
-        gridModel.switchModeWithoutAnimation = false
+        gridModel.switcherModel.update(switchModeWithoutAnimation: false)
         gridModel.tabCardModel.isSearchingForTabs = false
     }
 
@@ -115,10 +115,10 @@ class BrowserModel: ObservableObject {
         // since the previous animation wasn't finished yet.
         if showGrid, cardTransitionModel.state == .visibleForTrayShow {
             cardTransitionModel.update(to: .hidden)
-            gridModel.switchModeWithoutAnimation = false
+            gridModel.switcherModel.update(switchModeWithoutAnimation: false)
 
             SceneDelegate.getCurrentSceneDelegate(with: tabManager.scene)?.setSceneUIState(
-                to: .cardGrid(gridModel.switcherState, tabManager.isIncognito))
+                to: .cardGrid(gridModel.switcherModel.state, tabManager.isIncognito))
         } else {
             hideGridWithNoAnimation()
         }
@@ -167,7 +167,7 @@ class BrowserModel: ObservableObject {
 
     func openSpaceDigest(bvc: BrowserViewController) {
         bvc.showTabTray()
-        gridModel.setSwitcherState(to: .spaces)
+        gridModel.switcherModel.update(state: .spaces)
 
         openSpace(spaceId: SpaceStore.dailyDigestID)
     }

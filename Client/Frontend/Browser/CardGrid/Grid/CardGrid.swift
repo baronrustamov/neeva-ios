@@ -14,6 +14,37 @@ enum CardGridUX {
     static let GridSpacing: CGFloat = 20
 }
 
+// Isolating dependency on GridModel and SpaceCardModel.
+struct SpaceNavigationLink: View {
+    @EnvironmentObject var gridModel: GridModel
+    @EnvironmentObject var spaceModel: SpaceCardModel
+
+    @Environment(\.onOpenURLForSpace) var onOpenURLForSpace
+    @Environment(\.shareURL) var shareURL
+
+    let columns: [GridItem]
+
+    @ViewBuilder
+    var detailedSpaceView: some View {
+        if let detailedSpace = spaceModel.detailedSpace {
+            SpaceContainerView(primitive: detailedSpace)
+                .environment(\.onOpenURLForSpace, onOpenURLForSpace)
+                .environment(\.shareURL, shareURL)
+                .environment(\.columns, columns)
+        }
+    }
+
+    var body: some View {
+        NavigationLink(
+            destination: detailedSpaceView,
+            isActive: $gridModel.showingDetailView
+        ) { EmptyView() }
+        .useEffect(deps: spaceModel.detailedSpace) { detailedSpace in
+            gridModel.showingDetailView = detailedSpace != nil
+        }
+    }
+}
+
 // Isolating dependency on CardTransitionModel to this sub-view for performance
 // reasons.
 struct CardGridBackground: View {
@@ -48,13 +79,10 @@ struct CardGridBackground: View {
 }
 
 struct CardGrid: View {
-    @EnvironmentObject var gridModel: GridModel
-    @EnvironmentObject var spaceModel: SpaceCardModel
+    @EnvironmentObject var gridResizeModel: GridResizeModel
     @EnvironmentObject var tabCardModel: TabCardModel
     @EnvironmentObject var toastViewManager: ToastViewManager
 
-    @Environment(\.onOpenURLForSpace) var onOpenURLForSpace
-    @Environment(\.shareURL) var shareURL
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) private var verticalSizeClass
 
@@ -81,16 +109,6 @@ struct CardGrid: View {
     }
 
     @ViewBuilder
-    var detailedSpaceView: some View {
-        if let detailedSpace = spaceModel.detailedSpace {
-            SpaceContainerView(primitive: detailedSpace)
-                .environment(\.onOpenURLForSpace, onOpenURLForSpace)
-                .environment(\.shareURL, shareURL)
-                .environment(\.columns, columns)
-        }
-    }
-
-    @ViewBuilder
     var cardContainer: some View {
         VStack(spacing: 0) {
             CardsContainer(
@@ -103,7 +121,7 @@ struct CardGrid: View {
     }
 
     func updateCardSize(width: CGFloat, topToolbar: Bool) {
-        guard gridModel.canResizeGrid, width > 0 else {
+        guard gridResizeModel.canResizeGrid, width > 0 else {
             return
         }
 
@@ -128,15 +146,10 @@ struct CardGrid: View {
             cardContainer
                 .background(CardGridBackground())
                 .modifier(SwipeToSwitchGridViewGesture())
-            NavigationLink(
-                destination: detailedSpaceView,
-                isActive: $gridModel.showingDetailView
-            ) {}.useEffect(deps: spaceModel.detailedSpace) { detailedSpace in
-                gridModel.showingDetailView = detailedSpace != nil
-            }
+            SpaceNavigationLink(columns: columns)
         }.useEffect(
             deps: geom.size.width, topToolbar, perform: updateCardSize
-        ).useEffect(deps: gridModel.canResizeGrid) { _ in
+        ).useEffect(deps: gridResizeModel.canResizeGrid) { _ in
             updateCardSize(width: geom.size.width, topToolbar: topToolbar)
         }.ignoresSafeArea(.keyboard)
     }

@@ -52,9 +52,14 @@ class CardTests: XCTestCase {
         super.setUp()
 
         profile = TabManagerMockProfile()
+
+        SpaceStore.shared = .createMock([.stackOverflow, .savedForLater, .shared, .public])
+
         manager = TabManager(profile: profile, imageStore: nil)
         tabCardModel = TabCardModel(manager: manager)
-        gridModel = GridModel(tabManager: manager, tabCardModel: tabCardModel)
+        spaceCardModel = SpaceCardModel(scene: nil)
+        gridModel = GridModel(
+            tabManager: manager, tabCardModel: tabCardModel, spaceCardModel: spaceCardModel)
         incognitoModel = IncognitoModel(isIncognito: false)
         switcherToolbarModel = SwitcherToolbarModel(
             tabManager: manager, openLazyTab: {}, createNewSpace: {})
@@ -65,9 +70,6 @@ class CardTests: XCTestCase {
             overlayManager: OverlayManager())
         chromeModel = TabChromeModel()
         archivedTabsPanelModel = ArchivedTabsPanelModel(tabManager: manager)
-
-        SpaceStore.shared = .createMock([.stackOverflow, .savedForLater, .shared, .public])
-        spaceCardModel = SpaceCardModel(scene: nil)
     }
 
     override func tearDown() {
@@ -375,6 +377,7 @@ class CardTests: XCTestCase {
         .environmentObject(tabCardModel)
         .environmentObject(spaceCardModel)
         .environmentObject(gridModel)
+        .environmentObject(gridModel.switcherModel)
         .environmentObject(chromeModel)
 
         let tabGridContainer = try cardContainer.inspect().find(TabGridContainer.self)
@@ -395,7 +398,7 @@ class CardTests: XCTestCase {
         manager.addTab()
         waitForCondition(condition: { manager.activeTabs.count == 3 })
 
-        gridModel.setSwitcherState(to: .spaces)
+        gridModel.switcherModel.update(state: .spaces)
         spaceCardModel.onDataUpdated()
         waitForCondition(condition: { spaceCardModel.allDetails.count == 4 })
 
@@ -408,6 +411,7 @@ class CardTests: XCTestCase {
         .environmentObject(tabCardModel)
         .environmentObject(spaceCardModel)
         .environmentObject(gridModel)
+        .environmentObject(gridModel.switcherModel)
         .environmentObject(chromeModel)
 
         let spaceCardsView = try cardContainer.inspect().find(SpaceCardsView.self)

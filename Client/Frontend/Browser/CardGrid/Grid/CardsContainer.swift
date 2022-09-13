@@ -28,11 +28,15 @@ struct TabGridContainer: View {
     let geom: GeometryProxy
     let scrollProxy: ScrollViewProxy
 
+    @EnvironmentObject private var browserModel: BrowserModel
     @EnvironmentObject private var tabModel: TabCardModel
-    @EnvironmentObject private var gridModel: GridModel
     @Environment(\.safeArea) private var safeArea
 
     @State var cardStackGeom: CGSize = CGSize.zero
+
+    var gridScrollModel: GridScrollModel {
+        browserModel.gridModel.scrollModel
+    }
 
     var selectedRowId: TabCardModel.Row.ID? {
         let rows = tabModel.getRows(for: .all, incognito: isIncognito)
@@ -71,16 +75,24 @@ struct TabGridContainer: View {
             alignment: .top
         )
         .environment(\.aspectRatio, CardUX.DefaultTabCardRatio)
-        .useEffect(deps: gridModel.needsScrollToSelectedTab) { _ in
-            if let selectedRowId = selectedRowId {
-                withAnimation(nil) {
-                    scrollProxy.scrollTo(selectedRowId)
-                }
-                DispatchQueue.main.async { gridModel.didVerticalScroll += 1 }
-            }
-        }.if(tabModel.isSearchingForTabs) {
+        // NOTE: Observing just this specific published var and not all of GridScrollModel
+        // to avoid spurious updates.
+        .useEffect(gridScrollModel.$needsScrollToSelectedTab) {
+            scrollToSelectedRowId()
+        }
+        .if(tabModel.isSearchingForTabs) {
             $0.padding(.bottom, safeArea.bottom + FindInPageViewUX.height)
-        }.animation(nil)
+        }
+        .animation(nil)
+    }
+
+    func scrollToSelectedRowId() {
+        if let selectedRowId = selectedRowId {
+            withAnimation(nil) {
+                scrollProxy.scrollTo(selectedRowId)
+            }
+            DispatchQueue.main.async { gridScrollModel.didVerticalScroll += 1 }
+        }
     }
 }
 
@@ -88,8 +100,7 @@ struct CardScrollContainer<Content: View>: View {
     let columns: [GridItem]
     @ViewBuilder var content: (ScrollViewProxy) -> Content
 
-    @EnvironmentObject var spacesModel: SpaceCardModel
-    @EnvironmentObject var gridModel: GridModel
+    @EnvironmentObject var gridSwitcherModel: GridSwitcherModel
     @EnvironmentObject var tabModel: TabCardModel
     @EnvironmentObject var browserModel: BrowserModel
 
@@ -109,7 +120,7 @@ struct CardScrollContainer<Content: View>: View {
         // 2. scrollView wouldn't push down when the bottom tab is closed if the
         // animation is nil
         .animation(
-            (gridModel.gridCanAnimate
+            (gridSwitcherModel.gridCanAnimate
                 ? .interactiveSpring() : tabModel.tabsDidChange ? .default : nil)
         )
         .accessibilityIdentifier("CardGrid")
@@ -137,11 +148,9 @@ struct CardsContainer: View {
     @Default(.seenSpacesIntro) var seenSpacesIntro: Bool
 
     @EnvironmentObject var tabModel: TabCardModel
-    @EnvironmentObject var spacesModel: SpaceCardModel
     @EnvironmentObject var browserModel: BrowserModel
-    @EnvironmentObject var gridModel: GridModel
+    @EnvironmentObject var gridSwitcherModel: GridSwitcherModel
     @EnvironmentObject var incognitoModel: IncognitoModel
-    @EnvironmentObject var chromeModel: TabChromeModel
 
     // Used to rebuild the scene when switching between portrait and landscape.
     @State var orientation: UIDeviceOrientation = .unknown
@@ -156,7 +165,7 @@ struct CardsContainer: View {
                 // Spaces
                 CardScrollContainer(columns: columns) { scrollProxy in
                     VStack(alignment: .leading) {
-                        SpaceCardsView(spacesModel: spacesModel)
+                        SpaceCardsView(spacesModel: browserModel.gridModel.spaceCardModel)
                             .environment(\.columns, columns)
                         if !NeevaUserInfo.shared.isUserLoggedIn {
                             SpacesIntroOverlayContent()
@@ -165,21 +174,20 @@ struct CardsContainer: View {
                     .padding(.vertical, CardGridUX.GridSpacing)
                     .useEffect(deps: browserModel.showGrid) { _ in
                         scrollProxy.scrollTo(
-                            spacesModel.allDetails.first?.id ?? ""
+                            browserModel.gridModel.spaceCardModel.allDetails.first?.id ?? ""
                         )
                     }
                 }
-                .offset(x: (gridModel.switcherState == .spaces ? 0 : geom.widthIncludingSafeArea))
+                .offset(x: (gridSwitcherModel.state == .spaces ? 0 : geom.widthIncludingSafeArea))
                 .accessibilityElement(children: .contain)
                 .accessibilityLabel("Spaces")
-                .accessibilityHidden(gridModel.switcherState != .spaces)
+                .accessibilityHidden(gridSwitcherModel.state != .spaces)
 
                 // Normal Tabs
                 ZStack {
                     if !tabModel.isSearchingForTabs {
                         EmptyCardGrid(
                             isIncognito: false,
-                            isTopBar: chromeModel.inlineToolbar,
                             showArchivedTabsView:
                                 tabModel.manager.activeNormalTabs.isEmpty
                         ).opacity(tabModel.normalDetails.isEmpty ? 1 : 0)
@@ -194,19 +202,21 @@ struct CardsContainer: View {
                             )
                             .zIndex(1)
                             .accessibilityHidden(
-                                gridModel.switcherState != .tabs || incognitoModel.isIncognito)
+                                gridSwitcherModel.state != .tabs || incognitoModel.isIncognito)
 
                             OpenArchivedTabsPanelButton(containerGeometry: geom.size)
                         }.onAppear {
-                            gridModel.scrollToSelectedTab()
+                            browserModel.gridModel.scrollModel.scrollToSelectedTab()
                         }
                     }
                 }.offset(
-                    x: (gridModel.switcherState == .tabs
+                    x: (gridSwitcherModel.state == .tabs
                         ? (incognitoModel.isIncognito ? geom.widthIncludingSafeArea : 0)
                         : -geom.widthIncludingSafeArea)
                 )
-                .animation(gridModel.switchModeWithoutAnimation ? nil : .interactiveSpring())
+                .animation(
+                    gridSwitcherModel.switchModeWithoutAnimation ? nil : .interactiveSpring()
+                )
                 .accessibilityElement(children: .contain)
                 .accessibilityLabel("Tabs")
                 .accessibilityValue(Text("\(tabModel.manager.activeNormalTabs.count) tabs"))
@@ -216,7 +226,6 @@ struct CardsContainer: View {
                     if !tabModel.isSearchingForTabs {
                         EmptyCardGrid(
                             isIncognito: true,
-                            isTopBar: chromeModel.inlineToolbar,
                             showArchivedTabsView: false
                         ).opacity(tabModel.incognitoDetails.isEmpty ? 1 : 0)
                     }
@@ -224,17 +233,19 @@ struct CardsContainer: View {
                     CardScrollContainer(columns: columns) { scrollProxy in
                         TabGridContainer(isIncognito: true, geom: geom, scrollProxy: scrollProxy)
                             .accessibilityHidden(
-                                gridModel.switcherState != .tabs || !incognitoModel.isIncognito)
+                                gridSwitcherModel.state != .tabs || !incognitoModel.isIncognito)
                     }.onAppear {
-                        gridModel.scrollToSelectedTab()
+                        browserModel.gridModel.scrollModel.scrollToSelectedTab()
                     }
                 }
                 .offset(
-                    x: (gridModel.switcherState == .tabs
+                    x: (gridSwitcherModel.state == .tabs
                         ? (incognitoModel.isIncognito ? 0 : -geom.widthIncludingSafeArea)
                         : -geom.widthIncludingSafeArea)
                 )
-                .animation(gridModel.switchModeWithoutAnimation ? nil : .interactiveSpring())
+                .animation(
+                    gridSwitcherModel.switchModeWithoutAnimation ? nil : .interactiveSpring()
+                )
                 .accessibilityElement(children: .contain)
                 .accessibilityLabel("Incognito Tabs")
                 .accessibilityValue(Text("\(tabModel.manager.incognitoTabs.count) tabs"))

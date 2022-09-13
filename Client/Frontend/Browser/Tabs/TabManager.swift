@@ -70,6 +70,8 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     private var selectedTabURLSubscription: AnyCancellable?
     private var archivedTabsDurationSubscription: AnyCancellable?
 
+    private var needsHeavyUpdatesPostAnimation = false
+
     private let navDelegate: TabManagerNavDelegate
 
     // A WKWebViewConfiguration used for normal tabs
@@ -290,6 +292,8 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
 
                 // Tab data needs to be updated after the lastExecutedTime is modified.
                 updateAllTabDataAndSendNotifications(notify: notify)
+            } else {
+                needsHeavyUpdatesPostAnimation = true
             }
         }
 
@@ -339,9 +343,13 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     func updateSelectedTabDataPostAnimation() {
         selectedTab?.shouldPerformHeavyUpdatesUponSelect = true
 
-        // Tab data needs to be updated after the lastExecutedTime is modified.
-        updateAllTabDataAndSendNotifications(notify: true)
-        updateWebViewForSelectedTab(notify: true)
+        if needsHeavyUpdatesPostAnimation {
+            needsHeavyUpdatesPostAnimation = false
+
+            // Tab data needs to be updated after the lastExecutedTime is modified.
+            updateAllTabDataAndSendNotifications(notify: true)
+            updateWebViewForSelectedTab(notify: true)
+        }
     }
 
     /// Updates the name of the window when using iPad multitasking.

@@ -326,7 +326,7 @@ class BrowserViewController: UIViewController {
             self.displayedPopoverController = nil
         }
 
-        gridModel.canResizeGrid = false
+        gridModel.resizeModel.canResizeGrid = false
     }
 
     @objc func tappedTopArea() {
@@ -351,7 +351,7 @@ class BrowserViewController: UIViewController {
         presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
         presentedViewController?.view.alpha = 0
 
-        gridModel.canResizeGrid = false
+        gridModel.resizeModel.canResizeGrid = false
     }
 
     @objc func appDidBecomeActiveNotification() {
@@ -383,7 +383,7 @@ class BrowserViewController: UIViewController {
             SpaceStore.suggested.refresh()
         }
 
-        gridModel.canResizeGrid = true
+        gridModel.resizeModel.canResizeGrid = true
     }
 
     override func viewDidLoad() {
@@ -480,11 +480,11 @@ class BrowserViewController: UIViewController {
                 if !Defaults[.didFirstNavigation] {
                     self.showZeroQuery()
                 } else {
-                    self.gridModel.switchModeWithoutAnimation = true
+                    self.gridModel.switcherModel.update(switchModeWithoutAnimation: true)
                     self.showTabTray()
 
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        self.gridModel.switchModeWithoutAnimation = false
+                        self.gridModel.switcherModel.update(switchModeWithoutAnimation: false)
                     }
                 }
             }

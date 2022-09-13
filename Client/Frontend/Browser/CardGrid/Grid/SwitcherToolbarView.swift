@@ -50,6 +50,7 @@ struct SwitcherToolbarView: View {
 
     @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var gridModel: GridModel
+    @EnvironmentObject var gridSwitcherModel: GridSwitcherModel
     @EnvironmentObject var toolbarModel: SwitcherToolbarModel
 
     @State var presentingMenu = false
@@ -70,7 +71,7 @@ struct SwitcherToolbarView: View {
                 }
 
                 if top {
-                    if gridModel.switcherState == .spaces {
+                    if gridSwitcherModel.state == .spaces {
                         TopBarSpaceFilterButton()
                             .tapTargetFrame()
                             .environmentObject(gridModel.spaceCardModel)
@@ -87,7 +88,7 @@ struct SwitcherToolbarView: View {
                         .environmentObject(bvc.locationModel)
                     }
                 } else {
-                    if gridModel.switcherState == .spaces {
+                    if gridSwitcherModel.state == .spaces {
                         TabToolbarButtons.SpaceFilter(weight: .medium) {
                             bvc.showModal(style: .grouped) {
                                 SpacesFilterView()
@@ -129,7 +130,7 @@ struct SwitcherToolbarView: View {
                 }
 
                 HoverEffectButton {
-                    switch gridModel.switcherState {
+                    switch gridSwitcherModel.state {
                     case .tabs:
                         toolbarModel.openLazyTab()
                         browserModel.hideGridWithNoAnimation()
@@ -146,7 +147,7 @@ struct SwitcherToolbarView: View {
                             recentlyClosedTabsFlattened: bvc.tabManager.recentlyClosedTabsFlattened)
                     }
                 }
-                .disabled(gridModel.switcherState != .tabs && !NeevaUserInfo.shared.isUserLoggedIn)
+                .disabled(gridSwitcherModel.state != .tabs && !NeevaUserInfo.shared.isUserLoggedIn)
                 .accentColor(.label)
 
                 if !top {
@@ -154,7 +155,7 @@ struct SwitcherToolbarView: View {
                 }
 
                 HoverEffectButton(isTextButton: true) {
-                    switch gridModel.switcherState {
+                    switch gridSwitcherModel.state {
                     case .tabs:
                         browserModel.hideGridWithAnimation(
                             tabToBeSelected: browserModel.tabManager.selectedTab)

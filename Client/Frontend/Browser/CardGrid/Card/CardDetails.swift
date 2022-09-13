@@ -199,6 +199,10 @@ public class TabCardDetails: CardDropDelegate, CardDetails, AccessingManagerProv
             self?.objectWillChange.send()
         }.store(in: &subscriptions)
 
+        tab.$screenshotUUID.sink { [weak self] _ in
+            self?.objectWillChange.send()
+        }.store(in: &subscriptions)
+
         manager.selectedTabPublisher
             .prepend(nil)
             .withPrevious()

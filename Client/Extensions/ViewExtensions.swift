@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import Combine
 import SwiftUI
 
 struct ThrobbingHighlightBorder: ViewModifier {
@@ -63,6 +64,22 @@ extension View {
             updater($0.zero, $0.one, $0.two)
         }
         .onAppear { updater(zero, one, two) }
+    }
+
+    // Publisher variants. Useful when you just want to observe a particular published
+    // var of a model and not the entire model. Runs updater task asynchronously from
+    // onReceive to simulate the behavior of onChange and to ensure that the published
+    // var being updated has been updated by the time updater runs.
+    func useEffect<P>(_ p1: P, perform updater: @escaping () -> Void) -> some View
+    where P: Publisher, P.Failure == Never {
+        self.onReceive(p1) { _ in DispatchQueue.main.async(execute: updater) }
+            .onAppear { updater() }
+    }
+    func useEffect<P>(_ p1: P, _ p2: P, perform updater: @escaping () -> Void) -> some View
+    where P: Publisher, P.Failure == Never {
+        self.onReceive(p1) { _ in DispatchQueue.main.async(execute: updater) }
+            .onReceive(p2) { _ in DispatchQueue.main.async(execute: updater) }
+            .onAppear { updater() }
     }
 }
 

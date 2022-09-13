@@ -46,6 +46,24 @@ extension EnvironmentValues {
     }
 }
 
+struct CardThumbnail<Details>: View where Details: CardDetails {
+    @ObservedObject var details: Details
+    let geom: GeometryProxy
+
+    var body: some View {
+        details.thumbnail
+            .frame(
+                width: max(0, geom.size.width),
+                height: max(
+                    0,
+                    geom.size.height
+                        - (details.thumbnailDrawsHeader ? 0 : CardUX.HeaderSize)),
+                alignment: .top
+            )
+            .clipped()
+    }
+}
+
 /// A flexible card that takes up as much space as it is allotted.
 struct Card<Details>: View where Details: CardDetails {
     @ObservedObject var details: Details
@@ -71,16 +89,7 @@ struct Card<Details>: View where Details: CardDetails {
                     selectionCompletion()
                     details.onSelect()
                 } label: {
-                    details.thumbnail
-                        .frame(
-                            width: max(0, geom.size.width),
-                            height: max(
-                                0,
-                                geom.size.height
-                                    - (details.thumbnailDrawsHeader ? 0 : CardUX.HeaderSize)),
-                            alignment: .top
-                        )
-                        .clipped()
+                    CardThumbnail(details: details, geom: geom)
                         .onDrop(of: ["public.url", "public.text"], delegate: details)
                         .if(let: tabCardDetail) { tabCardDetail, view in
                             view.modifier(CardDragAndDropModifier(tabCardDetail: tabCardDetail))

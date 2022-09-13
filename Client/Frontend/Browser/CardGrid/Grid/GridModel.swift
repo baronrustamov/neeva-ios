@@ -5,55 +5,16 @@
 import Combine
 import Shared
 
-class GridModel: ObservableObject {
-    let tabCardModel: TabCardModel
-    let spaceCardModel: SpaceCardModel
+class GridResizeModel: ObservableObject {
+    @Published var canResizeGrid = true
+}
 
-    @Published private(set) var pickerHeight: CGFloat = UIConstants
-        .TopToolbarHeightWithToolbarButtonsShowing
-    @Published private(set) var switcherState: SwitcherView = .tabs {
-        didSet {
-            if case .spaces = switcherState {
-                ClientLogger.shared.logCounter(
-                    .SpacesUIVisited,
-                    attributes: EnvironmentHelper.shared.getAttributes())
-            }
-
-            SceneDelegate.getCurrentSceneDelegate(with: tabCardModel.manager.scene)?
-                .setSceneUIState(to: .cardGrid(switcherState, tabCardModel.manager.isIncognito))
-        }
-    }
-    @Published var gridCanAnimate = false
-    @Published var switchModeWithoutAnimation = false
-    @Published var showingDetailView = false {
-        didSet {
-            // Reset when going from true to false
-            if oldValue && !showingDetailView {
-                spaceCardModel.detailedSpace?.showingDetails = false
-            }
-        }
-    }
-    @Published var needsScrollToSelectedTab: Int = 0
+class GridScrollModel: ObservableObject {
     var scrollToCompletion: (() -> Void)?
+
+    @Published var needsScrollToSelectedTab: Int = 0
     @Published var didVerticalScroll: Int = 0
     @Published var didHorizontalScroll: Int = 0
-    @Published var canResizeGrid = true
-    @Published var showConfirmCloseAllTabs = false
-    @Published var numberOfTabsForCurrentState = 0
-
-    private var subscriptions: Set<AnyCancellable> = []
-
-    init(tabManager: TabManager, tabCardModel: TabCardModel) {
-        self.tabCardModel = tabCardModel
-        self.spaceCardModel = SpaceCardModel(
-            manager: NeevaUserInfo.shared.isUserLoggedIn ? .shared : .suggested,
-            scene: tabManager.scene)
-        self.numberOfTabsForCurrentState = tabManager.getTabCountForCurrentType()
-
-        tabManager.tabsUpdatedPublisher.sink { _ in
-            self.numberOfTabsForCurrentState = tabManager.getTabCountForCurrentType()
-        }.store(in: &subscriptions)
-    }
 
     // Ensure that the selected Card is visible by scrolling it into view
     // synchronously, which causes the selected Card to be generated if
@@ -63,30 +24,106 @@ class GridModel: ObservableObject {
         scrollToCompletion = completion
         needsScrollToSelectedTab += 1
     }
+}
 
-    func setSwitcherState(to state: SwitcherView) {
+class GridSwitcherModel: ObservableObject {
+    let tabManager: TabManager
+
+    init(tabManager: TabManager) {
+        self.tabManager = tabManager
+    }
+
+    @Published private(set) var state: SwitcherView = .tabs
+
+    func update(state: SwitcherView) {
+        guard self.state != state else {
+            return
+        }
+
         gridCanAnimate = true
 
-        if state != switcherState {
-            switcherState = state
+        self.state = state
+
+        if case .spaces = state {
+            ClientLogger.shared.logCounter(
+                .SpacesUIVisited,
+                attributes: EnvironmentHelper.shared.getAttributes())
         }
+        SceneDelegate.getCurrentSceneDelegate(with: tabManager.scene)?
+            .setSceneUIState(to: .cardGrid(state, tabManager.isIncognito))
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.gridCanAnimate = false
         }
     }
 
+    @Published private(set) var switchModeWithoutAnimation = false
+
+    func update(switchModeWithoutAnimation: Bool) {
+        if self.switchModeWithoutAnimation != switchModeWithoutAnimation {
+            self.switchModeWithoutAnimation = switchModeWithoutAnimation
+        }
+    }
+
+    @Published private(set) var gridCanAnimate = false
+}
+
+class GridModel: ObservableObject {
+    let tabCardModel: TabCardModel
+    let resizeModel: GridResizeModel
+    let scrollModel: GridScrollModel
+    let switcherModel: GridSwitcherModel
+    let spaceCardModel: SpaceCardModel
+
+    @Published private(set) var pickerHeight: CGFloat = UIConstants
+        .TopToolbarHeightWithToolbarButtonsShowing
+
+    @Published var showingDetailView = false {
+        didSet {
+            // Reset when going from true to false
+            if oldValue && !showingDetailView {
+                spaceCardModel.detailedSpace?.showingDetails = false
+            }
+        }
+    }
+
+    @Published var showConfirmCloseAllTabs = false
+    @Published var numberOfTabsForCurrentState = 0
+
+    private var subscriptions: Set<AnyCancellable> = []
+
+    convenience init(tabManager: TabManager, tabCardModel: TabCardModel) {
+        self.init(
+            tabManager: tabManager, tabCardModel: tabCardModel,
+            spaceCardModel: SpaceCardModel(
+                manager: NeevaUserInfo.shared.isUserLoggedIn ? .shared : .suggested,
+                scene: tabManager.scene))
+    }
+
+    init(tabManager: TabManager, tabCardModel: TabCardModel, spaceCardModel: SpaceCardModel) {
+        self.tabCardModel = tabCardModel
+        self.resizeModel = GridResizeModel()
+        self.scrollModel = GridScrollModel()
+        self.switcherModel = GridSwitcherModel(tabManager: tabManager)
+        self.spaceCardModel = spaceCardModel
+        self.numberOfTabsForCurrentState = tabManager.getTabCountForCurrentType()
+
+        tabManager.tabsUpdatedPublisher.sink { _ in
+            self.numberOfTabsForCurrentState = tabManager.getTabCountForCurrentType()
+        }.store(in: &subscriptions)
+    }
+
     func switchToTabs(incognito: Bool) {
-        setSwitcherState(to: .tabs)
+        switcherModel.update(state: .tabs)
 
         tabCardModel.manager.switchIncognitoMode(
             incognito: incognito, fromTabTray: true, openLazyTab: false)
         SceneDelegate.getCurrentSceneDelegate(with: tabCardModel.manager.scene)?
-            .setSceneUIState(to: .cardGrid(switcherState, tabCardModel.manager.isIncognito))
+            .setSceneUIState(to: .cardGrid(switcherModel.state, tabCardModel.manager.isIncognito))
     }
 
     func switchToSpaces() {
-        setSwitcherState(to: .spaces)
+        switcherModel.update(state: .spaces)
     }
 
     func openSpaceInDetailView(_ space: SpaceCardDetails?) {
@@ -132,11 +169,11 @@ class GridModel: ObservableObject {
         spaceCardModel.detailedSpace = nil
 
         if switchToTabs {
-            setSwitcherState(to: .tabs)
+            switcherModel.update(state: .tabs)
         }
 
         SceneDelegate.getCurrentSceneDelegate(with: tabCardModel.manager.scene)?.setSceneUIState(
-            to: .cardGrid(switcherState, tabCardModel.manager.isIncognito))
+            to: .cardGrid(switcherModel.state, tabCardModel.manager.isIncognito))
     }
 
     func spaceFailedToOpen() {

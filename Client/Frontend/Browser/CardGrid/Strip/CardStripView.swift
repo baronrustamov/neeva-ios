@@ -11,7 +11,7 @@ struct CardStripUX {
 }
 
 struct CardStripView: View {
-    @EnvironmentObject private var gridModel: GridModel
+    @EnvironmentObject private var gridScrollModel: GridScrollModel
     @EnvironmentObject private var incognitoModel: IncognitoModel
     @EnvironmentObject private var model: CardStripModel
     @EnvironmentObject private var scrollingControlModel: ScrollingControlModel
@@ -71,7 +71,7 @@ struct CardStripView: View {
     var body: some View {
         if model.shouldEmbedInScrollView {
             ScrollView(.horizontal, showsIndicators: false) {
-                content.useEffect(deps: gridModel.needsScrollToSelectedTab) { _ in
+                content.useEffect(deps: gridScrollModel.needsScrollToSelectedTab) { _ in
                     model.shouldEmbedInScrollView = false
                 }
             }

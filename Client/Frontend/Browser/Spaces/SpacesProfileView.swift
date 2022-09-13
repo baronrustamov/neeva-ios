@@ -35,7 +35,7 @@ struct SpacesProfileView: View {
     var onBackTap: () -> Void
     var owner: Space.Owner?
     @EnvironmentObject var browserModel: BrowserModel
-    @EnvironmentObject var gridModel: GridModel
+    @EnvironmentObject var gridResizeModel: GridResizeModel
     @ObservedObject var viewModel = SpacesProfileViewModel()
     @State var headerVisible = true
     @State private var cardSize: CGFloat = CardUX.DefaultCardSize
@@ -119,7 +119,7 @@ struct SpacesProfileView: View {
                 }
                 .useEffect(
                     deps: geom.size.width, isLandscape, perform: updateCardSize
-                ).useEffect(deps: gridModel.canResizeGrid) { _ in
+                ).useEffect(deps: gridResizeModel.canResizeGrid) { _ in
                     updateCardSize(width: geom.size.width, topToolbar: isLandscape)
                 }.ignoresSafeArea(.keyboard)
         }
@@ -159,7 +159,7 @@ struct SpacesProfileView: View {
 
     // ToDo: Remove this duplication
     func updateCardSize(width: CGFloat, topToolbar: Bool) {
-        guard gridModel.canResizeGrid else {
+        guard gridResizeModel.canResizeGrid else {
             return
         }
 

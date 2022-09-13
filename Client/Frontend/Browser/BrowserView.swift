@@ -49,7 +49,7 @@ struct BrowserContentView: View {
                 )
                 .opacity(contentVisibilityModel.showContent ? 0 : 1)
                 .onAppear {
-                    bvc.gridModel.scrollToSelectedTab()
+                    bvc.gridModel.scrollModel.scrollToSelectedTab()
                 }
                 .accessibilityHidden(contentVisibilityModel.showContent)
                 .ignoresSafeArea(edges: [.bottom])
@@ -153,7 +153,10 @@ struct BrowserView: View {
         .environmentObject(browserModel.switcherToolbarModel)
         .environmentObject(browserModel.toastViewManager)
         .environmentObject(bvc.gridModel)
+        .environmentObject(bvc.gridModel.resizeModel)
+        .environmentObject(bvc.gridModel.scrollModel)
         .environmentObject(bvc.gridModel.spaceCardModel)
+        .environmentObject(bvc.gridModel.switcherModel)
         .environmentObject(bvc.gridModel.tabCardModel)
         .environmentObject(bvc.overlayManager)
         .environmentObject(bvc.simulatedSwipeModel)
