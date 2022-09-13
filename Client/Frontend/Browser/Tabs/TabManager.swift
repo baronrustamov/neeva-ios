@@ -90,10 +90,9 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         }
     }
     var recentlyClosedTabsFlattened: [SavedTab] = []
-
-    // groups tabs closed together in a certain amount of time into one Toast
-    private let toastGroupTimerInterval: TimeInterval = 1.5
-    private var timerToTabsToast: Timer?
+    // Groups tabs closed at the same time so they can be restored together.
+    private let recentlyClosedTabGroupTimerDuration: TimeInterval = 1.5
+    private var recentlyClosedTabGroupTimer: Timer?
     private var closedTabsToShowToastFor = [SavedTab]()
 
     private var normalTabs: [Tab] {
@@ -1164,20 +1163,28 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             $0.saveSessionDataAndCreateSavedTab(
                 isSelected: selectedTab === $0, tabIndex: self.tabs.firstIndex(of: $0))
         }
-        recentlyClosedTabs.insert(savedTabs, at: 0)
+
+        if recentlyClosedTabGroupTimer?.isValid ?? false, recentlyClosedTabs.count > 0 {
+            recentlyClosedTabs[0].append(contentsOf: savedTabs)
+        } else {
+            recentlyClosedTabs.insert(savedTabs, at: 0)
+        }
 
         if showToast {
             closedTabsToShowToastFor.append(contentsOf: savedTabs)
+        }
 
-            timerToTabsToast?.invalidate()
-            timerToTabsToast = Timer.scheduledTimer(
-                withTimeInterval: toastGroupTimerInterval, repeats: false,
-                block: { _ in
+        recentlyClosedTabGroupTimer?.invalidate()
+        recentlyClosedTabGroupTimer = Timer.scheduledTimer(
+            withTimeInterval: recentlyClosedTabGroupTimerDuration, repeats: false,
+            block: { _ in
+                if self.closedTabsToShowToastFor.count > 0 {
                     ToastDefaults().showToastForClosedTabs(
                         self.closedTabsToShowToastFor, tabManager: self)
                     self.closedTabsToShowToastFor.removeAll()
-                })
-        }
+                }
+            }
+        )
     }
 
     // MARK: Zombie Tabs

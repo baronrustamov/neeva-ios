@@ -91,7 +91,14 @@ extension BrowserViewController {
     }
 
     @objc func restoreTabKeyCommand() {
-        if let tabToRestore = tabManager.recentlyClosedTabs.first {
+        if !(overlayManager.currentOverlay?.isPriority(.transient) ?? false) {
+            // If the restore tab toast was dismissed, make sure this is reset.
+            restoreTabToastHasKeyCommandPriority = false
+        }
+
+        if !restoreTabToastHasKeyCommandPriority,
+            let tabToRestore = tabManager.recentlyClosedTabs.first
+        {
             // override selected tab if we are viewing a tab
             tabManager.restoreSavedTabs(
                 tabToRestore,

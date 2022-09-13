@@ -27,12 +27,22 @@ class ToastDefaults: NSObject {
             return
         }
 
+        let bvc = SceneDelegate.getBVC(with: tabManager.scene)
+
         var toastText: LocalizedStringKey = "Tab Closed"
         let keyboardShortcutDescription = {
             AnyView(
                 (Text("\(Image(systemName: "shift"))")
-                    + Text("\(Image(systemName: "command"))") + Text("T to restore"))
-                    .withFont(.bodyXSmall).foregroundColor(.secondaryLabel))
+                    + Text("\(Image(systemName: "command"))")
+                    + Text("T to restore"))
+                    .withFont(.bodyXSmall)
+                    .foregroundColor(.secondaryLabel)
+                    .onAppear {
+                        bvc.restoreTabToastHasKeyCommandPriority = true
+                    }.onDisappear {
+                        bvc.restoreTabToastHasKeyCommandPriority = false
+                    }
+            )
         }
 
         if savedTabs.count > 0 {
@@ -47,18 +57,18 @@ class ToastDefaults: NSObject {
                         ? keyboardShortcutDescription : nil,
                     buttonText: "restore",
                     buttonAction: {
-                        let bvc = SceneDelegate.getBVC(with: tabManager.scene)
                         // override selected tab if we are viewing a tab
-                        bvc.tabManager.restoreSavedTabs(
+                        tabManager.restoreSavedTabs(
                             savedTabs,
                             overrideSelectedTab: bvc.browserModel.contentVisibilityModel.showContent
                         )
+                        bvc.restoreTabToastHasKeyCommandPriority = false
                     },
                     keyboardShortcut: KeyboardShortcut("t", modifiers: [.command, .shift])
                 )
             )
 
-            let toastViewManager = SceneDelegate.getBVC(with: tabManager.scene).toastViewManager
+            let toastViewManager = bvc.toastViewManager
             toast = toastViewManager.makeToast(content: toastContent)
         }
     }

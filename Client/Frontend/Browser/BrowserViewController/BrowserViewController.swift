@@ -94,6 +94,7 @@ class BrowserViewController: UIViewController {
     lazy var overlayManager: OverlayManager = {
         OverlayManager()
     }()
+    var restoreTabToastHasKeyCommandPriority = false
 
     private(set) lazy var simulateForwardModel: SimulatedSwipeModel = {
         SimulatedSwipeModel(
