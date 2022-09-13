@@ -55,6 +55,7 @@ open class MockProfile: Client.Profile {
     public var recommendations: HistoryRecommendations
     public var files: FileAccessor
     public var history: BrowserHistory & ResettableSyncStorage
+    public var logins: RustLogins
 
     fileprivate var legacyPlaces:
         BrowserHistory & Favicons & ResettableSyncStorage & HistoryRecommendations
@@ -69,7 +70,16 @@ open class MockProfile: Client.Profile {
 
     init(databasePrefix: String = "mock") {
         files = MockFiles()
+        let loginsDatabasePath = URL(
+            fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true
+        ).appendingPathComponent("\(databasePrefix)_logins.db").path
         try? files.remove("\(databasePrefix)_logins.db")
+        let encryptionKey = "AAAAAAAA"
+        let salt = RustLogins.setupPlaintextHeaderAndGetSalt(
+            databasePath: loginsDatabasePath, encryptionKey: encryptionKey)
+        logins = RustLogins(
+            databasePath: loginsDatabasePath, encryptionKey: encryptionKey, salt: salt)
+        _ = logins.reopenIfClosed()
         db = BrowserDB(filename: "\(databasePrefix).db", schema: BrowserSchema(), files: files)
         legacyPlaces = SQLiteHistory(db: self.db)
         recommendations = legacyPlaces
@@ -85,6 +95,7 @@ open class MockProfile: Client.Profile {
         isShutdown = false
 
         db.reopenIfClosed()
+        _ = logins.reopenIfClosed()
     }
 
     // swift-format-ignore: NoLeadingUnderscores
@@ -92,6 +103,7 @@ open class MockProfile: Client.Profile {
         isShutdown = true
 
         db.forceClose()
+        _ = logins.forceClose()
         UserDefaults.standard.clearProfilePrefs()
     }
 

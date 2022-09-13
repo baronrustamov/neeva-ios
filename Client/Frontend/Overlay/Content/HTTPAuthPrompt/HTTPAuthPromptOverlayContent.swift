@@ -13,7 +13,11 @@ struct HTTPAuthPromptOverlayContent: View {
 
     var body: some View {
         HTTPAuthPromptOverlayView(
-            url: url, onSubmit: onSubmit, onCancel: hideOverlay
+            url: url,
+            onSubmit: { username, password in
+                onSubmit(username, password)
+                hideOverlay()
+            }, onCancel: hideOverlay
         )
         .overlayIsFixedHeight(isFixedHeight: true)
         .accessibility(label: Text("HTTP Sign In"))

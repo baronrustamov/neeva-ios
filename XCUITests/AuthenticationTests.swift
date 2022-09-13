@@ -4,12 +4,11 @@
 
 import XCTest
 
-class AuthenticationTests: BaseTestCase {
-    let url = "https://jigsaw.w3.org/HTTP/Basic"
+class AuthenticationTests: IpadOnlyTestCase {
+    private let url = "https://jigsaw.w3.org/HTTP/Basic"
 
     func testIncorrectCredentials() throws {
-        try skipTest(issue: 1958, "this test is flaky")
-
+        try skipIfNeeded()
         openURL(url, waitForPageLoad: false)
 
         // Make sure that 3 invalid credentials result in authentication failure.
@@ -20,8 +19,7 @@ class AuthenticationTests: BaseTestCase {
     }
 
     func testCorrectCredentials() throws {
-        try skipTest(issue: 1755, "this test is flaky")
-
+        try skipIfNeeded()
         openURL(url, waitForPageLoad: false)
 
         enterCredentials(username: "guest", password: "guest")
@@ -33,24 +31,14 @@ class AuthenticationTests: BaseTestCase {
         enter(text: password, in: "Auth_Password_Field", isSecure: true)
 
         waitForExistence(app.buttons["Auth_Submit"])
-        app.buttons["Auth_Submit"].tap()
+        app.buttons["Auth_Submit"].tap(force: true)
         waitForExistence(app.buttons["Show Tabs"])
     }
 
     private func enter(text: String, in field: String, isSecure: Bool = false) {
-        UIPasteboard.general.string = text
+        waitForExistence(app.textFields["Auth_Username_Field"])
 
-        if isSecure {
-            waitForExistence(app.secureTextFields[field])
-            app.secureTextFields[field].tap()
-            app.secureTextFields[field].press(forDuration: 1)
-        } else {
-            waitForExistence(app.textFields[field])
-            app.textFields[field].tap()
-            app.textFields[field].press(forDuration: 1)
-        }
-
-        waitForExistence(app.menuItems["Paste"])
-        app.menuItems["Paste"].tap()
+        app.textFields[field].tap(force: true)
+        app.textFields[field].typeText(text + "\n")
     }
 }

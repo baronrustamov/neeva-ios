@@ -858,7 +858,6 @@ extension BrowserViewController: WKNavigationDelegate {
         _ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge,
         completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
     ) {
-
         // If this is a certificate challenge, see if the certificate has previously been
         // accepted by the user.
         let origin = "\(challenge.protectionSpace.host):\(challenge.protectionSpace.port)"
@@ -892,6 +891,15 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // The challenge may come from a background tab, so ensure it's the one visible.
         tabManager.selectTab(tab, notify: true)
+
+        Authenticator.handleAuthRequest(self, challenge: challenge)
+            .uponQueue(.main) { res in
+                if let credentials = res.successValue {
+                    completionHandler(.useCredential, credentials.credentials)
+                } else {
+                    completionHandler(.rejectProtectionSpace, nil)
+                }
+            }
     }
 
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
