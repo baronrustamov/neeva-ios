@@ -929,6 +929,7 @@ public enum LogConfig {
         public static let experimentArm = "ExperimentArm"
     }
 
+    // MARK: - CheatsheetAttribute
     public enum CheatsheetAttribute {
         public static let currentCheatsheetQuery = "currentCheatsheetQuery"
         public static let currentPageURL = "currentCheatsheetPageURL"
@@ -937,6 +938,7 @@ public enum LogConfig {
         public static let api = "api"
         public static let journeyID = "journeyID"
         public static let tabID = "tabID"
+        public static let completedOnboarding = "completedOnboarding"
 
         public enum QuerySource: String {
             case uToQ

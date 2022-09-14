@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import Combine
+import Defaults
 import Foundation
 import Shared
 
@@ -361,7 +362,14 @@ class CheatsheetMenuViewModel: ObservableObject {
     // MARK: - UI Lifecycle Methods
     func onOverlayPresented() {
         self.startJourney()
-        self.log(.OpenCheatsheet)
+        self.log(
+            .OpenCheatsheet,
+            attributes: [
+                ClientLogCounterAttribute(
+                    key: LogConfig.CheatsheetAttribute.completedOnboarding,
+                    value: String(Defaults[.seenCheatsheetIntro])
+                )
+            ])
     }
 
     func onOverlayDismissed() {
