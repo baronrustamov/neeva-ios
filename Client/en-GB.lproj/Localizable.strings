@@ -8,9 +8,6 @@
 " %@" = " %@";
 
 /* No comment provided by engineer. */
-" %@ Followers" = " %@ Followers";
-
-/* No comment provided by engineer. */
 " %lld" = " %lld";
 
 /* No comment provided by engineer. */
@@ -24,9 +21,6 @@
 
 /* No comment provided by engineer. */
 " by inviting friends to join Neeva" = " by inviting friends to join Neeva";
-
-/* No comment provided by engineer. */
-" u{10025E} " = " u{10025E} ";
 
 /* No comment provided by engineer. */
 " 􀉞 " = " 􀉞 ";
@@ -71,10 +65,7 @@
 "%@" = "%@";
 
 /* No comment provided by engineer. */
-"%@\n%@" = "%1$@\n%2$@";
-
-/* No comment provided by engineer. */
-"%@ - %@" = "%1$@ - %2$@";
+"%@ - %@" = "%@ - %@";
 
 /* This shows up on a recipe to specify how long it takes to make this dish */
 "%@ (Total Time)" = "%@ (Total Time)";
@@ -82,29 +73,8 @@
 /* No comment provided by engineer. */
 "%@ /mo" = "%@ /mo";
 
-/* accessibility label for how many website trackers are blocked on this page */
-"%@ %@ blocked" = "%1$@ %2$@ blocked";
-
 /* No comment provided by engineer. */
 "%@ Full Recipe" = "%@ Full Recipe";
-
-/* No comment provided by engineer. */
-"%@ OF %@" = "%1$@ OF %2$@";
-
-/* No comment provided by engineer. */
-"%@ Reviews" = "%@ Reviews";
-
-/* No comment provided by engineer. */
-"%@ site%@" = "%1$@ site%2$@";
-
-/* No comment provided by engineer. */
-"%@ tabs" = "%@ tabs";
-
-/* No comment provided by engineer. */
-"%@ Tabs" = "%@ Tabs";
-
-/* No comment provided by engineer. */
-"%@ tabs from “%@”" = "%1$@ tabs from “%2$@”";
 
 /* No comment provided by engineer. */
 "%@ this section" = "%@ this section";
@@ -113,10 +83,7 @@
 "%@, %@" = "%@, %@";
 
 /* No comment provided by engineer. */
-"%@: %@" = "%1$@: %2$@";
-
-/* No comment provided by engineer. */
-"%@. " = "%@. ";
+"%@: %@" = "%@: %@";
 
 /* No comment provided by engineer. */
 "%@/5" = "%@/5";
@@ -159,9 +126,6 @@
 
 /* No comment provided by engineer. */
 "%lld. " = "%lld. ";
-
-/* No comment provided by engineer. */
-"+%@" = "+%@";
 
 /* No comment provided by engineer. */
 "+%lld" = "+%lld";
@@ -254,7 +218,13 @@
 "Adjust the size of this pop-up window" = "Adjust the size of this pop-up window";
 
 /* No comment provided by engineer. */
+"After 7 days" = "After 7 days";
+
+/* No comment provided by engineer. */
 "After 7 Days" = "After 7 Days";
+
+/* No comment provided by engineer. */
+"After 30 days" = "After 30 days";
 
 /* No comment provided by engineer. */
 "After 30 Days" = "After 30 Days";
@@ -279,6 +249,9 @@
 
 /* No comment provided by engineer. */
 "Appearance" = "Appearance";
+
+/* No comment provided by engineer. */
+"Archive Tabs" = "Archive Tabs";
 
 /* No comment provided by engineer. */
 "Archived Tabs" = "Archived Tabs";
@@ -329,19 +302,16 @@
 "Block trackers, and pop-ups" = "Block Trackers, and Pop-ups";
 
 /* No comment provided by engineer. */
-"Blocks many ads and trackers. Minimizes disruption to ads and other functionality." = "Blocks many ads and trackers. Minimises disruption to ads and other functionality.";
+"Blocks more trackers. May disrupt ads and other functionality on some sites." = "Blocks more trackers. May disrupt ads and other functionality on some sites.";
 
 /* No comment provided by engineer. */
-"Blocks more ads and trackers. May break ads and other functionality on some sites." = "Blocks more ads and trackers. May break ads and other functionality on some sites.";
+"Blocks most trackers. Minimizes disruption to ads and other functionality." = "Blocks most trackers. Minimises disruption to ads and other functionality.";
 
 /* (No Comment) */
 "Browse the web ad-free" = "Browse the Web Ad-Free";
 
 /* (No Comment) */
 "Browse the web with no ads in your way" = "Browse the web with no ads in your way";
-
-/* No comment provided by engineer. */
-"Browser + ad blocker" = "Browser + ad blocker";
 
 /* (No Comment) */
 "Browser without ads or trackers" = "Browser without ads or trackers";
@@ -413,22 +383,13 @@
 "Close" = "Close";
 
 /* No comment provided by engineer. */
-"Close %@ %@%@" = "Close %1$@ %2$@%3$@";
-
-/* No comment provided by engineer. */
 "Close %lld %@%@" = "Close %lld %@%@";
 
 /* No comment provided by engineer. */
 "Close All" = "Close All";
 
 /* No comment provided by engineer. */
-"Close all %@ tabs from “%@”?" = "Close all %1$@ tabs from “%2$@”?";
-
-/* No comment provided by engineer. */
 "Close All %@Tabs" = "Close All %@Tabs";
-
-/* No comment provided by engineer. */
-"Close all %lld tabs from “%@”?" = "Close all %lld tabs from “%@”?";
 
 /* No comment provided by engineer. */
 "Close All Tabs" = "Close All Tabs";
@@ -444,12 +405,6 @@
 
 /* No comment provided by engineer. */
 "Close Tab" = "Close Tab";
-
-/* No comment provided by engineer. */
-"Close these %@ tabs?" = "Close these %@ tabs?";
-
-/* No comment provided by engineer. */
-"Close these %lld tabs?" = "Close these %lld tabs?";
 
 /* No comment provided by engineer. */
 "Closed" = "Closed";
@@ -898,6 +853,9 @@
 /* No comment provided by engineer. */
 "Leave Incognito Mode" = "Leave Incognito Mode";
 
+/* Describe the purpose of the options in the archive tab settings */
+"Let Neeva automatically archive tabs that haven't recently been viewed." = "Let Neeva automatically archive tabs that haven't recently been viewed.";
+
 /* No comment provided by engineer. */
 "Let's do it!" = "Let's do it!";
 
@@ -1203,9 +1161,6 @@
 
 /* No comment provided by engineer. */
 "QR Code: %@" = "QR Code: %@";
-
-/* No comment provided by engineer. */
-"Query string: nil" = "Query string: nil";
 
 /* No comment provided by engineer. */
 "Read Less" = "Read Less";
@@ -1625,9 +1580,6 @@
 "Unpin Tab" = "Unpin Tab";
 
 /* No comment provided by engineer. */
-"Untitled" = "Untitled";
-
-/* No comment provided by engineer. */
 "Update" = "Update";
 
 /* No comment provided by engineer. */
@@ -1719,9 +1671,6 @@
 
 /* No comment provided by engineer. */
 "You've disabled notifications, would you like to enable them in settings?" = "You've disabled notifications, would you like to enable them in settings?";
-
-/* No comment provided by engineer. */
-"Your Cookie Cutter just declined a **cookie popup** and blocked %@ **trackers**" = "Your Cookie Cutter just declined a **cookie pop-up** and blocked %@ **trackers**";
 
 /* No comment provided by engineer. */
 "Your Cookie Cutter just declined a **cookie popup** and blocked %lld **trackers**" = "Your Cookie Cutter just declined a **cookie pop-up** and blocked %lld **trackers**";

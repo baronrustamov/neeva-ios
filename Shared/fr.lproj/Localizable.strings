@@ -258,7 +258,7 @@
 "OK" = "OK";
 
 /* No comment provided by engineer. */
-"Oops, this page is a little shy" = "Oups, cette page est un peu timide";
+"Oops, this page is a little shy" = "Oups, cette page est introuvable";
 
 /* See http://mzl.la/1G7uHo7 */
 "Open Settings" = "Ouvrir les paramètres";
@@ -318,7 +318,7 @@
 "Save" = "Enregistrer";
 
 /* No comment provided by engineer. */
-"Save to Spaces" = "Enregistrer dans les espaces";
+"Save to Spaces" = "Enregistrer dans Espaces";
 
 /* No comment provided by engineer. */
 "Saved to \"%@\"" = "Enregistré dans « %@ »";
@@ -381,7 +381,7 @@
 "Show Tour" = "Afficher la visite";
 
 /* No comment provided by engineer. */
-"Sign in or Join Neeva" = "Connectez-vous ou rejoignez Neeva";
+"Sign in or Join Neeva" = "Se connecter";
 
 /* No comment provided by engineer. */
 "Space name" = "Nom de l'espace";

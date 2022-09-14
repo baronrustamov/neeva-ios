@@ -8,9 +8,6 @@
 " %@" = " %@";
 
 /* No comment provided by engineer. */
-" %@ Followers" = " %@ Follower";
-
-/* No comment provided by engineer. */
 " %lld" = " %lld";
 
 /* No comment provided by engineer. */
@@ -24,9 +21,6 @@
 
 /* No comment provided by engineer. */
 " by inviting friends to join Neeva" = " indem Sie Freunde zu Neeva einladen";
-
-/* No comment provided by engineer. */
-" u{10025E} " = " u{10025E} ";
 
 /* No comment provided by engineer. */
 " 􀉞 " = " 􀉞 ";
@@ -71,10 +65,7 @@
 "%@" = "%@";
 
 /* No comment provided by engineer. */
-"%@\n%@" = "%1$@\n%2$@";
-
-/* No comment provided by engineer. */
-"%@ - %@" = "%1$@ – %2$ @";
+"%@ - %@" = "%@ – %@";
 
 /* This shows up on a recipe to specify how long it takes to make this dish */
 "%@ (Total Time)" = "%@ (Gesamtzeit)";
@@ -82,29 +73,8 @@
 /* No comment provided by engineer. */
 "%@ /mo" = "%@/Monat";
 
-/* accessibility label for how many website trackers are blocked on this page */
-"%@ %@ blocked" = "%1$@ %2$@ blockiert";
-
 /* No comment provided by engineer. */
 "%@ Full Recipe" = "%@ Vollständiges Rezept";
-
-/* No comment provided by engineer. */
-"%@ OF %@" = "%1$@ VON %2$@";
-
-/* No comment provided by engineer. */
-"%@ Reviews" = "%@ Bewertungen";
-
-/* No comment provided by engineer. */
-"%@ site%@" = "%1$@ Website%2$@";
-
-/* No comment provided by engineer. */
-"%@ tabs" = "%@ Tabs";
-
-/* No comment provided by engineer. */
-"%@ Tabs" = "%@ Tabs";
-
-/* No comment provided by engineer. */
-"%@ tabs from “%@”" = "%1$@ Tabs von “%2$@”";
 
 /* No comment provided by engineer. */
 "%@ this section" = "%@ dieser Abschnitt";
@@ -113,10 +83,7 @@
 "%@, %@" = "%@, %@";
 
 /* No comment provided by engineer. */
-"%@: %@" = "%1$@: %2$@";
-
-/* No comment provided by engineer. */
-"%@. " = "%@. ";
+"%@: %@" = "%@: %@";
 
 /* No comment provided by engineer. */
 "%@/5" = "%@/5";
@@ -159,9 +126,6 @@
 
 /* No comment provided by engineer. */
 "%lld. " = "%lld. ";
-
-/* No comment provided by engineer. */
-"+%@" = "+%@";
 
 /* No comment provided by engineer. */
 "+%lld" = "+%lld";
@@ -254,7 +218,13 @@
 "Adjust the size of this pop-up window" = "Passen Sie die Größe dieses Popup-Fensters an";
 
 /* No comment provided by engineer. */
+"After 7 days" = "Nach 7 tagen";
+
+/* No comment provided by engineer. */
 "After 7 Days" = "Nach 7 Tagen";
+
+/* No comment provided by engineer. */
+"After 30 days" = "Nach 30 tagen";
 
 /* No comment provided by engineer. */
 "After 30 Days" = "Nach 30 Tagen";
@@ -266,7 +236,7 @@
 "Already have an account? " = "Sie haben bereits ein Konto? ";
 
 /* No comment provided by engineer. */
-"Already have an account? Sign in" = "Sie haben bereits ein Konto? Anmelden";
+"Already have an account? Sign in" = "Anmelden";
 
 /* No comment provided by engineer. */
 "Analytics Cookies" = "Analytics-Cookies";
@@ -279,6 +249,9 @@
 
 /* No comment provided by engineer. */
 "Appearance" = "Erscheinungsbild";
+
+/* No comment provided by engineer. */
+"Archive Tabs" = "Tabs archivieren";
 
 /* No comment provided by engineer. */
 "Archived Tabs" = "Archivierte Tabs";
@@ -296,7 +269,7 @@
 "arrows" = "Pfeile";
 
 /* No comment provided by engineer. */
-"Auto Archive Tabs" = "Auto Archive Tabs";
+"Auto Archive Tabs" = "Automatische Archivierung von Tabs";
 
 /* No comment provided by engineer. */
 "Automatically send usage statistics to Neeva" = "Automatisch Nutzungsstatistiken an Neeva senden";
@@ -329,19 +302,16 @@
 "Block trackers, and pop-ups" = "Tracker und Popups blockieren";
 
 /* No comment provided by engineer. */
-"Blocks many ads and trackers. Minimizes disruption to ads and other functionality." = "Blockiert viele Anzeigen und Tracker. Minimiert die Unterbrechung von Anzeigen und anderen Funktionen.";
+"Blocks more trackers. May disrupt ads and other functionality on some sites." = "Blockiert mehr Tracker. Kann Werbung und andere Funktionen auf einigen Websites beeinträchtigen.";
 
 /* No comment provided by engineer. */
-"Blocks more ads and trackers. May break ads and other functionality on some sites." = "Blockiert mehr Anzeigen und Tracker. Kann Werbung und andere Funktionen auf einigen Websites beeinträchtigen.";
+"Blocks most trackers. Minimizes disruption to ads and other functionality." = "Blockiert die meisten Tracker. Minimiert die Unterbrechung von Anzeigen und anderen Funktionen.";
 
 /* (No Comment) */
 "Browse the web ad-free" = "Werbefrei im Web surfen";
 
 /* (No Comment) */
 "Browse the web with no ads in your way" = "Surfen Sie im Internet, ohne dass Ihnen Werbung im Weg steht";
-
-/* No comment provided by engineer. */
-"Browser + ad blocker" = "Browser + Werbeblocker";
 
 /* (No Comment) */
 "Browser without ads or trackers" = "Browser ohne Werbung oder Tracker";
@@ -413,22 +383,13 @@
 "Close" = "Schließen";
 
 /* No comment provided by engineer. */
-"Close %@ %@%@" = "%1$@ %2$@%3$@ schließen";
-
-/* No comment provided by engineer. */
 "Close %lld %@%@" = "%lld %@%@ schließen";
 
 /* No comment provided by engineer. */
 "Close All" = "Alle schließen";
 
 /* No comment provided by engineer. */
-"Close all %@ tabs from “%@”?" = "Alle %1$@ Tabs von „%2$@“ schließen?";
-
-/* No comment provided by engineer. */
 "Close All %@Tabs" = "Alle %@ Tabs schließen";
-
-/* No comment provided by engineer. */
-"Close all %lld tabs from “%@”?" = "Alle %lld Tabs von “%@\" schließen?\"";
 
 /* No comment provided by engineer. */
 "Close All Tabs" = "Alle Tabs schließen";
@@ -444,12 +405,6 @@
 
 /* No comment provided by engineer. */
 "Close Tab" = "Tab schließen";
-
-/* No comment provided by engineer. */
-"Close these %@ tabs?" = "Diese %@ Tabs schließen?";
-
-/* No comment provided by engineer. */
-"Close these %lld tabs?" = "Diese %lld Tabs schließen?";
 
 /* No comment provided by engineer. */
 "Closed" = "Geschlossen";
@@ -898,6 +853,9 @@
 /* No comment provided by engineer. */
 "Leave Incognito Mode" = "Inkognito-Modus verlassen";
 
+/* Describe the purpose of the options in the archive tab settings */
+"Let Neeva automatically archive tabs that haven't recently been viewed." = "Tabs, die in letzter Zeit nicht angesehen wurden, automatisch von Neeva archivieren lassen.";
+
 /* No comment provided by engineer. */
 "Let's do it!" = "Los geht’s";
 
@@ -1205,9 +1163,6 @@
 "QR Code: %@" = "QR-Code: %@";
 
 /* No comment provided by engineer. */
-"Query string: nil" = "Abfrage-String: nil";
-
-/* No comment provided by engineer. */
 "Read Less" = "Weniger lesen";
 
 /* No comment provided by engineer. */
@@ -1394,7 +1349,7 @@
 "Sign In" = "Anmelden";
 
 /* No comment provided by engineer. */
-"Sign in or Join Neeva" = "Anmelden oder bei Neeva registrieren";
+"Sign in or Join Neeva" = "Anmelden";
 
 /* No comment provided by engineer. */
 "Sign in to:" = "Anmelden bei:";
@@ -1625,9 +1580,6 @@
 "Unpin Tab" = "Anheften des Tabs aufheben";
 
 /* No comment provided by engineer. */
-"Untitled" = "Unbenannt";
-
-/* No comment provided by engineer. */
 "Update" = "Aktualisieren";
 
 /* No comment provided by engineer. */
@@ -1719,9 +1671,6 @@
 
 /* No comment provided by engineer. */
 "You've disabled notifications, would you like to enable them in settings?" = "Sie haben die Benachrichtigungen deaktiviert. Möchten Sie sie in den Einstellungen aktivieren?";
-
-/* No comment provided by engineer. */
-"Your Cookie Cutter just declined a **cookie popup** and blocked %@ **trackers**" = "Ihr Cookie Cutter hat gerade ein **Cookie Popup** abgelehnt und %@ **Tracker** blockiert";
 
 /* No comment provided by engineer. */
 "Your Cookie Cutter just declined a **cookie popup** and blocked %lld **trackers**" = "Ihr Cookie Cutter hat gerade ein **Cookie Popup** abgelehnt und %lld **Tracker** blockiert";
