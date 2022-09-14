@@ -130,6 +130,16 @@ extension URL {
         return components.url!
     }
 
+    public func withPercentEncodedQueryParams(_ params: [URLQueryItem]) -> URL {
+        var components = URLComponents(url: self, resolvingAgainstBaseURL: false)!
+        var items = components.percentEncodedQueryItems ?? []
+        for param in params {
+            items.append(param)
+        }
+        components.percentEncodedQueryItems = items
+        return components.url!
+    }
+
     public func withQueryParam(_ name: String, value: String) -> URL {
         var components = URLComponents(url: self, resolvingAgainstBaseURL: false)!
         let item = URLQueryItem(name: name, value: value)

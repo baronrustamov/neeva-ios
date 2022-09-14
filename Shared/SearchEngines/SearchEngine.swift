@@ -87,10 +87,23 @@ public class SearchEngine: Identifiable, Hashable {
         return nil
     }
 
-    public func searchURLFrom(searchQuery: String, queryItems: [URLQueryItem]) -> URL? {
-        guard let url = searchURLForQuery(searchQuery) else { return nil }
+    public func searchURLFrom(searchQuery: String, percentEncodedQueryItems: [URLQueryItem]) -> URL?
+    {
+        guard let searchKey = searchQueryComponentKey,
+            let url = searchURLForQuery(searchQuery)
+        else { return nil }
 
-        return url.withQueryParams(queryItems.filter { $0.name != searchQueryComponentKey })
+        // Don't re-add the search query parameter, and in the case of Neeva, don't
+        // add the src param again either.
+        let ignoredQueryKeys: Set<String> = Set(
+            [searchKey]
+                + (isNeeva ? ["src"] : [])
+        )
+
+        return url.withPercentEncodedQueryParams(
+            percentEncodedQueryItems
+                .filter { !ignoredQueryKeys.contains($0.name) }
+        )
     }
 
     // MARK: - Internal properties & initializers

@@ -37,24 +37,17 @@ extension BrowserViewController: TopBarDelegate {
         }
 
         // User is editing the current query, should preserve the parameters from their original query
-        if let queryItems = searchQueryModel.queryItems,
-            let url = SearchEngine.current.searchURLFrom(searchQuery: text, queryItems: queryItems)
+        if let percentEncodedQueryItems = searchQueryModel.components?.percentEncodedQueryItems,
+            let url = SearchEngine.current.searchURLFrom(
+                searchQuery: text, percentEncodedQueryItems: percentEncodedQueryItems)
         {
             finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: currentTab)
-            searchQueryModel.queryItems = nil
+            searchQueryModel.components = nil
 
             return
         }
 
-        let searchEngine = SearchEngine.current
-        // We couldn't build a URL, so check for a matching search keyword.
-        let trimmedText = text.trimmingCharacters(in: .whitespaces)
-        guard trimmedText.firstIndex(of: " ") != nil else {
-            submitSearchText(text, forTab: currentTab, using: searchEngine)
-            return
-        }
-
-        self.submitSearchText(text, forTab: currentTab, using: searchEngine)
+        submitSearchText(text, forTab: currentTab, using: SearchEngine.current)
     }
 
     fileprivate func submitSearchText(

@@ -638,9 +638,9 @@ class SuggestionModel: ObservableObject {
         case .editCurrentQuery(let query, let url):
             hideZeroQuery = false
 
-            let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
             bvc.searchQueryModel.value = query
-            bvc.searchQueryModel.queryItems = components?.queryItems
+            bvc.searchQueryModel.components = URLComponents(
+                url: url, resolvingAgainstBaseURL: false)
             bvc.zeroQueryModel.targetTab = .currentTab
         }
 

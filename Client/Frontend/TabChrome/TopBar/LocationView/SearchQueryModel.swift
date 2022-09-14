@@ -9,8 +9,8 @@ import Combine
 class SearchQueryModel: ObservableObject {
     @Published var value: String = ""
 
-    // Parameters that are preseved while editing a search query
-    var queryItems: [URLQueryItem]?
+    // Contains the parameters that are preseved while editing a search query
+    var components: URLComponents?
 
     init() {}
     init(previewValue: String) {

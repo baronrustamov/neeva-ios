@@ -27,4 +27,22 @@ class EditURLTests: BaseTestCase {
         sleep(1)
         XCTAssertEqual(app.textFields["address"].value as! String, "http://fakeurl.madeup/")
     }
+
+    // Prevents regression of:
+    // Editing search for "c++" results in dropping the "++" part and just searching for "c" #4216
+    func testEditQueryIsIdempotent() {
+        performSearch(text: "c++")
+
+        waitForExistence(app.buttons["Address Bar"])
+        app.buttons["Address Bar"].tap()
+        waitForExistence(app.buttons["Edit current search"])
+        app.buttons["Edit current search"].tap()
+
+        // Resubmit the search
+        app.typeText("\r")
+        waitUntilPageLoad()
+
+        // It would be better to directly check the URL, but there is no easy way to do that.
+        XCTAssertEqual(app.staticTexts["locationLabelSiteSecure"].label, "c++")
+    }
 }
