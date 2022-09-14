@@ -32,14 +32,13 @@ struct TabGridContainer: View {
     @EnvironmentObject private var tabModel: TabCardModel
     @Environment(\.safeArea) private var safeArea
 
-    @State var cardStackGeom: CGSize = CGSize.zero
+    @State var rows: [Row] = []
 
     var gridScrollModel: GridScrollModel {
         browserModel.gridModel.scrollModel
     }
 
     var selectedRowId: TabCardModel.Row.ID? {
-        let rows = tabModel.getRows(for: .all, incognito: isIncognito)
         if let row = rows.first(where: { row in
             row.cells.contains(where: \.isSelected)
         }) {
@@ -54,20 +53,15 @@ struct TabGridContainer: View {
     }
 
     var body: some View {
-        Group {
-            LazyVStack(alignment: .leading, spacing: 0) {
-                // When there aren't enough tabs to make the scroll view scrollable, we build a VStack
-                // with spacer to pin ArchivedTabsView at the bottom of the scrollView.
-                TabGridCardView(containerGeometry: geom)
-            }.background(
-                GeometryReader { proxy in
-                    Color.clear
-                        .useEffect(deps: proxy.size) { newValue in
-                            cardStackGeom = newValue
-                        }
-                }
+        LazyVStack(alignment: .leading, spacing: 0) {
+            TabGridRowsView(
+                containerGeometry: geom,
+                rows: rows
             )
         }
+        .padding(.horizontal, CardGridUX.GridSpacing)
+        .background(Color.background)
+        .onDrop(of: ["public.url", "public.text"], delegate: tabModel)
         .frame(
             minHeight:
                 geom.size.height - UIConstants.ArchivedTabsViewHeight - CardGridUX.GridSpacing,
@@ -79,6 +73,11 @@ struct TabGridContainer: View {
         // to avoid spurious updates.
         .useEffect(gridScrollModel.$needsScrollToSelectedTab) {
             scrollToSelectedRowId()
+        }
+        .useEffect(deps: tabModel.rowsUpdated) { _ in
+            self.rows = tabModel.getRowSectionsNeeded(incognito: isIncognito).flatMap {
+                tabModel.getRows(for: $0, incognito: isIncognito)
+            }
         }
         .if(tabModel.isSearchingForTabs) {
             $0.padding(.bottom, safeArea.bottom + FindInPageViewUX.height)

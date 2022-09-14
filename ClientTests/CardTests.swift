@@ -14,7 +14,7 @@ extension CardGrid: Inspectable {}
 extension CardsContainer: Inspectable {}
 extension TabGridContainer: Inspectable {}
 extension CardScrollContainer: Inspectable {}
-extension TabGridSectionView: Inspectable {}
+extension TabGridRowsView: Inspectable {}
 extension GridPicker: Inspectable {}
 extension FaviconView: Inspectable {}
 extension SwitcherToolbarView: Inspectable {}

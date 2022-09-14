@@ -35,11 +35,10 @@ struct TabGridSectionHeaderView: View {
     }
 }
 
-struct TabGridSectionView: View {
+struct TabGridRowsView: View {
     @EnvironmentObject private var browserModel: BrowserModel
 
     let containerGeometry: GeometryProxy
-    let section: TabSection
     let rows: [Row]
 
     var body: some View {
@@ -97,13 +96,10 @@ struct TabGridSectionView: View {
     }
 
     init(
-        tabModel: TabCardModel,
         containerGeometry: GeometryProxy,
-        section: TabSection,
-        incognito: Bool
+        rows: [Row]
     ) {
         self.containerGeometry = containerGeometry
-        self.section = section
-        self.rows = tabModel.getRows(for: section, incognito: incognito)
+        self.rows = rows
     }
 }

@@ -62,6 +62,7 @@ class TabCardModel: CardDropDelegate, CardModel {
             }
         }
     }
+    @Published var rowsUpdated = 0
 
     struct Row: Identifiable {
         enum Cell: Identifiable {
@@ -195,7 +196,7 @@ class TabCardModel: CardDropDelegate, CardModel {
 
         // Defer signaling until after we have finished updating. This way our state is
         // completely consistent with TabManager prior to accessing allDetails, etc.
-        self.objectWillChange.send()
+        self.rowsUpdated += 1
     }
 
     // MARK: Get Rows
@@ -222,7 +223,8 @@ class TabCardModel: CardDropDelegate, CardModel {
             sections.append(.overAMonth)
         }
 
-        return sections
+        // Prevents sections with no cards (only headers) from being shown.
+        return sections.filter { (timeBasedNormalRows[$0]?.count ?? 0) > 1 }
     }
 
     // MARK: Build Rows
