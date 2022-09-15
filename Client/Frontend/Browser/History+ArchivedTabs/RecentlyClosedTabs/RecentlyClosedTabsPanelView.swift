@@ -6,7 +6,7 @@ import Shared
 import SwiftUI
 
 struct RecentlyClosedTabsPanelView: View {
-    @ObservedObject var model: HistoryPanelModel
+    let model: RecentlyClosedTabsPanelModel
     @State var showDeleteAllConfirmation = false
 
     let onDismiss: () -> Void
@@ -18,7 +18,7 @@ struct RecentlyClosedTabsPanelView: View {
                 VStack(spacing: 0) {
                     GroupedRowButtonView(label: "Delete All", symbol: .trash) {
                         showDeleteAllConfirmation = true
-                    }.disabled(model.groupedSites.isEmpty)
+                    }
                 }.accentColor(.label)
             }.padding(.horizontal)
 

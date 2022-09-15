@@ -75,6 +75,20 @@ struct ArchivedTabsCardView: View {
                     .padding(.vertical, 6)
                     .frame(minHeight: GroupedCellUX.minCellHeight)
             }
+        }.contextMenu {
+            if #available(iOS 15.0, *) {
+                Button(role: .destructive) {
+                    tabManager.remove(archivedTabs: [tab])
+                } label: {
+                    Label("Delete", systemSymbol: .trash)
+                }
+            } else {
+                Button {
+                    tabManager.remove(archivedTabs: [tab])
+                } label: {
+                    Label("Delete", systemSymbol: .trash)
+                }
+            }
         }
     }
 }

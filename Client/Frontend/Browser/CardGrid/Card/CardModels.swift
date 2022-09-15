@@ -220,6 +220,7 @@ class TabCardModel: CardDropDelegate, CardModel {
         }
 
         if Defaults[.archivedTabsDuration] == .forever {
+            sections.append(.lastMonth)
             sections.append(.overAMonth)
         }
 

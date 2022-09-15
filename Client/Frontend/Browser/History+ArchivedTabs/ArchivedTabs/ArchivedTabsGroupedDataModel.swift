@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import Defaults
 import Foundation
 import Shared
 import Storage
@@ -12,7 +13,6 @@ class ArchivedTabsGroupedDataModel: GroupedDataPanelModel {
     typealias Rows = ([[ArchivedTab]], [String: ArchivedTabGroup])
 
     @Published var groupedData = DateGroupedTableData<T>()
-    @Published var filteredGroupedData = DateGroupedTableData<T>()
 
     let tabCardModel: TabCardModel
     let tabManager: TabManager
@@ -20,11 +20,20 @@ class ArchivedTabsGroupedDataModel: GroupedDataPanelModel {
         return tabManager.archivedTabs.count
     }
 
-    @discardableResult func loadData() -> Deferred<Maybe<Cursor<T?>>> {
+    // MARK: - GroupedDataPanelModel Methods
+    @discardableResult func loadData(filter query: String? = nil) -> Deferred<Maybe<Cursor<T?>>> {
         groupedData = DateGroupedTableData<T>()
 
         tabManager.archivedTabGroups.forEach {
             let tabGroup = $0.value
+            let name = Defaults[.tabGroupNames][$0.key]
+
+            if let query = query, !query.isEmpty, let name = name?.lowercased(),
+                !name.contains(query.lowercased())
+            {
+                return
+            }
+
             // lastExecutedTime is in milliseconds, needs to be converted to seconds.
             let lastExecutedTimeSeconds = tabGroup.lastExecutedTime / 1000
             groupedData.add(
@@ -34,6 +43,12 @@ class ArchivedTabsGroupedDataModel: GroupedDataPanelModel {
 
         // Add the rest of the tabs as long as they weren't already added with a TabGroup.
         tabManager.archivedTabs.forEach {
+            if let query = query, !query.isEmpty,
+                !$0.displayTitle.lowercased().contains(query.lowercased())
+            {
+                return
+            }
+
             if tabManager.archivedTabGroups[$0.rootUUID] == nil {
                 let lastExecutedTimeSeconds = $0.lastExecutedTime / 1000
                 groupedData.add(
@@ -41,13 +56,6 @@ class ArchivedTabsGroupedDataModel: GroupedDataPanelModel {
                     date: Date(timeIntervalSince1970: TimeInterval(lastExecutedTimeSeconds)))
             }
         }
-
-        return .init()
-    }
-
-    @discardableResult func loadData(filter query: String) -> Deferred<Maybe<Cursor<T?>>> {
-        // TODO: (Evan) Load data from TabManager filtering by title/URL.
-        // No current implementation but similar to FindInGrid.
 
         return .init()
     }
@@ -92,9 +100,20 @@ class ArchivedTabsGroupedDataModel: GroupedDataPanelModel {
         return (rows, tabGroups)
     }
 
-    init(tabCardModel: TabCardModel, tabManager: TabManager) {
+    // MARK: - Archived Tab Methods
+    func clearArchivedTabs() {
+        tabManager.remove(archivedTabs: tabManager.archivedTabs)
+        loadData()
+
+        ClientLogger.shared.logCounter(
+            .clearArchivedTabs,
+            attributes: EnvironmentHelper.shared.getAttributes())
+    }
+
+    // MARK: - init
+    init(tabCardModel: TabCardModel) {
         self.tabCardModel = tabCardModel
-        self.tabManager = tabManager
+        self.tabManager = tabCardModel.manager
 
         loadData()
     }

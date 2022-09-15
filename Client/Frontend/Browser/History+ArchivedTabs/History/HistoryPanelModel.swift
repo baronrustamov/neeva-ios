@@ -30,10 +30,6 @@ class HistoryPanelModel: ObservableObject {
     // History search
     @Published var filteredSites = DateGroupedTableData<Site>()
 
-    var recentlyClosedTabs: [SavedTab] {
-        tabManager.recentlyClosedTabsFlattened
-    }
-
     // MARK: - Data
     func reloadData() {
         groupedSites = DateGroupedTableData<Site>()
@@ -132,15 +128,6 @@ class HistoryPanelModel: ObservableObject {
         profile.history.removeHistoryForURL(site.url).uponQueue(.main) { _ in
             self.groupedSites.remove(site)
         }
-    }
-
-    // Recently Closed Tabs
-    func restoreTab(at index: Int) {
-        tabManager.restoreSavedTabs([recentlyClosedTabs[index]], overrideSelectedTab: true)
-    }
-
-    func deleteRecentlyClosedTabs() {
-        tabManager.recentlyClosedTabs.removeAll()
     }
 
     // MARK: - init

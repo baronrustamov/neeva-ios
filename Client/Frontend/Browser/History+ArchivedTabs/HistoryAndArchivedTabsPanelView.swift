@@ -13,8 +13,8 @@ enum HistoryAndArchivedTabsPanelState {
 
 struct HistoryAndArchivedTabsPanelView: View {
     @EnvironmentObject var browserModel: BrowserModel
-    @EnvironmentObject var tabCardModel: TabCardModel
 
+    // MARK: - Properties
     @Default(.archivedTabsDuration) var archivedTabsDuration
     @State var currentView: HistoryAndArchivedTabsPanelState
     @State private var showArchivedTabSettings = false
@@ -22,16 +22,8 @@ struct HistoryAndArchivedTabsPanelView: View {
     @State private var showClearBrowsingData = false
     @State private var showCloseArchivedTabs = false
 
-    var archivedTabsAfterLabel: LocalizedStringKey {
-        switch archivedTabsDuration {
-        case .week:
-            return "After 7 Days"
-        case .month:
-            return "After 30 Days"
-        case .forever:
-            return "Never"
-        }
-    }
+    let archivedTabsModel: ArchivedTabsGroupedDataModel
+    let historyModel: HistoryGroupedDataModel
 
     var dragGesture: some Gesture {
         DragGesture()
@@ -58,8 +50,10 @@ struct HistoryAndArchivedTabsPanelView: View {
         Color.groupedBackground.frame(height: 1)
     }
 
+    // MARK: - History
+    @ViewBuilder
     var historyView: some View {
-        GroupedDataPanelView(model: HistoryGroupedDataModel(tabManager: browserModel.tabManager)) {
+        GroupedDataPanelView(model: historyModel) {
             VStack {
                 Button {
                     showRecentlyClosedTabs = true
@@ -86,14 +80,57 @@ struct HistoryAndArchivedTabsPanelView: View {
                 }
                 .foregroundColor(.red)
                 .padding(16)
+
+                NavigationLink(isActive: $showRecentlyClosedTabs) {
+                    RecentlyClosedTabsPanelView(
+                        model: RecentlyClosedTabsPanelModel(tabManager: browserModel.tabManager),
+                        onDismiss: {
+                            browserModel.overlayManager.hide(
+                                overlay: .fullScreenSheet(AnyView(self)))
+                        })
+                } label: {
+                    EmptyView()
+                }
+
+                NavigationLink(isActive: $showClearBrowsingData) {
+                    DataManagementView()
+                } label: {
+                    EmptyView()
+                }
             }
         }
     }
 
+    // MARK: - Archived Tabs
+    var archivedTabsAfterLabel: LocalizedStringKey {
+        switch archivedTabsDuration {
+        case .week:
+            return "After 7 Days"
+        case .month:
+            return "After 30 Days"
+        case .forever:
+            return "Never"
+        }
+    }
+
+    @ViewBuilder
+    var clearAllArchivedTabsButton: some View {
+        Button {
+            showCloseArchivedTabs = true
+        } label: {
+            HStack {
+                Text("Clear All Archived Tabs")
+                Spacer()
+            }
+        }.padding(16)
+    }
+
     @ViewBuilder
     var archivedTabsView: some View {
-        let archivedTabsModel = ArchivedTabsGroupedDataModel(
-            tabCardModel: tabCardModel, tabManager: browserModel.tabManager)
+        let clearAllArchiveButtonTitle: LocalizedStringKey =
+            "Are you sure you want to close all archived tabs?"
+        let clearAllArchiveButtonText: LocalizedStringKey =
+            "Close \(archivedTabsModel.numOfArchivedTabs) \(archivedTabsModel.numOfArchivedTabs > 1 ? "Tabs" : "Tab")"
 
         GroupedDataPanelView(model: archivedTabsModel) {
             VStack {
@@ -101,7 +138,7 @@ struct HistoryAndArchivedTabsPanelView: View {
                     showArchivedTabSettings = true
                 } label: {
                     HStack {
-                        Text("Auto Archive Tabs")
+                        Text("Archive Tabs")
                         Spacer()
 
                         Label {
@@ -117,21 +154,51 @@ struct HistoryAndArchivedTabsPanelView: View {
 
                 divider
 
-                Button {
-                    showCloseArchivedTabs = true
-                } label: {
-                    HStack {
-                        Text("Clear All Archived Tabs")
-
-                        Spacer()
+                Group {
+                    if #available(iOS 15.0, *) {
+                        clearAllArchivedTabsButton
+                            .confirmationDialog(
+                                clearAllArchiveButtonTitle,
+                                isPresented: $showCloseArchivedTabs,
+                                titleVisibility: .visible
+                            ) {
+                                Button(
+                                    clearAllArchiveButtonText,
+                                    role: .destructive
+                                ) {
+                                    archivedTabsModel.clearArchivedTabs()
+                                }
+                            }
+                    } else {
+                        clearAllArchivedTabsButton
+                            .actionSheet(isPresented: $showCloseArchivedTabs) {
+                                ActionSheet(
+                                    title: Text(clearAllArchiveButtonTitle),
+                                    buttons: [
+                                        .destructive(
+                                            Text(clearAllArchiveButtonText)
+                                        ) {
+                                            archivedTabsModel.clearArchivedTabs()
+                                        },
+                                        .cancel(),
+                                    ]
+                                )
+                            }
                     }
+                }.foregroundColor(
+                    archivedTabsModel.numOfArchivedTabs < 1 ? .tertiaryLabel : .red
+                ).disabled(archivedTabsModel.numOfArchivedTabs < 1)
+
+                NavigationLink(isActive: $showArchivedTabSettings) {
+                    ArchivedTabSettings()
+                } label: {
+                    EmptyView()
                 }
-                .foregroundColor(.red)
-                .padding(16)
             }
         }
     }
 
+    // MARK: - Body
     var body: some View {
         NavigationView {
             GeometryReader { geom in
@@ -141,15 +208,18 @@ struct HistoryAndArchivedTabsPanelView: View {
                     ZStack {
                         historyView
                             .offset(x: currentView == .history ? 0 : -geom.size.width)
+                            .accessibilityHidden(currentView == .archivedTabs)
 
                         archivedTabsView
                             .offset(x: currentView == .archivedTabs ? 0 : geom.size.width)
+                            .accessibilityHidden(currentView == .history)
                     }
 
                     Spacer()
                 }
             }
             .highPriorityGesture(dragGesture)
+            .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(
                 Text(currentView == .history ? "History" : "Archived Tabs")
             ).toolbar {
@@ -158,26 +228,20 @@ struct HistoryAndArchivedTabsPanelView: View {
                 } label: {
                     Text("Done")
                 }
-            }.navigationBarTitleDisplayMode(.inline)
-
-            NavigationLink(isActive: $showArchivedTabSettings) {
-                // TODO: (Evan) Navigate to ArchivedTabSettings.
-            } label: {
-                EmptyView()
             }
-
-            NavigationLink(isActive: $showRecentlyClosedTabs) {
-                // TODO: (Evan) Navigate to RecentlyClosedTabsPanelView.
-            } label: {
-                EmptyView()
+            .environment(\.onOpenURL) { url in
+                browserModel.tabManager.createOrSwitchToTab(for: url)
             }
         }
     }
-}
 
-struct HistoryAndArchivedTabsPanelView_Previews: PreviewProvider {
-    static var previews: some View {
-        HistoryAndArchivedTabsPanelView(currentView: .history)
-        HistoryAndArchivedTabsPanelView(currentView: .archivedTabs)
+    // MARK: - init
+    init(
+        currentView: HistoryAndArchivedTabsPanelState,
+        tabCardModel: TabCardModel
+    ) {
+        self.currentView = currentView
+        self.archivedTabsModel = ArchivedTabsGroupedDataModel(tabCardModel: tabCardModel)
+        self.historyModel = HistoryGroupedDataModel(tabManager: tabCardModel.manager)
     }
 }

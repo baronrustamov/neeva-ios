@@ -22,7 +22,11 @@ struct OpenArchivedTabsPanelButton: View {
                 if FeatureFlag[.archivedTabsRedesign] {
                     browserModel.overlayManager.show(
                         overlay: .fullScreenSheet(
-                            AnyView(HistoryAndArchivedTabsPanelView(currentView: .archivedTabs))))
+                            AnyView(
+                                HistoryAndArchivedTabsPanelView(
+                                    currentView: .archivedTabs, tabCardModel: tabModel))
+                        )
+                    )
                 } else {
                     openArchivedTabsPanelView()
                 }

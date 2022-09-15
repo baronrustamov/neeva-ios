@@ -13,12 +13,10 @@ protocol GroupedDataPanelModel: ObservableObject {
 
     var tabManager: TabManager { get }
     var groupedData: DateGroupedTableData<T> { get set }
-    var filteredGroupedData: DateGroupedTableData<T> { get set }
 
     // Return a Deferred object because history loads data async.
     // Might set up something for ArchivedTabs in the
     // future, simpler to have one return type for now.
-    @discardableResult func loadData() -> Deferred<Maybe<Cursor<T?>>>
-    @discardableResult func loadData(filter query: String) -> Deferred<Maybe<Cursor<T?>>>
+    @discardableResult func loadData(filter query: String?) -> Deferred<Maybe<Cursor<T?>>>
     func buildRows(with data: [T], for section: DateGroupedTableDataSection) -> Rows
 }
