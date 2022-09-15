@@ -1,4 +1,4 @@
-github "SDWebImage/SDWebImageSwiftUI"       ~> 2.0
+github "SDWebImage/SDWebImageSwiftUI"       ~> 2.1.0
 github "swisspol/GCDWebServer"              ~> 3.5.4
 github "kif-framework/KIF"                  "v3.8.3"
 github "mozilla-mobile/onepassword-app-extension"    "add-framework-support"
