@@ -8,7 +8,6 @@ struct OverlayView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
 
-    @EnvironmentObject private var browserModel: BrowserModel
     @EnvironmentObject private var chromeModel: TabChromeModel
     @EnvironmentObject private var overlayManager: OverlayManager
     @EnvironmentObject private var scrollingControlModel: ScrollingControlModel

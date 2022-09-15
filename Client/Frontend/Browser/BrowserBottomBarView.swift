@@ -7,16 +7,17 @@ import Shared
 import SwiftUI
 
 struct BrowserBottomBarView: View {
-    @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var chromeModel: TabChromeModel
     @EnvironmentObject var overlayManager: OverlayManager
+    @EnvironmentObject var gridVisibilityModel: GridVisibilityModel
 
     @ViewBuilder var toolbar: some View {
-        if !browserModel.showGrid && !chromeModel.inlineToolbar && !chromeModel.isEditingLocation
+        if !gridVisibilityModel.showGrid && !chromeModel.inlineToolbar
+            && !chromeModel.isEditingLocation
             && Defaults[.didFirstNavigation]
         {
             TabToolbarContent()
-        } else if browserModel.showGrid {
+        } else if gridVisibilityModel.showGrid {
             SwitcherToolbarView(top: false)
         }
     }

@@ -8,7 +8,6 @@ import SwiftUI
 struct CardStripCard<Details>: View where Details: TabCardDetails {
     @ObservedObject var details: Details
 
-    @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var cardStripModel: CardStripModel
     @EnvironmentObject var incognitoModel: IncognitoModel
     @Environment(\.sizeCategory) private var sizeCategory

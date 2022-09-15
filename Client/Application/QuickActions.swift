@@ -40,7 +40,8 @@ class QuickActions {
         withBrowserViewController bvc: BrowserViewController, isIncognito: Bool
     ) {
         bvc.openLazyTab(
-            openedFrom: bvc.browserModel.showGrid ? .tabTray : .newTabButton,
+            openedFrom: bvc.browserModel.gridModel.visibilityModel.showGrid
+                ? .tabTray : .newTabButton,
             switchToIncognitoMode: isIncognito)
     }
 }

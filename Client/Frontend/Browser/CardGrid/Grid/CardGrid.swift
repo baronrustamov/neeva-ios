@@ -50,6 +50,7 @@ struct SpaceNavigationLink: View {
 struct CardGridBackground: View {
     @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var cardTransitionModel: CardTransitionModel
+    @EnvironmentObject var gridVisibilityModel: GridVisibilityModel
 
     var color: some View {
         cardTransitionModel.state == .hidden
@@ -62,15 +63,15 @@ struct CardGridBackground: View {
                 browserModel.hideGridWithAnimation()
             }
             .onAnimationCompleted(
-                for: browserModel.showGrid,
+                for: gridVisibilityModel.showGrid,
                 completion: browserModel.onCompletedCardTransition
             )
             .useEffect(deps: cardTransitionModel.state) { state in
                 if state != .hidden {
                     let showGrid = (state == .visibleForTrayShow)
-                    if browserModel.showGrid != showGrid {
+                    if gridVisibilityModel.showGrid != showGrid {
                         withAnimation(CardTransitionUX.animation) {
-                            browserModel.showGrid = showGrid
+                            gridVisibilityModel.update(showGrid: showGrid)
                         }
                     }
                 }

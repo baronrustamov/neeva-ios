@@ -16,6 +16,7 @@ struct BrowserTopBarView: View {
     @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var chromeModel: TabChromeModel
     @EnvironmentObject var gridModel: GridModel
+    @EnvironmentObject var gridVisibilityModel: GridVisibilityModel
     @EnvironmentObject var tabContainerModel: TabContainerModel
 
     @ViewBuilder var switcherTopBar: some View {
@@ -27,7 +28,7 @@ struct BrowserTopBarView: View {
     }
 
     @ViewBuilder var content: some View {
-        if browserModel.showGrid {
+        if gridVisibilityModel.showGrid {
             switcherTopBar
                 .modifier(
                     SwipeToSwitchGridViewGesture(fromPicker: true))

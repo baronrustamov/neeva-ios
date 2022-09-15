@@ -26,7 +26,6 @@ struct GeneralSettingsSection: View {
     @Default(.contextMenuShowLinkPreviews) var showLinkPreviews
     @Default(.confirmCloseAllTabs) var confirmCloseAllTabs
     @Default(.archivedTabsDuration) var archivedTabsDuration
-    @EnvironmentObject var browserModel: BrowserModel
 
     var body: some View {
         NavigationLink(

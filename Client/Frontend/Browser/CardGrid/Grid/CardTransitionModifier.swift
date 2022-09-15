@@ -11,7 +11,12 @@ struct CardTransitionUX {
 
 struct ScrollToCompletionModifier<Details: CardDetails>: ViewModifier {
     let details: Details
-    let gridScrollModel: GridScrollModel
+
+    // Getting GridScrollModel indirectly here to avoid unnecessary updates due to
+    // properties of GridScrollModel being updated that this View doesn't care about.
+    // See the useEffect call below.
+    @EnvironmentObject var browserModel: BrowserModel
+    var gridScrollModel: GridScrollModel { browserModel.gridModel.scrollModel }
 
     func runCompletion() {
         if details.isSelected, let completion = gridScrollModel.scrollToCompletion {
@@ -40,8 +45,8 @@ struct CardTransitionModifier<Details: CardDetails>: ViewModifier {
     let containerGeometry: GeometryProxy
     var extraBottomPadding: CGFloat = 0
 
-    @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var cardTransitionModel: CardTransitionModel
+    @EnvironmentObject var gridVisibilityModel: GridVisibilityModel
 
     func body(content: Content) -> some View {
         content
@@ -49,9 +54,7 @@ struct CardTransitionModifier<Details: CardDetails>: ViewModifier {
             .opacity(details.isSelected && cardTransitionModel.state != .hidden ? 0 : 1)
             .animation(nil)
             .overlay(overlay)
-            .modifier(
-                ScrollToCompletionModifier(
-                    details: details, gridScrollModel: browserModel.gridModel.scrollModel))
+            .modifier(ScrollToCompletionModifier(details: details))
     }
 
     var overlay: some View {
@@ -70,14 +73,16 @@ struct CardTransitionModifier<Details: CardDetails>: ViewModifier {
     @ViewBuilder var overlayCard: some View {
         if let tabGroupDetails = details as? TabGroupCardDetails {
             let selectedTabDetails = (tabGroupDetails.allDetails.first { $0.isSelected })!
-            Card(details: selectedTabDetails, showsSelection: browserModel.showGrid, animate: true)
+            Card(
+                details: selectedTabDetails, showsSelection: gridVisibilityModel.showGrid,
+                animate: true)
         } else {
-            Card(details: details, showsSelection: browserModel.showGrid, animate: true)
+            Card(details: details, showsSelection: gridVisibilityModel.showGrid, animate: true)
         }
     }
 
     func calculateCardRect(geom: GeometryProxy) -> CGRect {
-        if browserModel.showGrid {
+        if gridVisibilityModel.showGrid {
             return geom.frame(in: .local)
         }
 

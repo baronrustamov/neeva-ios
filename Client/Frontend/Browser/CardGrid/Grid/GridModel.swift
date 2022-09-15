@@ -68,12 +68,23 @@ class GridSwitcherModel: ObservableObject {
     @Published private(set) var gridCanAnimate = false
 }
 
+class GridVisibilityModel: ObservableObject {
+    @Published private(set) var showGrid: Bool = false
+
+    func update(showGrid: Bool) {
+        if self.showGrid != showGrid {
+            self.showGrid = showGrid
+        }
+    }
+}
+
 class GridModel: ObservableObject {
-    let tabCardModel: TabCardModel
     let resizeModel: GridResizeModel
     let scrollModel: GridScrollModel
-    let switcherModel: GridSwitcherModel
     let spaceCardModel: SpaceCardModel
+    let switcherModel: GridSwitcherModel
+    let tabCardModel: TabCardModel
+    let visibilityModel: GridVisibilityModel
 
     @Published private(set) var pickerHeight: CGFloat = UIConstants
         .TopToolbarHeightWithToolbarButtonsShowing
@@ -101,11 +112,12 @@ class GridModel: ObservableObject {
     }
 
     init(tabManager: TabManager, tabCardModel: TabCardModel, spaceCardModel: SpaceCardModel) {
-        self.tabCardModel = tabCardModel
         self.resizeModel = GridResizeModel()
         self.scrollModel = GridScrollModel()
-        self.switcherModel = GridSwitcherModel(tabManager: tabManager)
         self.spaceCardModel = spaceCardModel
+        self.switcherModel = GridSwitcherModel(tabManager: tabManager)
+        self.tabCardModel = tabCardModel
+        self.visibilityModel = GridVisibilityModel()
         self.numberOfTabsForCurrentState = tabManager.getTabCountForCurrentType()
 
         tabManager.tabsUpdatedPublisher.sink { _ in

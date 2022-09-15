@@ -10,12 +10,12 @@ struct LocationLabel: View {
     let url: URL?
     let isSecure: Bool?
 
-    @EnvironmentObject private var browserModel: BrowserModel
+    @EnvironmentObject private var gridVisibilityModel: GridVisibilityModel
 
     var body: some View {
         LocationLabelAndIcon(
             url: url, isSecure: isSecure,
-            forcePlaceholder: browserModel.showGrid
+            forcePlaceholder: gridVisibilityModel.showGrid
                 || (NeevaConstants.isNeevaHome(url: url) && NeevaUserInfo.shared.hasLoginCookie())
         )
         .lineLimit(1)

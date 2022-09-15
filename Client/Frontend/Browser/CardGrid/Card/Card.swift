@@ -78,8 +78,8 @@ struct Card<Details>: View where Details: CardDetails {
 
     @Environment(\.selectionCompletion) private var selectionCompletion
     @EnvironmentObject private var incognitoModel: IncognitoModel
-    @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var cardTransitionModel: CardTransitionModel
+    @EnvironmentObject var gridVisibilityModel: GridVisibilityModel
     @State private var isPressed = false
 
     var body: some View {
@@ -96,7 +96,7 @@ struct Card<Details>: View where Details: CardDetails {
                         }
                 }
                 .buttonStyle(.reportsPresses(to: $isPressed))
-                .cornerRadius(animate && !browserModel.showGrid ? 0 : CardUX.CornerRadius)
+                .cornerRadius(animate && !gridVisibilityModel.showGrid ? 0 : CardUX.CornerRadius)
                 .modifier(
                     BorderTreatment(
                         isSelected: showsSelection && details.isSelected,
@@ -119,7 +119,7 @@ struct Card<Details>: View where Details: CardDetails {
                     }
                     .frame(width: max(0, geom.size.width), height: CardUX.ButtonSize)
                     .background(Color.clear)
-                    .opacity(animate && !browserModel.showGrid ? 0 : 1)
+                    .opacity(animate && !gridVisibilityModel.showGrid ? 0 : 1)
                 }
             }
         }
@@ -128,7 +128,7 @@ struct Card<Details>: View where Details: CardDetails {
         .modifier(ActionsModifier(close: details.closeButtonImage == nil ? nil : details.onClose))
         .modifier(
             CloseButtonModifier(
-                details: details, animate: animate, showGrid: browserModel.showGrid,
+                details: details, animate: animate, showGrid: gridVisibilityModel.showGrid,
                 dragToClose: dragToClose)
         )
         .accessibilityAddTraits(.isButton)

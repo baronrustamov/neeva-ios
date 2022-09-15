@@ -34,7 +34,6 @@ struct SpacesProfileView: View {
     let spaceId: String
     var onBackTap: () -> Void
     var owner: Space.Owner?
-    @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var gridResizeModel: GridResizeModel
     @ObservedObject var viewModel = SpacesProfileViewModel()
     @State var headerVisible = true

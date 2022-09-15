@@ -10,9 +10,9 @@ struct GridPicker: View {
 
     @EnvironmentObject var gridModel: GridModel
     @EnvironmentObject var gridSwitcherModel: GridSwitcherModel
+    @EnvironmentObject var gridVisibilityModel: GridVisibilityModel
     @EnvironmentObject var incognitoModel: IncognitoModel
     @EnvironmentObject var switcherToolbarModel: SwitcherToolbarModel
-    @EnvironmentObject var browserModel: BrowserModel
 
     @State var selectedIndex: Int = 1
 
@@ -84,7 +84,7 @@ struct GridPicker: View {
                     ? Color.background : Color.clear)
                     .ignoresSafeArea()
             )
-            .opacity(browserModel.showGrid ? 1 : 0)
+            .opacity(gridVisibilityModel.showGrid ? 1 : 0)
             .disabled(isSearchingForTabs)
     }
 }

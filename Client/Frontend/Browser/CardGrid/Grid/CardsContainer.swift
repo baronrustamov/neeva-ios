@@ -149,6 +149,7 @@ struct CardsContainer: View {
     @EnvironmentObject var tabModel: TabCardModel
     @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var gridSwitcherModel: GridSwitcherModel
+    @EnvironmentObject var gridVisibilityModel: GridVisibilityModel
     @EnvironmentObject var incognitoModel: IncognitoModel
 
     // Used to rebuild the scene when switching between portrait and landscape.
@@ -171,7 +172,7 @@ struct CardsContainer: View {
                         }
                     }
                     .padding(.vertical, CardGridUX.GridSpacing)
-                    .useEffect(deps: browserModel.showGrid) { _ in
+                    .useEffect(deps: gridVisibilityModel.showGrid) { _ in
                         scrollProxy.scrollTo(
                             browserModel.gridModel.spaceCardModel.allDetails.first?.id ?? ""
                         )

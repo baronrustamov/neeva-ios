@@ -8,7 +8,6 @@ import SwiftUI
 private struct CollapsedCardStripTabGroupCardView: View {
     @ObservedObject var groupDetails: TabGroupCardDetails
 
-    @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var cardStripModel: CardStripModel
     @Environment(\.sizeCategory) private var sizeCategory
 

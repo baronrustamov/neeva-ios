@@ -6,17 +6,15 @@ import Combine
 import Shared
 import SwiftUI
 
+// This is the root model for the browser and is available via @EnvironmentObject to
+// any View. It explicitly does not have any @Published vars. This way it is safe to
+// access via @EnvironmentObject without worry about that causing unwanted updates to
+// the View graph. However as this provides a means to access just about any model
+// from anywhere, it can be all too easy for this to open the door to spaghetti code.
+// All of these models are also available in the environment as well, so you can use
+// them directly as needed and preserve more modular code design.
 class BrowserModel: ObservableObject {
-    // MARK: - Properties
-    @Published var showGrid = false {
-        didSet {
-            if showGrid {
-                // Ensures toolbars are visible when user closes from the CardGrid.
-                // Expand when set to true, so ready when user returns.
-                scrollingControlModel.showToolbars(animated: true, completion: nil)
-            }
-        }
-    }
+    private var subscription: AnyCancellable?
 
     let cardStripModel: CardStripModel
     let cardTransitionModel: CardTransitionModel
@@ -24,14 +22,12 @@ class BrowserModel: ObservableObject {
     let cookieCutterModel = CookieCutterModel()
     let gridModel: GridModel
     let incognitoModel: IncognitoModel
+    let overlayManager: OverlayManager
     let scrollingControlModel: ScrollingControlModel
     let switcherToolbarModel: SwitcherToolbarModel
     let tabManager: TabManager
-
-    let overlayManager: OverlayManager
     let toastViewManager: ToastViewManager
 
-    // MARK: - Methods
     func showGridWithAnimation() {
         gridModel.switcherModel.update(state: .tabs)
         gridModel.switcherModel.update(switchModeWithoutAnimation: true)
@@ -55,9 +51,7 @@ class BrowserModel: ObservableObject {
         contentVisibilityModel.update(showContent: false)
         overlayManager.hideCurrentOverlay(ofPriority: .modal)
 
-        if !showGrid {
-            showGrid = true
-        }
+        gridModel.visibilityModel.update(showGrid: true)
 
         updateSpaces()
     }
@@ -93,9 +87,7 @@ class BrowserModel: ObservableObject {
         gridModel.scrollModel.scrollToSelectedTab()
         cardTransitionModel.update(to: .hidden)
 
-        if showGrid {
-            showGrid = false
-        }
+        gridModel.visibilityModel.update(showGrid: false)
 
         overlayManager.hideCurrentOverlay(ofPriority: .modal)
         contentVisibilityModel.update(showContent: true)
@@ -113,7 +105,7 @@ class BrowserModel: ObservableObject {
     func onCompletedCardTransition() {
         // Prevents a bug where a tab wouldn't open upon select,
         // since the previous animation wasn't finished yet.
-        if showGrid, cardTransitionModel.state == .visibleForTrayShow {
+        if gridModel.visibilityModel.showGrid, cardTransitionModel.state == .visibleForTrayShow {
             cardTransitionModel.update(to: .hidden)
             gridModel.switcherModel.update(switchModeWithoutAnimation: false)
 
@@ -193,5 +185,13 @@ class BrowserModel: ObservableObject {
 
         self.overlayManager = overlayManager
         self.toastViewManager = toastViewManager
+
+        subscription = self.gridModel.visibilityModel.$showGrid.sink { [weak self] showGrid in
+            if showGrid {
+                // Ensures toolbars are visible when user closes from the CardGrid.
+                // Expand when set to true, so ready when user returns.
+                self?.scrollingControlModel.showToolbars(animated: true, completion: nil)
+            }
+        }
     }
 }

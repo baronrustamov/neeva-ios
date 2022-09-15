@@ -533,7 +533,7 @@ class BrowserViewController: UIViewController {
         // makes sure zeroQuery isn't already open
         guard zeroQueryModel.openedFrom == nil else { return }
 
-        if browserModel.showGrid {
+        if browserModel.gridModel.visibilityModel.showGrid {
             hideCardGrid(withAnimation: false)
         }
 
@@ -813,7 +813,7 @@ class BrowserViewController: UIViewController {
 
     /// Closes or hides any overlayed views and returns to the selected tab
     func popToBVC() {
-        if browserModel.showGrid {
+        if browserModel.gridModel.visibilityModel.showGrid {
             // Hides CardGrid
             browserModel.hideGridWithNoAnimation()
 
@@ -999,7 +999,7 @@ class BrowserViewController: UIViewController {
     }
 
     func showTabTray() {
-        guard !browserModel.showGrid else { return }
+        guard !browserModel.gridModel.visibilityModel.showGrid else { return }
 
         // log show tap tray
         ClientLogger.shared.logCounter(
@@ -1043,7 +1043,7 @@ class BrowserViewController: UIViewController {
 // MARK: URL Bar Delegate support code
 extension BrowserViewController {
     func urlBarDidEnterOverlayMode() {
-        if browserModel.showGrid || tabManager.selectedTab == nil {
+        if browserModel.gridModel.visibilityModel.showGrid || tabManager.selectedTab == nil {
             openLazyTab(openedFrom: .tabTray)
         } else {
             showZeroQuery(openedFrom: .openTab(tabManager.selectedTab))

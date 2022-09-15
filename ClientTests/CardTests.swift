@@ -378,6 +378,7 @@ class CardTests: XCTestCase {
         .environmentObject(spaceCardModel)
         .environmentObject(gridModel)
         .environmentObject(gridModel.switcherModel)
+        .environmentObject(gridModel.visibilityModel)
         .environmentObject(chromeModel)
 
         let tabGridContainer = try cardContainer.inspect().find(TabGridContainer.self)
@@ -412,6 +413,7 @@ class CardTests: XCTestCase {
         .environmentObject(spaceCardModel)
         .environmentObject(gridModel)
         .environmentObject(gridModel.switcherModel)
+        .environmentObject(gridModel.visibilityModel)
         .environmentObject(chromeModel)
 
         let spaceCardsView = try cardContainer.inspect().find(SpaceCardsView.self)
