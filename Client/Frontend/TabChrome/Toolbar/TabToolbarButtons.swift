@@ -251,6 +251,7 @@ enum TabToolbarButtons {
         let action: () -> Void
 
         @EnvironmentObject var browserModel: BrowserModel
+        @EnvironmentObject var cardStripModel: CardStripModel
         @EnvironmentObject var gridModel: GridModel
 
         var button: some View {
@@ -268,7 +269,9 @@ enum TabToolbarButtons {
                 .modifier(
                     MenuBuilder.ConfirmCloseAllTabsConfirmationDialog(
                         showMenu: $gridModel.showConfirmCloseAllTabs,
-                        tabManager: browserModel.tabManager)
+                        tabManager: browserModel.tabManager,
+                        onlyCloseTodayTabs: cardStripModel.showCardStrip
+                    )
                 )
                 .accessibilityLabel(Text("Show Tabs"))
         }

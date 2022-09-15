@@ -25,7 +25,14 @@ class ContextMenuActionsBuilder {
 
     struct CloseAllTabsAction: View {
         let tabManager: TabManager
+        let onlyCloseTodayTabs: Bool
         let action: () -> Void
+
+        var tabs: [Tab] {
+            tabManager.getTabsForCurrentType(limitToToday: onlyCloseTodayTabs).filter {
+                !$0.isPinned
+            }
+        }
 
         var label: some View {
             Label {
@@ -40,10 +47,7 @@ class ContextMenuActionsBuilder {
                 if Defaults[.confirmCloseAllTabs] {
                     action()
                 } else {
-                    tabManager.removeTabs(
-                        tabManager.isIncognito
-                            ? tabManager.incognitoTabs : tabManager.activeNormalTabs,
-                        showToast: true)
+                    tabManager.removeTabs(tabs, showToast: true)
                 }
             }
         }
@@ -239,9 +243,16 @@ class MenuBuilder {
     struct ConfirmCloseAllTabsConfirmationDialog: ViewModifier {
         @Binding var showMenu: Bool
         let tabManager: TabManager
+        let onlyCloseTodayTabs: Bool
+
+        var tabs: [Tab] {
+            tabManager.getTabsForCurrentType(limitToToday: onlyCloseTodayTabs).filter {
+                !$0.isPinned
+            }
+        }
 
         var numberOfTabs: Int {
-            tabManager.getTabCountForCurrentType()
+            tabs.count
         }
 
         var isIncognito: Bool {
@@ -255,7 +266,7 @@ class MenuBuilder {
 
             if #available(iOS 15.0, *) {
                 content.confirmationDialog(
-                    "Are you sure you want to close all open \(isIncognito ? "incognito " : "")tabs?",
+                    "Are you sure you want to close all open \(isIncognito ? "incognito " : "\(onlyCloseTodayTabs ? "today " : "")")tabs?",
                     isPresented: $showMenu
                 ) {
                     Button(role: .destructive) {
@@ -288,6 +299,8 @@ class MenuBuilder {
 
     // MARK: - ShowTabsButton Menu
     struct ShowTabsButtonMenu: ViewModifier {
+        @EnvironmentObject var browserModel: BrowserModel
+        @EnvironmentObject var cardStripModel: CardStripModel
         @EnvironmentObject var gridModel: GridModel
         @EnvironmentObject var incognitoModel: IncognitoModel
 
@@ -321,7 +334,10 @@ class MenuBuilder {
                 }
 
                 if gridModel.numberOfTabsForCurrentState > 1 {
-                    ContextMenuActionsBuilder.CloseAllTabsAction(tabManager: tabManager) {
+                    ContextMenuActionsBuilder.CloseAllTabsAction(
+                        tabManager: tabManager,
+                        onlyCloseTodayTabs: browserModel.cardStripModel.showCardStrip
+                    ) {
                         bvc.gridModel.showConfirmCloseAllTabs = true
                     }
                 }

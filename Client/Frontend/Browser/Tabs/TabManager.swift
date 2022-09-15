@@ -239,13 +239,17 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         }
     }
 
-    func getTabCountForCurrentType() -> Int {
+    func getTabCountForCurrentType(limitToToday: Bool = false) -> Int {
+        getTabsForCurrentType(limitToToday: limitToToday).count
+    }
+
+    func getTabsForCurrentType(limitToToday: Bool = false) -> [Tab] {
         let isIncognito = isIncognito
 
         if isIncognito {
-            return incognitoTabs.count
+            return incognitoTabs
         } else {
-            return activeNormalTabs.count
+            return limitToToday ? todaysTabs : activeNormalTabs
         }
     }
 

@@ -174,7 +174,10 @@ struct SwitcherToolbarView: View {
                 )
                 .padding(.horizontal, 10)  // a) Padding for contextMenu
                 .contextMenu {
-                    ContextMenuActionsBuilder.CloseAllTabsAction(tabManager: bvc.tabManager) {
+                    ContextMenuActionsBuilder.CloseAllTabsAction(
+                        tabManager: bvc.tabManager,
+                        onlyCloseTodayTabs: false
+                    ) {
                         gridModel.showConfirmCloseAllTabs = true
                     }
                 }
@@ -182,7 +185,9 @@ struct SwitcherToolbarView: View {
                 .modifier(
                     MenuBuilder.ConfirmCloseAllTabsConfirmationDialog(
                         showMenu: $gridModel.showConfirmCloseAllTabs,
-                        tabManager: browserModel.tabManager)
+                        tabManager: browserModel.tabManager,
+                        onlyCloseTodayTabs: false
+                    )
                 )
                 .allowsHitTesting(toolbarModel.tabIsSelected)
             }
