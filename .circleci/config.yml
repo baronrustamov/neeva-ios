@@ -75,7 +75,7 @@ commands:
     steps:
       - run:
           name: decode Certificates
-          command: base64 -D -o Certificates.p12 <<< $certificates
+          command: echo "$certificates" | base64 --decode > Certificates.p12
       - run:
           name: make Provisioning Profiles directory
           command: mkdir -pv ~/Library/MobileDevice/Provisioning\ Profiles/
