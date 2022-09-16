@@ -173,6 +173,7 @@ jobs:
     resource_class: macos.x86.medium.gen2
     steps:
       - bootstrap
+      - generate-user-scripts
       - ruby/install-deps
       - set-up-cert
       - run:
