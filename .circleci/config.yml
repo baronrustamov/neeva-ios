@@ -68,7 +68,25 @@ commands:
           key: swift-format-cache-{{ arch }}-{{ checksum "xcode_version" }}-{{ checksum "swift-format/Package.swift" }}
           paths:
             - swift-format/.build
-
+  set-up-cert:
+    steps:
+      - run:
+          name: decode Certificates
+          command: base64 -D -o Certificates.p12 <<< $certificates
+      - run:
+          name: make Provisioning Profiles directory
+          command: mkdir -pv ~/Library/MobileDevice/Provisioning\ Profiles/
+      - run:
+          name: decode Provisioning Profiles
+          command: |
+            base64 -D -o ~/Library/MobileDevice/Provisioning\ Profiles/widget.mobileprovision <<< $WIDGET_PROVISION
+            base64 -D -o ~/Library/MobileDevice/Provisioning\ Profiles/share.mobileprovision <<< $SHARE_PROVISION
+            base64 -D -o ~/Library/MobileDevice/Provisioning\ Profiles/safari.mobileprovision <<< $SAFARI_EXTENSION_PROVISION
+            base64 -D -o ~/Library/MobileDevice/Provisioning\ Profiles/notification.mobileprovision <<< $NOTIFICATION_EXTENSION_PROVISION
+            base64 -D -o ~/Library/MobileDevice/Provisioning\ Profiles/client_intent.mobileprovision <<< $CLIENT_INTENT_PROVISION
+            base64 -D -o ~/Library/MobileDevice/Provisioning\ Profiles/browser.mobileprovision <<< $BROWSER_PROVISION
+            base64 -D -o ~/Library/MobileDevice/Provisioning\ Profiles/appclip.mobileprovision <<< $APP_CLIP_PROVISION
+            base64 -D -o ~/Library/MobileDevice/Provisioning\ Profiles/appclip2.mobileprovision <<< $APP_CLIP_2_PROVISION
   test-client:
     steps:
       - run:
@@ -152,53 +170,11 @@ jobs:
     resource_class: macos.x86.medium.gen2
     steps:
       - bootstrap
-      - build-codegen
-      - build-client
-      - save_cache:
-          name: Save build cache
-          key: v1-build-{{ .Environment.CIRCLE_SHA1 }}
-          paths:
-            - ~/Library/Developer/Xcode/DerivedData
-  swift-format:
-    macos:
-      xcode: "13.4.1"
-    resource_class: macos.x86.medium.gen2
-    steps:
-      - restore-build-cache
-      - build-swift-format
-      - swift-format-check
-  test-client:
-    macos:
-      xcode: "13.4.1"
-    resource_class: macos.x86.medium.gen2
-    steps:
-      - restore-build-cache
-      - test-client
-      - build-app-clip
-      - app-clip-tests
-  ui-tests:
-    macos:
-      xcode: "13.4.1"
-    resource_class: macos.x86.medium.gen2
-    steps:
-      - restore-build-cache
-      - ui-tests
-  xcui-tests:
-    macos:
-      xcode: "13.4.1"
-    parallelism: 3
-    resource_class: macos.x86.medium.gen2
-    steps:
-      - restore-build-cache
-      - xcui-tests
-  xcui-tests-ipad:
-    macos:
-      xcode: "13.4.1"
-    parallelism: 3
-    resource_class: macos.x86.medium.gen2
-    steps:
-      - restore-build-cache
-      - xcui-tests-ipad
+      - ruby/install-deps
+      - run:
+          name: fastlane
+          command: bundle exec fastlane build
+      - save_artifacts
 workflows:
   version: 2
   build:
