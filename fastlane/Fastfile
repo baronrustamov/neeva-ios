@@ -18,6 +18,7 @@ default_platform(:ios)
 platform :ios do
   before_all do
     setup_circle_ci
+    app_store_connect_api_key
     import_certificate(
       keychain_name: ENV["MATCH_KEYCHAIN_NAME"],
       keychain_password: ENV["MATCH_KEYCHAIN_PASSWORD"],
