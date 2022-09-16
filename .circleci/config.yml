@@ -82,14 +82,14 @@ commands:
       - run:
           name: decode Provisioning Profiles
           command: |
-            base64 -D -o ~/Library/MobileDevice/Provisioning\ Profiles/widget.mobileprovision <<< $WIDGET_PROVISION
-            base64 -D -o ~/Library/MobileDevice/Provisioning\ Profiles/share.mobileprovision <<< $SHARE_PROVISION
-            base64 -D -o ~/Library/MobileDevice/Provisioning\ Profiles/safari.mobileprovision <<< $SAFARI_EXTENSION_PROVISION
-            base64 -D -o ~/Library/MobileDevice/Provisioning\ Profiles/notification.mobileprovision <<< $NOTIFICATION_EXTENSION_PROVISION
-            base64 -D -o ~/Library/MobileDevice/Provisioning\ Profiles/client_intent.mobileprovision <<< $CLIENT_INTENT_PROVISION
-            base64 -D -o ~/Library/MobileDevice/Provisioning\ Profiles/browser.mobileprovision <<< $BROWSER_PROVISION
-            base64 -D -o ~/Library/MobileDevice/Provisioning\ Profiles/appclip.mobileprovision <<< $APP_CLIP_PROVISION
-            base64 -D -o ~/Library/MobileDevice/Provisioning\ Profiles/appclip2.mobileprovision <<< $APP_CLIP_2_PROVISION
+            echo $WIDGET_PROVISION | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/widget.mobileprovision
+            echo $SHARE_PROVISION | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/share.mobileprovision
+            echo $SAFARI_EXTENSION_PROVISION | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/safari.mobileprovision
+            echo $NOTIFICATION_EXTENSION_PROVISION | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/notification.mobileprovision
+            echo $CLIENT_INTENT_PROVISION | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/client_intent.mobileprovision
+            echo $BROWSER_PROVISION | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/browser.mobileprovision
+            echo $APP_CLIP_PROVISION | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/appclip.mobileprovision
+            echo $APP_CLIP_2_PROVISION | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/appclip2.mobileprovision
   test-client:
     steps:
       - run:
