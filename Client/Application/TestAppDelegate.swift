@@ -173,6 +173,10 @@ class TestAppDelegate: AppDelegate {
             Defaults[.lastVersionNumber] = "1"
         }
 
+        if launchArguments.contains(LaunchArguments.SkipAdBlockOnboarding) {
+            Defaults[.cookieCutterOnboardingShowed] = true
+        }
+
         // Skip the intro when requested by for example tests or automation
         if launchArguments.contains(LaunchArguments.SkipIntro) {
             Defaults[.introSeen] = true

@@ -123,6 +123,6 @@ extension BaseTestCase {
         waitForExistence(app.buttons["Tracking Protection"])
         app.buttons["Tracking Protection"].tap()
 
-        waitForExistence(app.buttons["Cookie Cutter Settings"])
+        waitForExistence(app.buttons["Neeva Shield Settings"])
     }
 }

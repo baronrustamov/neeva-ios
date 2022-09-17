@@ -36,7 +36,7 @@ class TPStatsBlocklistsTests: XCTestCase {
 
         self.measureMetrics([.wallClockTime], automaticallyStartMeasuring: true) {
             for _ in 0..<100 {
-                _ = blocklists.urlIsInList(
+                _ = blocklists.findBlockedRuleInList(
                     URL(string: "https://www.neeva.com")!,
                     mainDocumentURL: URL(string: "http://foo.com")!,
                     safelistedDomains: safelistedRegexs)
@@ -58,9 +58,9 @@ class TPStatsBlocklistsTests: XCTestCase {
                 return wildcardContentBlockerDomainToRegex(domain: domain)
             }
             let mainDoc = URL(string: mainDoc)!
-            return blocklists.urlIsInList(
+            return blocklists.findBlockedRuleInList(
                 URL(string: urlString)!, mainDocumentURL: mainDoc,
-                safelistedDomains: safelistedRegexs)
+                safelistedDomains: safelistedRegexs) != nil
         }
         XCTAssertEqual(blocklist("https://www.facebook.com", "https://atlassolutions.com"), false)
         XCTAssertEqual(blocklist("https://www.neeva.com"), false)

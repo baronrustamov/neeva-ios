@@ -25,7 +25,7 @@ struct NotificationRow: View {
 
                 HStack {
                     if notification.isUnread && showUnreadBadge {
-                        NotificationBadge(count: nil)
+                        NotificationBadge(count: nil, fontSize: nil)
                             .padding(.trailing)
                     }
 

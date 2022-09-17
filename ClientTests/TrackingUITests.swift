@@ -49,10 +49,10 @@ class TrackingUITests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        domainsGoogle.forEach { stats = stats.create(host: $0) }
-        domainsAmazon.forEach { stats = stats.create(host: $0) }
-        domainsOutbrain.forEach { stats = stats.create(host: $0) }
-        domainsUnknownSource.forEach { stats = stats.create(host: $0) }
+        domainsGoogle.forEach { stats = stats.create(host: $0, adBlocked: false) }
+        domainsAmazon.forEach { stats = stats.create(host: $0, adBlocked: false) }
+        domainsOutbrain.forEach { stats = stats.create(host: $0, adBlocked: false) }
+        domainsUnknownSource.forEach { stats = stats.create(host: $0, adBlocked: false) }
 
         expectedEntities =
             Array.init(repeating: TrackingEntity.Google, count: domainsGoogle.count)
@@ -88,9 +88,9 @@ class TrackingUITests: XCTestCase {
 
     func testTrackingStatsViewModelTwoEntities() throws {
         var tempStats = TPPageStats()
-        domainsGoogle.forEach { tempStats = tempStats.create(host: $0) }
-        domainsAmazon.forEach { tempStats = tempStats.create(host: $0) }
-        domainsUnknownSource.forEach { tempStats = tempStats.create(host: $0) }
+        domainsGoogle.forEach { tempStats = tempStats.create(host: $0, adBlocked: false) }
+        domainsAmazon.forEach { tempStats = tempStats.create(host: $0, adBlocked: false) }
+        domainsUnknownSource.forEach { tempStats = tempStats.create(host: $0, adBlocked: false) }
 
         let tempData = TrackingEntity.getTrackingDataForCurrentTab(stats: tempStats)
         model = TrackingStatsViewModel(testingData: tempData)
@@ -140,9 +140,9 @@ class TrackingUITests: XCTestCase {
 
     func testWhosTrackingYouTwoEntities() throws {
         var tempStats = TPPageStats()
-        domainsGoogle.forEach { tempStats = tempStats.create(host: $0) }
-        domainsAmazon.forEach { tempStats = tempStats.create(host: $0) }
-        domainsUnknownSource.forEach { tempStats = tempStats.create(host: $0) }
+        domainsGoogle.forEach { tempStats = tempStats.create(host: $0, adBlocked: false) }
+        domainsAmazon.forEach { tempStats = tempStats.create(host: $0, adBlocked: false) }
+        domainsUnknownSource.forEach { tempStats = tempStats.create(host: $0, adBlocked: false) }
         let ui = TrackingMenuView()
             .environmentObject(
                 TrackingStatsViewModel(

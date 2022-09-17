@@ -79,7 +79,7 @@ extension Defaults.Keys {
     public static let contentBlockingStrength =
         Defaults.Key<String>("contentBlockingStrength", default: "easyPrivacyStrict")
     public static let adBlockEnabled =
-        Defaults.Key("adBlockEnabled", default: false)
+        Defaults.Key("adBlockEnabled", default: true)
 
     // MARK: - appearance app settings
     public static let customizeTheme = Defaults.Key<AppearanceThemeOption?>(

@@ -33,11 +33,11 @@ struct CookieCutterOnboardingView: View {
                 ) {
                     VStack(alignment: .leading, spacing: 8) {
                         Text(
-                            "Your Cookie Cutter just declined a **cookie popup** and blocked \(trackingStatsViewModel.numTrackers) **trackers**"
+                            "Your Neeva Shield just declined a **cookie popup** and blocked \(trackingStatsViewModel.numTrackers) **trackers**"
                         )
 
                         Text(
-                            "Cookie Cutter by Neeva stops annoying cookie popups and blocks invasive trackers across the web."
+                            "Neeva Shield stops annoying cookie popups and blocks invasive trackers across the web."
                         )
                     }
 
@@ -84,6 +84,7 @@ struct CookieCutterOnboardingView_Previews: PreviewProvider {
         CookieCutterOnboardingView(onOpenMyCookieCutter: {}, onRemindMeLater: {}, onDismiss: {})
             .environmentObject(
                 TrackingStatsViewModel(
-                    testingData: .init(numTrackers: 57, numDomains: 57, trackingEntities: [])))
+                    testingData: .init(
+                        numTrackers: 57, numDomains: 57, trackingEntities: [], numAdBlocked: 0)))
     }
 }

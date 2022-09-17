@@ -14,7 +14,7 @@ class CookieCutterTests: BaseTestCase {
     private func dismissPopover() {
         // For some reason tapping the screen stopped working on the tests.
         // Open settings and close it to exit the menu.
-        app.buttons["Cookie Cutter Settings"].tap()
+        app.buttons["Neeva Shield Settings"].tap()
         waitForExistence(app.buttons["Settings"])
         app.buttons["Settings"].tap()
         app.buttons["Done"].tap()
@@ -27,7 +27,7 @@ class CookieCutterTests: BaseTestCase {
 
         goToSettings()
         app.swipeUp()
-        app.buttons["Cookie Cutter"].tap()
+        app.buttons["Neeva Shield"].tap()
 
         waitForExistence(app.switches["CookieCutterGlobalToggle"])
         app.switches["CookieCutterGlobalToggle"].firstMatch.tap()
@@ -80,14 +80,14 @@ class CookieCutterTests: BaseTestCase {
         openURL()
 
         goToTrackingProtectionMenu()
-        app.buttons["Cookie Cutter Settings"].tap()
+        app.buttons["Neeva Shield Settings"].tap()
         waitForExistence(app.switches["Ad Blocking"])
     }
 
     func testCheckReloadToastShowsDisablingAllCookies() {
         goToSettings()
         app.swipeUp()
-        app.buttons["Cookie Cutter"].tap()
+        app.buttons["Neeva Shield"].tap()
 
         waitForExistence(app.staticTexts["Accept Non-essential Cookies"])
         app.staticTexts["Accept Non-essential Cookies"].tap()

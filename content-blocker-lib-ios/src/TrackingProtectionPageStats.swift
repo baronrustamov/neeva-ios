@@ -6,18 +6,22 @@ import Shared
 
 struct TPPageStats {
     var domains: [String]
+    var numAdBlocked: Int
 
     init() {
         domains = [String]()
+        numAdBlocked = 0
     }
 
-    private init(domains: [String], host: String) {
+    private init(domains: [String], host: String, numAdBlocked: Int) {
         self.domains = domains
         self.domains.append(host)
+        self.numAdBlocked = numAdBlocked
     }
 
-    func create(host: String) -> TPPageStats {
-        return TPPageStats(domains: domains, host: host)
+    func create(host: String, adBlocked: Bool) -> TPPageStats {
+        return TPPageStats(
+            domains: domains, host: host, numAdBlocked: adBlocked ? numAdBlocked + 1 : numAdBlocked)
     }
 }
 
@@ -27,18 +31,18 @@ class TPStatsBlocklistChecker {
     // Initialized async, is non-nil when ready to be used.
     private var blockLists: TPStatsBlocklists?
 
-    func isBlocked(url: URL, mainDocumentURL: URL) -> Deferred<Bool> {
-        let deferred = Deferred<Bool>()
+    func blockedRule(for url: URL, mainDocumentURL: URL) -> Deferred<TPStatsBlocklists.Rule?> {
+        let deferred = Deferred<TPStatsBlocklists.Rule?>()
         guard let blockLists = blockLists, let host = url.host, !host.isEmpty else {
             // TP Stats init isn't complete yet
-            deferred.fill(false)
+            deferred.fill(nil)
             return deferred
         }
 
         guard let domain = url.baseDomain, let docDomain = mainDocumentURL.baseDomain,
             domain != docDomain
         else {
-            deferred.fill(false)
+            deferred.fill(nil)
             return deferred
         }
 
@@ -46,9 +50,9 @@ class TPStatsBlocklistChecker {
         let safelistRegex = TrackingPreventionConfig.unblockedDomainsRegex
 
         DispatchQueue.global().async {
-            // Return true in the Deferred if the domain could potentially be blocked
+            // Return the rule in the Deferred if the domain could potentially be blocked
             deferred.fill(
-                blockLists.urlIsInList(
+                blockLists.findBlockedRuleInList(
                     url,
                     mainDocumentURL: mainDocumentURL,
                     safelistedDomains: safelistRegex))
@@ -200,13 +204,15 @@ class TPStatsBlocklists {
         }
     }
 
-    func urlIsInList(_ url: URL, mainDocumentURL: URL, safelistedDomains: [String]) -> Bool {
+    func findBlockedRuleInList(_ url: URL, mainDocumentURL: URL, safelistedDomains: [String])
+        -> Rule?
+    {
         let resourceString = url.absoluteString
 
         guard let firstPartyDomain = mainDocumentURL.baseDomain, let baseDomain = url.baseDomain,
             let rules = blockRules[baseDomain]
         else {
-            return false
+            return nil
         }
 
         domainSearch: for rule in rules {
@@ -223,16 +229,16 @@ class TPStatsBlocklists {
                 if let baseDomain = url.baseDomain, !safelistedDomains.isEmpty {
                     for ignoreDomain in safelistedDomains {
                         if baseDomain.range(of: ignoreDomain, options: .regularExpression) != nil {
-                            return false
+                            return nil
                         }
                     }
                 }
 
-                return true
+                return rule
             }
-            return false
+            return nil
         }
 
-        return false
+        return nil
     }
 }

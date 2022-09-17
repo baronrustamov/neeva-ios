@@ -16,7 +16,7 @@ struct TrackingMenuProtectionRowButton: View {
                 if Defaults[.cookieCutterEnabled] {
                     Toggle(isOn: $preventTrackers) {
                         DetailedSettingsLabel(
-                            title: "Cookie Cutter",
+                            title: "Neeva Shield",
                             description: "Site appears broken? Try deactivating."
                         )
                         .padding(.vertical, 12)
@@ -28,7 +28,7 @@ struct TrackingMenuProtectionRowButton: View {
                 } else {
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("Cookie Cutter")
+                            Text("Neeva Shield")
                                 .withFont(.bodyLarge)
 
                             Text("Deactivated. Activate in Settings.")
@@ -46,7 +46,7 @@ struct TrackingMenuProtectionRowButton: View {
                     openSettings(.cookieCutter)
                 } label: {
                     HStack {
-                        Text("Cookie Cutter Settings")
+                        Text("Neeva Shield Settings")
                             .foregroundColor(.label)
 
                         Spacer()
@@ -57,7 +57,7 @@ struct TrackingMenuProtectionRowButton: View {
                     .padding(.horizontal, GroupedCellUX.padding)
                     .frame(minHeight: GroupedCellUX.minCellHeight)
                 }
-                .accessibilityLabel(Text("Cookie Cutter Settings"))
+                .accessibilityLabel(Text("Neeva Shield Settings"))
                 .frame(minWidth: 275)
             }
         }

@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import Defaults
 import Shared
 import SwiftUI
 
@@ -48,7 +49,11 @@ struct LocationViewTrackingButton: View {
         }.presentAsPopover(
             isPresented: $trackingStatsModel.showTrackingStatsViewPopover,
             backgroundColor: .systemGroupedBackground,
-            arrowDirections: [.up, .down]
+            arrowDirections: [.up, .down],
+            onDismiss: {
+                trackingStatsModel.onboardingBlockType = nil
+                Defaults[.cookieCutterOnboardingShowed] = true
+            }
         ) {
             if chromeModel.inlineToolbar {
                 ScrollView {

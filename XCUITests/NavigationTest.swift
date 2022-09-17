@@ -18,6 +18,11 @@ let requestMobileSiteLabel = "Request Mobile Site"
 let requestDesktopSiteLabel = "Request Desktop Site"
 
 class NavigationTest: BaseTestCase {
+    override func setUp() {
+        launchArguments.append(LaunchArguments.SkipAdBlockOnboarding)
+        super.setUp()
+    }
+
     func testNavigation() {
         func checkForwardButtonDisabled() {
             if app.buttons["Forward"].exists {

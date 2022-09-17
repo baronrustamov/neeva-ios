@@ -12,7 +12,7 @@ enum ClearableDataType: String, Identifiable, Codable, CaseIterable {
     case archivedTabs = "Archived Tabs"
     case cache = "Cache"
     case cookies = "Cookies"
-    case cookieCutterExclusions = "Cookie Cutter Exclusions"
+    case cookieCutterExclusions = "Neeva Shield Exclusions"
 
     var id: String { rawValue }
 
@@ -23,7 +23,7 @@ enum ClearableDataType: String, Identifiable, Codable, CaseIterable {
         case .archivedTabs: return "Archived Tabs"
         case .cache: return "Cache"
         case .cookies: return "Cookies"
-        case .cookieCutterExclusions: return "Cookie Cutter Exclusions"
+        case .cookieCutterExclusions: return "Neeva Shield Exclusions"
         }
     }
 

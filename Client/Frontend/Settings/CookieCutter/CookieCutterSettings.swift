@@ -17,10 +17,10 @@ struct CookieCutterSettings: View {
             Section(
                 footer:
                     Text(
-                        "When disabled, turns off Cookie Cutter on all sites. Changing this will reload your tabs."
+                        "When disabled, turns off Neeva Shield on all sites. Changing this will reload your tabs."
                     )
             ) {
-                Toggle("Cookie Cutter", isOn: $cookieCutterEnabled)
+                Toggle("Neeva Shield", isOn: $cookieCutterEnabled)
                     .onChange(of: cookieCutterEnabled) { newValue in
                         cookieCutterModel.cookieCutterEnabled = newValue
                     }
@@ -73,7 +73,7 @@ struct CookieCutterSettings: View {
         .applyToggleStyle()
         .accessibilityIdentifier("cookieCutterSettingsPage")
         .listStyle(.insetGrouped)
-        .navigationTitle(Text("Cookie Cutter"))
+        .navigationTitle(Text("Neeva Shield"))
     }
 }
 

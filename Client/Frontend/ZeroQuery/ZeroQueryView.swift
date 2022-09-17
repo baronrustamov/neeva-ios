@@ -153,8 +153,30 @@ struct ZeroQueryView: View {
         promoCardView(parentGeom)
         suggestedSitesView(parentGeom)
         searchesView
-        spacesView
+        // TODO: set up experiment
+        //spacesView
+        adBlockAnnouncement
         firstRunBranding
+    }
+
+    @ViewBuilder private var adBlockAnnouncement: some View {
+        if !Defaults[.didFirstNavigation] {
+            VStack(alignment: .leading, spacing: 30) {
+                ShieldWithBadgeView(
+                    foregroundSymbol: .checkmarkCircleFill, foregroundColor: .blue,
+                    backgroundSymbol: .checkmarkCircle, backgroundColor: .white
+                )
+                .padding(.top, 15)
+                .padding(.leading, -15)
+                Text("Neeva Ad Blocker is activated").withFont(.headingLarge)
+                Text(
+                    "Browse faster without spammy, screen-filling ads. Experience the web without ads today."
+                ).withFont(.bodyMedium)
+                    .padding(.bottom, 15)
+            }.padding(.horizontal, 32).padding(.vertical, 15).overlay(
+                RoundedRectangle(cornerRadius: 20).stroke(Color.ui.adaptive.blue, lineWidth: 2)
+            ).padding(15)
+        }
     }
 
     @ViewBuilder private var firstRunBranding: some View {

@@ -34,10 +34,11 @@ extension TabContentBlocker {
             components.scheme = "http"
             guard let url = components.url else { return }
 
-            TPStatsBlocklistChecker.shared.isBlocked(url: url, mainDocumentURL: mainDocumentUrl)
-                .uponQueue(.main) { blocked in
-                    if blocked, let host = url.host {
-                        self.stats = self.stats.create(host: host)
+            TPStatsBlocklistChecker.shared.blockedRule(for: url, mainDocumentURL: mainDocumentUrl)
+                .uponQueue(.main) { rule in
+                    if let rule = rule, let host = url.host {
+                        self.stats = self.stats.create(
+                            host: host, adBlocked: rule.list == BlocklistCategory.easyListAdBlock)
                     }
                 }
         }

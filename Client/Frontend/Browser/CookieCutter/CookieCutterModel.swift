@@ -76,30 +76,33 @@ class CookieCutterModel: ObservableObject {
 
     // MARK: - Methods
     func cookieWasHandled(bvc: BrowserViewController, domain: String?) {
-        if !Defaults[.cookieCutterOnboardingShowed] {
-            Defaults[.cookieCutterOnboardingShowed] = true
+        // TODO: Set up experiment
+        //        if !Defaults[.cookieCutterOnboardingShowed] {
+        //            Defaults[.cookieCutterOnboardingShowed] = true
+        //
+        //            bvc.showModal(style: OverlayStyle(showTitle: false, expandPopoverWidth: true)) {
+        //                CookieCutterOnboardingView {
+        //                    bvc.overlayManager.hideCurrentOverlay(ofPriority: .modal) {
+        //                        bvc.trackingStatsViewModel.showTrackingStatsViewPopover = true
+        //                    }
+        //                } onRemindMeLater: {
+        //                    NotificationPermissionHelper.shared.requestPermissionIfNeeded(
+        //                        from: bvc,
+        //                        showChangeInSettingsDialogIfNeeded: true,
+        //                        callSite: .defaultBrowserInterstitial
+        //                    ) { _ in
+        //                        LocalNotifications.scheduleNeevaOnboardingCallback(
+        //                            notificationType: .neevaOnboardingCookieCutter)
+        //                    }
+        //                } onDismiss: {
+        //                    bvc.overlayManager.hideCurrentOverlay(ofPriority: .modal)
+        //                }
+        //                .overlayIsFixedHeight(isFixedHeight: true)
+        //                .environmentObject(bvc.trackingStatsViewModel)
+        //            }
+        //        }
 
-            bvc.showModal(style: OverlayStyle(showTitle: false, expandPopoverWidth: true)) {
-                CookieCutterOnboardingView {
-                    bvc.overlayManager.hideCurrentOverlay(ofPriority: .modal) {
-                        bvc.trackingStatsViewModel.showTrackingStatsViewPopover = true
-                    }
-                } onRemindMeLater: {
-                    NotificationPermissionHelper.shared.requestPermissionIfNeeded(
-                        from: bvc,
-                        showChangeInSettingsDialogIfNeeded: true,
-                        callSite: .defaultBrowserInterstitial
-                    ) { _ in
-                        LocalNotifications.scheduleNeevaOnboardingCallback(
-                            notificationType: .neevaOnboardingCookieCutter)
-                    }
-                } onDismiss: {
-                    bvc.overlayManager.hideCurrentOverlay(ofPriority: .modal)
-                }
-                .overlayIsFixedHeight(isFixedHeight: true)
-                .environmentObject(bvc.trackingStatsViewModel)
-            }
-        }
+        bvc.trackingStatsViewModel.didBlockCookiePopup = cookiesBlocked
 
         if let domain = domain {
             // Also flag site here in case flagSite wasn't called by the engine.

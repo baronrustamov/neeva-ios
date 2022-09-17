@@ -38,7 +38,7 @@ struct PrivacySettingsSection: View {
         NavigationLink(isActive: $openCookieCutterPage) {
             CookieCutterSettings(cookieCutterEnabled: cookieCutterModel.cookieCutterEnabled)
         } label: {
-            Text("Cookie Cutter")
+            Text("Neeva Shield")
         }.id("cookie-cutter-setting")
 
         NavigationLinkButton("Privacy Policy") {

@@ -15,6 +15,7 @@ public struct LaunchArguments {
     public static let SetSignInOnce = "SIGN_IN_ONCE"
     public static let SetDidFirstNavigation = "DID_FIRST_NAVIGATION"
     public static let ForceExperimentControlArm = "FORCE_EXPERIMENT_CONTROL_ARM"
+    public static let SkipAdBlockOnboarding = "SKIP_AD_BLOCK_ONBOARDING"
 
     // After the colon, put the name of the file to load from test bundle
     public static let LoadDatabasePrefix = "NEEVA_LOAD_DB_NAMED:"

@@ -18,7 +18,7 @@ class HistoryTests: BaseTestCase {
     // This DDBB contains those 4 websites listed in the name
     let historyDB = "browserYoutubeTwitterMozillaExample.db"
     let clearBrowsingDataOptions = [
-        "Browsing History", "Archived Tabs", "Cache", "Cookies", "Cookie Cutter Exclusions",
+        "Browsing History", "Archived Tabs", "Cache", "Cookies", "Neeva Shield Exclusions",
     ]
 
     override func setUp() {

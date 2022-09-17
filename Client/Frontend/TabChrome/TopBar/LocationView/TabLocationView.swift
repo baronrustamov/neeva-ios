@@ -103,21 +103,19 @@ struct TabLocationView: View {
                     }
                 } leading: {
                     if model.url?.scheme == "https" || model.url?.scheme == "http" {
-                        if trackingStatsModel.numTrackers > 0 {
-                            NotificationBadgeOverlay(
-                                from: NotificationBadgeLocation.topRight,
-                                count: trackingStatsModel.numTrackers,
-                                value: trackingStatsModel.numTrackers == 1
-                                    ? "1 Tracker Blocked"
-                                    : "\(trackingStatsModel.numTrackers) Trackers Blocked",
-                                content:
-                                    LocationViewTrackingButton(
-                                        currentDomain: model.url?.baseDomain ?? "")
-                            ).frame(width: 80, alignment: .leading)
-                        } else {
-                            LocationViewTrackingButton(
-                                currentDomain: model.url?.baseDomain ?? "")
-                        }
+                        NotificationBadgeOverlay(
+                            from: NotificationBadgeLocation.topRight,
+                            count: trackingStatsModel.numTrackers,
+                            value: trackingStatsModel.numTrackers == 1
+                                ? "1 Tracker Blocked"
+                                : "\(trackingStatsModel.numTrackers) Trackers Blocked",
+                            showBadgeOnZero: false,
+                            contentSize: nil,
+                            fontSize: nil,
+                            content:
+                                LocationViewTrackingButton(
+                                    currentDomain: model.url?.baseDomain ?? "")
+                        ).frame(width: 80, alignment: .leading)
                     }
                 } trailing: {
                     Group {

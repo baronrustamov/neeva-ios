@@ -9,6 +9,7 @@ struct TrackingData {
     let numTrackers: Int
     let numDomains: Int
     let trackingEntities: [TrackingEntity]
+    let numAdBlocked: Int
 }
 
 enum TrackingEntity: String {
@@ -33,6 +34,7 @@ enum TrackingEntity: String {
             .reduce(into: [String: Int]()) { dict, domain in
                 dict[domain] = (dict[domain] ?? 0) + 1
             }.count
+        let numAdBlocked = stats?.numAdBlocked ?? 0
         let trackingEntities = domainsCollapsedAcrossCategories.map { (domain) -> TrackingEntity? in
             for element in trackingEntityMap {
                 guard let baseDomain = URL(string: "https://" + domain)?.baseDomain else {
@@ -47,7 +49,8 @@ enum TrackingEntity: String {
         return TrackingData(
             numTrackers: numTrackers,
             numDomains: numDomains,
-            trackingEntities: trackingEntities)
+            trackingEntities: trackingEntities,
+            numAdBlocked: numAdBlocked)
     }
 }
 
