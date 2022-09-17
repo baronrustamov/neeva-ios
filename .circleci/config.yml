@@ -3,6 +3,11 @@ version: 2.1
 orbs:
   ruby: circleci/ruby@1.2.0
 
+parameters:
+  deploy-app:
+    type: boolean
+    default: false
+
 commands:
   bootstrap:
     steps:
@@ -183,5 +188,6 @@ jobs:
 workflows:
   version: 2
   build:
+    when: << pipeline.parameters.deploy-app >>
     jobs:
       - build
