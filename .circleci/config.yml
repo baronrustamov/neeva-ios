@@ -177,13 +177,18 @@ jobs:
       xcode: "13.4.1"
     resource_class: macos.x86.medium.gen2
     steps:
-      - bootstrap
-      - generate-user-scripts
-      - ruby/install-deps
-      - set-up-cert
+#      - bootstrap
+#      - generate-user-scripts
+#      - ruby/install-deps
+#      - set-up-cert
+#      - run:
+#          name: fastlane
+#          command: bundle exec fastlane build
       - run:
-          name: fastlane
-          command: bundle exec fastlane build
+          name: create branch
+          command: |
+            git checkout -b chung/test-branch-for-fastlane
+            git push origin chung/test-branch-for-fastlane
       - save-artifacts
 workflows:
   version: 2
