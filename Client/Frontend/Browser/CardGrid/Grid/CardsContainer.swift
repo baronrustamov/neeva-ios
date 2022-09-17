@@ -82,7 +82,6 @@ struct TabGridContainer: View {
         .if(tabModel.isSearchingForTabs) {
             $0.padding(.bottom, safeArea.bottom + FindInPageViewUX.height)
         }
-        .animation(nil)
     }
 
     func scrollToSelectedRowId() {
@@ -119,8 +118,8 @@ struct CardScrollContainer<Content: View>: View {
         // 2. scrollView wouldn't push down when the bottom tab is closed if the
         // animation is nil
         .animation(
-            (gridSwitcherModel.gridCanAnimate
-                ? .interactiveSpring() : tabModel.tabsDidChange ? .default : nil)
+            (gridSwitcherModel.gridCanAnimate || tabModel.tabsDidChange
+                ? .interactiveSpring() : nil)
         )
         .accessibilityIdentifier("CardGrid")
         .environment(\.columns, columns)
@@ -179,6 +178,9 @@ struct CardsContainer: View {
                     }
                 }
                 .offset(x: (gridSwitcherModel.state == .spaces ? 0 : geom.widthIncludingSafeArea))
+                .animation(
+                    gridSwitcherModel.switchModeWithoutAnimation ? nil : .interactiveSpring()
+                )
                 .accessibilityElement(children: .contain)
                 .accessibilityLabel("Spaces")
                 .accessibilityHidden(gridSwitcherModel.state != .spaces)

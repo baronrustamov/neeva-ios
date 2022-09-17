@@ -27,21 +27,19 @@ class GridScrollModel: ObservableObject {
 }
 
 class GridSwitcherModel: ObservableObject {
-    let tabManager: TabManager
+    private let tabManager: TabManager
+    private var incognitoListener: AnyCancellable?
 
-    init(tabManager: TabManager) {
-        self.tabManager = tabManager
-    }
-
+    @Published private(set) var gridCanAnimate = false
     @Published private(set) var state: SwitcherView = .tabs
+    @Published private(set) var switchModeWithoutAnimation = false
 
     func update(state: SwitcherView) {
         guard self.state != state else {
             return
         }
 
-        gridCanAnimate = true
-
+        self.enableCanAnimateForShortDuration()
         self.state = state
 
         if case .spaces = state {
@@ -49,15 +47,10 @@ class GridSwitcherModel: ObservableObject {
                 .SpacesUIVisited,
                 attributes: EnvironmentHelper.shared.getAttributes())
         }
+
         SceneDelegate.getCurrentSceneDelegate(with: tabManager.scene)?
             .setSceneUIState(to: .cardGrid(state, tabManager.isIncognito))
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.gridCanAnimate = false
-        }
     }
-
-    @Published private(set) var switchModeWithoutAnimation = false
 
     func update(switchModeWithoutAnimation: Bool) {
         if self.switchModeWithoutAnimation != switchModeWithoutAnimation {
@@ -65,7 +58,21 @@ class GridSwitcherModel: ObservableObject {
         }
     }
 
-    @Published private(set) var gridCanAnimate = false
+    private func enableCanAnimateForShortDuration() {
+        self.gridCanAnimate = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.gridCanAnimate = false
+        }
+    }
+
+    init(tabManager: TabManager) {
+        self.tabManager = tabManager
+
+        // Turns on the grid animation when switching between incognito/normal tabs.
+        incognitoListener = tabManager.incognitoModel.$isIncognito.sink { _ in
+            self.enableCanAnimateForShortDuration()
+        }
+    }
 }
 
 class GridVisibilityModel: ObservableObject {
