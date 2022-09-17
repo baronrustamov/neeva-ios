@@ -13,7 +13,7 @@ struct WelcomeFlowIntroView: View {
     @State private var collectUsageStats = true
 
     var bullets = [
-        ("Private", "Block pesky trackers and cookie pop-ups"),
+        ("Private", "Search anonymously and block trackers"),
         ("Unbiased", "No advertisers controlling what you see"),
     ]
 
