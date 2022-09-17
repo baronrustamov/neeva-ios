@@ -149,6 +149,7 @@ struct CardGrid: View {
     }
 
     var body: some View {
+        let _ = debugCount("CardGrid.body")
         ZStack {
             cardContainer
                 .background(CardGridBackground())

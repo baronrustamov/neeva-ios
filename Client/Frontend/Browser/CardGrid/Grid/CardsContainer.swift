@@ -72,6 +72,7 @@ struct TabGridContainer: View {
     }
 
     var body: some View {
+        let _ = debugCount("TabGridContainer.body")
         LazyVStack(alignment: .leading, spacing: 0) {
             TabGridRowsView(
                 containerGeometry: geom,
@@ -177,9 +178,13 @@ struct CardsContainer: View {
     @Default(.seenSpacesIntro) var seenSpacesIntro: Bool
 
     @EnvironmentObject var browserModel: BrowserModel
-    @EnvironmentObject var gridSwitcherModel: GridSwitcherModel
+    //    @EnvironmentObject var gridSwitcherModel: GridSwitcherModel
     @EnvironmentObject var incognitoModel: IncognitoModel
     @EnvironmentObject var tabModel: TabCardModel
+
+    // XXX This eliminate one CardsContainer update, so we should figure out how to
+    // isolate this dependency.
+    var gridSwitcherModel: GridSwitcherModel { browserModel.gridModel.switcherModel }
 
     // Used to rebuild the scene when switching between portrait and landscape.
     @State var orientation: UIDeviceOrientation = .unknown
@@ -188,7 +193,9 @@ struct CardsContainer: View {
     let columns: [GridItem]
 
     var body: some View {
+        let _ = debugCount("CardsContainer.body")
         GeometryReader { geom in
+            let _ = debugCount("CardsContainer geom \(geom.size) \(geom.safeAreaInsets)")
             ZStack {
                 // Spaces
                 CardScrollContainer(columns: columns) { scrollProxy in

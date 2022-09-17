@@ -29,6 +29,7 @@ class BrowserModel: ObservableObject {
     let toastViewManager: ToastViewManager
 
     func showGridWithAnimation() {
+        print(">>> showGridWithAnimation")
         gridModel.switcherModel.update(state: .tabs)
         gridModel.switcherAnimationModel.update(switchWithAnimation: false)
         gridModel.tabCardModel.updateIfNeeded()
@@ -38,6 +39,7 @@ class BrowserModel: ObservableObject {
         } else {
             overlayManager.hideCurrentOverlay(ofPriority: .modal)
             gridModel.scrollModel.scrollToSelectedTab { [self] in
+                print(">>> did scrollToSelectedTab")
                 cardTransitionModel.update(to: .visibleForTrayShow)
                 contentVisibilityModel.update(showContent: false)
                 updateSpaces()
@@ -66,6 +68,7 @@ class BrowserModel: ObservableObject {
     }
 
     func hideGridWithAnimation(tabToBeSelected: Tab? = nil) {
+        print(">>> hideGridWithAnimation")
         assert(!gridModel.tabCardModel.allDetails.isEmpty)
 
         let tabToBeSelected = tabToBeSelected ?? tabManager.selectedTab
@@ -78,6 +81,7 @@ class BrowserModel: ObservableObject {
 
         overlayManager.hideCurrentOverlay(ofPriority: .modal)
         gridModel.scrollModel.scrollToSelectedTab { [self] in
+            print(">>> did scrollToSelectedTab")
             cardTransitionModel.update(to: .visibleForTrayHidden)
             gridModel.closeDetailView()
         }
@@ -103,6 +107,7 @@ class BrowserModel: ObservableObject {
     }
 
     func onCompletedCardTransition() {
+        print(">>> onCompletedCardTransition")
         // Prevents a bug where a tab wouldn't open upon select,
         // since the previous animation wasn't finished yet.
         if gridModel.visibilityModel.showGrid, cardTransitionModel.state == .visibleForTrayShow {

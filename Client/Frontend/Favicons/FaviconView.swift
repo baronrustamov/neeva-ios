@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import SDWebImageSwiftUI
+import Shared
 import Storage
 import SwiftUI
 
@@ -27,6 +28,7 @@ struct FaviconView: View {
     }
 
     var body: some View {
+        let _ = debugCount("FaviconView.body")
         WebImage(url: resolver.faviconUrl)
             .resizable()
             .placeholder {
