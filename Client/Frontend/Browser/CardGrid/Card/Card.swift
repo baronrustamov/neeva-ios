@@ -64,13 +64,24 @@ struct CardThumbnail<Details>: View where Details: CardDetails {
     }
 }
 
+struct CardAccessibilityFocusModifier<Details>: ViewModifier where Details: CardDetails {
+    @ObservedObject var details: Details
+    @EnvironmentObject var cardTransitionModel: CardTransitionModel
+
+    func body(content: Content) -> some View {
+        content
+            .accesibilityFocus(
+                shouldFocus: details.isSelected, trigger: cardTransitionModel.state == .hidden
+            )
+    }
+}
+
 /// A flexible card that takes up as much space as it is allotted.
 struct Card<Details>: View where Details: CardDetails {
     @ObservedObject var details: Details
     var dragToClose = false
-    /// Whether — if this card is selected — the blue border should be drawn
-    var showsSelection = true
     var animate = false
+    var showGrid = true
 
     var tabCardDetail: TabCardDetails? {
         details as? TabCardDetails
@@ -78,8 +89,6 @@ struct Card<Details>: View where Details: CardDetails {
 
     @Environment(\.selectionCompletion) private var selectionCompletion
     @EnvironmentObject private var incognitoModel: IncognitoModel
-    @EnvironmentObject var cardTransitionModel: CardTransitionModel
-    @EnvironmentObject var gridVisibilityModel: GridVisibilityModel
     @State private var isPressed = false
 
     var body: some View {
@@ -96,10 +105,10 @@ struct Card<Details>: View where Details: CardDetails {
                         }
                 }
                 .buttonStyle(.reportsPresses(to: $isPressed))
-                .cornerRadius(animate && !gridVisibilityModel.showGrid ? 0 : CardUX.CornerRadius)
+                .cornerRadius(animate && !showGrid ? 0 : CardUX.CornerRadius)
                 .modifier(
                     BorderTreatment(
-                        isSelected: showsSelection && details.isSelected,
+                        isSelected: showGrid && details.isSelected,
                         thumbnailDrawsHeader: details.thumbnailDrawsHeader,
                         isIncognito: incognitoModel.isIncognito)
                 )
@@ -119,7 +128,7 @@ struct Card<Details>: View where Details: CardDetails {
                     }
                     .frame(width: max(0, geom.size.width), height: CardUX.ButtonSize)
                     .background(Color.clear)
-                    .opacity(animate && !gridVisibilityModel.showGrid ? 0 : 1)
+                    .opacity(animate && !showGrid ? 0 : 1)
                 }
             }
         }
@@ -128,13 +137,11 @@ struct Card<Details>: View where Details: CardDetails {
         .modifier(ActionsModifier(close: details.closeButtonImage == nil ? nil : details.onClose))
         .modifier(
             CloseButtonModifier(
-                details: details, animate: animate, showGrid: gridVisibilityModel.showGrid,
+                details: details, animate: animate, showGrid: showGrid,
                 dragToClose: dragToClose)
         )
         .accessibilityAddTraits(.isButton)
-        .accesibilityFocus(
-            shouldFocus: details.isSelected, trigger: cardTransitionModel.state == .hidden
-        )
+        .modifier(CardAccessibilityFocusModifier(details: details))
         .if(!animate) { view in
             view
                 .scaleEffect(isPressed ? 0.95 : 1)

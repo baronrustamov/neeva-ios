@@ -73,11 +73,9 @@ struct CardTransitionModifier<Details: CardDetails>: ViewModifier {
     @ViewBuilder var overlayCard: some View {
         if let tabGroupDetails = details as? TabGroupCardDetails {
             let selectedTabDetails = (tabGroupDetails.allDetails.first { $0.isSelected })!
-            Card(
-                details: selectedTabDetails, showsSelection: gridVisibilityModel.showGrid,
-                animate: true)
+            Card(details: selectedTabDetails, animate: true, showGrid: gridVisibilityModel.showGrid)
         } else {
-            Card(details: details, showsSelection: gridVisibilityModel.showGrid, animate: true)
+            Card(details: details, animate: true, showGrid: gridVisibilityModel.showGrid)
         }
     }
 
