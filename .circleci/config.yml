@@ -151,68 +151,25 @@ jobs:
       xcode: "13.4.1"
     resource_class: macos.x86.medium.gen2
     steps:
-      - bootstrap
-      - build-codegen
-      - build-client
-      - save_cache:
-          name: Save build cache
-          key: v1-build-{{ .Environment.CIRCLE_SHA1 }}
-          paths:
-            - ~/Library/Developer/Xcode/DerivedData
-  swift-format:
+      - run:
+          name: testing
+          command: echo "kick off tag creation"
+  build-deploy:
     macos:
       xcode: "13.4.1"
     resource_class: macos.x86.medium.gen2
     steps:
-      - restore-build-cache
-      - build-swift-format
-      - swift-format-check
-  test-client:
-    macos:
-      xcode: "13.4.1"
-    resource_class: macos.x86.medium.gen2
-    steps:
-      - restore-build-cache
-      - test-client
-      - build-app-clip
-      - app-clip-tests
-  ui-tests:
-    macos:
-      xcode: "13.4.1"
-    resource_class: macos.x86.medium.gen2
-    steps:
-      - restore-build-cache
-      - ui-tests
-  xcui-tests:
-    macos:
-      xcode: "13.4.1"
-    parallelism: 3
-    resource_class: macos.x86.medium.gen2
-    steps:
-      - restore-build-cache
-      - xcui-tests
-  xcui-tests-ipad:
-    macos:
-      xcode: "13.4.1"
-    parallelism: 3
-    resource_class: macos.x86.medium.gen2
-    steps:
-      - restore-build-cache
-      - xcui-tests-ipad
+      - run:
+          name: deploy
+          command: echo "deploy"
+
 workflows:
   version: 2
   build:
     jobs:
       - build
-      - swift-format:
-          requires: [build]
-      - test-client:
-          requires: [build]
-      - ui-tests:
-          requires: [build]
-      - xcui-tests:
-          requires: [build]
-          context: ios-testing
-      - xcui-tests-ipad:
-          requires: [build]
-          context: ios-testing
+      - build-deploy:
+          filters:
+              tags:
+                only: /chungfastlane\/.*/
+      
