@@ -6,14 +6,34 @@ import Defaults
 import Foundation
 import Shared
 
+private struct UtilVersion {
+    let canonical: String
+    let hasher: String
+
+    static let `default`: Self = UtilVersion(
+        canonical: "5aa27ef",
+        hasher: "fe7351f"
+    )
+}
+
 private struct Checksum: Decodable {
+    // Binary file hashes
     let sha: String
     let md5: String
+
+    // hash function versioning
+    let hash: String
+    // canonicalization versioning
+    let canon: String
 
     static func load(from url: URL) throws -> Self {
         precondition(!Thread.isMainThread)
         let data = try Data(contentsOf: url)
         return try JSONDecoder().decode(Checksum.self, from: data)
+    }
+
+    func match(utilVersion: UtilVersion) -> Bool {
+        hash == utilVersion.hasher && canon == utilVersion.canonical
     }
 }
 
@@ -26,6 +46,7 @@ private enum BloomFilterLoader {
         case invalidChecksumData
         case invalidFilterBinaryFile
         case downloadedFileNotFound
+        case utilVersionExpectationMismatch
     }
 
     struct ResourceLocation {
@@ -60,7 +81,9 @@ private enum BloomFilterLoader {
     }()
 
     static func loadFilter(
-        with locations: ResourceLocation, completion: @escaping (LoaderResult) -> Void
+        with locations: ResourceLocation,
+        expected utilVersions: UtilVersion,
+        completion: @escaping (LoaderResult) -> Void
     ) {
         // check url validity
         guard locations.binUrl.lastPathComponent.hasSuffix(".bin"),
@@ -97,6 +120,9 @@ private enum BloomFilterLoader {
 
             do {
                 checksum = try Checksum.load(from: tempURL)
+                if !checksum.match(utilVersion: utilVersions) {
+                    throw LoaderError.utilVersionExpectationMismatch
+                }
             } catch {
                 completion(.failure(error))
                 return
@@ -295,7 +321,8 @@ private class FilterResource {
                     checksumURL: self.checksumURL,
                     binUrl: self.filterURL,
                     saveToURL: self.saveToPath
-                )
+                ),
+                expected: .default
             ) { [weak self] result in
                 // BloomFilterLoader may call completion handler on some other thread
                 // return to the instance's private queue for state mutation
