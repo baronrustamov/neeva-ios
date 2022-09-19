@@ -314,7 +314,7 @@ struct TrackingMenuView: View {
                             : "\(viewModel.numTrackers) Trackers Blocked", showBadgeOnZero: false,
                         contentSize: CGSize(width: 32, height: 32), fontSize: 15,
                         content:
-                            Image("welcome-shield", bundle: .main)
+                            Image("neeva-shield", bundle: .main)
                             .frame(width: 32, height: 32)
                     )
                 } else if viewModel.onboardingBlockType == .cookiePopup {
