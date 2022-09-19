@@ -11,30 +11,12 @@
         }
       },
       {
-        "package": "BigInt",
-        "repositoryURL": "https://github.com/attaswift/BigInt.git",
-        "state": {
-          "branch": null,
-          "revision": "0ed110f7555c34ff468e72e1686e59721f2b0da6",
-          "version": "5.3.0"
-        }
-      },
-      {
         "package": "CodeScanner",
         "repositoryURL": "https://github.com/twostraws/CodeScanner",
         "state": {
           "branch": null,
           "revision": "c27a66149b7483fe42e2ec6aad61d5c3fffe522d",
           "version": "2.1.1"
-        }
-      },
-      {
-        "package": "CryptoSwift",
-        "repositoryURL": "https://github.com/krzyzanowskim/CryptoSwift.git",
-        "state": {
-          "branch": null,
-          "revision": "12f2389aca4a07e0dd54c86ec23d0721ed88b8db",
-          "version": "1.4.3"
         }
       },
       {
@@ -62,15 +44,6 @@
           "branch": null,
           "revision": "6b27393cad517c067dceea85fadf050e70c4ceaa",
           "version": "1.10.1"
-        }
-      },
-      {
-        "package": "PromiseKit",
-        "repositoryURL": "https://github.com/mxcl/PromiseKit.git",
-        "state": {
-          "branch": null,
-          "revision": "3fd8c77ded8a4bbee548e3bd6c987ffe8c1e3574",
-          "version": "6.17.0"
         }
       },
       {
@@ -110,15 +83,6 @@
         }
       },
       {
-        "package": "Starscream",
-        "repositoryURL": "https://github.com/daltoniam/Starscream.git",
-        "state": {
-          "branch": null,
-          "revision": "df8d82047f6654d8e4b655d1b1525c64e1059d21",
-          "version": "4.0.4"
-        }
-      },
-      {
         "package": "HTMLEntities",
         "repositoryURL": "https://github.com/Kitura/swift-html-entities.git",
         "state": {
@@ -143,24 +107,6 @@
           "branch": null,
           "revision": "6b88c4ec1fa20cf38f2138052e63c8e79df5d76e",
           "version": "0.9.1"
-        }
-      },
-      {
-        "package": "WalletConnectSwift",
-        "repositoryURL": "https://github.com/WalletConnect/WalletConnectSwift.git",
-        "state": {
-          "branch": null,
-          "revision": "f316e6dd91639d6e3e5a4c8860d823c08cc71bc3",
-          "version": "1.6.2"
-        }
-      },
-      {
-        "package": "Web3swift",
-        "repositoryURL": "https://github.com/skywinder/web3swift",
-        "state": {
-          "branch": null,
-          "revision": "6ebfd9a5f19a3d9cd0fbaa478c9408c81847d836",
-          "version": null
         }
       },
       {

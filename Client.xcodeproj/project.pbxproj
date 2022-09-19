@@ -5439,13 +5439,10 @@
 				4A3D2996268993FE0082F293 /* XCRemoteSwiftPackageReference "ViewInspector" */,
 				C82719EB26FE734500EC9EF9 /* XCRemoteSwiftPackageReference "sindresorhus-Defaults" */,
 				6786EA752759545A00B53127 /* XCRemoteSwiftPackageReference "plcrashreporter" */,
-				BCAAA0CE276D979B0013223E /* XCRemoteSwiftPackageReference "web3swift" */,
-				4A93B53B2775909500CD5415 /* XCRemoteSwiftPackageReference "WalletConnectSwift" */,
 				BC532EED278C00550027CA11 /* XCRemoteSwiftPackageReference "CodeScanner" */,
 				E942D4382819BA8100B4A3EC /* XCRemoteSwiftPackageReference "swift-html-entities" */,
 				E96D956D2832FDF100DD5BB3 /* XCRemoteSwiftPackageReference "Yams" */,
 				E61A44A22832C942004AAC3F /* XCRemoteSwiftPackageReference "Kanna" */,
-				1C45B366283C4F36008A1401 /* XCRemoteSwiftPackageReference "CodeScanner" */,
 			);
 			productRefGroup = F84B21BF1A090F8100AAB793 /* Products */;
 			projectDirPath = "";
@@ -9344,28 +9341,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		1C45B366283C4F36008A1401 /* XCRemoteSwiftPackageReference "CodeScanner" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/twostraws/CodeScanner";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
-			};
-		};
 		4A3D2996268993FE0082F293 /* XCRemoteSwiftPackageReference "ViewInspector" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nalexn/ViewInspector";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 0.8.1;
-			};
-		};
-		4A93B53B2775909500CD5415 /* XCRemoteSwiftPackageReference "WalletConnectSwift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/WalletConnect/WalletConnectSwift.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
 			};
 		};
 		6786EA752759545A00B53127 /* XCRemoteSwiftPackageReference "plcrashreporter" */ = {
@@ -9382,14 +9363,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 2.0.0;
-			};
-		};
-		BCAAA0CE276D979B0013223E /* XCRemoteSwiftPackageReference "web3swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/skywinder/web3swift";
-			requirement = {
-				kind = revision;
-				revision = 6ebfd9a5f19a3d9cd0fbaa478c9408c81847d836;
 			};
 		};
 		C82719EB26FE734500EC9EF9 /* XCRemoteSwiftPackageReference "sindresorhus-Defaults" */ = {
