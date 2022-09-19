@@ -75,7 +75,7 @@ struct CollapsedCardGroupView: View {
                                 ClientLogger.shared.logCounter(
                                     .tabInTabGroupClicked,
                                     attributes: getLogCounterAttributesForTabGroups(
-                                        TabGroupRowIndex: rowIndex, selectedChildTabIndex: index,
+                                        tabGroupRowIndex: rowIndex, selectedChildTabIndex: index,
                                         expanded: false, numTabs: groupDetails.allDetails.count))
                                 browserModel.hideGridWithAnimation(
                                     tabToBeSelected: childTabDetail.tab)
@@ -145,13 +145,13 @@ struct CollapsedCardGroupView: View {
 }
 
 func getLogCounterAttributesForTabGroups(
-    TabGroupRowIndex: Int?, selectedChildTabIndex: Int?, expanded: Bool?, numTabs: Int
+    tabGroupRowIndex: Int?, selectedChildTabIndex: Int?, expanded: Bool?, numTabs: Int
 ) -> [ClientLogCounterAttribute] {
     var attributes = EnvironmentHelper.shared.getAttributes()
 
     attributes.append(
         ClientLogCounterAttribute(
-            key: LogConfig.TabGroupAttribute.TabGroupRowIndex, value: String(TabGroupRowIndex ?? -1)
+            key: LogConfig.TabGroupAttribute.TabGroupRowIndex, value: String(tabGroupRowIndex ?? -1)
         )
     )
 

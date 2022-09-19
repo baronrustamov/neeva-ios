@@ -99,7 +99,7 @@ struct TabGroupHeader: View {
         ClientLogger.shared.logCounter(
             groupDetails.isExpanded ? .tabGroupExpanded : .tabGroupCollapsed,
             attributes: getLogCounterAttributesForTabGroups(
-                TabGroupRowIndex: rowIndex, selectedChildTabIndex: nil,
+                tabGroupRowIndex: rowIndex, selectedChildTabIndex: nil,
                 expanded: nil, numTabs: groupDetails.allDetails.count)
         )
     }

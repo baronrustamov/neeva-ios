@@ -156,7 +156,7 @@ class TabCardModel: CardDropDelegate, CardModel {
 
         var id: Set<String> { Set(cells.map(\.id)) }
         var cells: [Cell]
-        var index: Int
+        var index: Int  // Index within TabSection
         var multipleCellTypes: Bool = false
 
         var numTabsInRow: Int {
@@ -165,6 +165,13 @@ class TabCardModel: CardDropDelegate, CardModel {
                 { total, cell in
                     total + cell.numTabs
                 })
+        }
+
+        var isSectionHeader: Bool {
+            if cells.count == 1, case .sectionHeader = cells[0] {
+                return true
+            }
+            return false
         }
     }
 

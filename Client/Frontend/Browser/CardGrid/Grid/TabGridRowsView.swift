@@ -84,10 +84,11 @@ struct TabGridRowsView: View {
                             }
                     case .sectionHeader(let section):
                         TabGridSectionHeaderView(section: section)
-                            .id(row.id)
                     }
                 }
-            }.zIndex(row.cells.contains(where: \.isSelected) ? 1 : 0)
+            }
+            .id(row.id)
+            .zIndex(row.cells.contains(where: \.isSelected) ? 1 : 0)
         }
     }
 

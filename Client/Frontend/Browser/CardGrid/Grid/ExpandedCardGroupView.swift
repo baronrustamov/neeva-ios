@@ -71,7 +71,7 @@ struct ExpandedCardGroupRowView: View {
                             ClientLogger.shared.logCounter(
                                 .tabInTabGroupClicked,
                                 attributes: getLogCounterAttributesForTabGroups(
-                                    TabGroupRowIndex: rowIndex, selectedChildTabIndex: index + 1,
+                                    tabGroupRowIndex: rowIndex, selectedChildTabIndex: index + 1,
                                     expanded: true, numTabs: groupDetails.allDetails.count))
                             browserModel.hideGridWithAnimation(tabToBeSelected: childTabDetail.tab)
                         }

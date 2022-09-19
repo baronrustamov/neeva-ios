@@ -39,16 +39,20 @@ struct TabGridContainer: View {
     }
 
     var selectedRowId: TabCardModel.Row.ID? {
-        if let row = rows.first(where: { row in
-            row.cells.contains(where: \.isSelected)
-        }) {
-            if row.index == 1 {
-                return rows[0].id
+        var previous: Row!
+        for row in rows {
+            if row.cells.contains(where: \.isSelected) {
+                // If we are selecting the first row of cards in the tab section, then
+                // select the header instead (i.e., the previous row). This way the header
+                // will be visible too.
+                if row.index == 1 {
+                    assert(previous.isSectionHeader)
+                    return previous.id
+                }
+                return row.id
             }
-
-            return row.id
+            previous = row
         }
-
         return nil
     }
 
