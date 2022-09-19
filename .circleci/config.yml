@@ -172,4 +172,6 @@ workflows:
           filters:
               tags:
                 only: /chungfastlane\/.*/
+              branches:
+                ignore: /.*/
       
