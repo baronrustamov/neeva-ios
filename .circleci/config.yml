@@ -255,5 +255,5 @@ workflows:
           filters:
               tags:
                 only: /Build-.*/
-          branches:
-              ignore: /.*/          
+              branches:
+                ignore: /.*/          
