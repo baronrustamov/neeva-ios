@@ -254,6 +254,6 @@ workflows:
       - build-and-deploy:
           filters:
               tags:
-                only: /Build-.*/
+                only: /fastlane\/Build-.*/
               branches:
                 ignore: /.*/          
