@@ -500,6 +500,8 @@ class BrowserViewController: UIViewController {
                 startScreen = .defaultBrowser
             }
 
+            _ = NeevaExperiment.startExperiment(for: .adBlockOnboarding)
+            NeevaExperiment.logStartExperiment(for: .adBlockOnboarding)
             presentWelcomeFlow(startScreen: startScreen)
         }
 
