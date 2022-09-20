@@ -81,7 +81,7 @@ struct GridPicker: View {
             .frame(height: gridModel.pickerHeight)
             .background(
                 (!isInToolbar
-                    ? Color.background : Color.clear)
+                    ? Color.DefaultBackground : Color.clear)
                     .ignoresSafeArea()
             )
             .opacity(gridVisibilityModel.showGrid ? 1 : 0)
