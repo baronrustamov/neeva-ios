@@ -38,13 +38,17 @@ private struct PromoStateStorage {
             return
         }
 
-        // TODO: (issue/4281) Not thread-safe; re-enable as part of session aggregated logging.
-        // Defaults[.numOfUGCTests] += 1
+        var counters: [CheatsheetIntAttribute] = []
+        defer {
+            CheatsheetLogger.shared.increment(counters)
+        }
+
+        counters.append(.numOfUGCTests)
 
         // if cannot construct canonical url, consider as miss
         guard let canonicalURL = CanonicalURL(from: url, stripMobile: true, relaxed: true)?.asString
         else {
-            // Defaults[.numOfUGCCanonicalError] += 1
+            counters.append(.numOfUGCCanonicalError)
             cache[url] = .missed
             return
         }
@@ -52,12 +56,14 @@ private struct PromoStateStorage {
         // leave value as unintialized if bloom filter manager is not ready to produce a result
         guard let result = bloomFilterManager.contains(canonicalURL)
         else {
-            // Defaults[.numOfUGCNoResult] += 1
+            counters.append(.numOfUGCNoResult)
             return
         }
 
         cache[url] = result ? .hit : .missed
-        // Defaults[.numOfUGCHits] += result ? 1 : 0
+        if result {
+            counters.append(.numOfUGCHits)
+        }
     }
 
     mutating func performTransition(on url: URL, transition: Transition) {
@@ -75,7 +81,7 @@ private struct PromoStateStorage {
         case .dismissBubble:
             state.showPromo = false
             state.showBubble = false
-            Defaults[.numOfUGCClears] += 1
+            CheatsheetLogger.shared.increment([.numOfUGCClears])
         }
 
         cache[url] = state

@@ -267,12 +267,7 @@ private class FilterResource {
     private let identifier: String
     private var state: State = .notInitialized {
         didSet {
-            switch state {
-            case .ready, .error:
-                Defaults[.redditFilterHealth] = state.description
-            default:
-                break
-            }
+            CheatsheetLogger.shared.setStrings(to: [.redditFilterHealth: state.description])
         }
     }
 

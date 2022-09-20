@@ -690,44 +690,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sendAggregatedCheatsheetLogs() {
-        ClientLogger.shared.logCounter(
-            .CheatsheetUGCStatsForSession,
-            attributes: EnvironmentHelper.shared.getAttributes() + [
-                ClientLogCounterAttribute(
-                    key: LogConfig.CheatsheetAttribute.UGCStat.filterHealth.rawValue,
-                    value: Defaults[.redditFilterHealth]
-                ),
-                ClientLogCounterAttribute(
-                    key: LogConfig.CheatsheetAttribute.UGCStat.ugcTest.rawValue,
-                    value: String(Defaults[.numOfUGCTests])
-                ),
-                ClientLogCounterAttribute(
-                    key: LogConfig.CheatsheetAttribute.UGCStat.ugcCanonicalError.rawValue,
-                    value: String(Defaults[.numOfUGCCanonicalError])
-                ),
-                ClientLogCounterAttribute(
-                    key: LogConfig.CheatsheetAttribute.UGCStat.ugcTestNoResult.rawValue,
-                    value: String(Defaults[.numOfUGCNoResult])
-                ),
-                ClientLogCounterAttribute(
-                    key: LogConfig.CheatsheetAttribute.UGCStat.ugcHit.rawValue,
-                    value: String(Defaults[.numOfUGCHits])
-                ),
-                ClientLogCounterAttribute(
-                    key: LogConfig.CheatsheetAttribute.UGCStat.ugcClear.rawValue,
-                    value: String(Defaults[.numOfUGCClears])
-                ),
-                ClientLogCounterAttribute(
-                    key: LogConfig.CheatsheetAttribute.UGCStat.isEnabled.rawValue,
-                    value: String(Defaults[.useCheatsheetBloomFilters])
-                ),
-            ]
-        )
-        Defaults[.numOfUGCTests] = 0
-        Defaults[.numOfUGCCanonicalError] = 0
-        Defaults[.numOfUGCNoResult] = 0
-        Defaults[.numOfUGCHits] = 0
-        Defaults[.numOfUGCClears] = 0
-        Defaults[.redditFilterHealth] = ""
+        CheatsheetLogger.shared.sendLogsOnAppStarted()
     }
 }

@@ -875,7 +875,7 @@
 		E650759B1E37F7AB006961AC /* CrashSimulator.m in Sources */ = {isa = PBXBuildFile; fileRef = E650756B1E37F7AB006961AC /* CrashSimulator.m */; };
 		E650759C1E37F7AB006961AC /* DeferredUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650756C1E37F7AB006961AC /* DeferredUtils.swift */; };
 		E650759D1E37F7AB006961AC /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650756D1E37F7AB006961AC /* DeviceInfo.swift */; };
-		E65075A01E37F7AB006961AC /* AxrrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075711E37F7AB006961AC /* ArrayExtensions.swift */; };
+		E65075A01E37F7AB006961AC /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075711E37F7AB006961AC /* ArrayExtensions.swift */; };
 		E65075A11E37F7AB006961AC /* HashExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075721E37F7AB006961AC /* HashExtensions.swift */; };
 		E65075A21E37F7AB006961AC /* HexExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075731E37F7AB006961AC /* HexExtensions.swift */; };
 		E65075A31E37F7AB006961AC /* KeychainWrapperExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075741E37F7AB006961AC /* KeychainWrapperExtensions.swift */; };
@@ -935,6 +935,7 @@
 		E94B7DEB27E4F96B003D8F13 /* QueryButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94B7DEA27E4F96B003D8F13 /* QueryButtonView.swift */; };
 		E9529C6527DC96C70009B434 /* NewsResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9529C6427DC96C70009B434 /* NewsResultsView.swift */; };
 		E954FD842845C91E009B534A /* UGCDiscussionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E954FD832845C91E009B534A /* UGCDiscussionView.swift */; };
+		E964302028D3F58500A304CC /* CheatsheetLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E964301F28D3F58500A304CC /* CheatsheetLogger.swift */; };
 		E96C21D32880F2EF00B58C86 /* CheatsheetDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96C21D22880F2EF00B58C86 /* CheatsheetDataStore.swift */; };
 		E96D95682832F27700DD5BB3 /* BloomFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96D95672832F27700DD5BB3 /* BloomFilterTests.swift */; };
 		E96D956A2832F2FC00DD5BB3 /* CanonicalURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96D95692832F2FC00DD5BB3 /* CanonicalURL.swift */; };
@@ -2303,6 +2304,7 @@
 		E94B7DEA27E4F96B003D8F13 /* QueryButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryButtonView.swift; sourceTree = "<group>"; };
 		E9529C6427DC96C70009B434 /* NewsResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsResultsView.swift; sourceTree = "<group>"; };
 		E954FD832845C91E009B534A /* UGCDiscussionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UGCDiscussionView.swift; sourceTree = "<group>"; };
+		E964301F28D3F58500A304CC /* CheatsheetLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheatsheetLogger.swift; sourceTree = "<group>"; };
 		E96C21D22880F2EF00B58C86 /* CheatsheetDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheatsheetDataStore.swift; sourceTree = "<group>"; };
 		E96D95672832F27700DD5BB3 /* BloomFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloomFilterTests.swift; sourceTree = "<group>"; };
 		E96D95692832F2FC00DD5BB3 /* CanonicalURL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanonicalURL.swift; sourceTree = "<group>"; };
@@ -3551,6 +3553,7 @@
 		BC07524126C20C42008B607A /* Cheatsheet */ = {
 			isa = PBXGroup;
 			children = (
+				E964301E28D3F57A00A304CC /* Logger */,
 				E96C21D22880F2EF00B58C86 /* CheatsheetDataStore.swift */,
 				32D7F0EA2797025C000203C7 /* CheatsheetMenuViewModel.swift */,
 				BC07524B26C3B98F008B607A /* CheatsheetMenuView.swift */,
@@ -4408,6 +4411,14 @@
 				E90075062835AEEC00AE60DE /* reddit_test.txt */,
 			);
 			name = BloomFilterTestFiles;
+			sourceTree = "<group>";
+		};
+		E964301E28D3F57A00A304CC /* Logger */ = {
+			isa = PBXGroup;
+			children = (
+				E964301F28D3F58500A304CC /* CheatsheetLogger.swift */,
+			);
+			path = Logger;
 			sourceTree = "<group>";
 		};
 		E96D95662830A0CB00DD5BB3 /* BloomFilter */ = {
@@ -6479,6 +6490,7 @@
 				D8EFFA0C1FF5B1FA001D3A09 /* NavigationRouter.swift in Sources */,
 				D0E55C4F1FB4FD23006DC274 /* FormPostHelper.swift in Sources */,
 				2026EC1C27F3D2F900817053 /* CookieCutterSettings.swift in Sources */,
+				E964302028D3F58500A304CC /* CheatsheetLogger.swift in Sources */,
 				B66E1A8228AD6ADE00F218B5 /* ArchivedTab.swift in Sources */,
 				D3972BF41C22412B00035B87 /* TitleActivityItemProvider.swift in Sources */,
 				E6F64023281B2EB3008B7644 /* SpacesProfileView.swift in Sources */,
@@ -8016,9 +8028,9 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = A9735M6NPH;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -8033,7 +8045,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(NEEVA_ROOT_BUNDLE_INDENTIFIER)";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
-				PROVISIONING_PROFILE_SPECIFIER = "Neeva Browser";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SHARED_DEFS = "MOZ_TARGET_CLIENT $(inherited)";
 				SKIP_INSTALL = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;

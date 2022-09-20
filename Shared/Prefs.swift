@@ -152,14 +152,6 @@ extension Defaults.Keys {
     public static let useCheatsheetBloomFilters = Defaults.BoolKey(
         "useCheatsheetBloomFilters", default: true
     )
-    public static let numOfUGCCanonicalError = Defaults.Key<Int>(
-        "numOfUGCCanonicalError", default: 0
-    )
-    public static let numOfUGCTests = Defaults.Key<Int>("numOfUGCTests", default: 0)
-    public static let numOfUGCNoResult = Defaults.Key<Int>("numOfUGCNoResult", default: 0)
-    public static let numOfUGCHits = Defaults.Key<Int>("numOfUGCHits", default: 0)
-    public static let numOfUGCClears = Defaults.Key<Int>("numOfUGCClears", default: 0)
-    public static let redditFilterHealth = Defaults.Key<String>("redditFilterHealth", default: "")
 
     // MARK: - notification
     public static let lastScheduledNeevaPromoID = Defaults.Key<String?>("lastScheduledNeevaPromoID")
