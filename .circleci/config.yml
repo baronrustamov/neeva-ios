@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  ruby: circleci/ruby@1.2.0
+
 commands:
   bootstrap:
     steps:
@@ -68,7 +71,6 @@ commands:
           key: swift-format-cache-{{ arch }}-{{ checksum "xcode_version" }}-{{ checksum "swift-format/Package.swift" }}
           paths:
             - swift-format/.build
-
   test-client:
     steps:
       - run:
@@ -144,6 +146,25 @@ commands:
        - store_artifacts:
            path: artifacts/
            when: always
+  set-up-code-signing:
+    steps:
+      - run:
+          name: decode Certificates
+          command: echo "$certificates" | base64 --decode > Certificates.p12
+      - run:
+          name: make Provisioning Profiles directory
+          command: mkdir -pv ~/Library/MobileDevice/Provisioning\ Profiles/
+      - run:
+          name: decode Provisioning Profiles
+          command: |
+            echo $WIDGET_PROVISION | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/widget.mobileprovision
+            echo $SHARE_PROVISION | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/share.mobileprovision
+            echo $SAFARI_EXTENSION_PROVISION | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/safari.mobileprovision
+            echo $NOTIFICATION_EXTENSION_PROVISION | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/notification.mobileprovision
+            echo $CLIENT_INTENT_PROVISION | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/client_intent.mobileprovision
+            echo $BROWSER_PROVISION | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/browser.mobileprovision
+            echo $APP_CLIP_PROVISION | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/appclip.mobileprovision
+            echo $APP_CLIP_2_PROVISION | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/appclip2.mobileprovision
 
 jobs:
   build:
@@ -198,7 +219,21 @@ jobs:
     resource_class: macos.x86.medium.gen2
     steps:
       - restore-build-cache
-      - xcui-tests-ipad
+      - xcui-tests-ipada
+  build-and-deploy:
+    macos:
+      xcode: "14.0"
+    resource_class: macos.x86.medium.gen2
+    steps:
+      - bootstrap
+      - generate-user-scripts
+      - ruby/install-deps
+      - set-up-code-signing
+      - run:
+          name: fastlane
+          command: bundle exec fastlane build_and_deploy
+      - save-artifacts
+     
 workflows:
   version: 2
   build:
@@ -216,3 +251,7 @@ workflows:
       - xcui-tests-ipad:
           requires: [build]
           context: ios-testing
+      - build-and-deploy:
+          filters:
+              tags:
+                only: /Build-.*/
