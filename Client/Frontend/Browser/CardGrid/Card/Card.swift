@@ -145,6 +145,7 @@ struct Card<Details>: View where Details: CardDetails {
         .if(!animate) { view in
             view
                 .scaleEffect(isPressed ? 0.95 : 1)
+                .animation(CardTransitionUX.animation, value: isPressed)
         }
     }
 

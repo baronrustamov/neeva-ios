@@ -93,7 +93,6 @@ struct TopBarContent: View {
         onCancel: @escaping () -> Void,
         onOverflowMenuAction: @escaping (OverflowMenuAction, UIView) -> Void
     ) -> some View {
-
         TopBarView(
             performTabToolbarAction: performTabToolbarAction,
             onReload: onReload,
