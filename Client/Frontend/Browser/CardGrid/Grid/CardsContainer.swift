@@ -44,9 +44,9 @@ struct TabGridContainer: View {
             if row.cells.contains(where: \.isSelected) {
                 // If we are selecting the first row of cards in the tab section, then
                 // select the header instead (i.e., the previous row). This way the header
-                // will be visible too.
-                if row.index == 1 {
-                    assert(previous.isSectionHeader)
+                // will be visible too. Do this only if there is a section header, which
+                // may not always be the case (e.g., incognito mode).
+                if row.index == 1 && previous.isSectionHeader {
                     return previous.id
                 }
                 return row.id
