@@ -42,7 +42,6 @@ ui-test-screenshots/
 /provisioning-profiles
 /assets
 #build tools
-/fastlane/Appfile
 /fastlane/Snapfile
 /fastlane/SnapshotHelper.swift
 /fastlane/frames
