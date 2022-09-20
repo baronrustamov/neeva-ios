@@ -136,18 +136,20 @@ class TrackingStatsViewModel: ObservableObject {
                 self.onDataUpdated()
             }
 
-        tabFinishLoadingSubscription = selectedTab?.$estimatedProgress.sink(receiveValue: {
-            estimatedProgress in
-            if estimatedProgress == 1 {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    if self.numAdBlocked > 0 {
-                        self.showOnboardingIfNecessary(onboardingBlockType: .adBlock)
-                    } else if self.didBlockCookiePopup == 1 {
-                        self.showOnboardingIfNecessary(onboardingBlockType: .cookiePopup)
+        if NeevaExperiment.arm(for: .adBlockOnboarding) == .adBlock {
+            tabFinishLoadingSubscription = selectedTab?.$estimatedProgress.sink(receiveValue: {
+                estimatedProgress in
+                if estimatedProgress == 1 {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        if self.numAdBlocked > 0 {
+                            self.showOnboardingIfNecessary(onboardingBlockType: .adBlock)
+                        } else if self.didBlockCookiePopup == 1 {
+                            self.showOnboardingIfNecessary(onboardingBlockType: .cookiePopup)
+                        }
                     }
                 }
-            }
-        })
+            })
+        }
     }
 
     func showOnboardingIfNecessary(onboardingBlockType: OnboardingBlockType) {
@@ -317,6 +319,7 @@ struct TrackingMenuView: View {
                             Image("welcome-shield", bundle: .main)
                             .frame(width: 32, height: 32)
                     )
+                    .padding(.top, 15)
                 } else if viewModel.onboardingBlockType == .cookiePopup {
                     ShieldWithBadgeView(
                         foregroundSymbol: .checkmarkCircleFill, foregroundColor: .blue,
@@ -330,31 +333,37 @@ struct TrackingMenuView: View {
         }
     }
 
+    @ViewBuilder
+    func onboardingText(text: String) -> some View {
+        Text(text)
+            .multilineTextAlignment(
+                .center
+            ).foregroundColor(.primary).withFont(unkerned: .headingMedium).padding(
+                .horizontal, 20
+            )
+            .frame(minHeight: 60)
+            .padding(.top, 10)
+    }
+
     var onboardingView: some View {
         GroupedStack {
-            VStack(alignment: .center, spacing: 20) {
+            VStack(alignment: .center, spacing: 0) {
                 badgeView
-                    .padding(.top, 20)
+                    .frame(minHeight: 50)
+
                 if !viewModel.preventTrackersForCurrentPage {
-                    Text("Want Neeva to block ads, trackers and cookie popups on this page?")
-                        .multilineTextAlignment(
-                            .center
-                        ).foregroundColor(.primary).withFont(unkerned: .headingMedium).padding(
-                            .horizontal, 20)
+                    onboardingText(
+                        text: "Want Neeva to block ads, trackers and cookie popups on this page?")
                 } else if viewModel.onboardingBlockType == .adBlock {
-                    Text("Neeva blocked ads and trackers on this page!").multilineTextAlignment(
-                        .center
-                    ).foregroundColor(.primary).withFont(unkerned: .headingMedium).padding(
-                        .horizontal, 20)
+                    onboardingText(text: "Neeva blocked ads and trackers on this page!")
                 } else if viewModel.onboardingBlockType == .cookiePopup {
-                    Text("Neeva blocked a cookie popup on this page!").multilineTextAlignment(
-                        .center
-                    )
-                    .foregroundColor(.primary).withFont(unkerned: .headingMedium).padding(
-                        .horizontal, 20)
+                    onboardingText(text: "Neeva blocked a cookie popup on this page!")
                 }
                 TrackingMenuProtectionOnboardingShieldButton(
-                    preventTrackers: $viewModel.preventTrackersForCurrentPage)
+                    preventTrackers: $viewModel.preventTrackersForCurrentPage
+                )
+                .padding(.vertical, 20)
+                .frame(minHeight: 60)
                 Button(
                     action: {
                         viewModel.showTrackingStatsViewPopover = false
@@ -374,7 +383,9 @@ struct TrackingMenuView: View {
     }
 
     var body: some View {
-        if !Defaults[.cookieCutterOnboardingShowed] && viewModel.onboardingBlockType != nil {
+        if NeevaExperiment.arm(for: .adBlockOnboarding) == .adBlock
+            && !Defaults[.cookieCutterOnboardingShowed] && viewModel.onboardingBlockType != nil
+        {
             onboardingView
         } else {
             GroupedStack {

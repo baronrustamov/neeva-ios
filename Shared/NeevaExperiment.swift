@@ -74,10 +74,17 @@ extension NeevaExperiment {
     //        case showDBPrompt
     //    }
 
-    /* Experiment Example */
+    public enum AdBlockOnboarding: String, ExperimentArms {
+        case control
+        case adBlock
+    }
 }
 
 // Experiment Example */
 // extension NeevaExperiment.Experiment where Arm == NeevaExperiment.DefaultBrowserV2 {
 // public static let defaultBrowserPromptV2 = Self()
 // }
+
+extension NeevaExperiment.Experiment where Arm == NeevaExperiment.AdBlockOnboarding {
+    public static let adBlockOnboarding = Self()
+}

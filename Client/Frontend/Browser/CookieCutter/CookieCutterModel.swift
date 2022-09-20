@@ -4,6 +4,7 @@
 
 import Defaults
 import Foundation
+import Shared
 import SwiftUI
 
 enum CookieNotices: CaseIterable, Encodable, Decodable {
@@ -76,31 +77,32 @@ class CookieCutterModel: ObservableObject {
 
     // MARK: - Methods
     func cookieWasHandled(bvc: BrowserViewController, domain: String?) {
-        // TODO: Set up experiment
-        //        if !Defaults[.cookieCutterOnboardingShowed] {
-        //            Defaults[.cookieCutterOnboardingShowed] = true
-        //
-        //            bvc.showModal(style: OverlayStyle(showTitle: false, expandPopoverWidth: true)) {
-        //                CookieCutterOnboardingView {
-        //                    bvc.overlayManager.hideCurrentOverlay(ofPriority: .modal) {
-        //                        bvc.trackingStatsViewModel.showTrackingStatsViewPopover = true
-        //                    }
-        //                } onRemindMeLater: {
-        //                    NotificationPermissionHelper.shared.requestPermissionIfNeeded(
-        //                        from: bvc,
-        //                        showChangeInSettingsDialogIfNeeded: true,
-        //                        callSite: .defaultBrowserInterstitial
-        //                    ) { _ in
-        //                        LocalNotifications.scheduleNeevaOnboardingCallback(
-        //                            notificationType: .neevaOnboardingCookieCutter)
-        //                    }
-        //                } onDismiss: {
-        //                    bvc.overlayManager.hideCurrentOverlay(ofPriority: .modal)
-        //                }
-        //                .overlayIsFixedHeight(isFixedHeight: true)
-        //                .environmentObject(bvc.trackingStatsViewModel)
-        //            }
-        //        }
+        if NeevaExperiment.arm(for: .adBlockOnboarding) == .adBlock {
+            if !Defaults[.cookieCutterOnboardingShowed] {
+                Defaults[.cookieCutterOnboardingShowed] = true
+
+                bvc.showModal(style: OverlayStyle(showTitle: false, expandPopoverWidth: true)) {
+                    CookieCutterOnboardingView {
+                        bvc.overlayManager.hideCurrentOverlay(ofPriority: .modal) {
+                            bvc.trackingStatsViewModel.showTrackingStatsViewPopover = true
+                        }
+                    } onRemindMeLater: {
+                        NotificationPermissionHelper.shared.requestPermissionIfNeeded(
+                            from: bvc,
+                            showChangeInSettingsDialogIfNeeded: true,
+                            callSite: .defaultBrowserInterstitial
+                        ) { _ in
+                            LocalNotifications.scheduleNeevaOnboardingCallback(
+                                notificationType: .neevaOnboardingCookieCutter)
+                        }
+                    } onDismiss: {
+                        bvc.overlayManager.hideCurrentOverlay(ofPriority: .modal)
+                    }
+                    .overlayIsFixedHeight(isFixedHeight: true)
+                    .environmentObject(bvc.trackingStatsViewModel)
+                }
+            }
+        }
 
         bvc.trackingStatsViewModel.didBlockCookiePopup = cookiesBlocked
 
