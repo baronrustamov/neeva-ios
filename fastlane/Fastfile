@@ -28,24 +28,24 @@ platform :ios do
   end
   desc "Description of what the lane does"
   lane :build_and_deploy do
-    # build_app(
-    #   configuration: "Release",
-    #   scheme: "Client",
-    #   clean: true,
-    #   export_options: "./Scripts/ExportOptions.plist"
-    # )
-    # upload_to_testflight(
-    #   changelog: "Internal Test Build",
-    #   groups: ["Friends and family",
-    #             "Apple Review",
-    #             "Neevans (employees only)"]
-    # )
+     build_app(
+       configuration: "Release",
+       scheme: "Client",
+       clean: true,
+       export_options: "./Scripts/ExportOptions.plist"
+     )
+     upload_to_testflight(
+       changelog: "Internal Test Build",
+       groups: [ENV["TESTFLIGHT_GROUP_1"],
+                 ENV["TESTFLIGHT_GROUP_2"],
+                 ENV["TESTFLIGHT_GROUP_3"]]
+     )
     version_str = File.open("../Client/AppConfig.xcconfig").grep(/BROWSER_MARKETING_VERSION = /)
     marketing_version = (version_str[0].to_s.split)[2]
     build_number_str = File.open("../Client/AppConfig.xcconfig").grep(/BROWSER_PROJECT_VERSION = /)
     build_number = (build_number_str[0].to_s.split)[2]
      slack(
-       message: ":fruitcompany: Uploaded Build ##{build_number} (v#{marketing_version}) to App Store\n\n\n <https://appstoreconnect.apple.com/apps/1543288638/testflight/ios/|App Store TestFlight>",
+       message: ":fruitcompany: Uploaded Build ##{build_number} (v#{marketing_version}) to App Store\n\n\n <#{ENV["TESTFLIGHT_URL"]}|App Store TestFlight>",
        default_payloads: [],
        slack_url: ENV["SLACK_URL"]
      )
