@@ -156,6 +156,7 @@ struct BrowserView: View {
         .environmentObject(bvc.gridModel.resizeModel)
         .environmentObject(bvc.gridModel.scrollModel)
         .environmentObject(bvc.gridModel.spaceCardModel)
+        .environmentObject(bvc.gridModel.switcherAnimationModel)
         .environmentObject(bvc.gridModel.switcherModel)
         .environmentObject(bvc.gridModel.tabCardModel)
         .environmentObject(bvc.gridModel.visibilityModel)

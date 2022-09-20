@@ -32,7 +32,6 @@ class GridSwitcherModel: ObservableObject {
 
     @Published private(set) var gridCanAnimate = false
     @Published private(set) var state: SwitcherView = .tabs
-    @Published private(set) var switchModeWithoutAnimation = false
 
     func update(state: SwitcherView) {
         guard self.state != state else {
@@ -52,12 +51,6 @@ class GridSwitcherModel: ObservableObject {
             .setSceneUIState(to: .cardGrid(state, tabManager.isIncognito))
     }
 
-    func update(switchModeWithoutAnimation: Bool) {
-        if self.switchModeWithoutAnimation != switchModeWithoutAnimation {
-            self.switchModeWithoutAnimation = switchModeWithoutAnimation
-        }
-    }
-
     private func enableCanAnimateForShortDuration() {
         self.gridCanAnimate = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -71,6 +64,16 @@ class GridSwitcherModel: ObservableObject {
         // Turns on the grid animation when switching between incognito/normal tabs.
         incognitoListener = tabManager.incognitoModel.$isIncognito.sink { _ in
             self.enableCanAnimateForShortDuration()
+        }
+    }
+}
+
+class GridSwitcherAnimationModel: ObservableObject {
+    @Published private(set) var switchWithAnimation = true
+
+    func update(switchWithAnimation: Bool) {
+        if self.switchWithAnimation != switchWithAnimation {
+            self.switchWithAnimation = switchWithAnimation
         }
     }
 }
@@ -89,6 +92,7 @@ class GridModel: ObservableObject {
     let resizeModel: GridResizeModel
     let scrollModel: GridScrollModel
     let spaceCardModel: SpaceCardModel
+    let switcherAnimationModel: GridSwitcherAnimationModel
     let switcherModel: GridSwitcherModel
     let tabCardModel: TabCardModel
     let visibilityModel: GridVisibilityModel
@@ -122,6 +126,7 @@ class GridModel: ObservableObject {
         self.resizeModel = GridResizeModel()
         self.scrollModel = GridScrollModel()
         self.spaceCardModel = spaceCardModel
+        self.switcherAnimationModel = GridSwitcherAnimationModel()
         self.switcherModel = GridSwitcherModel(tabManager: tabManager)
         self.tabCardModel = tabCardModel
         self.visibilityModel = GridVisibilityModel()

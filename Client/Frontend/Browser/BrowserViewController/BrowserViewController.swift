@@ -480,11 +480,11 @@ class BrowserViewController: UIViewController {
                 if !Defaults[.didFirstNavigation] {
                     self.showZeroQuery()
                 } else {
-                    self.gridModel.switcherModel.update(switchModeWithoutAnimation: true)
+                    self.gridModel.switcherAnimationModel.update(switchWithAnimation: false)
                     self.showTabTray()
 
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        self.gridModel.switcherModel.update(switchModeWithoutAnimation: false)
+                        self.gridModel.switcherAnimationModel.update(switchWithAnimation: true)
                     }
                 }
             }

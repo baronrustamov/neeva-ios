@@ -10,6 +10,7 @@ struct GridPicker: View {
 
     @EnvironmentObject var gridModel: GridModel
     @EnvironmentObject var gridSwitcherModel: GridSwitcherModel
+    @EnvironmentObject var gridSwitcherAnimationModel: GridSwitcherAnimationModel
     @EnvironmentObject var gridVisibilityModel: GridVisibilityModel
     @EnvironmentObject var incognitoModel: IncognitoModel
     @EnvironmentObject var switcherToolbarModel: SwitcherToolbarModel
@@ -49,7 +50,7 @@ struct GridPicker: View {
             SegmentedPicker(
                 segments: segments,
                 selectedSegmentIndex: $selectedIndex, dragOffset: switcherToolbarModel.dragOffset,
-                canAnimate: !gridSwitcherModel.switchModeWithoutAnimation
+                canAnimate: gridSwitcherAnimationModel.switchWithAnimation
             ).useEffect(deps: gridSwitcherModel.state) { _ in
                 switch gridSwitcherModel.state {
                 case .tabs:

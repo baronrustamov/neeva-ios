@@ -161,6 +161,18 @@ struct CardScrollContainer<Content: View>: View {
     }
 }
 
+// This modifier exists to isolate the dependency on `switchWithAnimation`.
+struct CardsContainerOffsetAnimationModifier: ViewModifier {
+    @EnvironmentObject var gridSwitcherAnimationModel: GridSwitcherAnimationModel
+
+    func body(content: Content) -> some View {
+        content
+            .animation(
+                gridSwitcherAnimationModel.switchWithAnimation ? .interactiveSpring() : nil
+            )
+    }
+}
+
 struct CardsContainer: View {
     @Default(.seenSpacesIntro) var seenSpacesIntro: Bool
 
@@ -191,9 +203,7 @@ struct CardsContainer: View {
                     .modifier(ScrollToFirstSpaceModifier(scrollProxy: scrollProxy))
                 }
                 .offset(x: (gridSwitcherModel.state == .spaces ? 0 : geom.widthIncludingSafeArea))
-                .animation(
-                    gridSwitcherModel.switchModeWithoutAnimation ? nil : .interactiveSpring()
-                )
+                .modifier(CardsContainerOffsetAnimationModifier())
                 .accessibilityElement(children: .contain)
                 .accessibilityLabel("Spaces")
                 .accessibilityHidden(gridSwitcherModel.state != .spaces)
@@ -229,9 +239,7 @@ struct CardsContainer: View {
                         ? (incognitoModel.isIncognito ? geom.widthIncludingSafeArea : 0)
                         : -geom.widthIncludingSafeArea)
                 )
-                .animation(
-                    gridSwitcherModel.switchModeWithoutAnimation ? nil : .interactiveSpring()
-                )
+                .modifier(CardsContainerOffsetAnimationModifier())
                 .accessibilityElement(children: .contain)
                 .accessibilityLabel("Tabs")
                 .accessibilityValue(Text("\(tabModel.manager.activeNormalTabs.count) tabs"))
@@ -258,9 +266,7 @@ struct CardsContainer: View {
                         ? (incognitoModel.isIncognito ? 0 : -geom.widthIncludingSafeArea)
                         : -geom.widthIncludingSafeArea)
                 )
-                .animation(
-                    gridSwitcherModel.switchModeWithoutAnimation ? nil : .interactiveSpring()
-                )
+                .modifier(CardsContainerOffsetAnimationModifier())
                 .accessibilityElement(children: .contain)
                 .accessibilityLabel("Incognito Tabs")
                 .accessibilityValue(Text("\(tabModel.manager.incognitoTabs.count) tabs"))
