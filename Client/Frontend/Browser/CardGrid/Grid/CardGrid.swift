@@ -133,13 +133,19 @@ struct CardGrid: View {
             columnCount = topToolbar ? 3 : 2
         }
 
+        // NOTE: Avoid updating state if the values didn't change. That way unnecessary
+        // and potentially expensive SwiftUI updates are avoided.
+
         if tabCardModel.columnCount != columnCount {
             tabCardModel.columnCount = columnCount
         }
 
-        self.cardSize =
+        let cardSize =
             (width - (tabCardModel.columnCount + 1) * CardGridUX.GridSpacing)
             / tabCardModel.columnCount
+        if self.cardSize != cardSize {
+            self.cardSize = cardSize
+        }
     }
 
     var body: some View {

@@ -23,6 +23,21 @@ extension EnvironmentValues {
 
 }
 
+struct ScrollToFirstSpaceModifier: ViewModifier {
+    let scrollProxy: ScrollViewProxy
+
+    @EnvironmentObject var browserModel: BrowserModel
+    @EnvironmentObject var gridVisibilityModel: GridVisibilityModel
+
+    func body(content: Content) -> some View {
+        content.useEffect(deps: gridVisibilityModel.showGrid) { _ in
+            if let details = browserModel.gridModel.spaceCardModel.viewModel.dataSource.first {
+                scrollProxy.scrollTo(details.id)
+            }
+        }
+    }
+}
+
 struct TabGridContainer: View {
     let isIncognito: Bool
     let geom: GeometryProxy
@@ -149,16 +164,14 @@ struct CardScrollContainer<Content: View>: View {
 struct CardsContainer: View {
     @Default(.seenSpacesIntro) var seenSpacesIntro: Bool
 
-    @EnvironmentObject var tabModel: TabCardModel
     @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var gridSwitcherModel: GridSwitcherModel
-    @EnvironmentObject var gridVisibilityModel: GridVisibilityModel
     @EnvironmentObject var incognitoModel: IncognitoModel
+    @EnvironmentObject var tabModel: TabCardModel
 
     // Used to rebuild the scene when switching between portrait and landscape.
     @State var orientation: UIDeviceOrientation = .unknown
     @State var generationId: Int = 0
-    @State var containerGeom: CGSize = CGSize.zero
 
     let columns: [GridItem]
 
@@ -175,11 +188,7 @@ struct CardsContainer: View {
                         }
                     }
                     .padding(.vertical, CardGridUX.GridSpacing)
-                    .useEffect(deps: gridVisibilityModel.showGrid) { _ in
-                        scrollProxy.scrollTo(
-                            browserModel.gridModel.spaceCardModel.allDetails.first?.id ?? ""
-                        )
-                    }
+                    .modifier(ScrollToFirstSpaceModifier(scrollProxy: scrollProxy))
                 }
                 .offset(x: (gridSwitcherModel.state == .spaces ? 0 : geom.widthIncludingSafeArea))
                 .animation(
@@ -255,9 +264,6 @@ struct CardsContainer: View {
                 .accessibilityElement(children: .contain)
                 .accessibilityLabel("Incognito Tabs")
                 .accessibilityValue(Text("\(tabModel.manager.incognitoTabs.count) tabs"))
-            }
-            .useEffect(deps: geom.size) { newValue in
-                containerGeom = newValue
             }
         }
         .id(generationId)
