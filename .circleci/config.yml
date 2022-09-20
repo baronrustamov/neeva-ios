@@ -179,16 +179,16 @@ jobs:
     steps:
 #      - bootstrap
 #      - generate-user-scripts
-#      - ruby/install-deps
-#      - set-up-cert
-#      - run:
-#          name: fastlane
-#          command: bundle exec fastlane build
+      - ruby/install-deps
+      - set-up-cert
       - run:
-          name: create branch
-          command: |
-            git checkout -b chung/test-branch-for-fastlane
-            git push origin chung/test-branch-for-fastlane
+          name: fastlane
+          command: bundle exec fastlane build
+#      - run:
+#          name: create branch
+#          command: |
+#            git checkout -b chung/test-branch-for-fastlane
+#            git push origin chung/test-branch-for-fastlane
       - save-artifacts
 workflows:
   version: 2
