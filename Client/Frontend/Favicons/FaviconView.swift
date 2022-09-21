@@ -12,19 +12,24 @@ class FaviconFetcher: ObservableObject {
     private static let cacheSize = 32  // Tuned for the card grid
     private static let cache: MRUCache<URL, UIImage> = .init(maxEntries: cacheSize)
 
-    private let resolver: FaviconResolver
+    private var resolver: FaviconResolver?
     private var subscription: AnyCancellable?
 
     @Published var image: UIImage = FaviconSupport.defaultFavicon
     @Published var backgroundColor = UIColor.clear
 
-    init(with resolver: FaviconResolver) {
-        self.resolver = resolver
-        self.subscription = self.resolver.$faviconUrl.sink { [weak self] in self?.load(url: $0) }
-    }
-
     static func updateCache(for url: URL, with image: UIImage) {
         cache[url] = image
+    }
+
+    func resolve(with resolver: FaviconResolver) {
+        guard self.resolver !== resolver else {
+            return
+        }
+
+        self.resolver = resolver
+        self.subscription?.cancel()
+        self.subscription = resolver.$faviconUrl.sink { [weak self] in self?.load(url: $0) }
     }
 
     private func load(url: URL?) {
@@ -44,7 +49,7 @@ class FaviconFetcher: ObservableObject {
                 }
             }
         }
-        update(with: resolver.fallbackContent)
+        update(with: resolver?.fallbackContent ?? (FaviconSupport.defaultFavicon, .clear))
     }
 
     private func update(with content: (image: UIImage, color: UIColor)) {
@@ -54,7 +59,9 @@ class FaviconFetcher: ObservableObject {
 }
 
 struct FaviconView: View {
-    @ObservedObject private var fetcher: FaviconFetcher
+    @StateObject private var fetcher = FaviconFetcher()
+
+    let resolver: FaviconResolver
 
     /// If `site.icon` is not provided, then the `Favicon` to use will be resolved by looking in
     /// the history database for the `Favicon` associated with the `site.url`. If that is not
@@ -74,14 +81,20 @@ struct FaviconView: View {
     }
 
     init(with resolver: FaviconResolver) {
-        self.fetcher = FaviconFetcher(with: resolver)
+        self.resolver = resolver
     }
 
     var body: some View {
-        Image(uiImage: fetcher.image)
-            .resizable()
-            .background(Color(fetcher.backgroundColor))
-            .transition(.opacity)
-            .scaledToFit()
+        ZStack {
+            Color.clear
+                .onAppear {
+                    self.fetcher.resolve(with: resolver)
+                }
+            Image(uiImage: fetcher.image)
+                .resizable()
+                .background(Color(fetcher.backgroundColor))
+                .transition(.opacity)
+                .scaledToFit()
+        }
     }
 }
