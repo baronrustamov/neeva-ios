@@ -99,7 +99,10 @@ class BrowserModel: ObservableObject {
 
         SceneDelegate.getCurrentSceneDelegate(with: tabManager.scene)?.setSceneUIState(to: .tab)
         gridModel.switcherAnimationModel.update(switchWithAnimation: true)
-        gridModel.tabCardModel.isSearchingForTabs = false
+
+        if gridModel.tabCardModel.isSearchingForTabs {
+            gridModel.tabCardModel.isSearchingForTabs = false
+        }
     }
 
     func onCompletedCardTransition() {
