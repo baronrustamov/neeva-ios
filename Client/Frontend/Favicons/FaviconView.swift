@@ -20,7 +20,7 @@ class FaviconFetcher: ObservableObject {
 
     init(with resolver: FaviconResolver) {
         self.resolver = resolver
-        self.subscription = self.resolver.$faviconUrl.sink(receiveValue: self.load(url:))
+        self.subscription = self.resolver.$faviconUrl.sink { [weak self] in self?.load(url: $0) }
     }
 
     static func updateCache(for url: URL, with image: UIImage) {
