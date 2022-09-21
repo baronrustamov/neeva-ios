@@ -43,7 +43,8 @@ class FaviconHandler {
             }
         }
 
-        let onSuccess: (Favicon, Data?) -> Void = { [weak tab] (favicon, data) -> Void in
+        let onSuccess: (Favicon, UIImage?, Data?) -> Void = {
+            [weak tab] (favicon, img, data) -> Void in
             tab?.favicon = favicon
 
             guard !(tab?.isIncognito ?? true) else {
@@ -54,7 +55,13 @@ class FaviconHandler {
             getAppDelegate().profile.favicons.addFavicon(favicon, forSite: site) >>> {
                 deferred.fill(Maybe(success: (favicon, data)))
             }
+
+            // Update the favicon resolver and image caches so that when the user goes to the card
+            // grid, the needed favicons will already be available in memory.
             FaviconResolver.updateCache(for: site, with: favicon)
+            if let img = img {
+                FaviconFetcher.updateCache(for: favicon.url, with: img)
+            }
         }
 
         let onCompletedSiteFavicon: SDInternalCompletionBlock = {
@@ -72,14 +79,14 @@ class FaviconHandler {
                 favicon.width = 0
                 favicon.height = 0
 
-                onSuccess(favicon, data)
+                onSuccess(favicon, nil, data)
                 return
             }
 
             favicon.width = Int(img.size.width)
             favicon.height = Int(img.size.height)
 
-            onSuccess(favicon, data)
+            onSuccess(favicon, img, data)
         }
 
         let onCompletedPageFavicon: SDInternalCompletionBlock = {
@@ -99,7 +106,7 @@ class FaviconHandler {
             favicon.width = Int(img.size.width)
             favicon.height = Int(img.size.height)
 
-            onSuccess(favicon, data)
+            onSuccess(favicon, img, data)
         }
 
         fetch = manager.loadImage(
