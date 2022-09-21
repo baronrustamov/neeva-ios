@@ -178,13 +178,9 @@ struct CardsContainer: View {
     @Default(.seenSpacesIntro) var seenSpacesIntro: Bool
 
     @EnvironmentObject var browserModel: BrowserModel
-    //    @EnvironmentObject var gridSwitcherModel: GridSwitcherModel
+    @EnvironmentObject var gridSwitcherModel: GridSwitcherModel
     @EnvironmentObject var incognitoModel: IncognitoModel
     @EnvironmentObject var tabModel: TabCardModel
-
-    // XXX This eliminate one CardsContainer update, so we should figure out how to
-    // isolate this dependency.
-    var gridSwitcherModel: GridSwitcherModel { browserModel.gridModel.switcherModel }
 
     // Used to rebuild the scene when switching between portrait and landscape.
     @State var orientation: UIDeviceOrientation = .unknown

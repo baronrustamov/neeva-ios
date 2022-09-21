@@ -55,7 +55,7 @@ struct BrowserContentView: View {
                 // XXX adding .leading here eliminates one CardsContainer update as without
                 // this the leading edge of the safe area changes from 0 to 1e-14 which is
                 // enough to make SwiftUI think it needs to evaluate CardsContainer.body again.
-                .ignoresSafeArea(edges: [.bottom, .leading])
+                .ignoresSafeArea(edges: [.bottom]) // , .leading])
 
             tabContainerContent
                 .opacity(contentVisibilityModel.showContent ? 1 : 0)
@@ -114,6 +114,8 @@ struct BrowserView: View {
                 safeArea, topBarHeight, bottomBarHeight in
                 self.safeArea = safeArea
                 self.chromeModel.bottomBarHeight = bottomBarHeight
+
+                print(">>> safeArea.leading = \(safeArea.leading)")
 
                 // Add a 3px of extra height to footer to hide
                 // a small bit of view that isn't hidden.
