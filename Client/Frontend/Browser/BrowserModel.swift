@@ -30,7 +30,7 @@ class BrowserModel: ObservableObject {
 
     func showGridWithAnimation() {
         gridModel.switcherModel.update(state: .tabs)
-        gridModel.switcherModel.update(switchModeWithoutAnimation: true)
+        gridModel.switcherAnimationModel.update(switchWithAnimation: false)
         gridModel.tabCardModel.updateIfNeeded()
 
         if tabManager.selectedTab?.isIncognito != incognitoModel.isIncognito {
@@ -72,7 +72,7 @@ class BrowserModel: ObservableObject {
         tabToBeSelected?.shouldPerformHeavyUpdatesUponSelect = false
 
         if let tabToBeSelected = tabToBeSelected {
-            gridModel.switcherModel.update(switchModeWithoutAnimation: true)
+            gridModel.switcherAnimationModel.update(switchWithAnimation: false)
             incognitoModel.update(isIncognito: tabToBeSelected.isIncognito)
         }
 
@@ -98,7 +98,7 @@ class BrowserModel: ObservableObject {
         tabManager.updateSelectedTabDataPostAnimation()
 
         SceneDelegate.getCurrentSceneDelegate(with: tabManager.scene)?.setSceneUIState(to: .tab)
-        gridModel.switcherModel.update(switchModeWithoutAnimation: false)
+        gridModel.switcherAnimationModel.update(switchWithAnimation: true)
         gridModel.tabCardModel.isSearchingForTabs = false
     }
 
@@ -107,7 +107,7 @@ class BrowserModel: ObservableObject {
         // since the previous animation wasn't finished yet.
         if gridModel.visibilityModel.showGrid, cardTransitionModel.state == .visibleForTrayShow {
             cardTransitionModel.update(to: .hidden)
-            gridModel.switcherModel.update(switchModeWithoutAnimation: false)
+            gridModel.switcherAnimationModel.update(switchWithAnimation: true)
 
             SceneDelegate.getCurrentSceneDelegate(with: tabManager.scene)?.setSceneUIState(
                 to: .cardGrid(gridModel.switcherModel.state, tabManager.isIncognito))
