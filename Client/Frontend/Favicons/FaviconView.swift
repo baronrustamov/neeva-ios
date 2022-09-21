@@ -15,44 +15,41 @@ class FaviconFetcher: ObservableObject {
     private let resolver: FaviconResolver
     private var subscription: AnyCancellable?
 
-    @Published var image: UIImage?
+    @Published var image: UIImage = FaviconSupport.defaultFavicon
     @Published var backgroundColor = UIColor.clear
 
     init(with resolver: FaviconResolver) {
         self.resolver = resolver
-        self.subscription = self.resolver.$faviconUrl.sink { [weak self] in
-            if let url = $0 {
-                self?.load(url: url)
-            }
-        }
+        self.subscription = self.resolver.$faviconUrl.sink(receiveValue: self.load(url:))
     }
 
     static func updateCache(for url: URL, with image: UIImage) {
         cache[url] = image
     }
 
-    private func load(url: URL) {
-        if let image = Self.cache[url] {
-            update(image: image, backgroundColor: .clear)
-        } else {
-            // Fetch the image
+    private func load(url: URL?) {
+        // The url will be null while waiting on the resolver.
+        if let url = url {
+            if let image = Self.cache[url] {
+                self.update(with: (image, .clear))
+                return
+            }
+            // Fetch the image and use fallback content while waiting for it to load.
             SDWebImageManager.shared.loadImage(with: url, options: .init(), progress: nil) {
                 (image, _, _, _, _, _) in
                 // completed
                 if let image = image {
                     Self.cache[url] = image
-                    self.update(image: image, backgroundColor: .clear)
+                    self.update(with: (image, .clear))
                 }
             }
-
-            let fallbackContent = resolver.fallbackContent
-            update(image: fallbackContent.image, backgroundColor: fallbackContent.color)
         }
+        update(with: resolver.fallbackContent)
     }
 
-    private func update(image: UIImage, backgroundColor: UIColor) {
-        self.image = image
-        self.backgroundColor = backgroundColor
+    private func update(with content: (image: UIImage, color: UIColor)) {
+        self.image = content.image
+        self.backgroundColor = content.color
     }
 }
 
@@ -81,14 +78,10 @@ struct FaviconView: View {
     }
 
     var body: some View {
-        if let image = fetcher.image {
-            Image(uiImage: image)
-                .resizable()
-                .background(Color(fetcher.backgroundColor))
-                .transition(.opacity)
-                .scaledToFit()
-        } else {
-            Color.blue
-        }
+        Image(uiImage: fetcher.image)
+            .resizable()
+            .background(Color(fetcher.backgroundColor))
+            .transition(.opacity)
+            .scaledToFit()
     }
 }
