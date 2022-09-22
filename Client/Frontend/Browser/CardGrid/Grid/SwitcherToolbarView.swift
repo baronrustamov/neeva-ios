@@ -192,8 +192,9 @@ struct SwitcherToolbarView: View {
                 .allowsHitTesting(toolbarModel.tabIsSelected)
             }
             .padding(.horizontal, 16)
-            .frame(
-                height: top ? UIConstants.TopToolbarHeightWithToolbarButtonsShowing - 1 : nil)
+            .if(top) {
+                $0.padding(.vertical, BrowserTopBarViewUX.SwitcherToolbarViewPadding)
+            }
 
             if top {
                 divider

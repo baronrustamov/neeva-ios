@@ -80,6 +80,9 @@ struct GridPicker: View {
     var body: some View {
         picker
             .frame(height: gridModel.pickerHeight)
+            .if(!isInToolbar) {
+                $0.padding(.bottom, BrowserTopBarViewUX.GridPickerBottomPadding)
+            }
             .background(
                 (!isInToolbar
                     ? Color.DefaultBackground : Color.clear)
