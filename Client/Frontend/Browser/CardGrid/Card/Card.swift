@@ -88,6 +88,7 @@ struct Card<Details>: View where Details: CardDetails {
     }
 
     @Environment(\.selectionCompletion) private var selectionCompletion
+    @Environment(\.cardSize) private var cardSize
     @EnvironmentObject private var incognitoModel: IncognitoModel
     @State private var isPressed = false
 
@@ -120,13 +121,14 @@ struct Card<Details>: View where Details: CardDetails {
                             .frame(width: CardUX.FaviconSize, height: CardUX.FaviconSize)
                             .cornerRadius(CardUX.FaviconCornerRadius)
                             .padding(5)
-                        Text(
-                            details.title
-                        ).withFont(.labelMedium)
+                        Text(details.title)
+                            .withFont(.labelMedium)
                             .frame(alignment: .center)
                             .padding(.trailing, 5).padding(.vertical, 4).lineLimit(1)
                     }
-                    .frame(width: max(0, geom.size.width), height: CardUX.ButtonSize)
+                    // Avoid re-layout as the geometry of the card changes during card transition
+                    // animation. `geom.size.width` should never get smaller than `cardSize`.
+                    .frame(width: cardSize, height: CardUX.ButtonSize)
                     .background(Color.clear)
                     .opacity(animate && !showGrid ? 0 : 1)
                 }
