@@ -98,7 +98,6 @@ class TrackingStatsViewModel: ObservableObject {
 
     private var subscriptions: Set<AnyCancellable> = []
     private var statsSubscription: AnyCancellable?
-    private var tabFinishLoadingSubscription: AnyCancellable?
 
     /// FOR TESTING ONLY
     private(set) var trackers: [TrackingEntity] {
@@ -134,31 +133,30 @@ class TrackingStatsViewModel: ObservableObject {
                 self.trackers = data.trackingEntities
                 self.numAdBlocked = data.numAdBlocked
                 self.onDataUpdated()
-            }
 
-        if NeevaExperiment.arm(for: .adBlockOnboarding) == .adBlock {
-            tabFinishLoadingSubscription = selectedTab?.$estimatedProgress.sink(receiveValue: {
-                estimatedProgress in
-                if estimatedProgress == 1 {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        if self.numAdBlocked > 0 {
-                            self.showOnboardingIfNecessary(onboardingBlockType: .adBlock)
-                        } else if self.didBlockCookiePopup == 1 {
-                            self.showOnboardingIfNecessary(onboardingBlockType: .cookiePopup)
-                        }
-                    }
+                if self.numAdBlocked > 0 {
+                    self.showOnboardingIfNecessary(onboardingBlockType: .adBlock)
                 }
-            })
-        }
+            }
     }
 
     func showOnboardingIfNecessary(onboardingBlockType: OnboardingBlockType) {
-        if !Defaults[.cookieCutterOnboardingShowed]
+        if NeevaExperiment.arm(for: .adBlockOnboarding) == .adBlock
+            && !Defaults[.cookieCutterOnboardingShowed]
             && self.onboardingBlockType == nil
             && ContentBlocker.shared.setupCompleted
         {
             self.onboardingBlockType = onboardingBlockType
             self.showTrackingStatsViewPopover = true
+
+            switch onboardingBlockType {
+            case .adBlock:
+                ClientLogger.shared.logCounter(
+                    LogConfig.Interaction.ShowNeevaShieldAdBlockOnboardingScreen)
+            case .cookiePopup:
+                ClientLogger.shared.logCounter(
+                    LogConfig.Interaction.ShowNeevaShieldCookiePopupOnboardingScreen)
+            }
         }
     }
 

@@ -202,7 +202,8 @@ class BrowserViewController: UIViewController {
         cheatsheetPromoModel.subscribe(to: self.tabManager)
         cheatsheetPromoModel.subscribe(
             to: self.browserModel.contentVisibilityModel,
-            overlayManager: self.overlayManager
+            overlayManager: self.overlayManager,
+            trackingModel: self.trackingStatsViewModel
         )
 
         didInit()

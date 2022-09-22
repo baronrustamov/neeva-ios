@@ -230,6 +230,9 @@ public enum LogConfig {
         case DefaultBrowserInterstitialRestoreImp
         /// Recommended space tap on preview zero query
         case SpacesRecommendedDetailUIVisited
+        /// the pop over for neeva shield onboarding screen
+        case ShowNeevaShieldAdBlockOnboardingScreen
+        case ShowNeevaShieldCookiePopupOnboardingScreen
 
         // MARK: promo card
         /// Promo card is rendered on screen
@@ -641,6 +644,8 @@ public enum LogConfig {
         case .NeevaAttributionRequestError: return .FirstRun
         case .DefaultBrowserInterstitialRestoreImp: return .FirstRun
         case .SpacesRecommendedDetailUIVisited: return .FirstRun
+        case .ShowNeevaShieldAdBlockOnboardingScreen: return .FirstRun
+        case .ShowNeevaShieldCookiePopupOnboardingScreen: return .FirstRun
 
         // MARK: - PromoCard
         case .PromoCardAppear: return .PromoCard

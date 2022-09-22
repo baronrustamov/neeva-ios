@@ -77,7 +77,7 @@ class CookieCutterModel: ObservableObject {
 
     // MARK: - Methods
     func cookieWasHandled(bvc: BrowserViewController, domain: String?) {
-        if NeevaExperiment.arm(for: .adBlockOnboarding) == .adBlock {
+        if NeevaExperiment.arm(for: .adBlockOnboarding) != .adBlock {
             if !Defaults[.cookieCutterOnboardingShowed] {
                 Defaults[.cookieCutterOnboardingShowed] = true
 
@@ -105,6 +105,9 @@ class CookieCutterModel: ObservableObject {
         }
 
         bvc.trackingStatsViewModel.didBlockCookiePopup = cookiesBlocked
+        if cookiesBlocked == 1 {
+            bvc.trackingStatsViewModel.showOnboardingIfNecessary(onboardingBlockType: .cookiePopup)
+        }
 
         if let domain = domain {
             // Also flag site here in case flagSite wasn't called by the engine.
