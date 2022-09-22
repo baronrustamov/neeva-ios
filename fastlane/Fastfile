@@ -1,0 +1,89 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  before_all do
+    setup_circle_ci
+    app_store_connect_api_key
+    import_certificate(
+      keychain_name: ENV["MATCH_KEYCHAIN_NAME"],
+      keychain_password: ENV["MATCH_KEYCHAIN_PASSWORD"],
+      certificate_path: 'Certificates.p12',
+      certificate_password: ENV["CERTIFICATE_PASSWORD"] || "default"
+    )
+  end
+
+  desc "Sends a slack message when you get an error"
+    error do |lane, exception|
+      send_slack_message(event_name: "Something went wrong...", is_success: false, error: exception)
+    end
+
+  marketing_version = nil
+  build_number = nil
+
+  desc "Build and deploy app to Testflight"
+  lane :build_and_deploy do
+    version_str = File.open("../Client/AppConfig.xcconfig").grep(/BROWSER_MARKETING_VERSION = /)
+    marketing_version = (version_str[0].to_s.split)[2]
+    build_number_str = File.open("../Client/AppConfig.xcconfig").grep(/BROWSER_PROJECT_VERSION = /)
+    build_number = (build_number_str[0].to_s.split)[2]
+
+     build_app(
+       configuration: "Release",
+       scheme: "Client",
+       clean: true,
+       export_options: "./Scripts/ExportOptions.plist"
+     )
+     upload_to_testflight(
+       changelog: "Internal Test Build",
+       groups: [ENV["TESTFLIGHT_GROUP_1"],
+                 ENV["TESTFLIGHT_GROUP_2"],
+                 ENV["TESTFLIGHT_GROUP_3"]]
+     )
+     slack(
+       message: ":fruitcompany: Uploaded Testflight Build #*#{build_number}* (*v#{marketing_version}*) to <#{ENV["TESTFLIGHT_URL"]}|App Store>",
+       default_payloads: ["git_branch", "last_git_commit", "last_git_commit_hash"],
+       slack_url: ENV["SLACK_URL"]
+     )
+  end
+
+  lane :send_slack_message do |options|
+      v = lane_context[SharedValues::VERSION_NUMBER]
+      b = lane_context[SharedValues::BUILD_NUMBER]
+      event_name = options[:event_name]
+      is_success = options[:is_success]
+      error = options[:error]
+      version_text = "#{marketing_version} (#{build_number})"
+      slack(
+        slack_url: ENV["SLACK_URL"],
+        message:  event_name,
+        success: is_success,
+        payload: {
+        "Version" => version_text
+        },
+        attachment_properties: {
+          fields: [
+              {
+                  title: "Error message",
+                  value: error
+              }
+          ]
+      },
+        default_payloads: [:git_branch, :git_author, :last_git_commit]
+      )
+    end
+end
