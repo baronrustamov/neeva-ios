@@ -76,12 +76,16 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
 
     // A WKWebViewConfiguration used for normal tabs
     lazy var configuration: WKWebViewConfiguration = {
-        return TabManager.makeWebViewConfig(isIncognito: false)
+        let config = TabManager.makeWebViewConfig(isIncognito: false)
+        config.preferences.javaScriptCanOpenWindowsAutomatically = !Defaults[.blockPopups]
+        return config
     }()
 
     // A WKWebViewConfiguration used for private mode tabs
     private lazy var incognitoConfiguration: WKWebViewConfiguration = {
-        return TabManager.makeWebViewConfig(isIncognito: true)
+        let config = TabManager.makeWebViewConfig(isIncognito: true)
+        config.preferences.javaScriptCanOpenWindowsAutomatically = !Defaults[.blockPopups]
+        return config
     }()
 
     // Enables undo of recently closed tabs
@@ -441,10 +445,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
                 tab.webView?.configuration.preferences.javaScriptCanOpenWindowsAutomatically =
                     allowPopups
             }
-            // The default tab configurations also need to change.
-            self.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
-            self.incognitoConfiguration.preferences.javaScriptCanOpenWindowsAutomatically =
-                allowPopups
         }
     }
 
@@ -1051,10 +1051,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             }
         }
 
-        if tab.isIncognito && incognitoTabs.count < 1 {
-            incognitoConfiguration = TabManager.makeWebViewConfig(isIncognito: true)
-        }
-
         if notify {
             TabEvent.post(.didClose, for: tab)
             updateAllTabDataAndSendNotifications(notify: notify)
@@ -1157,7 +1153,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
 
     func removeAllIncognitoTabs() {
         removeTabs(incognitoTabs)
-        incognitoConfiguration = TabManager.makeWebViewConfig(isIncognito: true)
     }
 
     // MARK: Recently Closed Tabs
