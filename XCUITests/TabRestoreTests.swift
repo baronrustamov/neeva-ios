@@ -16,7 +16,8 @@ class TabRestoreTests: BaseTestCase {
         goToTabTray()
         XCTAssertEqual(getNumberOfTabs(openTabTray: false), 1)
 
-        app.buttons["Close"].tap()
+        // on iOS 16, it complains that it cannot scroll to the button
+        app.buttons["Close"].tap(force: true)
         waitForNoExistence(app.buttons["Close"])
         XCTAssertEqual(getNumberOfTabs(openTabTray: false), 0)
 

@@ -29,19 +29,23 @@ class SpaceGeneratorTests: BaseTestCase {
 
     func testClaimGeneratedItem() {
         // Double-swipe to reduce flaking
-        app.cells["First generated entity"].swipeLeft()
+        waitForExistence(app.buttons["First generated entity"])
+        app.buttons["First generated entity"].swipeLeft()
+
         if !app.buttons["Keep"].exists {
-            app.cells["First generated entity"].swipeLeft()
+            app.buttons["First generated entity"].swipeLeft()
         }
+
+        waitForExistence(app.buttons["Keep"])
         app.buttons["Keep"].tap()
 
         // Double-swipe to reduce flaking
-        app.cells["First generated entity"].swipeLeft()
+        app.buttons["First generated entity"].swipeLeft()
         if !app.buttons["Edit"].exists {
-            app.cells["First generated entity"].swipeLeft()
+            app.buttons["First generated entity"].swipeLeft()
         }
 
-        XCTAssertTrue(app.buttons["Edit"].exists)
+        waitForExistence(app.buttons["Edit"])
     }
 
     func testDeleteGenerator() {

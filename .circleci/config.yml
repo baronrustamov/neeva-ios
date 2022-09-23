@@ -17,7 +17,7 @@ commands:
       - bootstrap
       - restore_cache:
           name: Restore build cache
-          key: v1-build-{{ .Environment.CIRCLE_SHA1 }}
+          key: v2-build-{{ .Environment.CIRCLE_SHA1 }}
   carthage-bootstrap:
     steps:
       - run:
@@ -25,13 +25,13 @@ commands:
           command: echo "$(xcodebuild -version)" >| xcode_version
       - restore_cache:
           name: Restore Carthage/ cache
-          key: carthage-dir-cache-{{ arch }}-{{ checksum "xcode_version" }}-{{ checksum "Cartfile.resolved" }}-v2
+          key: carthage-dir-cache-{{ arch }}-{{ checksum "xcode_version" }}-{{ checksum "Cartfile.resolved" }}-v3
       - run:
           name: Bootstrap Carthage dependencies
           command: ./carthage_command.sh
       - save_cache:
           name: Save Carthage/ cache
-          key: carthage-dir-cache-{{ arch }}-{{ checksum "xcode_version" }}-{{ checksum "Cartfile.resolved" }}-v2
+          key: carthage-dir-cache-{{ arch }}-{{ checksum "xcode_version" }}-{{ checksum "Cartfile.resolved" }}-v3
           paths:
             - Carthage
   unset-clone-via-ssh:
@@ -49,7 +49,7 @@ commands:
       - generate-user-scripts
       - run:
           name: Build Client
-          command: xcodebuild build-for-testing -scheme Client -workspace Neeva.xcworkspace -destination 'platform=iOS Simulator,name=iPhone 12'
+          command: xcodebuild build-for-testing -scheme Client -workspace Neeva.xcworkspace -destination 'platform=iOS Simulator,name=iPhone 14'
   build-codegen:
     steps:
        - run:
@@ -75,18 +75,18 @@ commands:
     steps:
       - run:
           name: SharedTests
-          command: xcodebuild test-without-building -scheme Client -workspace Neeva.xcworkspace -destination 'platform=iOS Simulator,name=iPhone 12' -only-testing SharedTests
+          command: xcodebuild test-without-building -scheme Client -workspace Neeva.xcworkspace -destination 'platform=iOS Simulator,name=iPhone 14' -only-testing SharedTests
       - run:
           name: StorageTests
-          command: xcodebuild test-without-building -scheme Client -workspace Neeva.xcworkspace -destination 'platform=iOS Simulator,name=iPhone 12' -only-testing StorageTests
+          command: xcodebuild test-without-building -scheme Client -workspace Neeva.xcworkspace -destination 'platform=iOS Simulator,name=iPhone 14' -only-testing StorageTests
       - run:
           name: ClientTests
-          command: xcodebuild test-without-building -scheme Client -workspace Neeva.xcworkspace -destination 'platform=iOS Simulator,name=iPhone 12' -only-testing ClientTests
+          command: xcodebuild test-without-building -scheme Client -workspace Neeva.xcworkspace -destination 'platform=iOS Simulator,name=iPhone 14' -only-testing ClientTests
   ui-tests:
     steps:
       - run:
           name: UITests
-          command: xcodebuild test-without-building -scheme Client -workspace Neeva.xcworkspace -destination 'platform=iOS Simulator,name=iPhone 12' -only-testing UITests  -resultBundlePath uitests-$CIRCLE_BUILD_NUM.xcresult
+          command: xcodebuild test-without-building -scheme Client -workspace Neeva.xcworkspace -destination 'platform=iOS Simulator,name=iPhone 14' -only-testing UITests  -resultBundlePath uitests-$CIRCLE_BUILD_NUM.xcresult
       - run:
           name: "Store screenshots"
           command: ./Scripts/uitests-helper.sh move-iphone-screenshots
@@ -104,7 +104,7 @@ commands:
           name: XCUITests
           command: >
             xcodebuild test-without-building -scheme Client -workspace Neeva.xcworkspace
-            -destination 'platform=iOS Simulator,name=iPhone 12' -resultBundlePath xcuitests-$CIRCLE_BUILD_NUM.xcresult
+            -destination 'platform=iOS Simulator,name=iPhone 14' -resultBundlePath xcuitests-$CIRCLE_BUILD_NUM.xcresult
             $(find -E XCUITests -regex '.*Tests?\.swift' | sed -e 's/^/-only-testing:/' -e 's/\.swift$//' | circleci tests split)
       - store-xcuitest-artifact
   xcui-tests-ipad:
@@ -130,12 +130,12 @@ commands:
       - checkout
       - run:
           name: Build AppClip
-          command: xcodebuild build-for-testing -scheme AppClip -workspace Neeva.xcworkspace -destination 'platform=iOS Simulator,name=iPhone 12'
+          command: xcodebuild build-for-testing -scheme AppClip -workspace Neeva.xcworkspace -destination 'platform=iOS Simulator,name=iPhone 14'
   app-clip-tests:
     steps:
       - run:
           name: AppClipTests
-          command: xcodebuild test-without-building -scheme AppClip -workspace Neeva.xcworkspace -destination 'platform=iOS Simulator,name=iPhone 12' -only-testing AppClipTests
+          command: xcodebuild test-without-building -scheme AppClip -workspace Neeva.xcworkspace -destination 'platform=iOS Simulator,name=iPhone 14' -only-testing AppClipTests
   swift-format-check:
     steps:
       - run:
@@ -169,7 +169,7 @@ commands:
 jobs:
   build:
     macos:
-      xcode: "13.4.1"
+      xcode: "14.0.0"
     resource_class: macos.x86.medium.gen2
     steps:
       - bootstrap
@@ -177,12 +177,12 @@ jobs:
       - build-client
       - save_cache:
           name: Save build cache
-          key: v1-build-{{ .Environment.CIRCLE_SHA1 }}
+          key: v2-build-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - ~/Library/Developer/Xcode/DerivedData
   swift-format:
     macos:
-      xcode: "13.4.1"
+      xcode: "14.0.0"
     resource_class: macos.x86.medium.gen2
     steps:
       - restore-build-cache
@@ -190,7 +190,7 @@ jobs:
       - swift-format-check
   test-client:
     macos:
-      xcode: "13.4.1"
+      xcode: "14.0.0"
     resource_class: macos.x86.medium.gen2
     steps:
       - restore-build-cache
@@ -199,14 +199,14 @@ jobs:
       - app-clip-tests
   ui-tests:
     macos:
-      xcode: "13.4.1"
+      xcode: "14.0.0"
     resource_class: macos.x86.medium.gen2
     steps:
       - restore-build-cache
       - ui-tests
   xcui-tests:
     macos:
-      xcode: "13.4.1"
+      xcode: "14.0.0"
     parallelism: 3
     resource_class: macos.x86.medium.gen2
     steps:
@@ -214,7 +214,7 @@ jobs:
       - xcui-tests
   xcui-tests-ipad:
     macos:
-      xcode: "13.4.1"
+      xcode: "14.0.0"
     parallelism: 3
     resource_class: macos.x86.medium.gen2
     steps:

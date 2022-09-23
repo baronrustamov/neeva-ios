@@ -62,19 +62,19 @@ class AddToSpaceSheetTests: BaseTestCase {
         XCTAssertTrue(app.textFields["Search Spaces"].exists)
     }
 
-    func testCloseSheetOnTapOutside() throws {
+    func testCloseSheetOnTapOutside() {
         app.buttons["Add To Space"].tap()
 
         if iPad() {
             app.buttons["Back"].tap(force: true)
         } else {
-            app.buttons["Address Bar"].tap()
+            app.buttons["Share"].tap(force: true)
         }
 
         waitForNoExistence(app.buttons["View Spaces"])
     }
 
-    func testCloseSheetOnTapX() throws {
+    func testCloseSheetOnTapX() {
         app.buttons["Add To Space"].tap()
         app.buttons["Close"].tap(force: true)
 
@@ -92,12 +92,11 @@ class AddToSpaceSheetTests: BaseTestCase {
 
         // Confirm we are on the Space detail page
         waitForExistence(app.buttons["Start Searching"])
-        XCTAssertTrue(app.buttons["Start Searching"].exists)
-
+        waitForExistence(app.buttons["Return to all Spaces view"])
         app.buttons["Return to all Spaces view"].tap()
 
         // Confirm the Space is visible on the Space grid page
-        XCTAssertTrue(app.buttons["Test Space"].exists)
+        waitForExistence(app.buttons["Test Space"])
     }
 
     func testDeleteItemFromExistingSpace() {

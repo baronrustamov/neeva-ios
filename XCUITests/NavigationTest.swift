@@ -95,15 +95,39 @@ class NavigationTest: BaseTestCase {
 
     func testCopyLink() {
         longPressLinkOptions(optionSelected: "Copy Link")
-        XCTAssertEqual(UIPasteboard.general.url?.absoluteString, website_2["moreLinkLongPressUrl"]!)
+
+        if #available(iOS 16.0, *) {
+            app.buttons["Address Bar"].tap()
+            app.textFields["address"].tap()
+
+            waitForExistence(app.menuItems["Paste & Go"])
+            app.menuItems["Paste & Go"].tap()
+
+            waitForHittable(app.buttons["Address Bar"])
+            XCTAssertEqual(getTabURL()?.absoluteString, "https://www.iana.org/domains/reserved")
+        } else {
+            XCTAssertEqual(
+                UIPasteboard.general.url?.absoluteString, website_2["moreLinkLongPressUrl"]!)
+        }
     }
 
     func testCopyLinkIncognitoMode() {
         setIncognitoMode(enabled: true)
         longPressLinkOptions(optionSelected: "Copy Link")
 
-        XCTAssertEqual(
-            UIPasteboard.general.url?.absoluteString, website_2["moreLinkLongPressUrlPrivate"]!)
+        if #available(iOS 16.0, *) {
+            app.buttons["Address Bar"].tap()
+            app.textFields["address"].tap()
+
+            waitForExistence(app.menuItems["Paste & Go"])
+            app.menuItems["Paste & Go"].tap()
+
+            waitForHittable(app.buttons["Address Bar"])
+            XCTAssertEqual(getTabURL()?.absoluteString, "https://www.iana.org/domains/reserved")
+        } else {
+            XCTAssertEqual(
+                UIPasteboard.general.url?.absoluteString, website_2["moreLinkLongPressUrlPrivate"]!)
+        }
     }
 
     func testLongPressOnAddressBar() {
@@ -113,20 +137,18 @@ class NavigationTest: BaseTestCase {
         app.textFields["address"].press(forDuration: 1)
         waitForExistence(app.menuItems["Select All"])
 
-        //Tap on Select All option and make sure Copy, Cut, Paste, and Look Up are shown
+        // Tap on Select All option and make sure Copy, Cut, Paste, and Look Up are shown
         app.menuItems["Select All"].tap()
         waitForExistence(app.menuItems["Copy"])
+
         if iPad() {
             XCTAssertTrue(app.menuItems["Copy"].exists)
             XCTAssertTrue(app.menuItems["Cut"].exists)
-            XCTAssertTrue(app.menuItems["Look Up"].exists)
-            XCTAssertTrue(app.menuItems["Share…"].exists)
             XCTAssertTrue(app.menuItems["Paste"].exists)
             XCTAssertTrue(app.menuItems["Paste & Go"].exists)
         } else {
             XCTAssertTrue(app.menuItems["Copy"].exists)
             XCTAssertTrue(app.menuItems["Cut"].exists)
-            XCTAssertTrue(app.menuItems["Look Up"].exists)
             XCTAssertTrue(app.menuItems["Paste"].exists)
         }
 
@@ -144,14 +166,12 @@ class NavigationTest: BaseTestCase {
         if iPad() {
             XCTAssertTrue(app.menuItems["Copy"].exists)
             XCTAssertTrue(app.menuItems["Cut"].exists)
-            XCTAssertTrue(app.menuItems["Look Up"].exists)
-            XCTAssertTrue(app.menuItems["Share…"].exists)
             XCTAssertTrue(app.menuItems["Paste & Go"].exists)
             XCTAssertTrue(app.menuItems["Paste"].exists)
         } else {
             XCTAssertTrue(app.menuItems["Copy"].exists)
             XCTAssertTrue(app.menuItems["Cut"].exists)
-            XCTAssertTrue(app.menuItems["Look Up"].exists)
+            XCTAssertTrue(app.menuItems["Paste"].exists)
         }
     }
 

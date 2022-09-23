@@ -23,8 +23,17 @@ class RelatedSpaceTests: BaseTestCase {
 
         super.setUp()
 
-        app.buttons["Show Tabs"].tap()
+        goToTabTray()
         app.buttons["Spaces"].tap()
+
+        // With iOS 16, the grid doesn't update unless we tap on a space and go back.
+        waitForExistence(app.buttons["My Space"])
+        app.buttons["My Space"].tap(force: true)
+
+        waitForExistence(app.buttons["Return to all Spaces view"])
+        app.buttons["Return to all Spaces view"].tap()
+
+        waitForExistence(app.buttons[spaceName1])
         app.buttons[spaceName1].tap()
     }
 
@@ -32,8 +41,8 @@ class RelatedSpaceTests: BaseTestCase {
     // so we click the user's name and hope that the app navigates
     // to the Profile UI instead.
     func testGetRelatedSpaces() {
-        XCTAssertTrue(app.staticTexts[spaceName1].exists)
-        XCTAssertTrue(app.buttons["Test User"].exists)
+        waitForExistence(app.staticTexts[spaceName1])
+        waitForExistence(app.buttons["Test User"])
 
         app.buttons["Test User"].tap()
         app.buttons[spaceName2].tap()

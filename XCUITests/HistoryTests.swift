@@ -38,9 +38,9 @@ class HistoryTests: BaseTestCase {
     private func clearWebsiteData() {
         goToSettings()
 
-        waitForExistence(app.cells["Clear Browsing Data"])
-        app.cells["Clear Browsing Data"].tap()
-        app.cells["Clear Selected Data on This Device"].tap()
+        waitForExistence(app.buttons["Clear Browsing Data"])
+        app.buttons["Clear Browsing Data"].tap()
+        app.buttons["Clear Selected Data on This Device"].tap()
 
         waitForExistence(app.buttons["Clear Data"])
         app.buttons["Clear Data"].tap()

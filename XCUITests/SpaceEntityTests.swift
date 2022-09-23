@@ -32,11 +32,7 @@ class SpaceEntityTests: BaseTestCase {
         XCTAssertFalse(app.buttons["Add To"].exists)
         XCTAssertFalse(app.buttons["Delete"].exists)
 
-        // Double-swipe to reduce flaking
-        app.cells["Example"].swipeLeft()
-        if !app.buttons["Edit"].exists {
-            app.cells["Example"].swipeLeft()
-        }
+        swipeToRevealEdit("Example")
 
         XCTAssertTrue(app.buttons["Edit"].exists)
         XCTAssertTrue(app.buttons["Add To"].exists)
@@ -51,11 +47,7 @@ class SpaceEntityTests: BaseTestCase {
                 .matching(identifier: "This is a description")
                 .element.exists)
 
-        // Double-swipe to reduce flaking
-        app.cells["Example"].swipeLeft()
-        if !app.buttons["Edit"].exists {
-            app.cells["Example"].swipeLeft()
-        }
+        swipeToRevealEdit("Example")
         app.buttons["Edit"].tap()
 
         XCTAssertTrue(app.staticTexts["Edit item"].exists)
@@ -75,11 +67,7 @@ class SpaceEntityTests: BaseTestCase {
     }
 
     func testAddToViaSwipe() {
-        // Double-swipe to reduce flaking
-        app.cells["Example"].swipeLeft()
-        if !app.buttons["Edit"].exists {
-            app.cells["Example"].swipeLeft()
-        }
+        swipeToRevealEdit("Example")
 
         XCTAssertFalse(app.staticTexts["Save to Spaces"].exists)
 
@@ -96,11 +84,7 @@ class SpaceEntityTests: BaseTestCase {
                 .matching(identifier: "Click to add description")
                 .element.exists)
 
-        // Double-swipe to reduce flaking
-        app.cells["Example"].swipeLeft()
-        if !app.buttons["Edit"].exists {
-            app.cells["Example"].swipeLeft()
-        }
+        swipeToRevealEdit("Example")
 
         app.buttons["Delete"].tap()
 
@@ -121,10 +105,19 @@ class SpaceEntityTests: BaseTestCase {
 
         XCTAssertTrue(buttons.firstIndex(of: "Example")! < buttons.firstIndex(of: "Yahoo")!)
 
+        waitForExistence(app.buttons["Example"])
+        let dragToTarget: XCUIElement = {
+            if #available(iOS 16, *) {
+                // Dragging to the static text does not trigger reordering on iOS 16
+                return app.buttons["Example"]
+            } else {
+                return app.staticTexts["Only visible to you and people you shared with"]
+            }
+        }()
         app.buttons["Yahoo"]
             .press(
                 forDuration: 0.5,
-                thenDragTo: app.staticTexts["Only visible to you and people you shared with"]
+                thenDragTo: dragToTarget
             )
         waitForExistence(app.buttons["Example"])
 
@@ -143,10 +136,7 @@ class SpaceEntityTests: BaseTestCase {
 
         // Delete one of the entities so the reordering doesn't break --
         // otherwise the driver will swipe too low and go to the home screen.
-        app.cells["Cnn"].swipeLeft()
-        if !app.buttons["Edit"].exists {
-            app.cells["Cnn"].swipeLeft()
-        }
+        swipeToRevealEdit("Cnn")
         app.buttons["Delete"].tap()
 
         // Add an entity
@@ -164,10 +154,18 @@ class SpaceEntityTests: BaseTestCase {
 
         // Move the new entity to the top of the Space
         waitForExistence(app.buttons["AAA"])
+        let dragToTarget: XCUIElement = {
+            if #available(iOS 16, *) {
+                // Dragging to the static text does not trigger reordering on iOS 16
+                return app.buttons["Example"]
+            } else {
+                return app.staticTexts["Only visible to you and people you shared with"]
+            }
+        }()
         app.buttons["AAA"]
             .press(
                 forDuration: 0.5,
-                thenDragTo: app.staticTexts["Only visible to you and people you shared with"]
+                thenDragTo: dragToTarget
             )
         waitForExistence(app.buttons["Example"])
 
@@ -182,5 +180,23 @@ class SpaceEntityTests: BaseTestCase {
         // Verify that the new entity is at the top of the Space again
         let buttons = app.descendants(matching: .button).allElementsBoundByIndex.map { $0.label }
         XCTAssertTrue(buttons.firstIndex(of: "AAA")! < buttons.firstIndex(of: "Example")!)
+    }
+}
+
+extension SpaceEntityTests {
+    func swipeToRevealEdit(_ identifier: String) {
+        // Double-swipe to reduce flakiness
+        if #available(iOS 16.0, *) {
+            // iOS 16, these are buttons not cells
+            app.buttons[identifier].swipeLeft()
+            if !app.buttons["Edit"].exists {
+                app.buttons[identifier].swipeLeft()
+            }
+        } else {
+            app.cells[identifier].swipeLeft()
+            if !app.buttons["Edit"].exists {
+                app.cells[identifier].swipeLeft()
+            }
+        }
     }
 }

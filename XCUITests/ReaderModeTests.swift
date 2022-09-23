@@ -33,11 +33,17 @@ class ReaderModeTests: BaseTestCase {
         app.buttons["Close Reading Mode"].tap()
         waitUntilPageLoad()
 
-        copyUrl()
-
-        if let myString = UIPasteboard.general.string, let url = URL(string: myString) {
-            XCTAssertEqual("/test-fixture/test-mozilla-org.html", url.path)
+        var urlPath: String?
+        if #available(iOS 16.0, *) {
+            let url = getTabURL()
+            urlPath = url?.path
+        } else {
+            copyUrl()
+            if let urlString = UIPasteboard.general.string {
+                urlPath = URL(string: urlString)?.path
+            }
         }
+        XCTAssertEqual("/test-fixture/test-mozilla-org.html", urlPath)
     }
 
     func testSecureSiteIconShowsCorrectState() {

@@ -139,7 +139,8 @@ class TabMenuTests: BaseTestCase {
         goToTabTray()
 
         waitForExistence(app.buttons["Example Domain, Tab"], timeout: 30)
-        app.buttons["Example Domain, Tab"].press(forDuration: 1)
+        // on iOS 16, this first press and hold doesn't work when using the element directly
+        pressTab("Example Domain, Tab", forDuration: 2)
 
         waitForExistence(app.buttons["Pin Tab"], timeout: 30)
         app.buttons["Pin Tab"].tap()
@@ -148,5 +149,20 @@ class TabMenuTests: BaseTestCase {
 
         // Check that unpin option exists
         waitForExistence(app.buttons["Unpin Tab"])
+    }
+}
+
+extension TabMenuTests {
+    func pressTab(_ identifier: String, forDuration: TimeInterval = 1) {
+        let tabElement: XCUIElement = app.buttons[identifier]
+        if #available(iOS 16, *) {
+            tabElement
+                .coordinate(
+                    withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)
+                )
+                .press(forDuration: forDuration)
+        } else {
+            tabElement.press(forDuration: forDuration)
+        }
     }
 }

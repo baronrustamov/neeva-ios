@@ -645,6 +645,7 @@ class SpaceCardModel: CardModel {
             request?.$state.sink { [weak self] state in
                 if case .success = state {
                     self?.spaceNeedsRefresh = spaceID
+                    self?.objectWillChange.send()
                 }
             }.store(in: &self.mutationSubscriptions)
         }

@@ -99,7 +99,7 @@ class BloomFilterTests: XCTestCase {
         let fileURL = try XCTUnwrap(
             testBundle.url(forResource: "test_urls_out", withExtension: "bin")
         )
-        let filter = try loadFilter(from: fileURL)
+        let filter = try loadFilter(from: fileURL, timeout: 10)
 
         for url in testURLs {
             XCTAssertTrue(filter.mayContain(key: url), "URL \(url) missed!")
@@ -146,7 +146,7 @@ class BloomFilterTests: XCTestCase {
 
     func loadFilter(
         from url: URL,
-        on qos: DispatchQoS.QoSClass = .background,
+        on qos: DispatchQoS.QoSClass = .utility,
         timeout: TimeInterval = 3.0
     ) throws -> BloomFilter {
         var filter: BloomFilter?

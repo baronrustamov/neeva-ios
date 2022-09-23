@@ -192,9 +192,14 @@ class TrackingUITests: XCTestCase {
         XCTAssertNotNil(toggle)
         rowButton.preventTrackers = false
         XCTAssertTrue(Defaults[.unblockedDomains].contains("neeva.com"))
-        XCTAssertFalse(try toggle.isOn())
+        ///testToggleInUI(): XCTAssertFalse failed: threw error "Toggle's tap() and isOn() are currently unavailable for inspection on iOS 16. Situation may change with a minor OS version update. In the meanwhile, please add XCTSkip for iOS 16 and use an earlier OS version for testing."
+        if #unavailable(iOS 16) {
+            XCTAssertFalse(try toggle.isOn())
+        }
         rowButton.preventTrackers = true
         XCTAssertFalse(Defaults[.unblockedDomains].contains("neeva.com"))
-        XCTAssertTrue(try toggle.isOn())
+        if #unavailable(iOS 16) {
+            XCTAssertFalse(try toggle.isOn())
+        }
     }
 }

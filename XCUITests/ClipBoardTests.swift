@@ -15,7 +15,15 @@ class ClipBoardTests: BaseTestCase {
 
     // Check copied url is same as in browser
     func checkCopiedUrl() {
-        if let myString = UIPasteboard.general.string {
+        let string: String? = {
+            if #available(iOS 16.0, *) {
+                return getTabURL()?.absoluteString
+            } else {
+                return UIPasteboard.general.string
+            }
+        }()
+
+        if let myString = string {
             let value = app.buttons["Address Bar"].value as! String
             XCTAssertNotNil(myString)
             XCTAssertEqual(myString, value, "Url matches with the UIPasteboard")
@@ -55,5 +63,24 @@ extension BaseTestCase {
 
         waitForExistence(app.buttons["Copy Address"])
         app.buttons["Copy Address"].tap()
+    }
+
+    // Workaround for `copyUrl` and reading pasteboard on IOS 16
+    // UIPasteboard prompt cannot be programmatically dismissed
+    @available(iOS 16.0, *)
+    func getTabURL() -> URL? {
+        app.buttons["Address Bar"].tap()
+
+        waitForExistence(app.buttons["Edit current address"])
+        app.buttons["Edit current address"].tap()
+
+        waitForExistence(app.textFields["address"])
+        let urlField = app.textFields["address"]
+
+        guard let urlString = urlField.value as? String else {
+            return nil
+        }
+
+        return URL(string: urlString)
     }
 }
