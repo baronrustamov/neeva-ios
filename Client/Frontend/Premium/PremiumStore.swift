@@ -61,6 +61,15 @@ class PremiumStore: ObservableObject {
             if PremiumStore.countries.contains(storefront.countryCode) {
                 return true
             }
+        } else {
+            ClientLogger.shared.logCounter(
+                .StorefrontWasNil,
+                attributes: [
+                    ClientLogCounterAttribute(
+                        key: LogConfig.Attribute.locale, value: Locale.current.identifier
+                    )
+                ]
+            )
         }
 
         return false
