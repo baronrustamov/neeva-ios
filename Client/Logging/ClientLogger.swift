@@ -15,8 +15,37 @@ enum ClientLoggerStatus {
 }
 
 struct DebugLog: Hashable {
-    let pathStr: String
-    let attributeStr: String
+    struct Attribute: Hashable, Identifiable {
+        let id = UUID()
+
+        let key: String
+        let value: String?
+    }
+
+    let path: String
+    let attributes: [Attribute]
+
+    init(_ path: LogConfig.Interaction, attributes: [ClientLogCounterAttribute] = []) {
+        self.init(pathString: path.rawValue, attributes: attributes)
+    }
+
+    init(pathString: String, attributes: [ClientLogCounterAttribute] = []) {
+        self.path = pathString
+        self.attributes = attributes.map { item -> Attribute in
+            let key = item.key?.underlying ?? "nil"
+            let value = item.value?.underlying
+
+            return Attribute(key: key, value: value)
+        }
+    }
+
+    var attributeStr: String {
+        attributes
+            .map { attribute in
+                "\(attribute.key) : \(attribute.value ?? "")"
+            }
+            .joined(separator: ",")
+    }
 }
 
 class ClientLogger {
@@ -68,12 +97,10 @@ class ClientLogger {
 
         #if DEBUG
             if !Defaults[.forceProdGraphQLLogger] {
-                let attributes = loggingAttributes.map { "\($0.key! ?? "" ): \($0.value! ?? "")" }
-                let path = path.rawValue
                 debugLoggerHistory.insert(
                     DebugLog(
-                        pathStr: path,
-                        attributeStr: attributes.joined(separator: ",")
+                        path,
+                        attributes: loggingAttributes
                     ),
                     at: 0
                 )

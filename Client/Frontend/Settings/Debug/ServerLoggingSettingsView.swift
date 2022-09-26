@@ -5,33 +5,90 @@
 import SwiftUI
 
 struct ServerLoggingSettingsView: View {
-    @State private var showingAlert = false
-    @State private var item = DebugLog(pathStr: "", attributeStr: "")
-
     let debugLoggerHistory = ClientLogger.shared.debugLoggerHistory
 
     var body: some View {
-        List {
-            if #available(iOS 15.0, *) {
-                ForEach(0..<debugLoggerHistory.count, id: \.self) { i in
-                    VStack(alignment: .leading) {
-                        Button(debugLoggerHistory[i].pathStr) {
-                            self.item = debugLoggerHistory[i]
-                            showingAlert = true
-                        }
+        LogListView(debugLoggerHistory: debugLoggerHistory)
+    }
+}
 
+private struct LogListView: View {
+    let debugLoggerHistory: [DebugLog]
+
+    @State private var item = DebugLog(pathString: "", attributes: [])
+    @State private var showingTable = false
+
+    var body: some View {
+        List {
+            ForEach(0..<debugLoggerHistory.count, id: \.self) { i in
+                VStack(alignment: .leading) {
+                    NavigationLink(debugLoggerHistory[i].path) {
+                        LogView(log: debugLoggerHistory[i])
+                            .navigationTitle(debugLoggerHistory[i].path)
                     }
                 }
-                .alert(
-                    "\(item.attributeStr)", isPresented: $showingAlert
-                ) {
-                    Button("OK", role: .cancel) {}
-                }
+            }
+        }
+    }
+}
+
+private struct LogView: View {
+    let log: DebugLog
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            if #available(iOS 16, *) {
+                TableLogBodyView(log: log)
             } else {
-                ForEach(0..<debugLoggerHistory.count, id: \.self) { i in
-                    Text(debugLoggerHistory[i].pathStr)
+                LegacyLogBodyView(log: log)
+            }
+        }
+    }
+}
+
+@available(iOS 16, *)
+private struct TableLogBodyView: View {
+    let log: DebugLog
+
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+
+    var body: some View {
+        Table(log.attributes) {
+            TableColumn("Key") { attribute in
+                if horizontalSizeClass == .compact {
+                    LegacyLogRowView(attribute: attribute)
+                } else {
+                    Text(attribute.key)
                 }
             }
+            TableColumn("Value") { attribute in
+                Text(attribute.value ?? "")
+            }
+        }
+    }
+}
+
+private struct LegacyLogBodyView: View {
+    let log: DebugLog
+
+    var body: some View {
+        List {
+            ForEach(log.attributes, id: \.id) { attribute in
+                LegacyLogRowView(attribute: attribute)
+            }
+        }
+    }
+}
+
+private struct LegacyLogRowView: View {
+    let attribute: DebugLog.Attribute
+
+    var body: some View {
+        HStack {
+            Text(attribute.key)
+            Spacer()
+            Text(attribute.value ?? "")
+                .foregroundColor(.secondaryLabel)
         }
     }
 }
