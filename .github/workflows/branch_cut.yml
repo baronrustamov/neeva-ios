@@ -1,0 +1,27 @@
+name: 'Weekly iOS Branch Cut and Build Deploy'
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  daily-build:
+    runs-on: macos-12
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Initialize mandatory git config
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email noreply@github.com
+
+      - name: Run branch cut and daily build script
+        run: |
+          ruby -r ./Scripts/build.rb -e "branch_cut_and_build('${{ secrets.SLACK_URL }}')"
+          if [ "$?" -ne 0 ]; then
+            echo "build script failure. Aborting..."
+            exit 1
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

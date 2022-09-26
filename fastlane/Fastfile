@@ -62,8 +62,6 @@ platform :ios do
   end
 
   lane :send_slack_message do |options|
-      v = lane_context[SharedValues::VERSION_NUMBER]
-      b = lane_context[SharedValues::BUILD_NUMBER]
       event_name = options[:event_name]
       is_success = options[:is_success]
       error = options[:error]
@@ -83,7 +81,7 @@ platform :ios do
               }
           ]
       },
-        default_payloads: [:git_branch, :git_author, :last_git_commit]
+        default_payloads: [:git_author, :last_git_commit]
       )
     end
 end
