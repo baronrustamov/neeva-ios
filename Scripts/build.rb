@@ -77,15 +77,15 @@ end
 def commit_and_push_version_bump(on_main)
   puts "committing..."
   if (on_main)
-    execute_shell_command("git checkout -b prepare-for-build-#{get_build_number}")
+    execute_shell_command("git checkout -b chung/test-pr")
   end
-  execute_shell_command("git commit -a -m \"Preparing for build #{get_build_number}\"")
+  execute_shell_command("git commit -a -m \"Preparing for dummy test\"")
   execute_shell_command("git push origin #{get_current_branch_name}")
 end
 
 def create_pr
   if (get_current_branch_name.start_with?('prepare-'))
-    execute_shell_command("gh pr create -t \"Prepare for build #{get_build_number}\" -r \"neevaco/ios\" -b \"Bumping up version for next build\"")
+    execute_shell_command("gh pr create -t \"Test" -r \"ios\" -b \"Test\"")
     execute_shell_command("gh pr merge --auto --merge --delete-branch")
   end
 end
@@ -103,16 +103,11 @@ end
 # Use this on main/Build-<build_number>-branch-name
 #
 def daily_build
-  on_main = is_on_main_branch
-
-  # Tag creation
-  create_build_tag
-
   # Version bump
   bump_version("patch")
 
   # commit version
-  commit_and_push_version_bump(on_main)
+  commit_and_push_version_bump(true)
 
   # create pr
   create_pr
