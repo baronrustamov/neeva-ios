@@ -185,6 +185,9 @@
 "acknowledge Neeva’s " = "akzeptieren Sie Neevas ";
 
 /* No comment provided by engineer. */
+"Activate Neeva Shield for this site." = "Aktivieren Sie Neeva Shield für diese Website.";
+
+/* No comment provided by engineer. */
 "Ad Blocking" = "Werbeblocker";
 
 /* (No Comment) */
@@ -216,6 +219,9 @@
 
 /* No comment provided by engineer. */
 "Adjust the size of this pop-up window" = "Passen Sie die Größe dieses Popup-Fensters an";
+
+/* No comment provided by engineer. */
+"Ads & Trackers" = "Werbeanzeigen und Tracker";
 
 /* No comment provided by engineer. */
 "After 7 days" = "Nach 7 tagen";
@@ -260,6 +266,9 @@
 "Are you sure you want to %@ this space?" = "Möchten Sie diesen Bereich wirklich %@?";
 
 /* No comment provided by engineer. */
+"Are you sure you want to close all archived tabs?" = "Möchten Sie wirklich alle archivierten Tabs schließen?";
+
+/* No comment provided by engineer. */
 "Are you sure you want to close all open %@tabs?" = "Möchten Sie wirklich alle geöffneten %@ Tabs schließen?";
 
 /* No comment provided by engineer. */
@@ -267,9 +276,6 @@
 
 /* No comment provided by engineer. */
 "arrows" = "Pfeile";
-
-/* No comment provided by engineer. */
-"Auto Archive Tabs" = "Automatische Archivierung von Tabs";
 
 /* No comment provided by engineer. */
 "Automatically send usage statistics to Neeva" = "Automatisch Nutzungsstatistiken an Neeva senden";
@@ -306,6 +312,9 @@
 
 /* No comment provided by engineer. */
 "Blocks most trackers. Minimizes disruption to ads and other functionality." = "Blockiert die meisten Tracker. Minimiert die Unterbrechung von Anzeigen und anderen Funktionen.";
+
+/* No comment provided by engineer. */
+"Browse faster without spammy, screen-filling ads. Experience the web without ads today." = "Surfen Sie schneller ohne Spam-artige, bildschirmfüllende Werbung. Erleben Sie jetzt das Internet ohne Werbung.";
 
 /* (No Comment) */
 "Browse the web ad-free" = "Werbefrei im Web surfen";
@@ -383,6 +392,9 @@
 "Close" = "Schließen";
 
 /* No comment provided by engineer. */
+"Close %lld %@" = "%lld %@ schließen";
+
+/* No comment provided by engineer. */
 "Close %lld %@%@" = "%lld %@%@ schließen";
 
 /* No comment provided by engineer. */
@@ -439,15 +451,6 @@
 /* No comment provided by engineer. */
 "Cookie Cutter" = "Cookie Cutter";
 
-/* No comment provided by engineer. */
-"Cookie Cutter by Neeva stops annoying cookie popups and blocks invasive trackers across the web." = "Cookie Cutter von Neeva stoppt lästige Cookie-Popups und blockiert aufdringliche Tracker im Internet.";
-
-/* No comment provided by engineer. */
-"Cookie Cutter Exclusions" = "Cookie-Cutter-Ausnahmen";
-
-/* No comment provided by engineer. */
-"Cookie Cutter Settings" = "Cookie-Cutter-Einstellungen";
-
 /* (No Comment) */
 "Cookie pop-up blocker" = "Cookie-Popup-Blocker";
 
@@ -462,6 +465,9 @@
 
 /* No comment provided by engineer. */
 "Cookies" = "Cookies";
+
+/* No comment provided by engineer. */
+"Cool. Thanks." = "Cool. Danke.";
 
 /* No comment provided by engineer. */
 "Copied to clipboard" = "In die Zwischenablage kopiert";
@@ -543,6 +549,9 @@
 
 /* No comment provided by engineer. */
 "Delete Space" = "Bereich löschen";
+
+/* No comment provided by engineer. */
+"Delete Tab Group" = "Tabgruppe löschen";
 
 /* No comment provided by engineer. */
 "Description" = "Beschreibung";
@@ -934,6 +943,9 @@
 /* No comment provided by engineer. */
 "Neeva — Logged out" = "Neeva – Ausgeloggt";
 
+/* No comment provided by engineer. */
+"Neeva Ad Blocker is activated" = "Neeva Ad Blocker ist aktiviert";
+
 /* Copiable text showing the version on the settings screen */
 "Neeva Browser %@ (%@)" = "Neeva Browser %1$@ (%2$@)";
 
@@ -942,6 +954,18 @@
 
 /* No comment provided by engineer. */
 "Neeva Search" = "Neeva-Suche";
+
+/* No comment provided by engineer. */
+"Neeva Shield" = "Neeva Shield";
+
+/* No comment provided by engineer. */
+"Neeva Shield Exclusions" = "Neeva-Shield-Ausnahmen";
+
+/* No comment provided by engineer. */
+"Neeva Shield Settings" = "Neeva-Shield-Einstellungen";
+
+/* No comment provided by engineer. */
+"Neeva Shield stops annoying cookie popups and blocks invasive trackers across the web." = "Neeva Shield stoppt lästige Cookie-Banner und blockiert invasive Tracker im gesamten Web.";
 
 /* No comment provided by engineer. */
 "Neeva's " = "Neevas ";
@@ -1235,6 +1259,9 @@
 "restore" = "wiederherstellen";
 
 /* No comment provided by engineer. */
+"Restore Tab Group" = "Tabgruppe wiederherstellen";
+
+/* No comment provided by engineer. */
 "S" = "S";
 
 /* No comment provided by engineer. */
@@ -1256,7 +1283,13 @@
 "Saving preference" = "Speichern der Einstellung";
 
 /* No comment provided by engineer. */
+"Search" = "Suche";
+
+/* No comment provided by engineer. */
 "Search and browse, free from corporate influence" = "Ohne Unternehmenseinflussnahme suchen und browsen";
+
+/* (No Comment) */
+"Search anonymously and block trackers" = "Anonym suchen und Tracker blockieren";
 
 /* No comment provided by engineer. */
 "Search Engine" = "Suchmaschine";
@@ -1272,6 +1305,9 @@
 
 /* No comment provided by engineer. */
 "Search Tabs" = "Tabs durchsuchen";
+
+/* No comment provided by engineer. */
+"Search TextField" = "Textfeld durchsuchen";
 
 /* No comment provided by engineer. */
 "Search your history" = "Suche in Ihrem Verlauf";
@@ -1403,6 +1439,9 @@
 "Signed in to Neeva with" = "Bei Neeva angemeldet mit";
 
 /* No comment provided by engineer. */
+"Site appears broken? Deactivate Neeva Shield for this site." = "Die Website scheint, nicht richtig zu funktionieren? Deaktivieren Sie Neeva Shield für diese Website.";
+
+/* No comment provided by engineer. */
 "Site appears broken? Try deactivating." = "Website scheint defekt zu sein? Versuchen Sie es mit der Deaktivierung.";
 
 /* No comment provided by engineer. */
@@ -1529,9 +1568,6 @@
 "Toolbar" = "Symbolleiste";
 
 /* No comment provided by engineer. */
-"Trackers" = "Tracker";
-
-/* No comment provided by engineer. */
 "TRACKERS" = "Tracker";
 
 /* No comment provided by engineer. */
@@ -1637,7 +1673,7 @@
 "When Closing All Tabs" = "Beim Schließen aller Registerkarten";
 
 /* No comment provided by engineer. */
-"When disabled, turns off Cookie Cutter on all sites. Changing this will reload your tabs." = "Wenn diese Option deaktiviert ist, wird Cookie-Cutter auf allen Websites deaktiviert. Wenn Sie dies ändern, werden Ihre Tabs neu geladen.";
+"When disabled, turns off Neeva Shield on all sites. Changing this will reload your tabs." = "Wenn diese Option deaktiviert ist, wird Neeva Shield auf allen Websites deaktiviert. Wenn Sie dies ändern, werden Ihre Tabs neu geladen.";
 
 /* No comment provided by engineer. */
 "When Leaving Incognito Mode" = "Beim Verlassen des Inkognito-Modus";
@@ -1673,7 +1709,7 @@
 "You've disabled notifications, would you like to enable them in settings?" = "Sie haben die Benachrichtigungen deaktiviert. Möchten Sie sie in den Einstellungen aktivieren?";
 
 /* No comment provided by engineer. */
-"Your Cookie Cutter just declined a **cookie popup** and blocked %lld **trackers**" = "Ihr Cookie Cutter hat gerade ein **Cookie Popup** abgelehnt und %lld **Tracker** blockiert";
+"Your Neeva Shield just declined a **cookie popup** and blocked %lld **trackers**" = "Ihr Neeva Shield hat gerade ein **Cookie-Banner** abgelehnt und %lld **Tracker** blockiert";
 
 /* No comment provided by engineer. */
 "Your NeevaScope is coming into focus..." = "Ihr NeevaScope rückt in den Fokus ...";
