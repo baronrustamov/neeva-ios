@@ -85,8 +85,21 @@ end
 
 def create_pr
   if (get_current_branch_name.start_with?('prepare-'))
-    execute_shell_command("gh pr create -t \"Prepare for build #{get_build_number}\" -r \"neevaco/ios\" -b \"Bumping up version for next build\"")
-    execute_shell_command("gh pr merge --auto --merge --delete-branch")
+    execute_shell_command("gh pr create -t \"Prepare for build #{get_build_number}\" -r \"ios\" -b \"Bumping up version for next build\"")
+  end
+end
+
+def reviewer(account)
+  execute_shell_command("git checkout -b chung/test-#{Time.now().min*Time.now().hour}")
+  execute_shell_command("touch i")
+  execute_shell_command("git add i")
+  execute_shell_command("git commit -a -m \"test\"")
+  execute_shell_command("git push origin chung/test-#{Time.now().min*Time.now().hour}")
+  puts "creating PR with reviewer: #{account}"
+  if (account == '')
+    execute_shell_command("gh pr create -t \"Test\" -b \"Test\"")
+  else
+    execute_shell_command("gh pr create -t \"Test\" -r \"#{account}\" -b \"Test\"")
   end
 end
 
