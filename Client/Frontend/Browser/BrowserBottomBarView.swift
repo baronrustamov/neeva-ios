@@ -12,10 +12,7 @@ struct BrowserBottomBarView: View {
     @EnvironmentObject var gridVisibilityModel: GridVisibilityModel
 
     @ViewBuilder var toolbar: some View {
-        if !gridVisibilityModel.showGrid && !chromeModel.inlineToolbar
-            && !chromeModel.isEditingLocation
-            && Defaults[.didFirstNavigation]
-        {
+        if !gridVisibilityModel.showGrid && Defaults[.didFirstNavigation] {
             TabToolbarContent()
         } else if gridVisibilityModel.showGrid {
             SwitcherToolbarView(top: false)
@@ -23,16 +20,12 @@ struct BrowserBottomBarView: View {
     }
 
     var body: some View {
-        ZStack {
-            if !chromeModel.inlineToolbar && !chromeModel.isEditingLocation
-                && !chromeModel.keyboardShowing && !overlayManager.hideBottomBar
-            {
-                toolbar
-                    .transition(.opacity)
-                    .frame(
-                        height: UIConstants.TopToolbarHeightWithToolbarButtonsShowing
-                    )
-            }
-        }.ignoresSafeArea(.keyboard)
+        if !chromeModel.inlineToolbar && !overlayManager.hideBottomBar {
+            toolbar
+                .transition(.opacity.combined(with: .identity))
+                .frame(
+                    height: UIConstants.TopToolbarHeightWithToolbarButtonsShowing
+                )
+        }
     }
 }
