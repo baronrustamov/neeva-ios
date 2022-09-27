@@ -120,8 +120,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         DynamicFontHelper.defaultHelper.startObserving()
 
-        ScreenCaptureHelper.defaultHelper.startObserving()
-
         MenuHelper.defaultHelper.setItems()
 
         SystemUtils.onFirstRun()

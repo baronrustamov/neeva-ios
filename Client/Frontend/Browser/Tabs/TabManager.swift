@@ -144,10 +144,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             self, selector: #selector(prefsDidChange), name: UserDefaults.didChangeNotification,
             object: nil)
 
-        ScreenCaptureHelper.defaultHelper.subscribeToTabUpdates(
-            from: selectedTabPublisher.eraseToAnyPublisher()
-        )
-
         selectedTabSubscription =
             selectedTabPublisher
             .sink { [weak self] tab in

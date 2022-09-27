@@ -19,11 +19,6 @@ public enum LogConfig {
         /// Tap stop reload page
         case TapStopReload
 
-        // MARK: Screen Capture
-        case didTakeScreenshot
-        case screenCaptureStarted
-        case screenCaptureFinished
-
         // MARK: bottom nav
         /// Click tab button to see all available tabs
         case ShowTabTray
@@ -547,10 +542,6 @@ public enum LogConfig {
         case .TurnOffGlobalBlockTracking: return .UI
         case .TurnOnGlobalAdBlockTracking: return .UI
         case .TurnOffGlobalAdBlockTracking: return .UI
-
-        case .didTakeScreenshot: return .UI
-        case .screenCaptureStarted: return .UI
-        case .screenCaptureFinished: return .UI
 
         // MARK: - OverflowMenu
         case .OpenDownloads: return .OverflowMenu
