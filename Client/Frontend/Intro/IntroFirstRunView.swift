@@ -306,6 +306,7 @@ private struct TermsAndPrivacyLinks: View {
 struct SafariVCLink: View {
     let title: LocalizedStringKey
     let url: URL
+    let foregroundColor: Color
 
     private var _token: Any?
     @available(iOS 15.0, *)
@@ -315,9 +316,10 @@ struct SafariVCLink: View {
 
     @State private var modal = ModalState()
 
-    init(_ title: LocalizedStringKey, url: URL) {
+    init(_ title: LocalizedStringKey, url: URL, foregroundColor: Color = .secondaryLabel) {
         self.title = title
         self.url = url
+        self.foregroundColor = foregroundColor
 
         // Strictly an optimization, no need for a fallback on older versions
         if #available(iOS 15.0, *) {
@@ -331,7 +333,7 @@ struct SafariVCLink: View {
         } label: {
             Text(title)
                 .underline()
-                .foregroundColor(.secondaryLabel)
+                .foregroundColor(foregroundColor)
         }.modal(state: $modal) {
             Safari(url: url)
         }

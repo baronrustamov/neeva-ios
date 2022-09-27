@@ -9,15 +9,14 @@ struct WelcomeFlowPlansView: View {
     @ObservedObject var model: WelcomeFlowModel
 
     var premiumBullets = [
-        ("Browser + ad blocker", ""),
-        ("Tracking prevention", ""),
+        ("Browser + ad blocker + tracking prevention", ""),
         ("Unlimited ad-free, private search", ""),
-        ("Premium password manager + VPN", ""),
+        ("Unlimited devices", ""),
     ]
     var freeBullets = [
-        ("Browser + ad blocker", ""),
-        ("Tracking prevention", ""),
-        ("Ad-free, private search", "50 searches/week"),
+        ("Browser + ad blocker + tracking prevention", ""),
+        ("Limited ad-free, private search", "50 searches/week"),
+        ("Limited devices", ""),
     ]
     var bullets: [(String, String)] {
         if model.currentPremiumPlan == nil {
@@ -29,7 +28,15 @@ struct WelcomeFlowPlansView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            WelcomeFlowHeaderView(text: "Get Premium for maximum privacy")
+            WelcomeFlowHeaderView(text: "Get Premium:")
+            Text("Unlimited Access & Top-Tier Privacy")
+                .font(
+                    .system(
+                        size: UIDevice.current.useTabletInterface || UIConstants.hasHomeButton
+                            ? 18 : 24, weight: .regular)
+                )
+                .frame(maxWidth: .infinity)
+                .multilineTextAlignment(.center)
                 .padding(.bottom, 20)
 
             HStack(spacing: 0) {
@@ -264,8 +271,16 @@ struct WelcomeFlowPlansView: View {
 
             Spacer()
 
-            WelcomeFlowPrivacyAndTermsLinksView()
-                .frame(maxWidth: .infinity, alignment: .center)
+            Group {
+                SafariVCLink(
+                    "Choose Premium and let’s fight climate change",
+                    url: NeevaConstants.appPrivacyURL, foregroundColor: .primary
+                )
+                .padding(.bottom, 5)
+
+                WelcomeFlowPrivacyAndTermsLinksView()
+            }
+            .frame(maxWidth: .infinity, alignment: .center)
 
             Spacer()
         }

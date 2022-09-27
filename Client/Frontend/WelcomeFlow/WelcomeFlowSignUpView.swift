@@ -17,6 +17,16 @@ struct WelcomeFlowSignUpView: View {
     var body: some View {
         VStack {
             WelcomeFlowHeaderView(text: "Create your account")
+                .padding(.bottom, 20)
+
+            Text(
+                "Neeva Premium is an account type that unlocks benefits, including insider perks and privacy-protecting tools."
+            )
+            .font(
+                .system(
+                    size: UIDevice.current.useTabletInterface || UIConstants.hasHomeButton
+                        ? 18 : 24, weight: .regular)
+            )
 
             Spacer()
 

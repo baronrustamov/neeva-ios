@@ -89,7 +89,7 @@ struct WelcomeFlowView: View {
                 }
                 .frame(
                     maxWidth: UIDevice.current.useTabletInterface ? 380 : .infinity,
-                    maxHeight: UIDevice.current.useTabletInterface ? 580 : .infinity
+                    maxHeight: UIDevice.current.useTabletInterface ? 650 : .infinity
                 )
                 .background(Color(UIColor.systemBackground)).cornerRadius(
                     20,
