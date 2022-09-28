@@ -690,6 +690,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sendAggregatedCheatsheetLogs() {
-        CheatsheetLogger.shared.sendLogsOnAppStarted()
+        CheatsheetSessionUsageLogger.shared.sendLogsOnAppStarted()
     }
 }
