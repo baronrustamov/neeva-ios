@@ -62,6 +62,9 @@ struct NeevaAccountInfoView: View {
                                 Text("\(currentPlan)")
                             }
                         }
+                        .onAppear {
+                            PremiumStore.shared.checkForAndFixMissingSubscription()
+                        }
                     }
                 } else {
                     /*
