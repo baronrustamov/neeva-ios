@@ -40,7 +40,7 @@ private struct PromoStateStorage {
 
         var counters: [CheatsheetIntAttribute] = []
         defer {
-            CheatsheetLogger.shared.increment(counters)
+            CheatsheetSessionUsageLogger.shared.increment(counters)
         }
 
         counters.append(.numOfUGCTests)
@@ -81,7 +81,7 @@ private struct PromoStateStorage {
         case .dismissBubble:
             state.showPromo = false
             state.showBubble = false
-            CheatsheetLogger.shared.increment([.numOfUGCClears])
+            CheatsheetSessionUsageLogger.shared.increment([.numOfUGCClears])
         }
 
         cache[url] = state
