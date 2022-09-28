@@ -409,6 +409,7 @@ public enum LogConfig {
         case PremiumPurchaseUnverified
         case PremiumPurchaseVerified
         case PremiumPurchaseError
+        case PremiumSubscriptionFixFailed
         case PreviousScreenClick
         case ScreenImpression
         case SignInClick
@@ -791,6 +792,7 @@ public enum LogConfig {
         case .PremiumPurchaseUnverified: return .Generic
         case .PremiumPurchaseVerified: return .Generic
         case .PremiumPurchaseError: return .Generic
+        case .PremiumSubscriptionFixFailed: return .Generic
         case .PreviousScreenClick: return .Generic
         case .ScreenImpression: return .Generic
         case .SignInClick: return .Generic

@@ -3902,6 +3902,48 @@ public enum AppleSubscriptionStatus: RawRepresentable, Equatable, Hashable, Case
   }
 }
 
+public struct RestoreAppleSubscriptionInput: GraphQLMapConvertible {
+  public var graphQLMap: GraphQLMap
+
+  /// - Parameters:
+  ///   - originalTransactionId: The original transaction ID. Must be provided for every subscription.
+  ///   - userUuid: Uniquely identifies the user. Created when the subscription is is made.
+  ///   - plan: The subscription plan.
+  public init(originalTransactionId: String, userUuid: Swift.Optional<String?> = nil, plan: Swift.Optional<AppleSubscriptionPlan?> = nil) {
+    graphQLMap = ["originalTransactionID": originalTransactionId, "userUUID": userUuid, "plan": plan]
+  }
+
+  /// The original transaction ID. Must be provided for every subscription.
+  public var originalTransactionId: String {
+    get {
+      return graphQLMap["originalTransactionID"] as! String
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "originalTransactionID")
+    }
+  }
+
+  /// Uniquely identifies the user. Created when the subscription is is made.
+  public var userUuid: Swift.Optional<String?> {
+    get {
+      return graphQLMap["userUUID"] as? Swift.Optional<String?> ?? Swift.Optional<String?>.none
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "userUUID")
+    }
+  }
+
+  /// The subscription plan.
+  public var plan: Swift.Optional<AppleSubscriptionPlan?> {
+    get {
+      return graphQLMap["plan"] as? Swift.Optional<AppleSubscriptionPlan?> ?? Swift.Optional<AppleSubscriptionPlan?>.none
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "plan")
+    }
+  }
+}
+
 public enum SubResultsDisplayType: RawRepresentable, Equatable, Hashable, CaseIterable, Apollo.JSONDecodable, Apollo.JSONEncodable {
   public typealias RawValue = String
   case `default`
@@ -7899,6 +7941,103 @@ public final class InitializeAppleSubscriptionMutation: GraphQLMutation {
         }
         set {
           resultMap.updateValue(newValue, forKey: "error")
+        }
+      }
+    }
+  }
+}
+
+public final class RestoreAppleSubscriptionMutation: GraphQLMutation {
+  /// The raw GraphQL definition of this operation.
+  public let operationDefinition: String =
+    """
+    mutation RestoreAppleSubscription($input: RestoreAppleSubscriptionInput!) {
+      restoreAppleSubscription(input: $input) {
+        __typename
+        succeeded
+      }
+    }
+    """
+
+  public let operationName: String = "RestoreAppleSubscription"
+
+  public let operationIdentifier: String? = "b8e68b3e38e7e4a1603e161b58601a6da6576ae14bf270e990b8a4c11d54badb"
+
+  public var input: RestoreAppleSubscriptionInput
+
+  public init(input: RestoreAppleSubscriptionInput) {
+    self.input = input
+  }
+
+  public var variables: GraphQLMap? {
+    return ["input": input]
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["Mutation"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("restoreAppleSubscription", arguments: ["input": GraphQLVariable("input")], type: .object(RestoreAppleSubscription.selections)),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(restoreAppleSubscription: RestoreAppleSubscription? = nil) {
+      self.init(unsafeResultMap: ["__typename": "Mutation", "restoreAppleSubscription": restoreAppleSubscription.flatMap { (value: RestoreAppleSubscription) -> ResultMap in value.resultMap }])
+    }
+
+    /// Restore an Apple subscription in case the client request failed.
+    public var restoreAppleSubscription: RestoreAppleSubscription? {
+      get {
+        return (resultMap["restoreAppleSubscription"] as? ResultMap).flatMap { RestoreAppleSubscription(unsafeResultMap: $0) }
+      }
+      set {
+        resultMap.updateValue(newValue?.resultMap, forKey: "restoreAppleSubscription")
+      }
+    }
+
+    public struct RestoreAppleSubscription: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["RestoreAppleSubscriptionResponse"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("succeeded", type: .nonNull(.scalar(Bool.self))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(succeeded: Bool) {
+        self.init(unsafeResultMap: ["__typename": "RestoreAppleSubscriptionResponse", "succeeded": succeeded])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      /// Whether or not the registration was successful.
+      public var succeeded: Bool {
+        get {
+          return resultMap["succeeded"]! as! Bool
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "succeeded")
         }
       }
     }
