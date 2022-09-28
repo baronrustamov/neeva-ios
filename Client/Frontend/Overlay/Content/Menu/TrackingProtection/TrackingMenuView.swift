@@ -144,7 +144,7 @@ class TrackingStatsViewModel: ObservableObject {
         if NeevaExperiment.arm(for: .adBlockOnboarding) == .adBlock
             && !Defaults[.cookieCutterOnboardingShowed]
             && self.onboardingBlockType == nil
-            && ContentBlocker.shared.setupCompleted
+            && (onboardingBlockType != .adBlock || ContentBlocker.shared.setupCompleted)
         {
             self.onboardingBlockType = onboardingBlockType
             self.showTrackingStatsViewPopover = true
