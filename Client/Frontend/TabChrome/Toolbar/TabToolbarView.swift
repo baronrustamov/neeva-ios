@@ -12,18 +12,11 @@ struct TabToolbarView: View {
     @EnvironmentObject private var incognitoModel: IncognitoModel
 
     let performAction: (ToolbarAction) -> Void
-
-    var body: some View {
-        VStack(spacing: 0) {
-            Color.ui.adaptive.separator
-                .frame(height: 0.5)
-                .ignoresSafeArea()
-            normalTabToolbar
-            Spacer()
-        }
-        .background(Color.DefaultBackground.ignoresSafeArea())
-        .accentColor(.label)
-        .offset(y: scrollingControlModel.footerBottomOffset)
+    
+    @ViewBuilder
+    private var neevaButton: some View {
+        TabToolbarButtons.Neeva(iconWidth: 22)
+            .disabled(!chromeModel.isPage || chromeModel.isErrorPage)
     }
 
     @ViewBuilder
@@ -34,6 +27,7 @@ struct TabToolbarView: View {
                 onBack: { performAction(.back) },
                 onLongPress: { performAction(.longPressBackForward) }
             )
+            
             TabToolbarButtons.OverflowMenu(
                 weight: .medium,
                 action: {
@@ -41,7 +35,9 @@ struct TabToolbarView: View {
                 },
                 identifier: "TabOverflowButton"
             )
+            
             neevaButton
+            
             if incognitoModel.isIncognito && FeatureFlag[.incognitoQuickClose] {
                 TabToolbarButtons.CloseTab(
                     action: { performAction(.closeTab) })
@@ -49,6 +45,7 @@ struct TabToolbarView: View {
                 TabToolbarButtons.AddToSpace(
                     weight: .medium, action: { performAction(.addToSpace) })
             }
+            
             TabToolbarButtons.ShowTabs(
                 weight: .medium,
                 action: { performAction(.showTabs) }
@@ -60,11 +57,20 @@ struct TabToolbarView: View {
         .accessibilityIdentifier("TabToolbar")
         .accessibilityLabel("Toolbar")
     }
-
-    @ViewBuilder
-    private var neevaButton: some View {
-        TabToolbarButtons.Neeva(iconWidth: 22)
-            .disabled(!chromeModel.isPage || chromeModel.isErrorPage)
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            Color.ui.adaptive.separator
+                .frame(height: 0.5)
+                .ignoresSafeArea()
+            
+            normalTabToolbar
+            
+            Spacer()
+        }
+        .accentColor(.label)
+        .background(Color.DefaultBackground.ignoresSafeArea())
+        .offset(y: scrollingControlModel.footerBottomOffset)
     }
 }
 
