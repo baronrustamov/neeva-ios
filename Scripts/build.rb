@@ -66,10 +66,9 @@ end
 
 def bump_version(which_version)
   puts "bumping version..." 
-  `sed -i -e 's/#{get_marketing_version}/#{increment_marketing_version(which_version)}/g' Client/AppConfig.xcconfig`
-  `sed -i -e 's/#{get_build_number}/#{increment_build_number}/g' Client/AppConfig.xcconfig`
-  `rm Client/AppConfig.xcconfig-e`
-  execute_shell_command("/usr/libexec/PlistBuddy -c \"Set :PreferenceSpecifiers:0:DefaultValue #{get_marketing_version}\" Client/Application/Settings.bundle/Root.plist")
+  execute_shell_command("sed -i -e 's/#{get_marketing_version}/#{increment_marketing_version(which_version)}/g' Client/Application/Settings.bundle/Root.plist")
+  execute_shell_command("sed -i -e 's/#{get_marketing_version}/#{increment_marketing_version(which_version)}/g' Client/AppConfig.xcconfig")
+  execute_shell_command("sed -i -e 's/#{get_build_number}/#{increment_build_number}/g' Client/AppConfig.xcconfig")
   puts "bumped version to v#{get_marketing_version} (#{get_build_number})"
   execute_shell_command("git diff")
 end
