@@ -24,7 +24,7 @@ struct SpaceEntityDescriptionView: View {
                     .withFont(.bodyLarge)
                     .modifier(DescriptionTextModifier())
             }
-        } else if showDescriptions, #available(iOS 15.0, *),
+        } else if showDescriptions,
             case .techDoc(let doc) = previewEntity,
             let body = doc.body
         {

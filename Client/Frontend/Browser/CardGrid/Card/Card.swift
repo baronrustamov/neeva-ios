@@ -70,8 +70,11 @@ struct CardAccessibilityFocusModifier<Details>: ViewModifier where Details: Card
 
     func body(content: Content) -> some View {
         content
-            .accesibilityFocus(
-                shouldFocus: details.isSelected, trigger: cardTransitionModel.state == .hidden
+            .modifier(
+                FocusOnAppearModifier(
+                    focus: details.isSelected,
+                    trigger: cardTransitionModel.state == .hidden
+                )
             )
     }
 }

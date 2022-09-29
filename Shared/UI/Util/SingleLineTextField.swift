@@ -41,47 +41,16 @@ public struct SingleLineTextField<Icon: View>: View {
 
     @ViewBuilder
     var textField: some View {
-        if #available(iOSApplicationExtension 15.0, *) {
-            FocusableTextField(
-                text: $text, focus: focusTextField,
-                onEditChanged: { isEditing in
-                    self.isEditing = isEditing
-                    onEditingChanged?(isEditing)
+        FocusableTextField(
+            text: $text,
+            focus: focusTextField,
+            onEditChanged: { isEditing in
+                self.isEditing = isEditing
+                onEditingChanged?(isEditing)
 
-                    errorMessage = ""
-                })
-        } else {
-            if secureText {
-                SecureField("", text: $text) {
-                    isEditing = false
-                    onEditingChanged?(isEditing)
-                }
-                .onTapGesture {
-                    isEditing = true
-                    onEditingChanged?(isEditing)
-
-                    errorMessage = ""
-
-                    if focusTextField {
-                        focusedTextField = false
-                    }
-                }
-            } else {
-                TextField(
-                    "", text: $text,
-                    onEditingChanged: { editing in
-                        isEditing = editing
-                        onEditingChanged?(editing)
-
-                        errorMessage = ""
-
-                        if editing && focusTextField {
-                            focusedTextField = false
-                        }
-                    }
-                )
+                errorMessage = ""
             }
-        }
+        )
     }
 
     @ViewBuilder
@@ -123,19 +92,6 @@ public struct SingleLineTextField<Icon: View>: View {
                 textField
                     .accessibilityLabel(placeholder)
                     .withFont(unkerned: useCapsuleBackground ? .bodyMedium : .bodyLarge)
-                    .introspectTextField { textField in
-                        if #available(iOSApplicationExtension 15.0, *) {
-                        } else {
-                            if focusTextField && !focusedTextField {
-                                focusedTextField = true
-
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                    textField.becomeFirstResponder()
-                                    textField.selectAll(nil)
-                                }
-                            }
-                        }
-                    }
                     .background(
                         GeometryReader { geo in
                             Color.clear

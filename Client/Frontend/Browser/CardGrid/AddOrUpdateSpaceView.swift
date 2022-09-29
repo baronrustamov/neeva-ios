@@ -51,8 +51,7 @@ private enum FieldType: String, Hashable {
     case descriptionField = "DESCRIPTION"
 }
 
-@available(iOS 15.0, *)
-private struct iOS15InputField: View {
+private struct InputField: View {
     @FocusState private var isFocused: FieldType?
 
     let title: FieldType
@@ -95,35 +94,6 @@ private struct iOS15InputField: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
         .roundedOuterBorder(cornerRadius: 12, color: textEditAccentColor(type: title), lineWidth: 1)
-    }
-}
-
-private struct LegacyInputField: View {
-    let title: FieldType
-    let bodyText: String
-    @Binding var inputText: String
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text(LocalizedStringKey(title.rawValue))
-                .withFont(.headingXSmall)
-                .foregroundColor(.secondaryLabel)
-
-            if case .descriptionField = title {
-                TextEditor(text: $inputText)
-                    .withFont(unkerned: .bodyLarge)
-                    .frame(maxWidth: .infinity, minHeight: 80, maxHeight: 110)
-                    .fixedSize(horizontal: false, vertical: true)
-            } else {
-                TextField(bodyText, text: $inputText)
-                    .withFont(unkerned: .bodyLarge)
-                    .autocapitalization(title == .titleField ? .words : .none)
-                    .disableAutocorrection(title != .titleField)
-            }
-        }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
-        .roundedOuterBorder(cornerRadius: 12, color: .quaternaryLabel, lineWidth: 1)
     }
 }
 
@@ -179,28 +149,17 @@ struct AddOrUpdateSpaceView: View {
         }
     }
 
-    private func inputField(title: FieldType, bodyText: String, inputText: Binding<String>)
-        -> some View
-    {
-        Group {
-            if #available(iOS 15.0, *) {
-                iOS15InputField(title: title, bodyText: bodyText, inputText: inputText)
-            } else {
-                LegacyInputField(title: title, bodyText: bodyText, inputText: inputText)
-            }
-        }
-    }
-
     var body: some View {
         ScrollView {
             GroupedStack {
-                inputField(
+                InputField(
                     title: .titleField, bodyText: "Please provide a title", inputText: $titleText
-                ).modifier(TextFieldBackgroundModifier())
-                    .accessibilityIdentifier("addOrUpdateSpaceTitle")
+                )
+                .modifier(TextFieldBackgroundModifier())
+                .accessibilityIdentifier("addOrUpdateSpaceTitle")
 
                 ZStack(alignment: .topTrailing) {
-                    inputField(
+                    InputField(
                         title: .descriptionField,
                         bodyText: "Please provide a description",
                         inputText: $descriptionText
@@ -233,11 +192,13 @@ struct AddOrUpdateSpaceView: View {
                     SpaceThumbnailPicker(spaceDetails: details, model: thumbnailModel)
                 }
                 if shouldShowURL {
-                    inputField(
-                        title: .urlField, bodyText: "Add a URL to your new item (optional)",
+                    InputField(
+                        title: .urlField,
+                        bodyText: "Add a URL to your new item (optional)",
                         inputText: $urlText
-                    ).modifier(TextFieldBackgroundModifier())
-                        .accessibilityIdentifier("addOrUpdateSpaceUrl")
+                    )
+                    .modifier(TextFieldBackgroundModifier())
+                    .accessibilityIdentifier("addOrUpdateSpaceUrl")
                 }
                 Button(
                     action: {

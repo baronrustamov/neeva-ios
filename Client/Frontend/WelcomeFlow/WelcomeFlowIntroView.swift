@@ -42,22 +42,18 @@ struct WelcomeFlowIntroView: View {
                 Button(
                     action: {
                         model.logCounter(.GetStartedInWelcome)
-                        if #available(iOS 15.0, *) {
-                            if PremiumStore.shared.loadingProducts {
-                                /*
-                                 NOTE: We do nothing here on purpose. I would rather have
-                                 disabled the button until we know products are done loading.
-                                 However we can't do that statically since using the `PremiumStore`
-                                 requires iOS 15. The good news is that only a very long lag
-                                 will make this something a user notices.
-                                 */
-                            } else if PremiumStore.isOfferedInCountry() {
-                                model.clearPreviousScreens()
-                                model.changeScreenTo(.plans)
-                            } else {
-                                model.clearPreviousScreens()
-                                model.changeScreenTo(.defaultBrowser)
-                            }
+
+                        if PremiumStore.shared.loadingProducts {
+                            /*
+                             NOTE: We do nothing here on purpose. I would rather have
+                             disabled the button until we know products are done loading.
+                             However we can't do that statically since using the `PremiumStore`
+                             requires iOS 15. The good news is that only a very long lag
+                             will make this something a user notices.
+                             */
+                        } else if PremiumStore.isOfferedInCountry() {
+                            model.clearPreviousScreens()
+                            model.changeScreenTo(.plans)
                         } else {
                             model.clearPreviousScreens()
                             model.changeScreenTo(.defaultBrowser)

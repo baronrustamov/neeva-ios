@@ -109,63 +109,37 @@ struct SpaceActionsModifier: ViewModifier {
     }
 
     func body(content: Content) -> some View {
-        if #available(iOS 15.0, *) {
-            content
-                .swipeActions(edge: .trailing) {
-                    Button(role: .destructive) {
-                        onDelete()
-                    } label: {
-                        Label("Delete", systemImage: "")
-                    }
-
-                    if details.data.generatorID != nil && isNewsItem {
-                        Button {
-                            keepNewsItem()
-                        } label: {
-                            Label("Keep", systemImage: "")
-                        }.tint(.blue)
-                    } else {
-                        Button {
-                            addToAnotherSpace(
-                                (details.data.url)!,
-                                details.title, details.description,
-                                details.data.thumbnail)
-                        } label: {
-                            Label("Add To", systemImage: "")
-                        }.tint(.gray)
-
-                        Button {
-                            editSpaceItem()
-                        } label: {
-                            Label("Edit", systemImage: "")
-                        }.tint(.blue)
-                    }
+        content
+            .swipeActions(edge: .trailing) {
+                Button(role: .destructive) {
+                    onDelete()
+                } label: {
+                    Label("Delete", systemImage: "")
                 }
-        } else {
-            content
-                .contextMenu(
-                    ContextMenu(menuItems: {
-                        if details.ACL >= .edit {
-                            Button(
-                                action: {
-                                    editSpaceItem()
-                                },
-                                label: {
-                                    Label("Edit item", systemSymbol: .squareAndPencil)
-                                })
-                        }
-                        Button(
-                            action: {
-                                addToAnotherSpace(
-                                    (details.data.url)!,
-                                    details.title, details.description, details.data.thumbnail)
-                            },
-                            label: {
-                                Label("Add to another Space", systemSymbol: .docOnDoc)
-                            })
-                    })
-                )
-        }
+
+                if details.data.generatorID != nil && isNewsItem {
+                    Button {
+                        keepNewsItem()
+                    } label: {
+                        Label("Keep", systemImage: "")
+                    }.tint(.blue)
+                } else {
+                    Button {
+                        addToAnotherSpace(
+                            (details.data.url)!,
+                            details.title, details.description,
+                            details.data.thumbnail)
+                    } label: {
+                        Label("Add To", systemImage: "")
+                    }.tint(.gray)
+
+                    Button {
+                        editSpaceItem()
+                    } label: {
+                        Label("Edit", systemImage: "")
+                    }.tint(.blue)
+                }
+            }
     }
 }
 
@@ -176,36 +150,19 @@ struct EditSpaceActionModifier: ViewModifier {
     let index: Int
 
     func body(content: Content) -> some View {
-        if #available(iOS 15.0, *) {
-            content
-                .swipeActions(edge: .trailing) {
-                    Button(role: .destructive) {
-                        onDelete(index)
-                    } label: {
-                        Label("Delete", systemImage: "")
-                    }
-
-                    Button {
-                        editSpaceItem()
-                    } label: {
-                        Label("Edit", systemImage: "")
-                    }.tint(.blue)
+        content
+            .swipeActions(edge: .trailing) {
+                Button(role: .destructive) {
+                    onDelete(index)
+                } label: {
+                    Label("Delete", systemImage: "")
                 }
-        } else {
-            content
-                .contextMenu(
-                    ContextMenu(menuItems: {
-                        if details.ACL >= .edit {
-                            Button(
-                                action: {
-                                    editSpaceItem()
-                                },
-                                label: {
-                                    Label("Edit item", systemSymbol: .squareAndPencil)
-                                })
-                        }
-                    })
-                )
-        }
+
+                Button {
+                    editSpaceItem()
+                } label: {
+                    Label("Edit", systemImage: "")
+                }.tint(.blue)
+            }
     }
 }

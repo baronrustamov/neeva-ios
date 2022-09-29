@@ -14,21 +14,6 @@ struct ArchivedTabsPanelView: View {
     @State private var confirmationShow = false
 
     let onDismiss: () -> Void
-    private let clearAllArchiveButtonTitle = "Are you sure you want to close all archived tabs?"
-
-    var clearAllArchivesButton: some View {
-        GroupedRowButtonView(
-            label: "Clear All Archived Tabs", symbol: .trash
-        ) {
-            confirmationShow = true
-        }
-        .accentColor(model.numOfArchivedTabs < 1 ? .tertiaryLabel : .red)
-        .disabled(model.numOfArchivedTabs < 1)
-    }
-
-    var clearAllArchiveButtonText: String {
-        return "Close \(model.numOfArchivedTabs) \(model.numOfArchivedTabs > 1 ? "Tabs" : "Tab")"
-    }
 
     var content: some View {
         ScrollView {
@@ -50,38 +35,27 @@ struct ArchivedTabsPanelView: View {
 
                     Color.groupedBackground.frame(height: 1)
 
-                    if #available(iOS 15.0, *) {
-                        clearAllArchivesButton
-                            .confirmationDialog(
-                                clearAllArchiveButtonTitle,
-                                isPresented: $confirmationShow,
-                                titleVisibility: .visible
-                            ) {
-                                Button(
-                                    clearAllArchiveButtonText,
-                                    role: .destructive
-                                ) {
-                                    model.clearArchivedTabs()
-                                    ClientLogger.shared.logCounter(
-                                        .clearArchivedTabs,
-                                        attributes: EnvironmentHelper.shared.getAttributes())
-                                }
-                            }
-                    } else {
-                        clearAllArchivesButton
-                            .actionSheet(isPresented: $confirmationShow) {
-                                ActionSheet(
-                                    title: Text(clearAllArchiveButtonTitle),
-                                    buttons: [
-                                        .destructive(
-                                            Text(clearAllArchiveButtonText)
-                                        ) {
-                                            model.clearArchivedTabs()
-                                        },
-                                        .cancel(),
-                                    ]
-                                )
-                            }
+                    GroupedRowButtonView(
+                        label: "Clear All Archived Tabs", symbol: .trash
+                    ) {
+                        confirmationShow = true
+                    }
+                    .accentColor(model.numOfArchivedTabs < 1 ? .tertiaryLabel : .red)
+                    .disabled(model.numOfArchivedTabs < 1)
+                    .confirmationDialog(
+                        "Are you sure you want to close all archived tabs?",
+                        isPresented: $confirmationShow,
+                        titleVisibility: .visible
+                    ) {
+                        Button(
+                            "Close \(model.numOfArchivedTabs) \(model.numOfArchivedTabs > 1 ? "Tabs" : "Tab")",
+                            role: .destructive
+                        ) {
+                            model.clearArchivedTabs()
+                            ClientLogger.shared.logCounter(
+                                .clearArchivedTabs,
+                                attributes: EnvironmentHelper.shared.getAttributes())
+                        }
                     }
                 }
             }

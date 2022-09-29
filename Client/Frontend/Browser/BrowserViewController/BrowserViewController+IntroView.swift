@@ -159,10 +159,6 @@ extension BrowserViewController {
             }
         )
 
-        if #unavailable(iOS 15.0) {
-            signInOrUpFlowModel.currentPremiumPlan = nil
-        }
-
         if let startScreen = startScreen {
             signInOrUpFlowModel.currentScreen = startScreen
         }

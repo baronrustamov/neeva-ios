@@ -90,13 +90,8 @@ struct HistoryPanelView: View {
                 .multilineTextAlignment(.center)
                 .accessibilityLabel(Text("History List Empty"))
         } else {
-            if #available(iOS 15.0, *) {
-                historyList
-                    .refreshable {
-                        model.reloadData()
-                    }
-            } else {
-                historyList
+            historyList.refreshable {
+                model.reloadData()
             }
         }
     }

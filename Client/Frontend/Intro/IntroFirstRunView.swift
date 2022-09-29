@@ -308,7 +308,6 @@ struct SafariVCLink: View {
     let url: URL
 
     private var _token: Any?
-    @available(iOS 15.0, *)
     var token: SFSafariViewController.PrewarmingToken? {
         _token as! SFSafariViewController.PrewarmingToken?
     }
@@ -320,9 +319,7 @@ struct SafariVCLink: View {
         self.url = url
 
         // Strictly an optimization, no need for a fallback on older versions
-        if #available(iOS 15.0, *) {
-            _token = SFSafariViewController.prewarmConnections(to: [url])
-        }
+        _token = SFSafariViewController.prewarmConnections(to: [url])
     }
 
     var body: some View {

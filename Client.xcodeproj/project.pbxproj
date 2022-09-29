@@ -7154,6 +7154,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = AppClip/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -7190,6 +7191,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = AppClip/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -7249,6 +7251,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = SiriShortcuts/ClientIntent/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -7306,6 +7309,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = SiriShortcuts/ClientIntent/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -7717,7 +7721,7 @@
 				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ServiceExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2021 Neeva. All rights reserved.";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -7763,7 +7767,7 @@
 				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ServiceExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2021 Neeva. All rights reserved.";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -7788,6 +7792,7 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				INFOPLIST_FILE = AppClip/AppClipTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PRODUCT_NAME = AppClipTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AppClip.app/AppClip";
 			};
@@ -7800,6 +7805,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = AppClip/AppClipTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PRODUCT_NAME = AppClipTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AppClip.app/AppClip";
 			};
@@ -7855,6 +7861,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Extensions/ShareTo/Preview Support/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -7914,6 +7921,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Extensions/ShareTo/Preview Support/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -8031,6 +8039,7 @@
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = A9735M6NPH;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Client/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -8063,6 +8072,7 @@
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PROVISIONING_PROFILE_SPECIFIER = "Neeva Browser ShareTo";
 				SKIP_INSTALL = NO;
 			};
@@ -8077,7 +8087,7 @@
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = WidgetKit/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PRODUCT_BUNDLE_IDENTIFIER = co.neeva.app.ios.browser.WidgetKit;
 				PROVISIONING_PROFILE_SPECIFIER = "Neeva Browser WidgetKit";
 				SKIP_INSTALL = NO;
@@ -8095,6 +8105,7 @@
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "Shared/Supporting Files/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -8116,6 +8127,7 @@
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				INFOPLIST_FILE = Storage/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				VALIDATE_WORKSPACE = NO;
 			};
@@ -8130,6 +8142,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				INFOPLIST_FILE = ClientTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PRODUCT_NAME = ClientTests;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
@@ -8146,6 +8159,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				INFOPLIST_FILE = UITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/UITests/UITests-Bridging-Header.h";
@@ -8163,6 +8177,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				INFOPLIST_FILE = StorageTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/StorageTests/StorageTests-Bridging-Header.h";
@@ -8179,6 +8194,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				INFOPLIST_FILE = SharedTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
@@ -8195,6 +8211,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				INFOPLIST_FILE = XCUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/XCUITests/XCUITests-Bridging-Header.h";
@@ -8210,6 +8227,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				INFOPLIST_FILE = StoragePerfTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
@@ -8311,7 +8329,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				INFOPLIST_FILE = Client/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -8338,6 +8356,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(inherit)Extensions/Entitlements/NeevaDev.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SKIP_INSTALL = NO;
 			};
 			name = Debug;
@@ -8348,6 +8367,7 @@
 				CODE_SIGN_ENTITLEMENTS = Extensions/Entitlements/NeevaDev.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = WidgetKit/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "co.neeva.app.ios.browser-dev.WidgetKit";
 				SKIP_INSTALL = NO;
 			};
@@ -8361,6 +8381,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				INFOPLIST_FILE = "Shared/Supporting Files/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -8378,6 +8399,7 @@
 				DEFINES_MODULE = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				INFOPLIST_FILE = Storage/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				VALIDATE_WORKSPACE = NO;
 			};
@@ -8392,6 +8414,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				INFOPLIST_FILE = ClientTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PRODUCT_NAME = ClientTests;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
@@ -8408,6 +8431,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				INFOPLIST_FILE = UITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/UITests/UITests-Bridging-Header.h";
@@ -8425,6 +8449,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				INFOPLIST_FILE = StorageTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/StorageTests/StorageTests-Bridging-Header.h";
@@ -8441,6 +8466,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				INFOPLIST_FILE = SharedTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
@@ -8457,6 +8483,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				INFOPLIST_FILE = XCUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/XCUITests/XCUITests-Bridging-Header.h";
@@ -8468,6 +8495,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = StoragePerfTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Debug;
@@ -8567,7 +8595,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				INFOPLIST_FILE = Client/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -8611,6 +8639,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = AppClip/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -8630,6 +8659,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(inherit)Extensions/Entitlements/NeevaDev.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PRODUCT_BUNDLE_IDENTIFIER = co.neeva.app.ios.browser.ShareTo;
 				SKIP_INSTALL = NO;
 			};
@@ -8641,6 +8671,7 @@
 				CODE_SIGN_ENTITLEMENTS = Extensions/Entitlements/NeevaDev.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = WidgetKit/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PRODUCT_BUNDLE_IDENTIFIER = co.neeva.app.ios.browser.WidgetKit;
 				SKIP_INSTALL = NO;
 			};
@@ -8688,6 +8719,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = SiriShortcuts/ClientIntent/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -8713,6 +8745,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				INFOPLIST_FILE = "Shared/Supporting Files/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
 					NSLocalizedString,
@@ -8731,6 +8764,7 @@
 				DEFINES_MODULE = YES;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				INFOPLIST_FILE = Storage/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				VALIDATE_WORKSPACE = NO;
 			};
@@ -8745,6 +8779,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				INFOPLIST_FILE = ClientTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PRODUCT_NAME = ClientTests;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
@@ -8761,6 +8796,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				INFOPLIST_FILE = UITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/UITests/UITests-Bridging-Header.h";
@@ -8778,6 +8814,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				INFOPLIST_FILE = StorageTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/StorageTests/StorageTests-Bridging-Header.h";
@@ -8794,6 +8831,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				INFOPLIST_FILE = SharedTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
@@ -8810,6 +8848,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A9735M6NPH;
 				INFOPLIST_FILE = XCUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/XCUITests/XCUITests-Bridging-Header.h";
@@ -8821,6 +8860,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = StoragePerfTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = "Release (Debug)";
@@ -8872,6 +8912,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "Extensions/ShareTo/Preview Support/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -8893,6 +8934,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = AppClip/AppClipTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				PRODUCT_NAME = AppClipTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AppClip.app/AppClip";
 			};
@@ -9116,7 +9158,7 @@
 				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ServiceExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2021 Neeva. All rights reserved.";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

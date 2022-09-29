@@ -120,14 +120,12 @@ struct BackForwardListView: View {
             VStack(spacing: 0) {
                 DismissBackgroundView(opacity: 0.2) {
                     overlayManager.hide(overlay: .backForwardList(self))
-                }.animation(nil).transition(.fade)
+                }
+                .animation(nil)
+                .transition(.fade)
 
                 Group {
-                    if #available(iOS 15.0, *) {
-                        content.background(.regularMaterial)
-                    } else {
-                        content.background(Color.DefaultBackground)
-                    }
+                    content.background(.regularMaterial)
                 }.frame(height: min(maxHeight, contentHeight))
             }
             .frame(maxWidth: .infinity)

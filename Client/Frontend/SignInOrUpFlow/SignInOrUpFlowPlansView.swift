@@ -65,9 +65,7 @@ struct SignInOrUpFlowPlansView: View {
                     model.currentPremiumPlan = nil
                 }
 
-                if #available(iOS 15.0, *),
-                    let annualProduct = PremiumStore.shared.getProductForPlan(.annual)
-                {
+                if let annualProduct = PremiumStore.shared.getProductForPlan(.annual) {
                     VStack {
                         Text("Premium\nAnnual")
                             .font(.system(size: 16, weight: .bold))
@@ -103,9 +101,7 @@ struct SignInOrUpFlowPlansView: View {
                     }
                 }
 
-                if #available(iOS 15.0, *),
-                    let monthlyProduct = PremiumStore.shared.getProductForPlan(.monthly)
-                {
+                if let monthlyProduct = PremiumStore.shared.getProductForPlan(.monthly) {
                     VStack {
                         Text("Premium\nMonthly")
                             .font(.system(size: 16, weight: .bold))
@@ -165,10 +161,9 @@ struct SignInOrUpFlowPlansView: View {
                 Spacer()
 
                 HStack {
-                    if #available(iOS 15.0, *) {
-                        Text(PremiumStore.shared.priceText(model.currentPremiumPlan)).fontWeight(
-                            .bold)
-                    }
+                    Text(PremiumStore.shared.priceText(model.currentPremiumPlan))
+                        .fontWeight(.bold)
+
                     if let termText = PremiumHelpers.termText(model.currentPremiumPlan),
                         termText != ""
                     {
@@ -218,9 +213,8 @@ struct SignInOrUpFlowPlansView: View {
                             if !NeevaUserInfo.shared.hasLoginCookie() {
                                 model.changeScreenTo(.signUp)
                             } else {
-                                if #available(iOS 15.0, *),
-                                    let product = PremiumStore.shared.getProductForPlan(
-                                        model.currentPremiumPlan)
+                                if let product = PremiumStore.shared.getProductForPlan(
+                                    model.currentPremiumPlan)
                                 {
                                     PremiumStore.shared.purchase(
                                         product, reloadUserInfo: true,
@@ -274,9 +268,7 @@ struct SignInOrUpFlowPlansView: View {
              we trigger the purchase based on the users original choice
              */
             if NeevaUserInfo.shared.hasLoginCookie() {
-                if #available(iOS 15.0, *),
-                    let product = PremiumStore.shared.getProductForPlan(model.currentPremiumPlan)
-                {
+                if let product = PremiumStore.shared.getProductForPlan(model.currentPremiumPlan) {
                     PremiumStore.shared.purchase(
                         product, reloadUserInfo: true,
                         onPending: self.onPurchasePending,

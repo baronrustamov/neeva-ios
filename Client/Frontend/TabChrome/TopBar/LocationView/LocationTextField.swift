@@ -145,10 +145,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
                 action: #selector(self.handleKeyCommand(sender:))),
         ]
 
-        if #available(iOS 15.0, *) {
-            for command in arrowCommands {
-                command.wantsPriorityOverSystemBehavior = true
-            }
+        for command in arrowCommands {
+            command.wantsPriorityOverSystemBehavior = true
         }
 
         return [

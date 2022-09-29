@@ -25,7 +25,6 @@ enum PremiumPurchaseErrorType {
     case unknown
 }
 
-@available(iOS 15.0, *)
 class PremiumStore: ObservableObject {
     static let shared = PremiumStore()
     private static let dateFormatter = ISO8601DateFormatter()

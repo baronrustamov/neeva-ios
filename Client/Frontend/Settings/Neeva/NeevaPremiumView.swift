@@ -6,7 +6,6 @@ import Shared
 import StoreKit
 import SwiftUI
 
-@available(iOS 15.0, *)
 struct NeevaPremiumView: View {
     @ObservedObject var userInfo: NeevaUserInfo
     // NOTE: we listen for changes on the store incase products are loading
