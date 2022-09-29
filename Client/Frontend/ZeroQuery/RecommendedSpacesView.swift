@@ -29,6 +29,11 @@ struct RecommendedSpacesView: View {
                         manager: SpaceStore.suggested),
                     state: expandSuggestedSpace
                 )
+                .onDisappear {
+                    if !Defaults[.didFirstNavigation] {
+                        viewModel.bvc.showZeroQuery()
+                    }
+                }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
                 .environment(
