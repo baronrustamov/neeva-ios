@@ -6,13 +6,36 @@ import Foundation
 import Shared
 import StoreKit
 
+enum ProductID: String, Equatable, Codable, CaseIterable {
+    //NOTE: These raw values are important, they map directly to App Store Connect product IDs.
+    case annual202206
+    case monthly202206  // deprecated; may be removed when there are zero subscribers
+    case monthly202209
+
+    func premiumPlan() -> PremiumPlan {
+        switch self {
+        case .annual202206:
+            return PremiumPlan.annual
+        case .monthly202206:
+            return PremiumPlan.monthly
+        case .monthly202209:
+            return PremiumPlan.monthly
+        }
+    }
+}
+
 enum PremiumPlan: String, Equatable, Codable {
-    /*
-     NOTE: These text values are important, they map directly to
-     App Store Connect product IDs.
-     */
-    case annual = "annual202206"
-    case monthly = "monthly202206"
+    case annual
+    case monthly
+
+    func currentProductID() -> ProductID {
+        switch self {
+        case .annual:
+            return .annual202206
+        case .monthly:
+            return .monthly202209
+        }
+    }
 }
 
 enum PremiumPurchaseSuccessType {
@@ -43,12 +66,15 @@ class PremiumStore: ObservableObject {
     var appleUUID: UUID? = nil
 
     init() {
+        self.loadProducts()
+    }
+
+    func loadProducts() {
         Task {
             self.loadingProducts = true
             do {
-                self.products = try await Product.products(for: [
-                    PremiumPlan.monthly.rawValue, PremiumPlan.annual.rawValue,
-                ])
+                self.products = try await Product.products(
+                    for: ProductID.allCases.map { $0.rawValue })
 
                 self.checkForAndFixMissingSubscription()
             } catch {
@@ -81,7 +107,7 @@ class PremiumStore: ObservableObject {
         guard let plan = plan else { return nil }
 
         return self.products.first { product in
-            return product.id == plan.rawValue
+            return product.id == plan.currentProductID().rawValue
         }
     }
 
@@ -307,6 +333,8 @@ class PremiumStore: ObservableObject {
     }
 }
 
+// MARK: Helpers
+
 class PremiumHelpers {
     static func primaryActionText(_ plan: PremiumPlan?, subscribed: Bool = false) -> String {
         switch plan {
@@ -322,7 +350,7 @@ class PremiumHelpers {
     static func priceSubText(_ plan: PremiumPlan?) -> (String, String) {
         switch plan {
         case .annual:
-            return ("Save 16%", "Cancel anytime")
+            return ("Save 30%", "Cancel anytime")
         case .monthly:
             return ("", "Cancel anytime")
         default:

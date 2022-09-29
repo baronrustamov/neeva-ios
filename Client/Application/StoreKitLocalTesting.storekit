@@ -66,12 +66,37 @@
           "referenceName" : "Annual (local)",
           "subscriptionGroupID" : "EFA616AA",
           "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "5.99",
+          "familyShareable" : false,
+          "groupNumber" : 3,
+          "internalID" : "D6B1D26F",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Monthly Plan",
+              "displayName" : "Monthly (local)",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "monthly202209",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Monthly (local)",
+          "subscriptionGroupID" : "EFA616AA",
+          "type" : "RecurringSubscription"
         }
       ]
     }
   ],
   "version" : {
-    "major" : 1,
-    "minor" : 2
+    "major" : 2,
+    "minor" : 0
   }
 }
