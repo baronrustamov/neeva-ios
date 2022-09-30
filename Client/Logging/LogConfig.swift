@@ -500,21 +500,30 @@ public enum LogConfig {
             .Stability,
             .PromoCard,
             .Notification,
-            .Cheatsheet,
             .CookieCutter,
             .UI,
             .OverflowMenu,
             .Generic,
         ]
 
-        let validInteraction =
-            path == .SpacesLoginRequired || path == .SpacesRecommendedDetailUIVisited
+        if validCategories.contains(category) {
+            return true
+        }
 
-        if path == .ToggleTrackingProtection {
+        let invalidInteractions: Set<LogConfig.Interaction> = [.ToggleTrackingProtection]
+        let validInteractions: Set<LogConfig.Interaction> = [
+            .SpacesLoginRequired,
+            .SpacesRecommendedDetailUIVisited,
+            .CheatsheetUGCStatsForSession,
+            .CheatsheetPopoverImpression,
+            .CheatsheetUGCIndicatorImpression,
+        ]
+
+        guard !invalidInteractions.contains(path) else {
             return false
         }
 
-        return validCategories.contains(category) || validInteraction
+        return validInteractions.contains(path)
     }
 
     // MARK: - Category

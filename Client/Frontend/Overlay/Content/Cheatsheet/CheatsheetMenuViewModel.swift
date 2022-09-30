@@ -69,26 +69,6 @@ class CheatsheetMenuViewModel: ObservableObject {
             _journeyID = newValue
         }
     }
-    private var loggerAttributes: [ClientLogCounterAttribute] {
-        [
-            ClientLogCounterAttribute(
-                key: LogConfig.CheatsheetAttribute.tabID,
-                value: tab?.tabUUID ?? "nil"
-            ),
-            ClientLogCounterAttribute(
-                key: LogConfig.CheatsheetAttribute.journeyID,
-                value: journeyID?.uuidString ?? "nil"
-            ),
-            ClientLogCounterAttribute(
-                key: LogConfig.CheatsheetAttribute.currentPageURL,
-                value: sourcePage?.url.absoluteString ?? "nil"
-            ),
-            ClientLogCounterAttribute(
-                key: LogConfig.CheatsheetAttribute.currentCheatsheetQuery,
-                value: query ?? "nil"
-            ),
-        ]
-    }
 
     /// Turn query into a neeva search URL for debugging and navigation purposes
     /// this property is not used in the network request
@@ -291,16 +271,39 @@ class CheatsheetMenuViewModel: ObservableObject {
         _ path: LogConfig.Interaction,
         attributes: [ClientLogCounterAttribute] = []
     ) {
-        let envAttributes = EnvironmentHelper.shared.getAttributes(
-            for: [.deviceTheme, .deviceOrientation, .deviceScreenSize, .isUserSignedIn, .deviceOS]
-        )
+        // Evaluate shared diagnostic and usage attributes synchronously
+        // These attributes contain sensitive data
+        let allAttributes =
+            [
+                ClientLogCounterAttribute(
+                    key: LogConfig.CheatsheetAttribute.tabID,
+                    value: tab?.tabUUID ?? "nil"
+                ),
+                ClientLogCounterAttribute(
+                    key: LogConfig.CheatsheetAttribute.journeyID,
+                    value: journeyID?.uuidString ?? "nil"
+                ),
+                ClientLogCounterAttribute(
+                    key: LogConfig.CheatsheetAttribute.currentPageURL,
+                    value: sourcePage?.url.absoluteString ?? "nil"
+                ),
+                ClientLogCounterAttribute(
+                    key: LogConfig.CheatsheetAttribute.currentCheatsheetQuery,
+                    value: query ?? "nil"
+                ),
+            ]
+            + attributes
 
-        // Evaluate computed `loggerAttributes` synchronously
-        let allAttributes = envAttributes + loggerAttributes + attributes
+        // Override logger attributes with submitted attributes
+        let combinedAttributes = Dictionary(allAttributes.map { ($0.key, $0.value) }) {
+            first, last in last
+        }
 
         ClientLogger.shared.logCounter(
             path,
-            attributes: allAttributes
+            attributes: combinedAttributes.map {
+                ClientLogCounterAttribute(key: $0.key, value: $0.value)
+            }
         )
     }
 

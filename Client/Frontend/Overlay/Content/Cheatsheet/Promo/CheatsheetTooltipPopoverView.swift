@@ -38,8 +38,7 @@ struct CheatsheetTooltipPopoverView: View {
                 repeats: false
             ) { _ in
                 ClientLogger.shared.logCounter(
-                    .CheatsheetPopoverImpression,
-                    attributes: EnvironmentHelper.shared.getAttributes()
+                    .CheatsheetPopoverImpression
                 )
             }
         }

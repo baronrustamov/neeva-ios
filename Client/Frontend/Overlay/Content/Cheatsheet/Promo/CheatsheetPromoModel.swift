@@ -234,10 +234,7 @@ class CheatsheetPromoModel: ObservableObject {
                     self?.scheduleSetDisplayedStateForTryCheatsheet()
                 } else {
                     ClientLogger.shared.logCounter(
-                        .CheatsheetPopoverReachedLimit,
-                        attributes: EnvironmentHelper.shared.getAttributes(for: [
-                            .isUserSignedIn
-                        ])
+                        .CheatsheetPopoverReachedLimit
                     )
                 }
             } else if Defaults[.useCheatsheetBloomFilters] {

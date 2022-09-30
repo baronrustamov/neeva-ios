@@ -103,8 +103,7 @@ final class CheatsheetServiceProvider: CheatsheetDataService {
                     DispatchQueue.main.async {
                         ClientLogger.shared.logCounter(
                             .CheatsheetBadURLString,
-                            attributes: EnvironmentHelper.shared.getAttributes()
-                                + [attribute]
+                            attributes: [attribute]
                         )
                     }
                 }

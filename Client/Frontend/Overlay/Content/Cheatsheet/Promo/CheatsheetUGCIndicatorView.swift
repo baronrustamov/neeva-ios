@@ -35,8 +35,7 @@ struct CheatsheetUGCIndicatorView: View {
                 repeats: false
             ) { _ in
                 ClientLogger.shared.logCounter(
-                    .CheatsheetUGCIndicatorImpression,
-                    attributes: EnvironmentHelper.shared.getAttributes()
+                    .CheatsheetUGCIndicatorImpression
                 )
             }
         }
