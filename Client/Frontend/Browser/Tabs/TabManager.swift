@@ -361,18 +361,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         }
     }
 
-    // Called by other classes to signal that they are entering/exiting private mode
-    // This is called by TabTrayVC when the private mode button is pressed and BEFORE we've switched to the new mode
-    // we only want to remove all private tabs when leaving PBM and not when entering.
-    func willSwitchTabMode(leavingPBM: Bool) {
-        // Clear every time entering/exiting this mode.
-        Tab.ChangeUserAgent.privateModeHostList = Set<String>()
-
-        if Defaults[.closeIncognitoTabs] && leavingPBM {
-            removeAllIncognitoTabs()
-        }
-    }
-
     func flagAllTabsToReload() {
         for tab in tabs {
             if tab == selectedTab {
@@ -1151,7 +1139,13 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         removeTabs(tabs, showToast: false)
     }
 
+    // This function is strictly used for clearing all Incognito
+    // tabs after the user exits Incognito Mode (if this behavior
+    // is set in Preferences).
     func removeAllIncognitoTabs() {
+        // Clear the list of Desktop Mode sites that is saved in memory.
+        Tab.ChangeUserAgent.incognitoModeHostList.removeAll()
+
         removeTabs(incognitoTabs)
         incognitoConfiguration = TabManager.makeWebViewConfig(isIncognito: true)
     }

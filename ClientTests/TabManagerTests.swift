@@ -109,7 +109,7 @@ class TabManagerTests: XCTestCase {
 
         manager.selectTab(manager.addTab(isIncognito: true), notify: true)
         XCTAssertEqual(manager.incognitoTabs.count, 1, "There should be one new private tab")
-        manager.willSwitchTabMode(leavingPBM: true)
+        manager.selectTab(tab, notify: true)
         XCTAssertEqual(
             manager.incognitoTabs.count, 0,
             "After willSwitchTabMode there should be no more private tabs")
@@ -146,9 +146,8 @@ class TabManagerTests: XCTestCase {
         manager.selectTab(manager.addTab(), notify: true)
         manager.selectTab(manager.addTab(isIncognito: true), notify: true)
 
-        manager.willSwitchTabMode(leavingPBM: false)
         XCTAssertEqual(manager.incognitoTabs.count, 1, "There should be 1 private tab")
-        manager.willSwitchTabMode(leavingPBM: true)
+        manager.selectTab(tab, notify: true)
         XCTAssertEqual(manager.incognitoTabs.count, 0, "There should be 0 private tab")
         manager.removeTab(tab)
         XCTAssertEqual(manager.activeNormalTabs.count, 1, "There should be 1 normal tab")
