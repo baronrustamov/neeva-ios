@@ -73,7 +73,7 @@ class PremiumStore: ObservableObject {
             )
         }
 
-        return false
+        return true
     }
 
     func getProductForPlan(_ plan: PremiumPlan?) -> Product? {
