@@ -18,7 +18,7 @@ struct TabGridSectionHeaderView: View {
 
     var body: some View {
         VStack {
-            Color.secondarySystemFill
+            Color.secondaryBackground
                 .frame(height: 8)
                 .padding(.horizontal, -CardGridUX.GridSpacing)
 

@@ -89,7 +89,7 @@ struct ExpandedCardGroupRowView: View {
             .padding(.top, CardUX.ShadowRadius)
         }
         .background(
-            Color.secondarySystemFill
+            Color.tertiarySystemFill
                 .cornerRadius(
                     isFirstRow(range) ? 24 : 0,
                     corners: .top

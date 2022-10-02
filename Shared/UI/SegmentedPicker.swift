@@ -130,7 +130,7 @@ public struct SegmentedPicker: View {
     public var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
-                .foregroundColor(Color.groupedBackground)
+                .foregroundColor(Color.secondaryBackground)
                 .frame(height: 40)
 
             icons(selected: false)

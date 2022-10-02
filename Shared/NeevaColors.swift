@@ -154,8 +154,6 @@ extension UIColor {
         named: "DarkElevated", in: NeevaConstants.sharedBundle, compatibleWith: nil)!
     public static let SelectedCell = UIColor(
         named: "SelectedCell", in: NeevaConstants.sharedBundle, compatibleWith: nil)!
-    public static let TrayBackground = UIColor(
-        named: "TrayBackground", in: NeevaConstants.sharedBundle, compatibleWith: nil)!
     public static let TextSelectionHighlight = UIColor(
         named: "TextSelectionHighlight", in: NeevaConstants.sharedBundle, compatibleWith: nil)!
     public static let PreviewHomeBackground = UIColor(
@@ -259,7 +257,6 @@ extension Color {
     }
 
     public static let DefaultBackground = Color(UIColor.DefaultBackground)
-    public static let TrayBackground = Color(UIColor.TrayBackground)
     public static let elevatedDarkBackground = Color(UIColor.ElevatedDarkBackground)
     public static let textSelectionHighlight = Color(UIColor.TextSelectionHighlight)
     public static let selectedCell = Color(UIColor.SelectedCell)

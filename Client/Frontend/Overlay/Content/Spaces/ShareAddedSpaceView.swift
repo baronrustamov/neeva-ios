@@ -89,7 +89,8 @@ struct ShareAddedSpaceView: View {
                 .padding(.horizontal, 16)
                 .padding(.vertical, 13)
                 if let space = space, space.ACL == .owner || space.isPublic {
-                    Color.TrayBackground.frame(height: 2)
+                    Color.background.frame(height: 2)
+
                     Text("Share Space")
                         .withFont(.headingSmall)
                         .foregroundColor(.secondaryLabel)

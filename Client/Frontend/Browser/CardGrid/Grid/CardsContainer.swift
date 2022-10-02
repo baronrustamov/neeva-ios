@@ -79,7 +79,6 @@ struct TabGridContainer: View {
             )
         }
         .padding(.horizontal, CardGridUX.GridSpacing)
-        .background(Color.background)
         .onDrop(of: ["public.url", "public.text"], delegate: tabModel)
         .frame(
             minHeight:

@@ -14,7 +14,7 @@ struct OpenArchivedTabsPanelButton: View {
 
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
-            Color.secondarySystemFill
+            Color.secondaryBackground
                 .frame(width: containerGeometry.width, height: 8)
                 .padding(.horizontal, -CardGridUX.GridSpacing)
 

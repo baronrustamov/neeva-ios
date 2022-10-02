@@ -5,10 +5,10 @@
 import Defaults
 import SwiftUI
 
-private enum BrowserTopBarViewUX {
+enum BrowserTopBarViewUX {
     static let GridPickerBottomPadding: CGFloat = 4.5
     static let ShowHeaderTapAreaHeight = 32.0
-    static let SwitcherToolbarViewBottomPadding: CGFloat = 7.5
+    static let SwitcherToolbarViewPadding: CGFloat = 3.75
 }
 
 struct BrowserTopBarView: View {
@@ -24,10 +24,8 @@ struct BrowserTopBarView: View {
     @ViewBuilder var switcherTopBar: some View {
         if chromeModel.inlineToolbar {
             SwitcherToolbarView(top: true)
-                .padding(.bottom, BrowserTopBarViewUX.SwitcherToolbarViewBottomPadding)
         } else {
             GridPicker()
-                .padding(.bottom, BrowserTopBarViewUX.GridPickerBottomPadding)
         }
     }
 

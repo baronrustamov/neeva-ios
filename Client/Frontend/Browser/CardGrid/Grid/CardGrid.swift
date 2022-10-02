@@ -54,7 +54,7 @@ struct CardGridBackground: View {
 
     var color: some View {
         cardTransitionModel.state == .hidden
-            ? Color.TrayBackground : Color.clear
+            ? Color.background : Color.clear
     }
 
     var body: some View {

@@ -49,7 +49,7 @@ struct CollapsedCardGroupView: View {
         .animation(nil)
         .transition(.fade)
         .background(
-            Color.secondarySystemFill
+            Color.tertiarySystemFill
                 .cornerRadius(24, corners: cornersToRound)
         ).onDrop(of: ["public.url", "public.text"], delegate: groupDetails)
     }
