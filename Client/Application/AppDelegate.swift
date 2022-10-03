@@ -30,6 +30,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
 
     // MARK: - Lifecycle
+    /*
+     * "Return false if the app should not perform the application(_:performActionFor:completionHandler:)
+     * method because you’re handling the invocation of a Home screen quick action"
+     * https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623032-application
+     */
     func application(
         _ application: UIApplication,
         willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -153,11 +158,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         return true
     }
 
-    /*
-     * "Return false if the app should not perform the application(_:performActionFor:completionHandler:)
-     * method because you’re handling the invocation of a Home screen quick action"
-     * https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623032-application
-     */
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
