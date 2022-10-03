@@ -1055,10 +1055,6 @@ extension BrowserViewController {
 
     func urlBarDidLeaveOverlayMode() {
         updateInZeroQuery(tabManager.selectedTab?.url as URL?)
-        if !Defaults[.didFirstNavigation] {
-            tabContainerModel.updateContent(.hideSuggestions)
-            zeroQueryModel.reset(bvc: self, wasCancelled: false)
-        }
     }
 }
 
