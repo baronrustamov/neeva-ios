@@ -338,19 +338,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     private func continueSiriIntent(continue userActivity: NSUserActivity) -> Bool {
-        var attributes = [
-            EnvironmentHelper.shared.getSessionUUID()
-        ]
-
         if let intent = userActivity.interaction?.intent as? OpenURLIntent {
             self.bvc.openURLInNewTab(intent.url)
-            ClientLogger.shared.logCounter(.openURLShortcut, attributes: attributes)
+            ClientLogger.shared.logCounter(.openURLShortcut)
             self.urlHandledOnLaunch = true
 
             return true
         }
 
         if let intent = userActivity.interaction?.intent as? SearchNeevaIntent {
+            var attributes: [ClientLogCounterAttribute] = []
             // shortcut has query input, start search for query
             if let query = intent.text,
                 !query.isEmpty,

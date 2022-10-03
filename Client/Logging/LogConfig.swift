@@ -8,6 +8,7 @@ import Foundation
 import Shared
 
 public enum LogConfig {
+
     // MARK: - Interactions
     public enum Interaction: String {
         /// Open tracking shield
@@ -416,6 +417,58 @@ public enum LogConfig {
         case StorefrontWasNil
     }
 
+    // When we add/remove a new interaction to this list make sure
+    // it's updated on the server side as well
+    public static let sessionIDEventWhiteList: Set =
+        [
+            Interaction.AppEnterForeground,
+            Interaction.FirstRunImpression,
+            Interaction.FirstRunPageLoad,
+            Interaction.FirstNavigation,
+            Interaction.OpenDefaultBrowserURL,
+            Interaction.GetStartedInWelcome,
+            Interaction.DefaultBrowserInterstitialImp,
+            Interaction.DefaultBrowserOnboardingInterstitialOpen,
+            Interaction.DefaultBrowserOnboardingInterstitialOpenAgain,
+            Interaction.DefaultBrowserOnboardingInterstitialSkip,
+            Interaction.DefaultBrowserOnboardingInterstitialRemind,
+            Interaction.DefaultBrowserOnboardingInterstitialContinue,
+            Interaction.DefaultBrowserOnboardingInterstitialVideo,
+            Interaction.OpenLocalNotification,
+            Interaction.AuthorizeSystemNotification,
+            Interaction.DenySystemNotification,
+            Interaction.AppEnterForeground,
+            Interaction.PremiumPurchaseVerified,
+            Interaction.StartExperiment,
+            Interaction.AppCrashWithPageLoad,
+            Interaction.AppCrashWithCrashReporter,
+            Interaction.LowMemoryWarning,
+            Interaction.FirstRunSignupWithApple,
+            Interaction.FirstRunOtherSignUpOptions,
+            Interaction.FirstRunSignin,
+            Interaction.PreviewModePromoSignup,
+            Interaction.DefaultBrowserInterstitialRestoreImp,
+            Interaction.SpacesRecommendedDetailUIVisited,
+            Interaction.PromoCardAppear,
+            Interaction.PromoDefaultBrowser,
+            Interaction.CloseDefaultBrowserPromo,
+            Interaction.OpenNotification,
+            Interaction.RegisterNotificationToken,
+            Interaction.BrowsePlanClick,
+            Interaction.ChoosePlanClick,
+            Interaction.PremiumPurchaseCancel,
+            Interaction.PremiumPurchasePending,
+            Interaction.PremiumPurchaseUnverified,
+            Interaction.PreviousScreenClick,
+            Interaction.ScreenImpression,
+            Interaction.SignInClick,
+            Interaction.SpacesLoginRequired,
+            Interaction.SpacesRecommendedDetailUIVisited,
+            Interaction.CheatsheetUGCStatsForSession,
+            Interaction.CheatsheetPopoverImpression,
+            Interaction.CheatsheetUGCIndicatorImpression,
+        ]
+
     /// Specify a comma separated string with these values to
     /// enable specific logging category on the server:
     /// `ios_logging_categories.experiment.yaml`
@@ -493,37 +546,7 @@ public enum LogConfig {
     public static func shouldAddSessionID(
         for path: LogConfig.Interaction
     ) -> Bool {
-        let category = LogConfig.category(for: path)
-
-        let validCategories: Set<LogConfig.InteractionCategory> = [
-            .FirstRun,
-            .Stability,
-            .PromoCard,
-            .Notification,
-            .CookieCutter,
-            .UI,
-            .OverflowMenu,
-            .Generic,
-        ]
-
-        if validCategories.contains(category) {
-            return true
-        }
-
-        let invalidInteractions: Set<LogConfig.Interaction> = [.ToggleTrackingProtection]
-        let validInteractions: Set<LogConfig.Interaction> = [
-            .SpacesLoginRequired,
-            .SpacesRecommendedDetailUIVisited,
-            .CheatsheetUGCStatsForSession,
-            .CheatsheetPopoverImpression,
-            .CheatsheetUGCIndicatorImpression,
-        ]
-
-        guard !invalidInteractions.contains(path) else {
-            return false
-        }
-
-        return validInteractions.contains(path)
+        return sessionIDEventWhiteList.contains(path)
     }
 
     // MARK: - Category
