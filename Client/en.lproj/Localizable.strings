@@ -139,3 +139,9 @@
 
 /* Price per month */
 "/month" = "/month";
+
+/* An example query for users to tap on to see results */
+"tech news" = "tech news";
+
+/* An example query for users to tap on to see results */
+"fruit tart recipes" = "fruit tart recipes";
