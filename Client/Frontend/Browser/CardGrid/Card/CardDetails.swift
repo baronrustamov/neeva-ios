@@ -296,7 +296,7 @@ public class TabCardDetails: CardDropDelegate, CardDetails, AccessingManagerProv
                     ClientLogger.shared.logCounter(.tabRemovedFromGroup)
                     manager.removeTabFromTabGroup(tab)
                 } label: {
-                    Label("Remove from group", systemSymbol: .arrowUpForwardSquare)
+                    Label("Remove from Group", systemSymbol: .arrowUpForwardSquare)
                 }
             }
 
