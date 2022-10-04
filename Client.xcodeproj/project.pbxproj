@@ -2674,6 +2674,20 @@
 			path = FindView;
 			sourceTree = "<group>";
 		};
+		20173C9528EBBE1A00C3D7D1 /* Spaces */ = {
+			isa = PBXGroup;
+			children = (
+				9BB796DC282EAD21001E577C /* AddToSpaceSheetTests.swift */,
+				9BC9C15C286F7354004DA7ED /* RelatedSpaceTests.swift */,
+				9BFAA4A22857D2B9008DEEB6 /* SpaceDetailPageTopBarTests.swift */,
+				9B6FD8B5285D10EF005C6999 /* SpaceEntityTests.swift */,
+				9B489596286528A70017FA57 /* SpacePublicAclTests.swift */,
+				9BC9C15A286F5880004DA7ED /* SpaceGeneratorTests.swift */,
+				9BE2C4F1284FFA64004F8BAA /* SpaceGridTests.swift */,
+			);
+			name = Spaces;
+			sourceTree = "<group>";
+		};
 		20217D9D286664FD003EF3A7 /* Card */ = {
 			isa = PBXGroup;
 			children = (
@@ -3099,6 +3113,7 @@
 				66E34CDB2711118900F30A3D /* ReaderModeTests.swift */,
 				2089ADB92876932E00CB3448 /* RecentlyClosedTests.swift */,
 				2C3406C71E719F00000FD889 /* SettingsTest.swift */,
+				20173C9528EBBE1A00C3D7D1 /* Spaces */,
 				66C5224827604533003C7F2D /* SuggestionBackButtonTests.swift */,
 				209CD9A227DBF9F20069675C /* TabGroupTests.swift */,
 				C850CD57269A00C40096F122 /* TabMenuTests.swift */,
@@ -3109,13 +3124,6 @@
 				EB7A651020699BD200B52A5F /* WebPagesForTesting.swift */,
 				0B9D40781E8D5AC80059E664 /* XCUITests-Bridging-Header.h */,
 				66AF61B926D87E9900FB68DF /* ZeroQueryTests.swift */,
-				9BE2C4F1284FFA64004F8BAA /* SpaceGridTests.swift */,
-				9BB796DC282EAD21001E577C /* AddToSpaceSheetTests.swift */,
-				9BFAA4A22857D2B9008DEEB6 /* SpaceDetailPageTopBarTests.swift */,
-				9B6FD8B5285D10EF005C6999 /* SpaceEntityTests.swift */,
-				9B489596286528A70017FA57 /* SpacePublicAclTests.swift */,
-				9BC9C15A286F5880004DA7ED /* SpaceGeneratorTests.swift */,
-				9BC9C15C286F7354004DA7ED /* RelatedSpaceTests.swift */,
 			);
 			path = XCUITests;
 			sourceTree = "<group>";
