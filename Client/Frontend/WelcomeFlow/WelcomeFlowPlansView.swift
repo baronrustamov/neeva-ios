@@ -29,7 +29,7 @@ struct WelcomeFlowPlansView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            WelcomeFlowHeaderView(text: "Get Premium for maximum privacy")
+            WelcomeFlowHeaderView(text: "Choose the right plan for you")
                 .padding(.bottom, 20)
 
             HStack(spacing: 0) {
@@ -238,6 +238,13 @@ struct WelcomeFlowPlansView: View {
                 )
                 .buttonStyle(.neeva(.primary))
 
+                if let subText = PremiumHelpers.primaryActionSubText(model.currentPremiumPlan),
+                    subText != ""
+                {
+                    Text(subText)
+                        .frame(maxWidth: .infinity)
+                }
+
                 if !NeevaUserInfo.shared.hasLoginCookie() {
                     Button(
                         action: {
@@ -258,8 +265,16 @@ struct WelcomeFlowPlansView: View {
 
             Spacer()
 
-            WelcomeFlowPrivacyAndTermsLinksView()
-                .frame(maxWidth: .infinity, alignment: .center)
+            Group {
+                SafariVCLink(
+                    "Subscribe and help fight climate change",
+                    url: NeevaConstants.appClimatePledgeURL
+                )
+                .frame(maxWidth: .infinity)
+
+                WelcomeFlowPrivacyAndTermsLinksView()
+                    .frame(maxWidth: .infinity, alignment: .center)
+            }
 
             Spacer()
         }

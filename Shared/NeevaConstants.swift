@@ -58,6 +58,7 @@ public struct NeevaConstants {
     public static let appHelpCenterURL: URL = "https://help.neeva.com/hc"
     public static let appPrivacyURL = appMarketingURL / "privacy"
     public static let appTermsURL = appMarketingURL / "terms"
+    public static let appClimatePledgeURL = appMarketingURL / "climate-pledge"
     public static let cookieCutterHelpURL: URL =
         "https://help.neeva.com/hc/en-us/articles/4486326606355"
 

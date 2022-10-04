@@ -324,6 +324,14 @@ struct SafariVCLink: View {
 
     var body: some View {
         Button {
+            ClientLogger.shared.logCounter(
+                .SafariVCLinkClick,
+                attributes: [
+                    ClientLogCounterAttribute(
+                        key: LogConfig.Attribute.safariVCLinkURL, value: self.url.absoluteString
+                    )
+                ])
+
             modal.present()
         } label: {
             Text(title)

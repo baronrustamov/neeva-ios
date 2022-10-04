@@ -310,18 +310,29 @@ class PremiumHelpers {
     static func primaryActionText(_ plan: PremiumPlan?, subscribed: Bool = false) -> String {
         switch plan {
         case .annual:
-            return subscribed ? "Manage Yearly" : "Subscribe Yearly"
+            return subscribed ? "Manage Yearly" : "Try it Free"
         case .monthly:
-            return subscribed ? "Manage Monthly" : "Subscribe Monthly"
+            return subscribed ? "Manage Monthly" : "Try it Free"
         default:
             return "Get FREE"
+        }
+    }
+
+    static func primaryActionSubText(_ plan: PremiumPlan?, subscribed: Bool = false) -> String {
+        switch plan {
+        case .annual:
+            return "7 Day Free Trial"
+        case .monthly:
+            return "7 Day Free Trial"
+        default:
+            return ""
         }
     }
 
     static func priceSubText(_ plan: PremiumPlan?) -> (String, String) {
         switch plan {
         case .annual:
-            return ("Save 16%", "Cancel anytime")
+            return ("Save 30%", "Cancel anytime")
         case .monthly:
             return ("", "Cancel anytime")
         default:
