@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import Defaults
 import Foundation
 import Shared
 
@@ -268,7 +269,12 @@ class CheatsheetSessionUsageLogger {
     /// Individual values are guaranteed to be thread safe by relying on UserDefault's thread safety promise
     /// However, the suite of values may not be thread safe since consequtive calls to UserDefaults are not atomic
     private func makeLoggerAttributes() -> [ClientLogCounterAttribute] {
-        var attributes = [ClientLogCounterAttribute]()
+        var attributes: [ClientLogCounterAttribute] = [
+            ClientLogCounterAttribute(
+                key: LogConfig.CheatsheetAttribute.UGCStat.isEnabled.rawValue,
+                value: String(Defaults[.useCheatsheetBloomFilters])
+            )
+        ]
 
         attributes.append(
             contentsOf: CheatsheetIntAttribute.allCases.map {
