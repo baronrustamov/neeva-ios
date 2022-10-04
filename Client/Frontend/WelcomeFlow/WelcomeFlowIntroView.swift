@@ -10,7 +10,7 @@ struct WelcomeFlowIntroView: View {
     @ObservedObject var model: WelcomeFlowModel
 
     // TODO: persist this in the view model?
-    @State private var collectUsageStats = true
+    @State private var collectUsageStats = Defaults[.shouldCollectUsageStats] ?? true
 
     var bullets = [
         ("Private", "Search anonymously and block trackers"),
