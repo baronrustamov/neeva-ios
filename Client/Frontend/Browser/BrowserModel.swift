@@ -193,7 +193,7 @@ class BrowserModel: ObservableObject {
             if showGrid {
                 // Ensures toolbars are visible when user closes from the CardGrid.
                 // Expand when set to true, so ready when user returns.
-                self?.scrollingControlModel.showToolbars(animated: true, completion: nil)
+                self?.scrollingControlModel.showToolbars(animated: true)
             }
         }
     }

@@ -86,9 +86,8 @@ class ScrollingControlModel: NSObject, ObservableObject {
         footerHeight = footer
     }
 
-    func showToolbars(animated: Bool, completion: ((_ finished: Bool) -> Void)? = nil) {
+    func showToolbars(animated: Bool) {
         if toolbarState == .visible {
-            completion?(true)
             return
         }
         toolbarState = .visible
@@ -99,13 +98,11 @@ class ScrollingControlModel: NSObject, ObservableObject {
             duration: actualDuration,
             headerOffset: 0,
             footerOffset: 0,
-            alpha: 1,
-            completion: completion)
+            alpha: 1)
     }
 
-    func hideToolbars(animated: Bool, completion: ((_ finished: Bool) -> Void)? = nil) {
+    func hideToolbars(animated: Bool) {
         if toolbarState == .collapsed {
-            completion?(true)
             return
         }
         toolbarState = .collapsed
@@ -116,13 +113,12 @@ class ScrollingControlModel: NSObject, ObservableObject {
             duration: actualDuration,
             headerOffset: -topScrollHeight,
             footerOffset: footerHeight,  // makes sure toolbar is hidden all the way
-            alpha: 0,
-            completion: completion)
+            alpha: 0)
     }
 
     func contentSizeDidChange() {
         if !checkScrollHeightIsLargeEnoughForScrolling() && headerTopOffset != 0 {
-            showToolbars(animated: true, completion: nil)
+            showToolbars(animated: true)
         }
     }
 
@@ -262,7 +258,7 @@ extension ScrollingControlModel {
 
     fileprivate func animateToolbarsWithOffsets(
         _ animated: Bool, duration: TimeInterval, headerOffset: CGFloat, footerOffset: CGFloat,
-        alpha: CGFloat, completion: ((_ finished: Bool) -> Void)?
+        alpha: CGFloat
     ) {
         let initialContentOffset = scrollView?.contentOffset ?? CGPoint.zero
 
@@ -279,20 +275,14 @@ extension ScrollingControlModel {
         }
 
         DispatchQueue.main.async { [self] in
+            self.headerTopOffset = headerOffset
+            self.footerBottomOffset = footerOffset
             if animated {
-                withAnimation(.interactiveSpring()) {
-                    self.headerTopOffset = headerOffset
-                    self.footerBottomOffset = footerOffset
-                }
-
                 UIView.animate(
                     withDuration: duration, delay: 0, options: .allowUserInteraction,
-                    animations: animation, completion: completion)
+                    animations: animation, completion: { _ in })
             } else {
                 animation()
-                self.headerTopOffset = headerOffset
-                self.footerBottomOffset = footerOffset
-                completion?(true)
             }
         }
     }
