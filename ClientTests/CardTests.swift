@@ -18,7 +18,7 @@ extension TabGridRowsView: Inspectable {}
 extension GridPicker: Inspectable {}
 extension FaviconView: Inspectable {}
 extension SwitcherToolbarView: Inspectable {}
-extension SpaceCardsView: Inspectable {}
+extension SpacesCardsView: Inspectable {}
 extension FittedCard: Inspectable {}
 extension Card: Inspectable {}
 extension ThumbnailGroupView: Inspectable {}
@@ -416,7 +416,7 @@ class CardTests: XCTestCase {
         .environmentObject(gridModel.visibilityModel)
         .environmentObject(chromeModel)
 
-        let spaceCardsView = try cardContainer.inspect().find(SpaceCardsView.self)
+        let spaceCardsView = try cardContainer.inspect().find(SpacesCardsView.self)
         XCTAssertNotNil(spaceCardsView)
 
         let spaceCards = spaceCardsView.findAll(FittedCard<SpaceCardDetails>.self)

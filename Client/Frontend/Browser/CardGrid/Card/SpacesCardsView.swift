@@ -3,21 +3,30 @@
 // found in the LICENSE file.
 
 import SwiftUI
+import UIKit
 
-struct SpaceCardsView: View {
+struct SpacesCardsView: View {
     @ObservedObject var viewModel: SpaceCardViewModel
     @Environment(\.columns) private var columns
 
-    init(spacesModel: SpaceCardModel) {
-        self.viewModel = spacesModel.viewModel
-    }
+    let refreshControl: UIRefreshControl
 
     var body: some View {
         LazyVGrid(columns: columns, spacing: CardGridUX.GridSpacing) {
             ForEach(viewModel.dataSource, id: \.id) { details in
                 FittedCard(details: details)
                     .id(details.id)
+            }.introspectScrollView { scrollView in
+                scrollView.refreshControl = refreshControl
             }
         }.animation(nil)
+    }
+
+    init(spacesModel: SpaceCardModel) {
+        self.viewModel = spacesModel.viewModel
+        self.refreshControl = UIRefreshControl()
+        self.refreshControl.addTarget(
+            viewModel, action: #selector(viewModel.refreshSpacesFromPullDown(_:)),
+            for: .valueChanged)
     }
 }

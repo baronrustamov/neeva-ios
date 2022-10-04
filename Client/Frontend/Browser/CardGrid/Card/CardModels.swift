@@ -844,4 +844,10 @@ class SpaceCardViewModel: ObservableObject {
             }
         }
     }
+
+    @objc func refreshSpacesFromPullDown(_ control: UIRefreshControl) {
+        SpaceStore.shared.refresh {
+            control.endRefreshing()
+        }
+    }
 }

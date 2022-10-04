@@ -94,7 +94,7 @@
 		20978E692874A9590009D346 /* CardDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20978E642874A9590009D346 /* CardDetails.swift */; };
 		20978E6A2874A9590009D346 /* CardModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20978E652874A9590009D346 /* CardModels.swift */; };
 		20978E6B2874A9590009D346 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20978E662874A9590009D346 /* Card.swift */; };
-		20978E6C2874A9590009D346 /* CardListViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20978E672874A9590009D346 /* CardListViews.swift */; };
+		20978E6C2874A9590009D346 /* SpacesCardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20978E672874A9590009D346 /* SpacesCardsView.swift */; };
 		20978E6D2874A9590009D346 /* CardGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20978E682874A9590009D346 /* CardGroupView.swift */; };
 		2097EC152835B4EB00A41DD8 /* SceneUIState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2097EC142835B4EB00A41DD8 /* SceneUIState.swift */; };
 		209CD9A327DBF9F20069675C /* TabGroupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209CD9A227DBF9F20069675C /* TabGroupTests.swift */; };
@@ -1382,7 +1382,7 @@
 		20978E642874A9590009D346 /* CardDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardDetails.swift; sourceTree = "<group>"; };
 		20978E652874A9590009D346 /* CardModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardModels.swift; sourceTree = "<group>"; };
 		20978E662874A9590009D346 /* Card.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
-		20978E672874A9590009D346 /* CardListViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardListViews.swift; sourceTree = "<group>"; };
+		20978E672874A9590009D346 /* SpacesCardsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpacesCardsView.swift; sourceTree = "<group>"; };
 		20978E682874A9590009D346 /* CardGroupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardGroupView.swift; sourceTree = "<group>"; };
 		2097EC142835B4EB00A41DD8 /* SceneUIState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneUIState.swift; sourceTree = "<group>"; };
 		209CD9A227DBF9F20069675C /* TabGroupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabGroupTests.swift; sourceTree = "<group>"; };
@@ -2684,11 +2684,11 @@
 				20978E642874A9590009D346 /* CardDetails.swift */,
 				20469124288782A400069C16 /* CardDropDelegate.swift */,
 				20978E682874A9590009D346 /* CardGroupView.swift */,
-				20978E672874A9590009D346 /* CardListViews.swift */,
 				20978E652874A9590009D346 /* CardModels.swift */,
 				2046912A2887836A00069C16 /* DragAndDropModifier.swift */,
 				20217D9E28666523003EF3A7 /* DragToCloseInteraction.swift */,
 				204691272887833900069C16 /* FittedCard.swift */,
+				20978E672874A9590009D346 /* SpacesCardsView.swift */,
 			);
 			path = Card;
 			sourceTree = "<group>";
@@ -6508,7 +6508,7 @@
 				C98E40572658504C003AC0E2 /* NeevaSettingsSection.swift in Sources */,
 				C98E406126585C43003AC0E2 /* AboutSettingsSection.swift in Sources */,
 				66C423E22758652900C7E6EE /* DraggableBannerModifier.swift in Sources */,
-				20978E6C2874A9590009D346 /* CardListViews.swift in Sources */,
+				20978E6C2874A9590009D346 /* SpacesCardsView.swift in Sources */,
 				4AB678B626E874E40078F61B /* CreateSpaceOverlayContent.swift in Sources */,
 				4A9F65412703CA2B00B7C06E /* SpaceContentSheetModel.swift in Sources */,
 				4A9FCD4826F107BF00725E17 /* ProfileView.swift in Sources */,

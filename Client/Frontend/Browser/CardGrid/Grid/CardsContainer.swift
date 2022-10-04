@@ -192,7 +192,7 @@ struct CardsContainer: View {
                 // Spaces
                 CardScrollContainer(columns: columns) { scrollProxy in
                     VStack(alignment: .leading) {
-                        SpaceCardsView(spacesModel: browserModel.gridModel.spaceCardModel)
+                        SpacesCardsView(spacesModel: browserModel.gridModel.spaceCardModel)
                             .environment(\.columns, columns)
                         if !NeevaUserInfo.shared.isUserLoggedIn {
                             SpacesIntroOverlayContent()
