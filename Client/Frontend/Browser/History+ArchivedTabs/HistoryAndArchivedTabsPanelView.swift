@@ -47,7 +47,7 @@ struct HistoryAndArchivedTabsPanelView: View {
     }
 
     var divider: some View {
-        Color.groupedBackground.frame(height: 1)
+        Color.tertiarySystemFill.frame(height: 1)
     }
 
     // MARK: - History
@@ -93,7 +93,10 @@ struct HistoryAndArchivedTabsPanelView: View {
                 }
 
                 NavigationLink(isActive: $showClearBrowsingData) {
-                    DataManagementView()
+                    DataManagementView().onDisappear {
+                        // Reloads all the data if the user cleared it.
+                        historyModel.reloadData()
+                    }
                 } label: {
                     EmptyView()
                 }

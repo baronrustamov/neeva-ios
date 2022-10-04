@@ -100,16 +100,4 @@ extension EnvironmentValues {
         get { self[OpenSettingsKey.self] }
         set { self[OpenSettingsKey.self] = newValue }
     }
-
-    private struct OpenArchivedTabsPanelViewKey: EnvironmentKey {
-        static var defaultValue: (() -> Void)?
-    }
-    public var openArchivedTabsPanelView: () -> Void {
-        get {
-            self[OpenArchivedTabsPanelViewKey.self] ?? {
-                fatalError(".environment(\\.OpenArchivedTabsPanelViewKey) must be specified")
-            }
-        }
-        set { self[OpenArchivedTabsPanelViewKey.self] = newValue }
-    }
 }

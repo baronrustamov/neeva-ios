@@ -7,6 +7,7 @@ import SwiftUI
 
 struct ArchivedTabsCardView: View {
     @Environment(\.selectionCompletion) private var selectionCompletion: () -> Void
+    @EnvironmentObject var browserModel: BrowserModel
 
     let tab: ArchivedTab
     let tabManager: TabManager
@@ -22,28 +23,21 @@ struct ArchivedTabsCardView: View {
         Button {
             tabManager.select(archivedTab: tab)
             selectionCompletion()
+            browserModel.hideGridWithNoAnimation()
         } label: {
             HStack {
                 HStack {
                     if let url = tabURL {
-                        if FeatureFlag[.archivedTabsRedesign] {
-                            let roundedRectangle = RoundedRectangle(cornerRadius: 8)
+                        let roundedRectangle = RoundedRectangle(cornerRadius: 8)
 
-                            FaviconView(forSiteUrl: url)
-                                .frame(width: 32, height: 32)
-                                .clipShape(roundedRectangle)
-                                .overlay(
-                                    roundedRectangle
-                                        .stroke(lineWidth: 0.5)
-                                        .foregroundColor(.quaternaryLabel)
-                                )
-                        } else {
-                            FaviconView(forSiteUrl: url)
-                                .frame(
-                                    width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize
-                                )
-                                .cornerRadius(4)
-                        }
+                        FaviconView(forSiteUrl: url)
+                            .frame(width: 32, height: 32)
+                            .clipShape(roundedRectangle)
+                            .overlay(
+                                roundedRectangle
+                                    .stroke(lineWidth: 0.5)
+                                    .foregroundColor(.quaternaryLabel)
+                            )
                     }
 
                     VStack(alignment: .leading, spacing: padding) {
@@ -51,30 +45,16 @@ struct ArchivedTabsCardView: View {
                             .withFont(.bodyMedium)
                             .foregroundColor(.label)
                             .multilineTextAlignment(.leading)
-
-                        if !FeatureFlag[.archivedTabsRedesign] {
-                            Text(tabURL?.absoluteString ?? "")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
                     }
-                    .lineLimit(FeatureFlag[.archivedTabsRedesign] ? 2 : 1)
+                    .lineLimit(2)
                     .padding(.leading, padding)
 
                     Spacer()
-                }.if(FeatureFlag[.archivedTabsRedesign]) { view in
-                    view.frame(maxWidth: width)
-                }
+                }.frame(maxWidth: width)
 
                 Spacer()
             }
             .padding(.trailing, -6)
-            .if(!FeatureFlag[.archivedTabsRedesign]) { view in
-                view
-                    .padding(.horizontal, GroupedCellUX.padding)
-                    .padding(.vertical, 6)
-                    .frame(minHeight: GroupedCellUX.minCellHeight)
-            }
         }.contextMenu {
             if #available(iOS 15.0, *) {
                 Button(role: .destructive) {

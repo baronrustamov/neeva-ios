@@ -23,13 +23,16 @@ struct RecentlyClosedTabsPanelView: View {
             }.padding(.horizontal)
 
             LazyVStack(spacing: 0) {
-                SiteListView(
-                    tabManager: model.tabManager,
-                    data: .savedTabs(model.recentlyClosedTabs),
-                    tappedItemAtIndex: { index in
+                ForEach(
+                    Array(model.recentlyClosedTabs.enumerated()), id: \.element
+                ) { index, savedTab in
+                    SiteRowView(tabManager: model.tabManager, data: .savedTab(savedTab)) {
                         model.restoreTab(at: index)
                         onDismiss()
-                    })
+                    }
+
+                    Color.groupedBackground.frame(height: 1)
+                }
             }.padding(.horizontal)
         }
         .background(Color.groupedBackground.ignoresSafeArea(.container))

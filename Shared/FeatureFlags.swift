@@ -10,7 +10,6 @@ public enum FeatureFlag: String, CaseIterable, RawRepresentable {
     // IMPORTANT: when adding a new feature flag, make sure to keep this list
     // in alphabetical order to reduce merge conflicts and keep the settings screen
     // simple to scan.
-    case archivedTabsRedesign = "Archived Tab Re-design"
     case cookieCutterRemindMeLater = "Cookie Cutter Remind Me Later"
     case customSearchEngine = "Custom Search Engine"
     case debugURLBar = "URL Bar Debug Mode"

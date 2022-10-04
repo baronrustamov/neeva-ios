@@ -29,11 +29,11 @@ struct GroupedDataPanelView<Model: GroupedDataPanelModel, NavigationButtons: Vie
             .padding(.horizontal)
             .padding(.vertical, 4)
 
-            Color.groupedBackground.frame(height: 8)
+            Color.tertiarySystemFill.frame(height: 8)
             navigationButtons
 
             if model.groupedData.isEmpty {
-                Color.groupedBackground.frame(height: 8)
+                Color.tertiarySystemFill.frame(height: 8)
             }
         }
     }
@@ -43,8 +43,14 @@ struct GroupedDataPanelView<Model: GroupedDataPanelModel, NavigationButtons: Vie
             VStack(spacing: 0) {
                 optionSections
 
-                ForEach(DateGroupedTableDataSection.allCases, id: \.self) { section in
-                    buildDaySections(section: section)
+                if model.groupedData.isEmpty {
+                    Text(model.emptyDataText)
+                        .padding(.top, 20)
+                        .accessibility(label: Text("Empty Rows"))
+                } else {
+                    ForEach(DateGroupedTableDataSection.allCases, id: \.self) { section in
+                        buildDaySections(section: section)
+                    }
                 }
             }
         }
@@ -85,7 +91,7 @@ struct GroupedDataPanelView<Model: GroupedDataPanelModel, NavigationButtons: Vie
                     {
                         let (rows, tabGroups) = model.buildRows(with: data, for: section)
 
-                        ForEach(rows, id: \.self) { tabs in
+                        ForEach(Array(rows.enumerated()), id: \.1) { index, tabs in
                             let tabGroup: ArchivedTabGroup? = tabGroups[tabs.first?.rootUUID ?? ""]
                             let isTopRow: Bool =
                                 tabs.first == nil
@@ -94,6 +100,7 @@ struct GroupedDataPanelView<Model: GroupedDataPanelModel, NavigationButtons: Vie
                             let isBottomRow: Bool =
                                 tabs.last == nil
                                 ? false : tabGroups[tabs.last!.rootUUID]?.children.last == tabs.last
+                            let isLastRowInSection = index == rows.count - 1
 
                             let corners: CornerSet = {
                                 var corners: CornerSet = []
@@ -117,15 +124,15 @@ struct GroupedDataPanelView<Model: GroupedDataPanelModel, NavigationButtons: Vie
                                 corners: corners,
                                 isTopRow: isTopRow,
                                 isBottomRow: isBottomRow
-                            )
+                            ).padding(.bottom, isLastRowInSection ? 8 : 0)
                         }
                     } else if let model = model as? HistoryGroupedDataModel,
                         let data = data as? [Site]
                     {
-                        let rows = model.buildRows(with: data, for: section)
+                        let rows = Array(model.buildRows(with: data, for: section))
 
                         ForEach(
-                            Array(rows), id: \.element
+                            rows, id: \.element
                         ) { index, site in
                             SiteRowView(
                                 tabManager: browserModel.tabManager,

@@ -50,6 +50,11 @@ class HistoryTests: BaseTestCase {
         app.navigationBars["Settings"].buttons["Done"].tap()
     }
 
+    private func checkIfHistoryIsEmpty() -> Bool {
+        waitForExistence(app.buttons["Clock"])
+        return app.staticTexts["Empty Rows"].exists
+    }
+
     // MARK: - Clear Data
     func testClearHistoryFromSettings() {
         // Go to Clear Data
@@ -57,7 +62,7 @@ class HistoryTests: BaseTestCase {
 
         // Make sure history is empty.
         goToHistory()
-        waitForExistence(app.staticTexts["History List Empty"])
+        XCTAssertTrue(checkIfHistoryIsEmpty())
     }
 
     func testClearPrivateDataButtonDisabled() {
@@ -117,7 +122,7 @@ class HistoryTests: BaseTestCase {
         waitForExistence(app.buttons["Twitter"])
         app.buttons["Twitter"].tap()
 
-        XCTAssertEqual(getNumberOfTabs(), 1)
+        XCTAssertEqual(getNumberOfTabs(openTabTray: false), 1)
     }
 
     // MARK: - Open in New Tab
@@ -127,8 +132,6 @@ class HistoryTests: BaseTestCase {
         waitForExistence(app.buttons["Twitter"])
         app.buttons["Twitter"].press(forDuration: 1)
         app.buttons["Open in new tab"].tap()
-
-        waitForExistence(app.buttons["Switch"])
         app.buttons["Done"].firstMatch.tap(force: true)
 
         XCTAssertEqual(getNumberOfTabs(openTabTray: false), 1)
@@ -140,8 +143,6 @@ class HistoryTests: BaseTestCase {
         waitForExistence(app.buttons["Twitter"])
         app.buttons["Twitter"].press(forDuration: 1)
         app.buttons["Open in new incognito tab"].tap()
-
-        waitForExistence(app.buttons["Switch"])
         app.buttons["Done"].firstMatch.tap(force: true)
 
         setIncognitoMode(enabled: true, shouldOpenURL: false, closeTabTray: false)
@@ -150,6 +151,7 @@ class HistoryTests: BaseTestCase {
 
     // MARK: - Search
     func testSearchHistory() {
+        openURL()
         goToHistory()
 
         // Make sure sites are visible before search.
@@ -157,11 +159,11 @@ class HistoryTests: BaseTestCase {
         waitForExistence(app.buttons["Twitter"])
 
         // Select TextField.
-        waitForHittable(app.textFields["History Search TextField"])
-        app.textFields["History Search TextField"].tap(force: true)
+        waitForHittable(app.textFields["Search TextField"])
+        app.textFields["Search TextField"].tap(force: true)
 
         // Perform search and verify only the correct site is shown.
-        app.textFields["History Search TextField"].typeText("example.com")
+        app.textFields["Search TextField"].typeText("example.com")
         waitForNoExistence(app.buttons["Twitter"])
         waitForExistence(app.staticTexts["Example Domain"])
     }
