@@ -52,7 +52,7 @@ extension Defaults.Keys {
         "sessionUUIDv2", default: "")
     public static let sessionUUIDExpirationTime = Defaults.Key<Date>(
         "sessionUUIDExpirationTime", default: Date(timeIntervalSince1970: 0))
-    public static let lastSessionPrivate = Defaults.BoolKey("wasLastSessionPrivate")
+    public static let lastKnownSessionWasIncognito = Defaults.BoolKey("wasLastSessionPrivate")
 
     // MARK: - explicit/implicit settings
     public static let contextMenuShowLinkPreviews = Defaults.Key(

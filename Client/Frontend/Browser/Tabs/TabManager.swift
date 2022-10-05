@@ -1359,10 +1359,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             for: scene, clearIncognitoTabs: Defaults[.closeIncognitoTabs], tabManager: self)
 
         if var tabToSelect = tabToSelect {
-            if Defaults[.lastSessionPrivate], !tabToSelect.isIncognito {
-                tabToSelect = addTab(isIncognito: true, notify: false)
-            }
-
             selectTab(tabToSelect, notify: true)
         }
 

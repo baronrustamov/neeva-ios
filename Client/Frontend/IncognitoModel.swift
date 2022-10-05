@@ -3,9 +3,14 @@
 // found in the LICENSE file.
 
 import Combine
+import Defaults
 
 class IncognitoModel: ObservableObject {
-    @Published private(set) var isIncognito: Bool
+    @Published private(set) var isIncognito: Bool {
+        didSet {
+            Defaults[.lastKnownSessionWasIncognito] = isIncognito
+        }
+    }
 
     init(isIncognito: Bool) {
         self.isIncognito = isIncognito
