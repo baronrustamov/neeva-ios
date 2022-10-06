@@ -148,6 +148,12 @@ public enum LogConfig {
         case LoginAfterFirstRun
         /// Page load at first run and before login
         case FirstRunPageLoad
+        /// First run navigation outbound in preview mode, non neeva domain
+        case PreviewNavigationOutbound
+        /// First run navigation inbound in preview mode, within neeva domain
+        case PreviewNavigationInbound
+        /// First run search in preview mode
+        case PreviewSearch
         /// Sign in from promo card
         case PromoSignin
         /// Sign up on preview promo card
@@ -372,6 +378,23 @@ public enum LogConfig {
         case CheatsheetQueryFallback
         case OpenCheatsheetSupport
         case CheatsheetFetchError
+        // Without Journey Associated, shrinked version
+        case SkOpenCheatsheet
+        case SkCloseCheatsheet
+        case SkCheatsheetEducationImpressionOnSRP
+        case SkCheatsheetEducationImpressionOnPage
+        case SkAckCheatsheetEducationOnSRP
+        case SkAckCheatsheetEducationOnPage
+        case SkShowCheatsheetEducationOnSRP
+        case SkShowCheatsheetEducationOnPage
+        case SkShowCheatsheetContent
+        case SkLoadCheatsheet
+        case SkCheatsheetUGCStatsForPage
+        case SkCheatsheetEmpty
+        case SkOpenLinkFromCheatsheet
+        case SkCheatsheetQueryFallback
+        case SkOpenCheatsheetSupport
+        case SkCheatsheetFetchError
 
         // MARK: recipe cheatsheet
         case RecipeCheatsheetShowMoreRecipe
@@ -447,6 +470,9 @@ public enum LogConfig {
             Interaction.FirstRunSignupWithApple,
             Interaction.FirstRunOtherSignUpOptions,
             Interaction.FirstRunSignin,
+            Interaction.PreviewSearch,
+            Interaction.PreviewNavigationOutbound,
+            Interaction.PreviewNavigationInbound,
             Interaction.PreviewModePromoSignup,
             Interaction.DefaultBrowserInterstitialRestoreImp,
             Interaction.SpacesRecommendedDetailUIVisited,
@@ -468,6 +494,22 @@ public enum LogConfig {
             Interaction.CheatsheetUGCStatsForSession,
             Interaction.CheatsheetPopoverImpression,
             Interaction.CheatsheetUGCIndicatorImpression,
+            Interaction.SkOpenCheatsheet,
+            Interaction.SkCloseCheatsheet,
+            Interaction.SkCheatsheetEducationImpressionOnSRP,
+            Interaction.SkCheatsheetEducationImpressionOnPage,
+            Interaction.SkAckCheatsheetEducationOnSRP,
+            Interaction.SkAckCheatsheetEducationOnPage,
+            Interaction.SkShowCheatsheetEducationOnSRP,
+            Interaction.SkShowCheatsheetEducationOnPage,
+            Interaction.SkShowCheatsheetContent,
+            Interaction.SkLoadCheatsheet,
+            Interaction.SkCheatsheetUGCStatsForPage,
+            Interaction.SkCheatsheetEmpty,
+            Interaction.SkOpenLinkFromCheatsheet,
+            Interaction.SkCheatsheetQueryFallback,
+            Interaction.SkOpenCheatsheetSupport,
+            Interaction.SkCheatsheetFetchError,
         ]
 
     /// Specify a comma separated string with these values to
@@ -653,6 +695,9 @@ public enum LogConfig {
         case .PreviewSampleQueryClicked: return .FirstRun
         case .PreviewTapFakeSearchInput: return .FirstRun
         case .PreviewHomeSignin: return .FirstRun
+        case .PreviewSearch: return .FirstRun
+        case .PreviewNavigationOutbound: return .FirstRun
+        case .PreviewNavigationInbound: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialSkip: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialContinueToNeeva: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialRemind: return .FirstRun
@@ -790,6 +835,23 @@ public enum LogConfig {
         case .CheatsheetUGCStatsForPage: return .Cheatsheet
         case .CheatsheetUGCStatsForSession: return .Cheatsheet
         case .CheatsheetUGCHitNoRedditDataV2: return .Cheatsheet
+
+        case .SkOpenCheatsheet: return .Cheatsheet
+        case .SkCloseCheatsheet: return .Cheatsheet
+        case .SkCheatsheetEducationImpressionOnSRP: return .Cheatsheet
+        case .SkCheatsheetEducationImpressionOnPage: return .Cheatsheet
+        case .SkAckCheatsheetEducationOnSRP: return .Cheatsheet
+        case .SkAckCheatsheetEducationOnPage: return .Cheatsheet
+        case .SkShowCheatsheetEducationOnSRP: return .Cheatsheet
+        case .SkShowCheatsheetEducationOnPage: return .Cheatsheet
+        case .SkShowCheatsheetContent: return .Cheatsheet
+        case .SkLoadCheatsheet: return .Cheatsheet
+        case .SkCheatsheetUGCStatsForPage: return .Cheatsheet
+        case .SkCheatsheetEmpty: return .Cheatsheet
+        case .SkOpenLinkFromCheatsheet: return .Cheatsheet
+        case .SkCheatsheetQueryFallback: return .Cheatsheet
+        case .SkOpenCheatsheetSupport: return .Cheatsheet
+        case .SkCheatsheetFetchError: return .Cheatsheet
 
         // MARK: - TabGroup
         case .tabGroupExpanded: return .TabGroup

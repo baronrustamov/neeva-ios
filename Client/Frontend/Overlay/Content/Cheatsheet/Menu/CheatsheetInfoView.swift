@@ -16,16 +16,19 @@ struct CheatsheetInfoViewOnSRP: View {
     var body: some View {
         CheatsheetInfoView(buttonText: "Got it!") {
             model.log(.AckCheatsheetEducationOnSRP)
+            model.log(.SkAckCheatsheetEducationOnSRP, shrink: true)
             buttonAction()
         }
         .onAppear {
             model.log(.ShowCheatsheetEducationOnSRP)
+            model.log(.SkShowCheatsheetEducationOnSRP, shrink: true)
         }
         .modifier(
             ImpressionLoggerModifier(
                 timeInterval: impressionOnSRPTimeInterval,
                 makeLog: {
                     model.log(.CheatsheetEducationImpressionOnSRP)
+                    model.log(.SkCheatsheetEducationImpressionOnSRP, shrink: true)
                 }
             )
         )
@@ -40,16 +43,19 @@ struct CheatsheetInfoViewOnPage: View {
     var body: some View {
         CheatsheetInfoView(buttonText: "Let's try it!") {
             model.log(.AckCheatsheetEducationOnPage)
+            model.log(.SkAckCheatsheetEducationOnPage, shrink: true)
             buttonAction()
         }
         .onAppear {
             model.log(.ShowCheatsheetEducationOnPage)
+            model.log(.SkShowCheatsheetEducationOnPage, shrink: true)
         }
         .modifier(
             ImpressionLoggerModifier(
                 timeInterval: impressionOnPageTimeInterval,
                 makeLog: {
                     model.log(.CheatsheetEducationImpressionOnPage)
+                    model.log(.SkCheatsheetEducationImpressionOnPage, shrink: true)
                 }
             )
         )
