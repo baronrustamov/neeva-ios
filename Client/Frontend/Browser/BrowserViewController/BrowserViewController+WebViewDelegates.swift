@@ -920,9 +920,16 @@ extension BrowserViewController: WKNavigationDelegate {
                             value: url.path + query))
 
                     // for preview mode, increase counter for preview mode queries
-                    if !Defaults[.signedInOnce] && !query.isEmpty {
+                    if !query.isEmpty {
                         Defaults[.previewModeQueries].insert(query)
+                        ClientLogger.shared.logCounter(.PreviewSearch, attributes: attributes)
+                    } else {
+                        ClientLogger.shared.logCounter(
+                            .PreviewNavigationInbound, attributes: attributes)
                     }
+                } else {
+                    ClientLogger.shared.logCounter(
+                        .PreviewNavigationOutbound, attributes: attributes)
                 }
 
                 ClientLogger.shared.logCounter(

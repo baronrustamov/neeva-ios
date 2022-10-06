@@ -50,6 +50,7 @@ struct CheatsheetMenuView: View {
                     }
                     .onAppear {
                         model.log(.ShowCheatsheetContent)
+                        model.log(.SkShowCheatsheetContent, shrink: true)
                     }
             } else if let error = model.cheatsheetDataError {
                 ErrorView(error, in: self, tryAgain: { model.reload() })
@@ -91,6 +92,7 @@ struct CheatsheetMenuView: View {
                                 )
                             openSupport = false
                             model.log(.OpenCheatsheetSupport)
+                            model.log(.SkOpenCheatsheetSupport, shrink: true)
                             menuAction(.support(screenshot: image))
                         }
                     }

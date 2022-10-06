@@ -141,6 +141,11 @@ class CheatsheetMenuViewModel: ObservableObject {
             ]
         )
 
+        self.log(
+            .SkLoadCheatsheet,
+            shrink: true
+        )
+
         service.getCheatsheetInfo(
             url: url, title: title
         ) { [weak self] result in
@@ -192,6 +197,16 @@ class CheatsheetMenuViewModel: ObservableObject {
                                 value: querySource.rawValue
                             )
                         ]
+                    )
+                    self.log(
+                        .SkCheatsheetQueryFallback,
+                        attributes: [
+                            ClientLogCounterAttribute(
+                                key: LogConfig.CheatsheetAttribute.cheatsheetQuerySource,
+                                value: querySource.rawValue
+                            )
+                        ],
+                        shrink: true
                     )
                 }
 
@@ -269,12 +284,15 @@ class CheatsheetMenuViewModel: ObservableObject {
     /// Wrapper around Client Logger that attaches additional information to identify the current journey
     func log(
         _ path: LogConfig.Interaction,
-        attributes: [ClientLogCounterAttribute] = []
+        attributes: [ClientLogCounterAttribute] = [],
+        shrink: Bool = false
     ) {
         // Evaluate shared diagnostic and usage attributes synchronously
         // These attributes contain sensitive data
         let allAttributes =
-            [
+            shrink
+            ? attributes
+            : ([
                 ClientLogCounterAttribute(
                     key: LogConfig.CheatsheetAttribute.tabID,
                     value: tab?.tabUUID ?? "nil"
@@ -292,7 +310,7 @@ class CheatsheetMenuViewModel: ObservableObject {
                     value: query ?? "nil"
                 ),
             ]
-            + attributes
+                + attributes)
 
         // Override logger attributes with submitted attributes
         let combinedAttributes = Dictionary(allAttributes.map { ($0.key, $0.value) }) {
@@ -320,6 +338,20 @@ class CheatsheetMenuViewModel: ObservableObject {
                     value: "\(error)"
                 ),
             ]
+        )
+        self.log(
+            .SkCheatsheetFetchError,
+            attributes: [
+                ClientLogCounterAttribute(
+                    key: LogConfig.CheatsheetAttribute.api,
+                    value: api.rawValue
+                ),
+                ClientLogCounterAttribute(
+                    key: "error",
+                    value: "\(error)"
+                ),
+            ],
+            shrink: true
         )
     }
 
@@ -358,6 +390,21 @@ class CheatsheetMenuViewModel: ObservableObject {
                     ),
                 ]
             )
+            self.log(
+                .SkCheatsheetUGCStatsForPage,
+                attributes: [
+                    ClientLogCounterAttribute(
+                        key: LogConfig.CheatsheetAttribute.UGCStat.ugcHit.rawValue,
+                        value: String(ugcHit)
+                    ),
+                    ClientLogCounterAttribute(
+                        key: LogConfig.CheatsheetAttribute.UGCStat.hasUGCData.rawValue,
+                        value: String(hasUGCData)
+                    ),
+                ],
+                shrink: true
+            )
+
         }
 
     }
@@ -373,10 +420,19 @@ class CheatsheetMenuViewModel: ObservableObject {
                     value: String(Defaults[.seenCheatsheetIntro])
                 )
             ])
+        self.log(
+            .SkOpenCheatsheet,
+            attributes: [
+                ClientLogCounterAttribute(
+                    key: LogConfig.CheatsheetAttribute.completedOnboarding,
+                    value: String(Defaults[.seenCheatsheetIntro])
+                )
+            ], shrink: true)
     }
 
     func onOverlayDismissed() {
         self.log(.CloseCheatsheet)
+        self.log(.SkCloseCheatsheet, shrink: true)
         self.endJourney()
     }
 
@@ -387,6 +443,7 @@ class CheatsheetMenuViewModel: ObservableObject {
         }
 
         self.log(.CheatsheetEmpty)
+        self.log(.SkCheatsheetEmpty, shrink: true)
     }
 
     private func startJourney() {
