@@ -251,10 +251,10 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
 
     func getTabForUUID(uuid: String) -> Tab? {
         assert(Thread.isMainThread)
-        let filterdTabs = tabs.filter { tab -> Bool in
+        let filteredTabs = tabs.filter { tab -> Bool in
             tab.tabUUID == uuid
         }
-        return filterdTabs.first
+        return filteredTabs.first
     }
 
     // MARK: - Select Tab
@@ -267,14 +267,11 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         tab?.isSelected = true
         selectedTab = tab
 
-        // Make sure to wipe the private tabs if the user has the pref turned on
-        if Defaults[.closeIncognitoTabs], !(tab?.isIncognito ?? false), incognitoTabs.count > 0 {
-            removeAllIncognitoTabs()
-        }
-
         // TODO(darin): This writes to a published variable generating a notification.
         // Are we okay with that happening here?
         incognitoModel.update(isIncognito: tab?.isIncognito ?? isIncognito)
+        removeAllIncognitoTabsForLeavingIncognitoMode(
+            previousWasIncognito: previous?.isIncognito ?? false)
 
         store.preserveTabs(
             tabs, archivedTabs: archivedTabs, existingSavedTabs: recentlyClosedTabsFlattened,
@@ -379,7 +376,9 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     }
 
     func toggleIncognitoMode(
-        fromTabTray: Bool = true, clearSelectedTab: Bool = true, openLazyTab: Bool = true,
+        fromTabTray: Bool = true,
+        clearSelectedTab: Bool = true,
+        openLazyTab: Bool = true,
         selectNewTab: Bool = false
     ) {
         let bvc = SceneDelegate.getBVC(with: scene)
@@ -390,6 +389,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         }
 
         incognitoModel.toggle()
+        removeAllIncognitoTabsForLeavingIncognitoMode(previousWasIncognito: !isIncognito)
 
         if selectNewTab {
             if let mostRecentTab = mostRecentTab(inTabs: isIncognito ? incognitoTabs : normalTabs) {
@@ -412,7 +412,8 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     ) {
         if isIncognito != incognito {
             toggleIncognitoMode(
-                fromTabTray: fromTabTray, clearSelectedTab: clearSelectedTab,
+                fromTabTray: fromTabTray,
+                clearSelectedTab: clearSelectedTab,
                 openLazyTab: openLazyTab)
         }
     }
@@ -1148,6 +1149,14 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
 
         removeTabs(incognitoTabs)
         incognitoConfiguration = TabManager.makeWebViewConfig(isIncognito: true)
+    }
+
+    /// If the user has the `closeIncognitoTabs` enabled, delete all incognito tabs.
+    /// Used when toggling out of incognito mode, or selecting a normal tab.
+    func removeAllIncognitoTabsForLeavingIncognitoMode(previousWasIncognito: Bool) {
+        if Defaults[.closeIncognitoTabs], !isIncognito, previousWasIncognito {
+            removeAllIncognitoTabs()
+        }
     }
 
     // MARK: Recently Closed Tabs

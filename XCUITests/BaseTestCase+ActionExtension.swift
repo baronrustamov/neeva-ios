@@ -7,8 +7,10 @@ import XCTest
 extension BaseTestCase {
     /// Launches from tab page, or runs if already in tab tray
     func setIncognitoMode(
-        enabled: Bool, urlToOpen: String = "example.com",
-        shouldOpenURL: Bool = true, closeTabTray: Bool = true
+        enabled: Bool,
+        urlToOpen: String = "example.com",
+        shouldOpenURL: Bool = true,
+        closeTabTray: Bool = true
     ) {
         if !app.buttons["Incognito Tabs"].exists {
             goToTabTray()

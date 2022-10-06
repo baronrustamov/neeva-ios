@@ -49,7 +49,8 @@ struct GridPicker: View {
 
             SegmentedPicker(
                 segments: segments,
-                selectedSegmentIndex: $selectedIndex, dragOffset: switcherToolbarModel.dragOffset,
+                selectedSegmentIndex: $selectedIndex,
+                dragOffset: switcherToolbarModel.dragOffset,
                 canAnimate: gridSwitcherAnimationModel.switchWithAnimation
             ).useEffect(deps: gridSwitcherModel.state) { _ in
                 switch gridSwitcherModel.state {

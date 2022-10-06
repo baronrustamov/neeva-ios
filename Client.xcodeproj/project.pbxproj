@@ -53,6 +53,7 @@
 		20167FC72824484800223B9E /* FindInCardGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20167FC62824484800223B9E /* FindInCardGridView.swift */; };
 		20167FCA282448DB00223B9E /* FindView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20167FC9282448DB00223B9E /* FindView.swift */; };
 		20167FCC28245C8100223B9E /* FindInCardGridTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20167FCB28245C8100223B9E /* FindInCardGridTests.swift */; };
+		20173C9428EBADC600C3D7D1 /* DeleteIncognitoTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20173C9328EBADC600C3D7D1 /* DeleteIncognitoTabTests.swift */; };
 		201B4BFE28452E8900F9594E /* DuplicateTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 201B4BFD28452E8900F9594E /* DuplicateTabTests.swift */; };
 		20217D9F28666523003EF3A7 /* DragToCloseInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20217D9E28666523003EF3A7 /* DragToCloseInteraction.swift */; };
 		20217DA128666575003EF3A7 /* BorderTreatment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20217DA028666575003EF3A7 /* BorderTreatment.swift */; };
@@ -1342,6 +1343,7 @@
 		20167FC62824484800223B9E /* FindInCardGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindInCardGridView.swift; sourceTree = "<group>"; };
 		20167FC9282448DB00223B9E /* FindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindView.swift; sourceTree = "<group>"; };
 		20167FCB28245C8100223B9E /* FindInCardGridTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindInCardGridTests.swift; sourceTree = "<group>"; };
+		20173C9328EBADC600C3D7D1 /* DeleteIncognitoTabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteIncognitoTabTests.swift; sourceTree = "<group>"; };
 		201B4BFD28452E8900F9594E /* DuplicateTabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuplicateTabTests.swift; sourceTree = "<group>"; };
 		20217D9E28666523003EF3A7 /* DragToCloseInteraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragToCloseInteraction.swift; sourceTree = "<group>"; };
 		20217DA028666575003EF3A7 /* BorderTreatment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderTreatment.swift; sourceTree = "<group>"; };
@@ -3076,6 +3078,7 @@
 				20C5B262282D82F400BD35B9 /* CookieCutterTests.swift */,
 				C8BD2A78278814DB001B3355 /* CreateOrSwitchToTabTests.swift */,
 				EB3A38912032673D004C6E67 /* DatabaseFixtureTest.swift */,
+				20173C9328EBADC600C3D7D1 /* DeleteIncognitoTabTests.swift */,
 				EB63CA4F228F0538005FD0EF /* DesktopModeTests.swift */,
 				2CC1B3EF1E9B861400814EEC /* DomainAutocompleteTest.swift */,
 				2C4A07DB20246EAD0083E320 /* DragAndDropTests.swift */,
@@ -6035,6 +6038,7 @@
 				C832BF6E26E0B31500B9A1F8 /* FindInPageTest.swift in Sources */,
 				20F0A96228E272B1006835A4 /* GroupDataPanelTests.swift in Sources */,
 				C832BF7326E0B31B00B9A1F8 /* NavigationTest.swift in Sources */,
+				20173C9428EBADC600C3D7D1 /* DeleteIncognitoTabTests.swift in Sources */,
 				C832BF7B26E0B31B00B9A1F8 /* LazyTabTests.swift in Sources */,
 				0BF0DB4A1E57B05E009172B0 /* LaunchArguments.swift in Sources */,
 				C832BF6A26E0B31500B9A1F8 /* DomainAutocompleteTest.swift in Sources */,
