@@ -146,6 +146,26 @@
 /* An example query for users to tap on to see results */
 "fruit tart recipes" = "fruit tart recipes";
 
+/* Bullet point text to describe Neeva benefit */
+"Browser + ad blocker" = "Browser + ad blocker";
+
+/* Bullet point text to describe Neeva benefit */
+"Tracking prevention" = "Tracking prevention";
+
+/* Bullet point text to describe Neeva premium benefit */
+"Unlimited ad-free, private search" = "Unlimited ad-free, private search";
+
+/* Bullet point text to describe Neeva premium benefit */
+"Premium password manager + VPN" = "Premium password manager + VPN";
+
+/* Bullet point text to describe Neeva benefit */
+"Ad-free, private search" = "Ad-free, private search";
+
+/* Bullet point text to describe Neeva free account benefit */
+"50 searches/week" = "50 searches/week";
+
+/* Button to try Neeva for free */
 "Try it Free" = "Try it Free";
 
+/* Subtitle text on the plan screen to specify our trial duration */
 "7 Day Free Trial" = "7 Day Free Trial";
