@@ -134,11 +134,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             .AppEnterForeground,
             attributes: attributes
         )
-
-        // send number of spotlight index events from the last session
-        sendAggregatedSpotlightLogs()
-        // send number of cheatsheet stats from the last session
-        sendAggregatedCheatsheetLogs()
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
@@ -655,38 +650,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
 
         return false
-    }
-
-    func sendAggregatedSpotlightLogs() {
-        ClientLogger.shared.logCounter(
-            .spotlightEventsForSession,
-            attributes: EnvironmentHelper.shared.getAttributes() + [
-                ClientLogCounterAttribute(
-                    key: LogConfig.SpotlightAttribute.CountForEvent.createUserActivity.rawValue,
-                    value: String(Defaults[.numOfIndexedUserActivities])
-                ),
-                ClientLogCounterAttribute(
-                    key: LogConfig.SpotlightAttribute.CountForEvent.addThumbnailToUserActivity
-                        .rawValue,
-                    value: String(Defaults[.numOfThumbnailsForUserActivity])
-                ),
-                ClientLogCounterAttribute(
-                    key: LogConfig.SpotlightAttribute.CountForEvent.willIndex.rawValue,
-                    value: String(Defaults[.numOfWillIndexEvents])
-                ),
-                ClientLogCounterAttribute(
-                    key: LogConfig.SpotlightAttribute.CountForEvent.didIndex.rawValue,
-                    value: String(Defaults[.numOfDidIndexEvents])
-                ),
-            ]
-        )
-        Defaults[.numOfIndexedUserActivities] = 0
-        Defaults[.numOfThumbnailsForUserActivity] = 0
-        Defaults[.numOfWillIndexEvents] = 0
-        Defaults[.numOfDidIndexEvents] = 0
-    }
-
-    func sendAggregatedCheatsheetLogs() {
-        CheatsheetSessionUsageLogger.shared.sendLogsOnAppStarted()
     }
 }

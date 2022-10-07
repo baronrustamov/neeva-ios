@@ -63,22 +63,53 @@ class ClientLogger {
         self.status = .enabled
     }
 
+    // MARK: - Public Methods
     func logCounter(
         _ path: LogConfig.Interaction, attributes: [ClientLogCounterAttribute] = []
     ) {
-        if self.status != ClientLoggerStatus.enabled {
+        self.logCounter(path, attributes: attributes, enforceIncognito: true)
+    }
+
+    // TODO: - Document usage
+    /// Register a logging event without performing incognito checks
+    ///
+    /// This method is only intended to be used with payloads that had already been scanned for incognito
+    /// For example, on such payload is aggregated statistics from an app session, where the statistics collected also
+    /// do not collect incognito usage.
+    /// - Warning: This method does not verify if BVC is in incognito beforing transmitting the logs. Please read documentation on its intended usage
+    func logCounterBypassIncognito(
+        _ path: LogConfig.Interaction, attributes: [ClientLogCounterAttribute] = []
+    ) {
+        self.logCounter(path, attributes: attributes, enforceIncognito: false)
+    }
+
+    func flushLoggingQueue() {
+        for clientLog in loggingQueue {
+            performLogMutation(clientLog)
+        }
+        loggingQueue.removeAll()
+    }
+
+    // MARK: - Private Methods
+    private func logCounter(
+        _ path: LogConfig.Interaction,
+        attributes: [ClientLogCounterAttribute],
+        enforceIncognito: Bool
+    ) {
+        guard self.status == ClientLoggerStatus.enabled else {
             return
         }
 
         // If it is performance logging, it is okay because no identity info is logged
         // If there is no tabs, assume that logging is OK for allowed actions
-        if LogConfig.category(for: path) != .Stability
-            && SceneDelegate.getBVCOrNil()?.incognitoModel.isIncognito ?? true
+        if enforceIncognito,
+            LogConfig.category(for: path) != .Stability
+                && SceneDelegate.getBVCOrNil()?.incognitoModel.isIncognito ?? true
         {
             return
         }
 
-        if !LogConfig.featureFlagEnabled(for: LogConfig.category(for: path)) {
+        guard LogConfig.featureFlagEnabled(for: LogConfig.category(for: path)) else {
             return
         }
 
@@ -116,13 +147,6 @@ class ClientLogger {
             // Queue up events in the case user hasn't decided to opt in usage collection
             loggingQueue.append(clientLog)
         }
-    }
-
-    func flushLoggingQueue() {
-        for clientLog in loggingQueue {
-            performLogMutation(clientLog)
-        }
-        loggingQueue.removeAll()
     }
 
     private func performLogMutation(_ clientLog: ClientLog) {

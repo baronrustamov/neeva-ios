@@ -204,7 +204,7 @@ class CheatsheetSessionUsageLogger {
     /// to make the logging call first, and then it clears the persistent copy and sets `isSafeToOverride` to allow
     /// recording values from this session
     func sendLogsOnAppStarted() {
-        clientLogger.logCounter(
+        clientLogger.logCounterBypassIncognito(
             .CheatsheetUGCStatsForSession,
             attributes: EnvironmentHelper.shared.getAttributes() + self.makeLoggerAttributes()
         )
