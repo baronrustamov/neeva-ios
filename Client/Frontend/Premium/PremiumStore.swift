@@ -111,8 +111,13 @@ class PremiumStore: ObservableObject {
                         if fixed {
                             NeevaUserInfo.shared.reload()
                         } else {
-                            ClientLogger.shared.logCounter(
-                                .PremiumSubscriptionFixFailed, attributes: [])
+                            // Logger needs to be called on main
+                            await MainActor.run {
+                                ClientLogger.shared.logCounter(
+                                    .PremiumSubscriptionFixFailed,
+                                    attributes: []
+                                )
+                            }
                         }
                         break
                     case .unverified(_, _):
