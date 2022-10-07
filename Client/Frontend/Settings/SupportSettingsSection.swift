@@ -10,7 +10,7 @@ struct SupportSettingsSection: View {
     @Environment(\.settingsPresentIntroViewController) var presentIntroViewController
 
     var body: some View {
-        if NeevaFeatureFlags[.welcomeTours] {
+        if NeevaUserInfo.shared.hasLoginCookie() {
             NavigationLinkButton("Welcome Tours") {
                 ClientLogger.shared.logCounter(
                     .ViewShowTour, attributes: EnvironmentHelper.shared.getAttributes())
