@@ -907,34 +907,38 @@ extension BrowserViewController: WKNavigationDelegate {
         tab.setURL(webView.url)
 
         if let url = webView.url {
-            // if user never signed in, log page load
-            if !Defaults[.signedInOnce] {
-                var attributes = EnvironmentHelper.shared.getFirstRunAttributes()
+            var attributes = EnvironmentHelper.shared.getFirstRunAttributes()
 
-                // if user visiting Neeva page, log path and query
-                if url.origin == NeevaConstants.appURL.origin {
-                    let query = url.query ?? ""
-                    attributes.append(
-                        ClientLogCounterAttribute(
-                            key: LogConfig.Attribute.FirstRunSearchPathQuery,
-                            value: url.path + query))
-
-                    // for preview mode, increase counter for preview mode queries
-                    if !query.isEmpty {
+            // Log navigation count
+            if url.origin == NeevaConstants.appURL.origin {
+                let query = url.query ?? ""
+                if query.isEmpty {
+                    // browse
+                    ClientLogger.shared.logCounter(
+                        .NavigationInbound, attributes: attributes)
+                } else {
+                    // preview search search
+                    if !Defaults[.signedInOnce] {
                         Defaults[.previewModeQueries].insert(query)
                         ClientLogger.shared.logCounter(.PreviewSearch, attributes: attributes)
-                    } else {
-                        ClientLogger.shared.logCounter(
-                            .PreviewNavigationInbound, attributes: attributes)
-                    }
-                } else {
-                    ClientLogger.shared.logCounter(
-                        .PreviewNavigationOutbound, attributes: attributes)
-                }
 
+                        attributes.append(
+                            ClientLogCounterAttribute(
+                                key: LogConfig.Attribute.FirstRunSearchPathQuery,
+                                value: url.path + query))
+                        ClientLogger.shared.logCounter(
+                            .FirstRunPageLoad,
+                            attributes: attributes)
+                    }
+                }
+            } else {
+                if !Defaults[.signedInOnce] {
+                    ClientLogger.shared.logCounter(
+                        .FirstRunPageLoad,
+                        attributes: attributes)
+                }
                 ClientLogger.shared.logCounter(
-                    .FirstRunPageLoad,
-                    attributes: attributes)
+                    .NavigationOutbound, attributes: attributes)
             }
 
             // increment page load count

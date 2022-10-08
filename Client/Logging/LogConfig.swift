@@ -148,10 +148,10 @@ public enum LogConfig {
         case LoginAfterFirstRun
         /// Page load at first run and before login
         case FirstRunPageLoad
-        /// First run navigation outbound in preview mode, non neeva domain
-        case PreviewNavigationOutbound
-        /// First run navigation inbound in preview mode, within neeva domain
-        case PreviewNavigationInbound
+        /// Navigation outbound, non neeva domain
+        case NavigationOutbound
+        /// Navigation inbound, within neeva domain
+        case NavigationInbound
         /// First run search in preview mode
         case PreviewSearch
         /// Sign in from promo card
@@ -471,8 +471,8 @@ public enum LogConfig {
             Interaction.FirstRunOtherSignUpOptions,
             Interaction.FirstRunSignin,
             Interaction.PreviewSearch,
-            Interaction.PreviewNavigationOutbound,
-            Interaction.PreviewNavigationInbound,
+            Interaction.NavigationOutbound,
+            Interaction.NavigationInbound,
             Interaction.PreviewModePromoSignup,
             Interaction.DefaultBrowserInterstitialRestoreImp,
             Interaction.SpacesRecommendedDetailUIVisited,
@@ -696,8 +696,8 @@ public enum LogConfig {
         case .PreviewTapFakeSearchInput: return .FirstRun
         case .PreviewHomeSignin: return .FirstRun
         case .PreviewSearch: return .FirstRun
-        case .PreviewNavigationOutbound: return .FirstRun
-        case .PreviewNavigationInbound: return .FirstRun
+        case .NavigationOutbound: return .FirstRun
+        case .NavigationInbound: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialSkip: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialContinueToNeeva: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialRemind: return .FirstRun
