@@ -117,13 +117,7 @@ struct WelcomeFlowView: View {
              Swift constructs the object lazily, so any access
              will trigger initialization.
              */
-
             _ = PremiumStore.shared.products.count
-
-            /*
-             TODO: We should try check if a user has an active entitlement
-             to a particular product and skip them right to sign in.
-             */
         }
     }
 }

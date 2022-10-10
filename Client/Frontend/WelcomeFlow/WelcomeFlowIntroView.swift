@@ -8,6 +8,7 @@ import SwiftUI
 
 struct WelcomeFlowIntroView: View {
     @ObservedObject var model: WelcomeFlowModel
+    @ObservedObject var premiumStore: PremiumStore = PremiumStore.shared
 
     // TODO: persist this in the view model?
     @State private var collectUsageStats = Defaults[.shouldCollectUsageStats] ?? true
@@ -43,15 +44,9 @@ struct WelcomeFlowIntroView: View {
                     action: {
                         model.logCounter(.GetStartedInWelcome)
 
-                        if PremiumStore.shared.loadingProducts {
-                            /*
-                             NOTE: We do nothing here on purpose. I would rather have
-                             disabled the button until we know products are done loading.
-                             However we can't do that statically since using the `PremiumStore`
-                             requires iOS 15. The good news is that only a very long lag
-                             will make this something a user notices.
-                             */
-                        } else if PremiumStore.isOfferedInCountry() {
+                        if PremiumStore.isOfferedInCountry()
+                            && premiumStore.products.count > 0
+                        {
                             model.clearPreviousScreens()
                             model.changeScreenTo(.plans)
                         } else {
@@ -60,12 +55,14 @@ struct WelcomeFlowIntroView: View {
                         }
                     },
                     label: {
-                        Text("Let's Go")
+                        Text(premiumStore.loadingProducts ? "Loading..." : "Let's Go")
                             .withFont(.labelLarge)
                             .foregroundColor(.brand.white)
                             .frame(maxWidth: .infinity)
+
                     }
                 )
+                .disabled(premiumStore.loadingProducts)
                 .buttonStyle(.neeva(.primary))
 
                 Button(
