@@ -437,7 +437,6 @@ public enum LogConfig {
         case PreviousScreenClick
         case ScreenImpression
         case SignInClick
-        case StorefrontWasNil
         case SafariVCLinkClick
     }
 
@@ -891,7 +890,6 @@ public enum LogConfig {
         case .PreviousScreenClick: return .Generic
         case .ScreenImpression: return .Generic
         case .SignInClick: return .Generic
-        case .StorefrontWasNil: return .Generic
         case .SafariVCLinkClick: return .Generic
         }
     }
@@ -954,7 +952,6 @@ public enum LogConfig {
         /// Generic attributes
         public static let screenName = "ScreenName"
         public static let source = "Source"
-        public static let locale = "Locale"
         public static let safariVCLinkURL = "SafariVCLinkURL"
 
         /// Premium attributes
