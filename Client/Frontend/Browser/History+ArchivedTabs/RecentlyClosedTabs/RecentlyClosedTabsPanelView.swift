@@ -26,10 +26,16 @@ struct RecentlyClosedTabsPanelView: View {
                 ForEach(
                     Array(model.recentlyClosedTabs.enumerated()), id: \.element
                 ) { index, savedTab in
-                    SiteRowView(tabManager: model.tabManager, data: .savedTab(savedTab)) {
-                        model.restoreTab(at: index)
-                        onDismiss()
-                    }
+                    SiteRowView(
+                        tabManager: model.tabManager,
+                        data: .savedTab(
+                            savedTab,
+                            {
+                                model.restoreTab(at: index)
+                                onDismiss()
+                            }
+                        )
+                    )
 
                     Color.groupedBackground.frame(height: 1)
                 }

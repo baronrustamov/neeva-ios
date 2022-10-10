@@ -12,7 +12,7 @@ private struct SiteRowViewUX {
 
 enum SiteRowData {
     case site(Site, (Site) -> Void)
-    case savedTab(SavedTab)
+    case savedTab(SavedTab, () -> Void)
 }
 
 private struct SiteRowButton: View {
@@ -61,12 +61,10 @@ private struct SiteView: View {
     let site: Site
     let title: String
     let tabManager: TabManager
-    let action: () -> Void
     let deleteSite: (Site) -> Void
 
     var body: some View {
         SiteRowButton(title: title, url: site.url) {
-            action()
             openURL(site.url)
         }
         .accessibilityLabel(Text(title.isEmpty ? site.url.absoluteString : title))
@@ -92,10 +90,10 @@ private struct SiteView: View {
 private struct SavedTabView: View {
     let savedTab: SavedTab
     let tabManager: TabManager
-    let action: () -> Void
+    let onTap: () -> Void
 
     var body: some View {
-        SiteRowButton(title: savedTab.title, url: savedTab.url, action: action)
+        SiteRowButton(title: savedTab.title, url: savedTab.url, action: onTap)
             .accessibilityLabel(Text(savedTab.title ?? ""))
             .accessibilityIdentifier(savedTab.url?.absoluteString ?? "")
             .buttonStyle(.tableCell)
@@ -108,9 +106,7 @@ private struct SavedTabView: View {
 
 struct SiteRowView: View {
     let tabManager: TabManager
-
     let data: SiteRowData
-    let action: () -> Void
 
     var body: some View {
         switch data {
@@ -124,10 +120,17 @@ struct SiteRowView: View {
             }()
 
             SiteView(
-                site: site, title: title, tabManager: tabManager, action: action,
-                deleteSite: deleteSite)
-        case .savedTab(let savedTab):
-            SavedTabView(savedTab: savedTab, tabManager: tabManager, action: action)
+                site: site,
+                title: title,
+                tabManager: tabManager,
+                deleteSite: deleteSite
+            )
+        case .savedTab(let savedTab, let onTap):
+            SavedTabView(
+                savedTab: savedTab,
+                tabManager: tabManager,
+                onTap: onTap
+            )
         }
     }
 }

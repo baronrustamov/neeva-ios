@@ -140,10 +140,9 @@ struct GroupedDataPanelView<Model: GroupedDataPanelModel, NavigationButtons: Vie
                                     site,
                                     { site in
                                         model.removeItemFromHistory(site: site)
-                                    })
-                            ) {
-                                // Nothing to do here. Should eventually remove this.
-                            }.onAppear {
+                                    }
+                                )
+                            ).onAppear {
                                 model.loadNextItemsIfNeeded(
                                     from: index + model.countOfPreviousSites(section: section))
                             }
