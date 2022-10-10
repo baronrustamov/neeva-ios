@@ -1446,9 +1446,9 @@ convert-source-map@^1.7.0:
   dependencies:
     safe-buffer "~5.1.1"
 
-cookie-cutter@neevaco/cookie-cutter-engine#v0.0.2:
-  version "0.0.2"
-  resolved "https://codeload.github.com/neevaco/cookie-cutter-engine/tar.gz/44928aea3ae79c4e8974c6abf764489256ea2c9a"
+cookie-cutter@neevaco/cookie-cutter-engine#v0.0.3:
+  version "0.0.3"
+  resolved "https://codeload.github.com/neevaco/cookie-cutter-engine/tar.gz/925cc3a589414abf2973aa65d91d967c21d7490c"
   dependencies:
     "@types/chrome" "^0.0.180"
     "@types/psl" "^1.1.0"
