@@ -45,15 +45,21 @@ class PremiumStore: ObservableObject {
         Task {
             self.loadingProducts = true
             do {
-                self.products = try await Product.products(for: [
+                let products = try await Product.products(for: [
                     PremiumPlan.monthly.rawValue, PremiumPlan.annual.rawValue,
                 ])
 
-                self.checkForAndFixMissingSubscription()
+                await MainActor.run {
+                    self.products = products
+                    self.checkForAndFixMissingSubscription()
+                }
             } catch {
                 // TODO: log?
             }
-            self.loadingProducts = false
+
+            await MainActor.run {
+                self.loadingProducts = false
+            }
         }
     }
 

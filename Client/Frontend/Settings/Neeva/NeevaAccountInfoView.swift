@@ -47,30 +47,23 @@ struct NeevaAccountInfoView: View {
 
                 // Only show for iOS 15 users who are in a country where Premium is offered
                 // and are not Lifetime and have not paid through another source.
-                if #available(iOS 15, *) {
-                    if premiumOfferedInCountry() && userInfo.subscriptionType != .lifetime
-                        && (userInfo.subscription?.source == SubscriptionSource.none
-                            || userInfo.subscription?.source == SubscriptionSource.apple)
-                    {
-                        NavigationLink(
-                            destination: NeevaPremiumView(userInfo: userInfo),
-                            isActive: $showingPremium
-                        ) {
-                            HStack {
-                                Text("Your Subscription")
-                                Spacer()
-                                Text("\(currentPlan)")
-                            }
-                        }
-                        .onAppear {
-                            PremiumStore.shared.checkForAndFixMissingSubscription()
+                if PremiumStore.isOfferedInCountry() && userInfo.subscriptionType != .lifetime
+                    && (userInfo.subscription?.source == SubscriptionSource.none
+                        || userInfo.subscription?.source == SubscriptionSource.apple)
+                {
+                    NavigationLink(
+                        destination: NeevaPremiumView(userInfo: userInfo),
+                        isActive: $showingPremium
+                    ) {
+                        HStack {
+                            Text("Your Subscription")
+                            Spacer()
+                            Text("\(currentPlan)")
                         }
                     }
-                } else {
-                    /*
-                     TODO: if a user is paying and payment source is apple, but
-                     running an older OS, should we add a message to the user?
-                     */
+                    .onAppear {
+                        PremiumStore.shared.checkForAndFixMissingSubscription()
+                    }
                 }
             }
 
