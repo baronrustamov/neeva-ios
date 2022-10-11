@@ -49,9 +49,7 @@ class ImageContextMenu: UIViewController {
         tableView.separatorInset = .zero
         tableView.isScrollEnabled = false
         tableView.isHidden = true
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0
-        }
+        tableView.sectionHeaderTopPadding = 0
         return tableView
     }()
 

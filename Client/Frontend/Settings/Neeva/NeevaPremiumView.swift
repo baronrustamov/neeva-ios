@@ -6,7 +6,6 @@ import Shared
 import StoreKit
 import SwiftUI
 
-@available(iOS 15.0, *)
 struct NeevaPremiumView: View {
     @ObservedObject var userInfo: NeevaUserInfo
     // NOTE: we listen for changes on the store incase products are loading
@@ -29,15 +28,15 @@ struct NeevaPremiumView: View {
     }
 
     var premiumBullets = [
-        ("Browser + ad blocker", ""),
-        ("Tracking prevention", ""),
+        ("Browser + ad blocker + tracking prevention", ""),
         ("Unlimited ad-free, private search", ""),
-        ("Premium password manager + VPN", ""),
+        ("Unlimited devices", ""),
+        ("Password manager + VPN", ""),
     ]
     var freeBullets = [
-        ("Browser + ad blocker", ""),
-        ("Tracking prevention", ""),
-        ("Ad-free, private search", "50 searches/week"),
+        ("Browser + ad blocker + tracking prevention", ""),
+        ("Limited Ad-free, private search", "50 searches/month"),
+        ("Limited devices", ""),
     ]
     var bullets: [(String, String)] {
         if currentPremiumPlan == nil {
@@ -49,7 +48,7 @@ struct NeevaPremiumView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            WelcomeFlowHeaderView(text: "Get Premium for maximum privacy")
+            WelcomeFlowHeaderView(text: "Choose the right plan for you")
                 .padding(.bottom, 20)
 
             HStack(spacing: 0) {

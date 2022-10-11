@@ -36,34 +36,36 @@ extension BrowserViewController: TopBarDelegate {
             return
         }
 
-        // User is editing the current query, should preserve the parameters from their original query
-        if let percentEncodedQueryItems = searchQueryModel.components?.percentEncodedQueryItems,
-            let url = SearchEngine.current.searchURLFrom(
-                searchQuery: text, percentEncodedQueryItems: percentEncodedQueryItems)
-        {
-            finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: currentTab)
-            searchQueryModel.components = nil
-
-            return
-        }
-
         submitSearchText(text, forTab: currentTab, using: SearchEngine.current)
     }
 
     fileprivate func submitSearchText(
         _ text: String, forTab tab: Tab?, using searchEngine: SearchEngine = SearchEngine.current
     ) {
-        if let searchURL = searchEngine.searchURLForQuery(text) {
-            // we don't associate the query string so that the action will open a new search
-            IntentHelper.suggestSearchIntent()
-            IntentHelper.donateSearchIntent()
+        var searchURL: URL?
+        // User is editing the current query, should preserve the parameters from their original query
+        if let percentEncodedQueryItems = searchQueryModel.components?.percentEncodedQueryItems,
+            let url = SearchEngine.current.searchURLFrom(
+                searchQuery: text, percentEncodedQueryItems: percentEncodedQueryItems
+            )
+        {
+            searchURL = url
+        } else if let url = searchEngine.searchURLForQuery(text) {
+            searchURL = url
+        }
 
-            // We couldn't find a matching search keyword, so do a search query.
-            finishEditingAndSubmit(searchURL, visitType: VisitType.typed, forTab: tab)
-        } else {
+        guard let searchURL = searchURL else {
             // We still don't have a valid URL, so something is broken. Give up.
             print("Error handling URL entry: \"\(text)\".")
             assertionFailure("Couldn't generate search URL: \(text)")
+            return
         }
+
+        // we don't associate the query string so that the action will open a new search
+        IntentHelper.suggestSearchIntent()
+        IntentHelper.donateSearchIntent()
+
+        finishEditingAndSubmit(searchURL, visitType: VisitType.typed, forTab: tab)
+        searchQueryModel.components = nil
     }
 }

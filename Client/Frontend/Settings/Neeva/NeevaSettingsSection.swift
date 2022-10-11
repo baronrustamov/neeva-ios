@@ -117,9 +117,7 @@ struct NeevaSettingsSection: View {
                  Swift constructs the object lazily, so any access
                  will trigger initialization.
                  */
-                if #available(iOS 15.0, *) {
-                    _ = PremiumStore.shared.products.count
-                }
+                _ = PremiumStore.shared.products.count
             }
         }
     }

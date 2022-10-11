@@ -134,11 +134,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             .AppEnterForeground,
             attributes: attributes
         )
-
-        // send number of spotlight index events from the last session
-        sendAggregatedSpotlightLogs()
-        // send number of cheatsheet stats from the last session
-        sendAggregatedCheatsheetLogs()
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
@@ -338,19 +333,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     private func continueSiriIntent(continue userActivity: NSUserActivity) -> Bool {
-        var attributes = [
-            EnvironmentHelper.shared.getSessionUUID()
-        ]
-
         if let intent = userActivity.interaction?.intent as? OpenURLIntent {
             self.bvc.openURLInNewTab(intent.url)
-            ClientLogger.shared.logCounter(.openURLShortcut, attributes: attributes)
+            ClientLogger.shared.logCounter(.openURLShortcut)
             self.urlHandledOnLaunch = true
 
             return true
         }
 
         if let intent = userActivity.interaction?.intent as? SearchNeevaIntent {
+            var attributes: [ClientLogCounterAttribute] = []
             // shortcut has query input, start search for query
             if let query = intent.text,
                 !query.isEmpty,
@@ -658,38 +650,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
 
         return false
-    }
-
-    func sendAggregatedSpotlightLogs() {
-        ClientLogger.shared.logCounter(
-            .spotlightEventsForSession,
-            attributes: EnvironmentHelper.shared.getAttributes() + [
-                ClientLogCounterAttribute(
-                    key: LogConfig.SpotlightAttribute.CountForEvent.createUserActivity.rawValue,
-                    value: String(Defaults[.numOfIndexedUserActivities])
-                ),
-                ClientLogCounterAttribute(
-                    key: LogConfig.SpotlightAttribute.CountForEvent.addThumbnailToUserActivity
-                        .rawValue,
-                    value: String(Defaults[.numOfThumbnailsForUserActivity])
-                ),
-                ClientLogCounterAttribute(
-                    key: LogConfig.SpotlightAttribute.CountForEvent.willIndex.rawValue,
-                    value: String(Defaults[.numOfWillIndexEvents])
-                ),
-                ClientLogCounterAttribute(
-                    key: LogConfig.SpotlightAttribute.CountForEvent.didIndex.rawValue,
-                    value: String(Defaults[.numOfDidIndexEvents])
-                ),
-            ]
-        )
-        Defaults[.numOfIndexedUserActivities] = 0
-        Defaults[.numOfThumbnailsForUserActivity] = 0
-        Defaults[.numOfWillIndexEvents] = 0
-        Defaults[.numOfDidIndexEvents] = 0
-    }
-
-    func sendAggregatedCheatsheetLogs() {
-        CheatsheetLogger.shared.sendLogsOnAppStarted()
     }
 }

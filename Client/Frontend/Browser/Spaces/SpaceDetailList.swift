@@ -231,28 +231,17 @@ struct CompactSpaceDetailList: View {
 
 struct ListSeparatorModifier: ViewModifier {
     func body(content: Content) -> some View {
-        if #available(iOS 15.0, *) {
-            content
-                .listRowInsets(
-                    EdgeInsets.init(
-                        top: 0,
-                        leading: 0,
-                        bottom: 0,
-                        trailing: 0)
-                )
-                .listSectionSeparator(Visibility.hidden)
-                .listRowSeparator(Visibility.hidden)
-                .listSectionSeparatorTint(Color.secondaryBackground)
-        } else {
-            content
-                .listRowInsets(
-                    EdgeInsets.init(
-                        top: 0,
-                        leading: 0,
-                        bottom: 0,
-                        trailing: 0)
-                )
-        }
+        content
+            .listRowInsets(
+                EdgeInsets.init(
+                    top: 0,
+                    leading: 0,
+                    bottom: 0,
+                    trailing: 0)
+            )
+            .listSectionSeparator(Visibility.hidden)
+            .listRowSeparator(Visibility.hidden)
+            .listSectionSeparatorTint(Color.secondaryBackground)
     }
 }
 
@@ -265,28 +254,24 @@ struct ListStyleModifier: ViewModifier {
     var isDigest: Bool = false
 
     func body(content: Content) -> some View {
-        if #available(iOS 15.0, *) {
-            content
-                .listStyle(.plain)
-                .background(Color.secondaryBackground)
-                .environment(
-                    \.openURL,
-                    OpenURLAction(handler: {
-                        openURLForSpace($0, spaceModel.detailedSpace!.id)
-                        browserModel.hideGridWithNoAnimation()
+        content
+            .listStyle(.plain)
+            .background(Color.secondaryBackground)
+            .environment(
+                \.openURL,
+                OpenURLAction(handler: {
+                    openURLForSpace($0, spaceModel.detailedSpace!.id)
+                    browserModel.hideGridWithNoAnimation()
 
-                        return .handled
-                    })
-                )
-                .if(!isDigest) {
-                    $0.refreshable {
-                        if let detailedSpace = self.spaceModel.detailedSpace {
-                            detailedSpace.refresh()
-                        }
+                    return .handled
+                })
+            )
+            .if(!isDigest) {
+                $0.refreshable {
+                    if let detailedSpace = self.spaceModel.detailedSpace {
+                        detailedSpace.refresh()
                     }
                 }
-        } else {
-            content
-        }
+            }
     }
 }

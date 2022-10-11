@@ -5,8 +5,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  daily-build:
-    runs-on: macos-12
+  branch-cut-and-build:
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3

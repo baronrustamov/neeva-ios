@@ -139,3 +139,38 @@
 
 /* Price per month */
 "/month" = "/month";
+
+/* An example query for users to tap on to see results */
+"tech news" = "tech news";
+
+/* An example query for users to tap on to see results */
+"fruit tart recipes" = "fruit tart recipes";
+
+/* Bullet point text to describe Neeva benefit */
+"Browser + ad blocker + tracking prevention" = "Browser + ad blocker + tracking prevention";
+
+/* Bullet point text to describe Neeva benefit */
+"Tracking prevention" = "Tracking prevention";
+
+/* Bullet point text to describe Neeva premium benefit */
+"Unlimited ad-free, private search" = "Unlimited ad-free, private search";
+"Limited Ad-free, private search" = "Limited Ad-free, private search";
+
+/* Bullet point text to describe Neeva premium benefit */
+"Password manager + VPN" = "Password manager + VPN";
+
+/* Bullet point text to describe Neeva benefit */
+"Ad-free, private search" = "Ad-free, private search";
+
+/* Bullet point text to describe Neeva free account benefit */
+"50 searches/month" = "50 searches/month";
+
+/* Bullet point text to describe Neeva device limits */
+"Unlimited devices" = "Unlimited devices";
+"Limited devices" = "Limited devices";
+
+/* Button to try Neeva for free */
+"Try it Free" = "Try it Free";
+
+/* Subtitle text on the plan screen to specify our trial duration */
+"7 Day Free Trial" = "7 Day Free Trial";

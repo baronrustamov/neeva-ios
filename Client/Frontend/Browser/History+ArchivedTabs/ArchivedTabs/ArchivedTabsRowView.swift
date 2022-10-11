@@ -62,7 +62,7 @@ struct NewArchivedTabsRowView: View {
                         .foregroundColor(.label)
 
                     Spacer()
-                }
+                }.padding(.top, 6)
             }
 
             HStack {

@@ -22,7 +22,15 @@ struct SuggestedSearch {
     let isExample: Bool
 }
 
-let exampleQueries: [SuggestedSearch] = ["best headphones", "lemon bar recipe", "react hooks"].map {
+let exampleQueries: [SuggestedSearch] = [
+    NSLocalizedString(
+        "tech news", value: "tech news",
+        comment: "An example query for users to tap on to see results"),
+    NSLocalizedString(
+        "fruit tart recipes", value: "fruit tart recipes",
+        comment: "An example query for users to tap on to see results"),
+    "react hooks",  // no translation needed for this query
+].map {
     query in
     SuggestedSearch(
         query: query,

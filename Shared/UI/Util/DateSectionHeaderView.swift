@@ -20,7 +20,7 @@ public struct DateSectionHeaderView: View {
 
     public var body: some View {
         VStack {
-            Color.groupedBackground.frame(height: 8)
+            Color.tertiarySystemFill.frame(height: 8)
             title
         }
     }

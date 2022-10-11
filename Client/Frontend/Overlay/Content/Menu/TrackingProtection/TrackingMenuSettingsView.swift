@@ -10,32 +10,14 @@ struct TrackingAttribution: View {
     @Environment(\.onOpenURL) var openURL
 
     var body: some View {
-        if #available(iOS 15.0, *) {
-            Section(
-                footer:
-                    // this component is not used currently
-                    Text(
-                        verbatim:
-                            "Tracking rules courtesy of [The EasyList Authors](https://easylist.to/)"
-                    )
-            ) {}
-        } else {
-            Section(
-                footer:
-                    Button(
-                        action: {
-                            openURL(URL(string: "https://easylist.to/pages/about.html")!)
-                        },
-                        label: {
-                            // this component is not used currently
-                            Text(verbatim: "Tracking rules courtesy of The EasyList Authors")
-                        }
-                    )
-                    .font(.footnote)
-                    .accentColor(.secondaryLabel)
-                    .textCase(nil)
-            ) {}
-        }
+        Section(
+            footer:
+                // this component is not used currently
+                Text(
+                    verbatim:
+                        "Tracking rules courtesy of [The EasyList Authors](https://easylist.to/)"
+                )
+        ) {}
     }
 }
 
@@ -73,18 +55,15 @@ struct TrackingSettingsSectionBlock: View {
             .padding(.horizontal, -10)
         }
 
-        // Only enable ad blocking on iOS 15+
-        if #available(iOS 15.0, *) {
-            Section {
-                Toggle("Ad Blocking", isOn: $adBlockEnabled)
-                    .onChange(of: adBlockEnabled) { _ in
-                        if adBlockEnabled {
-                            ClientLogger.shared.logCounter(.AdBlockEnabled)
-                        }
+        Section {
+            Toggle("Ad Blocking", isOn: $adBlockEnabled)
+                .onChange(of: adBlockEnabled) { _ in
+                    if adBlockEnabled {
+                        ClientLogger.shared.logCounter(.AdBlockEnabled)
                     }
-                    .disabled(
-                        contentBlockingStrength != BlockingStrength.easyPrivacyStrict.rawValue)
-            }
+                }
+                .disabled(
+                    contentBlockingStrength != BlockingStrength.easyPrivacyStrict.rawValue)
         }
     }
 }

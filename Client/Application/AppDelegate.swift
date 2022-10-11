@@ -30,6 +30,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
 
     // MARK: - Lifecycle
+    /*
+     * "Return false if the app should not perform the application(_:performActionFor:completionHandler:)
+     * method because you’re handling the invocation of a Home screen quick action"
+     * https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623032-application
+     */
     func application(
         _ application: UIApplication,
         willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -45,7 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         // If feedback did not finish sending before app closed, record that here
         if !Defaults[.feedbackBeingSent] {
-            ClientLogger.shared.logCounter(.FeedbackFailedToSend)
+            ClientLogger.shared.logCounterBypassIncognito(.FeedbackFailedToSend)
         }
         Defaults[.feedbackBeingSent] = false
 
@@ -120,11 +125,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         DynamicFontHelper.defaultHelper.startObserving()
 
-        ScreenCaptureHelper.defaultHelper.startObserving()
-
         MenuHelper.defaultHelper.setItems()
 
         SystemUtils.onFirstRun()
+
+        sendAggregatedLogsFromLastLaunch()
 
         log.info("startApplication end")
 
@@ -155,11 +160,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         return true
     }
 
-    /*
-     * "Return false if the app should not perform the application(_:performActionFor:completionHandler:)
-     * method because you’re handling the invocation of a Home screen quick action"
-     * https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623032-application
-     */
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -355,6 +355,48 @@ extension AppDelegate {
             return nil
         }
         return info.phys_footprint
+    }
+}
+
+extension AppDelegate {
+    func sendAggregatedLogsFromLastLaunch() {
+        // send number of spotlight index events from the last session
+        sendAggregatedSpotlightLogs()
+        // send number of cheatsheet stats from the last session
+        sendAggregatedCheatsheetLogs()
+    }
+
+    func sendAggregatedSpotlightLogs() {
+        ClientLogger.shared.logCounterBypassIncognito(
+            .spotlightEventsForSession,
+            attributes: EnvironmentHelper.shared.getAttributes() + [
+                ClientLogCounterAttribute(
+                    key: LogConfig.SpotlightAttribute.CountForEvent.createUserActivity.rawValue,
+                    value: String(Defaults[.numOfIndexedUserActivities])
+                ),
+                ClientLogCounterAttribute(
+                    key: LogConfig.SpotlightAttribute.CountForEvent.addThumbnailToUserActivity
+                        .rawValue,
+                    value: String(Defaults[.numOfThumbnailsForUserActivity])
+                ),
+                ClientLogCounterAttribute(
+                    key: LogConfig.SpotlightAttribute.CountForEvent.willIndex.rawValue,
+                    value: String(Defaults[.numOfWillIndexEvents])
+                ),
+                ClientLogCounterAttribute(
+                    key: LogConfig.SpotlightAttribute.CountForEvent.didIndex.rawValue,
+                    value: String(Defaults[.numOfDidIndexEvents])
+                ),
+            ]
+        )
+        Defaults[.numOfIndexedUserActivities] = 0
+        Defaults[.numOfThumbnailsForUserActivity] = 0
+        Defaults[.numOfWillIndexEvents] = 0
+        Defaults[.numOfDidIndexEvents] = 0
+    }
+
+    func sendAggregatedCheatsheetLogs() {
+        CheatsheetSessionUsageLogger.shared.sendLogsOnAppStarted()
     }
 }
 

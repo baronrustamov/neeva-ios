@@ -141,7 +141,8 @@ enum TabToolbarButtons {
                 .ellipsisCircle,
                 size: 20,
                 weight: weight,
-                label: .TabToolbarMoreAccessibilityLabel)
+                label: .TabToolbarMoreAccessibilityLabel
+            )
         }
     }
 
@@ -238,7 +239,11 @@ enum TabToolbarButtons {
             TabToolbarButton(
                 label: Symbol(
                     model.urlInSpace ? .bookmarkFill : .bookmark,
-                    size: 20, weight: weight, label: "Add To Space"),
+                    size: 20,
+                    weight: weight,
+                    relativeTo: nil,
+                    label: "Add To Space"
+                ),
                 action: action
             )
             .accessibilityValue(model.urlInSpace ? "Page is in a Space" : "")

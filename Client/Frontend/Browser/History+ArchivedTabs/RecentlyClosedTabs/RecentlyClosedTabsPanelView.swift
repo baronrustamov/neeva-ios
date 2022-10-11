@@ -23,13 +23,22 @@ struct RecentlyClosedTabsPanelView: View {
             }.padding(.horizontal)
 
             LazyVStack(spacing: 0) {
-                SiteListView(
-                    tabManager: model.tabManager,
-                    data: .savedTabs(model.recentlyClosedTabs),
-                    tappedItemAtIndex: { index in
-                        model.restoreTab(at: index)
-                        onDismiss()
-                    })
+                ForEach(
+                    Array(model.recentlyClosedTabs.enumerated()), id: \.element
+                ) { index, savedTab in
+                    SiteRowView(
+                        tabManager: model.tabManager,
+                        data: .savedTab(
+                            savedTab,
+                            {
+                                model.restoreTab(at: index)
+                                onDismiss()
+                            }
+                        )
+                    )
+
+                    Color.groupedBackground.frame(height: 1)
+                }
             }.padding(.horizontal)
         }
         .background(Color.groupedBackground.ignoresSafeArea(.container))
@@ -43,32 +52,16 @@ struct RecentlyClosedTabsPanelView: View {
                     .multilineTextAlignment(.center)
                     .accessibilityLabel(Text("Recently Closed List Empty"))
             } else {
-                if #available(iOS 15.0, *) {
-                    listContent
-                        .confirmationDialog("", isPresented: $showDeleteAllConfirmation) {
-                            Button(role: .destructive) {
-                                model.deleteRecentlyClosedTabs()
-                            } label: {
-                                Text("Delete All")
-                            }
-                        } message: {
-                            Text("Are you sure you want to delete all recently closed tabs?")
+                listContent
+                    .confirmationDialog("", isPresented: $showDeleteAllConfirmation) {
+                        Button(role: .destructive) {
+                            model.deleteRecentlyClosedTabs()
+                        } label: {
+                            Text("Delete All")
                         }
-                } else {
-                    listContent
-                        .actionSheet(isPresented: $showDeleteAllConfirmation) {
-                            ActionSheet(
-                                title: Text(
-                                    "Are you sure you want to delete all recently closed tabs?"),
-                                buttons: [
-                                    .destructive(Text("Delete All")) {
-                                        model.deleteRecentlyClosedTabs()
-                                    },
-                                    .cancel(),
-                                ]
-                            )
-                        }
-                }
+                    } message: {
+                        Text("Are you sure you want to delete all recently closed tabs?")
+                    }
             }
         }.navigationTitle("Recently Closed Tabs")
     }

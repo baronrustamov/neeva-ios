@@ -29,6 +29,16 @@ struct RecommendedSpacesView: View {
                         manager: SpaceStore.suggested),
                     state: expandSuggestedSpace
                 )
+                .onDisappear {
+                    // TODO: remove this once we conclude adblock experiment
+                    // This is required in order to show the zero query screen
+                    // when coming back from space view
+                    if NeevaExperiment.arm(for: .adBlockOnboarding) != .adBlock
+                        && !Defaults[.didFirstNavigation]
+                    {
+                        viewModel.bvc.showZeroQuery()
+                    }
+                }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
                 .environment(

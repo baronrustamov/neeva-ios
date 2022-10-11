@@ -25,14 +25,17 @@ enum PremiumPurchaseErrorType {
     case unknown
 }
 
-@available(iOS 15.0, *)
 class PremiumStore: ObservableObject {
     static let shared = PremiumStore()
     private static let dateFormatter = ISO8601DateFormatter()
 
-    // NOTE: currently only the U.S. but as we expand we'll maintain a list of valid country codes
+    // NOTE: regions where premium is offered (BCP 47 identifier)
+    // https://developer.apple.com/documentation/foundation/locale/region/3952434-identifier
+    static let regions = ["US" /*, "GB", "DE", "FR"*/]
+
+    // NOTE: countries where premium is offered (ISO 3166)
     // https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
-    static let countries = ["USA"]
+    static let countries = ["USA" /*, "GBR", "DEU", "FRA"*/]
 
     @Published var products: [Product] = []
     @Published var loadingProducts = false
@@ -40,78 +43,53 @@ class PremiumStore: ObservableObject {
     @Published var loadingMutation = false
     @Published var loadingUUIDPrimer = false
 
-    var appleUUID: String? = nil
+    var appleUUID: UUID? = nil
 
     init() {
         Task {
             self.loadingProducts = true
             do {
-                self.products = try await Product.products(for: [
+                let products = try await Product.products(for: [
                     PremiumPlan.monthly.rawValue, PremiumPlan.annual.rawValue,
                 ])
+
+                await MainActor.run {
+                    self.products = products
+                    self.checkForAndFixMissingSubscription()
+                }
             } catch {
                 // TODO: log?
             }
-            self.loadingProducts = false
+
+            await MainActor.run {
+                self.loadingProducts = false
+            }
         }
     }
 
     static func isOfferedInCountry() -> Bool {
+        // try via storefront country
         if let storefront = SKPaymentQueue.default().storefront {
             if PremiumStore.countries.contains(storefront.countryCode) {
                 return true
             }
-        } else {
-            ClientLogger.shared.logCounter(
-                .StorefrontWasNil,
-                attributes: [
-                    ClientLogCounterAttribute(
-                        key: LogConfig.Attribute.locale, value: Locale.current.identifier
-                    )
-                ]
-            )
+        }
+
+        // try via locale region
+        if let localeRegion = Locale.current.regionCode {
+            if PremiumStore.regions.contains(localeRegion) {
+                return true
+            }
         }
 
         return false
     }
 
-    func primeUUID() async -> String? {
-        await withCheckedContinuation { continuation in
-            if self.appleUUID != nil {
-                continuation.resume(returning: self.appleUUID)
-                return
-            }
-
-            self.loadingUUIDPrimer = true
-
-            DispatchQueue.main.async {
-                GraphQLAPI.shared.perform(
-                    mutation: InitializeAppleSubscriptionMutation()
-                ) { result in
-                    switch result {
-                    case .success(let data):
-                        self.appleUUID = data.initializeAppleSubscription?.appleUuid
-                        break
-                    case .failure:
-                        break
-                    }
-
-                    self.loadingUUIDPrimer = false
-
-                    continuation.resume(returning: self.appleUUID)
-                }
-            }
-        }
-
-    }
-
     func getProductForPlan(_ plan: PremiumPlan?) -> Product? {
-        if plan == nil {
-            return nil
-        }
+        guard let plan = plan else { return nil }
 
         return self.products.first { product in
-            return product.id == plan!.rawValue
+            return product.id == plan.rawValue
         }
     }
 
@@ -123,6 +101,149 @@ class PremiumStore: ObservableObject {
         return product.displayPrice
     }
 
+    func checkForAndFixMissingSubscription() {
+        if NeevaUserInfo.shared.hasLoginCookie()
+            && NeevaUserInfo.shared.subscriptionType == SubscriptionType.basic
+        {
+            self.products.forEach { product in
+                Task {
+                    let result = await product.currentEntitlement
+                    switch result {
+                    case .verified(let transaction):
+                        /*
+                         NOTE: This user has a basic subscription, but has an entitlement
+                         to this product, let's try to restore their subscription.
+                         */
+                        let fixed = await self.fixSubscription(
+                            product: product, transaction: transaction)
+
+                        if fixed {
+                            NeevaUserInfo.shared.reload()
+                        } else {
+                            // Logger needs to be called on main
+                            await MainActor.run {
+                                ClientLogger.shared.logCounter(
+                                    .PremiumSubscriptionFixFailed,
+                                    attributes: []
+                                )
+                            }
+                        }
+                        break
+                    case .unverified(_, _):
+                        // NOTE: do nothing
+                        break
+                    case .none:
+                        // NOTE: do nothing
+                        break
+                    }
+                }
+            }
+        }
+    }
+
+    func primeUUID() async -> Bool {
+        await withCheckedContinuation { continuation in
+            if self.appleUUID != nil {
+                continuation.resume(returning: true)
+                return
+            }
+
+            DispatchQueue.main.async {
+                self.loadingUUIDPrimer = true
+
+                GraphQLAPI.shared.perform(
+                    mutation: InitializeAppleSubscriptionMutation()
+                ) { result in
+                    self.loadingUUIDPrimer = false
+
+                    switch result {
+                    case .success(let data):
+                        if let parsedUUID = UUID(
+                            uuidString: data.initializeAppleSubscription?.appleUuid
+                                ?? NeevaUserInfo.shared.subscription?.apple?.uuid
+                                ?? "")
+                        {
+                            self.appleUUID = parsedUUID
+                            continuation.resume(returning: true)
+                            return
+                        }
+                        break
+                    case .failure:
+                        break
+                    }
+
+                    continuation.resume(returning: false)
+                }
+            }
+        }
+    }
+
+    func registerSubscription(product: Product, transaction: Transaction) async -> Bool {
+        await withCheckedContinuation { continuation in
+            guard let uuid = self.appleUUID else {
+                continuation.resume(returning: false)
+                return
+            }
+
+            DispatchQueue.main.async {
+                GraphQLAPI.shared.perform(
+                    mutation: RegisterAppleSubscriptionMutation(
+                        input: RegisterAppleSubscriptionInput(
+                            originalTransactionId: transaction.originalID.description,
+                            userUuid: uuid.uuidString,
+                            plan: product.id == PremiumPlan.monthly.rawValue
+                                ? AppleSubscriptionPlan.monthly
+                                : AppleSubscriptionPlan.annual,
+                            expiration: PremiumStore.dateFormatter.string(
+                                from: transaction.expirationDate ?? Date.now)
+                        )
+                    )
+                ) { result in
+                    switch result {
+                    case .failure:
+                        continuation.resume(returning: false)
+                        break
+                    case .success:
+                        continuation.resume(returning: true)
+                        break
+                    }
+                }
+            }
+        }
+    }
+
+    func fixSubscription(product: Product, transaction: Transaction) async -> Bool {
+        await withCheckedContinuation { continuation in
+            guard let uuid = self.appleUUID else {
+                continuation.resume(returning: false)
+                return
+            }
+
+            DispatchQueue.main.async {
+                GraphQLAPI.shared.perform(
+                    mutation: RestoreAppleSubscriptionMutation(
+                        input: RestoreAppleSubscriptionInput(
+                            originalTransactionId: transaction.originalID.description,
+                            userUuid: uuid.uuidString,
+                            plan: product.id == PremiumPlan.monthly.rawValue
+                                ? AppleSubscriptionPlan.monthly
+                                : AppleSubscriptionPlan.annual
+                        )
+                    )
+                ) { result in
+                    switch result {
+                    case .failure:
+                        continuation.resume(returning: false)
+                        break
+                    case .success:
+                        continuation.resume(returning: true)
+                        break
+                    }
+                }
+            }
+        }
+    }
+
     func purchase(
         _ product: Product, reloadUserInfo: Bool, onPending: (@escaping () -> Void),
         onCancelled: (@escaping () -> Void),
@@ -132,18 +253,7 @@ class PremiumStore: ObservableObject {
         DispatchQueue.main.async {
             Task {
                 _ = await self.primeUUID()
-
-                /*
-                 NOTE: We won't use this value, if we can't initialize
-                 the UUID given by the server, we bail early.
-                 */
-                var uuid = UUID()
-                if let appleUUID = UUID(
-                    uuidString: self.appleUUID ?? NeevaUserInfo.shared.subscription?.apple?.uuid
-                        ?? "")
-                {
-                    uuid = appleUUID
-                } else {
+                guard let uuid = self.appleUUID else {
                     onError(PremiumPurchaseErrorType.uuid)
                     return
                 }
@@ -176,37 +286,22 @@ class PremiumStore: ObservableObject {
                     case .verified(let transaction):
                         self.loadingMutation = true
 
-                        GraphQLAPI.shared.perform(
-                            mutation: RegisterAppleSubscriptionMutation(
-                                input: RegisterAppleSubscriptionInput(
-                                    originalTransactionId: transaction.originalID.description,
-                                    userUuid: uuid.uuidString,
-                                    plan: product.id == PremiumPlan.monthly.rawValue
-                                        ? AppleSubscriptionPlan.monthly
-                                        : AppleSubscriptionPlan.annual,
-                                    expiration: PremiumStore.dateFormatter.string(
-                                        from: transaction.expirationDate ?? Date.now)
-                                )
-                            )
-                        ) { result in
-                            switch result {
-                            case .failure:
-                                // TODO: What should we do in this case? The user has paid, but our API call failed.
-                                break
-                            case .success:
-                                break
-                            }
+                        let registered = await self.registerSubscription(
+                            product: product, transaction: transaction)
 
-                            if reloadUserInfo {
-                                NeevaUserInfo.shared.reload()
-                            }
+                        if !registered {
+                            // TODO: log?
+                        }
 
-                            self.loadingMutation = false
-
-                            onSuccess(.verified)
+                        if reloadUserInfo {
+                            NeevaUserInfo.shared.reload()
                         }
 
                         await transaction.finish()
+
+                        self.loadingMutation = false
+
+                        onSuccess(.verified)
                     case .unverified:
                         /*
                          NOTE: If we got here StoreKitV2 was unable to verify the JWT
@@ -229,18 +324,29 @@ class PremiumHelpers {
     static func primaryActionText(_ plan: PremiumPlan?, subscribed: Bool = false) -> String {
         switch plan {
         case .annual:
-            return subscribed ? "Manage Yearly" : "Subscribe Yearly"
+            return subscribed ? "Manage Yearly" : "Try it Free"
         case .monthly:
-            return subscribed ? "Manage Monthly" : "Subscribe Monthly"
+            return subscribed ? "Manage Monthly" : "Try it Free"
         default:
             return "Get FREE"
+        }
+    }
+
+    static func primaryActionSubText(_ plan: PremiumPlan?, subscribed: Bool = false) -> String {
+        switch plan {
+        case .annual:
+            return "7 Day Free Trial"
+        case .monthly:
+            return "7 Day Free Trial"
+        default:
+            return ""
         }
     }
 
     static func priceSubText(_ plan: PremiumPlan?) -> (String, String) {
         switch plan {
         case .annual:
-            return ("Save 16%", "Cancel anytime")
+            return ("Save 30%", "Cancel anytime")
         case .monthly:
             return ("", "Cancel anytime")
         default:

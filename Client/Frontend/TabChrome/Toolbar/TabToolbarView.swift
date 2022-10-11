@@ -40,10 +40,12 @@ struct TabToolbarView: View {
             
             if incognitoModel.isIncognito && FeatureFlag[.incognitoQuickClose] {
                 TabToolbarButtons.CloseTab(
-                    action: { performAction(.closeTab) })
+                    action: { performAction(.closeTab) }
+                )
             } else {
                 TabToolbarButtons.AddToSpace(
-                    weight: .medium, action: { performAction(.addToSpace) })
+                    weight: .medium, action: { performAction(.addToSpace) }
+                )
             }
             
             TabToolbarButtons.ShowTabs(

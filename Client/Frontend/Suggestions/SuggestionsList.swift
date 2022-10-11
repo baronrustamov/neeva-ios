@@ -70,24 +70,18 @@ struct SuggestionsList: View {
 
     var body: some View {
         GeometryReader { geom in
-            if #available(iOS 15.0, *) {
-                ScrollView(.vertical, showsIndicators: false) {
-                    content
-                        .safeAreaInset(edge: .leading, spacing: 0) {
-                            Color.clear.frame(width: geom.safeAreaInsets.leading)
+            ScrollView(.vertical, showsIndicators: false) {
+                content
+                    .safeAreaInset(edge: .leading, spacing: 0) {
+                        Color.clear.frame(width: geom.safeAreaInsets.leading)
 
-                        }
-                        .safeAreaInset(edge: .trailing, spacing: 0) {
-                            Color.clear.frame(width: geom.safeAreaInsets.trailing)
-                        }
-                }
-                .padding(.leading, -geom.safeAreaInsets.leading)
-                .padding(.trailing, -geom.safeAreaInsets.trailing)
-            } else {
-                ScrollView(.vertical, showsIndicators: false) {
-                    content
-                }
+                    }
+                    .safeAreaInset(edge: .trailing, spacing: 0) {
+                        Color.clear.frame(width: geom.safeAreaInsets.trailing)
+                    }
             }
+            .padding(.leading, -geom.safeAreaInsets.leading)
+            .padding(.trailing, -geom.safeAreaInsets.trailing)
         }
     }
 }

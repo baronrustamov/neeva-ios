@@ -18,7 +18,7 @@ extension TabGridRowsView: Inspectable {}
 extension GridPicker: Inspectable {}
 extension FaviconView: Inspectable {}
 extension SwitcherToolbarView: Inspectable {}
-extension SpaceCardsView: Inspectable {}
+extension SpacesCardsView: Inspectable {}
 extension FittedCard: Inspectable {}
 extension Card: Inspectable {}
 extension ThumbnailGroupView: Inspectable {}
@@ -39,7 +39,7 @@ class CardTests: XCTestCase {
     var spaceCardModel: SpaceCardModel!
     var switcherToolbarModel: SwitcherToolbarModel!
     var chromeModel: TabChromeModel!
-    var archivedTabsPanelModel: ArchivedTabsPanelModel!
+    var archivedTabsPanelModel: ArchivedTabsGroupedDataModel!
 
     @Default(.tabGroupExpanded) private var tabGroupExpanded: Set<String>
 
@@ -69,7 +69,7 @@ class CardTests: XCTestCase {
             toastViewManager: ToastViewManager(overlayManager: OverlayManager()),
             overlayManager: OverlayManager())
         chromeModel = TabChromeModel()
-        archivedTabsPanelModel = ArchivedTabsPanelModel(tabManager: manager)
+        archivedTabsPanelModel = ArchivedTabsGroupedDataModel(tabCardModel: tabCardModel)
     }
 
     override func tearDown() {
@@ -416,7 +416,7 @@ class CardTests: XCTestCase {
         .environmentObject(gridModel.visibilityModel)
         .environmentObject(chromeModel)
 
-        let spaceCardsView = try cardContainer.inspect().find(SpaceCardsView.self)
+        let spaceCardsView = try cardContainer.inspect().find(SpacesCardsView.self)
         XCTAssertNotNil(spaceCardsView)
 
         let spaceCards = spaceCardsView.findAll(FittedCard<SpaceCardDetails>.self)
@@ -540,9 +540,9 @@ class CardTests: XCTestCase {
 
         manager.updateAllTabDataAndSendNotifications(notify: false)
         archivedTabsPanelModel.loadData()
-        XCTAssertFalse(archivedTabsPanelModel.groupedRows.isEmpty)
+        XCTAssertFalse(archivedTabsPanelModel.groupedData.isEmpty)
         archivedTabsPanelModel.clearArchivedTabs()
-        XCTAssertTrue(archivedTabsPanelModel.groupedRows.isEmpty)
+        XCTAssertTrue(archivedTabsPanelModel.groupedData.isEmpty)
     }
 
     func testRestoreTabDeletedFromYesterday() {

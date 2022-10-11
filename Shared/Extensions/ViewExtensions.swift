@@ -140,24 +140,13 @@ extension View {
     }
 }
 
-extension View {
-    @ViewBuilder public func accesibilityFocus(shouldFocus: Bool, trigger: Bool) -> some View {
-        if #available(iOS 15.0, *) {
-            modifier(FocusOnAppearModifier(focus: shouldFocus, trigger: trigger))
-        } else {
-            self
-        }
-    }
-}
-
-@available(iOS 15.0, *)
-private struct FocusOnAppearModifier: ViewModifier {
+public struct FocusOnAppearModifier: ViewModifier {
     let focus: Bool
     let trigger: Bool
 
     @AccessibilityFocusState var isFocused
 
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         content
             .accessibilityFocused($isFocused)
             .onChange(of: trigger) { trigger in
@@ -167,5 +156,10 @@ private struct FocusOnAppearModifier: ViewModifier {
                     }
                 }
             }
+    }
+
+    public init(focus: Bool, trigger: Bool) {
+        self.focus = focus
+        self.trigger = trigger
     }
 }

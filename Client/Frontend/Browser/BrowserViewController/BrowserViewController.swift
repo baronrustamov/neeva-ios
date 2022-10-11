@@ -1055,6 +1055,12 @@ extension BrowserViewController {
 
     func urlBarDidLeaveOverlayMode() {
         updateInZeroQuery(tabManager.selectedTab?.url as URL?)
+        // this prevents showing a blank screen when exit from
+        // the keyboard when there is no active tab for first time user
+        if !Defaults[.didFirstNavigation] {
+            tabContainerModel.updateContent(.hideSuggestions)
+            zeroQueryModel.reset(bvc: self, wasCancelled: false)
+        }
     }
 }
 

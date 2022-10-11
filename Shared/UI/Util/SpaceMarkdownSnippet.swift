@@ -23,14 +23,8 @@ public struct SpaceMarkdownSnippet: View {
 
     @ViewBuilder
     private var content: some View {
-        if #available(iOS 15.0, *),
-            let attributedSnippet = try? AttributedString(
-                markdown: snippet)
-        {
+        if let attributedSnippet = try? AttributedString(markdown: snippet) {
             Text(attributedSnippet)
-                .withFont(.bodyLarge)
-        } else {
-            Text(snippet)
                 .withFont(.bodyLarge)
         }
     }

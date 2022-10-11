@@ -54,14 +54,8 @@ class ContextMenuActionsBuilder {
 
         var body: some View {
             Group {
-                if #available(iOS 15.0, *) {
-                    Button(role: .destructive, action: confirmCloseIfNeeded) {
-                        label
-                    }
-                } else {
-                    Button(action: confirmCloseIfNeeded) {
-                        label
-                    }
+                Button(role: .destructive, action: confirmCloseIfNeeded) {
+                    label
                 }
             }.accessibilityLabel(Text("Close All Tabs"))
         }
@@ -264,29 +258,15 @@ class MenuBuilder {
                 "Close \(numberOfTabs) \(isIncognito ? "Incognito " : "")\(numberOfTabs > 1 ? "Tabs" : "Tab")"
             )
 
-            if #available(iOS 15.0, *) {
-                content.confirmationDialog(
-                    "Are you sure you want to close all open \(isIncognito ? "incognito " : "\(onlyCloseTodayTabs ? "today " : "")")tabs?",
-                    isPresented: $showMenu
-                ) {
-                    Button(role: .destructive) {
-                        closeTabs()
-                    } label: {
-                        buttonText
-                    }.accessibilityLabel("Confirm Close All Tabs")
-                }
-            } else {
-                content.actionSheet(isPresented: $showMenu) {
-                    ActionSheet(
-                        title: Text(Strings.ClearHistoryMenuTitle),
-                        buttons: [
-                            .destructive(buttonText) {
-                                closeTabs()
-                            },
-                            .cancel(),
-                        ]
-                    )
-                }
+            content.confirmationDialog(
+                "Are you sure you want to close all open \(isIncognito ? "incognito " : "")tabs?",
+                isPresented: $showMenu
+            ) {
+                Button(role: .destructive) {
+                    closeTabs()
+                } label: {
+                    buttonText
+                }.accessibilityLabel("Confirm Close All Tabs")
             }
         }
 

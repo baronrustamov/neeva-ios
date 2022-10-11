@@ -7,10 +7,17 @@ import Shared
 import Storage
 import SwiftUI
 
+class FetchInProgressError: MaybeErrorType {
+    internal var description: String {
+        return "Fetch is already in-progress"
+    }
+}
+
 class HistoryGroupedDataModel: GroupedDataPanelModel {
     // MARK: - Properties
     typealias T = Site
     typealias Rows = EnumeratedSequence<[Site]>
+    let emptyDataText: LocalizedStringKey = "Your history will appear here"
 
     let tabManager: TabManager
     private let profile: Profile
@@ -26,7 +33,7 @@ class HistoryGroupedDataModel: GroupedDataPanelModel {
     private var filteredGroupedData = DateGroupedTableData<Site>()
 
     // MARK: - Data
-    private func reloadData() {
+    func reloadData() {
         loadedGroupedData = DateGroupedTableData<Site>()
         currentFetchOffset = 0
 

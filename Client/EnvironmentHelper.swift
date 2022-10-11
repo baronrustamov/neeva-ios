@@ -83,24 +83,11 @@ class EnvironmentHelper {
             .deviceOS,
         ]
     ) -> [ClientLogCounterAttribute] {
-        categories.flatMap { getAttributes(category: $0) } + [getSessionUUID()]
+        categories.flatMap { getAttributes(category: $0) }
     }
 
     func getFirstRunAttributes() -> [ClientLogCounterAttribute] {
         getAttributes(for: Category.firstRun)
-    }
-
-    func getSessionUUID() -> ClientLogCounterAttribute {
-        // Rotate session UUID every 30 mins
-        if Defaults[.sessionUUIDExpirationTime].minutesFromNow() > 30 {
-            Defaults[.sessionUUID] = UUID().uuidString
-            Defaults[.sessionUUIDExpirationTime] = Date()
-        }
-
-        // session UUID that will rotate every 30 mins
-        return ClientLogCounterAttribute(
-            key: LogConfig.Attribute.SessionUUID, value: Defaults[.sessionUUID]
-        )
     }
 
     // MARK: - Private Methods

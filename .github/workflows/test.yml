@@ -1,12 +1,19 @@
-name: 'Daily iOS Build Deploy'
+# This is a workflow for testing github action (like a github action playground)
+
+name: Github action (for testing)
 
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      reviewer:
+        description: 'Reviewer'
+        required: false
+        default: ''
 
 jobs:
   daily-build:
-    runs-on: ubuntu-latest
+    runs-on: macos-12
 
     steps:
       - uses: actions/checkout@v3
@@ -18,10 +25,6 @@ jobs:
 
       - name: Run daily build script
         run: |
-          ruby -r ./Scripts/build.rb -e "daily_build"
-          if [ "$?" -ne 0 ]; then
-            echo "build script failure. Aborting..."
-            exit 1
-          fi
+          ruby -r ./Scripts/build.rb -e "reviewer(\"${{ github.event.inputs.reviewer }}\")"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

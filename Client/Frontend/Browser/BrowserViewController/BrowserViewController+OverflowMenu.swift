@@ -134,17 +134,13 @@ extension BrowserViewController {
                 attributes: EnvironmentHelper.shared.getAttributes() + [overflowMenuAttribute]
             )
 
-            if FeatureFlag[.archivedTabsRedesign] {
-                overlayManager.show(
-                    overlay: .fullScreenSheet(
-                        AnyView(
-                            HistoryAndArchivedTabsPanelView(
-                                currentView: .history, tabCardModel: tabCardModel))
-                    )
+            overlayManager.show(
+                overlay: .fullScreenSheet(
+                    AnyView(
+                        HistoryAndArchivedTabsPanelView(
+                            currentView: .history, tabCardModel: tabCardModel))
                 )
-            } else {
-                present(HistoryPanelViewController(bvc: self), animated: true)
-            }
+            )
         case .goToDownloads:
             ClientLogger.shared.logCounter(
                 .OpenDownloads,

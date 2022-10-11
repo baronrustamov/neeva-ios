@@ -8,9 +8,10 @@ import SwiftUI
 
 struct WelcomeFlowIntroView: View {
     @ObservedObject var model: WelcomeFlowModel
+    @ObservedObject var premiumStore: PremiumStore = PremiumStore.shared
 
     // TODO: persist this in the view model?
-    @State private var collectUsageStats = true
+    @State private var collectUsageStats = Defaults[.shouldCollectUsageStats] ?? true
 
     var bullets = [
         ("Private", "Search anonymously and block trackers"),
@@ -42,34 +43,26 @@ struct WelcomeFlowIntroView: View {
                 Button(
                     action: {
                         model.logCounter(.GetStartedInWelcome)
-                        if #available(iOS 15.0, *) {
-                            if PremiumStore.shared.loadingProducts {
-                                /*
-                                 NOTE: We do nothing here on purpose. I would rather have
-                                 disabled the button until we know products are done loading.
-                                 However we can't do that statically since using the `PremiumStore`
-                                 requires iOS 15. The good news is that only a very long lag
-                                 will make this something a user notices.
-                                 */
-                            } else if PremiumStore.isOfferedInCountry() {
-                                model.clearPreviousScreens()
-                                model.changeScreenTo(.plans)
-                            } else {
-                                model.clearPreviousScreens()
-                                model.changeScreenTo(.defaultBrowser)
-                            }
+
+                        if PremiumStore.isOfferedInCountry()
+                            && premiumStore.products.count > 0
+                        {
+                            model.clearPreviousScreens()
+                            model.changeScreenTo(.plans)
                         } else {
                             model.clearPreviousScreens()
                             model.changeScreenTo(.defaultBrowser)
                         }
                     },
                     label: {
-                        Text("Let's Go")
+                        Text(premiumStore.loadingProducts ? "Loading..." : "Let's Go")
                             .withFont(.labelLarge)
                             .foregroundColor(.brand.white)
                             .frame(maxWidth: .infinity)
+
                     }
                 )
+                .disabled(premiumStore.loadingProducts)
                 .buttonStyle(.neeva(.primary))
 
                 Button(

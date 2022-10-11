@@ -67,11 +67,8 @@ enum BlocklistFileName: CaseIterable {
         case .easyPrivacyStrict:
             fileList.append(.easyPrivacy)
             fileList.append(.easyPrivacyStrict)
-            // Only support ad blocker on iOS 15+
-            if #available(iOS 15.0, *) {
-                if Defaults[.adBlockEnabled] {
-                    fileList.append(.easyListAdBlock)
-                }
+            if Defaults[.adBlockEnabled] {
+                fileList.append(.easyListAdBlock)
             }
         }
         return fileList
@@ -286,14 +283,8 @@ extension ContentBlocker {
 
     func compileListsNotInStore(completion: @escaping () -> Void) {
         var blocklists = [String]()
-        if #available(iOS 15.0, *) {
-            blocklists = BlocklistFileName.allCases.map { $0.filename }
-        } else {
-            blocklists = [
-                BlocklistFileName.easyPrivacy.filename,
-                BlocklistFileName.easyPrivacyStrict.filename,
-            ]
-        }
+        blocklists = BlocklistFileName.allCases.map { $0.filename }
+
         let deferreds: [Deferred<Void>] = blocklists.map { filename in
             let result = Deferred<Void>()
             ruleStore.lookUpContentRuleList(forIdentifier: filename) { contentRuleList, error in

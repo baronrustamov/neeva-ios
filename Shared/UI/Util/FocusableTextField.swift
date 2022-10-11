@@ -4,7 +4,6 @@
 
 import SwiftUI
 
-@available(iOSApplicationExtension 15.0, *)
 struct FocusableTextField: View {
     @Binding var text: String
     let isSecure: Bool = false

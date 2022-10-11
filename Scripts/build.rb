@@ -66,10 +66,9 @@ end
 
 def bump_version(which_version)
   puts "bumping version..." 
-  `sed -i -e 's/#{get_marketing_version}/#{increment_marketing_version(which_version)}/g' Client/AppConfig.xcconfig`
-  `sed -i -e 's/#{get_build_number}/#{increment_build_number}/g' Client/AppConfig.xcconfig`
-  `rm Client/AppConfig.xcconfig-e`
-  execute_shell_command("/usr/libexec/PlistBuddy -c \"Set :PreferenceSpecifiers:0:DefaultValue #{get_marketing_version}\" Client/Application/Settings.bundle/Root.plist")
+  execute_shell_command("sed -i -e 's/#{get_marketing_version}/#{increment_marketing_version(which_version)}/g' Client/Application/Settings.bundle/Root.plist")
+  execute_shell_command("sed -i -e 's/#{get_marketing_version}/#{increment_marketing_version(which_version)}/g' Client/AppConfig.xcconfig")
+  execute_shell_command("sed -i -e 's/#{get_build_number}/#{increment_build_number}/g' Client/AppConfig.xcconfig")
   puts "bumped version to v#{get_marketing_version} (#{get_build_number})"
   execute_shell_command("git diff")
 end
@@ -85,8 +84,21 @@ end
 
 def create_pr
   if (get_current_branch_name.start_with?('prepare-'))
-    execute_shell_command("gh pr create -t \"Prepare for build #{get_build_number}\" -r \"neevaco/ios\" -b \"Bumping up version for next build\"")
-    execute_shell_command("gh pr merge --auto --merge --delete-branch")
+    execute_shell_command("gh pr create -t \"Prepare for build #{get_build_number}\" -r \"ios\" -b \"Bumping up version for next build\"")
+  end
+end
+
+def reviewer(account)
+  execute_shell_command("git checkout -b chung/test-#{Time.now().min*Time.now().hour}")
+  execute_shell_command("touch i")
+  execute_shell_command("git add i")
+  execute_shell_command("git commit -a -m \"test\"")
+  execute_shell_command("git push origin chung/test-#{Time.now().min*Time.now().hour}")
+  puts "creating PR with reviewer: #{account}"
+  if (account == '')
+    execute_shell_command("gh pr create -t \"Test\" -b \"Test\"")
+  else
+    execute_shell_command("gh pr create -t \"Test\" -r \"#{account}\" -b \"Test\"")
   end
 end
 

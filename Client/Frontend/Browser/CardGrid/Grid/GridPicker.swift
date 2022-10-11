@@ -49,7 +49,8 @@ struct GridPicker: View {
 
             SegmentedPicker(
                 segments: segments,
-                selectedSegmentIndex: $selectedIndex, dragOffset: switcherToolbarModel.dragOffset,
+                selectedSegmentIndex: $selectedIndex,
+                dragOffset: switcherToolbarModel.dragOffset,
                 canAnimate: gridSwitcherAnimationModel.switchWithAnimation
             ).useEffect(deps: gridSwitcherModel.state) { _ in
                 switch gridSwitcherModel.state {
@@ -80,11 +81,9 @@ struct GridPicker: View {
     var body: some View {
         picker
             .frame(height: gridModel.pickerHeight)
-            .background(
-                (!isInToolbar
-                    ? Color.DefaultBackground : Color.clear)
-                    .ignoresSafeArea()
-            )
+            .if(!isInToolbar) {
+                $0.padding(.bottom, BrowserTopBarViewUX.GridPickerBottomPadding)
+            }
             .opacity(gridVisibilityModel.showGrid ? 1 : 0)
             .disabled(isSearchingForTabs)
     }

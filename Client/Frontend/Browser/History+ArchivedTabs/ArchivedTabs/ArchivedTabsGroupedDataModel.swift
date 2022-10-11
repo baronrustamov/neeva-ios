@@ -11,6 +11,7 @@ import SwiftUI
 class ArchivedTabsGroupedDataModel: GroupedDataPanelModel {
     typealias T = ArchivedTabRow
     typealias Rows = ([[ArchivedTab]], [String: ArchivedTabGroup])
+    let emptyDataText: LocalizedStringKey = "Your Archived Tabs will appear here"
 
     @Published var groupedData = DateGroupedTableData<T>()
 
@@ -66,7 +67,6 @@ class ArchivedTabsGroupedDataModel: GroupedDataPanelModel {
     ) -> Rows {
         let tabsPerRow = tabCardModel.columnCount
 
-        // TODO: (Evan) Rename ArchivedTabRow since it's very confusing now.
         func addItemToRowOrCreateNewRowIfNeeded(rows: inout [[ArchivedTab]], item: ArchivedTab) {
             let lastRowIndex = rows.count - 1
 

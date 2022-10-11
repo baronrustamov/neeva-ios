@@ -267,7 +267,9 @@ private class FilterResource {
     private let identifier: String
     private var state: State = .notInitialized {
         didSet {
-            CheatsheetLogger.shared.setStrings(to: [.redditFilterHealth: state.description])
+            CheatsheetSessionUsageLogger.shared.setStrings(to: [
+                .redditFilterHealth: state.description
+            ])
         }
     }
 

@@ -11,7 +11,7 @@
   },
   "license": "MPL-2.0",
   "dependencies": {
-    "cookie-cutter": "neevaco/cookie-cutter-engine#v0.0.2",
+    "cookie-cutter": "neevaco/cookie-cutter-engine#v0.0.3",
     "page-metadata-parser": "neevaco/page-metadata-parser#c2b6c91f33657d0d46667eec5e1c0d463b4c9f25",
     "readability": "mozilla/readability#1d2cb030b32e753cc4b7c4ce8b64c3ce4dc1b2ff"
   },

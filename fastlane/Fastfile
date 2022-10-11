@@ -56,7 +56,7 @@ platform :ios do
      )
      slack(
        message: ":fruitcompany: Uploaded Testflight Build #*#{build_number}* (*v#{marketing_version}*) to <#{ENV["TESTFLIGHT_URL"]}|App Store>",
-       default_payloads: ["git_branch", "last_git_commit", "last_git_commit_hash"],
+       default_payloads: ["last_git_commit", "last_git_commit_hash"],
        slack_url: ENV["SLACK_URL"]
      )
   end

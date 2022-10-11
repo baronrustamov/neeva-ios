@@ -296,7 +296,7 @@ public class TabCardDetails: CardDropDelegate, CardDetails, AccessingManagerProv
                     ClientLogger.shared.logCounter(.tabRemovedFromGroup)
                     manager.removeTabFromTabGroup(tab)
                 } label: {
-                    Label("Remove from group", systemSymbol: .arrowUpForwardSquare)
+                    Label("Remove from Group", systemSymbol: .arrowUpForwardSquare)
                 }
             }
 
@@ -305,18 +305,10 @@ public class TabCardDetails: CardDropDelegate, CardDetails, AccessingManagerProv
 
             Divider()
 
-            if #available(iOS 15.0, *) {
-                Button(role: .destructive) { [self] in
-                    manager.close(tab)
-                } label: {
-                    Label("Close Tab", systemSymbol: .trash)
-                }
-            } else {
-                Button { [self] in
-                    manager.close(tab)
-                } label: {
-                    Label("Close Tab", systemSymbol: .trash)
-                }
+            Button(role: .destructive) { [self] in
+                manager.close(tab)
+            } label: {
+                Label("Close Tab", systemSymbol: .trash)
             }
         }
     }
@@ -710,23 +702,14 @@ class TabGroupCardDetails: CardDropDelegate, ObservableObject {
             Label("Rename", systemSymbol: .pencil)
         }
 
-        if #available(iOS 15.0, *) {
-            Button(
-                role: .destructive,
-                action: {
-                    ClientLogger.shared.logCounter(.tabGroupDeleteThroughThreeDotMenu)
-                    self.deleting = true
-                }
-            ) {
-                Label("Close All", systemSymbol: .trash)
-            }
-        } else {
-            Button {
+        Button(
+            role: .destructive,
+            action: {
                 ClientLogger.shared.logCounter(.tabGroupDeleteThroughThreeDotMenu)
                 self.deleting = true
-            } label: {
-                Label("Close All", systemSymbol: .trash)
             }
+        ) {
+            Label("Close All", systemSymbol: .trash)
         }
     }
 

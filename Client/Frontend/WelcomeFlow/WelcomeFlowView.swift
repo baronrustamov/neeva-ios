@@ -89,7 +89,7 @@ struct WelcomeFlowView: View {
                 }
                 .frame(
                     maxWidth: UIDevice.current.useTabletInterface ? 380 : .infinity,
-                    maxHeight: UIDevice.current.useTabletInterface ? 580 : .infinity
+                    maxHeight: UIDevice.current.useTabletInterface ? 650 : .infinity
                 )
                 .background(Color(UIColor.systemBackground)).cornerRadius(
                     20,
@@ -117,14 +117,7 @@ struct WelcomeFlowView: View {
              Swift constructs the object lazily, so any access
              will trigger initialization.
              */
-            if #available(iOS 15.0, *) {
-                _ = PremiumStore.shared.products.count
-
-                /*
-                 TODO: We should try check if a user has an active entitlement
-                 to a particular product and skip them right to sign in.
-                 */
-            }
+            _ = PremiumStore.shared.products.count
         }
     }
 }

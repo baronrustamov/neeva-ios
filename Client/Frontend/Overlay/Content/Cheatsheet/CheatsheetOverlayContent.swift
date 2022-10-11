@@ -48,6 +48,16 @@ struct CheatsheetOverlayContent: View {
                     ClientLogCounterAttribute(key: "url", value: url.absoluteString),
                 ]
             )
+            model.log(
+                .SkOpenLinkFromCheatsheet,
+                attributes: [
+                    ClientLogCounterAttribute(
+                        key: LogConfig.CheatsheetAttribute.openLinkSource,
+                        value: source
+                    )
+                ],
+                shrink: true
+            )
             self.tabManager.createOrSwitchToTab(for: url, from: self.tabManager.selectedTab)
         }
     }

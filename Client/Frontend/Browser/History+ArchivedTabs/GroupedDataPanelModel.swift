@@ -13,6 +13,7 @@ protocol GroupedDataPanelModel: ObservableObject {
 
     var tabManager: TabManager { get }
     var groupedData: DateGroupedTableData<T> { get set }
+    var emptyDataText: LocalizedStringKey { get }
 
     // Return a Deferred object because history loads data async.
     // Might set up something for ArchivedTabs in the

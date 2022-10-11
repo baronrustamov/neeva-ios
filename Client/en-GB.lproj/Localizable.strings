@@ -365,6 +365,9 @@
 "Cancel anytime" = "Cancel anytime";
 
 /* No comment provided by engineer. */
+"Choose the right plan for you" = "Choose the right plan for you";
+
+/* No comment provided by engineer. */
 "Clear" = "Clear";
 
 /* No comment provided by engineer. */
@@ -727,6 +730,9 @@
 /* No comment provided by engineer. */
 "From the Neeva Community" = "From the Neeva Community";
 
+/* An example query for users to tap on to see results */
+"fruit tart recipes" = "fruit tart recipes";
+
 /* No comment provided by engineer. */
 "Full screen" = "Full screen";
 
@@ -785,15 +791,6 @@
 "History" = "History";
 
 /* No comment provided by engineer. */
-"History List" = "History List";
-
-/* No comment provided by engineer. */
-"History List Empty" = "History List Empty";
-
-/* No comment provided by engineer. */
-"History Search TextField" = "History Search TextField";
-
-/* No comment provided by engineer. */
 "Hours" = "Hours";
 
 /* No comment provided by engineer. */
@@ -843,6 +840,9 @@
 
 /* No comment provided by engineer. */
 "Keep Looking" = "Keep Looking";
+
+/* No comment provided by engineer. */
+"Key" = "Key";
 
 /* No comment provided by engineer. */
 "Kill the clutter" = "Kill the clutter";
@@ -948,6 +948,9 @@
 
 /* Copiable text showing the version on the settings screen */
 "Neeva Browser %@ (%@)" = "Neeva Browser %1$@ (%2$@)";
+
+/* No comment provided by engineer. */
+"Neeva Premium is an account type that unlocks benefits, including insider perks and privacy-protecting tools." = "Neeva Premium is an account type that unlocks benefits, including insider perks and privacy-protecting tools.";
 
 /* No comment provided by engineer. */
 "Neeva puts you in charge of\nyour life online." = "Neeva puts you in charge of\nyour life online.";
@@ -1232,9 +1235,6 @@
 "Remove" = "Remove";
 
 /* No comment provided by engineer. */
-"Remove from group" = "Remove from group";
-
-/* No comment provided by engineer. */
 "Removed From Top Sites" = "Removed From Top Sites";
 
 /* No comment provided by engineer. */
@@ -1308,9 +1308,6 @@
 
 /* No comment provided by engineer. */
 "Search TextField" = "Search TextField";
-
-/* No comment provided by engineer. */
-"Search your history" = "Search your history";
 
 /* No comment provided by engineer. */
 "Searches" = "Searches";
@@ -1528,6 +1525,9 @@
 /* No comment provided by engineer. */
 "Tap to pan and zoom" = "Tap to pan and zoom";
 
+/* An example query for users to tap on to see results */
+"tech news" = "tech news";
+
 /* No comment provided by engineer. */
 "Tell me more" = "Tell me more";
 
@@ -1585,6 +1585,9 @@
 /* No comment provided by engineer. */
 "try again" = "try again";
 
+/* (No Comment) */
+"Try it Free" = "Try it Free";
+
 /* No comment provided by engineer. */
 "Try NeevaScope!" = "Try NeevaScope!";
 
@@ -1631,6 +1634,9 @@
 "Username" = "Username";
 
 /* No comment provided by engineer. */
+"Value" = "Value";
+
+/* No comment provided by engineer. */
 "View Account" = "View Account";
 
 /* No comment provided by engineer. */
@@ -1656,9 +1662,6 @@
 
 /* No comment provided by engineer. */
 "Websites you've closed\nrecently will show up here." = "Websites you've closed\nrecently will show up here.";
-
-/* No comment provided by engineer. */
-"Websites you've visted\nrecently will show up here." = "Websites you've visted\nrecently will show up here.";
 
 /* No comment provided by engineer. */
 "Welcome To Neeva" = "Welcome To Neeva";

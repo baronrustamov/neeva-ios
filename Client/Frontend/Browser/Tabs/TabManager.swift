@@ -144,10 +144,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             self, selector: #selector(prefsDidChange), name: UserDefaults.didChangeNotification,
             object: nil)
 
-        ScreenCaptureHelper.defaultHelper.subscribeToTabUpdates(
-            from: selectedTabPublisher.eraseToAnyPublisher()
-        )
-
         selectedTabSubscription =
             selectedTabPublisher
             .sink { [weak self] tab in
@@ -255,10 +251,10 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
 
     func getTabForUUID(uuid: String) -> Tab? {
         assert(Thread.isMainThread)
-        let filterdTabs = tabs.filter { tab -> Bool in
+        let filteredTabs = tabs.filter { tab -> Bool in
             tab.tabUUID == uuid
         }
-        return filterdTabs.first
+        return filteredTabs.first
     }
 
     // MARK: - Select Tab
@@ -271,14 +267,11 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         tab?.isSelected = true
         selectedTab = tab
 
-        // Make sure to wipe the private tabs if the user has the pref turned on
-        if Defaults[.closeIncognitoTabs], !(tab?.isIncognito ?? false), incognitoTabs.count > 0 {
-            removeAllIncognitoTabs()
-        }
-
         // TODO(darin): This writes to a published variable generating a notification.
         // Are we okay with that happening here?
         incognitoModel.update(isIncognito: tab?.isIncognito ?? isIncognito)
+        removeAllIncognitoTabsForLeavingIncognitoMode(
+            previousWasIncognito: previous?.isIncognito ?? false)
 
         store.preserveTabs(
             tabs, archivedTabs: archivedTabs, existingSavedTabs: recentlyClosedTabsFlattened,
@@ -365,18 +358,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         }
     }
 
-    // Called by other classes to signal that they are entering/exiting private mode
-    // This is called by TabTrayVC when the private mode button is pressed and BEFORE we've switched to the new mode
-    // we only want to remove all private tabs when leaving PBM and not when entering.
-    func willSwitchTabMode(leavingPBM: Bool) {
-        // Clear every time entering/exiting this mode.
-        Tab.ChangeUserAgent.privateModeHostList = Set<String>()
-
-        if Defaults[.closeIncognitoTabs] && leavingPBM {
-            removeAllIncognitoTabs()
-        }
-    }
-
     func flagAllTabsToReload() {
         for tab in tabs {
             if tab == selectedTab {
@@ -395,7 +376,9 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     }
 
     func toggleIncognitoMode(
-        fromTabTray: Bool = true, clearSelectedTab: Bool = true, openLazyTab: Bool = true,
+        fromTabTray: Bool = true,
+        clearSelectedTab: Bool = true,
+        openLazyTab: Bool = true,
         selectNewTab: Bool = false
     ) {
         let bvc = SceneDelegate.getBVC(with: scene)
@@ -406,6 +389,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         }
 
         incognitoModel.toggle()
+        removeAllIncognitoTabsForLeavingIncognitoMode(previousWasIncognito: !isIncognito)
 
         if selectNewTab {
             if let mostRecentTab = mostRecentTab(inTabs: isIncognito ? incognitoTabs : normalTabs) {
@@ -428,7 +412,8 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     ) {
         if isIncognito != incognito {
             toggleIncognitoMode(
-                fromTabTray: fromTabTray, clearSelectedTab: clearSelectedTab,
+                fromTabTray: fromTabTray,
+                clearSelectedTab: clearSelectedTab,
                 openLazyTab: openLazyTab)
         }
     }
@@ -1155,9 +1140,23 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         removeTabs(tabs, showToast: false)
     }
 
+    // This function is strictly used for clearing all Incognito
+    // tabs after the user exits Incognito Mode (if this behavior
+    // is set in Preferences).
     func removeAllIncognitoTabs() {
+        // Clear the list of Desktop Mode sites that is saved in memory.
+        Tab.ChangeUserAgent.incognitoModeHostList.removeAll()
+
         removeTabs(incognitoTabs)
         incognitoConfiguration = TabManager.makeWebViewConfig(isIncognito: true)
+    }
+
+    /// If the user has the `closeIncognitoTabs` enabled, delete all incognito tabs.
+    /// Used when toggling out of incognito mode, or selecting a normal tab.
+    func removeAllIncognitoTabsForLeavingIncognitoMode(previousWasIncognito: Bool) {
+        if Defaults[.closeIncognitoTabs], !isIncognito, previousWasIncognito {
+            removeAllIncognitoTabs()
+        }
     }
 
     // MARK: Recently Closed Tabs
@@ -1369,10 +1368,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             for: scene, clearIncognitoTabs: Defaults[.closeIncognitoTabs], tabManager: self)
 
         if var tabToSelect = tabToSelect {
-            if Defaults[.lastSessionPrivate], !tabToSelect.isIncognito {
-                tabToSelect = addTab(isIncognito: true, notify: false)
-            }
-
             selectTab(tabToSelect, notify: true)
         }
 

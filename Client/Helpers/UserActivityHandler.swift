@@ -50,6 +50,7 @@ class UserActivityHandler {
         userActivity.title = tab.title
         // Indicate activity should be added to spotlight index
         userActivity.isEligibleForSearch = Defaults[.makeActivityAvailForSearch]
+        userActivity.isEligibleForPrediction = Defaults[.makeActivityAvailForSearch]
         // Carry url payload instead of using webpageURL in case neeva app is not DB
         userActivity.requiredUserInfoKeys = ["url"]
         userActivity.userInfo = ["url": url.absoluteString]

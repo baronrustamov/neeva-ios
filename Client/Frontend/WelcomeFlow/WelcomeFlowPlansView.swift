@@ -9,15 +9,15 @@ struct WelcomeFlowPlansView: View {
     @ObservedObject var model: WelcomeFlowModel
 
     var premiumBullets = [
-        ("Browser + ad blocker", ""),
-        ("Tracking prevention", ""),
+        ("Browser + ad blocker + tracking prevention", ""),
         ("Unlimited ad-free, private search", ""),
-        ("Premium password manager + VPN", ""),
+        ("Unlimited devices", ""),
+        ("Password manager + VPN", ""),
     ]
     var freeBullets = [
-        ("Browser + ad blocker", ""),
-        ("Tracking prevention", ""),
-        ("Ad-free, private search", "50 searches/week"),
+        ("Browser + ad blocker + tracking prevention", ""),
+        ("Limited Ad-free, private search", "50 searches/month"),
+        ("Limited devices", ""),
     ]
     var bullets: [(String, String)] {
         if model.currentPremiumPlan == nil {
@@ -29,7 +29,7 @@ struct WelcomeFlowPlansView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            WelcomeFlowHeaderView(text: "Get Premium for maximum privacy")
+            WelcomeFlowHeaderView(text: "Choose the right plan for you")
                 .padding(.bottom, 20)
 
             HStack(spacing: 0) {
@@ -65,9 +65,7 @@ struct WelcomeFlowPlansView: View {
                     model.currentPremiumPlan = nil
                 }
 
-                if #available(iOS 15.0, *),
-                    let annualProduct = PremiumStore.shared.getProductForPlan(.annual)
-                {
+                if let annualProduct = PremiumStore.shared.getProductForPlan(.annual) {
                     VStack {
                         Text("Premium\nAnnual")
                             .font(.system(size: 16, weight: .bold))
@@ -103,9 +101,7 @@ struct WelcomeFlowPlansView: View {
                     }
                 }
 
-                if #available(iOS 15.0, *),
-                    let monthlyProduct = PremiumStore.shared.getProductForPlan(.monthly)
-                {
+                if let monthlyProduct = PremiumStore.shared.getProductForPlan(.monthly) {
                     VStack {
                         Text("Premium\nMonthly")
                             .font(.system(size: 16, weight: .bold))
@@ -165,10 +161,9 @@ struct WelcomeFlowPlansView: View {
                 Spacer()
 
                 HStack {
-                    if #available(iOS 15.0, *) {
-                        Text(PremiumStore.shared.priceText(model.currentPremiumPlan)).fontWeight(
-                            .bold)
-                    }
+                    Text(PremiumStore.shared.priceText(model.currentPremiumPlan))
+                        .fontWeight(.bold)
+
                     if let termText = PremiumHelpers.termText(model.currentPremiumPlan),
                         termText != ""
                     {
@@ -218,9 +213,8 @@ struct WelcomeFlowPlansView: View {
                             if !NeevaUserInfo.shared.hasLoginCookie() {
                                 model.changeScreenTo(.signUp)
                             } else {
-                                if #available(iOS 15.0, *),
-                                    let product = PremiumStore.shared.getProductForPlan(
-                                        model.currentPremiumPlan)
+                                if let product = PremiumStore.shared.getProductForPlan(
+                                    model.currentPremiumPlan)
                                 {
                                     PremiumStore.shared.purchase(
                                         product, reloadUserInfo: true,
@@ -244,6 +238,13 @@ struct WelcomeFlowPlansView: View {
                 )
                 .buttonStyle(.neeva(.primary))
 
+                if let subText = PremiumHelpers.primaryActionSubText(model.currentPremiumPlan),
+                    subText != ""
+                {
+                    Text(subText)
+                        .frame(maxWidth: .infinity)
+                }
+
                 if !NeevaUserInfo.shared.hasLoginCookie() {
                     Button(
                         action: {
@@ -264,8 +265,16 @@ struct WelcomeFlowPlansView: View {
 
             Spacer()
 
-            WelcomeFlowPrivacyAndTermsLinksView()
-                .frame(maxWidth: .infinity, alignment: .center)
+            Group {
+                SafariVCLink(
+                    "Subscribe and help fight climate change",
+                    url: NeevaConstants.appClimatePledgeURL
+                )
+                .frame(maxWidth: .infinity)
+
+                WelcomeFlowPrivacyAndTermsLinksView()
+                    .frame(maxWidth: .infinity, alignment: .center)
+            }
 
             Spacer()
         }
@@ -276,17 +285,16 @@ struct WelcomeFlowPlansView: View {
              if this screen appears and we have a login cookie, we
              trigger the purchase based on the users original choice
              */
-            if NeevaUserInfo.shared.hasLoginCookie() {
-                if #available(iOS 15.0, *),
-                    let product = PremiumStore.shared.getProductForPlan(model.currentPremiumPlan)
-                {
-                    PremiumStore.shared.purchase(
-                        product, reloadUserInfo: true,
-                        onPending: self.onPurchasePending,
-                        onCancelled: self.onPurchaseCancelled,
-                        onError: self.onPurchaseError,
-                        onSuccess: self.onPurchaseSuccess)
-                }
+            if NeevaUserInfo.shared.hasLoginCookie(),
+                let product = PremiumStore.shared.getProductForPlan(model.currentPremiumPlan)
+            {
+                PremiumStore.shared.purchase(
+                    product, reloadUserInfo: true,
+                    onPending: self.onPurchasePending,
+                    onCancelled: self.onPurchaseCancelled,
+                    onError: self.onPurchaseError,
+                    onSuccess: self.onPurchaseSuccess
+                )
             }
 
             model.flushLoggingQueue()

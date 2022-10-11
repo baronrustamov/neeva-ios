@@ -8,6 +8,7 @@ import Foundation
 import Shared
 
 public enum LogConfig {
+
     // MARK: - Interactions
     public enum Interaction: String {
         /// Open tracking shield
@@ -18,11 +19,6 @@ public enum LogConfig {
         case TapReload
         /// Tap stop reload page
         case TapStopReload
-
-        // MARK: Screen Capture
-        case didTakeScreenshot
-        case screenCaptureStarted
-        case screenCaptureFinished
 
         // MARK: bottom nav
         /// Click tab button to see all available tabs
@@ -152,6 +148,12 @@ public enum LogConfig {
         case LoginAfterFirstRun
         /// Page load at first run and before login
         case FirstRunPageLoad
+        /// Navigation outbound, non neeva domain
+        case NavigationOutbound
+        /// Navigation inbound, within neeva domain
+        case NavigationInbound
+        /// First run search in preview mode
+        case PreviewSearch
         /// Sign in from promo card
         case PromoSignin
         /// Sign up on preview promo card
@@ -376,6 +378,23 @@ public enum LogConfig {
         case CheatsheetQueryFallback
         case OpenCheatsheetSupport
         case CheatsheetFetchError
+        // Without Journey Associated, shrinked version
+        case SkOpenCheatsheet
+        case SkCloseCheatsheet
+        case SkCheatsheetEducationImpressionOnSRP
+        case SkCheatsheetEducationImpressionOnPage
+        case SkAckCheatsheetEducationOnSRP
+        case SkAckCheatsheetEducationOnPage
+        case SkShowCheatsheetEducationOnSRP
+        case SkShowCheatsheetEducationOnPage
+        case SkShowCheatsheetContent
+        case SkLoadCheatsheet
+        case SkCheatsheetUGCStatsForPage
+        case SkCheatsheetEmpty
+        case SkOpenLinkFromCheatsheet
+        case SkCheatsheetQueryFallback
+        case SkOpenCheatsheetSupport
+        case SkCheatsheetFetchError
 
         // MARK: recipe cheatsheet
         case RecipeCheatsheetShowMoreRecipe
@@ -414,11 +433,83 @@ public enum LogConfig {
         case PremiumPurchaseUnverified
         case PremiumPurchaseVerified
         case PremiumPurchaseError
+        case PremiumSubscriptionFixFailed
         case PreviousScreenClick
         case ScreenImpression
         case SignInClick
-        case StorefrontWasNil
+        case SafariVCLinkClick
     }
+
+    // When we add/remove a new interaction to this list make sure
+    // it's updated on the server side as well
+    public static let sessionIDEventWhiteList: Set =
+        [
+            Interaction.AppEnterForeground,
+            Interaction.FirstRunImpression,
+            Interaction.FirstRunPageLoad,
+            Interaction.FirstNavigation,
+            Interaction.OpenDefaultBrowserURL,
+            Interaction.GetStartedInWelcome,
+            Interaction.DefaultBrowserInterstitialImp,
+            Interaction.DefaultBrowserOnboardingInterstitialOpen,
+            Interaction.DefaultBrowserOnboardingInterstitialOpenAgain,
+            Interaction.DefaultBrowserOnboardingInterstitialSkip,
+            Interaction.DefaultBrowserOnboardingInterstitialRemind,
+            Interaction.DefaultBrowserOnboardingInterstitialContinue,
+            Interaction.DefaultBrowserOnboardingInterstitialVideo,
+            Interaction.OpenLocalNotification,
+            Interaction.AuthorizeSystemNotification,
+            Interaction.DenySystemNotification,
+            Interaction.AppEnterForeground,
+            Interaction.PremiumPurchaseVerified,
+            Interaction.StartExperiment,
+            Interaction.AppCrashWithPageLoad,
+            Interaction.AppCrashWithCrashReporter,
+            Interaction.LowMemoryWarning,
+            Interaction.FirstRunSignupWithApple,
+            Interaction.FirstRunOtherSignUpOptions,
+            Interaction.FirstRunSignin,
+            Interaction.PreviewSearch,
+            Interaction.NavigationOutbound,
+            Interaction.NavigationInbound,
+            Interaction.PreviewModePromoSignup,
+            Interaction.DefaultBrowserInterstitialRestoreImp,
+            Interaction.SpacesRecommendedDetailUIVisited,
+            Interaction.PromoCardAppear,
+            Interaction.PromoDefaultBrowser,
+            Interaction.CloseDefaultBrowserPromo,
+            Interaction.OpenNotification,
+            Interaction.RegisterNotificationToken,
+            Interaction.BrowsePlanClick,
+            Interaction.ChoosePlanClick,
+            Interaction.PremiumPurchaseCancel,
+            Interaction.PremiumPurchasePending,
+            Interaction.PremiumPurchaseUnverified,
+            Interaction.PreviousScreenClick,
+            Interaction.ScreenImpression,
+            Interaction.SignInClick,
+            Interaction.SpacesLoginRequired,
+            Interaction.SpacesRecommendedDetailUIVisited,
+            Interaction.CheatsheetUGCStatsForSession,
+            Interaction.CheatsheetPopoverImpression,
+            Interaction.CheatsheetUGCIndicatorImpression,
+            Interaction.SkOpenCheatsheet,
+            Interaction.SkCloseCheatsheet,
+            Interaction.SkCheatsheetEducationImpressionOnSRP,
+            Interaction.SkCheatsheetEducationImpressionOnPage,
+            Interaction.SkAckCheatsheetEducationOnSRP,
+            Interaction.SkAckCheatsheetEducationOnPage,
+            Interaction.SkShowCheatsheetEducationOnSRP,
+            Interaction.SkShowCheatsheetEducationOnPage,
+            Interaction.SkShowCheatsheetContent,
+            Interaction.SkLoadCheatsheet,
+            Interaction.SkCheatsheetUGCStatsForPage,
+            Interaction.SkCheatsheetEmpty,
+            Interaction.SkOpenLinkFromCheatsheet,
+            Interaction.SkCheatsheetQueryFallback,
+            Interaction.SkOpenCheatsheetSupport,
+            Interaction.SkCheatsheetFetchError,
+        ]
 
     /// Specify a comma separated string with these values to
     /// enable specific logging category on the server:
@@ -497,28 +588,7 @@ public enum LogConfig {
     public static func shouldAddSessionID(
         for path: LogConfig.Interaction
     ) -> Bool {
-        let category = LogConfig.category(for: path)
-
-        let validCategories: Set<LogConfig.InteractionCategory> = [
-            .FirstRun,
-            .Stability,
-            .PromoCard,
-            .Notification,
-            .Cheatsheet,
-            .CookieCutter,
-            .UI,
-            .OverflowMenu,
-            .Generic,
-        ]
-
-        let validInteraction =
-            path == .SpacesLoginRequired || path == .SpacesRecommendedDetailUIVisited
-
-        if path == .ToggleTrackingProtection {
-            return false
-        }
-
-        return validCategories.contains(category) || validInteraction
+        return sessionIDEventWhiteList.contains(path)
     }
 
     // MARK: - Category
@@ -547,10 +617,6 @@ public enum LogConfig {
         case .TurnOffGlobalBlockTracking: return .UI
         case .TurnOnGlobalAdBlockTracking: return .UI
         case .TurnOffGlobalAdBlockTracking: return .UI
-
-        case .didTakeScreenshot: return .UI
-        case .screenCaptureStarted: return .UI
-        case .screenCaptureFinished: return .UI
 
         // MARK: - OverflowMenu
         case .OpenDownloads: return .OverflowMenu
@@ -628,6 +694,9 @@ public enum LogConfig {
         case .PreviewSampleQueryClicked: return .FirstRun
         case .PreviewTapFakeSearchInput: return .FirstRun
         case .PreviewHomeSignin: return .FirstRun
+        case .PreviewSearch: return .FirstRun
+        case .NavigationOutbound: return .FirstRun
+        case .NavigationInbound: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialSkip: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialContinueToNeeva: return .FirstRun
         case .DefaultBrowserOnboardingInterstitialRemind: return .FirstRun
@@ -766,6 +835,23 @@ public enum LogConfig {
         case .CheatsheetUGCStatsForSession: return .Cheatsheet
         case .CheatsheetUGCHitNoRedditDataV2: return .Cheatsheet
 
+        case .SkOpenCheatsheet: return .Cheatsheet
+        case .SkCloseCheatsheet: return .Cheatsheet
+        case .SkCheatsheetEducationImpressionOnSRP: return .Cheatsheet
+        case .SkCheatsheetEducationImpressionOnPage: return .Cheatsheet
+        case .SkAckCheatsheetEducationOnSRP: return .Cheatsheet
+        case .SkAckCheatsheetEducationOnPage: return .Cheatsheet
+        case .SkShowCheatsheetEducationOnSRP: return .Cheatsheet
+        case .SkShowCheatsheetEducationOnPage: return .Cheatsheet
+        case .SkShowCheatsheetContent: return .Cheatsheet
+        case .SkLoadCheatsheet: return .Cheatsheet
+        case .SkCheatsheetUGCStatsForPage: return .Cheatsheet
+        case .SkCheatsheetEmpty: return .Cheatsheet
+        case .SkOpenLinkFromCheatsheet: return .Cheatsheet
+        case .SkCheatsheetQueryFallback: return .Cheatsheet
+        case .SkOpenCheatsheetSupport: return .Cheatsheet
+        case .SkCheatsheetFetchError: return .Cheatsheet
+
         // MARK: - TabGroup
         case .tabGroupExpanded: return .TabGroup
         case .tabGroupCollapsed: return .TabGroup
@@ -800,10 +886,11 @@ public enum LogConfig {
         case .PremiumPurchaseUnverified: return .Generic
         case .PremiumPurchaseVerified: return .Generic
         case .PremiumPurchaseError: return .Generic
+        case .PremiumSubscriptionFixFailed: return .Generic
         case .PreviousScreenClick: return .Generic
         case .ScreenImpression: return .Generic
         case .SignInClick: return .Generic
-        case .StorefrontWasNil: return .Generic
+        case .SafariVCLinkClick: return .Generic
         }
     }
 
@@ -865,7 +952,7 @@ public enum LogConfig {
         /// Generic attributes
         public static let screenName = "ScreenName"
         public static let source = "Source"
-        public static let locale = "Locale"
+        public static let safariVCLinkURL = "SafariVCLinkURL"
 
         /// Premium attributes
         public static let subscriptionPlan = "SubscriptionPlan"

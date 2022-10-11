@@ -55,7 +55,7 @@ enum NavigationPath {
             self = .url(
                 webURL: NavigationPath.maybeRewriteURL(url, components) ?? url,
                 // Use the last browsing mode the user was in
-                isIncognito: Defaults[.lastSessionPrivate]
+                isIncognito: Defaults[.lastKnownSessionWasIncognito]
             )
         } else if urlString.starts(with: "\(scheme)://space-digest") {
             self = .spaceDigest
@@ -66,14 +66,14 @@ enum NavigationPath {
             if let ids = components.valueForQuery("updatedItemIds") {
                 updatedItemIds = ids.components(separatedBy: ",")
             }
-            self = .space(spaceId, updatedItemIds, Defaults[.lastSessionPrivate])
+            self = .space(spaceId, updatedItemIds, Defaults[.lastKnownSessionWasIncognito])
         } else if urlString.starts(with: "\(scheme)://fast-tap"),
             let query =
                 components.valueForQuery("query")?.replacingOccurrences(of: "+", with: " ")
         {
             self = .fastTap(query, components.valueForQuery("no-delay") != nil)
         } else if urlString.starts(with: "\(scheme)://configure-news-provider") {
-            self = .configNewsProvider(isIncognito: Defaults[.lastSessionPrivate])
+            self = .configNewsProvider(isIncognito: Defaults[.lastKnownSessionWasIncognito])
         } else if urlString.starts(with: "\(scheme)://wc?uri=") {
             return nil
 
@@ -162,20 +162,21 @@ enum NavigationPath {
         // Unless the `open-url` URL specifies a `private` parameter,
         // use the last browsing mode the user was in.
         let isIncognito =
-            Bool(components.valueForQuery("private") ?? "") ?? Defaults[.lastSessionPrivate]
+            Bool(components.valueForQuery("private") ?? "")
+            ?? Defaults[.lastKnownSessionWasIncognito]
         return .url(webURL: url, isIncognito: isIncognito)
     }
 
     private static func openCopiedUrl() -> NavigationPath? {
         guard let url = UIPasteboard.general.url else {
             if let string = UIPasteboard.general.string, let url = URL(string: string) {
-                return .url(webURL: url, isIncognito: Defaults[.lastSessionPrivate])
+                return .url(webURL: url, isIncognito: Defaults[.lastKnownSessionWasIncognito])
             } else {
                 return nil
             }
         }
 
-        return .url(webURL: url, isIncognito: Defaults[.lastSessionPrivate])
+        return .url(webURL: url, isIncognito: Defaults[.lastKnownSessionWasIncognito])
     }
 
     private static func handleCloseIncognitoTabs(with bvc: BrowserViewController) {

@@ -131,12 +131,9 @@ struct BrowserView: View {
             }
         )
         .environment(
-            \.openArchivedTabsPanelView,
-            {
-                if !FeatureFlag[.archivedTabsRedesign] {
-                    bvc.present(
-                        ArchivedTabsPanelViewController(browserModel: browserModel), animated: true)
-                }
+            \.openInNewTab,
+            { url, _ in
+                bvc.openURLInNewTab(url)
             }
         )
         .environmentObject(browserModel)

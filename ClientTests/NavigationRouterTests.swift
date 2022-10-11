@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Defaults
 import Foundation
 import WebKit
 import XCTest
@@ -9,7 +10,6 @@ import XCTest
 @testable import Client
 
 class NavigationRouterTests: XCTestCase {
-
     var appScheme: String {
         let urlTypes = Bundle.main.object(forInfoDictionaryKey: "CFBundleURLTypes") as! [AnyObject]
         let urlType = urlTypes.first as! [String: AnyObject]
@@ -18,6 +18,9 @@ class NavigationRouterTests: XCTestCase {
     }
 
     func testOpenURLScheme() {
+        // Reset incognito state from previous tests.
+        Defaults[.lastKnownSessionWasIncognito] = false
+
         let url = "http://google.com?a=1&b=2&c=foo%20bar".escape()!
         let appURL = "\(appScheme)://open-url?url=\(url)"
         let navItem = NavigationPath(url: URL(string: appURL)!)!

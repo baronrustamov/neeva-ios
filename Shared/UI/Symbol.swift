@@ -113,9 +113,15 @@ public struct Symbol: View {
     // since this comes first, Neeva custom icons take priority over SF Symbols with the same name
     public init(
         _ nicon: Nicon, size: CGFloat = Symbol.defaultSize, weight: NiconFont = .regular,
-        relativeTo: Font.TextStyle = .body, label: String
+        relativeTo: Font.TextStyle? = .body, label: String
     ) {
-        self.icon = .neeva(nicon, Font.custom(weight.rawValue, size: size, relativeTo: relativeTo))
+        var font: Font
+        if let relativeTo = relativeTo {
+            font = Font.custom(weight.rawValue, size: size, relativeTo: relativeTo)
+        } else {
+            font = Font.custom(weight.rawValue, fixedSize: size)
+        }
+        self.icon = .neeva(nicon, font)
         self.label = label
     }
 

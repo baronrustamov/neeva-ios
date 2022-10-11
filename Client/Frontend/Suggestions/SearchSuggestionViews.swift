@@ -269,6 +269,8 @@ struct QuerySuggestionView: View {
                     width: SuggestionViewUX.ThumbnailSize,
                     height: SuggestionViewUX.ThumbnailSize
                 )
+                // without this, the view does not refresh properly with latest SDWebImage library
+                .id(imageUrl)
         } else if AnnotationType(annotation: suggestion.annotation) == .dictionary
             && suggestion.annotation?.dictionaryInfo != nil
         {

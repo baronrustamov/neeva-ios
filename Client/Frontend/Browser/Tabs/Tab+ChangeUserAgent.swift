@@ -7,7 +7,7 @@ import Shared
 extension Tab {
     class ChangeUserAgent {
         // Track these in-memory only
-        static var privateModeHostList = Set<String>()
+        static var incognitoModeHostList = Set<String>()
 
         private static let file: URL = {
             return FileManager.default.containerURL(
@@ -34,7 +34,7 @@ extension Tab {
             if baseDomainList.contains(baseDomain) {
                 return true
             }
-            return isIncognito ? privateModeHostList.contains(baseDomain) : false
+            return isIncognito ? incognitoModeHostList.contains(baseDomain) : false
         }
 
         static func updateDomainList(forUrl url: URL, isChangedUA: Bool, isIncognito: Bool) {
@@ -42,10 +42,10 @@ extension Tab {
 
             if isIncognito {
                 if isChangedUA {
-                    ChangeUserAgent.privateModeHostList.insert(baseDomain)
+                    ChangeUserAgent.incognitoModeHostList.insert(baseDomain)
                     return
                 } else {
-                    ChangeUserAgent.privateModeHostList.remove(baseDomain)
+                    ChangeUserAgent.incognitoModeHostList.remove(baseDomain)
                     // Continue to next section and try remove it from `hostList` also.
                 }
             }

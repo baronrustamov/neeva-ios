@@ -145,14 +145,8 @@ struct SuggestedSiteView: View {
                 description: site.metadata?.description,
                 shareTarget: shareTargetView)
 
-            if #available(iOS 15.0, *) {
-                Button(role: .destructive, action: { isDeleting = true }) {
-                    Label("Remove", systemSymbol: .trash)
-                }
-            } else {
-                Button(action: { isDeleting = true }) {
-                    Label("Remove", systemSymbol: .trash)
-                }
+            Button(role: .destructive, action: { isDeleting = true }) {
+                Label("Remove", systemSymbol: .trash)
             }
 
             if FeatureFlag[.pinToTopSites] {
