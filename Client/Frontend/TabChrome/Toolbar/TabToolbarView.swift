@@ -12,7 +12,7 @@ struct TabToolbarView: View {
     @EnvironmentObject private var incognitoModel: IncognitoModel
 
     let performAction: (ToolbarAction) -> Void
-    
+
     @ViewBuilder
     private var neevaButton: some View {
         TabToolbarButtons.Neeva(iconWidth: 22)
@@ -27,7 +27,7 @@ struct TabToolbarView: View {
                 onBack: { performAction(.back) },
                 onLongPress: { performAction(.longPressBackForward) }
             )
-            
+
             TabToolbarButtons.OverflowMenu(
                 weight: .medium,
                 action: {
@@ -35,9 +35,9 @@ struct TabToolbarView: View {
                 },
                 identifier: "TabOverflowButton"
             )
-            
+
             neevaButton
-            
+
             if incognitoModel.isIncognito && FeatureFlag[.incognitoQuickClose] {
                 TabToolbarButtons.CloseTab(
                     action: { performAction(.closeTab) }
@@ -47,7 +47,7 @@ struct TabToolbarView: View {
                     weight: .medium, action: { performAction(.addToSpace) }
                 )
             }
-            
+
             TabToolbarButtons.ShowTabs(
                 weight: .medium,
                 action: { performAction(.showTabs) }
@@ -59,15 +59,15 @@ struct TabToolbarView: View {
         .accessibilityIdentifier("TabToolbar")
         .accessibilityLabel("Toolbar")
     }
-    
+
     var body: some View {
         VStack(spacing: 0) {
             Color.ui.adaptive.separator
                 .frame(height: 0.5)
                 .ignoresSafeArea()
-            
+
             normalTabToolbar
-            
+
             Spacer()
         }
         .accentColor(.label)
