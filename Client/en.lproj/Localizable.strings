@@ -147,22 +147,27 @@
 "fruit tart recipes" = "fruit tart recipes";
 
 /* Bullet point text to describe Neeva benefit */
-"Browser + ad blocker" = "Browser + ad blocker";
+"Browser + ad blocker + tracking prevention" = "Browser + ad blocker + tracking prevention";
 
 /* Bullet point text to describe Neeva benefit */
 "Tracking prevention" = "Tracking prevention";
 
 /* Bullet point text to describe Neeva premium benefit */
 "Unlimited ad-free, private search" = "Unlimited ad-free, private search";
+"Limited Ad-free, private search" = "Limited Ad-free, private search";
 
 /* Bullet point text to describe Neeva premium benefit */
-"Premium password manager + VPN" = "Premium password manager + VPN";
+"Password manager + VPN" = "Password manager + VPN";
 
 /* Bullet point text to describe Neeva benefit */
 "Ad-free, private search" = "Ad-free, private search";
 
 /* Bullet point text to describe Neeva free account benefit */
-"50 searches/week" = "50 searches/week";
+"50 searches/month" = "50 searches/month";
+
+/* Bullet point text to describe Neeva device limits */
+"Unlimited devices" = "Unlimited devices";
+"Limited devices" = "Limited devices";
 
 /* Button to try Neeva for free */
 "Try it Free" = "Try it Free";

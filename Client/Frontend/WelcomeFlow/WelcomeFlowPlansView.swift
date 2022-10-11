@@ -9,15 +9,15 @@ struct WelcomeFlowPlansView: View {
     @ObservedObject var model: WelcomeFlowModel
 
     var premiumBullets = [
-        ("Browser + ad blocker", ""),
-        ("Tracking prevention", ""),
+        ("Browser + ad blocker + tracking prevention", ""),
         ("Unlimited ad-free, private search", ""),
-        ("Premium password manager + VPN", ""),
+        ("Unlimited devices", ""),
+        ("Password manager + VPN", ""),
     ]
     var freeBullets = [
-        ("Browser + ad blocker", ""),
-        ("Tracking prevention", ""),
-        ("Ad-free, private search", "50 searches/week"),
+        ("Browser + ad blocker + tracking prevention", ""),
+        ("Limited Ad-free, private search", "50 searches/month"),
+        ("Limited devices", ""),
     ]
     var bullets: [(String, String)] {
         if model.currentPremiumPlan == nil {
