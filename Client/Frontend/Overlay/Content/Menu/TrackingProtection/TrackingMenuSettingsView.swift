@@ -27,20 +27,14 @@ struct TrackingSettingsSectionBlock: View {
 
     var body: some View {
         Section(
-            header: Text("TRACKERS"),
-            footer: contentBlockingStrength == BlockingStrength.easyPrivacy.rawValue
-                ? Text(
-                    "Blocks most trackers. Minimizes disruption to ads and other functionality."
-                )
-                : Text(
-                    "Blocks more trackers. May disrupt ads and other functionality on some sites."
-                )
+            header: Text("TRACKER AND AD BLOCKING")
         ) {
             Picker("Protection Mode", selection: $contentBlockingStrength) {
                 ForEach(BlockingStrength.allCases) { strength in
-                    VStack(alignment: .leading) {
-                        Text(strength.name.capitalized)
-                    }
+                    DetailedSettingsLabel(
+                        title: LocalizedStringKey(strength.name.capitalized),
+                        description: strength.description
+                    )
                     .tag(strength.rawValue)
                 }
             }
@@ -50,20 +44,22 @@ struct TrackingSettingsSectionBlock: View {
                 }
             }
             .labelsHidden()
-            .pickerStyle(.segmented)
-            .listRowBackground(Color.clear)
-            .padding(.horizontal, -10)
+            .pickerStyle(.inline)
         }
 
         Section {
-            Toggle("Ad Blocking", isOn: $adBlockEnabled)
-                .onChange(of: adBlockEnabled) { _ in
-                    if adBlockEnabled {
-                        ClientLogger.shared.logCounter(.AdBlockEnabled)
-                    }
+            Toggle(isOn: $adBlockEnabled) {
+                DetailedSettingsLabel(
+                    title: "Ad Blocking",
+                    description: "Only available in Strict mode")
+            }
+            .onChange(of: adBlockEnabled) { _ in
+                if adBlockEnabled {
+                    ClientLogger.shared.logCounter(.AdBlockEnabled)
                 }
-                .disabled(
-                    contentBlockingStrength != BlockingStrength.easyPrivacyStrict.rawValue)
+            }
+            .disabled(
+                contentBlockingStrength != BlockingStrength.easyPrivacyStrict.rawValue)
         }
     }
 }

@@ -4,6 +4,7 @@
 
 import Defaults
 import Shared
+import SwiftUI
 
 extension Defaults.Keys {
     // TODO: migrate to a new naming without dot so publisher/observer work
@@ -26,7 +27,7 @@ enum BlockingStrength: String, Codable, CaseIterable, Identifiable {
         }
     }
 
-    var description: String {
+    var description: LocalizedStringKey {
         switch self {
         case .easyPrivacy:
             return "Blocks many trackers. Minimizes disruption to ads and other funtionality."

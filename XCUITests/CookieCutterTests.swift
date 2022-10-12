@@ -81,7 +81,7 @@ class CookieCutterTests: BaseTestCase {
 
         goToTrackingProtectionMenu()
         app.buttons["Neeva Shield Settings"].tap()
-        waitForExistence(app.switches["Ad Blocking"])
+        waitForExistence(app.staticTexts["Ad Blocking"])
     }
 
     func testCheckReloadToastShowsDisablingAllCookies() {
@@ -89,17 +89,16 @@ class CookieCutterTests: BaseTestCase {
         app.swipeUp()
         app.buttons["Neeva Shield"].tap()
 
-        waitForExistence(app.staticTexts["Accept Non-essential Cookies"])
-        app.staticTexts["Accept Non-essential Cookies"].tap()
+        waitForExistence(app.switches["acceptCookie"])
+        app.switches["acceptCookie"].tap()
+
+        app.swipeUp()
 
         waitForExistence(app.switches[Self.nonEssentialCookieSwitches[0]])
 
         for i in 0...Self.nonEssentialCookieSwitches.count - 1 {
             app.switches[Self.nonEssentialCookieSwitches[i]].firstMatch.tap()
         }
-
-        waitForExistence(app.buttons["Reload"])
-        app.buttons["Reload"].firstMatch.tap(force: true)
 
         waitForExistence(app.switches["Cookie Popups"])
         XCTAssertTrue(app.switches["Cookie Popups"].firstMatch.value as! String == "1")

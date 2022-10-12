@@ -154,6 +154,7 @@
 
 /* Bullet point text to describe Neeva premium benefit */
 "Unlimited ad-free, private search" = "Unlimited ad-free, private search";
+
 "Limited Ad-free, private search" = "Limited Ad-free, private search";
 
 /* Bullet point text to describe Neeva premium benefit */
@@ -167,6 +168,7 @@
 
 /* Bullet point text to describe Neeva device limits */
 "Unlimited devices" = "Unlimited devices";
+
 "Limited devices" = "Limited devices";
 
 /* Button to try Neeva for free */
@@ -174,3 +176,7 @@
 
 /* Subtitle text on the plan screen to specify our trial duration */
 "7 Day Free Trial" = "7 Day Free Trial";
+
+"Standard" = "Standard";
+
+"Strict" = "Strict";

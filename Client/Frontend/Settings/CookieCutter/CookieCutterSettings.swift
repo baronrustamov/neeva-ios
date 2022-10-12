@@ -9,8 +9,24 @@ struct CookieCutterSettings: View {
     @Environment(\.onOpenURL) var openURL
     @EnvironmentObject var cookieCutterModel: CookieCutterModel
 
-    @State var showNonEssentialCookieSettings = false
     @State var cookieCutterEnabled: Bool
+
+    @ViewBuilder
+    var cookieCutterFooter: some View {
+        if cookieCutterModel.cookieNotices == CookieNotices.declineNonEssential {
+            VStack(alignment: .leading) {
+                Text(
+                    "Essential cookies are used by sites to remember things like your login information and preferences. These cookies cannot be blocked by the extension."
+                )
+
+                Button {
+                    openURL(NeevaConstants.cookieCutterHelpURL)
+                } label: {
+                    Text("Learn More").withFont(.bodyMedium)
+                }
+            }
+        }
+    }
 
     var body: some View {
         List {
@@ -29,45 +45,26 @@ struct CookieCutterSettings: View {
             }
 
             if cookieCutterEnabled {
+                TrackingSettingsSectionBlock()
+
                 Section(
                     header: Text("COOKIE POPUPS"),
-                    footer:
-                        VStack(alignment: .leading) {
-                            Text(
-                                "Essential cookies are used by sites to remember things like your login information and preferences. These cookies cannot be blocked by the extension."
-                            )
-
-                            Button {
-                                openURL(NeevaConstants.cookieCutterHelpURL)
-                            } label: {
-                                Text("Learn More")
-                            }
-                        }
+                    footer: cookieCutterFooter
                 ) {
                     Picker("", selection: $cookieCutterModel.cookieNotices) {
                         Text("Decline Non-essential Cookies")
+                            .accessibility(identifier: "declineCookie")
                             .tag(CookieNotices.declineNonEssential)
-
-                        NavigationLink(isActive: $showNonEssentialCookieSettings) {
-                            NonEssentialCookieSettings()
-                                .environmentObject(cookieCutterModel)
-                        } label: {
-                            Text("Accept Non-essential Cookies")
-                        }
-                        .tag(CookieNotices.userSelected)
-                        .highPriorityGesture(
-                            TapGesture().onEnded { _ in
-                                DispatchQueue.main.async {
-                                    showNonEssentialCookieSettings = true
-                                }
-
-                                cookieCutterModel.cookieNotices = .userSelected
-                            }
-                        )
+                        Text("Accept Non-essential Cookies")
+                            .accessibility(identifier: "acceptCookie")
+                            .tag(CookieNotices.userSelected)
                     }.labelsHidden().pickerStyle(.inline).accessibilityLabel("Cookie Popups")
                 }
 
-                TrackingSettingsSectionBlock()
+                if cookieCutterModel.cookieNotices == CookieNotices.userSelected {
+                    NonEssentialCookieSettings()
+                        .environmentObject(cookieCutterModel)
+                }
             }
         }
         .applyToggleStyle()
