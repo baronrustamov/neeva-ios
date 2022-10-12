@@ -163,6 +163,12 @@
 /* No comment provided by engineer. */
 "2. Select Neeva" = "2. Sélectionnez Neeva";
 
+/* Subtitle text on the plan screen to specify our trial duration */
+"7 Day Free Trial" = "Essai gratuit de 7 jours";
+
+/* Bullet point text to describe Neeva free account benefit */
+"50 searches/month" = "50 recherches par mois";
+
 /* No comment provided by engineer. */
 "About" = "À propos";
 
@@ -192,6 +198,9 @@
 
 /* (No Comment) */
 "Ad-free search results" = "Résultats de recherche sans publicité";
+
+/* Bullet point text to describe Neeva benefit */
+"Ad-free, private search" = "Recherche privée sans publicité";
 
 /* No comment provided by engineer. */
 "Add" = "Ajouter";
@@ -321,6 +330,9 @@
 
 /* (No Comment) */
 "Browse the web with no ads in your way" = "Naviguez sur le Web sans publicité";
+
+/* Bullet point text to describe Neeva benefit */
+"Browser + ad blocker + tracking prevention" = "Navigateur + bloqueur de publicités + blocage des traqueurs";
 
 /* (No Comment) */
 "Browser without ads or trackers" = "Navigateur sans publicités ni traqueurs";
@@ -644,6 +656,9 @@
 "Empty Card Grid (Incognito)" = "Vider la grille de carte (mode privé)";
 
 /* No comment provided by engineer. */
+"Empty Rows" = "Lignes vides";
+
+/* No comment provided by engineer. */
 "Enable in Settings" = "Activer dans les paramètres";
 
 /* No comment provided by engineer. */
@@ -877,6 +892,12 @@
 /* accessibility label for one type of themes for reader mode feature */
 "Light Theme" = "Thème clair";
 
+/* (No Comment) */
+"Limited Ad-free, private search" = "Recherche privée limitée sans publicité";
+
+/* (No Comment) */
+"Limited devices" = "Appareils limités";
+
 /* No comment provided by engineer. */
 "Linkedin" = "LinkedIn";
 
@@ -885,6 +906,9 @@
 
 /* No comment provided by engineer. */
 "Loading account info…" = "Chargement des informations du compte…";
+
+/* No comment provided by engineer. */
+"Loading..." = "Chargement...";
 
 /* No comment provided by engineer. */
 "Loving it!" = "J'adore !";
@@ -1111,6 +1135,9 @@
 /* No comment provided by engineer. */
 "Password (required)" = "Mot de passe (requis)";
 
+/* Bullet point text to describe Neeva premium benefit */
+"Password manager + VPN" = "Gestionnaire de mots de passe + VPN";
+
 /* section header to group tabs created in the last 7 days */
 "Past 7 Days" = "7 derniers jours";
 
@@ -1233,6 +1260,9 @@
 
 /* No comment provided by engineer. */
 "Remove" = "Supprimer";
+
+/* No comment provided by engineer. */
+"Remove from Group" = "Supprimer du groupe";
 
 /* No comment provided by engineer. */
 "Removed From Top Sites" = "Supprimé des meilleurs sites";
@@ -1477,6 +1507,9 @@
 /* No comment provided by engineer. */
 "Submit" = "Envoyer";
 
+/* No comment provided by engineer. */
+"Subscribe and help fight climate change" = "Souscrivez un abonnement et participez à la lutte contre le changement climatique";
+
 /* Button to subscribe a monthly subscription */
 "Subscribe Monthly" = "Abonnement mensuel";
 
@@ -1570,6 +1603,9 @@
 /* No comment provided by engineer. */
 "TRACKERS" = "Traqueurs";
 
+/* Bullet point text to describe Neeva benefit */
+"Tracking prevention" = "Blocage des traqueurs";
+
 /* No comment provided by engineer. */
 "Tracking Protection" = "Blocage des traqueurs";
 
@@ -1585,7 +1621,7 @@
 /* No comment provided by engineer. */
 "try again" = "Réessayez";
 
-/* (No Comment) */
+/* Button to try Neeva for free */
 "Try it Free" = "Essayer gratuitement";
 
 /* No comment provided by engineer. */
@@ -1611,6 +1647,12 @@
 
 /* No comment provided by engineer. */
 "Unknown" = "Inconnu";
+
+/* Bullet point text to describe Neeva premium benefit */
+"Unlimited ad-free, private search" = "Recherche privée illimitée sans publicité";
+
+/* Bullet point text to describe Neeva device limits */
+"Unlimited devices" = "Nombre illimité d'appareils";
 
 /* No comment provided by engineer. */
 "Unpin" = "Supprimer";
@@ -1710,6 +1752,12 @@
 
 /* No comment provided by engineer. */
 "You've disabled notifications, would you like to enable them in settings?" = "Vous avez désactivé les notifications, voulez-vous les activer dans les paramètres ?";
+
+/* No comment provided by engineer. */
+"Your Archived Tabs will appear here" = "Vos onglets archivés apparaîtront ici";
+
+/* No comment provided by engineer. */
+"Your history will appear here" = "Votre historique s'affichera ici";
 
 /* No comment provided by engineer. */
 "Your Neeva Shield just declined a **cookie popup** and blocked %lld **trackers**" = "Neeva Shield vient de refuser une **fenêtre contextuelle de gestion des cookies** et de bloquer %lld **traqueurs**";
