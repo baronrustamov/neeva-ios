@@ -163,6 +163,12 @@
 /* No comment provided by engineer. */
 "2. Select Neeva" = "2. Select Neeva";
 
+/* Subtitle text on the plan screen to specify our trial duration */
+"7 Day Free Trial" = "7 Day Free Trial";
+
+/* Bullet point text to describe Neeva free account benefit */
+"50 searches/month" = "50 searches/month";
+
 /* No comment provided by engineer. */
 "About" = "About";
 
@@ -192,6 +198,9 @@
 
 /* (No Comment) */
 "Ad-free search results" = "Ad-free search results";
+
+/* Bullet point text to describe Neeva benefit */
+"Ad-free, private search" = "Ad-free, private search";
 
 /* No comment provided by engineer. */
 "Add" = "Add";
@@ -321,6 +330,9 @@
 
 /* (No Comment) */
 "Browse the web with no ads in your way" = "Browse the web with no ads in your way";
+
+/* Bullet point text to describe Neeva benefit */
+"Browser + ad blocker + tracking prevention" = "Browser + ad blocker + tracking prevention";
 
 /* (No Comment) */
 "Browser without ads or trackers" = "Browser without ads or trackers";
@@ -644,6 +656,9 @@
 "Empty Card Grid (Incognito)" = "Empty Card Grid (Incognito)";
 
 /* No comment provided by engineer. */
+"Empty Rows" = "Empty Rows";
+
+/* No comment provided by engineer. */
 "Enable in Settings" = "Enable in Settings";
 
 /* No comment provided by engineer. */
@@ -877,6 +892,12 @@
 /* accessibility label for one type of themes for reader mode feature */
 "Light Theme" = "Light Theme";
 
+/* (No Comment) */
+"Limited Ad-free, private search" = "Limited Ad-free, private search";
+
+/* (No Comment) */
+"Limited devices" = "Limited devices";
+
 /* No comment provided by engineer. */
 "Linkedin" = "Linkedin";
 
@@ -885,6 +906,9 @@
 
 /* No comment provided by engineer. */
 "Loading account info…" = "Loading account info…";
+
+/* No comment provided by engineer. */
+"Loading..." = "Loading...";
 
 /* No comment provided by engineer. */
 "Loving it!" = "Loving it!";
@@ -1111,6 +1135,9 @@
 /* No comment provided by engineer. */
 "Password (required)" = "Password (required)";
 
+/* Bullet point text to describe Neeva premium benefit */
+"Password manager + VPN" = "Password manager + VPN";
+
 /* section header to group tabs created in the last 7 days */
 "Past 7 Days" = "Past 7 Days";
 
@@ -1233,6 +1260,9 @@
 
 /* No comment provided by engineer. */
 "Remove" = "Remove";
+
+/* No comment provided by engineer. */
+"Remove from Group" = "Remove from group";
 
 /* No comment provided by engineer. */
 "Removed From Top Sites" = "Removed From Top Sites";
@@ -1477,6 +1507,9 @@
 /* No comment provided by engineer. */
 "Submit" = "Submit";
 
+/* No comment provided by engineer. */
+"Subscribe and help fight climate change" = "Subscribe and help fight climate change";
+
 /* Button to subscribe a monthly subscription */
 "Subscribe Monthly" = "Subscribe Monthly";
 
@@ -1570,6 +1603,9 @@
 /* No comment provided by engineer. */
 "TRACKERS" = "TRACKERS";
 
+/* Bullet point text to describe Neeva benefit */
+"Tracking prevention" = "Tracking prevention";
+
 /* No comment provided by engineer. */
 "Tracking Protection" = "Tracking Protection";
 
@@ -1585,7 +1621,7 @@
 /* No comment provided by engineer. */
 "try again" = "try again";
 
-/* (No Comment) */
+/* Button to try Neeva for free */
 "Try it Free" = "Try it Free";
 
 /* No comment provided by engineer. */
@@ -1611,6 +1647,12 @@
 
 /* No comment provided by engineer. */
 "Unknown" = "Unknown";
+
+/* Bullet point text to describe Neeva premium benefit */
+"Unlimited ad-free, private search" = "Unlimited ad-free, private search";
+
+/* Bullet point text to describe Neeva device limits */
+"Unlimited devices" = "Unlimited devices";
 
 /* No comment provided by engineer. */
 "Unpin" = "Unpin";
@@ -1710,6 +1752,12 @@
 
 /* No comment provided by engineer. */
 "You've disabled notifications, would you like to enable them in settings?" = "You've disabled notifications, would you like to enable them in settings?";
+
+/* No comment provided by engineer. */
+"Your Archived Tabs will appear here" = "Your Archived Tabs will appear here";
+
+/* No comment provided by engineer. */
+"Your history will appear here" = "Your history will appear here";
 
 /* No comment provided by engineer. */
 "Your Neeva Shield just declined a **cookie popup** and blocked %lld **trackers**" = "Your Neeva Shield just declined a **cookie popup** and blocked %lld **trackers**";
