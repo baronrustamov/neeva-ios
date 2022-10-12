@@ -44,7 +44,7 @@ struct WelcomeFlowIntroView: View {
                     action: {
                         model.logCounter(.GetStartedInWelcome)
 
-                        if PremiumStore.isOfferedInCountry()
+                        if PremiumStore.isOfferedInLanguage()
                             && premiumStore.products.count > 0
                         {
                             model.clearPreviousScreens()
