@@ -29,13 +29,10 @@ class PremiumStore: ObservableObject {
     static let shared = PremiumStore()
     private static let dateFormatter = ISO8601DateFormatter()
 
-    // NOTE: regions where premium is offered (BCP 47 identifier)
-    // https://developer.apple.com/documentation/foundation/locale/region/3952434-identifier
-    static let regions = ["US" /*, "GB", "DE", "FR"*/]
-
-    // NOTE: countries where premium is offered (ISO 3166)
-    // https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
-    static let countries = ["USA" /*, "GBR", "DEU", "FRA"*/]
+    // NOTE: languages premium is offered to
+    // https://developer.apple.com/documentation/foundation/nslocale/1643026-languagecode
+    // https://www.loc.gov/standards/iso639-2/php/English_list.php
+    static let languages = ["en", "eng", "fr", "fre", "de", "ger"]
 
     @Published var products: [Product] = []
     @Published var loadingProducts = false
@@ -67,17 +64,9 @@ class PremiumStore: ObservableObject {
         }
     }
 
-    static func isOfferedInCountry() -> Bool {
-        // try via storefront country
-        if let storefront = SKPaymentQueue.default().storefront {
-            if PremiumStore.countries.contains(storefront.countryCode) {
-                return true
-            }
-        }
-
-        // try via locale region
-        if let localeRegion = Locale.current.regionCode {
-            if PremiumStore.regions.contains(localeRegion) {
+    static func isOfferedInLanguage() -> Bool {
+        if let lang = Locale.current.languageCode {
+            if PremiumStore.languages.contains(lang) {
                 return true
             }
         }
