@@ -53,6 +53,12 @@ class SpaceServiceProd: SpaceService {
         return CreateSpaceRequest(name: name)
     }
 
+    func createSpaceWithURLs(name: String, urls: [SpaceURLInput])
+        -> CreateSpaceWithURLsRequest?
+    {
+        return CreateSpaceWithURLsRequest(name: name, urls: urls)
+    }
+
     func deleteGenerator(spaceID: String, generatorID: String) -> DeleteGeneratorRequest? {
         return DeleteGeneratorRequest(spaceID: spaceID, generatorID: generatorID)
     }

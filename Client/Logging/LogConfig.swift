@@ -403,6 +403,7 @@ public enum LogConfig {
         case tabGroupExpanded
         case tabGroupCollapsed
         case tabGroupRenameThroughThreeDotMenu
+        case tabGroupSaveToSpacesThroughThreeDotMenu
         case tabGroupDeleteThroughThreeDotMenu
         case tabGroupLongPressMenuClicked
         case tabGroupRemaneThroughLongPressMenu
@@ -856,6 +857,7 @@ public enum LogConfig {
         case .tabGroupExpanded: return .TabGroup
         case .tabGroupCollapsed: return .TabGroup
         case .tabGroupRenameThroughThreeDotMenu: return .TabGroup
+        case .tabGroupSaveToSpacesThroughThreeDotMenu: return .TabGroup
         case .tabGroupDeleteThroughThreeDotMenu: return .TabGroup
         case .tabGroupLongPressMenuClicked: return .TabGroup
         case .tabGroupRemaneThroughLongPressMenu: return .TabGroup

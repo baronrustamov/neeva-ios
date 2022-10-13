@@ -702,6 +702,17 @@ class TabGroupCardDetails: CardDropDelegate, ObservableObject {
             Label("Rename", systemSymbol: .pencil)
         }
 
+        if FeatureFlag[.createSpaceFromTabGroup] {
+            Button { [self] in
+                ClientLogger.shared.logCounter(.tabGroupSaveToSpacesThroughThreeDotMenu)
+                if let tabGroup = manager.getTabGroup(for: id) {
+                    manager.createSpaceFromTabGroup(tabGroup)
+                }
+            } label: {
+                Label("Save All to Spaces", systemSymbol: .bookmark)
+            }
+        }
+
         Button(
             role: .destructive,
             action: {

@@ -33,6 +33,9 @@ public protocol SpaceService {
     func createSpace(name: String) -> CreateSpaceRequest?
 
     @discardableResult
+    func createSpaceWithURLs(name: String, urls: [SpaceURLInput]) -> CreateSpaceWithURLsRequest?
+
+    @discardableResult
     func deleteGenerator(spaceID: String, generatorID: String) -> DeleteGeneratorRequest?
 
     @discardableResult

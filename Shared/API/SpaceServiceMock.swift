@@ -335,6 +335,14 @@ public class SpaceServiceMock: SpaceService {
         return request
     }
 
+    // TODO(jon): Make this work and write tests using it!
+    public func createSpaceWithURLs(name: String, urls: [SpaceURLInput])
+        -> CreateSpaceWithURLsRequest?
+    {
+        let request = CreateSpaceWithURLsRequest(name: name, urls: urls, testMode: true)
+        return request
+    }
+
     public func deleteGenerator(spaceID: String, generatorID: String) -> DeleteGeneratorRequest? {
         let request = DeleteGeneratorRequest(
             spaceID: spaceID, generatorID: generatorID, testMode: true)

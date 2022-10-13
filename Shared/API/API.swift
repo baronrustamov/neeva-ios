@@ -4966,6 +4966,118 @@ public struct PinSpaceInput: GraphQLMapConvertible {
   }
 }
 
+public struct CreateSpaceWithURLsInput: GraphQLMapConvertible {
+  public var graphQLMap: GraphQLMap
+
+  /// - Parameters:
+  ///   - name
+  ///   - urls
+  public init(name: Swift.Optional<String?> = nil, urls: Swift.Optional<[SpaceURLInput]?> = nil) {
+    graphQLMap = ["name": name, "urls": urls]
+  }
+
+  public var name: Swift.Optional<String?> {
+    get {
+      return graphQLMap["name"] as? Swift.Optional<String?> ?? Swift.Optional<String?>.none
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "name")
+    }
+  }
+
+  public var urls: Swift.Optional<[SpaceURLInput]?> {
+    get {
+      return graphQLMap["urls"] as? Swift.Optional<[SpaceURLInput]?> ?? Swift.Optional<[SpaceURLInput]?>.none
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "urls")
+    }
+  }
+}
+
+public struct SpaceURLInput: GraphQLMapConvertible {
+  public var graphQLMap: GraphQLMap
+
+  /// - Parameters:
+  ///   - url
+  ///   - title
+  ///   - thumbnail
+  ///   - data: Raw data for page being added. Could be HTML from DOM or byte stream if PDF etc
+  ///   - mediaType: Type of content, eg text/html
+  ///   - contentType: Type of the content obtained from the http response
+  ///   - isBase64: Defaults to false
+  public init(url: Swift.Optional<String?> = nil, title: Swift.Optional<String?> = nil, thumbnail: Swift.Optional<String?> = nil, data: Swift.Optional<String?> = nil, mediaType: Swift.Optional<String?> = nil, contentType: Swift.Optional<String?> = nil, isBase64: Swift.Optional<Bool?> = nil) {
+    graphQLMap = ["url": url, "title": title, "thumbnail": thumbnail, "data": data, "mediaType": mediaType, "contentType": contentType, "isBase64": isBase64]
+  }
+
+  public var url: Swift.Optional<String?> {
+    get {
+      return graphQLMap["url"] as? Swift.Optional<String?> ?? Swift.Optional<String?>.none
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "url")
+    }
+  }
+
+  public var title: Swift.Optional<String?> {
+    get {
+      return graphQLMap["title"] as? Swift.Optional<String?> ?? Swift.Optional<String?>.none
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "title")
+    }
+  }
+
+  public var thumbnail: Swift.Optional<String?> {
+    get {
+      return graphQLMap["thumbnail"] as? Swift.Optional<String?> ?? Swift.Optional<String?>.none
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "thumbnail")
+    }
+  }
+
+  /// Raw data for page being added. Could be HTML from DOM or byte stream if PDF etc
+  public var data: Swift.Optional<String?> {
+    get {
+      return graphQLMap["data"] as? Swift.Optional<String?> ?? Swift.Optional<String?>.none
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "data")
+    }
+  }
+
+  /// Type of content, eg text/html
+  public var mediaType: Swift.Optional<String?> {
+    get {
+      return graphQLMap["mediaType"] as? Swift.Optional<String?> ?? Swift.Optional<String?>.none
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "mediaType")
+    }
+  }
+
+  /// Type of the content obtained from the http response
+  public var contentType: Swift.Optional<String?> {
+    get {
+      return graphQLMap["contentType"] as? Swift.Optional<String?> ?? Swift.Optional<String?>.none
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "contentType")
+    }
+  }
+
+  /// Defaults to false
+  public var isBase64: Swift.Optional<Bool?> {
+    get {
+      return graphQLMap["isBase64"] as? Swift.Optional<Bool?> ?? Swift.Optional<Bool?>.none
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "isBase64")
+    }
+  }
+}
+
 public enum QuerySuggestionType: RawRepresentable, Equatable, Hashable, CaseIterable, Apollo.JSONDecodable, Apollo.JSONEncodable {
   public typealias RawValue = String
   case standard
@@ -22338,6 +22450,102 @@ public final class PinSpaceMutation: GraphQLMutation {
       }
       set {
         resultMap.updateValue(newValue, forKey: "pinSpace")
+      }
+    }
+  }
+}
+
+public final class CreateSpaceWithUrLsMutation: GraphQLMutation {
+  /// The raw GraphQL definition of this operation.
+  public let operationDefinition: String =
+    """
+    mutation CreateSpaceWithURLs($input: CreateSpaceWithURLsInput!) {
+      createSpaceWithURLs(input: $input) {
+        __typename
+        spaceID
+      }
+    }
+    """
+
+  public let operationName: String = "CreateSpaceWithURLs"
+
+  public let operationIdentifier: String? = "ad3c102e63ec4fc5a07c21f9636bcd31462b0f13dd1cbdab9304de3a8af35a04"
+
+  public var input: CreateSpaceWithURLsInput
+
+  public init(input: CreateSpaceWithURLsInput) {
+    self.input = input
+  }
+
+  public var variables: GraphQLMap? {
+    return ["input": input]
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["Mutation"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("createSpaceWithURLs", arguments: ["input": GraphQLVariable("input")], type: .object(CreateSpaceWithUrl.selections)),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(createSpaceWithUrLs: CreateSpaceWithUrl? = nil) {
+      self.init(unsafeResultMap: ["__typename": "Mutation", "createSpaceWithURLs": createSpaceWithUrLs.flatMap { (value: CreateSpaceWithUrl) -> ResultMap in value.resultMap }])
+    }
+
+    /// API to create a space and populate it with an initial set of URLs
+    public var createSpaceWithUrLs: CreateSpaceWithUrl? {
+      get {
+        return (resultMap["createSpaceWithURLs"] as? ResultMap).flatMap { CreateSpaceWithUrl(unsafeResultMap: $0) }
+      }
+      set {
+        resultMap.updateValue(newValue?.resultMap, forKey: "createSpaceWithURLs")
+      }
+    }
+
+    public struct CreateSpaceWithUrl: GraphQLSelectionSet {
+      public static let possibleTypes: [String] = ["CreateSpaceWithURLsResponse"]
+
+      public static var selections: [GraphQLSelection] {
+        return [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("spaceID", type: .nonNull(.scalar(String.self))),
+        ]
+      }
+
+      public private(set) var resultMap: ResultMap
+
+      public init(unsafeResultMap: ResultMap) {
+        self.resultMap = unsafeResultMap
+      }
+
+      public init(spaceId: String) {
+        self.init(unsafeResultMap: ["__typename": "CreateSpaceWithURLsResponse", "spaceID": spaceId])
+      }
+
+      public var __typename: String {
+        get {
+          return resultMap["__typename"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      public var spaceId: String {
+        get {
+          return resultMap["spaceID"]! as! String
+        }
+        set {
+          resultMap.updateValue(newValue, forKey: "spaceID")
+        }
       }
     }
   }

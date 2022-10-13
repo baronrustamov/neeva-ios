@@ -308,3 +308,9 @@ mutation ClaimGeneratedItem($input: ClaimGeneratedItemInput!) {
 mutation PinSpace($input: PinSpaceInput!) {
     pinSpace(input: $input)
 }
+
+mutation CreateSpaceWithURLs($input: CreateSpaceWithURLsInput!) {
+    createSpaceWithURLs(input: $input) {
+        spaceID
+    }
+}

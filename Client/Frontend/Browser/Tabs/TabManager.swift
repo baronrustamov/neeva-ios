@@ -69,6 +69,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     private var selectedTabSubscription: AnyCancellable?
     private var selectedTabURLSubscription: AnyCancellable?
     private var archivedTabsDurationSubscription: AnyCancellable?
+    private var spaceFromTabGroupSubscription: AnyCancellable?
 
     private var needsHeavyUpdatesPostAnimation = false
 
@@ -568,6 +569,34 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
 
     func getTabGroup(for tab: Tab) -> TabGroup? {
         return activeTabGroups[tab.rootUUID]
+    }
+
+    func createSpaceFromTabGroup(_ item: TabGroup) {
+        let request = SpaceServiceProvider.shared.createSpaceWithURLs(
+            name: item.title ?? "My Tab Group",
+            urls: item.children.compactMap {
+                SpaceURLInput(url: $0.url?.absoluteString, title: $0.displayTitle)
+            })
+        spaceFromTabGroupSubscription = request?.$state.sink { [self] state in
+            switch state {
+            case .success:
+                if let spaceID = request?.result?.createSpaceWithUrLs?.spaceId {
+                    SpaceStore.shared.refresh { [self] in
+                        let bvc = SceneDelegate.getBVC(with: scene)
+                        ToastDefaults().showToast(
+                            bvc: bvc, text: "Conversion successful", buttonText: "Open Space"
+                        ) {
+                            bvc.browserModel.openSpace(spaceId: spaceID)
+                        }
+                    }
+                }
+                self.spaceFromTabGroupSubscription?.cancel()
+            case .failure:
+                self.spaceFromTabGroupSubscription?.cancel()
+            case .initial:
+                Logger.browser.info("Waiting to create Space from Tab Group")
+            }
+        }
     }
 
     func closeTabGroup(_ item: TabGroup, showToast: Bool) {

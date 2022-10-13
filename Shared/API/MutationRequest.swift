@@ -15,6 +15,7 @@ open class MutationRequest<Mutation: GraphQLMutation>: ObservableObject {
     }
 
     @Published public var state: State = .initial
+    @Published public var result: Mutation.Data?
     @Published public var error: Error?
 
     public init(mutation: Mutation, testMode: Bool = false) {
@@ -30,7 +31,8 @@ open class MutationRequest<Mutation: GraphQLMutation>: ObservableObject {
             case .failure(let error):
                 self.error = error
                 self.state = .failure
-            case .success:
+            case .success(let result):
+                self.result = result
                 self.state = .success
             }
         }

@@ -22,6 +22,20 @@ class ToastDefaults: NSObject {
         toast = toastView
     }
 
+    func showToast(
+        bvc: BrowserViewController, text: String, buttonText: String,
+        buttonAction: @escaping () -> Void
+    ) {
+        let toastContent = ToastViewContent(
+            normalContent: ToastStateContent(
+                text: LocalizedStringKey(text), buttonText: LocalizedStringKey(buttonText),
+                buttonAction: buttonAction))
+        let toastViewManager = bvc.toastViewManager
+
+        toast = toastViewManager.makeToast(
+            content: toastContent, toastProgressViewModel: toastProgressViewModel)
+    }
+
     func showToastForClosedTabs(_ savedTabs: [SavedTab], tabManager: TabManager) {
         guard savedTabs.count > 0 else {
             return

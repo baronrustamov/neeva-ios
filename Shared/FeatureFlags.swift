@@ -11,6 +11,7 @@ public enum FeatureFlag: String, CaseIterable, RawRepresentable {
     // in alphabetical order to reduce merge conflicts and keep the settings screen
     // simple to scan.
     case cookieCutterRemindMeLater = "Cookie Cutter Remind Me Later"
+    case createSpaceFromTabGroup = "Create Space from Tab Group"
     case customSearchEngine = "Custom Search Engine"
     case debugURLBar = "URL Bar Debug Mode"
     case enableSuggestedSpaces = "Show Spaces from Neeva Community"
