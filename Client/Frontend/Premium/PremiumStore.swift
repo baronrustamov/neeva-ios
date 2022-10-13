@@ -65,9 +65,19 @@ class PremiumStore: ObservableObject {
     }
 
     static func isOfferedInLanguage() -> Bool {
-        if let lang = Locale.current.languageCode {
-            if PremiumStore.languages.contains(lang) {
-                return true
+        let preferredLanguages = Locale.preferredLanguages
+
+        if preferredLanguages.count <= 0 {
+            // we want to track how frequent this case happens
+            ClientLogger.shared.logCounter(.NoPreferredLanguage)
+            return false
+        } else {
+            // preferredLanguage returns in format en, de-US...
+            for language in preferredLanguages {
+                let components = language.components(separatedBy: "-")
+                if components.count > 0 && PremiumStore.languages.contains(components[0]) {
+                    return true
+                }
             }
         }
 

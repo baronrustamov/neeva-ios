@@ -235,6 +235,8 @@ public enum LogConfig {
         /// the pop over for neeva shield onboarding screen
         case ShowNeevaShieldAdBlockOnboardingScreen
         case ShowNeevaShieldCookiePopupOnboardingScreen
+        case PremiumEligible
+        case NoPreferredLanguage
 
         // MARK: promo card
         /// Promo card is rendered on screen
@@ -510,6 +512,7 @@ public enum LogConfig {
             Interaction.SkCheatsheetQueryFallback,
             Interaction.SkOpenCheatsheetSupport,
             Interaction.SkCheatsheetFetchError,
+            Interaction.PremiumEligible,
         ]
 
     /// Specify a comma separated string with these values to
@@ -717,6 +720,8 @@ public enum LogConfig {
         case .SpacesRecommendedDetailUIVisited: return .FirstRun
         case .ShowNeevaShieldAdBlockOnboardingScreen: return .FirstRun
         case .ShowNeevaShieldCookiePopupOnboardingScreen: return .FirstRun
+        case .PremiumEligible: return .FirstRun
+        case .NoPreferredLanguage: return .FirstRun
 
         // MARK: - PromoCard
         case .PromoCardAppear: return .PromoCard
