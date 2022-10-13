@@ -40,7 +40,6 @@ class BrowserModel: ObservableObject {
             gridModel.scrollModel.scrollToSelectedTab { [self] in
                 cardTransitionModel.update(to: .visibleForTrayShow)
                 contentVisibilityModel.update(showContent: false)
-                updateSpaces()
             }
         }
     }
@@ -52,16 +51,18 @@ class BrowserModel: ObservableObject {
         overlayManager.hideCurrentOverlay(ofPriority: .modal)
 
         gridModel.visibilityModel.update(showGrid: true)
-
-        updateSpaces()
     }
 
+    // We'll refresh Spaces when the user visits the Spaces grid, but we don't
+    // need to do that otherwise (e.g., when opening the Tab card grid).
     func showSpaces(forceUpdate: Bool = true) {
         showGridWithNoAnimation()
         gridModel.switcherModel.update(state: .spaces)
 
         if forceUpdate {
-            updateSpaces()
+            DispatchQueue.main.async {
+                SpaceStore.shared.refresh()
+            }
         }
     }
 
@@ -116,13 +117,6 @@ class BrowserModel: ObservableObject {
                 to: .cardGrid(gridModel.switcherModel.state, tabManager.isIncognito))
         } else {
             hideGridWithNoAnimation()
-        }
-    }
-
-    private func updateSpaces() {
-        // In preparation for the CardGrid being shown soon, refresh spaces.
-        DispatchQueue.main.async {
-            SpaceStore.shared.refresh()
         }
     }
 
