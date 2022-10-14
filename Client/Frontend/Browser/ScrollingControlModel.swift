@@ -267,22 +267,23 @@ extension ScrollingControlModel {
         // produce a ~50px page jumping effect in response to tap navigations.
         let isShownFromHidden = headerTopOffset == -topScrollHeight && headerOffset == 0
 
-        let animation = {
-            if isShownFromHidden, let scrollView = self.scrollView {
-                scrollView.contentOffset = CGPoint(
-                    x: initialContentOffset.x, y: initialContentOffset.y + self.topScrollHeight)
-            }
+        let setOffset = {
+            self.headerTopOffset = headerOffset
+            self.footerBottomOffset = footerOffset
         }
 
         DispatchQueue.main.async { [self] in
-            self.headerTopOffset = headerOffset
-            self.footerBottomOffset = footerOffset
             if animated {
                 UIView.animate(
                     withDuration: duration, delay: 0, options: .allowUserInteraction,
-                    animations: animation, completion: { _ in })
+                    animations: setOffset, completion: { _ in })
             } else {
-                animation()
+                setOffset()
+            }
+
+            if isShownFromHidden, let scrollView = self.scrollView {
+                scrollView.contentOffset = CGPoint(
+                    x: initialContentOffset.x, y: initialContentOffset.y + self.topScrollHeight)
             }
         }
     }
@@ -324,9 +325,7 @@ extension ScrollingControlModel: UIScrollViewDelegate {
             return
         }
 
-        if (decelerate || (toolbarState == .animating && !decelerate))
-            && checkScrollHeightIsLargeEnoughForScrolling()
-        {
+        if checkScrollHeightIsLargeEnoughForScrolling() {
             if scrollDirection == .up {
                 showToolbars(animated: true)
             } else if scrollDirection == .down {
