@@ -82,9 +82,10 @@ def commit_and_push_version_bump(on_main)
   execute_shell_command("git push origin #{get_current_branch_name}")
 end
 
-def create_pr
+def create_pr(github_user)
   if (get_current_branch_name.start_with?('prepare-'))
-    execute_shell_command("gh pr create -t \"Prepare for build #{get_build_number}\" -r \"ios\" -b \"Bumping up version for next build\"")
+    execute_shell_command("gh pr create -t \"Prepare for build #{get_build_number}\" -r \"#{github_user}\" -b \"Bumping up version for next build\"")
+    execute_shell_command("gh pr merge --auto --merge --delete-branch")
   end
 end
 
@@ -114,7 +115,7 @@ end
 # This creates build tag, bump up the version and create PR if necessary
 # Use this on main/Build-<build_number>-branch-name
 #
-def daily_build
+def daily_build(github_user)
   on_main = is_on_main_branch
 
   # Tag creation
@@ -127,7 +128,7 @@ def daily_build
   commit_and_push_version_bump(on_main)
 
   # create pr
-  create_pr
+  create_pr(github_user)
 end 
 
 #
@@ -135,7 +136,7 @@ end
 # This create build tag, cuts the branch, bump up the version on both branches and create any PR if necessary
 # Use this on main only
 #
-def branch_cut_and_build(slack_url)
+def branch_cut_and_build(slack_url, github_user)
   if (!is_on_main_branch)
     puts "Branch cut should happen on main. You are running this workflow on #{get_current_branch_name}. Aborting..."
     exit 1
@@ -163,6 +164,6 @@ def branch_cut_and_build(slack_url)
   commit_and_push_version_bump(true)
 
   # create pr
-  create_pr
+  create_pr(github_user)
 end 
 

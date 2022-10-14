@@ -18,7 +18,7 @@ jobs:
 
       - name: Run branch cut and daily build script
         run: |
-          ruby -r ./Scripts/build.rb -e "branch_cut_and_build('${{ secrets.SLACK_URL }}')"
+          ruby -r ./Scripts/build.rb -e "branch_cut_and_build('${{ secrets.SLACK_URL }}', '${{ github.actor }}')"
           if [ "$?" -ne 0 ]; then
             echo "build script failure. Aborting..."
             exit 1
