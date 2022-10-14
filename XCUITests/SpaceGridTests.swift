@@ -159,7 +159,7 @@ class SpaceGridTests: BaseTestCase {
     func testPinSpace() {
         app.buttons["Show Tabs"].tap()
         app.buttons["Spaces"].tap()
-        app.buttons[SpaceServiceMock.mySpaceTitle].press(forDuration: 0.5)
+        app.buttons[SpaceServiceMock.mySpaceTitle].press(forDuration: 1)
 
         XCTAssertTrue(app.buttons["Pin"].exists)
 
@@ -185,13 +185,13 @@ class SpaceGridTests: BaseTestCase {
 
         XCTAssertFalse(app.buttons["pin"].exists)
 
-        app.buttons[SpaceServiceMock.mySpaceTitle].press(forDuration: 0.5)
+        app.buttons[SpaceServiceMock.mySpaceTitle].press(forDuration: 1)
         app.buttons["Pin"].tap()
 
         waitForExistence(app.scrollViews["CardGrid"])
         XCTAssertTrue(app.buttons["pin"].exists)
 
-        app.buttons[SpaceServiceMock.mySpaceTitle].press(forDuration: 0.5)
+        app.buttons[SpaceServiceMock.mySpaceTitle].press(forDuration: 1)
         app.buttons["Unpin"].tap()
 
         waitForExistence(app.scrollViews["CardGrid"])
@@ -201,7 +201,7 @@ class SpaceGridTests: BaseTestCase {
     func testPinnedSpaceIsFirstInAddToSpaceSheet() {
         app.buttons["Show Tabs"].tap()
         app.buttons["Spaces"].tap()
-        app.buttons[SpaceServiceMock.mySpaceTitle].press(forDuration: 0.5)
+        app.buttons[SpaceServiceMock.mySpaceTitle].press(forDuration: 1)
         app.buttons["Pin"].tap()
 
         waitForExistence(app.scrollViews["CardGrid"])

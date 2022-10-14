@@ -729,7 +729,6 @@
 		C9F49CD226711B8700F3408A /* LockProtected.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB912B9122722A7800DF585A /* LockProtected.swift */; };
 		C9F49CD326711B8B00F3408A /* ReadWriteLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB912B9022722A7800DF585A /* ReadWriteLock.swift */; };
 		C9F8EB342680DA8A0042CFE7 /* TabToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F8EB322680DA8A0042CFE7 /* TabToolbarView.swift */; };
-		C9F8EB352680DA8A0042CFE7 /* TabToolbarHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F8EB332680DA8A0042CFE7 /* TabToolbarHost.swift */; };
 		C9F8EB372680E33B0042CFE7 /* TabToolbarButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F8EB362680E33B0042CFE7 /* TabToolbarButtons.swift */; };
 		C9F8EB46268126EB0042CFE7 /* LocationViewTouchHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F8EB45268126EB0042CFE7 /* LocationViewTouchHandler.swift */; };
 		C9FD1B1F26C1AD7C00926A70 /* TopBarHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91FA35B26B1959B00E82841 /* TopBarHost.swift */; };
@@ -2083,7 +2082,6 @@
 		C9F49CC3266FF8CC00F3408A /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
 		C9F49CC5266FFB8200F3408A /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		C9F8EB322680DA8A0042CFE7 /* TabToolbarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabToolbarView.swift; sourceTree = "<group>"; };
-		C9F8EB332680DA8A0042CFE7 /* TabToolbarHost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabToolbarHost.swift; sourceTree = "<group>"; };
 		C9F8EB362680E33B0042CFE7 /* TabToolbarButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabToolbarButtons.swift; sourceTree = "<group>"; };
 		C9F8EB45268126EB0042CFE7 /* LocationViewTouchHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewTouchHandler.swift; sourceTree = "<group>"; };
 		C9FD1B2626C414DD00926A70 /* StorageTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "StorageTests-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -3801,7 +3799,6 @@
 		C9ACC46B267BA614009AE182 /* Toolbar */ = {
 			isa = PBXGroup;
 			children = (
-				C9F8EB332680DA8A0042CFE7 /* TabToolbarHost.swift */,
 				C9F8EB322680DA8A0042CFE7 /* TabToolbarView.swift */,
 				C9F8EB362680E33B0042CFE7 /* TabToolbarButtons.swift */,
 			);
@@ -6208,7 +6205,6 @@
 			files = (
 				C9C18DEA26558FF3004710CD /* FrontViewController.swift in Sources */,
 				BCC7737B27443E7F008E7538 /* SignUpOneButtonPromptView.swift in Sources */,
-				C9F8EB352680DA8A0042CFE7 /* TabToolbarHost.swift in Sources */,
 				C9946461265706D500613110 /* FeatureFlagSettingsView.swift in Sources */,
 				D029A04920A62DB0001DB72F /* TemporaryDocument.swift in Sources */,
 				4A5CCE8326524B7F0063783D /* FaviconView.swift in Sources */,

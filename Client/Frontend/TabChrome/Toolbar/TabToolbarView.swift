@@ -6,6 +6,11 @@ import Defaults
 import Shared
 import SwiftUI
 
+protocol ToolbarDelegate: AnyObject {
+    var performTabToolbarAction: (ToolbarAction) -> Void { get }
+    func perform(overflowMenuAction: OverflowMenuAction, targetButtonView: UIView?)
+}
+
 struct TabToolbarView: View {
     @EnvironmentObject var chromeModel: TabChromeModel
     @EnvironmentObject var scrollingControlModel: ScrollingControlModel

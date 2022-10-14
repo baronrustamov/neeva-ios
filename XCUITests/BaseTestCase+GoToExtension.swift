@@ -107,7 +107,7 @@ extension BaseTestCase {
         action(app.buttons[label])
 
         if shouldDismissOverlay {
-            tapCoordinate(at: 5, and: 100)
+            tapCoordinate(at: 20, and: 200)
             waitForExistence(app.buttons["More"])
         }
     }

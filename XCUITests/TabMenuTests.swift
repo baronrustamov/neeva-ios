@@ -125,9 +125,13 @@ class TabMenuTests: BaseTestCase {
         app.buttons["Show Tabs"].press(forDuration: 1)
         app.buttons["Pin Tab"].tap()
 
+        waitForNoExistence(app.staticTexts["Tab Pinned"], timeoutValue: 30)
+
         // Unpin.
         app.buttons["Show Tabs"].press(forDuration: 1)
         app.buttons["Unpin Tab"].tap()
+
+        waitForNoExistence(app.staticTexts["Tab Pinned"], timeoutValue: 30)
 
         // Check that Pin option exists.
         app.buttons["Show Tabs"].press(forDuration: 1)

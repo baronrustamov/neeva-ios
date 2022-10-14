@@ -93,7 +93,7 @@ struct BrowserView: View {
                         BrowserTopBarView(bvc: bvc, geom: geom).onHeightOfViewChanged { height in
                             topBarHeight = height
                         }.fixedSize(horizontal: false, vertical: true)
-                    }
+                    }.ignoresSafeArea([], edges: [])
 
                     // Bottom Bar
                     BrowserBottomBarView().onHeightOfViewChanged { height in
@@ -104,8 +104,9 @@ struct BrowserView: View {
                     keyboardVisibleStateChanged: { isVisible in
                         chromeModel.keyboardShowing = isVisible
                     }
-                ).navigationBarHidden(true)
+                ).ignoresSafeArea(.keyboard, edges: .bottom)
             }
+            .navigationBarHidden(true)
             .navigationViewStyle(.stack)
             .useEffect(deps: geom.safeAreaInsets, topBarHeight, bottomBarHeight) {
                 safeArea, topBarHeight, bottomBarHeight in
