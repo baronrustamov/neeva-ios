@@ -18,7 +18,7 @@ jobs:
 
       - name: Run daily build script
         run: |
-          ruby -r ./Scripts/build.rb -e "daily_build"
+          ruby -r ./Scripts/build.rb -e "daily_build('${{ github.actor }}')"
           if [ "$?" -ne 0 ]; then
             echo "build script failure. Aborting..."
             exit 1
