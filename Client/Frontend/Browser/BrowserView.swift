@@ -104,9 +104,10 @@ struct BrowserView: View {
                     keyboardVisibleStateChanged: { isVisible in
                         chromeModel.keyboardShowing = isVisible
                     }
-                ).ignoresSafeArea(.keyboard, edges: .bottom)
+                )
+                .navigationBarHidden(true)
+                .ignoresSafeArea(.keyboard, edges: .bottom)
             }
-            .navigationBarHidden(true)
             .navigationViewStyle(.stack)
             .useEffect(deps: geom.safeAreaInsets, topBarHeight, bottomBarHeight) {
                 safeArea, topBarHeight, bottomBarHeight in
