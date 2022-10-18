@@ -59,11 +59,11 @@ class CardStripModel: ObservableObject {
     private var detailCount: Int {
         incognitoModel.isIncognito
             ? tabCardModel.incognitoDetails.count
-            : tabCardModel.allDetails.filter { $0.tab.isIncluded(in: [.pinned, .today]) }.count
+            : tabCardModel.normalDetails.filter { $0.tab.isIncluded(in: [.pinned, .today]) }.count
     }
 
     var showCardStrip: Bool {
-        return tabChromeModel.inlineToolbar
+        tabChromeModel.inlineToolbar
             && !tabChromeModel.isEditingLocation
             && detailCount > 1
             && todayTabsExists
