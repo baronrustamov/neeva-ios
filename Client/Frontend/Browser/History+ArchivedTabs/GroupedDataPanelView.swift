@@ -149,6 +149,10 @@ struct GroupedDataPanelView<Model: GroupedDataPanelModel, NavigationButtons: Vie
                         }.padding(.top, 8)
                     }
                 }
+                .transition(.identity)
+                .transaction { transaction in
+                    transaction.animation = nil
+                }
             }
         }
     }
