@@ -364,9 +364,10 @@ class PremiumHelpers {
         }
     }
 
-    static func priceString(from input: Decimal) -> String {
+    static func annualAvgPricePerMonth(_ product: Product) -> String {
         let formatter = NumberFormatter()
+        formatter.locale = product.priceFormatStyle.locale
         formatter.numberStyle = .currency
-        return formatter.string(from: input as NSNumber) ?? "\(input)"
+        return formatter.string(from: product.price / 12 as NSNumber) ?? "\(product.price / 12)"
     }
 }
