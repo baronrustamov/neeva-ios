@@ -141,8 +141,7 @@ class TrackingStatsViewModel: ObservableObject {
     }
 
     func showOnboardingIfNecessary(onboardingBlockType: OnboardingBlockType) {
-        if NeevaExperiment.arm(for: .adBlockOnboarding) == .adBlock
-            && !Defaults[.cookieCutterOnboardingShowed]
+        if !Defaults[.cookieCutterOnboardingShowed]
             && self.onboardingBlockType == nil
             && (onboardingBlockType != .adBlock || ContentBlocker.shared.setupCompleted)
         {
@@ -381,9 +380,7 @@ struct TrackingMenuView: View {
     }
 
     var body: some View {
-        if NeevaExperiment.arm(for: .adBlockOnboarding) == .adBlock
-            && !Defaults[.cookieCutterOnboardingShowed] && viewModel.onboardingBlockType != nil
-        {
+        if !Defaults[.cookieCutterOnboardingShowed] && viewModel.onboardingBlockType != nil {
             onboardingView
         } else {
             GroupedStack {
