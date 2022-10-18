@@ -365,9 +365,23 @@ class PremiumHelpers {
     }
 
     static func annualAvgPricePerMonth(_ product: Product) -> String {
+        let pricePerMonth = product.price / 12
+        var output = ""
+
         let formatter = NumberFormatter()
-        formatter.locale = product.priceFormatStyle.locale
         formatter.numberStyle = .currency
-        return formatter.string(from: product.price / 12 as NSNumber) ?? "\(product.price / 12)"
+        formatter.currencySymbol = ""  // removes currency symbols
+
+        if let fmtPrice = formatter.string(from: product.price as NSNumber),
+            let fmtPricePerMonth = formatter.string(from: pricePerMonth as NSNumber)
+        {
+            // in some languages `NumberFormatter` will append whitespace to currency formatting, so we trim it off
+            let trmPrice = fmtPrice.trimmingCharacters(in: .whitespacesAndNewlines)
+            let trmPricePerMonth = fmtPricePerMonth.trimmingCharacters(in: .whitespacesAndNewlines)
+
+            output = product.displayPrice.replacingOccurrences(of: trmPrice, with: trmPricePerMonth)
+        }
+
+        return output
     }
 }
