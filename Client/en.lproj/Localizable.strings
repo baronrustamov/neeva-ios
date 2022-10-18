@@ -128,8 +128,8 @@
 /* Button to get the free plan for our product */
 "Get FREE" = "Get FREE";
 
-/* save 16% discount in our product's subscription price */
-"Save 16%" = "Save 16%";
+/* save 30% discount in our product's subscription price */
+"Save 30%" = "Save 30%";
 
 /* Text to tell user they can cancel our service any time */
 "Cancel anytime" = "Cancel anytime";
