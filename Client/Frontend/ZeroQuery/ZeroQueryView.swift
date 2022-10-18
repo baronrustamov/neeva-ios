@@ -153,11 +153,7 @@ struct ZeroQueryView: View {
         promoCardView(parentGeom)
         suggestedSitesView(parentGeom)
         searchesView
-        if NeevaExperiment.arm(for: .adBlockOnboarding) == .adBlock {
-            adBlockAnnouncement
-        } else {
-            spacesView
-        }
+        adBlockAnnouncement
         firstRunBranding
     }
 
