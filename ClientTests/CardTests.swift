@@ -55,21 +55,24 @@ class CardTests: XCTestCase {
 
         SpaceStore.shared = .createMock([.stackOverflow, .savedForLater, .shared, .public])
 
-        manager = TabManager(profile: profile, imageStore: nil)
-        tabCardModel = TabCardModel(manager: manager)
-        spaceCardModel = SpaceCardModel(scene: nil)
-        gridModel = GridModel(
-            tabManager: manager, tabCardModel: tabCardModel, spaceCardModel: spaceCardModel)
+        chromeModel = TabChromeModel()
         incognitoModel = IncognitoModel(isIncognito: false)
+        manager = TabManager(profile: profile, imageStore: nil)
+        spaceCardModel = SpaceCardModel(scene: nil)
         switcherToolbarModel = SwitcherToolbarModel(
             tabManager: manager, openLazyTab: {}, createNewSpace: {})
+        tabCardModel = TabCardModel(manager: manager)
+
+        archivedTabsPanelModel = ArchivedTabsGroupedDataModel(tabCardModel: tabCardModel)
+        gridModel = GridModel(
+            tabManager: manager, tabCardModel: tabCardModel, spaceCardModel: spaceCardModel)
+
+        let overlayManager = OverlayManager(chromeModel: chromeModel) { _ in }
         browserModel = BrowserModel(
             gridModel: gridModel, tabManager: manager, chromeModel: .init(),
             incognitoModel: incognitoModel, switcherToolbarModel: switcherToolbarModel,
-            toastViewManager: ToastViewManager(overlayManager: OverlayManager()),
-            overlayManager: OverlayManager())
-        chromeModel = TabChromeModel()
-        archivedTabsPanelModel = ArchivedTabsGroupedDataModel(tabCardModel: tabCardModel)
+            toastViewManager: ToastViewManager(overlayManager: overlayManager),
+            overlayManager: overlayManager)
     }
 
     override func tearDown() {

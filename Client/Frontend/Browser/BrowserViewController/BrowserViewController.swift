@@ -79,7 +79,7 @@ class BrowserViewController: UIViewController {
             tabManager: tabManager,
             openLazyTab: { self.openLazyTab(openedFrom: .tabTray) },
             createNewSpace: {
-                self.showModal(style: .withTitle) {
+                self.overlayManager.showModal(style: .withTitle) {
                     CreateSpaceOverlayContent()
                         .environmentObject(self.gridModel.spaceCardModel)
                 }
@@ -92,7 +92,9 @@ class BrowserViewController: UIViewController {
     }()
 
     lazy var overlayManager: OverlayManager = {
-        OverlayManager()
+        OverlayManager(
+            chromeModel: chromeModel,
+            openURLInNewTabPreservingIncognitoState: openURLInNewTabPreservingIncognitoState)
     }()
     var restoreTabToastHasKeyCommandPriority = false
 
@@ -236,7 +238,7 @@ class BrowserViewController: UIViewController {
         // this hide method calls `dismiss`. When it is called inside
         // cooridnator.animate, it breaks the UI after rotation.
         if !chromeModel.inlineToolbar {
-            hideOverlayPopoverViewController()
+            overlayManager.hideCurrentOverlay(ofPriority: .sheet)
         }
 
         coordinator.animate { [self] _ in
@@ -248,7 +250,7 @@ class BrowserViewController: UIViewController {
             }
 
             if chromeModel.inlineToolbar {
-                hideOverlaySheetViewController()
+                overlayManager.hideCurrentOverlay(ofPriority: .sheet)
             }
         } completion: { [self] _ in
             browserModel.scrollingControlModel.setMinimumZoom()
@@ -1649,7 +1651,7 @@ extension BrowserViewController {
             title: title, description: description, url: url, thumbnail: thumbnail, updater: updater
         )
 
-        self.showModal(
+        overlayManager.showModal(
             style: .spaces,
             headerButton: OverlayHeaderButton(
                 text: "View Spaces",
@@ -1679,7 +1681,7 @@ extension BrowserViewController {
     }
 
     func showSpacesLoginRequiredSheet() {
-        self.showModal(style: .withTitle) {
+        overlayManager.showModal(style: .withTitle) {
             SpacesLoginRequiredView()
                 .environment(\.onSigninOrJoinNeeva) {
                     ClientLogger.shared.logCounter(.SpacesLoginRequired)
@@ -1701,7 +1703,7 @@ extension BrowserViewController {
     func showCheatSheetOverlay() {
         // if on iphone and portrait, present as sheet
         // otherwise, present as popover
-        showModal(style: .cheatsheet) {
+        overlayManager.showModal(style: .cheatsheet) {
             CheatsheetOverlayContent(
                 menuAction: { self.perform(overflowMenuAction: $0, targetButtonView: nil) },
                 tabManager: self.tabManager

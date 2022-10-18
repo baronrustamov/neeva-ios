@@ -53,7 +53,7 @@ class Authenticator {
 
         let deferred = Deferred<Maybe<LoginRecord>>()
 
-        bvc.showModal(style: .grouped) {
+        bvc.overlayManager.showModal(style: .grouped) {
             HTTPAuthPromptOverlayContent(
                 url: protectionSpace.urlString(),
                 onSubmit: { username, password in

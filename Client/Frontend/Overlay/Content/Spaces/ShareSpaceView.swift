@@ -60,8 +60,9 @@ struct ShareSpaceView: View {
 
     @Default(.seenSpacesShareIntro) var seenSpacesShareIntro: Bool
 
-    @EnvironmentObject var tabModel: TabCardModel
+    @EnvironmentObject var overlayManager: OverlayManager
     @EnvironmentObject var spaceModel: SpaceCardModel
+    @EnvironmentObject var tabModel: TabCardModel
     @EnvironmentObject var toastViewManager: ToastViewManager
 
     @State var suggestedContacts: [ContactsProvider.Profile] = []
@@ -376,17 +377,16 @@ struct ShareSpaceView: View {
                         isPresented = false
                         onShared()
                     } else {
-                        let bvc = SceneDelegate.getBVC(with: tabModel.manager.scene)
-                        bvc.showModal(
+                        overlayManager.showModal(
                             style: .spaces,
                             content: {
                                 SpacesShareIntroOverlayContent(
                                     onDismiss: {
-                                        bvc.overlayManager.hideCurrentOverlay(ofPriority: .modal)
+                                        overlayManager.hideCurrentOverlay(ofPriority: .sheet)
                                         seenSpacesShareIntro = true
                                     },
                                     onShare: {
-                                        bvc.overlayManager.hideCurrentOverlay(ofPriority: .modal)
+                                        overlayManager.hideCurrentOverlay(ofPriority: .sheet)
                                         spaceModel.changePublicACL(space: space, add: true)
                                         seenSpacesShareIntro = true
                                         onShared()

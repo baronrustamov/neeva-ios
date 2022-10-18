@@ -101,7 +101,7 @@ class WebUIMessageHelper: TabContentScript {
                 ]
             )
 
-            bvc.showAsModalOverlaySheet(
+            bvc.overlayManager.showAsModalOverlaySheet(
                 style: OverlayStyle(
                     showTitle: false,
                     backgroundColor: .systemBackground)

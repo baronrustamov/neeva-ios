@@ -7,14 +7,16 @@ import Shared
 import SwiftUI
 
 struct ShareAddedSpaceView: View {
-    @Environment(\.hideOverlay) private var hideOverlay
-    @EnvironmentObject private var chromeModel: TabChromeModel
     @EnvironmentObject private var browserModel: BrowserModel
+    @EnvironmentObject private var chromeModel: TabChromeModel
+    @EnvironmentObject private var overlayManager: OverlayManager
+    @Environment(\.hideOverlay) private var hideOverlay
 
     @State var subscription: AnyCancellable?
     @State var refreshing = false
     @State var presentingShareUI: Bool = true
     @ObservedObject var request: AddToSpaceRequest
+
     let bvc: BrowserViewController
 
     private var space: Space? {
@@ -52,7 +54,7 @@ struct ShareAddedSpaceView: View {
 
                             let entity: SpaceEntityData? = space?.contentData?.first
                             if let id = entity?.id, let space = space {
-                                bvc
+                                overlayManager
                                     .showModal(
                                         style: .spaces,
                                         toPosition: .top

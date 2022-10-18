@@ -90,45 +90,17 @@ class OverlayManager: ObservableObject {
     @Published var hideBottomBar = false
     @Published var isPresentedViewControllerVisible = false
     @Published var backgroundOpacityLevel = 5
-
     /// Used to control full screen/popover sheets
     @Published var showFullScreenPopoverSheet = false
 
+    private let chromeModel: TabChromeModel
+    private let openURLInNewTabPreservingIncognitoState: (URL) -> Void
+
     private let animation = Animation.easeInOut(duration: 0.2)
     /// [(Overlay, Animate, Completion)]
-    var queuedOverlays = [(OverlayType, Bool, (() -> Void)?)]()
+    private var queuedOverlays = [(OverlayType, Bool, (() -> Void)?)]()
 
-    func presentFullScreenModal(
-        content: AnyView, animate: Bool = true, ignoreSafeArea: Bool = true,
-        completion: (() -> Void)? = nil
-    ) {
-        let content = AnyView(
-            content
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .if(ignoreSafeArea) { view in
-                    view.ignoresSafeArea()
-                }
-        )
-
-        show(overlay: .fullScreenModal(content), animate: animate, completion: completion)
-    }
-
-    func presentFullScreenCover(
-        content: AnyView, animate: Bool = true,
-        ignoreSafeArea: Bool = true,
-        completion: (() -> Void)? = nil
-    ) {
-        let content = AnyView(
-            content
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .if(ignoreSafeArea) { view in
-                    view.ignoresSafeArea()
-                }
-        )
-
-        show(overlay: .fullScreenCover(content), animate: animate, completion: completion)
-    }
-
+    // MARK: - Show
     @discardableResult func show(
         overlay: OverlayType, animate: Bool = true, completion: (() -> Void)? = nil
     ) -> OverlayType {
@@ -240,6 +212,7 @@ class OverlayManager: ObservableObject {
             ofPriorities: nil, animate: animate, showNext: showNext, completion: completion)
     }
 
+    // MARK: - Hide
     /// Hides a the current Overlay.
     /// - Parameters:
     ///     - ofPriority: Only hide the current Overlay if it matches this priority.
@@ -357,5 +330,160 @@ class OverlayManager: ObservableObject {
     private func resetUIModifiers() {
         offset = 0
         opacity = 1
+    }
+
+    // MARK: - init
+    init(
+        chromeModel: TabChromeModel,
+        openURLInNewTabPreservingIncognitoState: @escaping (URL) -> Void
+    ) {
+        self.chromeModel = chromeModel
+        self.openURLInNewTabPreservingIncognitoState = openURLInNewTabPreservingIncognitoState
+    }
+}
+
+// MARK: - Full Screen Views
+extension OverlayManager {
+    /// Presents a full screen sheet on iPhone that cannot be dismissed by tapping outside.
+    /// Presents as a large modal with padding on iPad that can be dismissed by tapping in the margins.
+    func presentFullScreenModal(
+        content: AnyView, animate: Bool = true, ignoreSafeArea: Bool = true,
+        completion: (() -> Void)? = nil
+    ) {
+        let content = AnyView(
+            content
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .if(ignoreSafeArea) { view in
+                    view.ignoresSafeArea()
+                }
+        )
+
+        show(overlay: .fullScreenModal(content), animate: animate, completion: completion)
+    }
+
+    /// Presents a full screen sheet for both iPhone and iPad.
+    /// Cannot be dismissed by tapping outside the view.
+    func presentFullScreenCover(
+        content: AnyView, animate: Bool = true,
+        ignoreSafeArea: Bool = true,
+        completion: (() -> Void)? = nil
+    ) {
+        let content = AnyView(
+            content
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .if(ignoreSafeArea) { view in
+                    view.ignoresSafeArea()
+                }
+        )
+
+        show(overlay: .fullScreenCover(content), animate: animate, completion: completion)
+    }
+}
+
+// MARK: - Sheet & Popovers
+extension OverlayManager {
+    /// Present Content as sheet if on iPhone and in Portrait; otherwise, present as popover
+    ///  - Tag: showModal
+    func showModal<Content: View>(
+        style: OverlayStyle,
+        headerButton: OverlayHeaderButton? = nil,
+        toPosition: OverlaySheetPosition = .middle,
+        @ViewBuilder content: @escaping () -> Content,
+        onDismiss: (() -> Void)? = nil
+    ) {
+        showModal(
+            style: style,
+            headerButton: headerButton,
+            toPosition: toPosition,
+            headerContent: { EmptyView() },
+            content: content,
+            onDismiss: onDismiss
+        )
+    }
+
+    func showModal<Content: View, HeaderContent: View>(
+        style: OverlayStyle,
+        headerButton: OverlayHeaderButton? = nil,
+        toPosition: OverlaySheetPosition = .middle,
+        @ViewBuilder headerContent: @escaping () -> HeaderContent,
+        @ViewBuilder content: @escaping () -> Content,
+        onDismiss: (() -> Void)? = nil
+    ) {
+        if !chromeModel.inlineToolbar {
+            showAsModalOverlaySheet(
+                style: style,
+                toPosition: toPosition,
+                content: content,
+                onDismiss: onDismiss,
+                headerButton: headerButton,
+                headerContent: headerContent
+            )
+        } else {
+            showAsModalOverlayPopover(
+                style: style, content: content, onDismiss: onDismiss, headerButton: headerButton)
+        }
+    }
+
+    func showAsModalOverlaySheet<Content: View>(
+        style: OverlayStyle,
+        toPosition: OverlaySheetPosition = .middle,
+        @ViewBuilder content: @escaping () -> Content,
+        onDismiss: (() -> Void)? = nil
+    ) {
+        showAsModalOverlaySheet(
+            style: style,
+            toPosition: toPosition,
+            content: content,
+            onDismiss: onDismiss,
+            headerButton: nil,
+            headerContent: { EmptyView() }
+        )
+    }
+
+    func showAsModalOverlaySheet<Content: View, HeaderContent: View>(
+        style: OverlayStyle,
+        toPosition: OverlaySheetPosition = .middle,
+        @ViewBuilder content: @escaping () -> Content,
+        onDismiss: (() -> Void)? = nil,
+        headerButton: OverlayHeaderButton? = nil,
+        @ViewBuilder headerContent: @escaping () -> HeaderContent
+    ) {
+        let overlayView = OverlaySheetRootView(
+            overlayPosition: toPosition,
+            style: style,
+            content: { AnyView(erasing: content()) },
+            onDismiss: { rootView in
+                onDismiss?()
+                self.hide(overlay: .sheet(rootView))
+            },
+            onOpenURL: { url, rootView in
+                self.hide(overlay: .sheet(rootView))
+                self.openURLInNewTabPreservingIncognitoState(url)
+            },
+            headerButton: headerButton,
+            headerContent: { AnyView(erasing: headerContent()) }
+        )
+
+        show(overlay: .sheet(overlayView))
+    }
+
+    func showAsModalOverlayPopover<Content: View>(
+        style: OverlayStyle,
+        @ViewBuilder content: @escaping () -> Content,
+        onDismiss: (() -> Void)? = nil,
+        headerButton: OverlayHeaderButton? = nil
+    ) {
+        let popoverView = PopoverRootView(
+            style: style, content: { AnyView(erasing: content()) },
+            onDismiss: { rootView in
+                onDismiss?()
+                self.hide(overlay: .popover(rootView))
+            },
+            onOpenURL: { url, rootView in
+                self.hide(overlay: .popover(rootView))
+                self.openURLInNewTabPreservingIncognitoState(url)
+            }, headerButton: headerButton)
+
+        self.show(overlay: .popover(popoverView))
     }
 }

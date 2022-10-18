@@ -142,7 +142,7 @@ class NotificationPermissionHelper {
     }
 
     func showChangeNotificationPreferencesInSettingsDialog(from bvc: BrowserViewController) {
-        bvc.showModal(style: .grouped) {
+        bvc.overlayManager.showModal(style: .grouped) {
             ChangeNotificationPreferenceDialogView {
                 SystemsHelper.openSystemSettingsNeevaPage()
                 bvc.overlayManager.hideCurrentOverlay(ofPriority: .modal)

@@ -111,7 +111,7 @@ class UserActivityHandler {
 
     class func presentTextSizeView(tab: Tab) {
         let bvc = SceneDelegate.getBVC(for: tab.webView)
-        bvc.showAsModalOverlaySheet(style: .grouped) {
+        bvc.overlayManager.showAsModalOverlaySheet(style: .grouped) {
             TextSizeView(
                 model: TextSizeModel(tab: tab)
             ) {

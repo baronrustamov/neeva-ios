@@ -77,7 +77,7 @@ extension BrowserViewController: ToolbarDelegate {
                     attributes: EnvironmentHelper.shared.getAttributes() + [toolbarActionAttribute]
                 )
                 self.updateFeedbackImage()
-                self.showModal(style: .nonScrollableMenu) {
+                self.overlayManager.showModal(style: .nonScrollableMenu) {
                     OverflowMenuOverlayContent(
                         menuAction: { action in
                             self.perform(overflowMenuAction: action, targetButtonView: nil)

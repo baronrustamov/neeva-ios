@@ -166,7 +166,7 @@ class SettingsViewController: UIHostingController<AnyView> {
                 self.dismiss(animated: true, completion: nil)
             }
             .environment(\.showNotificationPrompt) {
-                bvc.showAsModalOverlaySheet(
+                bvc.overlayManager.showAsModalOverlaySheet(
                     style: OverlayStyle(
                         showTitle: false,
                         backgroundColor: .systemBackground)

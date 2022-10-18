@@ -7,19 +7,22 @@ import Shared
 import SwiftUI
 
 struct SpaceTopView: View {
-    @Default(.showDescriptions) var showDescriptions
     @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var gridModel: GridModel
-    @EnvironmentObject var tabModel: TabCardModel
+    @EnvironmentObject var overlayManager: OverlayManager
     @EnvironmentObject var spacesModel: SpaceCardModel
+    @EnvironmentObject var tabModel: TabCardModel
     @Environment(\.onOpenURL) var onOpenURL
     @Environment(\.shareURL) var shareURL
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+
+    @Default(.showDescriptions) var showDescriptions
     @State private var shareTargetView: UIView?
     @State private var showConfirmDeleteAlert = false
     @ObservedObject var primitive: SpaceCardDetails
     @Binding var headerVisible: Bool
+
     let addToAnotherSpace: (URL, String?, String?, String?) -> Void
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var space: Space?
 
     var canEdit: Bool {
@@ -86,7 +89,7 @@ struct SpaceTopView: View {
             Button(
                 action: {
                     DispatchQueue.main.async {
-                        SceneDelegate.getBVC(with: tabModel.manager.scene).showModal(
+                        overlayManager.showModal(
                             style: .spaces,
                             toPosition: .top
                         ) {
@@ -125,23 +128,22 @@ struct SpaceTopView: View {
             Button(
                 action: {
                     if case .owner = space.userACL {
-                        SceneDelegate.getBVC(with: tabModel.manager.scene)
-                            .showModal(style: .spaces) {
-                                ShareSpaceContent(
-                                    space: space,
-                                    shareTargetView: shareTargetView ?? UIView(),
-                                    fromAddToSpace: false,
-                                    noteText: "Check out my Neeva Space!"
-                                )
-                                .environmentObject(spacesModel)
-                                .environmentObject(tabModel)
-                                .environment(\.onOpenURL) { url in
-                                    browserModel.hideGridWithNoAnimation()
-                                    spacesModel.detailedSpace = nil
-                                    onOpenURL(url)
-                                }
-                                .environment(\.shareURL, shareURL)
+                        overlayManager.showModal(style: .spaces) {
+                            ShareSpaceContent(
+                                space: space,
+                                shareTargetView: shareTargetView ?? UIView(),
+                                fromAddToSpace: false,
+                                noteText: "Check out my Neeva Space!"
+                            )
+                            .environmentObject(spacesModel)
+                            .environmentObject(tabModel)
+                            .environment(\.onOpenURL) { url in
+                                browserModel.hideGridWithNoAnimation()
+                                spacesModel.detailedSpace = nil
+                                onOpenURL(url)
                             }
+                            .environment(\.shareURL, shareURL)
+                        }
                     } else {
                         shareURL(space.url, shareTargetView ?? UIView())
                         ClientLogger.shared.logCounter(
@@ -166,14 +168,14 @@ struct SpaceTopView: View {
         if let space = space {
             Button(
                 action: {
-                    SceneDelegate.getBVC(with: tabModel.manager.scene)
-                        .showModal(
-                            style: .spaces,
-                            toPosition: .top
-                        ) {
-                            AddOrUpdateSpaceContent(space: space, config: .updateSpace)
-                                .environmentObject(spacesModel)
-                        }
+                    overlayManager.showModal(
+                        style: .spaces,
+                        toPosition: .top
+                    ) {
+                        AddOrUpdateSpaceContent(space: space, config: .updateSpace)
+                            .environmentObject(spacesModel)
+                    }
+
                     ClientLogger.shared.logCounter(
                         .SpacesDetailEditButtonClicked,
                         attributes: EnvironmentHelper.shared.getAttributes())

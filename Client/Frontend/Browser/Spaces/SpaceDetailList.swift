@@ -7,21 +7,24 @@ import Shared
 import SwiftUI
 
 struct SpaceDetailList: View {
-    @Default(.showDescriptions) var showDescriptions
     @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var gridModel: GridModel
-    @EnvironmentObject var tabModel: TabCardModel
+    @EnvironmentObject var overlayManager: OverlayManager
     @EnvironmentObject var spacesModel: SpaceCardModel
+    @EnvironmentObject var tabModel: TabCardModel
     @Environment(\.onOpenURLForSpace) var onOpenURLForSpace
     @Environment(\.shareURL) var shareURL
+
+    @Default(.showDescriptions) var showDescriptions
     @ObservedObject var primitive: SpaceCardDetails
     @Binding var headerVisible: Bool
     @Binding var isVerifiedProfile: Bool
+    @State var addingComment = false
+    @StateObject var spaceCommentsModel = SpaceCommentsModel()
+
     var onShowProfileUI: () -> Void
     let onShowAnotherSpace: (String) -> Void
     let addToAnotherSpace: (URL, String?, String?, String?) -> Void
-    @State var addingComment = false
-    @StateObject var spaceCommentsModel = SpaceCommentsModel()
 
     var canEdit: Bool {
         primitive.ACL >= .edit && !(primitive.item?.isDigest ?? false)
@@ -62,20 +65,19 @@ struct SpaceDetailList: View {
                                 return
                             }
 
-                            SceneDelegate.getBVC(with: tabModel.manager.scene)
-                                .showModal(
-                                    style: .withTitle,
-                                    toPosition: .top
-                                ) {
-                                    AddOrUpdateSpaceContent(
-                                        space: space,
-                                        config: .updateSpaceItem(details.id)
-                                    ) { helpURL in
-                                        SceneDelegate.getBVC(with: tabModel.manager.scene)
-                                            .openURLInNewTab(helpURL)
-                                    }
-                                    .environmentObject(spacesModel)
+                            overlayManager.showModal(
+                                style: .withTitle,
+                                toPosition: .top
+                            ) {
+                                AddOrUpdateSpaceContent(
+                                    space: space,
+                                    config: .updateSpaceItem(details.id)
+                                ) { helpURL in
+                                    SceneDelegate.getBVC(with: tabModel.manager.scene)
+                                        .openURLInNewTab(helpURL)
                                 }
+                                .environmentObject(spacesModel)
+                            }
                         }
 
                         SpaceEntityDetailView(

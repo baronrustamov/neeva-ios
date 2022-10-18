@@ -48,7 +48,6 @@
 		1DA3CE6724EEE86C00422BB2 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075641E37F7AB006961AC /* AppInfo.swift */; };
 		1DDAD13E24F0651C007623C8 /* TopSitesWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDAD13C24F064F7007623C8 /* TopSitesWidget.swift */; };
 		200976852810EA620055A02B /* CookieCutterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200976842810EA620055A02B /* CookieCutterHelper.swift */; };
-		2011A43D283D8B6300947E6B /* BrowserViewController+ShowModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2011A43C283D8B6300947E6B /* BrowserViewController+ShowModal.swift */; };
 		2015BD3628808BF100BA63E0 /* ShortcutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2015BD3528808BF100BA63E0 /* ShortcutTests.swift */; };
 		20167FC72824484800223B9E /* FindInCardGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20167FC62824484800223B9E /* FindInCardGridView.swift */; };
 		20167FCA282448DB00223B9E /* FindView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20167FC9282448DB00223B9E /* FindView.swift */; };
@@ -1336,7 +1335,6 @@
 		1DA3CE6224EEE83200422BB2 /* SavedTab+ConfigureExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SavedTab+ConfigureExtension.swift"; sourceTree = "<group>"; };
 		1DDAD13C24F064F7007623C8 /* TopSitesWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesWidget.swift; sourceTree = "<group>"; };
 		200976842810EA620055A02B /* CookieCutterHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCutterHelper.swift; sourceTree = "<group>"; };
-		2011A43C283D8B6300947E6B /* BrowserViewController+ShowModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+ShowModal.swift"; sourceTree = "<group>"; };
 		2015BD3528808BF100BA63E0 /* ShortcutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutTests.swift; sourceTree = "<group>"; };
 		20167FC62824484800223B9E /* FindInCardGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindInCardGridView.swift; sourceTree = "<group>"; };
 		20167FC9282448DB00223B9E /* FindView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindView.swift; sourceTree = "<group>"; };
@@ -3615,7 +3613,6 @@
 				67AA22F126C476F300F33D09 /* BrowserViewController+OverflowMenu.swift */,
 				66B6567526C4667B00D25767 /* BrowserViewController+SKStoreProductViewControllerDelegate.swift */,
 				20ED47CD27F28235002E3ADF /* BrowserViewController+IntroView.swift */,
-				2011A43C283D8B6300947E6B /* BrowserViewController+ShowModal.swift */,
 			);
 			path = BrowserViewController;
 			sourceTree = "<group>";
@@ -6340,7 +6337,6 @@
 				66F0E62526EC2CFD008A4327 /* OverlayModifiers.swift in Sources */,
 				C9ACC46A267A8A1E009AE182 /* TrackingMenuSettingsView.swift in Sources */,
 				C8A4D2C4262886B900192B4D /* OverlaySheetView.swift in Sources */,
-				2011A43D283D8B6300947E6B /* BrowserViewController+ShowModal.swift in Sources */,
 				8AC7A593280D2B5F00176E7E /* OpenArchivedTabsPanelButton.swift in Sources */,
 				F80983B9283848450039FCBD /* AppearanceSettingsSection.swift in Sources */,
 				C9B2D28226612EF7005EF5AD /* NeevaAccountRow.swift in Sources */,

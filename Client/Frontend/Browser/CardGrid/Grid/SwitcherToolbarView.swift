@@ -51,6 +51,7 @@ struct SwitcherToolbarView: View {
     @EnvironmentObject var browserModel: BrowserModel
     @EnvironmentObject var gridModel: GridModel
     @EnvironmentObject var gridSwitcherModel: GridSwitcherModel
+    @EnvironmentObject var overlayManager: OverlayManager
     @EnvironmentObject var toolbarModel: SwitcherToolbarModel
 
     @State var presentingMenu = false
@@ -90,7 +91,7 @@ struct SwitcherToolbarView: View {
                 } else {
                     if gridSwitcherModel.state == .spaces {
                         TabToolbarButtons.SpaceFilter(weight: .medium) {
-                            bvc.showModal(style: .grouped) {
+                            overlayManager.showModal(style: .grouped) {
                                 SpacesFilterView()
                                     .environmentObject(gridModel.spaceCardModel)
                             }
@@ -105,7 +106,7 @@ struct SwitcherToolbarView: View {
                                 )
                                 // Refesh feedback screenshot before presenting overflow menu
                                 bvc.updateFeedbackImage()
-                                bvc.showModal(style: .nonScrollableMenu) {
+                                overlayManager.showModal(style: .nonScrollableMenu) {
                                     OverflowMenuOverlayContent(
                                         menuAction: { action in
                                             bvc.perform(

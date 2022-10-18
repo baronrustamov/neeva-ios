@@ -484,7 +484,7 @@ extension BrowserViewController: WKNavigationDelegate {
     fileprivate func showOverlay(forExternalUrl url: URL) {
         tabManager.selectedTab?.stop()
 
-        showModal(style: .grouped) {
+        overlayManager.showModal(style: .grouped) {
             OpenInAppOverlayContent(url: url) {
                 ToastDefaults().showToast(
                     with:
@@ -1043,7 +1043,7 @@ extension BrowserViewController: WKNavigationDelegate {
                         || Defaults[.previewModeQueries].count % Defaults[.signupPromptInterval]
                             == 0
                 {
-                    self.showModal(
+                    overlayManager.showModal(
                         style: OverlayStyle(
                             showTitle: false,
                             backgroundColor: .systemBackground,
