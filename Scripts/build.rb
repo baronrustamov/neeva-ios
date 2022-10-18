@@ -85,7 +85,6 @@ end
 def create_pr(github_user)
   if (get_current_branch_name.start_with?('prepare-'))
     execute_shell_command("gh pr create -t \"Prepare for build #{get_build_number}\" -r \"#{github_user}\" -b \"Bumping up version for next build\"")
-    execute_shell_command("gh pr merge --auto --merge --delete-branch")
   end
 end
 
