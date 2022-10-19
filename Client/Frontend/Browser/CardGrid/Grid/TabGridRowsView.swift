@@ -89,6 +89,9 @@ struct TabGridRowsView: View {
             }
             .id(row.id)
             .zIndex(row.cells.contains(where: \.isSelected) ? 1 : 0)
+            .transaction { transaction in
+                transaction.animation = nil
+            }
         }
     }
 
