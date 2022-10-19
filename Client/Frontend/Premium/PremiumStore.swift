@@ -364,9 +364,9 @@ class PremiumHelpers {
         }
     }
 
-    static func annualAvgPricePerMonth(_ product: Product) -> String {
+    static func annualAvgPricePerMonth(_ product: Product) -> String? {
         let pricePerMonth = product.price / 12
-        var output = ""
+        var output: String? = nil
 
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
@@ -380,6 +380,11 @@ class PremiumHelpers {
             let trmPricePerMonth = fmtPricePerMonth.trimmingCharacters(in: .whitespacesAndNewlines)
 
             output = product.displayPrice.replacingOccurrences(of: trmPrice, with: trmPricePerMonth)
+
+            // if the output is the same as the original display price, something went wrong
+            if output == product.displayPrice {
+                output = nil
+            }
         }
 
         return output

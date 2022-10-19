@@ -81,10 +81,12 @@ struct NeevaPremiumView: View {
                     VStack {
                         Text("Premium\nAnnual")
                             .font(.system(size: 16, weight: .bold))
-                        Text(
-                            "\(PremiumHelpers.annualAvgPricePerMonth(annualProduct)) /mo"
-                        )
-                        .font(.system(size: 14))
+                        if let avgPricePerMonth = PremiumHelpers.annualAvgPricePerMonth(
+                            annualProduct)
+                        {
+                            Text("\(avgPricePerMonth) /mo")
+                                .font(.system(size: 14))
+                        }
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .multilineTextAlignment(.center)
