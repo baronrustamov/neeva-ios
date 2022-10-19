@@ -485,15 +485,28 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     // Use for links, that do not show a confirmation before opening.
-    fileprivate func showOverlay(forExternalUrl url: URL) {
+    //
+    // Callback is not triggered when the user clicks off the modal. (I.e.,
+    // dismisses without clicking one of the buttons. This is a known issue.)
+    fileprivate func showOpenInExternalAppConfirmation(
+        forExternalUrl url: URL, completion: ((Bool) -> Void)? = nil
+    ) {
         tabManager.selectedTab?.stop()
 
         overlayManager.showModal(style: .grouped) {
-            OpenInAppOverlayContent(url: url) {
-                ToastDefaults().showToast(
-                    with:
-                        "Unable to open link in external app. Check if the app is installed on this device.",
-                    toastViewManager: self.toastViewManager)
+            OpenInAppOverlayContent(url: url) { state in
+                switch state {
+                case .didOpen:
+                    completion?(true)
+                case .didNotOpen:
+                    ToastDefaults().showToast(
+                        with:
+                            "Unable to open link in external app. Check if the app is installed on this device.",
+                        toastViewManager: self.toastViewManager)
+                    fallthrough
+                case .canceled:
+                    completion?(false)
+                }
             }.environment(\.hideOverlay, { self.overlayManager.hideCurrentOverlay() })
         }
     }
@@ -553,20 +566,19 @@ extension BrowserViewController: WKNavigationDelegate {
         //            return
         //        }
 
-        if isStoreURL(url), let appStoreID = getAppStoreID(url) {
-            let productVC = SKStoreProductViewController()
-            productVC.delegate = self
-            productVC.loadProduct(withParameters: [
-                SKStoreProductParameterITunesItemIdentifier: appStoreID
-            ]) { _, error in
-                if let error = error {
-                    print("Error loading SKStoreProductViewController:", error)
-                    self.showOverlay(forExternalUrl: url)
+        if isStoreURL(url) {
+            showOpenInExternalAppConfirmation(forExternalUrl: url) { [self] didOpenApp in
+                // Firebase opens a new tab to redirect to the App Store. If the user successfully
+                // opens the App Store, either go back or remove the tab to leave more meaningful
+                // content.
+                if didOpenApp, webView.url?.host?.hasSuffix("page.link") == true {
+                    if webView.canGoBack {
+                        webView.goBack()
+                    } else {
+                        tabManager.removeTab(tabManager[webView], showToast: false)
+                    }
                 }
             }
-
-            present(productVC, animated: true, completion: nil)
-
             decisionHandler(.cancel)
             return
         }
@@ -625,7 +637,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // always allow this. Additionally, data URIs are also handled just like normal web pages.
 
         if ["http", "https", "blob", "file"].contains(url.scheme) {
-            if navigationAction.targetFrame?.isMainFrame ?? false {
+            if isMainFrame {
                 tab.changedUserAgent = Tab.ChangeUserAgent.contains(
                     url: url, isIncognito: tab.isIncognito)
             }
@@ -698,10 +710,9 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         // Only show OpenInAppOverlay for schemes other than Neeva,
-        if !(url.scheme?.contains("neeva") ?? true),
-            navigationAction.targetFrame?.isMainFrame ?? false  // and from the main frame.
-        {
-            showOverlay(forExternalUrl: url)
+        // and from the main frame.
+        if !(url.scheme?.contains("neeva") ?? true), isMainFrame {
+            showOpenInExternalAppConfirmation(forExternalUrl: url)
         }
 
         decisionHandler(.cancel)

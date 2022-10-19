@@ -8,24 +8,35 @@ import SwiftUI
 struct OpenInAppOverlayContent: View {
     @Environment(\.hideOverlay) private var hideOverlay
 
+    enum OpenInAppOverlayState {
+        case canceled
+        case didOpen
+        case didNotOpen
+    }
+
     let url: URL
-    let failedToOpenURL: () -> Void
+    let completionHandler: ((OpenInAppOverlayState) -> Void)?
 
     var body: some View {
         OpenInAppOverlayView(
             url: url,
             onOpen: {
                 hideOverlay()
-
-                UIApplication.shared.open(url, options: [:]) { opened in
-                    if !opened {
-                        failedToOpenURL()
-                    }
+                UIApplication.shared.open(url, options: [:]) { success in
+                    completionHandler?(success ? .didOpen : .didNotOpen)
                 }
             },
-            onCancel: hideOverlay
+            onCancel: {
+                hideOverlay()
+                completionHandler?(.canceled)
+            }
         )
         .padding(.bottom)
         .overlayIsFixedHeight(isFixedHeight: true)
+    }
+
+    init(url: URL, completionHandler: ((OpenInAppOverlayState) -> Void)? = nil) {
+        self.url = url
+        self.completionHandler = completionHandler
     }
 }
