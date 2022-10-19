@@ -428,6 +428,10 @@ extension WKNavigationAction {
 }
 
 extension BrowserViewController: WKNavigationDelegate {
+    private static let schemesHandledByOS: Set = [
+        "facetime", "facetime-audio", "mailto", "sms", "tel",
+    ]
+
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         logJSConsoleOutputIfEnabled(for: webView)
 
@@ -508,6 +512,8 @@ extension BrowserViewController: WKNavigationDelegate {
         _ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
+        let isMainFrame = navigationAction.targetFrame?.isMainFrame == true
+
         guard let url = navigationAction.request.url, let tab = tabManager[webView] else {
             decisionHandler(.cancel)
             return
@@ -526,18 +532,9 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        // Prompt the user before redirecting to an external app.
-        if ["sms", "mailto"].contains(url.scheme) {
-            showOverlay(forExternalUrl: url)
-
-            decisionHandler(.cancel)
-            return
-        }
-
-        // These schemes always show a system prompt, so we don’t need to show our own
-        if ["tel", "facetime", "facetime-audio"].contains(url.scheme) {
+        // We let the operating system handle schemes like tel, facetime, etc.
+        if let scheme = url.scheme, Self.schemesHandledByOS.contains(scheme), isMainFrame {
             UIApplication.shared.open(url, options: [:])
-
             decisionHandler(.cancel)
             return
         }
