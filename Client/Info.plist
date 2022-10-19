@@ -59,26 +59,42 @@
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-		<string>ymail</string>
-		<string>ms-outlook</string>
+		<!--
+			MAXIMUM OF 50
+			https://developer.apple.com/documentation/uikit/uiapplication/1622952-canopenurl
+			
+			More info on third-party custom schemes
+			https://medium.com/@contact.jmeyers/complete-list-of-ios-url-schemes-for-apple-apps-and-services-always-updated-800c64f450f
+		-->
+		<!-- Productivity -->
 		<string>airmail</string>
-		<string>italiaonline-mailto</string>
-		<string>mailru-mailto</string>
-		<string>mymail-mailto</string>
-		<string>readdle-spark</string>
-		<string>itms-books</string>
-		<string>org-appextension-feature-password-management</string>
-		<string>googlegmail</string>
 		<string>fastmail</string>
-		<string>twitter</string>
-		<string>fb</string>
-		<string>linkedin</string>
+		<string>googlegmail</string>
+		<string>mobilenotes</string>
+		<string>ms-outlook</string>
+		<string>readdle-spark</string>
+		<string>webcal</string>
+		<string>ymail</string>
 		<string>zoomus</string>
+		<!-- Social -->
+		<string>fb</string>
+		<string>instagram</string>
+		<string>linkedin</string>
+		<string>twitter</string>
+		<string>venmo</string>
+		<string>whatsapp</string>
+		<!-- Travel -->
 		<string>lyft</string>
 		<string>uber</string>
-		<string>instagram</string>
-		<string>whatsapp</string>
-		<string>venmo</string>
+		<string>waze</string>
+		<!-- Misc. (Do we need these?) -->
+		<string>ibooks</string>
+		<string>italiaonline-mailto</string>
+		<string>itms-books</string>
+		<string>itms-bookss</string>
+		<string>mailru-mailto</string>
+		<string>mymail-mailto</string>
+		<string>org-appextension-feature-password-management</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
