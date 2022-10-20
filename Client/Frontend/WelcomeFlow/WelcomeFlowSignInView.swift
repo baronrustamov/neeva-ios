@@ -14,9 +14,7 @@ struct WelcomeFlowSignInView: View {
     @State var showError = false
 
     var body: some View {
-        VStack {
-            Spacer()
-
+        VStack(spacing: 0) {
             AuthButtonView(
                 icon: Image(systemSymbol: .applelogo),
                 label: "Sign in with Apple",
@@ -97,9 +95,8 @@ struct WelcomeFlowSignInView: View {
                     model.changeScreenTo(.signInQRCode)
                 }
             }
-
-            Spacer()
         }
+        .frame(maxHeight: .infinity)
         .alert(isPresented: self.$showError) {
             Alert(
                 title: Text("Error"),

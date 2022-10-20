@@ -15,7 +15,7 @@ struct WelcomeFlowSignUpView: View {
     @State var showError = false
 
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             WelcomeFlowHeaderView(text: "Create your account")
                 .padding(.bottom, 20)
 
@@ -27,8 +27,7 @@ struct WelcomeFlowSignUpView: View {
                     size: UIDevice.current.useTabletInterface || UIConstants.hasHomeButton
                         ? 18 : 24, weight: .regular)
             )
-
-            Spacer()
+            .padding(.bottom, 20)
 
             AuthButtonView(
                 icon: Image(systemSymbol: .applelogo),
@@ -123,8 +122,7 @@ struct WelcomeFlowSignUpView: View {
             .onChange(of: emailOptIn) { newValue in
                 model.authStore.marketingEmailOptOut = !newValue
             }
-
-            Spacer()
+            .padding(.top)
         }
         .alert(isPresented: self.$showError) {
             Alert(

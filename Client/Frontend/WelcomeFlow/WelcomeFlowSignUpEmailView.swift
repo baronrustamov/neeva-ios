@@ -44,7 +44,5 @@ struct WelcomeFlowSignUpEmailView: View {
         .onAppear {
             model.logCounter(.ScreenImpression)
         }
-
-        Spacer()
     }
 }

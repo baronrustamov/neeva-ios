@@ -21,9 +21,9 @@ struct WelcomeFlowIntroView: View {
     var body: some View {
         VStack(alignment: .leading) {
             WelcomeFlowHeaderView(
-                text: "Search and browse, free from corporate influence", alignment: .leading)
-
-            Spacer()
+                text: "Search and browse, free from corporate influence", alignment: .leading
+            )
+            .padding(.bottom)
 
             ForEach(bullets, id: \.self.0) { (primary, secondary) in
                 HStack(alignment: .top) {
@@ -34,7 +34,7 @@ struct WelcomeFlowIntroView: View {
                         Text(LocalizedStringKey(secondary)).font(.system(size: 14))
                     }
                 }
-                .padding(.vertical, 10)
+                .padding(.bottom)
             }
 
             Spacer()
@@ -79,6 +79,7 @@ struct WelcomeFlowIntroView: View {
                     }
                 )
                 .buttonStyle(.neeva(.secondary))
+                .padding(.bottom)
             }
 
             Spacer()
@@ -101,8 +102,6 @@ struct WelcomeFlowIntroView: View {
             }
             .padding(.bottom, 18)
             .padding(.horizontal, 30)
-
-            Spacer()
 
             WelcomeFlowPrivacyAndTermsLinksView()
                 .frame(maxWidth: .infinity, alignment: .center)

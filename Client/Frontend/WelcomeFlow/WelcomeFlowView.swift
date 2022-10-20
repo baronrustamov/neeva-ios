@@ -28,64 +28,64 @@ struct WelcomeFlowView: View {
                 }
 
                 // this is the main container
-                VStack(spacing: 0) {
-                    // nav buttons (back and close)
-                    HStack(alignment: .bottom) {
-                        if model.prevScreens.count != 0 {
-                            Button(action: {
-                                model.logCounter(.PreviousScreenClick)
-                                model.goToPreviousScreen()
-                            }) {
-                                Symbol(decorative: .arrowBackwardCircleFill, size: 30)
-                                    .foregroundColor(Color.secondary)
+                ScrollView {
+                    VStack(spacing: 0) {
+                        // nav buttons (back and close)
+                        HStack(alignment: .bottom) {
+                            if model.prevScreens.count != 0 {
+                                Button(action: {
+                                    model.logCounter(.PreviousScreenClick)
+                                    model.goToPreviousScreen()
+                                }) {
+                                    Symbol(decorative: .arrowBackwardCircleFill, size: 30)
+                                        .foregroundColor(Color.secondary)
+                                }
+                            }
+
+                            Spacer()
+
+                            if model.showCloseButton {
+                                Button(action: { model.complete() }) {
+                                    Symbol(decorative: .xmarkCircleFill, size: 30)
+                                        .foregroundColor(Color.secondary)
+                                }
                             }
                         }
+                        .frame(minHeight: 40)
+                        .padding(.top, 10)
+                        .padding(.horizontal, 10)
 
-                        Spacer()
+                        // word mark
+                        Image("neeva-letter-only")
+                            .resizable()
+                            .renderingMode(.template)
+                            .scaledToFit()
+                            .frame(width: 100)
+                            .foregroundColor(Color.secondary)
+                            .padding(.bottom, 25)
 
-                        if model.showCloseButton {
-                            Button(action: { model.complete() }) {
-                                Symbol(decorative: .xmarkCircleFill, size: 30)
-                                    .foregroundColor(Color.secondary)
+                        // screen content
+                        Group {
+                            switch model.currentScreen {
+                            case .plans:
+                                WelcomeFlowPlansView(model: model)
+                            case .signUp:
+                                WelcomeFlowSignUpView(
+                                    model: model, emailOptIn: !model.authStore.marketingEmailOptOut)
+                            case .signUpEmail:
+                                WelcomeFlowSignUpEmailView(model: model)
+                            case .signIn:
+                                WelcomeFlowSignInView(model: model)
+                            case .signInQRCode:
+                                WelcomeFlowSignInQRCodeView(model: model)
+                            case .defaultBrowser:
+                                WelcomeFlowDefaultBrowserView(model: model)
+                            default:
+                                WelcomeFlowIntroView(model: model)
                             }
                         }
+                        .padding(.horizontal, 25)
                     }
-                    .frame(minHeight: 40)
-                    .padding(.top, 10)
-                    .padding(.horizontal, 10)
-
-                    // word mark
-                    Image("neeva-letter-only")
-                        .resizable()
-                        .renderingMode(.template)
-                        .scaledToFit()
-                        .frame(width: 100)
-                        .foregroundColor(Color.secondary)
-                        .padding(.bottom, 25)
-
-                    // screen content
-                    Group {
-                        switch model.currentScreen {
-                        case .plans:
-                            WelcomeFlowPlansView(model: model)
-                        case .signUp:
-                            WelcomeFlowSignUpView(
-                                model: model, emailOptIn: !model.authStore.marketingEmailOptOut)
-                        case .signUpEmail:
-                            WelcomeFlowSignUpEmailView(model: model)
-                        case .signIn:
-                            WelcomeFlowSignInView(model: model)
-                        case .signInQRCode:
-                            WelcomeFlowSignInQRCodeView(model: model)
-                        case .defaultBrowser:
-                            WelcomeFlowDefaultBrowserView(model: model)
-                        default:
-                            WelcomeFlowIntroView(model: model)
-                        }
-                    }
-                    .padding(.horizontal, 25)
-
-                    Spacer()
                 }
                 .frame(
                     maxWidth: UIDevice.current.useTabletInterface ? 380 : .infinity,

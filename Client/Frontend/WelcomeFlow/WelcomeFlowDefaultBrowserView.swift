@@ -15,10 +15,9 @@ struct WelcomeFlowDefaultBrowserView: View {
     ]
 
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
             WelcomeFlowHeaderView(text: "Make Neeva your default browser")
-
-            Spacer()
+                .padding(.bottom)
 
             ForEach(bullets, id: \.self.0) { (primary, secondary) in
                 HStack(alignment: .top) {
@@ -32,8 +31,6 @@ struct WelcomeFlowDefaultBrowserView: View {
                 .padding(.vertical, 10)
             }
 
-            Spacer()
-
             VStack(alignment: .leading) {
                 Text("Follow these 2 easy steps:")
                     .withFont(.bodyLarge)
@@ -42,6 +39,7 @@ struct WelcomeFlowDefaultBrowserView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.top, 10)
 
             VStack(alignment: .leading) {
                 HStack {
@@ -79,9 +77,7 @@ struct WelcomeFlowDefaultBrowserView: View {
                     .stroke(Color(UIColor.systemGray5), lineWidth: 3)
             )
 
-            Spacer()
-
-            Group {
+            VStack(spacing: 0) {
                 Button(
                     action: {
                         if model.defaultBrowserContinueMode {
@@ -106,6 +102,8 @@ struct WelcomeFlowDefaultBrowserView: View {
                     }
                 )
                 .buttonStyle(.neeva(.primary))
+                .padding(.top, 20)
+                .padding(.bottom)
 
                 Button(
                     action: {
@@ -132,8 +130,6 @@ struct WelcomeFlowDefaultBrowserView: View {
                 )
                 .buttonStyle(.neeva(.secondary))
             }
-
-            Spacer()
         }
         .onAppear {
             model.logCounter(.ScreenImpression)
