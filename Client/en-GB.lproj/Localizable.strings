@@ -1037,12 +1037,6 @@
 "No Matches" = "No Matches";
 
 /* No comment provided by engineer. */
-"Non-essential Cookies" = "Non-essential Cookies";
-
-/* No comment provided by engineer. */
-"Non-essential cookies will be set to decline." = "Non-essential cookies will be set to decline.";
-
-/* No comment provided by engineer. */
 "Not now" = "Not now";
 
 /* No comment provided by engineer. */
@@ -1056,6 +1050,9 @@
 
 /* No comment provided by engineer. */
 "on a search result or website to add to your Space" = "on a search result or website to add to your Space";
+
+/* No comment provided by engineer. */
+"Only available in Strict mode" = "Only available in Strict mode";
 
 /* No comment provided by engineer. */
 "Only visible to you and people you shared with" = "Only visible to you and people you shared with";
@@ -1301,6 +1298,9 @@
 "Save 30%" = "Save 30%";
 
 /* No comment provided by engineer. */
+"Save All to Spaces" = "Save All to Spaces";
+
+/* No comment provided by engineer. */
 "Save and share instantly. Stay organized by adding images, websites, documents to a Space today" = "Save and share instantly. Stay organised by adding images, websites, documents to a Space today";
 
 /* the save action to save an item to a space */
@@ -1492,6 +1492,9 @@
 /* No comment provided by engineer. */
 "Spread the cheer on the App Store? Your review will help Neeva grow." = "Spread the cheer on the App Store? Your review will help Neeva grow.";
 
+/* (No Comment) */
+"Standard" = "Standard";
+
 /* No comment provided by engineer. */
 "Start Searching" = "Start Searching";
 
@@ -1503,6 +1506,9 @@
 
 /* No comment provided by engineer. */
 "Stop" = "Stop";
+
+/* (No Comment) */
+"Strict" = "Strict";
 
 /* No comment provided by engineer. */
 "Submit" = "Submit";
@@ -1601,7 +1607,7 @@
 "Toolbar" = "Toolbar";
 
 /* No comment provided by engineer. */
-"TRACKERS" = "TRACKERS";
+"TRACKER AND AD BLOCKING" = "TRACKER AND AD BLOCKING";
 
 /* Bullet point text to describe Neeva benefit */
 "Tracking prevention" = "Tracking prevention";

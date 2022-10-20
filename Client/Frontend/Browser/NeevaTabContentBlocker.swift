@@ -30,9 +30,9 @@ enum BlockingStrength: String, Codable, CaseIterable, Identifiable {
     var description: LocalizedStringKey {
         switch self {
         case .easyPrivacy:
-            return "Blocks many trackers. Minimizes disruption to ads and other funtionality."
+            return "Blocks most trackers. Minimizes disruption to ads and other functionality."
         case .easyPrivacyStrict:
-            return "Blocks more trackers. May break ads and other functionlity on some sites."
+            return "Blocks more trackers. May disrupt ads and other functionality on some sites."
         }
     }
 }
