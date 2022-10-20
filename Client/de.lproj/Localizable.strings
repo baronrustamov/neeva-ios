@@ -1037,12 +1037,6 @@
 "No Matches" = "Keine Übereinstimmungen";
 
 /* No comment provided by engineer. */
-"Non-essential Cookies" = "Nicht notwendige Cookies";
-
-/* No comment provided by engineer. */
-"Non-essential cookies will be set to decline." = "Nicht wesentliche Cookies werden abgelehnt.";
-
-/* No comment provided by engineer. */
 "Not now" = "Nicht jetzt";
 
 /* No comment provided by engineer. */
@@ -1056,6 +1050,9 @@
 
 /* No comment provided by engineer. */
 "on a search result or website to add to your Space" = "in einem Suchergebnis oder auf einer Website, um sie Ihrem Bereich hinzuzufügen";
+
+/* No comment provided by engineer. */
+"Only available in Strict mode" = "Nur im strengen Modus verfügbar";
 
 /* No comment provided by engineer. */
 "Only visible to you and people you shared with" = "Nur für Sie und Personen, mit denen Sie die Inhalte geteilt haben, sichtbar.";
@@ -1301,6 +1298,9 @@
 "Save 30%" = "30 % sparen";
 
 /* No comment provided by engineer. */
+"Save All to Spaces" = "Alle in Bereichen speichern";
+
+/* No comment provided by engineer. */
 "Save and share instantly. Stay organized by adding images, websites, documents to a Space today" = "Speichern und sofort teilen. Bleiben Sie gut organisiert: Fügen Sie noch heute Bilder, Websites und Dokumente zu einem Bereich hinzu.";
 
 /* the save action to save an item to a space */
@@ -1492,6 +1492,9 @@
 /* No comment provided by engineer. */
 "Spread the cheer on the App Store? Your review will help Neeva grow." = "Begeisterung mit anderen im App Store teilen? Ihre Bewertung wird Neeva helfen zu wachsen.";
 
+/* (No Comment) */
+"Standard" = "Standard";
+
 /* No comment provided by engineer. */
 "Start Searching" = "Suche starten";
 
@@ -1503,6 +1506,9 @@
 
 /* No comment provided by engineer. */
 "Stop" = "Stopp";
+
+/* (No Comment) */
+"Strict" = "Streng";
 
 /* No comment provided by engineer. */
 "Submit" = "Einreichen";
@@ -1601,7 +1607,7 @@
 "Toolbar" = "Symbolleiste";
 
 /* No comment provided by engineer. */
-"TRACKERS" = "Tracker";
+"TRACKER AND AD BLOCKING" = "TRACKER- UND WERBEBLOCKIERUNG";
 
 /* Bullet point text to describe Neeva benefit */
 "Tracking prevention" = "Verhindern von Tracking";

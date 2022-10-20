@@ -1037,12 +1037,6 @@
 "No Matches" = "Aucune correspondance";
 
 /* No comment provided by engineer. */
-"Non-essential Cookies" = "Cookies non essentiels";
-
-/* No comment provided by engineer. */
-"Non-essential cookies will be set to decline." = "Les cookies non essentiels seront configurés pour être refusés.";
-
-/* No comment provided by engineer. */
 "Not now" = "Pas maintenant";
 
 /* No comment provided by engineer. */
@@ -1056,6 +1050,9 @@
 
 /* No comment provided by engineer. */
 "on a search result or website to add to your Space" = "sur un résultat de recherche ou un site Web pour l'ajouter à votre espace";
+
+/* No comment provided by engineer. */
+"Only available in Strict mode" = "Disponible uniquement en mode strict.";
 
 /* No comment provided by engineer. */
 "Only visible to you and people you shared with" = "Uniquement visible par vous et les personnes avec qui vous partagez";
@@ -1301,6 +1298,9 @@
 "Save 30%" = "Économisez 30 %";
 
 /* No comment provided by engineer. */
+"Save All to Spaces" = "Tout enregistrer dans les espaces";
+
+/* No comment provided by engineer. */
 "Save and share instantly. Stay organized by adding images, websites, documents to a Space today" = "Enregistrez et partagez instantanément. Faites du tri en ajoutant des images, des sites Web et des documents à un espace dès aujourd'hui.";
 
 /* the save action to save an item to a space */
@@ -1492,6 +1492,9 @@
 /* No comment provided by engineer. */
 "Spread the cheer on the App Store? Your review will help Neeva grow." = "Vous souhaitez répandre de la joie sur l'App Store ? Votre avis nous permettra d'améliorer Neeva.";
 
+/* (No Comment) */
+"Standard" = "Standard";
+
 /* No comment provided by engineer. */
 "Start Searching" = "Lancer la recherche";
 
@@ -1503,6 +1506,9 @@
 
 /* No comment provided by engineer. */
 "Stop" = "Arrêter";
+
+/* (No Comment) */
+"Strict" = "Strict";
 
 /* No comment provided by engineer. */
 "Submit" = "Envoyer";
@@ -1601,7 +1607,7 @@
 "Toolbar" = "Barre d'outils";
 
 /* No comment provided by engineer. */
-"TRACKERS" = "Traqueurs";
+"TRACKER AND AD BLOCKING" = "BLOCAGE DE TRAQUEURS ET PUBLICITÉS";
 
 /* Bullet point text to describe Neeva benefit */
 "Tracking prevention" = "Blocage des traqueurs";
