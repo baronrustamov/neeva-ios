@@ -48,7 +48,8 @@ struct NeevaAccountInfoView: View {
                 // Only show for iOS 15 users who are in a country where Premium is offered
                 // and are not Lifetime and have not paid through another source.
                 if PremiumStore.isOfferedInLanguage() && userInfo.subscriptionType != .lifetime
-                    && (userInfo.subscription?.source == SubscriptionSource.none
+                    && (userInfo.subscription == nil
+                        || userInfo.subscription?.source == SubscriptionSource.none
                         || userInfo.subscription?.source == SubscriptionSource.apple)
                 {
                     NavigationLink(
