@@ -14,8 +14,6 @@ struct WelcomeFlowSignInQRCodeView: View {
 
     var body: some View {
         VStack {
-            Spacer()
-
             CodeScannerView(codeTypes: [.qr]) { result in
                 model.authStore.signInwithQRCode(
                     result,
@@ -28,8 +26,6 @@ struct WelcomeFlowSignInQRCodeView: View {
                         model.changeScreenTo(.defaultBrowser)
                     })
             }
-
-            Spacer()
         }
         .alert(isPresented: self.$showError) {
             Alert(

@@ -28,9 +28,9 @@ struct WelcomeFlowPlansView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
             WelcomeFlowHeaderView(text: "Choose the right plan for you")
-                .padding(.bottom, 20)
+                .padding(.bottom)
 
             HStack(spacing: 0) {
                 VStack {
@@ -144,26 +144,26 @@ struct WelcomeFlowPlansView: View {
             .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: .infinity)
             .background(Color(UIColor.secondaryLabel).opacity(0.25)).cornerRadius(8)
+            .padding(.bottom)
 
-            Spacer()
-
-            ForEach(bullets, id: \.self.0) { (primary, secondary) in
-                HStack(alignment: .top) {
-                    Symbol(decorative: .checkmark, size: 18)
-                        .foregroundColor(Color.ui.adaptive.blue)
-                    VStack(alignment: .leading) {
-                        Text(LocalizedStringKey(primary)).font(.system(size: 16, weight: .bold))
-                        if secondary != "" {
-                            Text(LocalizedStringKey(secondary)).font(.system(size: 12))
+            VStack(alignment: .leading, spacing: 0) {
+                ForEach(bullets, id: \.self.0) { (primary, secondary) in
+                    HStack(alignment: .top) {
+                        Symbol(decorative: .checkmark, size: 18)
+                            .foregroundColor(Color.ui.adaptive.blue)
+                        VStack(alignment: .leading) {
+                            Text(LocalizedStringKey(primary)).font(.system(size: 16, weight: .bold))
+                            if secondary != "" {
+                                Text(LocalizedStringKey(secondary)).font(.system(size: 12))
+                            }
                         }
                     }
+                    .padding(.bottom, 10)
                 }
-                .padding(.bottom, 10)
             }
+            .padding(.bottom, 10)
 
-            Group {
-                Spacer()
-
+            VStack(spacing: 0) {
                 HStack {
                     Text(PremiumStore.shared.priceText(model.currentPremiumPlan))
                         .fontWeight(.bold)
@@ -176,6 +176,7 @@ struct WelcomeFlowPlansView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .multilineTextAlignment(.center)
+                .padding(.bottom, 5)
 
                 if let subText = PremiumHelpers.priceSubText(model.currentPremiumPlan) {
                     HStack {
@@ -193,11 +194,10 @@ struct WelcomeFlowPlansView: View {
                     .frame(maxWidth: .infinity)
                     .multilineTextAlignment(.center)
                 }
-
-                Spacer()
             }
+            .padding(.bottom)
 
-            Group {
+            VStack(spacing: 0) {
                 Button(
                     action: {
                         model.logCounter(
@@ -241,6 +241,7 @@ struct WelcomeFlowPlansView: View {
                     }
                 )
                 .buttonStyle(.neeva(.primary))
+                .padding(.bottom, 10)
 
                 if let subText = PremiumHelpers.primaryActionSubText(model.currentPremiumPlan),
                     subText != ""
@@ -264,23 +265,22 @@ struct WelcomeFlowPlansView: View {
                         }
                     )
                     .buttonStyle(.neeva(.clear))
+                    .padding(.top)
                 }
             }
+            .padding(.bottom)
 
-            Spacer()
-
-            Group {
+            VStack(spacing: 0) {
                 SafariVCLink(
                     "Subscribe and help fight climate change",
                     url: NeevaConstants.appClimatePledgeURL
                 )
                 .frame(maxWidth: .infinity)
+                .padding(.bottom, 10)
 
                 WelcomeFlowPrivacyAndTermsLinksView()
                     .frame(maxWidth: .infinity, alignment: .center)
             }
-
-            Spacer()
         }
         .onAppear {
             model.logCounter(.ScreenImpression)
