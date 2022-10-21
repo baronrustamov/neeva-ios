@@ -83,6 +83,7 @@ struct GridPicker: View {
             .frame(height: gridModel.pickerHeight)
             .if(!isInToolbar) {
                 $0.padding(.bottom, BrowserTopBarViewUX.GridPickerBottomPadding)
+                    .background(Color.background.ignoresSafeArea())
             }
             .opacity(gridVisibilityModel.showGrid ? 1 : 0)
             .disabled(isSearchingForTabs)
