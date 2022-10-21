@@ -488,7 +488,7 @@ extension BrowserViewController: WKNavigationDelegate {
     //
     // Callback is not triggered when the user clicks off the modal. (I.e.,
     // dismisses without clicking one of the buttons. This is a known issue.)
-    fileprivate func showOpenInExternalAppConfirmation(
+    func showOpenInExternalAppConfirmation(
         forExternalUrl url: URL, completion: ((Bool) -> Void)? = nil
     ) {
         tabManager.selectedTab?.stop()

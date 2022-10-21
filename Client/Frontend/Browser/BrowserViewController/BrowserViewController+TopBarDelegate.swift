@@ -33,10 +33,18 @@ extension BrowserViewController: TopBarDelegate {
         if let fixupURL = URLFixup.getURL(text), !isSearchQuerySuggestion {
             // The user entered a URL, so use it.
             finishEditingAndSubmit(fixupURL, visitType: VisitType.typed, forTab: currentTab)
-            return
+            // Check if the user entered a custom URL scheme like lyft://book-a-ride
+        } else if let url = URL(string: text), UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.hideKeyboard()
+            showOpenInExternalAppConfirmation(forExternalUrl: url) { didOpenApp in
+                // If the user opened the app, there's no need for the ZQ page.
+                if didOpenApp {
+                    self.chromeModel.hideZeroQuery()
+                }
+            }
+        } else {
+            submitSearchText(text, forTab: currentTab, using: SearchEngine.current)
         }
-
-        submitSearchText(text, forTab: currentTab, using: SearchEngine.current)
     }
 
     fileprivate func submitSearchText(
