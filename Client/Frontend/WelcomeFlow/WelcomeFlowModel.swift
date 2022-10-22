@@ -59,10 +59,6 @@ class WelcomeFlowModel: ObservableObject {
         Defaults[.introSeen] = true
         self.onCloseAction?()
         self.onCloseAction = nil
-
-        if let tab = authStore.bvc.tabManager.activeTabs.first {
-            authStore.bvc.tabManager.selectTab(tab, notify: false)
-        }
     }
 
     func flushLoggingQueue() {

@@ -104,11 +104,15 @@ class ZeroQueryModel: ObservableObject {
     }
 
     func signIn() {
+        self.bvc.presentSignInOrUpFlow(startScreen: nil, onCompleteDismissZeroQuery: true)
+        /*
+        // the old flow
         self.bvc.presentIntroViewController(
             true,
             completion: {
                 self.bvc.dismissEditingAndHideZeroQuery()
             })
+         */
     }
 
     func handlePromoCard(interaction: LogConfig.Interaction) {

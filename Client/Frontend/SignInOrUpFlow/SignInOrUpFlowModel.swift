@@ -44,10 +44,6 @@ class SignInOrUpFlowModel: ObservableObject {
     func complete() {
         self.onCloseAction?()
         self.onCloseAction = nil
-
-        if let tab = authStore.bvc.tabManager.activeTabs.first {
-            authStore.bvc.tabManager.selectTab(tab, notify: false)
-        }
     }
 
     func logCounter(

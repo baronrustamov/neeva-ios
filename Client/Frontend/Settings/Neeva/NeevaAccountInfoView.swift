@@ -45,8 +45,10 @@ struct NeevaAccountInfoView: View {
             Section(header: Text("Membership Status"), footer: membershipStatusFooterText) {
                 membershipStatusBody
 
-                // Only show for iOS 15 users who are in a country where Premium is offered
-                // and are not Lifetime and have not paid through another source.
+                /*
+                 Only show for users who Premium is offered to and are not Lifetime and
+                 have not paid through another source.
+                 */
                 if PremiumStore.isOfferedInLanguage() && userInfo.subscriptionType != .lifetime
                     && (userInfo.subscription?.source == SubscriptionSource.none
                         || userInfo.subscription?.source == SubscriptionSource.apple)

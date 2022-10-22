@@ -7,17 +7,19 @@ import SwiftUI
 
 struct SignInOrUpFlowPlansView: View {
     @ObservedObject var model: SignInOrUpFlowModel
+    @ObservedObject var userInfo: NeevaUserInfo = NeevaUserInfo.shared
+    @ObservedObject var premiumStore: PremiumStore = PremiumStore.shared
 
     var premiumBullets = [
-        ("Browser + ad blocker", ""),
-        ("Tracking prevention", ""),
+        ("Browser + ad blocker + tracking prevention", ""),
         ("Unlimited ad-free, private search", ""),
-        ("Premium password manager + VPN", ""),
+        ("Unlimited devices", ""),
+        ("Password manager + VPN", ""),
     ]
     var freeBullets = [
-        ("Browser + ad blocker", ""),
-        ("Tracking prevention", ""),
-        ("Ad-free, private search", "50 searches/week"),
+        ("Browser + ad blocker + tracking prevention", ""),
+        ("Limited Ad-free, private search", "50 searches/month"),
+        ("Limited devices", ""),
     ]
     var bullets: [(String, String)] {
         if model.currentPremiumPlan == nil {
@@ -28,9 +30,9 @@ struct SignInOrUpFlowPlansView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading) {
-            SignInOrUpFlowHeaderView(text: "Get Premium for maximum privacy")
-                .padding(.bottom, 20)
+        VStack(alignment: .leading, spacing: 0) {
+            WelcomeFlowHeaderView(text: "Choose the right plan for you")
+                .padding(.bottom)
 
             HStack(spacing: 0) {
                 VStack {
@@ -65,7 +67,7 @@ struct SignInOrUpFlowPlansView: View {
                     model.currentPremiumPlan = nil
                 }
 
-                if let annualProduct = PremiumStore.shared.getProductForPlan(.annual) {
+                if let annualProduct = premiumStore.getProductForPlan(.annual) {
                     VStack {
                         Text("Premium\nAnnual")
                             .font(.system(size: 16, weight: .bold))
@@ -105,7 +107,7 @@ struct SignInOrUpFlowPlansView: View {
                     }
                 }
 
-                if let monthlyProduct = PremiumStore.shared.getProductForPlan(.monthly) {
+                if let monthlyProduct = premiumStore.getProductForPlan(.monthly) {
                     VStack {
                         Text("Premium\nMonthly")
                             .font(.system(size: 16, weight: .bold))
@@ -144,28 +146,28 @@ struct SignInOrUpFlowPlansView: View {
             .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: .infinity)
             .background(Color(UIColor.secondaryLabel).opacity(0.25)).cornerRadius(8)
+            .padding(.bottom)
 
-            Spacer()
-
-            ForEach(bullets, id: \.self.0) { (primary, secondary) in
-                HStack(alignment: .top) {
-                    Symbol(decorative: .checkmark, size: 18)
-                        .foregroundColor(Color.ui.adaptive.blue)
-                    VStack(alignment: .leading) {
-                        Text(LocalizedStringKey(primary)).font(.system(size: 16, weight: .bold))
-                        if secondary != "" {
-                            Text(LocalizedStringKey(secondary)).font(.system(size: 12))
+            VStack(alignment: .leading, spacing: 0) {
+                ForEach(bullets, id: \.self.0) { (primary, secondary) in
+                    HStack(alignment: .top) {
+                        Symbol(decorative: .checkmark, size: 18)
+                            .foregroundColor(Color.ui.adaptive.blue)
+                        VStack(alignment: .leading) {
+                            Text(LocalizedStringKey(primary)).font(.system(size: 16, weight: .bold))
+                            if secondary != "" {
+                                Text(LocalizedStringKey(secondary)).font(.system(size: 12))
+                            }
                         }
                     }
+                    .padding(.bottom, 10)
                 }
-                .padding(.bottom, 10)
             }
+            .padding(.bottom, 10)
 
-            Group {
-                Spacer()
-
+            VStack(spacing: 0) {
                 HStack {
-                    Text(PremiumStore.shared.priceText(model.currentPremiumPlan))
+                    Text(premiumStore.priceText(model.currentPremiumPlan))
                         .fontWeight(.bold)
 
                     if let termText = PremiumHelpers.termText(model.currentPremiumPlan),
@@ -176,6 +178,7 @@ struct SignInOrUpFlowPlansView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .multilineTextAlignment(.center)
+                .padding(.bottom, 5)
 
                 if let subText = PremiumHelpers.priceSubText(model.currentPremiumPlan) {
                     HStack {
@@ -193,11 +196,10 @@ struct SignInOrUpFlowPlansView: View {
                     .frame(maxWidth: .infinity)
                     .multilineTextAlignment(.center)
                 }
-
-                Spacer()
             }
+            .padding(.bottom)
 
-            Group {
+            VStack(spacing: 0) {
                 Button(
                     action: {
                         model.logCounter(
@@ -217,10 +219,10 @@ struct SignInOrUpFlowPlansView: View {
                             if !NeevaUserInfo.shared.hasLoginCookie() {
                                 model.changeScreenTo(.signUp)
                             } else {
-                                if let product = PremiumStore.shared.getProductForPlan(
+                                if let product = premiumStore.getProductForPlan(
                                     model.currentPremiumPlan)
                                 {
-                                    PremiumStore.shared.purchase(
+                                    premiumStore.purchase(
                                         product, reloadUserInfo: true,
                                         onPending: self.onPurchasePending,
                                         onCancelled: self.onPurchaseCancelled,
@@ -238,6 +240,14 @@ struct SignInOrUpFlowPlansView: View {
                     }
                 )
                 .buttonStyle(.neeva(.primary))
+                .padding(.bottom, 10)
+
+                if let subText = PremiumHelpers.primaryActionSubText(model.currentPremiumPlan),
+                    subText != ""
+                {
+                    Text(LocalizedStringKey(subText))
+                        .frame(maxWidth: .infinity)
+                }
 
                 if !NeevaUserInfo.shared.hasLoginCookie() {
                     Button(
@@ -254,15 +264,23 @@ struct SignInOrUpFlowPlansView: View {
                         }
                     )
                     .buttonStyle(.neeva(.clear))
+                    .padding(.top)
                 }
             }
+            .padding(.bottom)
 
-            Spacer()
+            VStack(spacing: 0) {
+                SafariVCLink(
+                    "Subscribe and help fight climate change",
+                    url: NeevaConstants.appClimatePledgeURL
+                )
+                .frame(maxWidth: .infinity)
+                .padding(.bottom, 10)
 
-            SignInOrUpFlowPrivacyAndTermsLinksView()
-                .frame(maxWidth: .infinity, alignment: .center)
+                SignInOrUpFlowPrivacyAndTermsLinksView()
+                    .frame(maxWidth: .infinity, alignment: .center)
 
-            Spacer()
+            }
         }
         .onAppear {
             model.logCounter(.ScreenImpression)
@@ -271,14 +289,26 @@ struct SignInOrUpFlowPlansView: View {
              if this screen is showing and we have a login cookie,
              we trigger the purchase based on the users original choice
              */
-            if NeevaUserInfo.shared.hasLoginCookie() {
-                if let product = PremiumStore.shared.getProductForPlan(model.currentPremiumPlan) {
-                    PremiumStore.shared.purchase(
+            if NeevaUserInfo.shared.hasLoginCookie(),
+                let product = premiumStore.getProductForPlan(model.currentPremiumPlan)
+            {
+                /*
+                 Only continue for users who Premium is offered to and are not Lifetime and
+                 have not paid through another source.
+                 */
+                if PremiumStore.isOfferedInLanguage() && userInfo.subscriptionType == .basic
+                    && (userInfo.subscription == nil
+                        || userInfo.subscription?.source == SubscriptionSource.none
+                        || userInfo.subscription?.source == SubscriptionSource.apple)
+                {
+                    premiumStore.purchase(
                         product, reloadUserInfo: true,
                         onPending: self.onPurchasePending,
                         onCancelled: self.onPurchaseCancelled,
                         onError: self.onPurchaseError,
                         onSuccess: self.onPurchaseSuccess)
+                } else {
+                    model.complete()
                 }
             }
         }

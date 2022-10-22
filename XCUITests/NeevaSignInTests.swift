@@ -133,7 +133,7 @@ class NeevaSignInTests: BaseTestCase {
         waitForExistence(app.buttons["Sign in or Join Neeva"])
         app.buttons["Sign in or Join Neeva"].tap()
 
-        waitForExistence(app.staticTexts["Welcome To Neeva"])
+        waitForExistence(app.staticTexts["Choose the right plan for you"])
     }
 
     func testIntroPageCancelButton() throws {
@@ -144,12 +144,14 @@ class NeevaSignInTests: BaseTestCase {
     func testOtherSignUpOptions() throws {
         testSignInUIAppearsFromSettings()
 
-        waitForExistence(app.buttons["Other sign up options"])
-        app.buttons["Other sign up options"].tap()
+        waitForExistence(app.buttons["Try it Free"])
+        app.buttons["Try it Free"].tap()
 
-        waitForExistence(app.staticTexts["Join Neeva"])
-        waitForExistence(app.buttons["Create Neeva account"])
+        waitForExistence(app.buttons["Other Sign-up Options"])
+        app.buttons["Other Sign-up Options"].tap()
+
         waitForExistence(app.buttons["Sign up with Apple"])
+        waitForExistence(app.buttons["Sign up with email"])
         waitForExistence(app.buttons["Sign up with Google"])
         waitForExistence(app.buttons["Sign up with Microsoft"])
 
@@ -159,12 +161,11 @@ class NeevaSignInTests: BaseTestCase {
     func testSignInPageButtons() throws {
         testSignInUIAppearsFromSettings()
 
-        waitForExistence(app.buttons["Already have an account? Sign In"])
-        app.buttons["Already have an account? Sign In"].tap()
+        waitForExistence(app.buttons["Already have an account? Sign in"])
+        app.buttons["Already have an account? Sign in"].tap()
 
-        waitForExistence(app.staticTexts["Sign In"])
-        waitForExistence(app.buttons["Continue"])
         waitForExistence(app.buttons["Sign in with Apple"])
+        waitForExistence(app.buttons["Sign in with email"])
         waitForExistence(app.buttons["Sign in with Google"])
         waitForExistence(app.buttons["Sign in with Microsoft"])
 

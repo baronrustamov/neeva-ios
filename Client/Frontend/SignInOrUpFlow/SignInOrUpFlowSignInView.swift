@@ -14,9 +14,7 @@ struct SignInOrUpFlowSignInView: View {
     @State var showError = false
 
     var body: some View {
-        VStack {
-            Spacer()
-
+        VStack(spacing: 0) {
             AuthButtonView(
                 icon: Image(systemSymbol: .applelogo),
                 label: "Sign in with Apple",
@@ -28,7 +26,7 @@ struct SignInOrUpFlowSignInView: View {
                     self.showError = true
                 }) {
                     model.clearPreviousScreens()
-                    model.complete()
+                    model.changeScreenTo(.plans)
                 }
             }
 
@@ -46,7 +44,7 @@ struct SignInOrUpFlowSignInView: View {
                     }
                 ) {
                     model.clearPreviousScreens()
-                    model.complete()
+                    model.changeScreenTo(.plans)
                 }
             }
 
@@ -64,7 +62,7 @@ struct SignInOrUpFlowSignInView: View {
                     }
                 ) {
                     model.clearPreviousScreens()
-                    model.complete()
+                    model.changeScreenTo(.plans)
                 }
             }
 
@@ -82,7 +80,7 @@ struct SignInOrUpFlowSignInView: View {
                     }
                 ) {
                     model.clearPreviousScreens()
-                    model.complete()
+                    model.changeScreenTo(.plans)
                 }
             }
 

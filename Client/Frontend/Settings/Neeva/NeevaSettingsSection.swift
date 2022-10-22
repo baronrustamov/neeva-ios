@@ -12,8 +12,8 @@ struct NeevaSettingsSection: View {
 
     @ObservedObject var userInfo: NeevaUserInfo
     @Environment(\.openInNewTab) var openURL
-    @Environment(\.settingsPresentIntroViewController) var presentIntroViewController
-    //@Environment(\.settingsPresentSignInOrUpFlow) var presentSignInOrUpFlowView // the new upcoming flow
+    //@Environment(\.settingsPresentIntroViewController) var presentIntroViewController // the old flow
+    @Environment(\.settingsPresentSignInOrUpFlow) var presentSignInOrUpFlowView
     @State var showingAccountDetails = false
 
     // Used by FeatureFlag[.inlineAccountSettings] to render inline settings
@@ -107,8 +107,8 @@ struct NeevaSettingsSection: View {
             Button("Sign in or Join Neeva") {
                 ClientLogger.shared.logCounter(
                     .SettingSignin, attributes: EnvironmentHelper.shared.getFirstRunAttributes())
-                presentIntroViewController()
-                //presentSignInOrUpFlowView() // the new upcoming flow
+                //presentIntroViewController() // the old flow
+                presentSignInOrUpFlowView()
             }
             .frame(height: 60 - 12)
             .onAppear {

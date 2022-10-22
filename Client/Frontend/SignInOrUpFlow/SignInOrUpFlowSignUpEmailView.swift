@@ -28,6 +28,7 @@ struct SignInOrUpFlowSignUpEmailView: View {
                         self.showError = true
                     }
                 ) {
+                    model.clearPreviousScreens()
                     model.changeScreenTo(.plans)
                 }
             }

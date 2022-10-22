@@ -151,11 +151,17 @@ extension BrowserViewController {
 
 // MARK: - Sign In or Up
 extension BrowserViewController {
-    func presentSignInOrUpFlow(startScreen: SignInOrUpFlowScreen?) {
+    func presentSignInOrUpFlow(
+        startScreen: SignInOrUpFlowScreen?, onCompleteDismissZeroQuery: Bool = false
+    ) {
         let signInOrUpFlowModel = SignInOrUpFlowModel(
             authStore: AuthStore(bvc: self),
             onCloseAction: {
                 self.overlayManager.hideCurrentOverlay()
+
+                if onCompleteDismissZeroQuery {
+                    self.dismissEditingAndHideZeroQuery()
+                }
             }
         )
 

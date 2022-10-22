@@ -7,6 +7,8 @@ import SwiftUI
 
 struct WelcomeFlowPlansView: View {
     @ObservedObject var model: WelcomeFlowModel
+    @ObservedObject var userInfo: NeevaUserInfo = NeevaUserInfo.shared
+    @ObservedObject var premiumStore: PremiumStore = PremiumStore.shared
 
     var premiumBullets = [
         ("Browser + ad blocker + tracking prevention", ""),
@@ -65,7 +67,7 @@ struct WelcomeFlowPlansView: View {
                     model.currentPremiumPlan = nil
                 }
 
-                if let annualProduct = PremiumStore.shared.getProductForPlan(.annual) {
+                if let annualProduct = premiumStore.getProductForPlan(.annual) {
                     VStack {
                         Text("Premium\nAnnual")
                             .font(.system(size: 16, weight: .bold))
@@ -105,7 +107,7 @@ struct WelcomeFlowPlansView: View {
                     }
                 }
 
-                if let monthlyProduct = PremiumStore.shared.getProductForPlan(.monthly) {
+                if let monthlyProduct = premiumStore.getProductForPlan(.monthly) {
                     VStack {
                         Text("Premium\nMonthly")
                             .font(.system(size: 16, weight: .bold))
@@ -165,7 +167,7 @@ struct WelcomeFlowPlansView: View {
 
             VStack(spacing: 0) {
                 HStack {
-                    Text(PremiumStore.shared.priceText(model.currentPremiumPlan))
+                    Text(premiumStore.priceText(model.currentPremiumPlan))
                         .fontWeight(.bold)
 
                     if let termText = PremiumHelpers.termText(model.currentPremiumPlan),
@@ -217,10 +219,10 @@ struct WelcomeFlowPlansView: View {
                             if !NeevaUserInfo.shared.hasLoginCookie() {
                                 model.changeScreenTo(.signUp)
                             } else {
-                                if let product = PremiumStore.shared.getProductForPlan(
+                                if let product = premiumStore.getProductForPlan(
                                     model.currentPremiumPlan)
                                 {
-                                    PremiumStore.shared.purchase(
+                                    premiumStore.purchase(
                                         product, reloadUserInfo: true,
                                         onPending: self.onPurchasePending,
                                         onCancelled: self.onPurchaseCancelled,
@@ -290,15 +292,28 @@ struct WelcomeFlowPlansView: View {
              trigger the purchase based on the users original choice
              */
             if NeevaUserInfo.shared.hasLoginCookie(),
-                let product = PremiumStore.shared.getProductForPlan(model.currentPremiumPlan)
+                let product = premiumStore.getProductForPlan(model.currentPremiumPlan)
             {
-                PremiumStore.shared.purchase(
-                    product, reloadUserInfo: true,
-                    onPending: self.onPurchasePending,
-                    onCancelled: self.onPurchaseCancelled,
-                    onError: self.onPurchaseError,
-                    onSuccess: self.onPurchaseSuccess
-                )
+                /*
+                 Only continue for users who Premium is offered to and are not Lifetime and
+                 have not paid through another source.
+                 */
+                if PremiumStore.isOfferedInLanguage() && userInfo.subscriptionType == .basic
+                    && (userInfo.subscription == nil
+                        || userInfo.subscription?.source == SubscriptionSource.none
+                        || userInfo.subscription?.source == SubscriptionSource.apple)
+                {
+                    premiumStore.purchase(
+                        product, reloadUserInfo: true,
+                        onPending: self.onPurchasePending,
+                        onCancelled: self.onPurchaseCancelled,
+                        onError: self.onPurchaseError,
+                        onSuccess: self.onPurchaseSuccess
+                    )
+                } else {
+                    model.clearPreviousScreens()
+                    model.changeScreenTo(.defaultBrowser)
+                }
             }
 
             model.flushLoggingQueue()

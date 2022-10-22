@@ -15,10 +15,19 @@ struct SignInOrUpFlowSignUpView: View {
     @State var showError = false
 
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             SignInOrUpFlowHeaderView(text: "Create your account")
+                .padding(.bottom, 20)
 
-            Spacer()
+            Text(
+                "Neeva Premium is an account type that unlocks benefits, including insider perks and privacy-protecting tools."
+            )
+            .font(
+                .system(
+                    size: UIDevice.current.useTabletInterface || UIConstants.hasHomeButton
+                        ? 18 : 24, weight: .regular)
+            )
+            .padding(.bottom, 20)
 
             AuthButtonView(
                 icon: Image(systemSymbol: .applelogo),
@@ -113,8 +122,7 @@ struct SignInOrUpFlowSignUpView: View {
             .onChange(of: emailOptIn) { newValue in
                 model.authStore.marketingEmailOptOut = !newValue
             }
-
-            Spacer()
+            .padding(.top)
         }
         .alert(isPresented: self.$showError) {
             Alert(

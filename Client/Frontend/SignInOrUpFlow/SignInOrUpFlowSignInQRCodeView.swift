@@ -25,7 +25,7 @@ struct SignInOrUpFlowSignInQRCodeView: View {
                     },
                     onSuccess: {
                         model.clearPreviousScreens()
-                        model.complete()
+                        model.changeScreenTo(.plans)
                     })
             }
 
