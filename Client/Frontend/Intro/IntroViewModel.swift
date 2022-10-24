@@ -321,6 +321,7 @@ extension IntroViewModel {
         var request = URLRequest(url: NeevaConstants.createOktaAccountURL)
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("co.neeva.app.ios-browser", forHTTPHeaderField: "X-Neeva-Client-ID")
         request.httpMethod = "POST"
 
         let salt = generateSalt()

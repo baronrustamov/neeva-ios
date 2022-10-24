@@ -296,6 +296,7 @@ extension AuthStore {
         var request = URLRequest(url: NeevaConstants.createOktaAccountURL)
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("co.neeva.app.ios-browser", forHTTPHeaderField: "X-Neeva-Client-ID")
         request.httpMethod = "POST"
 
         let salt = generateSalt()
@@ -476,7 +477,10 @@ private class NoRedirectReq: NSObject {
     }
 
     func dataTask(url: URL, completionHandler: (@escaping (Data?, URLResponse?, Error?) -> Void)) {
-        let task = self.session?.dataTask(with: url) { (data, response, error) in
+        var request = URLRequest(url: url)
+        request.addValue("co.neeva.app.ios-browser", forHTTPHeaderField: "X-Neeva-Client-ID")
+
+        let task = self.session?.dataTask(with: request) { (data, response, error) in
             guard let data = data else {
                 return
             }
