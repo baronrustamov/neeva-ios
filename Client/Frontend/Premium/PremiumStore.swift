@@ -29,11 +29,6 @@ class PremiumStore: ObservableObject {
     static let shared = PremiumStore()
     private static let dateFormatter = ISO8601DateFormatter()
 
-    // NOTE: languages premium is offered to
-    // https://developer.apple.com/documentation/foundation/nslocale/1643026-languagecode
-    // https://www.loc.gov/standards/iso639-2/php/English_list.php
-    static let languages = ["en", "eng", "fr", "fre", "de", "ger"]
-
     @Published var products: [Product] = []
     @Published var loadingProducts = false
     @Published var loadingPurchase = false
@@ -62,26 +57,6 @@ class PremiumStore: ObservableObject {
                 self.loadingProducts = false
             }
         }
-    }
-
-    static func isOfferedInLanguage() -> Bool {
-        let preferredLanguages = Locale.preferredLanguages
-
-        if preferredLanguages.count <= 0 {
-            // we want to track how frequent this case happens
-            ClientLogger.shared.logCounter(.NoPreferredLanguage)
-            return false
-        } else {
-            // preferredLanguage returns in format en, de-US...
-            for language in preferredLanguages {
-                let components = language.components(separatedBy: "-")
-                if components.count > 0 && PremiumStore.languages.contains(components[0]) {
-                    return true
-                }
-            }
-        }
-
-        return false
     }
 
     func getProductForPlan(_ plan: PremiumPlan?) -> Product? {

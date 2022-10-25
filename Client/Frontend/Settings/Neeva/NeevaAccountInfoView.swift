@@ -46,10 +46,10 @@ struct NeevaAccountInfoView: View {
                 membershipStatusBody
 
                 /*
-                 Only show for users who Premium is offered to and are not Lifetime and
-                 have not paid through another source.
+                 NOTE: Only show for users who are not Lifetime and have
+                 not paid through another source.
                  */
-                if PremiumStore.isOfferedInLanguage() && userInfo.subscriptionType != .lifetime
+                if userInfo.subscriptionType != .lifetime
                     && (userInfo.subscription?.source == SubscriptionSource.none
                         || userInfo.subscription?.source == SubscriptionSource.apple)
                 {

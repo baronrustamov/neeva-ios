@@ -295,10 +295,10 @@ struct WelcomeFlowPlansView: View {
                 let product = premiumStore.getProductForPlan(model.currentPremiumPlan)
             {
                 /*
-                 Only continue for users who Premium is offered to and are not Lifetime and
-                 have not paid through another source.
+                 NOTE: Only show for users who are not Lifetime and have
+                 not paid through another source.
                  */
-                if PremiumStore.isOfferedInLanguage() && userInfo.subscriptionType == .basic
+                if userInfo.subscriptionType == .basic
                     && (userInfo.subscription == nil
                         || userInfo.subscription?.source == SubscriptionSource.none
                         || userInfo.subscription?.source == SubscriptionSource.apple)

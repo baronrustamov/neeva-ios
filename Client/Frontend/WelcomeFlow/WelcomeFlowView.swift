@@ -108,9 +108,6 @@ struct WelcomeFlowView: View {
                 model.logCounter(
                     .FirstRunImpression,
                     attributes: EnvironmentHelper.shared.getFirstRunAttributes())
-                if PremiumStore.isOfferedInLanguage() {
-                    model.logCounter(.PremiumEligible)
-                }
                 ConversionLogger.log(event: .launchedApp)
                 Defaults[.firstRunImpressionLogged] = true
             }
