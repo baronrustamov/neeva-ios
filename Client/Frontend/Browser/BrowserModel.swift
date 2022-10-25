@@ -78,14 +78,14 @@ class BrowserModel: ObservableObject {
         }
 
         overlayManager.hideCurrentOverlay(ofPriority: .modal)
-        gridModel.scrollModel.scrollToSelectedTab { [self] in
+        gridModel.scrollModel.scrollToSelectedTab(includeCardStrip: true) { [self] in
             cardTransitionModel.update(to: .visibleForTrayHidden)
             gridModel.closeDetailView()
         }
     }
 
     func hideGridWithNoAnimation() {
-        gridModel.scrollModel.scrollToSelectedTab()
+        gridModel.scrollModel.scrollToSelectedTab(includeCardStrip: true)
         cardTransitionModel.update(to: .hidden)
 
         gridModel.visibilityModel.update(showGrid: false)

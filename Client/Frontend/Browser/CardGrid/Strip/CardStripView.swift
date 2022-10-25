@@ -12,6 +12,7 @@ struct CardStripUX {
 
 struct CardStripView: View {
     @EnvironmentObject private var gridScrollModel: GridScrollModel
+    @EnvironmentObject private var gridVisibilityModel: GridVisibilityModel
     @EnvironmentObject private var incognitoModel: IncognitoModel
     @EnvironmentObject private var model: CardStripModel
     @EnvironmentObject private var scrollingControlModel: ScrollingControlModel
@@ -41,16 +42,20 @@ struct CardStripView: View {
     var content: some View {
         HStack(spacing: 0) {
             ForEach(model.cells) { cell in
-                switch cell {
-                case .tabGroupInline(let groupDetails):
-                    CardStripTabGroupCardView(groupDetails: groupDetails)
-                case .tabGroupGridRow(let groupDetails, _):
-                    CardStripTabGroupCardView(groupDetails: groupDetails)
-                case .tab(let tabDetails):
-                    CardStripCard(details: tabDetails)
-                default:
-                    EmptyView()
-                }
+                Group {
+                    switch cell {
+                    case .tabGroupInline(let groupDetails):
+                        CardStripTabGroupCardView(groupDetails: groupDetails)
+                            .id(cell.id)
+                    case .tabGroupGridRow(let groupDetails, _):
+                        CardStripTabGroupCardView(groupDetails: groupDetails)
+                            .id(cell.id)
+                    case .tab(let tabDetails):
+                        CardStripCard(details: tabDetails)
+                    default:
+                        EmptyView()
+                    }
+                }.id(cell.id)
             }
 
             if !model.todayTabsExists {
@@ -70,9 +75,13 @@ struct CardStripView: View {
 
     var body: some View {
         if model.shouldEmbedInScrollView {
-            ScrollView(.horizontal, showsIndicators: false) {
-                content.useEffect(deps: gridScrollModel.needsScrollToSelectedTab) { _ in
-                    model.shouldEmbedInScrollView = false
+            ScrollViewReader { scrollProxy in
+                ScrollView(.horizontal, showsIndicators: false) {
+                    content.useEffect(deps: gridScrollModel.cardStripNeedScrollToSelectedTab) { _ in
+                        if let selected = model.cells.first(where: \.isSelected) {
+                            scrollProxy.scrollTo(selected.id, anchor: .center)
+                        }
+                    }
                 }
             }
         } else {

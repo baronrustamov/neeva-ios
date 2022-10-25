@@ -12,7 +12,8 @@ class GridResizeModel: ObservableObject {
 class GridScrollModel: ObservableObject {
     var scrollToCompletion: (() -> Void)?
 
-    @Published var needsScrollToSelectedTab: Int = 0
+    @Published private(set) var cardStripNeedScrollToSelectedTab: Int = 0
+    @Published private(set) var needsScrollToSelectedTab: Int = 0
     @Published var didVerticalScroll: Int = 0
     @Published var didHorizontalScroll: Int = 0
 
@@ -20,9 +21,13 @@ class GridScrollModel: ObservableObject {
     // synchronously, which causes the selected Card to be generated if
     // needed. Runs `completion` once the selected Card is guaranteed to
     // be visible and responsive to other state changes.
-    func scrollToSelectedTab(completion: (() -> Void)? = nil) {
+    func scrollToSelectedTab(includeCardStrip: Bool = false, completion: (() -> Void)? = nil) {
         scrollToCompletion = completion
         needsScrollToSelectedTab += 1
+
+        if includeCardStrip {
+            cardStripNeedScrollToSelectedTab += 1
+        }
     }
 }
 
