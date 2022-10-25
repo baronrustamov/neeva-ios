@@ -33,28 +33,84 @@ struct QuickLinkEntry: TimelineEntry {
 struct SmallQuickLinkView: View {
     var entry: IntentProvider.Entry
 
-    @ViewBuilder
+    @Environment(\.widgetFamily) var family
+
     var body: some View {
-        ImageButtonWithLabel(isSmall: true, link: entry.link)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(
-                LinearGradient(
-                    gradient: Gradient(colors: entry.link.backgroundColors),
-                    startPoint: .bottomLeading, endPoint: .topTrailing)
-            ).widgetURL(entry.link.url)
+        Group {
+            switch family {
+            case .systemSmall:
+                ImageButtonWithLabel(isSmall: true, link: entry.link)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(
+                        LinearGradient(
+                            gradient: Gradient(colors: entry.link.backgroundColors),
+                            startPoint: .bottomLeading, endPoint: .topTrailing
+                        )
+                    )
+            case .accessoryCircular:
+                circularLockScreenView
+            case .accessoryRectangular:
+                rectangularLockScreenView
+            default:
+                EmptyView()
+            }
+        }
+        .widgetURL(entry.link.url)
+    }
+
+    @ViewBuilder
+    var circularLockScreenView: some View {
+        ZStack {
+            if #available(iOS 16, *) {
+                AccessoryWidgetBackground()
+            }
+
+            Image("neeva-circular")
+                .resizable()
+                .scaledToFit()
+        }
+    }
+
+    @ViewBuilder
+    var rectangularLockScreenView: some View {
+        ZStack {
+            if #available(iOS 16, *) {
+                AccessoryWidgetBackground()
+                    .clipShape(Capsule())
+            }
+
+            Image("neeva-rect")
+                .resizable()
+                .scaledToFit()
+        }
     }
 }
 
 struct SmallQuickLinkWidget: Widget {
     private let kind: String = "Quick Actions - Small"
 
+    static var supportedFamilies: [WidgetFamily] {
+        var families: [WidgetFamily] = []
+
+        #if os(iOS)
+            // Families specific to iOS
+            families += [.systemSmall]
+            if #available(iOS 16, *) {
+                // Support lockscreen widgets
+                families += [.accessoryCircular, .accessoryRectangular]
+            }
+        #endif
+
+        return families
+    }
+
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: IntentProvider()) { entry in
             SmallQuickLinkView(entry: entry)
         }
-        .supportedFamilies([.systemSmall])
         .configurationDisplayName(String.QuickActionsGalleryTitle)
         .description(String.SearchInNeevaTitle)
+        .supportedFamilies(Self.supportedFamilies)
     }
 }
 
