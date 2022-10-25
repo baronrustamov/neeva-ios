@@ -26,15 +26,9 @@ struct LocationViewTrackingButton: View {
     @EnvironmentObject private var cookieCutterModel: CookieCutterModel
     @EnvironmentObject private var chromeModel: TabChromeModel
 
-    let currentDomain: String
+    @State var trackingMenuHeight: CGFloat = 0
 
-    var content: some View {
-        TrackingMenuView()
-            .environmentObject(trackingStatsModel)
-            .environmentObject(cookieCutterModel)
-            .environment(\.openSettings, openSettings)
-            .topBarPopoverPadding(removeBottomPadding: false)
-    }
+    let currentDomain: String
 
     var body: some View {
         let label =
@@ -55,16 +49,17 @@ struct LocationViewTrackingButton: View {
                 Defaults[.cookieCutterOnboardingShowed] = true
             }
         ) {
-            if chromeModel.inlineToolbar {
-                ScrollView {
-                    content
-                        .topBarPopoverPadding(removeHorizontalPadding: false)
-                        .padding(.bottom, 4)
-                }
-            } else {
-                content
-                    .padding(.vertical, 4)
-            }
+            ScrollView {
+                TrackingMenuView()
+                    .frame(minHeight: 250)
+                    .environmentObject(trackingStatsModel)
+                    .environmentObject(cookieCutterModel)
+                    .environment(\.openSettings, openSettings)
+                    .topBarPopoverPadding(removeBottomPadding: true)
+                    .onHeightOfViewChanged { newValue in
+                        self.trackingMenuHeight = newValue
+                    }
+            }.frame(minHeight: 250, idealHeight: trackingMenuHeight, maxHeight: 400)
         }
     }
 }

@@ -1996,7 +1996,6 @@
 		C98E406226585F01003AC0E2 /* DebugSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSettingsSection.swift; sourceTree = "<group>"; };
 		C994645E2657052200613110 /* FeatureFlags.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureFlags.swift; sourceTree = "<group>"; };
 		C9946460265706D500613110 /* FeatureFlagSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureFlagSettingsView.swift; sourceTree = "<group>"; };
-		C9A241CA269CA4AB007156B3 /* TopBarHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBarHost.swift; sourceTree = "<group>"; };
 		C9ACC463267A45AC009AE182 /* SuggestionsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionsList.swift; sourceTree = "<group>"; };
 		C9ACC469267A8A1E009AE182 /* TrackingMenuSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingMenuSettingsView.swift; sourceTree = "<group>"; };
 		C9ADD2A426726F8C005F9C4B /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
@@ -3951,7 +3950,6 @@
 		C9FD1B1E26C1AC8700926A70 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
-				C9A241CA269CA4AB007156B3 /* TopBarHost.swift */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";

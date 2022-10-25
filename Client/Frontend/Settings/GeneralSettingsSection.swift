@@ -9,12 +9,15 @@ import SwiftUI
 struct DetailedSettingsLabel: View {
     let title: LocalizedStringKey
     let description: LocalizedStringKey
+
     var body: some View {
         VStack(alignment: .leading, spacing: 3) {
             Text(title)
+
             Text(description)
                 .foregroundColor(.secondaryLabel)
                 .font(.caption)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 }

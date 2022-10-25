@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import Combine
 import SwiftUI
 
 // Enable cornerRadius to apply only to specific corners.
@@ -164,6 +165,58 @@ public struct FocusOnAppearModifier: ViewModifier {
     }
 }
 
+private struct Pair<T0: Equatable, T1: Equatable>: Equatable {
+    let zero: T0, one: T1
+}
+
+private struct Tuple<T0: Equatable, T1: Equatable, T2: Equatable>: Equatable {
+    let zero: T0, one: T1, two: T2
+}
+
+extension View {
+    /// Inspired by React’s `useEffect` hook, this modifier calls `perform(deps)` both `onAppear` and whenever `deps` changes.
+    public func useEffect<T: Equatable>(deps: T, perform updater: @escaping (T) -> Void)
+        -> some View
+    {
+        self.onChange(of: deps, perform: updater)
+            .onAppear { updater(deps) }
+    }
+
+    /// Inspired by React’s `useEffect` hook, this modifier calls `perform(deps)` both `onAppear` and whenever `deps` changes.
+    public func useEffect<T0: Equatable, T1: Equatable>(
+        deps zero: T0, _ one: T1, perform updater: @escaping (T0, T1) -> Void
+    ) -> some View {
+        self.onChange(of: Pair(zero: zero, one: one)) { updater($0.zero, $0.one) }
+            .onAppear { updater(zero, one) }
+    }
+
+    public func useEffect<T0: Equatable, T1: Equatable, T2: Equatable>(
+        deps zero: T0, _ one: T1, _ two: T2, perform updater: @escaping (T0, T1, T2) -> Void
+    ) -> some View {
+        self.onChange(of: Tuple(zero: zero, one: one, two: two)) {
+            updater($0.zero, $0.one, $0.two)
+        }
+        .onAppear { updater(zero, one, two) }
+    }
+
+    // Publisher variants. Useful when you just want to observe a particular published
+    // var of a model and not the entire model. Runs updater task asynchronously from
+    // onReceive to simulate the behavior of onChange and to ensure that the published
+    // var being updated has been updated by the time updater runs.
+    public func useEffect<P>(_ p1: P, perform updater: @escaping () -> Void) -> some View
+    where P: Publisher, P.Failure == Never {
+        self.onReceive(p1) { _ in DispatchQueue.main.async(execute: updater) }
+            .onAppear { updater() }
+    }
+
+    public func useEffect<P>(_ p1: P, _ p2: P, perform updater: @escaping () -> Void) -> some View
+    where P: Publisher, P.Failure == Never {
+        self.onReceive(p1) { _ in DispatchQueue.main.async(execute: updater) }
+            .onReceive(p2) { _ in DispatchQueue.main.async(execute: updater) }
+            .onAppear { updater() }
+    }
+}
+
 /// Wraps a border around the content to which it is applied, resulting in
 /// the content being `2 * lineWidth` larger in width and height.
 struct RoundedOuterBorder: ViewModifier {
@@ -199,5 +252,55 @@ extension EnvironmentValues {
     public var hideOverlay: () -> Void {
         get { self[HideOverlayKey.self] }
         set { self[HideOverlayKey.self] = newValue }
+    }
+}
+
+extension View {
+    public func onHeightOfViewChanged(perform updater: @escaping (CGFloat) -> Void) -> some View {
+        self
+            .background(
+                GeometryReader { geom in
+                    Color.clear
+                        .useEffect(deps: geom.size.height) { height in
+                            updater(height)
+                        }
+                }
+            )
+    }
+
+    public func onWidthOfViewChanged(perform updater: @escaping (CGFloat) -> Void) -> some View {
+        self
+            .background(
+                GeometryReader { geom in
+                    Color.clear
+                        .useEffect(deps: geom.size.width) { width in
+                            updater(width)
+                        }
+                }
+            )
+    }
+
+    public func onSizeOfViewChanged(perform updater: @escaping (CGSize) -> Void) -> some View {
+        self
+            .background(
+                GeometryReader { geom in
+                    Color.clear
+                        .useEffect(deps: geom.size) { size in
+                            updater(size)
+                        }
+                }
+            )
+    }
+
+    public func safeAreaChanged(perform updater: @escaping (EdgeInsets) -> Void) -> some View {
+        self
+            .background(
+                GeometryReader { geom in
+                    Color.clear
+                        .useEffect(deps: geom.safeAreaInsets) { insets in
+                            updater(insets)
+                        }
+                }
+            )
     }
 }

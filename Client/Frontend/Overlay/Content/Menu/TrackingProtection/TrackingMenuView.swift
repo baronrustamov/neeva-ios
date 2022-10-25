@@ -206,8 +206,14 @@ struct TrackingMenuFirstRowElement: View {
     var body: some View {
         GroupedCell(alignment: .leading) {
             VStack(alignment: .leading) {
-                Text(label).withFont(.headingMedium).foregroundColor(.secondaryLabel)
-                Text("\(num)").withFont(.displayMedium)
+                Text(label)
+                    .withFont(.headingMedium)
+                    .foregroundColor(.secondaryLabel)
+
+                Spacer()
+
+                Text("\(num)")
+                    .withFont(.displayMedium)
             }
             .padding(.bottom, 4)
             .padding(.vertical, 10)
@@ -387,11 +393,13 @@ struct TrackingMenuView: View {
                 if viewModel.preventTrackersForCurrentPage {
                     HStack(spacing: 8) {
                         TrackingMenuFirstRowElement(
-                            label: "Ads & Trackers", num: viewModel.numTrackers)
+                            label: "Ads & Trackers", num: viewModel.numTrackers
+                        ).frame(maxHeight: .infinity)
 
                         TrackingMenuFirstRowElement(
-                            label: "Cookie Popups", num: cookieCutterModel.cookiesBlocked)
-                    }
+                            label: "Cookie Popups", num: cookieCutterModel.cookiesBlocked
+                        ).frame(maxHeight: .infinity)
+                    }.fixedSize(horizontal: false, vertical: true)
 
                     if !viewModel.whosTrackingYouDomains.isEmpty {
                         WhosTrackingYouView(
