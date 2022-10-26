@@ -372,7 +372,7 @@ struct TrackingMenuView: View {
                         viewModel.showTrackingStatsViewPopover = false
                     },
                     label: {
-                        Text("Cool. Thanks.")
+                        Text("Cool, thanks!")
                             .withFont(.labelMedium)
                             .foregroundColor(.brand.white)
                             .frame(maxWidth: .infinity)
