@@ -315,7 +315,6 @@ struct SignInOrUpFlowPlansView: View {
     }
 
     func onPurchasePending() {
-        // TODO: what should we do here for the UX?
         model.logCounter(
             .PremiumPurchasePending,
             attributes: [
@@ -324,6 +323,9 @@ struct SignInOrUpFlowPlansView: View {
                     value: model.premiumPlanLogAttributeValue()
                 )
             ])
+
+        model.clearPreviousScreens()
+        model.complete()
     }
 
     func onPurchaseCancelled() {
