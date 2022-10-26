@@ -31,7 +31,7 @@ struct RedditDiscussion: Identifiable {
         let id = UUID()
 
         init?(from comment: CheatsheetQueryController.Backlink.Comment) {
-            guard !comment.body.isEmptyOrWhitespace(),
+            guard !comment.body.isBlank,
                 !Self.filteredStrings.contains(comment.body)
             else {
                 return nil
@@ -80,7 +80,7 @@ struct RedditDiscussion: Identifiable {
         {
             self.content = .comments(Array(filteredComments.prefix(10)))
         } else if let body = backlink.snippet?.tryRemovingHTMLencoding(strict: true),
-            !body.isEmptyOrWhitespace(),
+            !body.isBlank,
             !Self.filteredBodyStrings.contains(body)
         {
             // else, show body snippet

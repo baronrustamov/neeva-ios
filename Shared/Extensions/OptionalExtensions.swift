@@ -14,3 +14,16 @@ infix operator ???: NilCoalescingPrecedence
 public func ??? <T>(optional: T?, defaultValue: @autoclosure () -> String) -> String {
     return optional.map { String(describing: $0) } ?? defaultValue()
 }
+
+// Checks if a String is empty (""), null or whitespace only.
+// Adopted from Apache Commons StringUtils:
+// https://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/StringUtils.html
+extension Optional where Wrapped == String {
+    public var isBlank: Bool {
+        self?.isBlank ?? true
+    }
+
+    public var isNotBlank: Bool {
+        !isBlank
+    }
+}

@@ -5,6 +5,18 @@
 import Foundation
 
 extension String {
+    // Checks if a String is empty ("") or whitespace only.
+    // Adopted from Apache Commons StringUtils:
+    // https://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/StringUtils.html
+    // See also: isBlank and isNotBlank in OptionalExtensions.swift
+    public var isBlank: Bool {
+        self.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
+    public var isNotBlank: Bool {
+        !isBlank
+    }
+
     public var looksLikeAURL: Bool {
         // The assumption here is that if the user is typing in a forward slash and there are no spaces
         // involved, it's going to be a URL. If we type a space, any url would be invalid.
@@ -67,15 +79,6 @@ extension String {
 
     public func remove(_ string: String?) -> String {
         return self.replacingOccurrences(of: string ?? "", with: "")
-    }
-
-    public func isEmptyOrWhitespace() -> Bool {
-        // Check empty string
-        if self.isEmpty {
-            return true
-        }
-        // Trim and check empty string
-        return (self.trimmingCharacters(in: .whitespaces) == "")
     }
 
     ///   Truncates the string to the specified length number of characters and appends an optional trailing string if longer.
