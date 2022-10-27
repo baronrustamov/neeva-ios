@@ -31,14 +31,16 @@ struct OktaEmailSignUpFormView: View {
         VStack {
             TextField("Email (required)", text: $email)
                 .padding()
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12.0)
-                        .stroke(Color(UIColor.systemGray5), lineWidth: 1.0)
-                )
                 .disableAutocorrection(true)
                 .autocapitalization(.none)
                 .fixedSize(horizontal: false, vertical: true)
-                .background(Color.brand.white)
+                .background(
+                    RoundedRectangle(cornerRadius: 12, style: .continuous).fill(.background)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .strokeBorder(.foreground, lineWidth: 1)
+                )
 
             VStack {
                 ZStack(alignment: .trailing) {
@@ -57,11 +59,13 @@ struct OktaEmailSignUpFormView: View {
                     .onChange(of: password, perform: passwordOnChange)
                     .textContentType(.newPassword)
                     .padding()
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12.0)
-                            .stroke(Color(UIColor.systemGray5), lineWidth: 1.0)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12, style: .continuous).fill(.background)
                     )
-                    .background(Color.brand.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .strokeBorder(.foreground, lineWidth: 1)
+                    )
 
                     Button(
                         action: {
