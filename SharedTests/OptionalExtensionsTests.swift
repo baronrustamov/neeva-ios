@@ -18,10 +18,10 @@ class OptionalExtensionsTests: XCTestCase {
     func testIsNotBlank() {
         XCTAssertTrue(Optional.some("a").isNotBlank)
 
+        XCTAssertFalse(Optional.none.isNotBlank)
         XCTAssertFalse(Optional.some("").isNotBlank)
         XCTAssertFalse(Optional.some(" ").isNotBlank)
         XCTAssertFalse(Optional.some("\t").isNotBlank)
         XCTAssertFalse(Optional.some("\n").isNotBlank)
-        XCTAssertFalse(Optional.none.isNotBlank)
     }
 }
