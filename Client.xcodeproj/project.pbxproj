@@ -469,6 +469,8 @@
 		9B32E19928258DF400A169EE /* SpaceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32E19828258DF400A169EE /* SpaceService.swift */; };
 		9B32E19B28258E1A00A169EE /* SpaceServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32E19A28258E1A00A169EE /* SpaceServiceProvider.swift */; };
 		9B489597286528A70017FA57 /* SpacePublicAclTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B489596286528A70017FA57 /* SpacePublicAclTests.swift */; };
+		9B4AA28C290AEAE0009A915B /* StringExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B4AA28B290AEAE0009A915B /* StringExtensionsTests.swift */; };
+		9B4AA28E290AEB32009A915B /* OptionalExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B4AA28D290AEB32009A915B /* OptionalExtensionsTests.swift */; };
 		9B6FD8B6285D10EF005C6999 /* SpaceEntityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6FD8B5285D10EF005C6999 /* SpaceEntityTests.swift */; };
 		9B99C5322825C1DF006D390D /* SpaceServiceProd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B99C5312825C1DF006D390D /* SpaceServiceProd.swift */; };
 		9B99C5342825C63F006D390D /* SpaceServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B99C5332825C63F006D390D /* SpaceServiceMock.swift */; };
@@ -1839,6 +1841,8 @@
 		9B32E19828258DF400A169EE /* SpaceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceService.swift; sourceTree = "<group>"; };
 		9B32E19A28258E1A00A169EE /* SpaceServiceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceServiceProvider.swift; sourceTree = "<group>"; };
 		9B489596286528A70017FA57 /* SpacePublicAclTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacePublicAclTests.swift; sourceTree = "<group>"; };
+		9B4AA28B290AEAE0009A915B /* StringExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensionsTests.swift; sourceTree = "<group>"; };
+		9B4AA28D290AEB32009A915B /* OptionalExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalExtensionsTests.swift; sourceTree = "<group>"; };
 		9B570A59283808E600695949 /* Client.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = Client.xctestplan; path = Client.xcodeproj/Client.xctestplan; sourceTree = "<group>"; };
 		9B6FD8B5285D10EF005C6999 /* SpaceEntityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceEntityTests.swift; sourceTree = "<group>"; };
 		9B99C5312825C1DF006D390D /* SpaceServiceProd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceServiceProd.swift; sourceTree = "<group>"; };
@@ -4364,8 +4368,10 @@
 				E4E25CCA1CA99E7400D0F088 /* HexExtensionsTests.swift */,
 				B66E1A7F28A6CA5E00F218B5 /* MRUCacheTests.swift */,
 				E6F9653B1B2F1D5D0034B023 /* NSURLExtensionsTests.swift */,
+				9B4AA28D290AEB32009A915B /* OptionalExtensionsTests.swift */,
 				2FEBABAE1AB3659000DB5728 /* ResultTests.swift */,
 				E61453BD1B750A1700C3F9D7 /* RollingFileLoggerTests.swift */,
+				9B4AA28B290AEAE0009A915B /* StringExtensionsTests.swift */,
 				E6F9650E1B2F1CF20034B023 /* Supporting Files */,
 				28A6CE891AC082E200C1A2D4 /* UtilsTests.swift */,
 			);
@@ -6182,7 +6188,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				B66E1A8028A6CA5E00F218B5 /* MRUCacheTests.swift in Sources */,
+				9B4AA28E290AEB32009A915B /* OptionalExtensionsTests.swift in Sources */,
 				28532BEB1C472015000072D9 /* UtilsTests.swift in Sources */,
+				9B4AA28C290AEAE0009A915B /* StringExtensionsTests.swift in Sources */,
 				28532BEA1C472008000072D9 /* DeferredTests.swift in Sources */,
 				E61453BE1B750A1700C3F9D7 /* RollingFileLoggerTests.swift in Sources */,
 				E96D95682832F27700DD5BB3 /* BloomFilterTests.swift in Sources */,
