@@ -131,7 +131,7 @@ public class CheatsheetQueryController: QueryController<
                 from comment: CheatsheetInfoQuery.Data.GetCheatsheetInfo.BacklinkUrl.Forum.Comment
             ) {
                 guard let body = comment.body,
-                    !body.isBlank
+                    body.isNotBlank
                 else {
                     return nil
                 }

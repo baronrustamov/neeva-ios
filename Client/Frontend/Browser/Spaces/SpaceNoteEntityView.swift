@@ -18,7 +18,7 @@ struct SpaceNoteEntityView: View {
                     isDigestSeeMore ? .ui.adaptive.blue : .label)
 
             if let snippet = details.data.snippet,
-                !snippet.isBlank
+                snippet.isNotBlank
             {
                 SpaceMarkdownSnippet(
                     showDescriptions: showDescriptions,

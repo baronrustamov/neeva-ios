@@ -89,7 +89,7 @@ public struct UserAgentBuilder {
 
     /// Helper method to remove the empty components from user agent string that contain only whitespaces or are just empty
     private func removeEmptyComponentsAndJoin(uaItems: [String]) -> String {
-        return uaItems.filter { !$0.isBlank }.joined(separator: " ")
+        return uaItems.filter { $0.isNotBlank }.joined(separator: " ")
     }
 
     private static func makeMobileUserAgent(identifier: String) -> UserAgentBuilder {
