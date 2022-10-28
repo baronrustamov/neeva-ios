@@ -583,7 +583,10 @@ class SuggestionModel: ObservableObject {
                 }
             }
 
-            if let suggestedUrl = URL(string: suggestion.suggestedUrl) {
+            let encodedUrl = suggestion.suggestedUrl.addingPercentEncoding(
+                withAllowedCharacters: .urlQueryAllowed
+            )
+            if let suggestedUrl = URL(string: encodedUrl ?? suggestion.suggestedUrl) {
                 finishEditingAndSubmit(url: suggestedUrl, for: suggestedQuery)
             } else {
                 log.error(
