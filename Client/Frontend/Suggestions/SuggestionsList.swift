@@ -12,6 +12,7 @@ struct SuggestionsList: View {
     static let placeholderNavSuggestion = NavSuggestion(
         url: "https://neeva.com", title: "PlaceholderLongTitleOneWord")
 
+    @Environment(\.safeArea) private var safeArea: EdgeInsets
     @EnvironmentObject private var suggestionModel: SuggestionModel
 
     var searchSuggestionLabel: String {
@@ -69,20 +70,18 @@ struct SuggestionsList: View {
     }
 
     var body: some View {
-        GeometryReader { geom in
-            ScrollView(.vertical, showsIndicators: false) {
-                content
-                    .safeAreaInset(edge: .leading, spacing: 0) {
-                        Color.clear.frame(width: geom.safeAreaInsets.leading)
-
-                    }
-                    .safeAreaInset(edge: .trailing, spacing: 0) {
-                        Color.clear.frame(width: geom.safeAreaInsets.trailing)
-                    }
-            }
-            .padding(.leading, -geom.safeAreaInsets.leading)
-            .padding(.trailing, -geom.safeAreaInsets.trailing)
+        ScrollView(.vertical, showsIndicators: false) {
+            content
+                .safeAreaInset(edge: .leading, spacing: 0) {
+                    Color.clear.frame(width: safeArea.leading)
+                }
+                .safeAreaInset(edge: .trailing, spacing: 0) {
+                    Color.clear.frame(width: safeArea.trailing)
+                }
+                .padding(.bottom, safeArea.bottom)
         }
+        .padding(.leading, -safeArea.leading)
+        .padding(.trailing, -safeArea.trailing)
     }
 }
 
