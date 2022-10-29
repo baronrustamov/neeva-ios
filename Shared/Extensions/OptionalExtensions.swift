@@ -15,14 +15,29 @@ public func ??? <T>(optional: T?, defaultValue: @autoclosure () -> String) -> St
     return optional.map { String(describing: $0) } ?? defaultValue()
 }
 
-// Checks if a String is empty (""), null or whitespace only.
-// Adopted from Apache Commons StringUtils:
-// https://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/StringUtils.html
 extension Optional where Wrapped == String {
+    /// Checks if a `String?` is `nil`, empty ("") or whitespace only.
+    /// ```
+    /// Optional.none.isBlank       = true
+    /// Optional.some("").isBlank   = true
+    /// Optional.some(" ").isBlank  = true
+    /// Optional.some("a").isBlank  = false
+    /// ```
+    /// Adopted from [Apache Commons StringUtils](https://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/StringUtils.html).
+    /// - Returns: `true` if the `String?` is `nil`, empty or whitespace only
     public var isBlank: Bool {
         self?.isBlank ?? true
     }
 
+    /// Checks if a `String?` is not `nil`, not empty ("") and not whitespace only.
+    /// ```
+    /// Optional.none.isNotBlank        = false
+    /// Optional.some("").isNotBlank    = false
+    /// Optional.some(" ").isNotBlank   = false
+    /// Optional.some("a").isNotBlank   = true
+    /// ```
+    /// Adopted from [Apache Commons StringUtils](https://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/StringUtils.html).
+    /// - Returns: `true` if the `String?` is not `nil`, not empty and not whitespace only
     public var isNotBlank: Bool {
         !isBlank
     }

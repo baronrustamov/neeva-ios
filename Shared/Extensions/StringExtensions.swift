@@ -5,14 +5,26 @@
 import Foundation
 
 extension String {
-    // Checks if a String is empty ("") or whitespace only.
-    // Adopted from Apache Commons StringUtils:
-    // https://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/StringUtils.html
-    // See also: isBlank and isNotBlank in OptionalExtensions.swift
+    /// Checks if a `String` is empty ("") or whitespace only.
+    /// ```
+    /// "".isBlank  = true
+    /// " ".isBlank = true
+    /// "a".isBlank = false
+    /// ```
+    /// Adopted from [Apache Commons StringUtils](https://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/StringUtils.html).
+    /// - Returns: `true` if the `String` is empty or whitespace only
     public var isBlank: Bool {
         self.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
+    /// Checks if a `String` is not empty ("") and not whitespace only.
+    /// ```
+    /// "".isNotBlank   = false
+    /// " ".isNotBlank  = false
+    /// "a".isNotBlank  = true
+    /// ```
+    /// Adopted from [Apache Commons StringUtils](https://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/StringUtils.html).
+    /// - Returns: `true` if the `String` is not empty and not whitespace only
     public var isNotBlank: Bool {
         !isBlank
     }
