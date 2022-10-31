@@ -36,7 +36,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         // Override point for customization.
     }
 
-    func userContentController(didReceive message: WKScriptMessage) {
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         // Override point for customization.
     }
 }
