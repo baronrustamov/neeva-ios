@@ -295,13 +295,12 @@ struct WelcomeFlowPlansView: View {
                 let product = premiumStore.getProductForPlan(model.currentPremiumPlan)
             {
                 /*
-                 NOTE: Only show for users who are not Lifetime and have
-                 not paid through another source.
+                 NOTE: Only execute for users who have no subscription
                  */
-                if userInfo.subscriptionType == .basic
-                    && (userInfo.subscription == nil
-                        || userInfo.subscription?.source == SubscriptionSource.none
-                        || userInfo.subscription?.source == SubscriptionSource.apple)
+                if NeevaUserInfo.shared.subscriptionType == .basic
+                    && (NeevaUserInfo.shared.subscriptionType == nil
+                        || NeevaUserInfo.shared.subscriptionType == .basic
+                        || NeevaUserInfo.shared.subscriptionType == .unknown)
                 {
                     premiumStore.purchase(
                         product, reloadUserInfo: true,
