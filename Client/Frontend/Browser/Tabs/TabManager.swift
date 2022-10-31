@@ -764,7 +764,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
 
             // Add tab to be root of a tab group if it follows the rule for the nytimes case.
             // See TabGroupTests.swift for example.
-            for possibleChildTab in isIncognito ? incognitoTabs : normalTabs {
+            for possibleChildTab in tab.isIncognito ? incognitoTabs : normalTabs {
                 if addTabToTabGroupIfNeeded(newTab: tab, possibleChildTab: possibleChildTab) {
                     guard let childTabIndex = tabs.firstIndex(of: possibleChildTab) else {
                         continue
@@ -817,7 +817,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         let newTab = addTab(
             tabConfig: .init(
                 request: URLRequest(url: url),
-                insertLocation: InsertTabLocation(parent: tab)
+                insertLocation: InsertTabLocation(parent: incognito ? nil : tab)
             ),
             isIncognito: incognito
         )
