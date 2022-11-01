@@ -51,7 +51,7 @@ struct LocationViewTrackingButton: View {
         ) {
             ScrollView {
                 TrackingMenuView()
-                    .frame(minHeight: 250)
+                    .frame(minHeight: trackingStatsModel.preventTrackersForCurrentPage ? 250 : 0)
                     .environmentObject(trackingStatsModel)
                     .environmentObject(cookieCutterModel)
                     .environment(\.openSettings, openSettings)
@@ -59,7 +59,10 @@ struct LocationViewTrackingButton: View {
                     .onHeightOfViewChanged { newValue in
                         self.trackingMenuHeight = newValue
                     }
-            }.frame(minHeight: 250, idealHeight: trackingMenuHeight, maxHeight: 400)
+            }.frame(
+                idealHeight: trackingMenuHeight,
+                maxHeight: 400
+            )
         }
     }
 }
