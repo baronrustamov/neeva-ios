@@ -9,6 +9,73 @@ import XCGLogger
 
 private let log = Logger.storage
 
+class TabManagerStoreFactory {
+    let profile: Profile
+    lazy var backgroundFileProcesser = BackgroundTaskProcessor(label: "TabManagerStoreFactory")
+
+    init(_ profile: Profile) {
+        self.profile = profile
+    }
+
+    var rootPath: String {
+        return self.profile.files.rootPath
+    }
+
+    var rootURL: URL {
+        if #available(iOS 16, *) {
+            return URL(filePath: self.profile.files.rootPath, directoryHint: .isDirectory)
+        } else {
+            return URL(fileURLWithPath: self.rootPath)
+        }
+    }
+
+    var fallbackTabsURL: URL {
+        return rootURL
+            .appendingPathComponent("tabsState.archive")
+    }
+
+    func tabSavePath(for scene: UIScene) -> URL {
+        return tabSavePath(for: scene.session)
+    }
+
+    func tabSavePath(for session: UISceneSession) -> URL {
+        return rootURL
+            .appendingPathComponent("tabsState.archive-\(session.persistentIdentifier)")
+    }
+
+    func cleanupDisconnectedSessionStores(retainedSessions: Set<UISceneSession>) {
+        // Keep fallback archive and archive for the retained sessions
+        let retainedArchives = Set([fallbackTabsURL])
+            .union(retainedSessions.map(self.tabSavePath(for:)))
+
+        // Get list of archives to remove
+        var existingArchives: [URL]?
+        do {
+            existingArchives = try FileManager.default.contentsOfDirectory(
+                at: rootURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles
+            ).filter { file in
+                file.isFileURL && file.lastComponentIsPrefixedBy("tabsState.archive")
+            }
+        } catch {
+            log.error("Failed to query tab archives: \(error.localizedDescription)")
+        }
+        let filesToRemove = Set(existingArchives ?? []).subtracting(retainedArchives)
+
+        guard !filesToRemove.isEmpty else {
+            return
+        }
+        backgroundFileProcesser.performTask {
+            for file in filesToRemove {
+                do {
+                    try FileManager.default.removeItem(at: file)
+                } catch {
+                    log.error("Failed to clean up session archive at \(file): \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+}
+
 class TabManagerStore {
     static let shared = TabManagerStore(
         imageStore: DiskImageStore(

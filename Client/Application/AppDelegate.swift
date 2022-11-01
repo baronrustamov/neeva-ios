@@ -29,6 +29,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         lateInitializedProfile!
     }
 
+    var tabManagerStoreFactory: TabManagerStoreFactory!
+
     // MARK: - Lifecycle
     /*
      * "Return false if the app should not perform the application(_:performActionFor:completionHandler:)
@@ -55,6 +57,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         Defaults[.feedbackBeingSent] = false
 
         lateInitializedProfile = createProfile()
+
+        // Initialize TabManagerStoreFactory and clean up unused archives
+        self.tabManagerStoreFactory = TabManagerStoreFactory(profile)
+        tabManagerStoreFactory.cleanupDisconnectedSessionStores(retainedSessions: application.openSessions)
 
         // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
         setUpWebServer(profile)
