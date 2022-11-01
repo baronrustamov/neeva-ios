@@ -30,7 +30,8 @@ class TabManagerStoreFactory {
     }
 
     var fallbackTabsURL: URL {
-        return rootURL
+        return
+            rootURL
             .appendingPathComponent("tabsState.archive")
     }
 
@@ -39,14 +40,15 @@ class TabManagerStoreFactory {
     }
 
     func tabSavePath(for session: UISceneSession) -> URL {
-        return rootURL
+        return
+            rootURL
             .appendingPathComponent("tabsState.archive-\(session.persistentIdentifier)")
     }
 
-    func cleanupDisconnectedSessionStores(retainedSessions: Set<UISceneSession>) {
+    func cleanupDisconnectedSessionStores(retaining sessions: Set<UISceneSession>) {
         // Keep fallback archive and archive for the retained sessions
         let retainedArchives = Set([fallbackTabsURL])
-            .union(retainedSessions.map(self.tabSavePath(for:)))
+            .union(sessions.map(self.tabSavePath(for:)))
 
         // Get list of archives to remove
         var existingArchives: [URL]?
@@ -69,7 +71,9 @@ class TabManagerStoreFactory {
                 do {
                     try FileManager.default.removeItem(at: file)
                 } catch {
-                    log.error("Failed to clean up session archive at \(file): \(error.localizedDescription)")
+                    log.error(
+                        "Failed to clean up session archive at \(file): \(error.localizedDescription)"
+                    )
                 }
             }
         }

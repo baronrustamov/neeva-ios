@@ -60,7 +60,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         // Initialize TabManagerStoreFactory and clean up unused archives
         self.tabManagerStoreFactory = TabManagerStoreFactory(profile)
-        tabManagerStoreFactory.cleanupDisconnectedSessionStores(retainedSessions: application.openSessions)
+        tabManagerStoreFactory.cleanupDisconnectedSessionStores(
+            retaining: application.openSessions
+        )
 
         // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
         setUpWebServer(profile)
