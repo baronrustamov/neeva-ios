@@ -19,6 +19,16 @@ class SpaceServiceProd: SpaceService {
         return AddSpaceCommentRequest(spaceID: spaceID, comment: comment)
     }
 
+    func addSpaceResultsByUrlMutation(
+        input: AddSpaceResultsByURLInput,
+        completion: @escaping (Result<AddSpaceResultsByUrlMutation.Data, Error>) -> Void
+    )
+        -> Cancellable?
+    {
+        GraphQLAPI.shared.perform(
+            mutation: AddSpaceResultsByUrlMutation(input: input), resultHandler: completion)
+    }
+
     func addToSpaceMutation(
         spaceId: String, url: String, title: String,
         thumbnail: String? = nil, data: String?, mediaType: String?, isBase64: Bool?,
@@ -53,10 +63,13 @@ class SpaceServiceProd: SpaceService {
         return CreateSpaceRequest(name: name)
     }
 
-    func createSpaceWithURLs(name: String, urls: [SpaceURLInput])
-        -> CreateSpaceWithURLsRequest?
-    {
-        return CreateSpaceWithURLsRequest(name: name, urls: urls)
+    func createSpaceWithURLs(
+        name: String, urls: [SpaceURLInput],
+        completion: @escaping (Result<CreateSpaceWithUrLsMutation.Data, Error>) -> Void
+    ) -> Cancellable? {
+        GraphQLAPI.shared.perform(
+            mutation: CreateSpaceWithUrLsMutation(
+                input: CreateSpaceWithURLsInput(name: name, urls: urls)), resultHandler: completion)
     }
 
     func deleteGenerator(spaceID: String, generatorID: String) -> DeleteGeneratorRequest? {

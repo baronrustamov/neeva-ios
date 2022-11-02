@@ -77,7 +77,7 @@ private struct CollapsedCardStripTabGroupCardView: View {
         }
         .transition(.identity)
         .animation(CardTransitionUX.animation)
-        .contextMenu(menuItems: groupDetails.contextMenu)
+        .contextMenu { TabGroupContextMenu(groupDetails: groupDetails) }
         .background(Color.groupedBackground)
         .onDrop(of: ["public.url", "public.text"], delegate: groupDetails)
         .accessibilityLabel(groupDetails.title + ", Card Strip Tab Group Card")

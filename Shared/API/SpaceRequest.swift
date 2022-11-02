@@ -8,16 +8,6 @@ public class CreateSpaceRequest: MutationRequest<CreateSpaceMutation> {
     }
 }
 
-// Apollo seems to mangle acronym capitalization, so that's why we have "WithUrLsMutation"
-public class CreateSpaceWithURLsRequest: MutationRequest<CreateSpaceWithUrLsMutation> {
-    public init(name: String, urls: [SpaceURLInput], testMode: Bool = false) {
-        super.init(
-            mutation: CreateSpaceWithUrLsMutation(
-                input: CreateSpaceWithURLsInput(name: name, urls: urls)),
-            testMode: testMode)
-    }
-}
-
 public class DeleteSpaceRequest: MutationRequest<DeleteSpaceMutation> {
     public init(spaceID: String, testMode: Bool = false) {
         super.init(

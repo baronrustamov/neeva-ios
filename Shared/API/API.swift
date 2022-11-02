@@ -3167,6 +3167,7 @@ public enum SubscriptionType: RawRepresentable, Equatable, Hashable, CaseIterabl
   case basic
   case premium
   case lifetime
+  case unlimited
   case unknown
   /// Auto generated constant for unknown enum values
   case __unknown(RawValue)
@@ -3176,6 +3177,7 @@ public enum SubscriptionType: RawRepresentable, Equatable, Hashable, CaseIterabl
       case "Basic": self = .basic
       case "Premium": self = .premium
       case "Lifetime": self = .lifetime
+      case "Unlimited": self = .unlimited
       case "Unknown": self = .unknown
       default: self = .__unknown(rawValue)
     }
@@ -3186,6 +3188,7 @@ public enum SubscriptionType: RawRepresentable, Equatable, Hashable, CaseIterabl
       case .basic: return "Basic"
       case .premium: return "Premium"
       case .lifetime: return "Lifetime"
+      case .unlimited: return "Unlimited"
       case .unknown: return "Unknown"
       case .__unknown(let value): return value
     }
@@ -3196,6 +3199,7 @@ public enum SubscriptionType: RawRepresentable, Equatable, Hashable, CaseIterabl
       case (.basic, .basic): return true
       case (.premium, .premium): return true
       case (.lifetime, .lifetime): return true
+      case (.unlimited, .unlimited): return true
       case (.unknown, .unknown): return true
       case (.__unknown(let lhsValue), .__unknown(let rhsValue)): return lhsValue == rhsValue
       default: return false
@@ -3207,6 +3211,7 @@ public enum SubscriptionType: RawRepresentable, Equatable, Hashable, CaseIterabl
       .basic,
       .premium,
       .lifetime,
+      .unlimited,
       .unknown,
     ]
   }
@@ -5074,6 +5079,25 @@ public struct SpaceURLInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "isBase64")
+    }
+  }
+}
+
+public struct AddSpaceResultsByURLInput: GraphQLMapConvertible {
+  public var graphQLMap: GraphQLMap
+
+  /// - Parameters:
+  ///   - entries
+  public init(entries: Swift.Optional<[AddSpaceResultByURLInput]?> = nil) {
+    graphQLMap = ["entries": entries]
+  }
+
+  public var entries: Swift.Optional<[AddSpaceResultByURLInput]?> {
+    get {
+      return graphQLMap["entries"] as? Swift.Optional<[AddSpaceResultByURLInput]?> ?? Swift.Optional<[AddSpaceResultByURLInput]?>.none
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "entries")
     }
   }
 }
@@ -22546,6 +22570,60 @@ public final class CreateSpaceWithUrLsMutation: GraphQLMutation {
         set {
           resultMap.updateValue(newValue, forKey: "spaceID")
         }
+      }
+    }
+  }
+}
+
+public final class AddSpaceResultsByUrlMutation: GraphQLMutation {
+  /// The raw GraphQL definition of this operation.
+  public let operationDefinition: String =
+    """
+    mutation AddSpaceResultsByURL($input: AddSpaceResultsByURLInput!) {
+      addSpaceResultsByURL(input: $input)
+    }
+    """
+
+  public let operationName: String = "AddSpaceResultsByURL"
+
+  public let operationIdentifier: String? = "1e0c86dc81c46a57317aca68545355f5a47fe9d9e5dc12fc7e7bd8588b2d588c"
+
+  public var input: AddSpaceResultsByURLInput
+
+  public init(input: AddSpaceResultsByURLInput) {
+    self.input = input
+  }
+
+  public var variables: GraphQLMap? {
+    return ["input": input]
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes: [String] = ["Mutation"]
+
+    public static var selections: [GraphQLSelection] {
+      return [
+        GraphQLField("addSpaceResultsByURL", arguments: ["input": GraphQLVariable("input")], type: .nonNull(.list(.scalar(String.self)))),
+      ]
+    }
+
+    public private(set) var resultMap: ResultMap
+
+    public init(unsafeResultMap: ResultMap) {
+      self.resultMap = unsafeResultMap
+    }
+
+    public init(addSpaceResultsByUrl: [String?]) {
+      self.init(unsafeResultMap: ["__typename": "Mutation", "addSpaceResultsByURL": addSpaceResultsByUrl])
+    }
+
+    /// Add URLs to a space, and return the list of IDs of the space result.
+    public var addSpaceResultsByUrl: [String?] {
+      get {
+        return resultMap["addSpaceResultsByURL"]! as! [String?]
+      }
+      set {
+        resultMap.updateValue(newValue, forKey: "addSpaceResultsByURL")
       }
     }
   }

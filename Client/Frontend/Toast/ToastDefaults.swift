@@ -140,9 +140,12 @@ class ToastDefaults: NSObject {
                 self.toastProgressViewModel?.status = .failed
             } else {
                 self.toastProgressViewModel?.status = .success
-                if let spaceID = request.targetSpaceID {
+                if request.isForOneTab,
+                    let spaceID = request.targetSpaceID,
+                    let url = request.singleTabData?.url
+                {
                     SpaceStore.shared.refreshSpace(
-                        spaceID: spaceID, url: request.url, anonymous: false
+                        spaceID: spaceID, url: url, anonymous: false
                     )
                 }
             }

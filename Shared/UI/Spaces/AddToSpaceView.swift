@@ -5,178 +5,6 @@
 import Combine
 import SwiftUI
 
-public class AddToSpaceRequest: ObservableObject {
-    var cancellable: Cancellable?
-
-    public let title: String
-    public let description: String?  // meta description
-    public let url: URL
-    public let thumbnail: String?
-    public let updater: SocialInfoUpdater?
-
-    public enum Mode {
-        case saveToExistingSpace
-        case saveToNewSpace
-
-        public var title: LocalizedStringKey {
-            switch self {
-            case .saveToNewSpace:
-                return "Create Space"
-            case .saveToExistingSpace:
-                return "Save to Spaces"
-            }
-        }
-    }
-    @Published public var mode: Mode = .saveToExistingSpace
-
-    public enum State {
-        case initial
-        case creatingSpace
-        case savingToSpace
-        case savedToSpace
-        case deletingFromSpace
-        case deletedFromSpace
-        case failed
-    }
-    @Published public var state: State = .initial
-
-    // The results from a request. |targetSpaceName| is set on both
-    // success and failure. |targetSpaceID| is only set on success.
-    @Published public var targetSpaceName: String?
-    @Published public var targetSpaceID: String?
-    @Published public var error: Error?
-
-    public var textInfo: (LocalizedStringKey, LocalizedStringKey, Bool) {
-        switch self.state {
-        case .initial:
-            fatalError()
-        case .creatingSpace, .savingToSpace:
-            return ("Saving...", "Saved to \"\(self.targetSpaceName!)\"", false)
-        case .savedToSpace:
-            return (
-                "Saved to \"\(self.targetSpaceName!)\"", "Saved to \"\(self.targetSpaceName!)\"",
-                false
-            )
-        case .deletingFromSpace:
-            return ("Deleting...", "Deleted from \"\(self.targetSpaceName!)\"", true)
-        case .deletedFromSpace:
-            return (
-                "Deleted from \"\(self.targetSpaceName!)\"",
-                "Deleted from \"\(self.targetSpaceName!)\"", true
-            )
-        default:
-            return ("An error occured", "An error occured", false)
-        }
-    }
-
-    /// - Parameters:
-    ///   - title: The title of the newly created entity
-    ///   - description: The description/snippet of the newly created entity
-    ///   - url: The URL of the newly created entity
-    public init(
-        title: String, description: String?, url: URL,
-        thumbnail: String? = nil, updater: SocialInfoUpdater? = nil
-    ) {
-        self.title = title
-        self.description = description
-        self.url = url
-        self.thumbnail = thumbnail
-        self.updater = updater
-
-        SpaceStore.shared.refresh()
-    }
-
-    func addToNewSpace(spaceName: String) {
-        guard spaceName.count > 0 else { return }
-
-        self.targetSpaceName = spaceName
-
-        // Note: This creates a reference cycle between self and the mutation.
-        // This means even if all other references are dropped to self, then
-        // the mutation will attempt to run to completion.
-        self.cancellable = GraphQLAPI.shared.perform(
-            mutation: CreateSpaceMutation(name: spaceName)
-        ) { [self] result in
-            self.cancellable = nil
-            switch result {
-            case .success(let data):
-                self.addToExistingSpace(id: data.createSpace, name: spaceName)
-            case .failure(let error):
-                self.error = error
-                withAnimation {
-                    self.state = .failed
-                }
-            }
-        }
-        withAnimation {
-            self.state = .creatingSpace
-        }
-    }
-
-    public func addToExistingSpace(id: String, name: String) {
-        self.targetSpaceName = name
-
-        self.cancellable = SpaceServiceProvider.shared.addToSpaceMutation(
-            spaceId: id,
-            url: self.url.absoluteString,
-            title: self.title,
-            thumbnail: self.thumbnail,
-            data: self.description,
-            mediaType: "text/plain",
-            isBase64: false
-        ) { result in
-            self.cancellable = nil
-            switch result {
-            case .failure(let error):
-                self.error = error
-                withAnimation {
-                    self.state = .failed
-                }
-                break
-            case .success:
-                self.targetSpaceID = id
-                withAnimation {
-                    self.state = .savedToSpace
-                }
-            }
-        }
-
-        withAnimation {
-            self.state = .savingToSpace
-        }
-    }
-
-    public func deleteFromExistingSpace(id: String, name: String) {
-        self.targetSpaceName = name
-
-        // Note: This creates a reference cycle between self and the mutation.
-        // This means even if all other references are dropped to self, then
-        // the mutation will attempt to run to completion.
-        self.cancellable = SpaceStore.shared.sendRemoveItemFromSpaceRequest(
-            spaceId: id, url: self.url.absoluteString
-        ) { result in
-            self.cancellable = nil
-            switch result {
-            case .failure(let error):
-                self.error = error
-                withAnimation {
-                    self.state = .failed
-                }
-                break
-            case .success:
-                self.targetSpaceID = id
-                withAnimation {
-                    self.state = .deletedFromSpace
-                }
-                break
-            }
-        }
-        withAnimation {
-            self.state = .deletingFromSpace
-        }
-    }
-}
-
 public struct AddToSpaceView: View {
     @ObservedObject var request: AddToSpaceRequest
     @ObservedObject var spaceStore = SpaceStore.shared
@@ -238,17 +66,28 @@ public struct AddToSpaceView: View {
                 .padding(.top, 16)
         } else {
             LazyVStack(spacing: 14) {
-                ForEach(filteredSpaces, id: \.self) { space in
-                    SpaceListItem(space, currentURL: request.url)
-                        .onTapGesture {
-                            if SpaceStore.shared.urlInSpace(request.url, spaceId: space.id) {
-                                request.deleteFromExistingSpace(
-                                    id: space.id.value, name: space.name)
-                                onDismiss()
-                            } else {
-                                request.addToExistingSpace(id: space.id.value, name: space.name)
+                if request.isForOneTab, let url = request.singleTabData?.url {
+                    ForEach(filteredSpaces, id: \.self) { space in
+                        AddToSpaceListItem(space, currentURL: url)
+                            .onTapGesture {
+                                if SpaceStore.shared.urlInSpace(url, spaceId: space.id) {
+                                    request.deleteFromExistingSpace(
+                                        id: space.id.value, name: space.name)
+                                    onDismiss()
+                                } else {
+                                    request.addToExistingSpace(id: space.id.value, name: space.name)
+                                }
                             }
-                        }
+                    }
+                } else {
+                    // Tab Group
+                    ForEach(filteredSpaces, id: \.self) { space in
+                        AddToSpaceListItem(space)
+                            .onTapGesture {
+                                request.addGroupToExistingSpace(
+                                    id: space.id.value, name: space.name)
+                            }
+                    }
                 }
             }
             .padding(.bottom, 16)
@@ -259,7 +98,9 @@ public struct AddToSpaceView: View {
         Group {
             if request.mode == .saveToNewSpace {
                 CreateSpaceView {
-                    request.addToNewSpace(spaceName: $0)
+                    request.isForOneTab
+                        ? request.addToNewSpace(spaceName: $0)
+                        : request.addGroupToNewSpace(spaceName: $0)
                 }
             } else {
                 let spaceList = VStack {
@@ -302,8 +143,12 @@ public struct AddToSpaceView: View {
 struct AddToSpaceView_Previews: PreviewProvider {
     static var previews: some View {
         AddToSpaceView(
-            request: AddToSpaceRequest(
-                title: "Hello, world!", description: "<h1>Testing!</h1>", url: "https://google.com"),
+            request: AddToSpaceRequest(input: [
+                AddToSpaceInput(
+                    url: "https://google.com", title: "Hello, world!",
+                    description: "<h1>Testing!</h1>"
+                )
+            ])!,
             onDismiss: { print("Done") })
     }
 }

@@ -1636,19 +1636,11 @@ extension BrowserViewController {
         }
     }
 
-    func showAddToSpacesSheet(
-        url: URL,
-        title: String?,
-        description: String?,
-        thumbnail: String? = nil,
-        importData: SpaceImportHandler? = nil,
-        updater: SocialInfoUpdater? = nil
+    /// Convenience method to reduce code duplication.
+    private func showAddToSpacesModal(
+        request: AddToSpaceRequest, importData: SpaceImportHandler? = nil,
+        onDismiss: (() -> Void)? = nil
     ) {
-        let title = (title ?? "").isEmpty ? url.absoluteString : title!
-        let request = AddToSpaceRequest(
-            title: title, description: description, url: url, thumbnail: thumbnail, updater: updater
-        )
-
         overlayManager.showModal(
             style: .spaces,
             headerButton: OverlayHeaderButton(
@@ -1659,16 +1651,40 @@ extension BrowserViewController {
                     ClientLogger.shared.logCounter(
                         .ViewSpacesFromSheet,
                         attributes: EnvironmentHelper.shared.getAttributes())
-                })
-        ) {
-            AddToSpaceOverlayContent(
-                request: request,
-                bvc: self, importData: importData
+                }),
+            content: {
+                AddToSpaceOverlayContent(
+                    request: request,
+                    bvc: self, importData: importData
+                )
+                .environmentObject(self.chromeModel)
+                .environmentObject(self.browserModel)
+                .environmentObject(self.overlayManager)
+            }, onDismiss: onDismiss)
+    }
+
+    func showAddToSpacesSheet(
+        url: URL,
+        title: String?,
+        description: String?,
+        thumbnail: String? = nil,
+        importData: SpaceImportHandler? = nil,
+        updater: SocialInfoUpdater? = nil
+    ) {
+        let title = (title ?? "").isEmpty ? url.absoluteString : title!
+
+        // This should never fail. The initializer only fails when
+        // the input is empty.
+        guard
+            let request = AddToSpaceRequest(
+                input: [
+                    AddToSpaceInput(
+                        url: url, title: title, thumbnail: thumbnail, description: description)
+                ], updater: updater
             )
-            .environmentObject(self.chromeModel)
-            .environmentObject(self.browserModel)
-            .environmentObject(self.overlayManager)
-        } onDismiss: {
+        else { return }
+
+        showAddToSpacesModal(request: request, importData: importData) {
             if request.state != .initial
                 && request.state != .savingToSpace
                 && request.state != .savedToSpace
@@ -1676,6 +1692,18 @@ extension BrowserViewController {
                 ToastDefaults().showToastForAddToSpaceUI(bvc: self, request: request)
             }
         }
+    }
+
+    func showAddToSpacesSheetForGroup(tabGroup: TabGroup) {
+        guard
+            let request = AddToSpaceRequest(
+                input: tabGroup.children.compactMap {
+                    guard let url = $0.url else { return nil }
+                    return AddToSpaceInput(url: url, title: $0.displayTitle)
+                })
+        else { return }
+
+        showAddToSpacesModal(request: request)
     }
 
     func showSpacesLoginRequiredSheet() {

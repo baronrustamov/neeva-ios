@@ -268,6 +268,16 @@ public class SpaceServiceMock: SpaceService {
         return nil
     }
 
+    // TODO(jon): Implement this!
+    public func addSpaceResultsByUrlMutation(
+        input: AddSpaceResultsByURLInput,
+        completion: @escaping (Result<AddSpaceResultsByUrlMutation.Data, Error>) -> Void
+    )
+        -> Combine.Cancellable?
+    {
+        return nil
+    }
+
     public func addToSpaceMutation(
         spaceId: String, url: String, title: String,
         thumbnail: String?, data: String?, mediaType: String?, isBase64: Bool?,
@@ -336,11 +346,11 @@ public class SpaceServiceMock: SpaceService {
     }
 
     // TODO(jon): Make this work and write tests using it!
-    public func createSpaceWithURLs(name: String, urls: [SpaceURLInput])
-        -> CreateSpaceWithURLsRequest?
-    {
-        let request = CreateSpaceWithURLsRequest(name: name, urls: urls, testMode: true)
-        return request
+    public func createSpaceWithURLs(
+        name: String, urls: [SpaceURLInput],
+        completion: @escaping (Result<CreateSpaceWithUrLsMutation.Data, Error>) -> Void
+    ) -> Combine.Cancellable? {
+        nil
     }
 
     public func deleteGenerator(spaceID: String, generatorID: String) -> DeleteGeneratorRequest? {
