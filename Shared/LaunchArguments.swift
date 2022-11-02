@@ -29,6 +29,8 @@ public struct LaunchArguments {
     public static let EnableMockUserInfo = "ENABLE_MOCK_USER_INFO"
     public static let EnableMockSpaces = "ENABLE_MOCK_SPACES"
 
+    public static let UseM1AppHost = "USE_M1_APP_HOST"
+
     public static let DontAddTabOnLaunch = "DONT_ADD_TAB_ON_LAUNCH"
 
     public static let DisableCheatsheetBloomFilters = "DISABLE_CHEATSHEET_BLOOM_FILTERS"

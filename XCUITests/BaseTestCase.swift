@@ -139,6 +139,13 @@ class BaseTestCase: XCTestCase {
         waitForNoExistence(progressIndicator, timeoutValue: 20.0)
     }
 
+    public func enterSearchText(
+        _ text: String, fromTabTray: Bool = false, waitForPageLoad: Bool = true
+    ) {
+        // exploiting the openURL func because it just copies and pastes
+        openURL(text, fromTabTray: fromTabTray, waitForPageLoad: waitForPageLoad)
+    }
+
     public func openURL(
         _ url: String = "example.com", fromTabTray: Bool = false, waitForPageLoad: Bool = true
     ) {
@@ -263,6 +270,38 @@ class IphoneOnlyTestCase: BaseTestCase {
 extension BaseTestCase {
     func tabTrayButton(forApp app: XCUIApplication) -> XCUIElement {
         return app.buttons["Show Tabs"]
+    }
+}
+
+extension BaseTestCase {
+    // Copy url from the browser
+    func copyUrl() {
+        app.buttons["Address Bar"].tap()
+
+        waitForExistence(app.buttons["Edit current address"])
+        app.buttons["Edit current address"].press(forDuration: 1)
+
+        waitForExistence(app.buttons["Copy Address"])
+        app.buttons["Copy Address"].tap()
+    }
+
+    // Workaround for `copyUrl` and reading pasteboard on IOS 16
+    // UIPasteboard prompt cannot be programmatically dismissed
+    @available(iOS 16.0, *)
+    func getTabURL() -> URL? {
+        app.buttons["Address Bar"].tap()
+
+        waitForExistence(app.buttons["Edit current address"])
+        app.buttons["Edit current address"].tap()
+
+        waitForExistence(app.textFields["address"])
+        let urlField = app.textFields["address"]
+
+        guard let urlString = urlField.value as? String else {
+            return nil
+        }
+
+        return URL(string: urlString)
     }
 }
 

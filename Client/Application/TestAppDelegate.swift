@@ -168,6 +168,9 @@ class TestAppDelegate: AppDelegate {
             profile = BrowserProfile(localName: "testProfile")
         }
 
+        // Clear existing preferences
+        Defaults.removeAll(suite: .standard)
+
         // Don't show the What's New page.
         if launchArguments.contains(LaunchArguments.SkipWhatsNew) {
             Defaults[.lastVersionNumber] = "1"
@@ -207,6 +210,14 @@ class TestAppDelegate: AppDelegate {
 
         if launchArguments.contains(LaunchArguments.EnableMockSpaces) {
             SpaceServiceProvider.shared = SpaceServiceMock()
+        }
+
+        if launchArguments.contains(LaunchArguments.UseM1AppHost) {
+            assert(
+                !launchArguments.contains(LaunchArguments.EnableMockAppHost),
+                "Using both M1 and Mocked app hosts is not a supported combination."
+            )
+            NeevaConstants.appHost = "m1.neeva.com"
         }
 
         if launchArguments.contains(LaunchArguments.DisableCheatsheetBloomFilters) {

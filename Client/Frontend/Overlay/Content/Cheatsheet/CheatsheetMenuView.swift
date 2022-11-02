@@ -29,7 +29,7 @@ struct CheatsheetMenuView: View {
     var body: some View {
         ZStack {
             // Show Cheatsheet Info if on Neeva domain page
-            if NeevaConstants.isInNeevaDomain(model.sourcePage?.url) {
+            if NeevaConstants.isInNeevaDomain(model.sourcePage?.url ?? model.tab?.url) {
                 CheatsheetInfoViewOnSRP {
                     hideOverlay()
                     defaultShowTryCheatsheetPopover = !seenCheatsheetIntro

@@ -52,35 +52,3 @@ class ClipBoardTests: BaseTestCase {
         checkUrl()
     }
 }
-
-extension BaseTestCase {
-    // Copy url from the browser
-    func copyUrl() {
-        app.buttons["Address Bar"].tap()
-
-        waitForExistence(app.buttons["Edit current address"])
-        app.buttons["Edit current address"].press(forDuration: 1)
-
-        waitForExistence(app.buttons["Copy Address"])
-        app.buttons["Copy Address"].tap()
-    }
-
-    // Workaround for `copyUrl` and reading pasteboard on IOS 16
-    // UIPasteboard prompt cannot be programmatically dismissed
-    @available(iOS 16.0, *)
-    func getTabURL() -> URL? {
-        app.buttons["Address Bar"].tap()
-
-        waitForExistence(app.buttons["Edit current address"])
-        app.buttons["Edit current address"].tap()
-
-        waitForExistence(app.textFields["address"])
-        let urlField = app.textFields["address"]
-
-        guard let urlString = urlField.value as? String else {
-            return nil
-        }
-
-        return URL(string: urlString)
-    }
-}
