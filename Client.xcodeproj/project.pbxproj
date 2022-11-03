@@ -469,6 +469,7 @@
 		8AC7A593280D2B5F00176E7E /* OpenArchivedTabsPanelButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC7A592280D2B5F00176E7E /* OpenArchivedTabsPanelButton.swift */; };
 		9B32E19928258DF400A169EE /* SpaceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32E19828258DF400A169EE /* SpaceService.swift */; };
 		9B32E19B28258E1A00A169EE /* SpaceServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B32E19A28258E1A00A169EE /* SpaceServiceProvider.swift */; };
+		9B3C1E5329139431008B006F /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = 9B3C1E5229139431008B006F /* Defaults */; };
 		9B47B770290A246000D54FC8 /* AddToSpaceRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B47B76F290A246000D54FC8 /* AddToSpaceRequest.swift */; };
 		9B47B772290A24AF00D54FC8 /* AddToSpaceInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B47B771290A24AF00D54FC8 /* AddToSpaceInput.swift */; };
 		9B489597286528A70017FA57 /* SpacePublicAclTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B489596286528A70017FA57 /* SpacePublicAclTests.swift */; };
@@ -544,7 +545,6 @@
 		BCF864CD276C5FDC00E94B3A /* BuyingGuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCF864CC276C5FDC00E94B3A /* BuyingGuideView.swift */; };
 		C80E03E626B8459600A7800A /* LoggingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80E03E526B8459600A7800A /* LoggingSettingsView.swift */; };
 		C80E03E826B88FF000A7800A /* OptionalLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80E03E726B88FF000A7800A /* OptionalLogger.swift */; };
-		C82719ED26FE734500EC9EF9 /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = C82719EC26FE734500EC9EF9 /* Defaults */; };
 		C82CDD47233E8996002E2743 /* Tab+ChangeUserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */; };
 		C832BF5926DEE0BB00B9A1F8 /* AddToSpaceOverlayContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C832BF5826DEE0BB00B9A1F8 /* AddToSpaceOverlayContent.swift */; };
 		C832BF5B26E0A7A400B9A1F8 /* OpenInAppOverlayContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C832BF5A26E0A7A400B9A1F8 /* OpenInAppOverlayContent.swift */; };
@@ -2409,7 +2409,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				85EFC03B27C51C46009460DE /* SwiftKeychainWrapper.xcframework in Frameworks */,
-				C82719ED26FE734500EC9EF9 /* Defaults in Frameworks */,
 				C9C18E53265597C0004710CD /* SFSafeSymbols in Frameworks */,
 				C9C18E5F265599C4004710CD /* Introspect in Frameworks */,
 				C9C18E2326559322004710CD /* KeychainAccess in Frameworks */,
@@ -2429,6 +2428,7 @@
 				66A7639427C7505D0047F999 /* SDWebImageSwiftUI.xcframework in Frameworks */,
 				C8E18F20222EDED000E30E52 /* SafariServices.framework in Frameworks */,
 				C8E18F1E222EDE4500E30E52 /* Accelerate.framework in Frameworks */,
+				9B3C1E5329139431008B006F /* Defaults in Frameworks */,
 				E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */,
 				F8F360332874D9B800736740 /* StoreKit.framework in Frameworks */,
 				E6231C011B90A44F005ABB0D /* libz.tbd in Frameworks */,
@@ -4941,7 +4941,6 @@
 				C9C18E44265595EC004710CD /* Apollo */,
 				C9C18E52265597C0004710CD /* SFSafeSymbols */,
 				C9C18E5E265599C4004710CD /* Introspect */,
-				C82719EC26FE734500EC9EF9 /* Defaults */,
 				E942D43B2819BB3200B4A3EC /* HTMLEntities */,
 			);
 			productName = Shared;
@@ -5255,6 +5254,7 @@
 				6786EA762759545A00B53127 /* CrashReporter */,
 				E942D4392819BA8100B4A3EC /* HTMLEntities */,
 				1C45B367283C4F36008A1401 /* CodeScanner */,
+				9B3C1E5229139431008B006F /* Defaults */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -5447,12 +5447,12 @@
 				C9D4565526558F360047267A /* XCRemoteSwiftPackageReference "Reachability" */,
 				C9D4565826558F400047267A /* XCRemoteSwiftPackageReference "SFSafeSymbols" */,
 				4A3D2996268993FE0082F293 /* XCRemoteSwiftPackageReference "ViewInspector" */,
-				C82719EB26FE734500EC9EF9 /* XCRemoteSwiftPackageReference "sindresorhus-Defaults" */,
 				6786EA752759545A00B53127 /* XCRemoteSwiftPackageReference "plcrashreporter" */,
 				BC532EED278C00550027CA11 /* XCRemoteSwiftPackageReference "CodeScanner" */,
 				E942D4382819BA8100B4A3EC /* XCRemoteSwiftPackageReference "swift-html-entities" */,
 				E96D956D2832FDF100DD5BB3 /* XCRemoteSwiftPackageReference "Yams" */,
 				E61A44A22832C942004AAC3F /* XCRemoteSwiftPackageReference "Kanna" */,
+				9B3C1E5129139431008B006F /* XCRemoteSwiftPackageReference "Defaults" */,
 			);
 			productRefGroup = F84B21BF1A090F8100AAB793 /* Products */;
 			projectDirPath = "";
@@ -9408,20 +9408,20 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		9B3C1E5129139431008B006F /* XCRemoteSwiftPackageReference "Defaults" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/Defaults.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.3.0;
+			};
+		};
 		BC532EED278C00550027CA11 /* XCRemoteSwiftPackageReference "CodeScanner" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/twostraws/CodeScanner";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 2.0.0;
-			};
-		};
-		C82719EB26FE734500EC9EF9 /* XCRemoteSwiftPackageReference "sindresorhus-Defaults" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/neevaco/sindresorhus-Defaults";
-			requirement = {
-				branch = "neeva-v4.2.2";
-				kind = branch;
 			};
 		};
 		C9D4564626558EDA0047267A /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
@@ -9514,9 +9514,9 @@
 			package = 6786EA752759545A00B53127 /* XCRemoteSwiftPackageReference "plcrashreporter" */;
 			productName = CrashReporter;
 		};
-		C82719EC26FE734500EC9EF9 /* Defaults */ = {
+		9B3C1E5229139431008B006F /* Defaults */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = C82719EB26FE734500EC9EF9 /* XCRemoteSwiftPackageReference "sindresorhus-Defaults" */;
+			package = 9B3C1E5129139431008B006F /* XCRemoteSwiftPackageReference "Defaults" */;
 			productName = Defaults;
 		};
 		C9C18E2226559322004710CD /* KeychainAccess */ = {

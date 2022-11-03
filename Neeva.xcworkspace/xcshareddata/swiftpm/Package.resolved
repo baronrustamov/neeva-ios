@@ -20,6 +20,15 @@
         }
       },
       {
+        "package": "Defaults",
+        "repositoryURL": "https://github.com/sindresorhus/Defaults.git",
+        "state": {
+          "branch": null,
+          "revision": "981ccb0a01c54abbe3c12ccb8226108527bbf115",
+          "version": "6.3.0"
+        }
+      },
+      {
         "package": "Kanna",
         "repositoryURL": "https://github.com/tid-kijyun/Kanna.git",
         "state": {
@@ -62,15 +71,6 @@
           "branch": null,
           "revision": "c61de7a6e9eb1520d32316b06d5932accd974e70",
           "version": "2.1.3"
-        }
-      },
-      {
-        "package": "Defaults",
-        "repositoryURL": "https://github.com/neevaco/sindresorhus-Defaults",
-        "state": {
-          "branch": "neeva-v4.2.2",
-          "revision": "711b645a34e363bcba3d0f8a265a3763b81ee589",
-          "version": null
         }
       },
       {

@@ -5,7 +5,21 @@
 import Defaults
 import SwiftUI
 
-public enum AppearanceThemeOption: String, Equatable, Encodable, Decodable, CaseIterable {
+public struct AppearanceThemeOptionBridge: Defaults.Bridge {
+    public typealias Value = AppearanceThemeOption
+    public typealias Serializable = String
+
+    public func serialize(_ value: Value?) -> Serializable? {
+        value?.rawValue
+    }
+
+    public func deserialize(_ object: Serializable?) -> Value? {
+        guard let object = object else { return nil }
+        return AppearanceThemeOption(rawValue: object)
+    }
+}
+
+public enum AppearanceThemeOption: String, Equatable, Codable, CaseIterable {
     case system = "System"
     case light = "Light"
     case dark = "Dark"
@@ -13,12 +27,34 @@ public enum AppearanceThemeOption: String, Equatable, Encodable, Decodable, Case
     public var localizedName: LocalizedStringKey { LocalizedStringKey(rawValue) }
 }
 
-public enum AppearanceIconOption: String, Equatable, Encodable, Decodable, CaseIterable {
+extension AppearanceThemeOption: Defaults.Serializable {
+    public static let bridge = AppearanceThemeOptionBridge()
+}
+
+public struct AppearanceIconOptionBridge: Defaults.Bridge {
+    public typealias Value = AppearanceIconOption
+    public typealias Serializable = String
+
+    public func serialize(_ value: Value?) -> Serializable? {
+        value?.rawValue
+    }
+
+    public func deserialize(_ object: Serializable?) -> Value? {
+        guard let object = object else { return nil }
+        return AppearanceIconOption(rawValue: object)
+    }
+}
+
+public enum AppearanceIconOption: String, Equatable, Codable, CaseIterable {
     // these strings map directly to definitions in `/Client/Info.plist`
     case system = "System"
     case black = "Black"
 
     public var localizedName: LocalizedStringKey { LocalizedStringKey(rawValue) }
+}
+
+extension AppearanceIconOption: Defaults.Serializable {
+    public static let bridge = AppearanceThemeOptionBridge()
 }
 
 // If you add a setting here, make sure it’s either exposed through

@@ -5,7 +5,38 @@
 import Defaults
 import SwiftUI
 
-enum ArchivedTabsDuration: CaseIterable, Encodable, Decodable {
+struct ArchivedTabsDurationBridge: Defaults.Bridge {
+    typealias Value = ArchivedTabsDuration
+    typealias Serializable = String
+
+    func serialize(_ value: Value?) -> Serializable? {
+        switch value {
+        case .week:
+            return "week"
+        case .month:
+            return "month"
+        case .forever:
+            return "forever"
+        default:
+            return nil
+        }
+    }
+
+    func deserialize(_ object: Serializable?) -> Value? {
+        switch object {
+        case "week":
+            return .week
+        case "month":
+            return .month
+        case "forever":
+            return .forever
+        default:
+            return nil
+        }
+    }
+}
+
+enum ArchivedTabsDuration: CaseIterable, Codable {
     case week
     case month
     case forever
@@ -20,6 +51,10 @@ enum ArchivedTabsDuration: CaseIterable, Encodable, Decodable {
             return "Never"
         }
     }
+}
+
+extension ArchivedTabsDuration: Defaults.Serializable {
+    public static let bridge = ArchivedTabsDurationBridge()
 }
 
 extension Defaults.Keys {

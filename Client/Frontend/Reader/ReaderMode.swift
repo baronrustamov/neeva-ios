@@ -101,6 +101,28 @@ enum ReaderModeFontType: String, Codable {
     }
 }
 
+struct ReaderModeStyleBridge: Defaults.Bridge {
+    typealias Value = ReaderModeStyle
+    typealias Serializable = [String: String]
+
+    func serialize(_ value: Value?) -> Serializable? {
+        guard let value = value else { return nil }
+        return [
+            "theme": value.theme.rawValue,
+            "fontType": value.fontType.rawValue,
+        ]
+    }
+
+    func deserialize(_ object: Serializable?) -> Value? {
+        guard let object = object,
+              let theme = ReaderModeTheme(rawValue: object["theme"] ?? ""),
+              let fontType = ReaderModeFontType(rawValue: object["fontType"] ?? "")
+        else { return nil }
+
+        return ReaderModeStyle(theme: theme, fontType: fontType)
+    }
+}
+
 struct ReaderModeStyle: Codable {
     var theme: ReaderModeTheme
     var fontType: ReaderModeFontType
@@ -115,6 +137,10 @@ struct ReaderModeStyle: Codable {
     mutating func ensurePreferredColorThemeIfNeeded() {
         self.theme = ReaderModeTheme.preferredTheme(for: self.theme)
     }
+}
+
+extension ReaderModeStyle: Defaults.Serializable {
+    public static let bridge = ReaderModeStyleBridge()
 }
 
 /// This struct captures the response from the Readability.js code.
