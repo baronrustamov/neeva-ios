@@ -28,7 +28,7 @@ class DynamicFontHelper: NSObject {
     func startObserving() {
         cancellable = NotificationCenter.default
             .publisher(for: UIContentSizeCategory.didChangeNotification)
-            .sink(receiveValue: contentSizeCategoryDidChange(_:))
+            .sink(receiveValue: contentSizeCategoryDidChange)
     }
 
     /// Small

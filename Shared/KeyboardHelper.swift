@@ -64,7 +64,7 @@ open class KeyboardHelper: NSObject, ObservableObject {
     open var currentState: KeyboardState?
 
     fileprivate var delegates = [WeakKeyboardDelegate]()
-    private var cancellables: Set<AnyCancellable> = []
+    private var cancellables = [AnyCancellable]()
 
     public static let keyboardAnimationTime = 0.3
 
@@ -84,6 +84,8 @@ open class KeyboardHelper: NSObject, ObservableObject {
             return nil
         }
 
+        // We never clear out cancellables because this function is
+        // only called once.
         NotificationCenter.default
             .publisher(for: UIResponder.keyboardWillShowNotification)
             .compactMap(transform)
