@@ -403,7 +403,6 @@ class BrowserViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         KeyboardHelper.defaultHelper.addDelegate(self)
 
         // In case if the background is accidentally shown
