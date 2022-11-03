@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Combine
 import Defaults
 // IMPORTANT!: Please take into consideration when adding new imports to
 // this file that it is utilized by external components besides the core
@@ -80,7 +81,7 @@ protocol Profile: AnyObject {
 
     func cleanupHistoryIfNeeded()
 
-    @discardableResult func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
+    @discardableResult func storeTabs(_ tabs: [RemoteTab]) -> Shared.Deferred<Maybe<Int>>
 }
 
 open class BrowserProfile: Profile {
@@ -104,6 +105,8 @@ open class BrowserProfile: Profile {
         keychain.set(secret, forKey: loginsUnlockKeychainKey, withAccessibility: .afterFirstUnlock)
         return secret
     }()
+
+    private var cancellables = [AnyCancellable]()
 
     /// N.B., `BrowserProfile` is used from our extensions, often via a pattern like
     ///
@@ -152,13 +155,18 @@ open class BrowserProfile: Profile {
         //     log.debug("SQLite compile_options:\n\(compileOptions.joined(separator: "\n"))")
         // }
 
-        let notificationCenter = NotificationCenter.default
+        // These Cancellables are not cleared out, since we should only have ~2 instances
+        // of BrowserProfile existing during the app's lifetime. This should take
+        // up < 100 bytes of memory.
+        NotificationCenter.default
+            .publisher(for: .OnLocationChange)
+            .sink(receiveValue: onLocationChange)
+            .store(in: &cancellables)
 
-        notificationCenter.addObserver(
-            self, selector: #selector(onLocationChange), name: .OnLocationChange, object: nil)
-        notificationCenter.addObserver(
-            self, selector: #selector(onPageMetadataFetched), name: .OnPageMetadataFetched,
-            object: nil)
+        NotificationCenter.default
+            .publisher(for: .OnPageMetadataFetched)
+            .sink(receiveValue: onPageMetadataFetched)
+            .store(in: &cancellables)
 
         // Always start by needing invalidation.
         // This is the same as self.history.setTopSitesNeedsInvalidation, but without the
@@ -184,8 +192,7 @@ open class BrowserProfile: Profile {
         _ = logins.forceClose()
     }
 
-    @objc
-    func onLocationChange(notification: NSNotification) {
+    private func onLocationChange(notification: Notification) {
         if let v = notification.userInfo!["visitType"] as? Int,
             let visitType = VisitType(rawValue: v),
             let url = notification.userInfo!["url"] as? URL, !isIgnoredURL(url),
@@ -205,8 +212,7 @@ open class BrowserProfile: Profile {
         }
     }
 
-    @objc
-    func onPageMetadataFetched(notification: NSNotification) {
+    private func onPageMetadataFetched(notification: Notification) {
         let isIncognito = notification.userInfo?["isPrivate"] as? Bool ?? true
         guard !isIncognito else {
             log.debug("Private mode - Ignoring page metadata.")
