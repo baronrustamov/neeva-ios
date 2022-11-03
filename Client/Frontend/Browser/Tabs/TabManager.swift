@@ -124,7 +124,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     }
 
     var cookieCutterModel: CookieCutterModel?
-    
+
     // MARK: - Init
     init(profile: Profile, scene: UIScene, incognitoModel: IncognitoModel) {
         assert(Thread.isMainThread)
