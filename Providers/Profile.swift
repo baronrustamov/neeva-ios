@@ -284,11 +284,11 @@ open class BrowserProfile: Profile {
         return CertStore()
     }()
 
-    public func getCachedClients() -> Deferred<Maybe<[RemoteClient]>> {
+    public func getCachedClients() -> Shared.Deferred<Maybe<[RemoteClient]>> {
         return self.remoteClientsAndTabs.getClients()
     }
 
-    public func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
+    public func getCachedClientsAndTabs() -> Shared.Deferred<Maybe<[ClientAndTabs]>> {
         return self.remoteClientsAndTabs.getClientsAndTabs()
     }
 
@@ -296,7 +296,7 @@ open class BrowserProfile: Profile {
         recommendations.cleanupHistoryIfNeeded()
     }
 
-    func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
+    func storeTabs(_ tabs: [RemoteTab]) -> Shared.Deferred<Maybe<Int>> {
         return self.remoteClientsAndTabs.insertOrUpdateTabs(tabs)
     }
 
