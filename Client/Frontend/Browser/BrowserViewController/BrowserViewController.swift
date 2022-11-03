@@ -232,7 +232,7 @@ class BrowserViewController: UIViewController {
     ) {
         super.viewWillTransition(to: size, with: coordinator)
 
-        dismissVisibleMenus()
+        displayedPopoverController?.dismiss(animated: true)
 
         // The popover view controller is presented with `present`
         // this hide method calls `dismiss`. When it is called inside
@@ -319,44 +319,6 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    func dismissVisibleMenus() {
-        displayedPopoverController?.dismiss(animated: true)
-    }
-
-    private func appDidEnterBackgroundNotification() {
-        displayedPopoverController?.dismiss(animated: false) {
-            self.updateDisplayedPopoverProperties = nil
-            self.displayedPopoverController = nil
-        }
-
-        gridModel.resizeModel.canResizeGrid = false
-    }
-
-    @objc func tappedTopArea() {
-        browserModel.scrollingControlModel.showToolbars(animated: true)
-    }
-
-    private func appWillResignActiveNotification() {
-        // Dismiss any popovers that might be visible
-        displayedPopoverController?.dismiss(animated: false) {
-            self.updateDisplayedPopoverProperties = nil
-            self.displayedPopoverController = nil
-        }
-
-        // If we are displying a private tab, hide any elements in the tab that we wouldn't want shown
-        // when the app is in the app switcher
-        guard incognitoModel.isIncognito else {
-            return
-        }
-
-        view.bringSubviewToFront(webViewContainerBackdrop)
-        webViewContainerBackdrop.alpha = 1
-        presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
-        presentedViewController?.view.alpha = 0
-
-        gridModel.resizeModel.canResizeGrid = false
-    }
-
     private func appDidBecomeActiveNotification() {
         // Re-show any components that might have been hidden because they were being displayed
         // as part of a private mode tab
@@ -389,18 +351,58 @@ class BrowserViewController: UIViewController {
         gridModel.resizeModel.canResizeGrid = true
     }
 
-    private var cancellables: Set<AnyCancellable> = []
+    private func appWillResignActiveNotification() {
+        // Dismiss any popovers that might be visible
+        displayedPopoverController?.dismiss(animated: false) {
+            self.updateDisplayedPopoverProperties = nil
+            self.displayedPopoverController = nil
+        }
+
+        // If we are displying a private tab, hide any elements in the tab that we wouldn't want shown
+        // when the app is in the app switcher
+        guard incognitoModel.isIncognito else {
+            return
+        }
+
+        view.bringSubviewToFront(webViewContainerBackdrop)
+        webViewContainerBackdrop.alpha = 1
+        presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
+        presentedViewController?.view.alpha = 0
+
+        gridModel.resizeModel.canResizeGrid = false
+    }
+
+    private func appDidEnterBackgroundNotification() {
+        displayedPopoverController?.dismiss(animated: false) {
+            self.updateDisplayedPopoverProperties = nil
+            self.displayedPopoverController = nil
+        }
+
+        gridModel.resizeModel.canResizeGrid = false
+    }
+
+    private var appLifeCycleCancellables = [AnyCancellable]()
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)
-            .sink { _ in self.appWillResignActiveNotification() }
-            .store(in: &cancellables)
-        NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
+
+        // A couple of assumptions are made here:
+        //  (1) BVC will exist for the entire lifetime of the app.
+        //  (2) viewDidLoad will only be called once.
+        // with these assumptions, we refrain from deallocating
+        // the Cancellables and using weak self.
+        NotificationCenter.default
+            .publisher(for: UIApplication.didBecomeActiveNotification)
             .sink { _ in self.appDidBecomeActiveNotification() }
-            .store(in: &cancellables)
-        NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
+            .store(in: &appLifeCycleCancellables)
+        NotificationCenter.default
+            .publisher(for: UIApplication.willResignActiveNotification)
+            .sink { _ in self.appWillResignActiveNotification() }
+            .store(in: &appLifeCycleCancellables)
+        NotificationCenter.default
+            .publisher(for: UIApplication.didEnterBackgroundNotification)
             .sink { _ in self.appDidEnterBackgroundNotification() }
-            .store(in: &cancellables)
+            .store(in: &appLifeCycleCancellables)
+
         KeyboardHelper.defaultHelper.addDelegate(self)
 
         // In case if the background is accidentally shown
