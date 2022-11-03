@@ -323,7 +323,7 @@ class BrowserViewController: UIViewController {
         displayedPopoverController?.dismiss(animated: true)
     }
 
-    @objc func appDidEnterBackgroundNotification() {
+    private func appDidEnterBackgroundNotification() {
         displayedPopoverController?.dismiss(animated: false) {
             self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil
@@ -336,7 +336,7 @@ class BrowserViewController: UIViewController {
         browserModel.scrollingControlModel.showToolbars(animated: true)
     }
 
-    @objc func appWillResignActiveNotification() {
+    private func appWillResignActiveNotification() {
         // Dismiss any popovers that might be visible
         displayedPopoverController?.dismiss(animated: false) {
             self.updateDisplayedPopoverProperties = nil
@@ -357,7 +357,7 @@ class BrowserViewController: UIViewController {
         gridModel.resizeModel.canResizeGrid = false
     }
 
-    @objc func appDidBecomeActiveNotification() {
+    private func appDidBecomeActiveNotification() {
         // Re-show any components that might have been hidden because they were being displayed
         // as part of a private mode tab
         UIView.animate(
@@ -389,17 +389,18 @@ class BrowserViewController: UIViewController {
         gridModel.resizeModel.canResizeGrid = true
     }
 
+    private var cancellables: Set<AnyCancellable> = []
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(
-            self, selector: #selector(appWillResignActiveNotification),
-            name: UIApplication.willResignActiveNotification, object: nil)
-        NotificationCenter.default.addObserver(
-            self, selector: #selector(appDidBecomeActiveNotification),
-            name: UIApplication.didBecomeActiveNotification, object: nil)
-        NotificationCenter.default.addObserver(
-            self, selector: #selector(appDidEnterBackgroundNotification),
-            name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)
+            .sink { _ in self.appWillResignActiveNotification() }
+            .store(in: &cancellables)
+        NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
+            .sink { _ in self.appDidBecomeActiveNotification() }
+            .store(in: &cancellables)
+        NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
+            .sink { _ in self.appDidEnterBackgroundNotification() }
+            .store(in: &cancellables)
         KeyboardHelper.defaultHelper.addDelegate(self)
 
         // In case if the background is accidentally shown

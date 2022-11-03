@@ -2,10 +2,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Combine
 import Foundation
 import Shared
 
 class DynamicFontHelper: NSObject {
+    private var cancellable: AnyCancellable?
 
     static var defaultHelper: DynamicFontHelper {
         struct Singleton {
@@ -24,13 +26,9 @@ class DynamicFontHelper: NSObject {
 
     /// Starts monitoring the `ContentSizeCategory` changes
     func startObserving() {
-        NotificationCenter.default.addObserver(
-            self, selector: #selector(contentSizeCategoryDidChange),
-            name: UIContentSizeCategory.didChangeNotification, object: nil)
-    }
-
-    deinit {
-        NotificationCenter.default.removeObserver(self)
+        cancellable = NotificationCenter.default
+            .publisher(for: UIContentSizeCategory.didChangeNotification)
+            .sink(receiveValue: contentSizeCategoryDidChange(_:))
     }
 
     /// Small
@@ -44,7 +42,7 @@ class DynamicFontHelper: NSObject {
             UIFontDescriptor.preferredFontDescriptor(withTextStyle: .caption2).pointSize
     }
 
-    @objc func contentSizeCategoryDidChange(_ notification: Notification) {
+    private func contentSizeCategoryDidChange(_ notification: Notification) {
         refreshFonts()
         let notification = Notification(name: .DynamicFontChanged, object: nil)
         NotificationCenter.default.post(notification)

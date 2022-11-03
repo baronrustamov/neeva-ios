@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Combine
 import UIKit
 
 /// The keyboard state at the time of notification.
@@ -63,6 +64,7 @@ open class KeyboardHelper: NSObject, ObservableObject {
     open var currentState: KeyboardState?
 
     fileprivate var delegates = [WeakKeyboardDelegate]()
+    private var cancellables: Set<AnyCancellable> = []
 
     public static let keyboardAnimationTime = 0.3
 
@@ -75,22 +77,36 @@ open class KeyboardHelper: NSObject, ObservableObject {
 
     /// Starts monitoring the keyboard state.
     open func startObserving() {
-        NotificationCenter.default.addObserver(
-            self, selector: #selector(keyboardWillShow),
-            name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(
-            self, selector: #selector(keyboardDidShow),
-            name: UIResponder.keyboardDidShowNotification, object: nil)
-        NotificationCenter.default.addObserver(
-            self, selector: #selector(keyboardWillHide),
-            name: UIResponder.keyboardWillHideNotification, object: nil)
-        NotificationCenter.default.addObserver(
-            self, selector: #selector(keyboardDidHide),
-            name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
+        func transform(_ notification: Notification) -> KeyboardState? {
+            if let userInfo = notification.userInfo {
+                return KeyboardState(userInfo)
+            }
+            return nil
+        }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default
+            .publisher(for: UIResponder.keyboardWillShowNotification)
+            .compactMap(transform)
+            .sink(receiveValue: keyboardWillShow(_:))
+            .store(in: &cancellables)
+
+        NotificationCenter.default
+            .publisher(for: UIResponder.keyboardDidShowNotification)
+            .compactMap(transform)
+            .sink(receiveValue: keyboardDidShow(_:))
+            .store(in: &cancellables)
+
+        NotificationCenter.default
+            .publisher(for: UIResponder.keyboardWillHideNotification)
+            .compactMap(transform)
+            .sink(receiveValue: keyboardWillHide(_:))
+            .store(in: &cancellables)
+
+        NotificationCenter.default
+            .publisher(for: UIResponder.keyboardDidHideNotification)
+            .compactMap(transform)
+            .sink(receiveValue: keyboardDidHide(_:))
+            .store(in: &cancellables)
     }
 
     /// Adds a delegate to the helper.
@@ -105,48 +121,29 @@ open class KeyboardHelper: NSObject, ObservableObject {
         delegates.append(WeakKeyboardDelegate(delegate))
     }
 
-    @objc func keyboardWillShow(_ notification: Notification) {
-        if let userInfo = notification.userInfo {
-            currentState = KeyboardState(userInfo)
-            keyboardVisible = true
-
-            for weakDelegate in delegates {
-                weakDelegate.delegate?.keyboardHelper(
-                    self, keyboardWillShowWithState: currentState!)
-            }
+    private func keyboardWillShow(_ currentState: KeyboardState) {
+        keyboardVisible = true
+        delegates.forEach {
+            $0.delegate?.keyboardHelper(self, keyboardWillShowWithState: currentState)
         }
     }
 
-    @objc func keyboardDidShow(_ notification: Notification) {
-        if let userInfo = notification.userInfo {
-            currentState = KeyboardState(userInfo)
-
-            for weakDelegate in delegates {
-                weakDelegate.delegate?.keyboardHelper(self, keyboardDidShowWithState: currentState!)
-            }
+    private func keyboardDidShow(_ currentState: KeyboardState) {
+        delegates.forEach {
+            $0.delegate?.keyboardHelper(self, keyboardDidShowWithState: currentState)
         }
     }
 
-    @objc func keyboardWillHide(_ notification: Notification) {
-        if let userInfo = notification.userInfo {
-            currentState = KeyboardState(userInfo)
-
-            for weakDelegate in delegates {
-                weakDelegate.delegate?.keyboardHelper(
-                    self, keyboardWillHideWithState: currentState!)
-            }
+    private func keyboardWillHide(_ currentState: KeyboardState) {
+        delegates.forEach {
+            $0.delegate?.keyboardHelper(self, keyboardWillHideWithState: currentState)
         }
     }
 
-    @objc func keyboardDidHide(_ notification: Notification) {
-        if let userInfo = notification.userInfo {
-            currentState = KeyboardState(userInfo)
-            keyboardVisible = false
-
-            for weakDelegate in delegates {
-                weakDelegate.delegate?.keyboardHelper(
-                    self, keyboardDidHideWithState: currentState!)
-            }
+    private func keyboardDidHide(_ currentState: KeyboardState) {
+        keyboardVisible = false
+        delegates.forEach {
+            $0.delegate?.keyboardHelper(self, keyboardDidHideWithState: currentState)
         }
     }
 }

@@ -70,6 +70,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     private var selectedTabURLSubscription: AnyCancellable?
     private var archivedTabsDurationSubscription: AnyCancellable?
     private var spaceFromTabGroupSubscription: AnyCancellable?
+    private var prefsDidChangeSubscription: AnyCancellable?
 
     private var needsHeavyUpdatesPostAnimation = false
 
@@ -123,7 +124,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     }
 
     var cookieCutterModel: CookieCutterModel?
-
     // MARK: - Init
     init(profile: Profile, scene: UIScene, incognitoModel: IncognitoModel) {
         assert(Thread.isMainThread)
@@ -141,9 +141,9 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
 
         addNavigationDelegate(self)
 
-        NotificationCenter.default.addObserver(
-            self, selector: #selector(prefsDidChange), name: UserDefaults.didChangeNotification,
-            object: nil)
+        prefsDidChangeSubscription = NotificationCenter.default
+            .publisher(for: UserDefaults.didChangeNotification)
+            .sink { _ in self.prefsDidChange() }
 
         selectedTabSubscription =
             selectedTabPublisher
@@ -419,7 +419,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         }
     }
 
-    @objc private func prefsDidChange() {
+    private func prefsDidChange() {
         DispatchQueue.main.async {
             let allowPopups = !Defaults[.blockPopups]
             // Each tab may have its own configuration, so we should tell each of them in turn.
