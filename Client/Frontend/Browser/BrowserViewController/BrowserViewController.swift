@@ -183,6 +183,8 @@ class BrowserViewController: UIViewController {
     }
 
     private var subscriptions: Set<AnyCancellable> = []
+    /// This is never cleared out because it is only populated once (during ``init(profile:scene:)``).
+    private var appLifeCycleCancellables = [AnyCancellable]()
 
     init(profile: Profile, scene: UIScene) {
         self.profile = profile
@@ -190,6 +192,24 @@ class BrowserViewController: UIViewController {
         self.readerModeCache = DiskReaderModeCache.sharedInstance
 
         super.init(nibName: nil, bundle: nil)
+
+        // Do not call app life-cycle handlers before the view is loaded
+        // because they operate on the view.
+        NotificationCenter.default
+            .publisher(for: UIApplication.didBecomeActiveNotification)
+            .drop { _ in !self.isViewLoaded }
+            .sink { _ in self.appDidBecomeActiveNotification() }
+            .store(in: &appLifeCycleCancellables)
+        NotificationCenter.default
+            .publisher(for: UIApplication.willResignActiveNotification)
+            .drop { _ in !self.isViewLoaded }
+            .sink { _ in self.appWillResignActiveNotification() }
+            .store(in: &appLifeCycleCancellables)
+        NotificationCenter.default
+            .publisher(for: UIApplication.didEnterBackgroundNotification)
+            .drop { _ in !self.isViewLoaded }
+            .sink { _ in self.appDidEnterBackgroundNotification() }
+            .store(in: &appLifeCycleCancellables)
 
         self.tabManager.cookieCutterModel = browserModel.cookieCutterModel
         self.tabManager.selectedTabPublisher.dropFirst().sink { [weak self] tab in
@@ -381,27 +401,8 @@ class BrowserViewController: UIViewController {
         gridModel.resizeModel.canResizeGrid = false
     }
 
-    private var appLifeCycleCancellables = [AnyCancellable]()
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // A couple of assumptions are made here:
-        //  (1) BVC will exist for the entire lifetime of the app.
-        //  (2) viewDidLoad will only be called once.
-        // with these assumptions, we refrain from deallocating
-        // the Cancellables and using weak self.
-        NotificationCenter.default
-            .publisher(for: UIApplication.didBecomeActiveNotification)
-            .sink { _ in self.appDidBecomeActiveNotification() }
-            .store(in: &appLifeCycleCancellables)
-        NotificationCenter.default
-            .publisher(for: UIApplication.willResignActiveNotification)
-            .sink { _ in self.appWillResignActiveNotification() }
-            .store(in: &appLifeCycleCancellables)
-        NotificationCenter.default
-            .publisher(for: UIApplication.didEnterBackgroundNotification)
-            .sink { _ in self.appDidEnterBackgroundNotification() }
-            .store(in: &appLifeCycleCancellables)
 
         KeyboardHelper.defaultHelper.addDelegate(self)
 
