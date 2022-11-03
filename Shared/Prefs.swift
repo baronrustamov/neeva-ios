@@ -61,7 +61,7 @@ extension Defaults.Keys {
         "profile.topSites.deletedSuggestedSites", default: [])
     public static let showSearchSuggestions = Defaults.Key(
         "profile.search.suggestions.show", default: true)
-    public static let blockPopups = Defaults.Key("profile.blockPopups", default: true)
+    public static let blockPopups = Defaults.Key("profile_blockPopups", default: true)
     public static let closeIncognitoTabs = Defaults.BoolKey("profile.settings.closePrivateTabs")
     public static let recentlyClosedTabs = Defaults.Key<Data?>("profile.recentlyClosedTabs")
     public static let saveLogins = Defaults.BoolKey("profile.saveLogins")

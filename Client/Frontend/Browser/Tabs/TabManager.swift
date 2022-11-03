@@ -70,7 +70,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     private var selectedTabURLSubscription: AnyCancellable?
     private var archivedTabsDurationSubscription: AnyCancellable?
     private var spaceFromTabGroupSubscription: AnyCancellable?
-    private var prefsDidChangeSubscription: AnyCancellable?
+    private var popUpPrefDidChangeSubscription: AnyCancellable?
 
     private var needsHeavyUpdatesPostAnimation = false
 
@@ -141,9 +141,8 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
 
         addNavigationDelegate(self)
 
-        prefsDidChangeSubscription = NotificationCenter.default
-            .publisher(for: UserDefaults.didChangeNotification)
-            .sink { _ in self.prefsDidChange() }
+        popUpPrefDidChangeSubscription = Defaults.publisher(.blockPopups)
+            .sink { _ in self.popUpPrefDidChange() }
 
         selectedTabSubscription =
             selectedTabPublisher
@@ -419,7 +418,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         }
     }
 
-    private func prefsDidChange() {
+    private func popUpPrefDidChange() {
         DispatchQueue.main.async {
             let allowPopups = !Defaults[.blockPopups]
             // Each tab may have its own configuration, so we should tell each of them in turn.
