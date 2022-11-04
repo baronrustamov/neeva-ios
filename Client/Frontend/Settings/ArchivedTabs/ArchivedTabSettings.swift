@@ -41,7 +41,7 @@ struct ArchivedTabSettings: View {
                 }.labelsHidden()
             } footer: {
                 Text(
-                    "Let Neeva automatically archive tabs that haven't recently been viewed.",
+                    "Let Neeva automatically archive tabs that haven’t recently been viewed. Changes will take effect on the next app launch.",
                     comment: "Describe the purpose of the options in the archive tab settings")
             }
         }

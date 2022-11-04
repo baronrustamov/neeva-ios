@@ -426,7 +426,7 @@ class CardTests: XCTestCase {
         XCTAssertEqual(spaceCards.count, 4)
     }
 
-    func testSelectedTabAfterTabGroupRemoved() {
+    func testSelectedTabAfterTabGroupRemoved() throws {
         let tab1 = manager.addTab()
         let tab2 = manager.addTab()
         let tab3 = manager.addTab(afterTab: tab2)
@@ -437,7 +437,7 @@ class CardTests: XCTestCase {
         }
     }
 
-    func testSelectedTabAfterSwitchingMdoe() {
+    func testSelectedTabAfterSwitchingMdoe() throws {
         let tab1 = manager.addTab()
         let _ = manager.addTab(isIncognito: true)
         manager.selectTab(tab1, notify: true)
@@ -447,7 +447,7 @@ class CardTests: XCTestCase {
 
     // MARK: - Time-based Switcher Tests
     /// Add a new tab and a tab last used one day ago, check if they show up in the correct section.
-    func testTabsInTimeSection() {
+    func testTabsInTimeSection() throws {
         let startOfOneDayAgo = Calendar.current.date(
             byAdding: .day, value: -1, to: Date())
         guard let startOfOneDayAgo = startOfOneDayAgo else { return }
@@ -464,7 +464,7 @@ class CardTests: XCTestCase {
     }
 
     /// Tests that TabGroups correctly appear in different sections of the CardGrid.
-    func testTabGroupInTimeSection() {
+    func testTabGroupInTimeSection() throws {
         let startOfOneDayAgo = Calendar.current.date(
             byAdding: .day, value: -1, to: Date())
         guard let startOfOneDayAgo = startOfOneDayAgo else { return }
@@ -488,35 +488,8 @@ class CardTests: XCTestCase {
         XCTAssertEqual(yesterdayRow.cells[0].numTabs, 2)
     }
 
-    /// Add a tab last used over a week ago, check if it shows up in the archives.
-    /// Default time threshold to archive a tab is 7 days.
-    func testTabsInArchivedSection() {
-        let startOfEightDaysAgo = Calendar.current.date(
-            byAdding: .day, value: -8, to: Date())
-        guard let startOfEightDaysAgo = startOfEightDaysAgo else { return }
-
-        let tab1 = manager.addTab()
-        tab1.lastExecutedTime = UInt64(startOfEightDaysAgo.timeIntervalSince1970) * 1000
-        manager.updateAllTabDataAndSendNotifications(notify: true)
-
-        XCTAssertEqual(manager.archivedTabs[0].id, tab1.id)
-    }
-
-    /// Add a tab last used over a week ago, select it and make sure it becomes an active tab.
-    func testSelectTabFromArchives() {
-        let startOfEightDaysAgo = Calendar.current.date(
-            byAdding: .day, value: -8, to: Date())
-        guard let startOfEightDaysAgo = startOfEightDaysAgo else { return }
-
-        let tab1 = manager.addTab()
-        tab1.lastExecutedTime = UInt64(startOfEightDaysAgo.timeIntervalSince1970) * 1000
-        manager.selectTab(tab1, notify: true)
-
-        XCTAssertEqual(manager.activeTabs[0], tab1)
-    }
-
     /// Close the last tab in today section and check that no tab is selected.
-    func testNoNewTabSelectedAfterClosingLastTabInToday() {
+    func testNoNewTabSelectedAfterClosingLastTabInToday() throws {
         let startOfOneDayAgo = Calendar.current.date(
             byAdding: .day, value: -1, to: Date())
         guard let startOfOneDayAgo = startOfOneDayAgo else { return }
@@ -530,25 +503,7 @@ class CardTests: XCTestCase {
         waitForCondition(condition: { manager.selectedTab == nil })
     }
 
-    /// Check ArchivedTabsPanelModel.clearArchivedTabs() removes archived tabs.
-    func testClearArchivedTabs() {
-        let startOfEightDaysAgo = Calendar.current.date(
-            byAdding: .day, value: -8, to: Date())
-        guard let startOfEightDaysAgo = startOfEightDaysAgo else { return }
-
-        let tab1 = manager.addTab()
-        let tab2 = manager.addTab()
-        tab1.lastExecutedTime = UInt64(startOfEightDaysAgo.timeIntervalSince1970) * 1000
-        tab2.lastExecutedTime = UInt64(startOfEightDaysAgo.timeIntervalSince1970) * 1000
-
-        manager.updateAllTabDataAndSendNotifications(notify: false)
-        archivedTabsPanelModel.loadData()
-        XCTAssertFalse(archivedTabsPanelModel.groupedData.isEmpty)
-        archivedTabsPanelModel.clearArchivedTabs()
-        XCTAssertTrue(archivedTabsPanelModel.groupedData.isEmpty)
-    }
-
-    func testRestoreTabDeletedFromYesterday() {
+    func testRestoreTabDeletedFromYesterday() throws {
         // Add tab to yesterday section
         let yesterdaysDate = Date.getDate(dayOffset: -1)
         let tab1 = manager.addTab()
@@ -564,6 +519,59 @@ class CardTests: XCTestCase {
         // Verify tab is in today section
         XCTAssertEqual(tabCardModel.timeBasedNormalRows[.today]?.count, 2)
         XCTAssertEqual(manager.selectedTab, restoredTab)
+    }
+
+    // MARK: - Archived Tab Tests
+    /// Add a tab last used over a week ago, check if it shows up in the archives.
+    /// Default time threshold to archive a tab is 7 days.
+    func testTabsInArchivedSection() throws {
+        throw XCTSkip(
+            "This test requires writing an archived tabs to storage and loading the app. API not available."
+        )
+
+        let startOfEightDaysAgo = Calendar.current.date(
+            byAdding: .day, value: -8, to: Date())
+        guard let startOfEightDaysAgo = startOfEightDaysAgo else { return }
+
+        let tab1 = manager.addTab()
+        tab1.lastExecutedTime = UInt64(startOfEightDaysAgo.timeIntervalSince1970) * 1000
+        manager.updateAllTabDataAndSendNotifications(notify: true)
+
+        XCTAssertEqual(manager.archivedTabs.first?.id, tab1.id)
+    }
+
+    /// Add a tab last used over a week ago, select it and make sure it becomes an active tab.
+    func testSelectTabFromArchives() throws {
+        let startOfEightDaysAgo = Calendar.current.date(
+            byAdding: .day, value: -8, to: Date())
+        guard let startOfEightDaysAgo = startOfEightDaysAgo else { return }
+
+        let tab1 = manager.addTab()
+        tab1.lastExecutedTime = UInt64(startOfEightDaysAgo.timeIntervalSince1970) * 1000
+        manager.selectTab(tab1, notify: true)
+
+        XCTAssertEqual(manager.activeTabs[0], tab1)
+    }
+
+    /// Check ArchivedTabsPanelModel.clearArchivedTabs() removes archived tabs.
+    func testClearArchivedTabs() throws {
+        throw XCTSkip(
+            "This test requires writing an archived tabs to storage and loading the app. API not available."
+        )
+        let startOfEightDaysAgo = Calendar.current.date(
+            byAdding: .day, value: -8, to: Date())
+        guard let startOfEightDaysAgo = startOfEightDaysAgo else { return }
+
+        let tab1 = manager.addTab()
+        let tab2 = manager.addTab()
+        tab1.lastExecutedTime = UInt64(startOfEightDaysAgo.timeIntervalSince1970) * 1000
+        tab2.lastExecutedTime = UInt64(startOfEightDaysAgo.timeIntervalSince1970) * 1000
+
+        manager.updateAllTabDataAndSendNotifications(notify: false)
+        archivedTabsPanelModel.loadData()
+        XCTAssertFalse(archivedTabsPanelModel.groupedData.isEmpty)
+        archivedTabsPanelModel.clearArchivedTabs()
+        XCTAssertTrue(archivedTabsPanelModel.groupedData.isEmpty)
     }
 }
 

@@ -46,9 +46,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     private var tabs = [Tab]()
     var tabsUpdatedPublisher = PassthroughSubject<Void, Never>()
 
-    // Tab Group related variables
-    @Default(.archivedTabsDuration) private var archivedTabsDuration
-
     // TODO: consolidate accessors, don't need both `tabs` and `activeTabs`
     var activeTabs: [Tab] { tabs }
     var archivedTabs: [ArchivedTab] = []
@@ -68,7 +65,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     private(set) var updateArchivedTabsPublisher = PassthroughSubject<Void, Never>()
     private var selectedTabSubscription: AnyCancellable?
     private var selectedTabURLSubscription: AnyCancellable?
-    private var archivedTabsDurationSubscription: AnyCancellable?
     private var spaceFromTabGroupSubscription: AnyCancellable?
 
     private var needsHeavyUpdatesPostAnimation = false
@@ -156,14 +152,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
                     .sink {
                         self?.selectedTabURLPublisher.send($0)
                     }
-            }
-
-        archivedTabsDurationSubscription =
-            _archivedTabsDuration.publisher.dropFirst().sink {
-                [weak self] _ in
-                self?.updateAllTabDataAndSendNotifications(notify: false)
-                // update CardGrid and ArchivedTabsPanelView with the latest data
-                self?.updateArchivedTabsPublisher.send()
             }
     }
 
@@ -509,24 +497,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         // regard the tab as still being active to avoid the selected tab disappearing.
         if let selectedTab = selectedTab, selectedTab.shouldBeArchived {
             selectedTab.lastExecutedTime = Date.nowMilliseconds()
-        }
-
-        // Determine if any of the active tabs should be converted to archived tabs.
-        // Incognito tabs are never archived.
-        let shouldBeArchivedCondition: (Tab) -> Bool = {
-            !$0.isIncognito && $0.shouldBeArchived
-        }
-        let tabsToArchive = tabs.filter(shouldBeArchivedCondition)
-        for tab in tabsToArchive {
-            tab.closeWebView()
-            // Discard tabIndex at this point. When restored, we'll simply append to activeTabs.
-            archivedTabs.append(
-                ArchivedTab(
-                    savedTab: tab.saveSessionDataAndCreateSavedTab(isSelected: false, tabIndex: nil)
-                ))
-        }
-        if !tabsToArchive.isEmpty {
-            tabs.removeAll(where: shouldBeArchivedCondition)
         }
 
         // Re-build any tab groups.
