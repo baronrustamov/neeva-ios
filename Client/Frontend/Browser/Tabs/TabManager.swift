@@ -928,6 +928,8 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         if resolveParentRef {
             self.resolveParentRef(for: [tab])
         }
+        // Do not attempt to open Universal Links until the user has done a manual navigation.
+        tab.shouldOpenUniversalLinks = false
         return tab
     }
 
@@ -1525,6 +1527,8 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
                 return
             }
 
+            // When the Tab has done its first non-internal navigation, it's OK to open Universal Links.
+            selectedTab?.shouldOpenUniversalLinks = true
             storeChanges()
         }
     }

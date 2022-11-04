@@ -742,19 +742,21 @@ class BrowserViewController: UIViewController {
             request = nil
         }
 
-        DispatchQueue.main.async {
-            self.tabManager.selectTab(
-                self.tabManager.addTab(
-                    tabConfig: .init(
-                        request: request,
-                        query: query,
-                        visitType: visitType
-                    ),
-                    isIncognito: isIncognito
+        DispatchQueue.main.async { [self] in
+            let tab = tabManager.addTab(
+                tabConfig: .init(
+                    request: request,
+                    query: query,
+                    visitType: visitType
                 ),
-                notify: true
+                isIncognito: isIncognito
             )
-            self.hideCardGrid(withAnimation: false)
+            // Do not launch Universal Links in another app if the user
+            // did a manual navigation.
+            tab.shouldOpenUniversalLinks = query == nil
+
+            tabManager.selectTab(tab, notify: true)
+            hideCardGrid(withAnimation: false)
         }
     }
 
