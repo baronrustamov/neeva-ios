@@ -171,11 +171,6 @@ class TestAppDelegate: AppDelegate {
         // Clear existing preferences
         Defaults.removeAll(suite: .standard)
 
-        // Don't show the What's New page.
-        if launchArguments.contains(LaunchArguments.SkipWhatsNew) {
-            Defaults[.lastVersionNumber] = "1"
-        }
-
         if launchArguments.contains(LaunchArguments.SkipAdBlockOnboarding) {
             Defaults[.cookieCutterOnboardingShowed] = true
         }

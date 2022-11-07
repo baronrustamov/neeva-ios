@@ -25,7 +25,7 @@ class BaseTestCase: XCTestCase {
     // or, use restart() to re-launch with custom args.
     var launchArguments = [
         LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SetSignInOnce,
-        LaunchArguments.SetDidFirstNavigation, LaunchArguments.SkipWhatsNew,
+        LaunchArguments.SetDidFirstNavigation,
         LaunchArguments.SkipETPCoverSheet, LaunchArguments.DeviceName,
         "\(LaunchArguments.ServerPort)\(serverPort)", LaunchArguments.DisableCheatsheetBloomFilters,
     ]
