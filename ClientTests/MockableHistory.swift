@@ -21,10 +21,6 @@ class MockableHistory: BrowserHistory, AccountRemovalDelegate, ResettableSyncSto
     func removeSiteFromTopSites(_ site: Site) -> Success { fatalError() }
     func removeHostFromTopSites(_ host: String) -> Success { fatalError() }
     func clearTopSitesCache() -> Success { fatalError() }
-    func removeFromPinnedTopSites(_ site: Site) -> Success { fatalError() }
-    func isPinnedTopSite(_ url: String) -> Deferred<Maybe<Bool>> { fatalError() }
-    func addPinnedTopSite(_ site: Site) -> Success { fatalError() }
-    func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site?>>> { fatalError() }
     func getSitesByLastVisit(limit: Int, offset: Int) -> Deferred<Maybe<Cursor<Site?>>> {
         fatalError()
     }

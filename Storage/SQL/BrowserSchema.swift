@@ -59,7 +59,6 @@ let TableFavicons = "favicons"
 let TableHistory = "history"
 let TableHistoryFTS = "history_fts"  // Added in v35.
 let TableCachedTopSites = "cached_top_sites"
-let TablePinnedTopSites = "pinned_top_sites"
 let TableDomains = "domains"
 let TableVisits = "visits"
 let TableFaviconSites = "favicon_sites"
@@ -141,7 +140,6 @@ private let AllTables: [String] = [
     TableActivityStreamBlocklist,
     TablePageMetadata,
     TableHighlights,
-    TablePinnedTopSites,
     TableRemoteDevices,
 
     TableSyncCommands,
@@ -320,17 +318,6 @@ open class BrowserSchema: Schema {
             iconType INTEGER,
             iconWidth INTEGER,
             frecencies REAL
-        )
-        """
-
-    let pinnedTopSitesTableCreate = """
-        CREATE TABLE IF NOT EXISTS pinned_top_sites (
-            historyID INTEGER,
-            url TEXT NOT NULL UNIQUE,
-            title TEXT,
-            guid TEXT,
-            pinDate REAL,
-            domain TEXT NOT NULL
         )
         """
 
@@ -937,7 +924,6 @@ open class BrowserSchema: Schema {
             historyIDsWithIcon,
             iconForURL,
             pageMetadataCreate,
-            pinnedTopSitesTableCreate,
             highlightsCreate,
             self.remoteDevices,
             activityStreamBlocklistCreate,
@@ -1327,30 +1313,6 @@ open class BrowserSchema: Schema {
         //         return false
         //     }
         // }
-
-        // Someone upgrading from v21 will get this table anyway.
-        // So, there's no need to create it only to be dropped and
-        // re-created at v26 anyway.
-        // if from < 25 && to >= 25 {
-        //     if !self.run(db, queries: [
-        //         pinnedTopSitesTableCreate
-        //         ]) {
-        //         return false
-        //     }
-        // }
-
-        if from < 26 && to >= 26 {
-            if !self.run(
-                db,
-                queries: [
-                    // The old pin table was never released so we can safely drop
-                    "DROP TABLE IF EXISTS pinned_top_sites",
-                    pinnedTopSitesTableCreate,
-                ])
-            {
-                return false
-            }
-        }
 
         if from < 27 && to >= 27 {
             if !self.run(

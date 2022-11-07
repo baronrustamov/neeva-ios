@@ -25,12 +25,6 @@ public protocol BrowserHistory {
     func setTopSitesNeedsInvalidation()
     func setTopSitesCacheSize(_ size: Int32)
     func clearTopSitesCache() -> Success
-
-    // Pinning top sites
-    func removeFromPinnedTopSites(_ site: Site) -> Success
-    func addPinnedTopSite(_ site: Site) -> Success
-    func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site?>>>
-    func isPinnedTopSite(_ url: String) -> Deferred<Maybe<Bool>>
 }
 
 /// An interface for fast repeated frecency queries.

@@ -394,58 +394,6 @@ extension SQLiteHistory: BrowserHistory {
         return deferMaybe(DatabaseError(description: "Invalid url for site \(site.url)"))
     }
 
-    public func removeFromPinnedTopSites(_ site: Site) -> Success {
-        guard let host = site.url.normalizedHost else {
-            return deferMaybe(DatabaseError(description: "Invalid url for site \(site.url)"))
-        }
-
-        //do a fuzzy delete so dupes can be removed
-        let query: (String, Args?) = ("DELETE FROM pinned_top_sites where domain = ?", [host])
-        return db.run([query]) >>== {
-            return self.db.run([("UPDATE domains SET showOnTopSites = 1 WHERE domain = ?", [host])])
-        }
-    }
-
-    public func isPinnedTopSite(_ url: String) -> Deferred<Maybe<Bool>> {
-        let sql = """
-            SELECT * FROM pinned_top_sites
-            WHERE url = ?
-            LIMIT 1
-            """
-        let args: Args = [url]
-        return self.db.queryReturnsResults(sql, args: args)
-    }
-
-    public func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site?>>> {
-        let sql = """
-            SELECT * FROM pinned_top_sites LEFT OUTER JOIN view_favicons_widest ON
-                historyID = view_favicons_widest.siteID
-            ORDER BY pinDate DESC
-            """
-        return db.runQueryConcurrently(
-            sql, args: [], factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
-    }
-
-    public func addPinnedTopSite(_ site: Site) -> Success {  // needs test
-        let now = Date.nowMilliseconds()
-        guard let guid = site.guid, let host = site.url.normalizedHost else {
-            return deferMaybe(DatabaseError(description: "Invalid site \(site.url)"))
-        }
-
-        let args: Args = [site.url.absoluteString, now, site.title, site.id, guid, host]
-        let arglist = BrowserDB.varlist(args.count)
-        // Prevent the pinned site from being used in topsite calculations
-        // We dont have to worry about this when removing a pin because the assumption is that a user probably doesnt want it being recommended as a topsite either
-        return self.removeHostFromTopSites(host) >>== {
-            return self.db.run([
-                (
-                    "INSERT OR REPLACE INTO pinned_top_sites (url, pinDate, title, historyID, guid, domain) VALUES \(arglist)",
-                    args
-                )
-            ])
-        }
-    }
-
     public func removeHostFromTopSites(_ host: String) -> Success {
         return db.run([("UPDATE domains SET showOnTopSites = 0 WHERE domain = ?", [host])])
     }

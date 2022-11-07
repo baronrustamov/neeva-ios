@@ -154,10 +154,6 @@ private class MockTopSitesHistory: MockableHistory {
         return deferMaybe(ArrayCursor(data: mockTopSites))
     }
 
-    override func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site?>>> {
-        return deferMaybe(ArrayCursor(data: []))
-    }
-
     override func updateTopSitesCacheIfInvalidated() -> Deferred<Maybe<Bool>> {
         return deferMaybe(true)
     }
