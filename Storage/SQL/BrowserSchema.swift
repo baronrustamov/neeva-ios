@@ -191,7 +191,7 @@ private let log = Logger.storage
 /// The monolithic class that manages the inter-related history etc. tables.
 /// We rely on SQLiteHistory having initialized the favicon table first.
 open class BrowserSchema: Schema {
-    static let DefaultVersion = 40  // Issue #4776.
+    static let DefaultVersion = 41  // Issue #4565.
 
     public var name: String { return "BROWSER" }
     public var version: Int { return BrowserSchema.DefaultVersion }
@@ -1521,6 +1521,11 @@ open class BrowserSchema: Schema {
             {
                 return false
             }
+        }
+
+        // Remove data from an obsolete "Pin to Top Sites" feature. This applies to all versions. PR #4565
+        if !run(db, queries: ["DROP TABLE IF EXISTS pinned_top_sites"]) {
+            return false
         }
 
         return true
