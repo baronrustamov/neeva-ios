@@ -44,19 +44,8 @@ struct TopSitesHandler {
             // Prevent duplication with neeva home, searches and spaces
             mergedSites = mergedSites.filter { !$0.url.isNeevaURL() }
 
-            let allSites: [Site]
-            if FeatureFlag[.pinToTopSites] {
-                // create PinnedSite objects. used by the view layer to tell topsites apart
-                let pinnedSites: [Site] = pinned.map(PinnedSite.init(site:))
-                let pinnedKeys = Set(pinnedSites.map(siteKey(_:)))
-                // no need to update pinnedKeys since mergedSites is already deduplicated
-                allSites = pinnedSites + mergedSites.filter { !pinnedKeys.contains(siteKey($0)) }
-            } else {
-                allSites = mergedSites
-            }
-
             // Favor top sites from defaultSites as they have better favicons. But keep PinnedSites.
-            let newSites = allSites.map { site -> Site in
+            let newSites = mergedSites.map { site -> Site in
                 if let _ = site as? PinnedSite {
                     return site
                 }

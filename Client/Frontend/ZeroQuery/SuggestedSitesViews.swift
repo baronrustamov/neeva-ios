@@ -148,10 +148,6 @@ struct SuggestedSiteView: View {
             Button(role: .destructive, action: { isDeleting = true }) {
                 Label("Remove", systemSymbol: .trash)
             }
-
-            if FeatureFlag[.pinToTopSites] {
-                Text("Pin/unpin not yet implemented")
-            }
         }
     }
 }

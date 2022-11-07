@@ -849,60 +849,9 @@ class BrowserViewController: UIViewController {
         _ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect,
         arrowDirection: UIPopoverArrowDirection
     ) {
-        let helper = ShareExtensionHelper(url: url, tab: tab)
-
-        var appActivities = [UIActivity]()
-
-        let deferredSites = self.profile.history.isPinnedTopSite(tab?.url?.absoluteString ?? "")
-
-        let isPinned = deferredSites.value.successValue ?? false
-
-        if FeatureFlag[.pinToTopSites] {
-            var topSitesActivity: PinToTopSitesActivity
-            if isPinned == false {
-                topSitesActivity = PinToTopSitesActivity(isPinned: isPinned) { [weak tab] in
-                    guard let url = tab?.url?.displayURL,
-                        let sql = self.profile.history as? SQLiteHistory
-                    else { return }
-
-                    sql.getSites(forURLs: [url.absoluteString]).bind { val -> Success in
-                        guard let site = val.successValue?.asArray().first?.flatMap({ $0 }) else {
-                            return succeed()
-                        }
-                        return self.profile.history.addPinnedTopSite(site)
-                    }.uponQueue(.main) { [self] result in
-                        if result.isSuccess {
-                            toastViewManager.makeToast(text: "Pinned To Top Sites").enqueue(
-                                manager: toastViewManager)
-                        }
-                    }
-                }
-            } else {
-                topSitesActivity = PinToTopSitesActivity(isPinned: isPinned) { [weak tab] in
-                    guard let url = tab?.url?.displayURL,
-                        let sql = self.profile.history as? SQLiteHistory
-                    else { return }
-
-                    sql.getSites(forURLs: [url.absoluteString]).bind { val -> Success in
-                        guard let site = val.successValue?.asArray().first?.flatMap({ $0 }) else {
-                            return succeed()
-                        }
-
-                        return self.profile.history.removeFromPinnedTopSites(site)
-                    }.uponQueue(.main) { [self] result in
-                        if result.isSuccess {
-                            toastViewManager.makeToast(text: "Removed From Top Sites").enqueue(
-                                manager: toastViewManager)
-                        }
-                    }
-                }
-            }
-            appActivities.append(topSitesActivity)
-        }
-
-        let controller = helper.createActivityViewController(appActivities: appActivities) {
+        let controller = ShareExtensionHelper(url: url, tab: tab).createActivityViewController {
             [weak self] _, _ in
-            guard let self = self else { return }
+            guard let self else { return }
 
             // After dismissing, check to see if there were any prompts we queued up
             self.showQueuedAlertIfAvailable()
