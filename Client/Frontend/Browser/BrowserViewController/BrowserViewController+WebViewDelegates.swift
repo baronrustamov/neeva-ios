@@ -708,7 +708,8 @@ extension BrowserViewController: WKNavigationDelegate {
 
             // Do not launch Universal Links in another app in Incognito Mode
             // to respect user privacy.
-            if !tab.isIncognito,
+            if isMainFrame,
+                !tab.isIncognito,
                 tab.shouldOpenUniversalLinks,
                 navigationAction.navigationType == .other
             {
