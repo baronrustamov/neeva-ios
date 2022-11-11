@@ -13,11 +13,14 @@ struct AddToSpaceView: View {
 
     init(item: ShareItem, onDismiss: @escaping (Bool) -> Void) {
         _request = .init(
-            wrappedValue: AddToSpaceRequest(
-                title: item.title ?? item.url,
-                description: item.description,
-                url: item.url.asURL!
-            ))
+            // Force unwrapping is OK here because the AddToSpaceRequest initializer
+            // should never fail given an array of nonzero length.
+            wrappedValue: AddToSpaceRequest(input: [
+                AddToSpaceInput(
+                    url: item.url.asURL!, title: item.title ?? item.url,
+                    description: item.description)
+            ])!
+        )
         self.onDismiss = onDismiss
     }
 

@@ -535,10 +535,13 @@ class SpaceCardDetails: CardDetails, AccessingManagerProvider, ThumbnailModel {
             _ = item.loadObject(ofClass: URL.self) { url, _ in
                 if let url = url, let space = self.manager.get(for: self.id) {
                     DispatchQueue.main.async {
-                        let request = AddToSpaceRequest(
-                            title: "Link from \(url.baseDomain ?? "page")",
-                            description: "", url: url)
-                        request.addToExistingSpace(id: space.id.id, name: space.name)
+                        AddToSpaceRequest(
+                            input: [
+                                AddToSpaceInput(
+                                    url: url, title: "Link from \(url.baseDomain ?? "page")",
+                                    description: "")
+                            ]
+                        )?.addToExistingSpace(id: space.id.id, name: space.name)
                     }
                 }
             }
@@ -685,42 +688,6 @@ class TabGroupCardDetails: CardDropDelegate, ObservableObject {
                     return
                 }
             }
-        }
-    }
-
-    @ViewBuilder func contextMenu() -> some View {
-        if let title = customTitle {
-            Text("\(allDetails.count) tabs from “\(title)”")
-        } else {
-            Text("\(allDetails.count) Tabs")
-        }
-
-        Button {
-            ClientLogger.shared.logCounter(.tabGroupRenameThroughThreeDotMenu)
-            self.renaming = true
-        } label: {
-            Label("Rename", systemSymbol: .pencil)
-        }
-
-        if FeatureFlag[.createSpaceFromTabGroup] {
-            Button { [self] in
-                ClientLogger.shared.logCounter(.tabGroupSaveToSpacesThroughThreeDotMenu)
-                if let tabGroup = manager.getTabGroup(for: id) {
-                    manager.createSpaceFromTabGroup(tabGroup)
-                }
-            } label: {
-                Label("Save All to Spaces", systemSymbol: .bookmark)
-            }
-        }
-
-        Button(
-            role: .destructive,
-            action: {
-                ClientLogger.shared.logCounter(.tabGroupDeleteThroughThreeDotMenu)
-                self.deleting = true
-            }
-        ) {
-            Label("Close All", systemSymbol: .trash)
         }
     }
 

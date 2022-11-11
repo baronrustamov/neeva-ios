@@ -314,3 +314,7 @@ mutation CreateSpaceWithURLs($input: CreateSpaceWithURLsInput!) {
         spaceID
     }
 }
+
+mutation AddSpaceResultsByURL($input: AddSpaceResultsByURLInput!) {
+    addSpaceResultsByURL(input: $input)
+}

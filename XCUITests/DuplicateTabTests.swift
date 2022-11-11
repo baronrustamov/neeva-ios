@@ -24,6 +24,7 @@ class DuplicateTabTests: BaseTestCase {
         app.buttons["Example Domain, Tab"].press(forDuration: 1)
         waitForExistence(app.buttons["Open in Incognito"])
         app.buttons["Open in Incognito"].tap()
+        XCTAssertEqual(getNumberOfTabs(openTabTray: false), 1)
 
         app.buttons["Done"].tap()
         waitForExistence(app.links["More information..."])

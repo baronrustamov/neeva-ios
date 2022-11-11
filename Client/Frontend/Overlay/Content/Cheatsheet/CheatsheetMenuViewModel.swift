@@ -42,7 +42,7 @@ class CheatsheetMenuViewModel: ObservableObject {
 
     // Data sources
     private let service: CheatsheetDataService
-    private weak var tab: Tab?
+    private(set) weak var tab: Tab?
     // Store the data used to initiate the request in case the values changes
     private(set) var sourcePage: SourcePage?
 

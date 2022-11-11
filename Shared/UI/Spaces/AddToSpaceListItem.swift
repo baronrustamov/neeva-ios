@@ -5,16 +5,27 @@
 import SFSafeSymbols
 import SwiftUI
 
-/// An entry in a space list
-struct SpaceListItem: View {
-    let space: Space
-    let icon: Nicon
-    let iconColor: Color
+/// An entry in the Add to Spaces sheet.
+///
+/// There are two modes, depending on the number of URLs to be added.
+/// - For one URL, a bookmark icon is displayed indicating whether or not the URL is in the Space.
+/// - For multiple URLs (i.e., a Tab Group), no bookmark icon is displayed.
+struct AddToSpaceListItem: View {
+    private let space: Space
+    private let currentURL: URL?
+    private let icon: Nicon
+    private let iconColor: Color
 
-    /// - Parameter space: the space to render
-    init(_ space: Space, currentURL: URL) {
+    /// - Parameters:
+    ///     - space: The space to render.
+    ///     - currentURL: The current URL of the Tab if only one Tab is to be added. Otherwise `nil`, which indicates that a Tab Group is to be added.
+    init(_ space: Space, currentURL: URL? = nil) {
         self.space = space
-        if SpaceStore.shared.urlInSpace(currentURL, spaceId: space.id) {
+        self.currentURL = currentURL
+
+        if let currentURL = currentURL,
+            SpaceStore.shared.urlInSpace(currentURL, spaceId: space.id)
+        {
             icon = .bookmarkFill
             iconColor = .ui.adaptive.blue
         } else {
@@ -22,6 +33,7 @@ struct SpaceListItem: View {
             iconColor = .tertiaryLabel
         }
     }
+
     var body: some View {
         HStack {
             LargeSpaceIconView(space: space)
@@ -41,10 +53,15 @@ struct SpaceListItem: View {
                     .foregroundColor(.secondaryLabel)
             }
             Spacer(minLength: 0)
-            Symbol(decorative: icon, weight: .semibold, relativeTo: .title3)
-                .tapTargetFrame()
-                .foregroundColor(iconColor)
-                .hoverEffect()
+            // If currentURL != nil, that means a single Tab is to be
+            // added. In this case (and not the Tab Group case), show
+            // the bookmark icon.
+            if currentURL != nil {
+                Symbol(decorative: icon, weight: .semibold, relativeTo: .title3)
+                    .tapTargetFrame()
+                    .foregroundColor(iconColor)
+                    .hoverEffect()
+            }
         }
         .padding(.vertical, 6)
         .padding(.leading, 16)
@@ -74,13 +91,13 @@ struct SpaceView_Previews: PreviewProvider {
             LoadingSpaceListItem()
                 .padding(.vertical, 10)
                 .padding(.leading, 16)
-            SpaceListItem(.empty(), currentURL: "https://neeva.com")
-            SpaceListItem(.savedForLaterEmpty, currentURL: "https://neeva.com")
-            SpaceListItem(.savedForLater, currentURL: "https://neeva.com")
-            SpaceListItem(.stackOverflow, currentURL: "https://neeva.com")
-            SpaceListItem(.shared, currentURL: "https://neeva.com")
-            SpaceListItem(.public, currentURL: "https://neeva.com")
-            SpaceListItem(.sharedAndPublic, currentURL: "https://neeva.com")
+            AddToSpaceListItem(.empty(), currentURL: "https://neeva.com")
+            AddToSpaceListItem(.savedForLaterEmpty, currentURL: "https://neeva.com")
+            AddToSpaceListItem(.savedForLater, currentURL: "https://neeva.com")
+            AddToSpaceListItem(.stackOverflow, currentURL: "https://neeva.com")
+            AddToSpaceListItem(.shared, currentURL: "https://neeva.com")
+            AddToSpaceListItem(.public, currentURL: "https://neeva.com")
+            AddToSpaceListItem(.sharedAndPublic, currentURL: "https://neeva.com")
         }.padding(.vertical).previewLayout(.sizeThatFits)
     }
 }

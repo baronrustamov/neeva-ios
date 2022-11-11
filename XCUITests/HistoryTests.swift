@@ -24,7 +24,7 @@ class HistoryTests: BaseTestCase {
     override func setUp() {
         launchArguments = [
             LaunchArguments.SkipIntro, LaunchArguments.SetSignInOnce,
-            LaunchArguments.SetDidFirstNavigation, LaunchArguments.SkipWhatsNew,
+            LaunchArguments.SetDidFirstNavigation,
             LaunchArguments.SkipETPCoverSheet, LaunchArguments.DeviceName,
             "\(LaunchArguments.ServerPort)\(serverPort)",
             "\(LaunchArguments.EnableNeevaFeatureBoolFlags)40640",

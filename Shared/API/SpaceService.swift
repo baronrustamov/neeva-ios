@@ -16,6 +16,12 @@ public protocol SpaceService {
     func addSpaceComment(spaceID: String, comment: String) -> AddSpaceCommentRequest?
 
     @discardableResult
+    func addSpaceResultsByUrlMutation(
+        input: AddSpaceResultsByURLInput,
+        completion: @escaping (Result<AddSpaceResultsByUrlMutation.Data, Error>) -> Void
+    ) -> Cancellable?
+
+    @discardableResult
     func addToSpaceMutation(
         spaceId: String, url: String, title: String,
         thumbnail: String?, data: String?, mediaType: String?, isBase64: Bool?,
@@ -33,7 +39,10 @@ public protocol SpaceService {
     func createSpace(name: String) -> CreateSpaceRequest?
 
     @discardableResult
-    func createSpaceWithURLs(name: String, urls: [SpaceURLInput]) -> CreateSpaceWithURLsRequest?
+    func createSpaceWithURLs(
+        name: String, urls: [SpaceURLInput],
+        completion: @escaping (Result<CreateSpaceWithUrLsMutation.Data, Error>) -> Void
+    ) -> Cancellable?
 
     @discardableResult
     func deleteGenerator(spaceID: String, generatorID: String) -> DeleteGeneratorRequest?

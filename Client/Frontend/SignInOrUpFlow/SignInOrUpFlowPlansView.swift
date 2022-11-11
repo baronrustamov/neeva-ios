@@ -289,24 +289,25 @@ struct SignInOrUpFlowPlansView: View {
              if this screen is showing and we have a login cookie,
              we trigger the purchase based on the users original choice
              */
-            if NeevaUserInfo.shared.hasLoginCookie(),
-                let product = premiumStore.getProductForPlan(model.currentPremiumPlan)
-            {
-                /*
-                 NOTE: Only show for users who are not Lifetime and have
-                 not paid through another source.
-                 */
-                if userInfo.subscriptionType == .basic
-                    && (userInfo.subscription == nil
-                        || userInfo.subscription?.source == SubscriptionSource.none
-                        || userInfo.subscription?.source == SubscriptionSource.apple)
-                {
-                    premiumStore.purchase(
-                        product, reloadUserInfo: true,
-                        onPending: self.onPurchasePending,
-                        onCancelled: self.onPurchaseCancelled,
-                        onError: self.onPurchaseError,
-                        onSuccess: self.onPurchaseSuccess)
+            if NeevaUserInfo.shared.hasLoginCookie() {
+                if let product = PremiumStore.shared.getProductForPlan(model.currentPremiumPlan) {
+                    /*
+                     NOTE: Only execute for users who have no subscription
+                     */
+                    if NeevaUserInfo.shared.subscriptionType == .basic
+                        && (NeevaUserInfo.shared.subscriptionType == nil
+                            || NeevaUserInfo.shared.subscriptionType == .basic
+                            || NeevaUserInfo.shared.subscriptionType == .unknown)
+                    {
+                        premiumStore.purchase(
+                            product, reloadUserInfo: true,
+                            onPending: self.onPurchasePending,
+                            onCancelled: self.onPurchaseCancelled,
+                            onError: self.onPurchaseError,
+                            onSuccess: self.onPurchaseSuccess)
+                    } else {
+                        model.complete()
+                    }
                 } else {
                     model.complete()
                 }

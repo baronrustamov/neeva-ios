@@ -191,12 +191,11 @@ class TabCardModel: CardDropDelegate, CardModel {
         timeBasedNormalRows[.yesterday] = buildRows(for: .yesterday, incognito: false)
         timeBasedNormalRows[.lastWeek] = buildRows(for: .lastWeek, incognito: false)
 
-        if Defaults[.archivedTabsDuration] == .month {
-            timeBasedNormalRows[.lastMonth] = buildRows(for: .lastMonth, incognito: false)
-        } else if Defaults[.archivedTabsDuration] == .forever {
-            timeBasedNormalRows[.lastMonth] = buildRows(for: .lastMonth, incognito: false)
-            timeBasedNormalRows[.overAMonth] = buildRows(for: .overAMonth, incognito: false)
-        }
+        // Because tabs are only archived when restoring from start up tabs, it is possible
+        // to have tabs that should be archived in the tab switcher if the app stays alive for a long time
+        // we need to show these tabs
+        timeBasedNormalRows[.lastMonth] = buildRows(for: .lastMonth, incognito: false)
+        timeBasedNormalRows[.overAMonth] = buildRows(for: .overAMonth, incognito: false)
 
         // TODO: in the future, we might apply time-based treatments to incognito mode.
         incognitoRows = buildRows(for: .all, incognito: true)
@@ -220,16 +219,9 @@ class TabCardModel: CardDropDelegate, CardModel {
             return [.all]
         }
 
-        var sections: [TabSection] = [.pinned, .today, .yesterday, .lastWeek]
-
-        if Defaults[.archivedTabsDuration] == .month {
-            sections.append(.lastMonth)
-        }
-
-        if Defaults[.archivedTabsDuration] == .forever {
-            sections.append(.lastMonth)
-            sections.append(.overAMonth)
-        }
+        let sections: [TabSection] = [
+            .pinned, .today, .yesterday, .lastWeek, .lastMonth, .overAMonth,
+        ]
 
         // Prevents sections with no cards (only headers) from being shown.
         return sections.filter { (timeBasedNormalRows[$0]?.count ?? 0) > 1 }

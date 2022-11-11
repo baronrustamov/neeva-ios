@@ -9,7 +9,7 @@ class FirstRunTests: BaseTestCase {
     override func setUp() {
         // for the current test name, add the db fixture used
         launchArguments = [
-            LaunchArguments.ReactivateIntro, LaunchArguments.SkipWhatsNew,
+            LaunchArguments.ReactivateIntro,
             LaunchArguments.ForceExperimentControlArm,
         ]
 

@@ -46,9 +46,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     private var tabs = [Tab]()
     var tabsUpdatedPublisher = PassthroughSubject<Void, Never>()
 
-    // Tab Group related variables
-    @Default(.archivedTabsDuration) private var archivedTabsDuration
-
     // TODO: consolidate accessors, don't need both `tabs` and `activeTabs`
     var activeTabs: [Tab] { tabs }
     var archivedTabs: [ArchivedTab] = []
@@ -68,7 +65,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
     private(set) var updateArchivedTabsPublisher = PassthroughSubject<Void, Never>()
     private var selectedTabSubscription: AnyCancellable?
     private var selectedTabURLSubscription: AnyCancellable?
-    private var archivedTabsDurationSubscription: AnyCancellable?
     private var spaceFromTabGroupSubscription: AnyCancellable?
 
     private var needsHeavyUpdatesPostAnimation = false
@@ -156,14 +152,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
                     .sink {
                         self?.selectedTabURLPublisher.send($0)
                     }
-            }
-
-        archivedTabsDurationSubscription =
-            _archivedTabsDuration.publisher.dropFirst().sink {
-                [weak self] _ in
-                self?.updateAllTabDataAndSendNotifications(notify: false)
-                // update CardGrid and ArchivedTabsPanelView with the latest data
-                self?.updateArchivedTabsPublisher.send()
             }
     }
 
@@ -511,24 +499,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             selectedTab.lastExecutedTime = Date.nowMilliseconds()
         }
 
-        // Determine if any of the active tabs should be converted to archived tabs.
-        // Incognito tabs are never archived.
-        let shouldBeArchivedCondition: (Tab) -> Bool = {
-            !$0.isIncognito && $0.shouldBeArchived
-        }
-        let tabsToArchive = tabs.filter(shouldBeArchivedCondition)
-        for tab in tabsToArchive {
-            tab.closeWebView()
-            // Discard tabIndex at this point. When restored, we'll simply append to activeTabs.
-            archivedTabs.append(
-                ArchivedTab(
-                    savedTab: tab.saveSessionDataAndCreateSavedTab(isSelected: false, tabIndex: nil)
-                ))
-        }
-        if !tabsToArchive.isEmpty {
-            tabs.removeAll(where: shouldBeArchivedCondition)
-        }
-
         // Re-build any tab groups.
         func generateTabGroups<TabType: GenericTab>(
             for tabs: [TabType], predicate: ([TabType]) -> Bool
@@ -569,34 +539,6 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
 
     func getTabGroup(for tab: Tab) -> TabGroup? {
         return activeTabGroups[tab.rootUUID]
-    }
-
-    func createSpaceFromTabGroup(_ item: TabGroup) {
-        let request = SpaceServiceProvider.shared.createSpaceWithURLs(
-            name: item.title ?? "My Tab Group",
-            urls: item.children.compactMap {
-                SpaceURLInput(url: $0.url?.absoluteString, title: $0.displayTitle)
-            })
-        spaceFromTabGroupSubscription = request?.$state.sink { [self] state in
-            switch state {
-            case .success:
-                if let spaceID = request?.result?.createSpaceWithUrLs?.spaceId {
-                    SpaceStore.shared.refresh { [self] in
-                        let bvc = SceneDelegate.getBVC(with: scene)
-                        ToastDefaults().showToast(
-                            bvc: bvc, text: "Conversion successful", buttonText: "Open Space"
-                        ) {
-                            bvc.browserModel.openSpace(spaceId: spaceID)
-                        }
-                    }
-                }
-                self.spaceFromTabGroupSubscription?.cancel()
-            case .failure:
-                self.spaceFromTabGroupSubscription?.cancel()
-            case .initial:
-                Logger.browser.info("Waiting to create Space from Tab Group")
-            }
-        }
     }
 
     func closeTabGroup(_ item: TabGroup, showToast: Bool) {
@@ -764,7 +706,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
 
             // Add tab to be root of a tab group if it follows the rule for the nytimes case.
             // See TabGroupTests.swift for example.
-            for possibleChildTab in isIncognito ? incognitoTabs : normalTabs {
+            for possibleChildTab in tab.isIncognito ? incognitoTabs : normalTabs {
                 if addTabToTabGroupIfNeeded(newTab: tab, possibleChildTab: possibleChildTab) {
                     guard let childTabIndex = tabs.firstIndex(of: possibleChildTab) else {
                         continue
@@ -817,7 +759,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         let newTab = addTab(
             tabConfig: .init(
                 request: URLRequest(url: url),
-                insertLocation: InsertTabLocation(parent: tab)
+                insertLocation: InsertTabLocation(parent: incognito ? nil : tab)
             ),
             isIncognito: incognito
         )
@@ -956,6 +898,8 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         if resolveParentRef {
             self.resolveParentRef(for: [tab])
         }
+        // Do not attempt to open Universal Links until the user has done a manual navigation.
+        tab.shouldOpenUniversalLinks = false
         return tab
     }
 
@@ -1553,6 +1497,8 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
                 return
             }
 
+            // When the Tab has done its first non-internal navigation, it's OK to open Universal Links.
+            selectedTab?.shouldOpenUniversalLinks = true
             storeChanges()
         }
     }

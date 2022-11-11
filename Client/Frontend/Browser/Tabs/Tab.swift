@@ -94,6 +94,13 @@ class Tab: NSObject, ObservableObject, GenericTab {
     var shouldPerformHeavyUpdatesUponSelect = true
     var isSelected = false
 
+    /// Used to control whether or not to open a Universal Link in another app.
+    ///
+    /// There are certain circumstances where this should not be done, for example:
+    /// - When a `Tab` is restored from disk.
+    /// - When a user does a manual navigation.
+    var shouldOpenUniversalLinks = true
+
     @Published private(set) var canGoBack = false
     @Published private(set) var canGoForward = false
 

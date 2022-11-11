@@ -12,7 +12,7 @@ struct TabGroupHeader: View {
     var body: some View {
         HStack {
             Menu {
-                groupDetails.contextMenu()
+                TabGroupContextMenu(groupDetails: groupDetails)
             } label: {
                 Label("ellipsis", systemImage: "ellipsis")
                     .foregroundColor(.label)
@@ -59,7 +59,7 @@ struct TabGroupHeader: View {
             groupDetails.isShowingDetails.toggle()
         }
         .contentShape(Rectangle())
-        .contextMenu(menuItems: groupDetails.contextMenu)
+        .contextMenu { TabGroupContextMenu(groupDetails: groupDetails) }
         .textFieldAlert(
             isPresented: $groupDetails.renaming, title: "Rename “\(groupDetails.title)”",
             required: false

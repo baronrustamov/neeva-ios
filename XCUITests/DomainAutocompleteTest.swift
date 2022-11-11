@@ -22,7 +22,7 @@ class DomainAutocompleteTest: BaseTestCase {
         if testWithDB.contains(testName) {
             // for the current test name, add the db fixture used
             launchArguments = [
-                LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew,
+                LaunchArguments.SkipIntro,
                 LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + historyDB,
             ]
         }

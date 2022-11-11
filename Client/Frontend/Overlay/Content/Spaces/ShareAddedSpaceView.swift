@@ -47,31 +47,35 @@ struct ShareAddedSpaceView: View {
             if request.state == .savedToSpace {
                 HStack(spacing: 24) {
                     Spacer()
-                    Button(
-                        action: {
-                            browserModel.openSpace(
-                                spaceID: request.targetSpaceID!)
-
-                            let entity: SpaceEntityData? = space?.contentData?.first
-                            if let id = entity?.id, let space = space {
-                                overlayManager
-                                    .showModal(
-                                        style: .spaces,
-                                        toPosition: .top
-                                    ) {
-                                        AddOrUpdateSpaceContent(
-                                            space: space, config: .updateSpaceItem(id)
-                                        ).environmentObject(
-                                            bvc.gridModel.spaceCardModel)
-                                    }
-                            }
-                        },
-                        label: {
-                            Text("Edit Item")
-                                .foregroundColor(refreshing ? .tertiaryLabel : .ui.adaptive.blue)
-                                .withFont(.labelLarge)
-                                .disabled(refreshing)
-                        })
+                    // Only show the Edit Item button if a single Tab is to be added.
+                    if request.isForOneTab {
+                        Button(
+                            action: {
+                                browserModel.openSpace(
+                                    spaceID: request.targetSpaceID!)
+                                let entity: SpaceEntityData? = space?.contentData?.first
+                                if let id = entity?.id, let space = space {
+                                    overlayManager
+                                        .showModal(
+                                            style: .spaces,
+                                            toPosition: .top
+                                        ) {
+                                            AddOrUpdateSpaceContent(
+                                                space: space, config: .updateSpaceItem(id)
+                                            ).environmentObject(
+                                                bvc.gridModel.spaceCardModel)
+                                        }
+                                }
+                            },
+                            label: {
+                                Text("Edit Item")
+                                    .foregroundColor(
+                                        refreshing ? .tertiaryLabel : .ui.adaptive.blue
+                                    )
+                                    .withFont(.labelLarge)
+                                    .disabled(refreshing)
+                            })
+                    }
                     Button(
                         action: {
                             if let tab = bvc.tabManager.selectedTab {
@@ -101,13 +105,16 @@ struct ShareAddedSpaceView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 if let space = space {
+                    let title = request.singleTabData?.title
                     ShareSpaceView(
                         space: space,
                         shareTarget: bvc.view,
                         isPresented: $presentingShareUI,
                         compact: true,
                         noteText:
-                            "Just added \"\(request.title)\" to my \"\(request.targetSpaceName!)\" Space."
+                            request.isForOneTab && title != nil
+                            ? "Just added \"\(title!)\" to my \"\(request.targetSpaceName!)\" Space."
+                            : "Just added to my \"\(request.targetSpaceName!)\" Space."
                     )
                 } else {
                     Spacer().frame(height: 210)
@@ -155,7 +162,8 @@ struct ShareAddedSpaceView: View {
                     if case .ready = state {
                         refreshing = false
                         subscription?.cancel()
-                        if let updater = request.updater, let entity = space?.contentData?.first?.id
+                        if let updater = request.updater,
+                            let entity = space?.contentData?.first?.id
                         {
                             updater.update(entity: entity, within: space!.id.id)
                         }

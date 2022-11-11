@@ -771,6 +771,27 @@ public class SpaceStore: ObservableObject {
         let isPinned = allSpaces.first { $0.id.value == spaceId }?.isPinned ?? true
         return SpaceServiceProvider.shared.pinSpace(spaceId: spaceId, isPinned: !isPinned)
     }
+
+    // MARK: - Add Tab Group to Space
+    public func addGroupToExistingSpace(
+        spaceID: String, group: [AddToSpaceInput],
+        completion: @escaping (Result<AddSpaceResultsByUrlMutation.Data, Error>) -> Void
+    ) -> Combine.Cancellable? {
+        return SpaceServiceProvider.shared.addSpaceResultsByUrlMutation(
+            input: AddSpaceResultsByURLInput(
+                entries: group.map { $0.toAddSpaceResultByURLInput(spaceID: spaceID) }),
+            completion: completion)
+    }
+
+    public func addGroupToNewSpace(
+        name: String, group: [AddToSpaceInput],
+        completion: @escaping (Result<CreateSpaceWithUrLsMutation.Data, Error>) -> Void
+    ) -> Combine.Cancellable? {
+        return SpaceServiceProvider.shared.createSpaceWithURLs(
+            name: name,
+            urls: group.map { $0.toSpaceURLInput() },
+            completion: completion)
+    }
 }
 
 extension SpaceStore {
