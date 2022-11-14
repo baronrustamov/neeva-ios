@@ -76,7 +76,6 @@ struct ThumbnailGroupView<Model: ThumbnailModel>: View {
         }
         .cornerRadius(ThumbnailGroupViewUX.ThumbnailsContainerRadius)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-        .drawingGroup()
         .shadow(color: Color.black.opacity(0.25), radius: 1)
         .shadow(color: Color.black.opacity(0.1), radius: 2, y: 1)
     }

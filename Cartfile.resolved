@@ -1,6 +1,6 @@
 github "DaveWoodCom/XCGLogger" "7.0.1"
-github "SDWebImage/SDWebImage" "5.13.2"
-github "SDWebImage/SDWebImageSwiftUI" "2.1.0"
+github "SDWebImage/SDWebImage" "5.13.5"
+github "SDWebImage/SDWebImageSwiftUI" "2.2.1"
 github "SwiftyJSON/SwiftyJSON" "5.0.1"
 github "jrendel/SwiftKeychainWrapper" "3.4.0"
 github "kif-framework/KIF" "v3.8.3"
