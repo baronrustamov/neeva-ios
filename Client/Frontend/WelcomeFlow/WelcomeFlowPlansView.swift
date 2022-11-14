@@ -297,10 +297,9 @@ struct WelcomeFlowPlansView: View {
                 /*
                  NOTE: Only execute for users who have no subscription
                  */
-                if NeevaUserInfo.shared.subscriptionType == .basic
-                    && (NeevaUserInfo.shared.subscriptionType == nil
-                        || NeevaUserInfo.shared.subscriptionType == .basic
-                        || NeevaUserInfo.shared.subscriptionType == .unknown)
+                if NeevaUserInfo.shared.subscriptionType == nil
+                    || NeevaUserInfo.shared.subscriptionType == .basic
+                    || NeevaUserInfo.shared.subscriptionType == .unknown
                 {
                     premiumStore.purchase(
                         product, reloadUserInfo: true,
