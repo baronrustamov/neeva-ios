@@ -482,7 +482,7 @@
 "Cookies" = "Cookies";
 
 /* No comment provided by engineer. */
-"Cool, thanks!" = "Cool, merci !";
+"Cool, thanks!" = "Super, merci !";
 
 /* No comment provided by engineer. */
 "Copied to clipboard" = "Copié dans le presse-papiers";
@@ -761,9 +761,6 @@
 "Get FREE" = "Profitez-en GRATUITEMENT";
 
 /* No comment provided by engineer. */
-"Get Premium for maximum privacy" = "Devenez membre Premium et profitez d'une confidentialité maximale";
-
-/* No comment provided by engineer. */
 "Get safer, richer and better\nsearch when you sign in" = "Profitez d'une recherche plus sûre, riche et efficace en vous connectant";
 
 /* No comment provided by engineer. */
@@ -878,7 +875,7 @@
 "Leave Incognito Mode" = "Quitter le mode privé";
 
 /* Describe the purpose of the options in the archive tab settings */
-"Let Neeva automatically archive tabs that haven't recently been viewed." = "Laissez Neeva archiver automatiquement les onglets que vous n'avez pas consultés récemment.";
+"Let Neeva automatically archive tabs that haven’t recently been viewed. Changes will take effect on the next app launch." = "Laissez Neeva archiver automatiquement les onglets que vous n'avez pas consultés récemment. Les modifications prendront effet lors du prochain lancement de l'application.";
 
 /* No comment provided by engineer. */
 "Let's do it!" = "C'est parti !";

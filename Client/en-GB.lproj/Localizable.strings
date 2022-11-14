@@ -761,9 +761,6 @@
 "Get FREE" = "Get FREE";
 
 /* No comment provided by engineer. */
-"Get Premium for maximum privacy" = "Get Premium for maximum privacy";
-
-/* No comment provided by engineer. */
 "Get safer, richer and better\nsearch when you sign in" = "Get safer, richer and better\nsearch when you sign in";
 
 /* No comment provided by engineer. */
@@ -878,7 +875,7 @@
 "Leave Incognito Mode" = "Leave Incognito Mode";
 
 /* Describe the purpose of the options in the archive tab settings */
-"Let Neeva automatically archive tabs that haven't recently been viewed." = "Let Neeva automatically archive tabs that haven't recently been viewed.";
+"Let Neeva automatically archive tabs that haven’t recently been viewed. Changes will take effect on the next app launch." = "Let Neeva automatically archive tabs that haven’t recently been viewed. Changes will take effect on the next app launch.";
 
 /* No comment provided by engineer. */
 "Let's do it!" = "Let's do it!";
