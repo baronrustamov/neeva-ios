@@ -323,7 +323,7 @@ class NotificationManager: ObservableObject {
     ) {
         var tapAction: LocalNotifications.LocalNotificationTapAction
         if !NeevaUserInfo.shared.isUserLoggedIn {
-            bvc.presentIntroViewController(true)
+            bvc.presentSignInOrUpFlow()
             tapAction = LocalNotifications.LocalNotificationTapAction.openIntroView
         } else {
             if let urlStr = urlStr, let url = URL(string: urlStr) {
@@ -374,7 +374,7 @@ class NotificationManager: ObservableObject {
 
         if type != .neevaOnboardingDefaultBrowser {
             if !NeevaUserInfo.shared.isUserLoggedIn {
-                bvc.presentIntroViewController(true)
+                bvc.presentSignInOrUpFlow()
             } else {
                 if let urlStr = urlStr, let url = URL(string: urlStr) {
                     bvc.openURLInNewTab(url)

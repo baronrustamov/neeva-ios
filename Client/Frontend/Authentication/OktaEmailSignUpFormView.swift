@@ -5,6 +5,13 @@
 import Shared
 import SwiftUI
 
+enum PasswordStrength: String {
+    case none = "none"
+    case low = "low"
+    case medium = "medium"
+    case strong = "strong"
+}
+
 struct OktaEmailSignUpFormView: View {
     @Binding private var email: String
     @Binding private var password: String

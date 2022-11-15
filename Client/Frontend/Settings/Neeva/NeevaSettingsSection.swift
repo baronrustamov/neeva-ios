@@ -12,7 +12,6 @@ struct NeevaSettingsSection: View {
 
     @ObservedObject var userInfo: NeevaUserInfo
     @Environment(\.openInNewTab) var openURL
-    //@Environment(\.settingsPresentIntroViewController) var presentIntroViewController // the old flow
     @Environment(\.settingsPresentSignInOrUpFlow) var presentSignInOrUpFlowView
     @State var showingAccountDetails = false
 
@@ -107,7 +106,6 @@ struct NeevaSettingsSection: View {
             Button("Sign in or Join Neeva") {
                 ClientLogger.shared.logCounter(
                     .SettingSignin, attributes: EnvironmentHelper.shared.getFirstRunAttributes())
-                //presentIntroViewController() // the old flow
                 presentSignInOrUpFlowView()
             }
             .frame(height: 60 - 12)

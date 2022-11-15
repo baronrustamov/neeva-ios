@@ -61,14 +61,7 @@ struct AddToSpaceOverlayContent: View {
                     .AddToSpaceErrorSigninOrJoinNeeva,
                     attributes: EnvironmentHelper.shared.getFirstRunAttributes())
                 hideOverlay()
-                bvc.presentIntroViewController(
-                    true,
-                    onDismiss: {
-                        DispatchQueue.main.async {
-                            bvc.hideCardGrid(withAnimation: true)
-                        }
-                    }
-                )
+                bvc.presentSignInOrUpFlow(onCompleteHideCardGrid: true)
             }
     }
 }

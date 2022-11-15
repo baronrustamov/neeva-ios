@@ -7,7 +7,7 @@ import SwiftUI
 
 struct SupportSettingsSection: View {
     @Environment(\.openInNewTab) var openInNewTab
-    @Environment(\.settingsPresentIntroViewController) var presentIntroViewController
+    @Environment(\.settingsPresentSignInOrUpFlow) var presentSignInOrUpFlow
 
     var body: some View {
         if NeevaUserInfo.shared.hasLoginCookie() {
@@ -20,7 +20,7 @@ struct SupportSettingsSection: View {
             NavigationLinkButton("Show Tour") {
                 ClientLogger.shared.logCounter(
                     .ViewShowTour, attributes: EnvironmentHelper.shared.getAttributes())
-                presentIntroViewController()
+                presentSignInOrUpFlow()
             }
         }
 

@@ -6,16 +6,6 @@ import Shared
 import SwiftUI
 
 extension EnvironmentValues {
-    private struct PresentIntroKey: EnvironmentKey {
-        static var defaultValue = { () -> Void in
-            fatalError("Specify an environment value for \\.settingsPresentIntroViewController")
-        }
-    }
-    public var settingsPresentIntroViewController: () -> Void {
-        get { self[PresentIntroKey.self] }
-        set { self[PresentIntroKey.self] = newValue }
-    }
-
     private struct PresentSignInOrUpFlowKey: EnvironmentKey {
         static var defaultValue = { () -> Void in
             fatalError("Specify an environment value for \\.settingsPresentSignInOrUpFlow")
@@ -148,18 +138,9 @@ class SettingsViewController: UIHostingController<AnyView> {
                 self.dismiss(animated: true, completion: nil)
                 bvc.openURLInNewTabPreservingIncognitoState(url)
             }
-            .environment(\.settingsPresentIntroViewController) {
-                self.dismiss(animated: true) {
-                    bvc.presentIntroViewController(
-                        true,
-                        completion: {
-                            bvc.dismissEditingAndHideZeroQuery()
-                        })
-                }
-            }
             .environment(\.settingsPresentSignInOrUpFlow) {
                 self.dismiss(animated: true) {
-                    bvc.presentSignInOrUpFlow(startScreen: nil)
+                    bvc.presentSignInOrUpFlow()
                 }
             }
             .environment(\.dismissScreen) {

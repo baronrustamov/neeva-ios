@@ -7,107 +7,6 @@ import Foundation
 import Shared
 import SwiftUI
 
-// MARK: - Sign In
-extension BrowserViewController {
-    func presentIntroViewController(
-        _ alwaysShow: Bool = false,
-        signInMode: Bool = false,
-        onOtherOptionsPage: Bool = false,
-        marketingEmailOptOut: Bool = false,
-        completion: (() -> Void)? = nil,
-        onDismiss: (() -> Void)? = nil
-    ) {
-        // Confirm a introView isn't already visible.
-        guard !introViewModel.isDisplaying else {
-            return
-        }
-
-        if alwaysShow || !Defaults[.introSeen] {
-            showProperIntroVC(
-                signInMode: signInMode,
-                onOtherOptionsPage: onOtherOptionsPage,
-                marketingEmailOptOut: marketingEmailOptOut,
-                completion: completion,
-                onDismiss: onDismiss
-            )
-        }
-    }
-
-    private func showProperIntroVC(
-        signInMode: Bool = false, onOtherOptionsPage: Bool = false,
-        marketingEmailOptOut: Bool = false, completion: (() -> Void)? = nil,
-        onDismiss: (() -> Void)? = nil
-    ) {
-        introViewModel.onSignInMode = signInMode
-        introViewModel.onOtherOptionsPage = onOtherOptionsPage
-        introViewModel.marketingEmailOptOut = marketingEmailOptOut
-        introViewModel.present { action in
-            switch action {
-            case .signupWithApple(
-                let marketingEmailOptOut, let identityToken, let authorizationCode):
-                if let identityToken = identityToken,
-                    let authorizationCode = authorizationCode
-                {
-                    let authURL = NeevaConstants.appleAuthURL(
-                        identityToken: identityToken,
-                        authorizationCode: authorizationCode,
-                        marketingEmailOptOut: marketingEmailOptOut ?? false,
-                        signup: true)
-                    self.openURLInNewTab(authURL)
-                }
-            case .skipToBrowser:
-                if let onDismiss = onDismiss {
-                    onDismiss()
-                }
-            case .oktaSignin(let email):
-                self.openURLFromAuth(NeevaConstants.oktaSigninURL(email: email))
-            case .oauthWithProvider(_, _, let token, _):
-                // loading appSearchURL to prevent showing marketing site
-                self.setTokenAndOpenURL(token: token, url: NeevaConstants.appSearchURL)
-            case .oktaAccountCreated(let token):
-                self.setTokenAndOpenURL(
-                    token: token, url: NeevaConstants.verificationRequiredURL)
-            default:
-                break
-            }
-
-            if NeevaUserInfo.shared.hasLoginCookie() {
-                if let notificationToken = Defaults[.notificationToken] {
-                    NotificationPermissionHelper.shared
-                        .registerDeviceTokenWithServer(deviceToken: notificationToken)
-                }
-            }
-
-            SpaceStore.shared.refresh(force: true)
-        } completion: {
-            completion?()
-        }
-    }
-
-    private func openURLFromAuth(_ url: URL) {
-        DispatchQueue.main.async {
-            self.openURLInNewTab(url)
-            self.hideCardGrid(withAnimation: false)
-        }
-    }
-
-    private func setTokenAndOpenURL(token: String, url: URL) {
-        NeevaUserInfo.shared.setLoginCookie(token)
-
-        if let notificationToken = Defaults[.notificationToken] {
-            NotificationPermissionHelper.shared
-                .registerDeviceTokenWithServer(deviceToken: notificationToken)
-        }
-
-        let httpCookieStore = self.tabManager.configuration.websiteDataStore.httpCookieStore
-        httpCookieStore.setCookie(NeevaConstants.loginCookie(for: token)) {
-            DispatchQueue.main.async {
-                self.openURLFromAuth(url)
-            }
-        }
-    }
-}
-
 // MARK: - Welcome flow
 extension BrowserViewController {
     func presentWelcomeFlow(startScreen: WelcomeFlowScreen?) {
@@ -152,7 +51,8 @@ extension BrowserViewController {
 // MARK: - Sign In or Up
 extension BrowserViewController {
     func presentSignInOrUpFlow(
-        startScreen: SignInOrUpFlowScreen?, onCompleteDismissZeroQuery: Bool = false
+        startScreen: SignInOrUpFlowScreen? = nil, onCompleteDismissZeroQuery: Bool = false,
+        onCompleteHideCardGrid: Bool = false
     ) {
         let signInOrUpFlowModel = SignInOrUpFlowModel(
             authStore: AuthStore(bvc: self),
@@ -161,6 +61,12 @@ extension BrowserViewController {
 
                 if onCompleteDismissZeroQuery {
                     self.dismissEditingAndHideZeroQuery()
+                }
+
+                if onCompleteHideCardGrid {
+                    DispatchQueue.main.async {
+                        self.hideCardGrid(withAnimation: true)
+                    }
                 }
             }
         )

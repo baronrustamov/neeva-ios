@@ -80,7 +80,7 @@ class WebUIMessageHelper: TabContentScript {
                 }
             }
 
-            bvc.presentIntroViewController(true)
+            bvc.presentSignInOrUpFlow()
         default:
             break
         }

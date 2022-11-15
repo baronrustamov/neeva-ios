@@ -211,12 +211,7 @@ struct TabContainerContent: View {
                                     attributes: EnvironmentHelper.shared.getFirstRunAttributes())
                                 let bvc = zeroQueryModel.bvc
                                 bvc.chromeModel.setEditingLocation(to: false)
-                                bvc.presentIntroViewController(
-                                    true,
-                                    onDismiss: {
-                                        bvc.hideCardGrid(withAnimation: true)
-                                    }
-                                )
+                                bvc.presentSignInOrUpFlow(onCompleteHideCardGrid: true)
                             }
                     default:
                         EmptyView()

@@ -128,13 +128,6 @@ class BrowserViewController: UIViewController {
 
     var findInPageModel: FindInPageModel?
 
-    lazy var introViewModel: IntroViewModel = {
-        IntroViewModel(
-            presentationController: self,
-            overlayManager: overlayManager,
-            toastViewManager: toastViewManager)
-    }()
-
     private(set) var readerModeCache: ReaderModeCache
     private(set) var screenshotHelper: ScreenshotHelper!
 
@@ -836,7 +829,6 @@ class BrowserViewController: UIViewController {
             dismissEditingAndHideZeroQuerySync(wasCancelled: false)
         }
 
-        introViewModel.dismiss(nil)
         overlayManager.hideCurrentOverlay()
 
         DispatchQueue.main.async {
@@ -1716,7 +1708,7 @@ extension BrowserViewController {
 
                     self.overlayManager.hideCurrentOverlay()
 
-                    self.presentIntroViewController(true)
+                    self.presentSignInOrUpFlow()
                 }
         }
     }
@@ -1743,14 +1735,7 @@ extension BrowserViewController {
                 )
 
                 self.overlayManager.hideCurrentOverlay()
-                self.presentIntroViewController(
-                    true,
-                    onDismiss: {
-                        DispatchQueue.main.async {
-                            self.hideCardGrid(withAnimation: true)
-                        }
-                    }
-                )
+                self.presentSignInOrUpFlow(onCompleteHideCardGrid: true)
             }
         }
 

@@ -24,7 +24,7 @@ struct SpacesIntroOverlayContent: View {
             secondButtonText: "Learn More About Spaces",
             firstButtonPressed: {
                 let bvc = SceneDelegate.getBVC(with: tabModel.manager.scene)
-                bvc.presentIntroViewController(true)
+                bvc.presentSignInOrUpFlow()
             },
             secondButtonPressed: {
                 onOpenURL(learnMoreURL)
