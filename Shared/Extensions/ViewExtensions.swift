@@ -5,19 +5,41 @@
 import Combine
 import SwiftUI
 
+// MARK: - Corner Radius
 // Enable cornerRadius to apply only to specific corners.
 // From https://stackoverflow.com/questions/56760335/round-specific-corners-swiftui
 private struct RoundedCorner: Shape {
     var radius: CGFloat = .infinity
     var corners: CornerSet = .all
 
-    @Environment(\.layoutDirection) var layoutDirection
+    let layoutDirection: LayoutDirection
 
     func path(in rect: CGRect) -> Path {
         let path = UIBezierPath(
-            roundedRect: rect, byRoundingCorners: corners.rectCorners(for: layoutDirection),
-            cornerRadii: CGSize(width: radius, height: radius))
+            roundedRect: rect,
+            byRoundingCorners: corners.rectCorners(for: layoutDirection),
+            cornerRadii: CGSize(width: radius, height: radius)
+        )
         return Path(path.cgPath)
+    }
+}
+
+/// RoundedCornerModifier to apply clipShape with `RoundedCorner`
+///
+/// This wrapper helps silence the runtime warning.
+/// ```[SwiftUI] Accessing Environment<LayoutDirection>'s value outside of being installed on a View. This will always read the default value and will not update.```
+/// It appears that accessing the Environment value in a ViewModifier is allowed
+private struct RoundedCornerModifier: ViewModifier {
+    @Environment(\.layoutDirection) var layoutDirection
+
+    let radius: CGFloat
+    let corners: CornerSet
+
+    func body(content: Content) -> some View {
+        content
+            .clipShape(
+                RoundedCorner(radius: radius, corners: corners, layoutDirection: layoutDirection)
+            )
     }
 }
 
@@ -76,9 +98,12 @@ public struct CornerSet: OptionSet {
 extension View {
     /// Clips the views to a rectangle with only the specified corners rounded.
     public func cornerRadius(_ radius: CGFloat, corners: CornerSet) -> some View {
-        clipShape(RoundedCorner(radius: radius, corners: corners))
+        modifier(RoundedCornerModifier(radius: radius, corners: corners))
     }
+}
 
+// MARK: - Toggle Style
+extension View {
     /// Applies a toggle style that turns them from green to blue
     public func applyToggleStyle() -> some View {
         toggleStyle(SwitchToggleStyle(tint: Color.ui.adaptive.blue))
@@ -90,6 +115,7 @@ extension View {
     }
 }
 
+// MARK: - if
 // From https://www.avanderlee.com/swiftui/conditional-view-modifier/
 extension View {
     /// Applies the given transform if the given condition evaluates to `true`.
@@ -123,6 +149,7 @@ extension View {
     }
 }
 
+// MARK: - Screen Space Offset
 private struct ScreenSpaceOffset: ViewModifier {
     let x: CGFloat
     let y: CGFloat
@@ -141,6 +168,7 @@ extension View {
     }
 }
 
+// MARK: - FocusOnAppear
 public struct FocusOnAppearModifier: ViewModifier {
     let focus: Bool
     let trigger: Bool
@@ -165,6 +193,7 @@ public struct FocusOnAppearModifier: ViewModifier {
     }
 }
 
+// MARK: - React Style Hooks
 private struct Pair<T0: Equatable, T1: Equatable>: Equatable {
     let zero: T0, one: T1
 }
@@ -217,6 +246,7 @@ extension View {
     }
 }
 
+// MARK: - Rounded Outer Border
 /// Wraps a border around the content to which it is applied, resulting in
 /// the content being `2 * lineWidth` larger in width and height.
 struct RoundedOuterBorder: ViewModifier {
@@ -244,6 +274,7 @@ extension View {
     }
 }
 
+// MARK: - Overlay
 extension EnvironmentValues {
     private struct HideOverlayKey: EnvironmentKey {
         static let defaultValue: () -> Void = {}
@@ -255,6 +286,7 @@ extension EnvironmentValues {
     }
 }
 
+// MARK: - On Size of View Changed
 extension View {
     public func onHeightOfViewChanged(perform updater: @escaping (CGFloat) -> Void) -> some View {
         self
