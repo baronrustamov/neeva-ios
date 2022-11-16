@@ -45,7 +45,7 @@ struct InternalSettingsView: View {
     @Default(.lastZeroQueryImpUpdatedTimestamp) var lastZeroQueryImpUpdatedTimestamp
     @Default(.didTriggerSystemReviewDialog) var didTriggerSystemReviewDialog
     @Default(.numberOfAppForeground) var numberOfAppForeground
-    @Default(.forceProdGraphQLLogger) var forceProdGraphQLLogger
+    @Default(.enableDebugGraphQLLogger) var enableDebugGraphQLLogger
     @Default(.firstRunImpressionLogged) var firstRunImpressionLogged
     @Default(.lastReportedConversionEvent) var lastReportedConversionEvent
     @Default(.lastDefaultBrowserInterstitialChoice) var lastDefaultBrowserInterstitialChoice
@@ -175,7 +175,7 @@ struct InternalSettingsView: View {
             }
 
             Section(header: Text(verbatim: "Miscellaneous")) {
-                Toggle(String("forceProdGraphQLLogger"), isOn: $forceProdGraphQLLogger)
+                Toggle(String("enableDebugGraphQLLogger"), isOn: $enableDebugGraphQLLogger)
                 Toggle(String("saveLogins"), isOn: $saveLogins)
                     // comment this line out if you’re working on logins and need access
                     .disabled(!saveLogins)

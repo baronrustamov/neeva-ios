@@ -245,8 +245,13 @@ extension Defaults.Keys {
     public static let lastZeroQueryImpUpdatedTimestamp = Defaults.Key<Date?>(
         "lastZeroQueryImpUpdatedTimestamp")
 
-    public static let forceProdGraphQLLogger = Defaults.BoolKey(
-        "forceProdGraphQLLogger", default: false)
+    #if DEBUG
+        public static let enableDebugGraphQLLogger = Defaults.BoolKey(
+            "enableDebugGraphQLLogger", default: true)
+    #else
+        public static let enableDebugGraphQLLogger = Defaults.BoolKey(
+            "enableDebugGraphQLLogger", default: false)
+    #endif
 
     public static let lastReportedConversionEvent = Defaults.Key<Int>(
         "lastReportedConversionEvent", default: -1)

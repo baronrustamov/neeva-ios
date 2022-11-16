@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import Defaults
 import SwiftUI
 
 struct ServerLoggingSettingsView: View {
@@ -18,13 +19,18 @@ private struct LogListView: View {
     @State private var item = DebugLog(pathString: "", attributes: [])
     @State private var showingTable = false
 
+    @Default(.enableDebugGraphQLLogger) var enableDebugGraphQLLogger
+
     var body: some View {
         List {
-            ForEach(0..<debugLoggerHistory.count, id: \.self) { i in
-                VStack(alignment: .leading) {
-                    NavigationLink(debugLoggerHistory[i].path) {
-                        LogView(log: debugLoggerHistory[i])
-                            .navigationTitle(debugLoggerHistory[i].path)
+            Toggle(String("enableDebugGraphQLLogger"), isOn: $enableDebugGraphQLLogger)
+            Section(header: Text("Events")) {
+                ForEach(0..<debugLoggerHistory.count, id: \.self) { i in
+                    VStack(alignment: .leading) {
+                        NavigationLink(debugLoggerHistory[i].path) {
+                            LogView(log: debugLoggerHistory[i])
+                                .navigationTitle(debugLoggerHistory[i].path)
+                        }
                     }
                 }
             }

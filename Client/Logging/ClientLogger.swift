@@ -126,18 +126,16 @@ class ClientLogger {
         let clientLogCounter = ClientLogCounter(path: path.rawValue, attributes: loggingAttributes)
         let clientLog = ClientLog(counter: clientLogCounter)
 
-        #if DEBUG
-            if !Defaults[.forceProdGraphQLLogger] {
-                debugLoggerHistory.insert(
-                    DebugLog(
-                        path,
-                        attributes: loggingAttributes
-                    ),
-                    at: 0
-                )
-                return
-            }
-        #endif
+        if Defaults[.enableDebugGraphQLLogger] {
+            debugLoggerHistory.insert(
+                DebugLog(
+                    path,
+                    attributes: loggingAttributes
+                ),
+                at: 0
+            )
+            return
+        }
 
         if let shouldCollectUsageStats = Defaults[.shouldCollectUsageStats] {
             if shouldCollectUsageStats {
