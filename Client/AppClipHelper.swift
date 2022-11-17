@@ -7,7 +7,7 @@ import Foundation
 class AppClipHelper {
     static let appClipGroupId = "group.co.neeva.app.ios.browser.app-clip.login"
 
-    static func retreiveAppClipData() -> String? {
+    static func retrieveAppClipData() -> String? {
         guard
             let appClipPath = FileManager.default.containerURL(
                 forSecurityApplicationGroupIdentifier: appClipGroupId)?.appendingPathComponent(

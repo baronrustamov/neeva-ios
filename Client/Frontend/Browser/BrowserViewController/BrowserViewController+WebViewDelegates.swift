@@ -901,8 +901,8 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         // If this is a request to our local web server, use our private credentials.
-        if challenge.protectionSpace.host == "localhost"
-            && challenge.protectionSpace.port == Int(WebServer.sharedInstance.server.port)
+        if challenge.protectionSpace.host == "localhost",
+            challenge.protectionSpace.port == Int(WebServer.sharedInstance.port)
         {
             completionHandler(.useCredential, WebServer.sharedInstance.credentials)
             return

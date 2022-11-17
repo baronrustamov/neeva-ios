@@ -7,23 +7,31 @@ import GCDWebServers
 import Shared
 
 class WebServer {
-    private let log = Logger.browser
-
     static let sharedInstance = WebServer()
-
-    let server: GCDWebServer = GCDWebServer()
-
-    var base: String {
-        return "http://localhost:\(server.port)"
-    }
 
     /// The private credentials for accessing resources on this Web server.
     let credentials: URLCredential
+
+    private let log = Logger.browser
+
+    private let server: GCDWebServer = GCDWebServer()
 
     /// A random, transient token used for authenticating requests.
     /// Other apps are able to make requests to our local Web server,
     /// so this prevents them from accessing any resources.
     fileprivate let sessionToken = UUID().uuidString
+
+    var base: String {
+        return "http://localhost:\(server.port)"
+    }
+
+    var isRunning: Bool {
+        server.isRunning
+    }
+
+    var port: UInt {
+        server.port
+    }
 
     init() {
         credentials = URLCredential(user: sessionToken, password: "", persistence: .forSession)
@@ -43,6 +51,10 @@ class WebServer {
         return server.isRunning
     }
 
+    func stop() {
+        server.stop()
+    }
+
     /// Convenience method to register a dynamic handler. Will be mounted at $base/$module/$resource
     func registerHandlerForMethod(
         _ method: String, module: String, resource: String,
@@ -57,8 +69,23 @@ class WebServer {
             return handler(request)
         }
         server.addHandler(
-            forMethod: method, path: "/\(module)/\(resource)", request: GCDWebServerRequest.self,
-            processBlock: wrappedHandler)
+            forMethod: method, path: "/\(module)/\(resource)",
+            request: GCDWebServerRequest.self,
+            processBlock: wrappedHandler
+        )
+    }
+
+    func registerGETHandler(
+        forPath: String,
+        filePath: String
+    ) {
+        server.addGETHandler(
+            forPath: forPath,
+            filePath: filePath,
+            isAttachment: false,
+            cacheAge: UInt.max,
+            allowRangeRequests: true
+        )
     }
 
     /// Convenience method to register a resource in the main bundle. Will be mounted at $base/$module/$resource

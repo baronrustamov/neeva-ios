@@ -19,6 +19,6 @@ class AppClipTest: XCTestCase {
         let testValue = "testing"
 
         AppClipHelper.saveTokenToDevice(testValue)
-        XCTAssertEqual(AppClipHelper.retreiveAppClipData(), testValue)
+        XCTAssertEqual(AppClipHelper.retrieveAppClipData(), testValue)
     }
 }

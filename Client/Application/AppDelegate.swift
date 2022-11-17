@@ -229,7 +229,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     func setUpWebServer(_ profile: Profile) {
         let server = WebServer.sharedInstance
-        guard !server.server.isRunning else { return }
+        guard !server.isRunning else { return }
 
         ReaderModeHandlers.register(server, profile: profile)
 
@@ -245,7 +245,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
 
         if AppConstants.IsRunningTest || AppConstants.IsRunningPerfTest {
-            registerHandlersForTestMethods(server: server.server)
+            server.registerHandlersForTestMethods()
         }
 
         // Bug 1223009 was an issue whereby CGDWebserver crashed when moving to a background task

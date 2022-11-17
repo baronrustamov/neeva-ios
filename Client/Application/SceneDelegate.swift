@@ -70,33 +70,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             Defaults[.applicationCleanlyBackgrounded] = false
         }
 
-        // Safe to call this again if already open.
-        getAppDelegate().profile._reopen()
-
         checkForSignInTokenOnDevice()
-
-        // This loads tabs queued up using the ShareTo "Load in Background" functionality.
-        // We execute a trivial deferred to put this on the background queue.
-        succeed().upon { _ in
-            self.bvc.loadQueuedTabs()
-        }
-
-        getAppDelegate().updateTopSitesWidget()
-
-        // If server is already running this won't do anything.
-        // This will restart the server if it was stopped in `sceneDidEnterBackground`.
-        getAppDelegate().setUpWebServer(getAppDelegate().profile)
 
         NotificationPermissionHelper.shared.updatePermissionState()
 
         // Continue playing the video if there is a player
         if let interstitialViewModel = bvc.interstitialViewModel {
             interstitialViewModel.player?.play()
-        }
-
-        // Update the selectedTab.lastExecutedTime if the tab is visible.
-        if bvc.browserModel.contentVisibilityModel.showContent {
-            bvc.tabManager.selectedTab?.lastExecutedTime = Date.nowMilliseconds()
         }
     }
 
@@ -108,9 +88,35 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             callSite: LocalNotifications.ScheduleCallSite.enterForeground
         )
 
+        // If server is already running this won't do anything.
+        // This will restart the server if it was stopped in `sceneDidEnterBackground`.
+        if !WebServer.sharedInstance.isRunning {
+            do {
+                try WebServer.sharedInstance.start()
+                log.error("WebServer started")
+            } catch let err as NSError {
+                log.error("Failed to start WebServer: \(err)")
+            }
+        }
+
+        // Safe to call this again if already open.
+        getAppDelegate().profile._reopen()
+
+        // This loads tabs queued up using the ShareTo "Load in Background" functionality on the background queue.
+        DispatchQueue.global(qos: .userInitiated).async { [self] in
+            self.bvc.loadQueuedTabs()
+        }
+
         bvc.tabManager.removeBlankTabs()
         bvc.tabManager.updateAllTabDataAndSendNotifications(notify: true)
         bvc.downloadQueue.resumeAll()
+
+        // Update the selectedTab.lastExecutedTime if the tab is visible.
+        if bvc.browserModel.contentVisibilityModel.showContent {
+            bvc.tabManager.selectedTab?.lastExecutedTime = Date.nowMilliseconds()
+        }
+
+        getAppDelegate().updateTopSitesWidget()
 
         var attributes = EnvironmentHelper.shared.getAttributes()
         if !NeevaUserInfo.shared.hasLoginCookie(),
@@ -136,19 +142,45 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         )
     }
 
-    func sceneDidEnterBackground(_ scene: UIScene) {
+    /*
+     Use deactivation to preserve the user’s data and put your app in a quiet state by pausing all major work; specifically:
+     Save user data to disk and close any open files.
+     Suspend dispatch and operation queues.
+     Don’t schedule any new tasks for execution.
+     Invalidate any active timers.
+     Pause gameplay automatically.
+     Don’t commit any new Metal work to be processed.
+     Don’t commit any new OpenGL commands.
+     */
+    func sceneWillResignActive(_ scene: UIScene) {
         log.info("activeSceneCount=\(Self.activeSceneCount)")
-
         bvc.tabManager.preserveTabs()
 
         Self.activeSceneCount -= 1
+    }
+
+    /*
+     During a background transition, perform as many of the following tasks as makes sense for your app:
+     Discard any images or media that you read directly from files.
+     Discard any large, in-memory objects that you can recreate or reload from disk.
+     Release access to the camera and other shared hardware resources.
+     Hide sensitive information (such as passwords) in your app’s user interface.
+     Dismiss alerts and other temporary interfaces.
+     Close connections to any shared system databases.
+     Unregister from Bonjour services and close any listening sockets associated with them.
+     Ensure that all Metal command buffers have been scheduled. For more information, see Preparing Your Metal App to Run in the Background.
+     Ensure that all OpenGL commands you previously submitted have finished.
+     */
+    func sceneDidEnterBackground(_ scene: UIScene) {
+        log.info("activeSceneCount=\(Self.activeSceneCount)")
+
         if Self.activeSceneCount == 0 {
             // At this point we are happy to mark the app as applicationCleanlyBackgrounded. If a crash happens in background
             // sync then that crash will still be reported. But we won't bother the user with the Restore Tabs
             // dialog. We don't have to because at this point we already saved the tab state properly.
             Defaults[.applicationCleanlyBackgrounded] = true
 
-            WebServer.sharedInstance.server.stop()
+            WebServer.sharedInstance.stop()
             getAppDelegate().shutdownProfile()
         }
 
@@ -533,7 +565,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func checkForSignInTokenOnDevice() {
         log.info("Checking for sign in token from App Clip on device")
 
-        if let signInToken = AppClipHelper.retreiveAppClipData() {
+        if let signInToken = AppClipHelper.retrieveAppClipData() {
             self.handleSignInToken(signInToken)
         } else {
             log.info("Unable to retrieve sign in token from App Clip on device")
