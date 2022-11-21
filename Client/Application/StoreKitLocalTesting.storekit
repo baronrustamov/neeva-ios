@@ -28,7 +28,11 @@
           "familyShareable" : false,
           "groupNumber" : 2,
           "internalID" : "5FAAE248",
-          "introductoryOffer" : null,
+          "introductoryOffer" : {
+            "internalID" : "E51E00D5",
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1W"
+          },
           "localizations" : [
             {
               "description" : "Monthly Plan",
@@ -53,7 +57,11 @@
           "familyShareable" : false,
           "groupNumber" : 1,
           "internalID" : "85FDD3B2",
-          "introductoryOffer" : null,
+          "introductoryOffer" : {
+            "internalID" : "1E737677",
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1W"
+          },
           "localizations" : [
             {
               "description" : "Yearly Plan",

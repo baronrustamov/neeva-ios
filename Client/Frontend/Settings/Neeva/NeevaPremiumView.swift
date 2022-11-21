@@ -217,6 +217,13 @@ struct NeevaPremiumView: View {
                     }
                 )
                 .buttonStyle(.neeva(.primary))
+
+                if let subText = PremiumHelpers.primaryActionSubText(currentPremiumPlan),
+                    !subText.isEmpty
+                {
+                    Text(LocalizedStringKey(subText))
+                        .frame(maxWidth: .infinity)
+                }
             }
 
             if isSubscribedToPlan() {

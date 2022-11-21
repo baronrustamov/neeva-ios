@@ -246,7 +246,7 @@ struct WelcomeFlowPlansView: View {
                 .padding(.bottom, 10)
 
                 if let subText = PremiumHelpers.primaryActionSubText(model.currentPremiumPlan),
-                    subText != ""
+                    !subText.isEmpty
                 {
                     Text(LocalizedStringKey(subText))
                         .frame(maxWidth: .infinity)
