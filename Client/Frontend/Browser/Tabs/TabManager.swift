@@ -263,8 +263,12 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             previousWasIncognito: previous?.isIncognito ?? false)
 
         store.preserveTabs(
-            tabs, archivedTabs: archivedTabs, existingSavedTabs: recentlyClosedTabsFlattened,
-            selectedTab: selectedTab, for: scene)
+            tabs,
+            archivedTabs: archivedTabs,
+            existingSavedTabs: recentlyClosedTabsFlattened,
+            selectedTab: selectedTab,
+            for: scene
+        )
 
         assert(tab === selectedTab, "Expected tab is selected")
 
@@ -1146,8 +1150,17 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
         }
 
         let savedTabs = tabs.map {
-            $0.saveSessionDataAndCreateSavedTab(
-                isSelected: selectedTab === $0, tabIndex: self.tabs.firstIndex(of: $0))
+            let savedTab = $0.saveSessionDataAndCreateSavedTab(
+                isSelected: selectedTab === $0,
+                tabIndex: self.tabs.firstIndex(of: $0),
+                isForArchivedTab: FeatureFlag[.archivedDontCloseTabs]
+            )
+            
+            if FeatureFlag[.archivedDontCloseTabs] {
+                archivedTabs.append(.init(savedTab: savedTab))
+            }
+            
+            return savedTab
         }
 
         if recentlyClosedTabGroupTimer?.isValid ?? false, recentlyClosedTabs.count > 0 {
@@ -1156,7 +1169,7 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
             recentlyClosedTabs.insert(savedTabs, at: 0)
         }
 
-        if showToast {
+        if showToast && !FeatureFlag[.archivedDontCloseTabs] {
             closedTabsToShowToastFor.append(contentsOf: savedTabs)
         }
 

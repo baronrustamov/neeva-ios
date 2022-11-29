@@ -8,6 +8,7 @@ import Storage
 
 class ArchivedTab: NSObject {
     let savedTab: SavedTab
+    
     init(savedTab: SavedTab) {
         self.savedTab = savedTab
     }
@@ -22,4 +23,5 @@ extension ArchivedTab: GenericTab {
     var rootUUID: String { savedTab.rootUUID }
     var isPinned: Bool { false }  // Cannot be pinned
     var parentSpaceID: String? { nil }  // Cannot have a parent
+    var manuallyArchived: Bool { savedTab.manuallyArchived ?? false }
 }

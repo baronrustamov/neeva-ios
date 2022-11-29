@@ -141,7 +141,7 @@ struct HistoryAndArchivedTabsPanelView: View {
                     showArchivedTabSettings = true
                 } label: {
                     HStack {
-                        Text("Archive Tabs")
+                        Text("Auto Archive Tabs")
                         Spacer()
 
                         Label {

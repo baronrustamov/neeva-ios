@@ -267,7 +267,8 @@ class Tab: NSObject, ObservableObject, GenericTab {
                 title: tab.displayTitle,
                 history: history,
                 lastUsed: Date.nowMilliseconds(),
-                icon: nil)
+                icon: nil
+            )
         } else if let sessionData = tab.sessionData, !sessionData.urls.isEmpty {
             let history = Array(sessionData.urls.filter(RemoteTab.shouldIncludeURL).reversed())
             if let displayURL = history.first {
@@ -277,7 +278,8 @@ class Tab: NSObject, ObservableObject, GenericTab {
                     title: tab.displayTitle,
                     history: history,
                     lastUsed: sessionData.lastUsedTime,
-                    icon: nil)
+                    icon: nil
+                )
             }
         }
 
@@ -825,18 +827,31 @@ class Tab: NSObject, ObservableObject, GenericTab {
     }
 
     func saveSessionDataAndCreateSavedTab(
-        isSelected: Bool, tabIndex: Int?, isForPinnedTabPlaceholder: Bool = false
+        isSelected: Bool,
+        tabIndex: Int?,
+        isForPinnedTabPlaceholder: Bool = false,
+        isForArchivedTab: Bool = false
     ) -> SavedTab {
         saveSessionData(isForPinnedTabPlaceholder: isForPinnedTabPlaceholder)
 
         return SavedTab(
-            screenshotUUID: screenshotUUID, isSelected: isSelected,
-            title: title ?? lastTitle, isIncognito: isIncognito, isPinned: isPinned,
-            pinnedTime: pinnedTime, lastExecutedTime: lastExecutedTime,
-            faviconURL: displayFavicon?.url, url: url, sessionData: sessionData,
-            uuid: tabUUID, rootUUID: rootUUID, parentUUID: parentUUID ?? "",
-            tabIndex: tabIndex, parentSpaceID: parentSpaceID ?? "",
-            pageZoom: pageZoom)
+            screenshotUUID: screenshotUUID,
+            isSelected: isSelected,
+            title: title ?? lastTitle,
+            isIncognito: isIncognito,
+            isPinned: isPinned,
+            pinnedTime: pinnedTime,
+            lastExecutedTime: lastExecutedTime,
+            faviconURL: displayFavicon?.url,
+            url: url, sessionData: sessionData,
+            uuid: tabUUID,
+            rootUUID: rootUUID,
+            parentUUID: parentUUID ?? "",
+            manuallyArchived: isForArchivedTab,
+            tabIndex: tabIndex,
+            parentSpaceID: parentSpaceID ?? "",
+            pageZoom: pageZoom
+        )
     }
 }
 

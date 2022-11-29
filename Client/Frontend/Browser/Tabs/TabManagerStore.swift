@@ -69,7 +69,8 @@ class TabManagerStore {
         for tab in tabs {
             tab.tabUUID = tab.tabUUID.isEmpty ? UUID().uuidString : tab.tabUUID
             let savedTab = tab.saveSessionDataAndCreateSavedTab(
-                isSelected: tab == selectedTab, tabIndex: nil)
+                isSelected: tab == selectedTab, tabIndex: nil
+            )
             savedTabs.append(savedTab)
 
             if let image = tab.screenshot, let uuid = tab.screenshotUUID {
@@ -177,7 +178,9 @@ class TabManagerStore {
             let shouldBeArchived =
                 !savedTab.isPinned
                 && shouldBeArchived(
-                    basedOn: savedTab.lastExecutedTime ?? Date.nowMilliseconds())
+                    basedOn: savedTab.lastExecutedTime ?? Date.nowMilliseconds()
+                ) || savedTab.manuallyArchived ?? false
+            
             if shouldBeArchived {
                 tabManager.add(archivedTab: ArchivedTab(savedTab: savedTab))
             } else {

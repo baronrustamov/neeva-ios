@@ -19,6 +19,7 @@ class SavedTab: NSObject, NSCoding {
     let tabUUID: String
     let rootUUID: String
     let parentUUID: String?
+    let manuallyArchived: Bool?
 
     // Used to support undo close tab, so that we can remember where to re-insert
     // the tab upon restore.
@@ -29,10 +30,23 @@ class SavedTab: NSObject, NSCoding {
     let pageZoom: CGFloat?
 
     init(
-        screenshotUUID: UUID?, isSelected: Bool, title: String?, isIncognito: Bool, isPinned: Bool,
-        pinnedTime: TimeInterval?, lastExecutedTime: Timestamp,
-        faviconURL: URL?, url: URL?, sessionData: SessionData?, uuid: String, rootUUID: String,
-        parentUUID: String, tabIndex: Int?, parentSpaceID: String, pageZoom: CGFloat
+        screenshotUUID: UUID?,
+        isSelected: Bool,
+        title: String?,
+        isIncognito: Bool,
+        isPinned: Bool,
+        pinnedTime: TimeInterval?,
+        lastExecutedTime: Timestamp,
+        faviconURL: URL?,
+        url: URL?,
+        sessionData: SessionData?,
+        uuid: String,
+        rootUUID: String,
+        parentUUID: String,
+        manuallyArchived: Bool?,
+        tabIndex: Int?,
+        parentSpaceID: String,
+        pageZoom: CGFloat
     ) {
         self.screenshotUUID = screenshotUUID
         self.isSelected = isSelected
@@ -47,6 +61,7 @@ class SavedTab: NSObject, NSCoding {
         self.tabUUID = uuid
         self.rootUUID = rootUUID
         self.parentUUID = parentUUID
+        self.manuallyArchived = manuallyArchived
         self.tabIndex = tabIndex
         self.parentSpaceID = parentSpaceID
         self.pageZoom = pageZoom
@@ -68,6 +83,7 @@ class SavedTab: NSObject, NSCoding {
         self.tabUUID = coder.decodeObject(forKey: "UUID") as? String ?? UUID().uuidString
         self.rootUUID = coder.decodeObject(forKey: "rootUUID") as? String ?? UUID().uuidString
         self.parentUUID = coder.decodeObject(forKey: "parentUUID") as? String
+        self.manuallyArchived = coder.decodeObject(forKey: "manuallyArchived") as? Bool
         self.tabIndex = coder.decodeObject(forKey: "tabIndex") as? Int
         self.parentSpaceID = coder.decodeObject(forKey: "parentSpaceID") as? String
         self.pageZoom = coder.decodeObject(forKey: "pageZoom") as? CGFloat
@@ -87,6 +103,7 @@ class SavedTab: NSObject, NSCoding {
         coder.encode(tabUUID, forKey: "UUID")
         coder.encode(rootUUID, forKey: "rootUUID")
         coder.encode(parentUUID, forKey: "parentUUID")
+        coder.encode(manuallyArchived, forKey: "manuallyArchived")
         coder.encode(tabIndex, forKey: "tabIndex")
         coder.encode(parentSpaceID, forKey: "parentSpaceID")
         coder.encode(pageZoom, forKey: "pageZoom")
