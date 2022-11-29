@@ -1155,11 +1155,11 @@ class TabManager: NSObject, TabEventHandler, WKNavigationDelegate {
                 tabIndex: self.tabs.firstIndex(of: $0),
                 isForArchivedTab: FeatureFlag[.archivedDontCloseTabs]
             )
-            
+
             if FeatureFlag[.archivedDontCloseTabs] {
                 archivedTabs.append(.init(savedTab: savedTab))
             }
-            
+
             return savedTab
         }
 

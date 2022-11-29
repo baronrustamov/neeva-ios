@@ -180,7 +180,7 @@ class TabManagerStore {
                 && shouldBeArchived(
                     basedOn: savedTab.lastExecutedTime ?? Date.nowMilliseconds()
                 ) || savedTab.manuallyArchived ?? false
-            
+
             if shouldBeArchived {
                 tabManager.add(archivedTab: ArchivedTab(savedTab: savedTab))
             } else {

@@ -8,7 +8,7 @@ import Storage
 
 class ArchivedTab: NSObject {
     let savedTab: SavedTab
-    
+
     init(savedTab: SavedTab) {
         self.savedTab = savedTab
     }
