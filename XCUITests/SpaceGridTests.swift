@@ -151,7 +151,7 @@ class SpaceGridTests: BaseTestCase {
 
         XCTAssertFalse(app.buttons["Learn More About Spaces"].exists)
 
-        app.buttons[SpaceServiceMock.mySpaceTitle].tap()
+        app.buttons[SpaceServiceMock.mySpaceTitle].tap(force: true)
 
         XCTAssertTrue(app.buttons["Learn More About Spaces"].exists)
     }
@@ -159,6 +159,10 @@ class SpaceGridTests: BaseTestCase {
     func testPinSpace() {
         app.buttons["Show Tabs"].tap()
         app.buttons["Spaces"].tap()
+
+        // On XCode 14.1, we need to interact the screen somehow in order to select a space in test
+        app.swipeDown()
+
         app.buttons[SpaceServiceMock.mySpaceTitle].press(forDuration: 1)
 
         XCTAssertTrue(app.buttons["Pin"].exists)
@@ -183,6 +187,9 @@ class SpaceGridTests: BaseTestCase {
         app.buttons["Show Tabs"].tap()
         app.buttons["Spaces"].tap()
 
+        // On XCode 14.1, we need to interact the screen somehow in order to select a space in test
+        app.swipeDown()
+
         XCTAssertFalse(app.buttons["pin"].exists)
 
         app.buttons[SpaceServiceMock.mySpaceTitle].press(forDuration: 1)
@@ -201,6 +208,10 @@ class SpaceGridTests: BaseTestCase {
     func testPinnedSpaceIsFirstInAddToSpaceSheet() {
         app.buttons["Show Tabs"].tap()
         app.buttons["Spaces"].tap()
+
+        // On XCode 14.1, we need to interact the screen somehow in order to select a space in test
+        app.swipeDown()
+
         app.buttons[SpaceServiceMock.mySpaceTitle].press(forDuration: 1)
         app.buttons["Pin"].tap()
 

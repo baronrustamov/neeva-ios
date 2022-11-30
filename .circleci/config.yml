@@ -92,7 +92,7 @@ commands:
           command: ./Scripts/uitests-helper.sh move-iphone-screenshots
       - run:
           name: UITests - iPad
-          command: xcodebuild test-without-building -scheme Client -workspace Neeva.xcworkspace -destination 'platform=iOS Simulator,name=iPad Pro (11-inch) (3rd generation)' -only-testing UITests -resultBundlePath uitests-ipad-$CIRCLE_BUILD_NUM.xcresult
+          command: xcodebuild test-without-building -scheme Client -workspace Neeva.xcworkspace -destination 'platform=iOS Simulator,name=iPad Pro (11-inch) (4th generation)' -only-testing UITests -resultBundlePath uitests-ipad-$CIRCLE_BUILD_NUM.xcresult
       - run:
           name: Zip Test Results
           command: ./Scripts/uitests-helper.sh store-artifacts
@@ -113,7 +113,7 @@ commands:
           name: XCUITests - iPad
           command: >
             xcodebuild test-without-building -scheme Client -workspace Neeva.xcworkspace
-            -destination 'platform=iOS Simulator,name=iPad Pro (11-inch) (3rd generation)' -resultBundlePath xcuitests-$CIRCLE_BUILD_NUM.xcresult
+            -destination 'platform=iOS Simulator,name=iPad Pro (11-inch) (4th generation)' -resultBundlePath xcuitests-$CIRCLE_BUILD_NUM.xcresult
             $(find -E XCUITests -regex '.*Tests?\.swift' | sed -e 's/^/-only-testing:/' -e 's/\.swift$//' | circleci tests split)
       - store-xcuitest-artifact
   store-xcuitest-artifact:
@@ -169,7 +169,7 @@ commands:
 jobs:
   build:
     macos:
-      xcode: "14.0.0"
+      xcode: "14.1.0"
     resource_class: macos.x86.medium.gen2
     steps:
       - bootstrap
@@ -182,7 +182,7 @@ jobs:
             - ~/Library/Developer/Xcode/DerivedData
   swift-format:
     macos:
-      xcode: "14.0.0"
+      xcode: "14.1.0"
     resource_class: macos.x86.medium.gen2
     steps:
       - restore-build-cache
@@ -190,7 +190,7 @@ jobs:
       - swift-format-check
   test-client:
     macos:
-      xcode: "14.0.0"
+      xcode: "14.1.0"
     resource_class: macos.x86.medium.gen2
     steps:
       - restore-build-cache
@@ -199,14 +199,14 @@ jobs:
       - app-clip-tests
   ui-tests:
     macos:
-      xcode: "14.0.0"
+      xcode: "14.1.0"
     resource_class: macos.x86.medium.gen2
     steps:
       - restore-build-cache
       - ui-tests
   xcui-tests:
     macos:
-      xcode: "14.0.0"
+      xcode: "14.1.0"
     parallelism: 3
     resource_class: macos.x86.medium.gen2
     steps:
@@ -214,7 +214,7 @@ jobs:
       - xcui-tests
   xcui-tests-ipad:
     macos:
-      xcode: "14.0.0"
+      xcode: "14.1.0"
     parallelism: 3
     resource_class: macos.x86.medium.gen2
     steps:

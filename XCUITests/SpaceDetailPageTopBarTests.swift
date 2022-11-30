@@ -63,7 +63,7 @@ class SpaceDetailPageTopBarTests: BaseTestCase {
     func testEditSpace() {
         app.buttons["Show Tabs"].tap()
         app.buttons["Spaces"].tap()
-        app.buttons[SpaceServiceMock.mySpaceTitle].tap()
+        app.buttons[SpaceServiceMock.mySpaceTitle].tap(force: true)
         app.buttons["Compose"].tap(force: true)
 
         waitForExistence(app.textFields["addOrUpdateSpaceTitle"])
@@ -82,7 +82,7 @@ class SpaceDetailPageTopBarTests: BaseTestCase {
     func testShareSpace() {
         app.buttons["Show Tabs"].tap()
         app.buttons["Spaces"].tap()
-        app.buttons[SpaceServiceMock.mySpaceTitle].tap()
+        app.buttons[SpaceServiceMock.mySpaceTitle].tap(force: true)
 
         XCTAssertFalse(app.switches["Enable shareable link, Anyone with the link can view"].exists)
 
@@ -95,7 +95,8 @@ class SpaceDetailPageTopBarTests: BaseTestCase {
         // A Space I own
         app.buttons["Show Tabs"].tap()
         app.buttons["Spaces"].tap()
-        app.buttons[SpaceServiceMock.mySpaceTitle].tap()
+
+        app.buttons[SpaceServiceMock.mySpaceTitle].tap(force: true)
 
         XCTAssertFalse(app.buttons["Delete Space"].exists)
         XCTAssertFalse(app.buttons["Add to another Space"].exists)
@@ -126,7 +127,9 @@ class SpaceDetailPageTopBarTests: BaseTestCase {
     func testDeleteSpace() {
         app.buttons["Show Tabs"].tap()
         app.buttons["Spaces"].tap()
-        app.buttons[SpaceServiceMock.mySpaceTitle].tap()
+
+        // On XCode 14.1, we need to force tapping on the button in order for test to work
+        app.buttons[SpaceServiceMock.mySpaceTitle].tap(force: true)
         app.buttons["Overflow Menu"].tap(force: true)
         waitForExistence(app.buttons["Delete Space"])
         app.buttons["Delete Space"].tap()
@@ -143,6 +146,7 @@ class SpaceDetailPageTopBarTests: BaseTestCase {
     func testUnfollowSpace() {
         app.buttons["Show Tabs"].tap()
         app.buttons["Spaces"].tap()
+
         app.buttons[SpaceServiceMock.spaceNotOwnedByMeTitle].tap()
         app.buttons["Overflow Menu"].tap()
         waitForExistence(app.buttons["Unfollow"])
