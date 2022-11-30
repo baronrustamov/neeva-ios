@@ -1,0 +1,481 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* No comment provided by engineer. */
+". Verify your email address by clicking the link in your inbox." = ". Verify your email address by clicking the link in your inbox.";
+
+/* No comment provided by engineer. */
+"“%@”" = "“%@”";
+
+/* No comment provided by engineer. */
+"**%@**" = "**%@**";
+
+/* No comment provided by engineer. */
+"%@ Membership Unknown" = "%@ Membership Unknown";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* About settings section title */
+"About" = "About";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Add Tab";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "OK";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "An error occured while adding the pass to Wallet. Please try again later.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "Failed to Add Pass";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Address and Search";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* No comment provided by engineer. */
+"An error occured" = "An error occured";
+
+/* No comment provided by engineer. */
+"Apple" = "Apple";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Back";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Block Pop-up Windows";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "Bookmarks";
+
+/* Label for Cancel button */
+"Cancel" = "Cancel";
+
+/* No comment provided by engineer. */
+"Clear" = "Clear";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "Go to copied link?";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Close";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "computer";
+
+/* Context menu item for copying an image to the clipboard */
+"ContextMenu.CopyImageButtonTitle" = "Copy Image";
+
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "Copy Image Link";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "Copy Link";
+
+/* Context menu item for downloading a link URL */
+"ContextMenu.DownloadLinkButtonTitle" = "Download Link";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenInNewTabButtonTitle" = "Open in New Tab";
+
+/* Context menu item for saving an image */
+"ContextMenu.SaveImageButtonTitle" = "Save Image";
+
+/* Context menu item for sharing a link URL */
+"ContextMenu.ShareLinkButtonTitle" = "Share Link";
+
+/* No comment provided by engineer. */
+"Create" = "Create";
+
+/* No comment provided by engineer. */
+"Create Space" = "Create Space";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Dark";
+
+/* No comment provided by engineer. */
+"Deleted from \"%@\"" = "Deleted from \"%@\"";
+
+/* No comment provided by engineer. */
+"Deleting..." = "Deleting...";
+
+/* No comment provided by engineer. */
+"Description" = "Description";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Display Settings";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "Done";
+
+/* Panel accessibility label */
+"Downloads" = "Downloads";
+
+/* No comment provided by engineer. */
+"edit" = "edit";
+
+/* No comment provided by engineer. */
+"Edit URL" = "Edit URL";
+
+/* No comment provided by engineer. */
+"Email" = "Email";
+
+/* No comment provided by engineer. */
+"Enter a URL to submit with the feedback" = "Enter a URL to submit with the feedback";
+
+/* No comment provided by engineer. */
+"Error" = "Error";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Advanced";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Warning: we can’t confirm your connection to this website is secure.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "It may be a misconfiguration or tampering by an attacker. Proceed if you accept the potential risk.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "Your private information could be stolen from %@. To protect your safety, Neeva has not connected to this website.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "This connection is not trusted";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Go Back";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Visit site anyway";
+
+/* No comment provided by engineer. */
+"example@neeva.com" = "example@neeva.com";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Forward";
+
+/* No comment provided by engineer. */
+"Free Basic" = "Free Basic";
+
+/* No comment provided by engineer. */
+"Google" = "Google";
+
+/* Toggle history syncing setting */
+"History" = "History";
+
+/* Title for popup action menu to clear recent history. */
+"HistoryPanel.ClearHistoryMenuTitle" = "Clearing Recent History will remove history, cookies, and other browser data.";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Back.DiscoveryTitle" = "Back";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseAllTabs.DiscoveryTitle" = "Close All Tabs";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Close Tab";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Find.DiscoveryTitle" = "Find";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Forward.DiscoveryTitle" = "Forward";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewIncognitoTab.DiscoveryTitle" = "New Incognito Tab";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.NewTab.DiscoveryTitle" = "New Tab";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.Reload.DiscoveryTitle" = "Reload Page";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.RestoreLastClosedTabs.DiscoveryTitle" = "Restore Last Closed Tabs";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Select Location Bar";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Show Next Tab";
+
+/* Label to display in the Discoverability overlay for keyboard shortcuts */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Show Previous Tab";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "just now";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Licences";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Light";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Neeva reader mode from another app. */
+"Load original page" = "Load original page";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Neeva reader mode from another app. */
+"Loading content…" = "Loading content…";
+
+/* Toggle logins syncing setting */
+"Logins" = "Logins";
+
+/* No comment provided by engineer. */
+"Microsoft" = "Microsoft";
+
+/* Accessibility Label for the tab toolbar More button */
+"More" = "More";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "more than a month ago";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "more than a week ago";
+
+/* No comment provided by engineer. */
+"Need help or want instant answers to FAQs?" = "Need help or want instant answers to FAQs?";
+
+/* No comment provided by engineer. */
+"Neeva" = "Neeva";
+
+/* Accessibility label for the New Tab button in the tab toolbar.
+   Accessibility Label for the tab toolbar New tab button */
+"New Tab" = "New Tab";
+
+/* Restore Tabs Negative Action */
+"No" = "No";
+
+/* No comment provided by engineer. */
+"No Results Found" = "No Results Found";
+
+/* OK button */
+"OK" = "OK";
+
+/* No comment provided by engineer. */
+"Oops, this page is a little shy" = "Oops, this page is a little shy";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Open Settings";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Password";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.NeevaWouldLikeAccessMessage" = "This allows you to save the image to your Camera Roll.";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.NeevaWouldLikeAccessTitle" = "Neeva would like to access your Photos";
+
+/* Pin to Top Sites no Share activity title */
+"Pin to Top Sites" = "Pin to Top Sites";
+
+/* No comment provided by engineer. */
+"Placeholder" = "Placeholder";
+
+/* No comment provided by engineer. */
+"Please share your questions, issues, or feature requests. Your feedback helps us improve Neeva!" = "Please share your questions, issues, or feature requests. Your feedback helps us improve Neeva!";
+
+/* No comment provided by engineer. */
+"Please sign in to Neeva to view this page" = "Please sign in to Neeva to view this page";
+
+/* No comment provided by engineer. */
+"Please verify your email address to use this feature" = "Please verify your email address to use this feature";
+
+/* No comment provided by engineer. */
+"Premium" = "Premium";
+
+/* Privacy section title */
+"Privacy" = "Privacy";
+
+/* Show Neeva Browser Privacy Policy page from the Privacy section in the settings. See https://neeva.co/privacy */
+"Privacy Policy" = "Privacy Policy";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "read";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Reader View";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Reload";
+
+/* No comment provided by engineer. */
+"Reload Page" = "Reload Page";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Remove";
+
+/* No comment provided by engineer. */
+"Resend email" = "Resend email";
+
+/* No comment provided by engineer. */
+"Save" = "Save";
+
+/* No comment provided by engineer. */
+"Save to Spaces" = "Save to Spaces";
+
+/* No comment provided by engineer. */
+"Saved to \"%@\"" = "Saved to \"%@\"";
+
+/* No comment provided by engineer. */
+"Saving..." = "Saving...";
+
+/* Accessibility Label for the tab toolbar Search button
+   Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Search";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Search or enter address";
+
+/* No comment provided by engineer. */
+"Search Spaces" = "Search Spaces";
+
+/* No comment provided by engineer. */
+"Send" = "Send";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Send Feedback";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Only HTTP and HTTPS links can be shared.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "OK";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "The link you are trying to share cannot be shared.";
+
+/* Title in the settings view controller title bar */
+"Settings" = "Settings";
+
+/* The description of the open new tab siri shortcut */
+"Settings.Siri.OpenTabShortcut" = "Open New Tab";
+
+/* Tracking protection settings option for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrict" = "Strict";
+
+/* No comment provided by engineer. */
+"Share My Search" = "Share My Search";
+
+/* No comment provided by engineer. */
+"Share Screenshot" = "Share Screenshot";
+
+/* No comment provided by engineer. */
+"Share URL" = "Share URL";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Show Search Suggestions";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar
+   Accessibility Label for the tabs button in the tab toolbar */
+"Show Tabs" = "Show Tabs";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Show Tour";
+
+/* No comment provided by engineer. */
+"Sign in or Join Neeva" = "Sign in or Join Neeva";
+
+/* No comment provided by engineer. */
+"Space name" = "Space name";
+
+/* No comment provided by engineer. */
+"Spacify" = "Spacify";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Stop";
+
+/* Support section title */
+"Support" = "Support";
+
+/* Hardware shortcut to open the tab tray from a tab. Shown in the Discoverability overlay when the hardware Command Key is held down. */
+"Tab.ShowTabTray.KeyCodeTitle" = "Show All Tabs";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Tabs Tray";
+
+/* No comment provided by engineer. */
+"Test" = "Test";
+
+/* No comment provided by engineer. */
+"Text" = "Text";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Neeva reader mode from another app. */
+"The page could not be displayed in Reader View." = "The page could not be displayed in Reader View.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "There was an error converting the page";
+
+/* Relative date for date in past week. */
+"this week" = "this week";
+
+/* History tableview section header */
+"Today" = "Today";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "today at %@";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Add the selected text to a Space selection menu item */
+"UIMenuItem.AddToSpace" = "Add to Space";
+
+/* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
+"UIMenuItem.PasteGo" = "Paste & Go";
+
+/* No comment provided by engineer. */
+"Unable to connect to internet" = "Unable to connect to internet";
+
+/* No comment provided by engineer. */
+"Unknown" = "Unknown";
+
+/* Unpin from Top Sites Share activity title */
+"Unpin from Top Sites" = "Unpin from Top Sites";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "unread";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Username";
+
+/* No comment provided by engineer. */
+"View or edit" = "View or edit";
+
+/* No comment provided by engineer. */
+"View or Edit Screenshot" = "View or Edit Screenshot";
+
+/* No comment provided by engineer. */
+"Visit our Help Center!" = "Visit our Help Centre!";
+
+/* No comment provided by engineer. */
+"Want to use a different email address?" = "Want to use a different email address?";
+
+/* No comment provided by engineer. */
+"We've sent an email to " = "We've sent an email to ";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Web content";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipedia";
+
+/* Relative date for yesterday. */
+"yesterday" = "yesterday";
+
+/* History tableview section header */
+"Yesterday" = "Yesterday";
+
+/* No comment provided by engineer. */
+"You can **sign up** again." = "You can **sign up** again.";
+
+/* No comment provided by engineer. */
+"Your internet seems to be lost. Check your internet connection and try again." = "Your internet seems to be lost. Check your internet connection and try again.";
+
