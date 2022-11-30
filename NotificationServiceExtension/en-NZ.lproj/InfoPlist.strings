@@ -1,0 +1,9 @@
+/* Bundle display name */
+"CFBundleDisplayName" = "ServiceExtension";
+
+/* Bundle name */
+"CFBundleName" = "NotificationServiceExtension";
+
+/* Copyright (human-readable) */
+"NSHumanReadableCopyright" = "Copyright © 2021 Neeva. All rights reserved.";
+
