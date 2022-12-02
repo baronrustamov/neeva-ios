@@ -39,6 +39,7 @@ struct WelcomeFlowPlansView: View {
                     Text("FREE")
                         .font(.system(size: 16, weight: .bold))
                 }
+                .accessibilityIdentifier("planFree")
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .multilineTextAlignment(.center)
                 .padding(8)
@@ -78,6 +79,7 @@ struct WelcomeFlowPlansView: View {
                                 .font(.system(size: 14))
                         }
                     }
+                    .accessibilityIdentifier("planAnnual")
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .multilineTextAlignment(.center)
                     .padding(.vertical, 12)
@@ -114,6 +116,7 @@ struct WelcomeFlowPlansView: View {
                         Text("\(monthlyProduct.displayPrice) /mo")
                             .font(.system(size: 14))
                     }
+                    .accessibilityIdentifier("planMonthly")
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .multilineTextAlignment(.center)
                     .padding(8)

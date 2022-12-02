@@ -971,6 +971,10 @@
 		F35B8D2B1D6380EA008E3D61 /* SessionRestore.html in Resources */ = {isa = PBXBuildFile; fileRef = F35B8D2A1D6380EA008E3D61 /* SessionRestore.html */; };
 		F35B8D2D1D6383E9008E3D61 /* SessionRestoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F35B8D2C1D6383E9008E3D61 /* SessionRestoreHelper.swift */; };
 		F532A5AE29230F38009C2E43 /* SafariVCLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = F532A5AD29230F38009C2E43 /* SafariVCLink.swift */; };
+		F55847DB29373DCA00209C3D /* SignInOrUpFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55847DA29373DCA00209C3D /* SignInOrUpFlowTests.swift */; };
+		F55847DF2937FBD400209C3D /* StoreKitLocalTesting.storekit in Resources */ = {isa = PBXBuildFile; fileRef = F8F360362875066200736740 /* StoreKitLocalTesting.storekit */; };
+		F55847E12938297D00209C3D /* StoreKitEmpty.storekit in Resources */ = {isa = PBXBuildFile; fileRef = F55847E02938297D00209C3D /* StoreKitEmpty.storekit */; };
+		F55847E22938299600209C3D /* StoreKitEmpty.storekit in Resources */ = {isa = PBXBuildFile; fileRef = F55847E02938297D00209C3D /* StoreKitEmpty.storekit */; };
 		F564D05728ADB4AF00A033CA /* WelcomeFlowSignInQRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D05628ADB4AF00A033CA /* WelcomeFlowSignInQRCodeView.swift */; };
 		F564D05B28AEEA5900A033CA /* SignInOrUpFlowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D05A28AEEA5900A033CA /* SignInOrUpFlowModel.swift */; };
 		F564D05D28AEEC0200A033CA /* SignInOrUpFlowHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D05C28AEEC0200A033CA /* SignInOrUpFlowHeaderView.swift */; };
@@ -981,6 +985,7 @@
 		F564D06728AEEDA100A033CA /* SignInOrUpFlowSignUpEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D06628AEEDA100A033CA /* SignInOrUpFlowSignUpEmailView.swift */; };
 		F564D06928AEEE2E00A033CA /* SignInOrUpFlowSignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D06828AEEE2E00A033CA /* SignInOrUpFlowSignUpView.swift */; };
 		F564D06B28AEEE5F00A033CA /* SignInOrUpFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D06A28AEEE5F00A033CA /* SignInOrUpFlowView.swift */; };
+		F57946CB29372F57006A8FB9 /* WelcomeFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F57946CA29372F57006A8FB9 /* WelcomeFlowTests.swift */; };
 		F805A79F2840187D00372451 /* Black@3x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = F805A79B2840187D00372451 /* Black@3x~ipad.png */; };
 		F805A7A02840187D00372451 /* System@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = F805A79C2840187D00372451 /* System@2x~ipad.png */; };
 		F805A7A12840187D00372451 /* Black@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = F805A79D2840187D00372451 /* Black@2x~ipad.png */; };
@@ -2409,6 +2414,8 @@
 		F35B8D2A1D6380EA008E3D61 /* SessionRestore.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = SessionRestore.html; sourceTree = "<group>"; };
 		F35B8D2C1D6383E9008E3D61 /* SessionRestoreHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionRestoreHelper.swift; sourceTree = "<group>"; };
 		F532A5AD29230F38009C2E43 /* SafariVCLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariVCLink.swift; sourceTree = "<group>"; };
+		F55847DA29373DCA00209C3D /* SignInOrUpFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInOrUpFlowTests.swift; sourceTree = "<group>"; };
+		F55847E02938297D00209C3D /* StoreKitEmpty.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKitEmpty.storekit; sourceTree = "<group>"; };
 		F564D05628ADB4AF00A033CA /* WelcomeFlowSignInQRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeFlowSignInQRCodeView.swift; sourceTree = "<group>"; };
 		F564D05A28AEEA5900A033CA /* SignInOrUpFlowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInOrUpFlowModel.swift; sourceTree = "<group>"; };
 		F564D05C28AEEC0200A033CA /* SignInOrUpFlowHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInOrUpFlowHeaderView.swift; sourceTree = "<group>"; };
@@ -2419,6 +2426,7 @@
 		F564D06628AEEDA100A033CA /* SignInOrUpFlowSignUpEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInOrUpFlowSignUpEmailView.swift; sourceTree = "<group>"; };
 		F564D06828AEEE2E00A033CA /* SignInOrUpFlowSignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInOrUpFlowSignUpView.swift; sourceTree = "<group>"; };
 		F564D06A28AEEE5F00A033CA /* SignInOrUpFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInOrUpFlowView.swift; sourceTree = "<group>"; };
+		F57946CA29372F57006A8FB9 /* WelcomeFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeFlowTests.swift; sourceTree = "<group>"; };
 		F805A79B2840187D00372451 /* Black@3x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Black@3x~ipad.png"; sourceTree = "<group>"; };
 		F805A79C2840187D00372451 /* System@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "System@2x~ipad.png"; sourceTree = "<group>"; };
 		F805A79D2840187D00372451 /* Black@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Black@2x~ipad.png"; sourceTree = "<group>"; };
@@ -3143,8 +3151,8 @@
 				209F3F4E28A7247B00B6AB9E /* CardStripTests.swift */,
 				4766AC7529108BE400F79C47 /* CheatsheetTests */,
 				3D9CAA1B1EFCD655002434DD /* ClipBoardTests.swift */,
-				3D71C89D1F5703A1008D8646 /* CopiedLinksTests.swift */,
 				20C5B262282D82F400BD35B9 /* CookieCutterTests.swift */,
+				3D71C89D1F5703A1008D8646 /* CopiedLinksTests.swift */,
 				C8BD2A78278814DB001B3355 /* CreateOrSwitchToTabTests.swift */,
 				EB3A38912032673D004C6E67 /* DatabaseFixtureTest.swift */,
 				20173C9328EBADC600C3D7D1 /* DeleteIncognitoTabTests.swift */,
@@ -3167,6 +3175,7 @@
 				66E34CDB2711118900F30A3D /* ReaderModeTests.swift */,
 				2089ADB92876932E00CB3448 /* RecentlyClosedTests.swift */,
 				2C3406C71E719F00000FD889 /* SettingsTest.swift */,
+				F55847DA29373DCA00209C3D /* SignInOrUpFlowTests.swift */,
 				20173C9528EBBE1A00C3D7D1 /* Spaces */,
 				66C5224827604533003C7F2D /* SuggestionBackButtonTests.swift */,
 				209CD9A227DBF9F20069675C /* TabGroupTests.swift */,
@@ -3176,6 +3185,7 @@
 				2CB56E3E1E926BFB00AF7586 /* ToolbarTest.swift */,
 				3BF4B8DA1D38493300493393 /* Utils */,
 				EB7A651020699BD200B52A5F /* WebPagesForTesting.swift */,
+				F57946CA29372F57006A8FB9 /* WelcomeFlowTests.swift */,
 				0B9D40781E8D5AC80059E664 /* XCUITests-Bridging-Header.h */,
 				66AF61B926D87E9900FB68DF /* ZeroQueryTests.swift */,
 			);
@@ -4760,6 +4770,7 @@
 				E6639F171BF11E17002D0853 /* Settings.bundle */,
 				E40FAB0B1A7ABB77009CB80D /* WebServer.swift */,
 				F8F360362875066200736740 /* StoreKitLocalTesting.storekit */,
+				F55847E02938297D00209C3D /* StoreKitEmpty.storekit */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -5598,6 +5609,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F55847DF2937FBD400209C3D /* StoreKitLocalTesting.storekit in Resources */,
+				F55847E22938299600209C3D /* StoreKitEmpty.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5795,6 +5808,7 @@
 				F805A7A02840187D00372451 /* System@2x~ipad.png in Resources */,
 				39A35AED1C0662A3006B9E87 /* SpotlightHelper.js in Resources */,
 				D0FCF8071FE4772D004A7995 /* MainFrameAtDocumentEnd.js in Resources */,
+				F55847E12938297D00209C3D /* StoreKitEmpty.storekit in Resources */,
 				BC6D34892622D4DE0050DEC4 /* Roobert-Medium.otf in Resources */,
 				C9098F7726B0539000D2B5F4 /* webpack.config.js in Resources */,
 				679BB17C2714D069002F60FE /* easy_privacy.json in Resources */,
@@ -6100,6 +6114,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9BB796DD282EAD21001E577C /* AddToSpaceSheetTests.swift in Sources */,
+				F55847DB29373DCA00209C3D /* SignInOrUpFlowTests.swift in Sources */,
 				C832BF6E26E0B31500B9A1F8 /* FindInPageTest.swift in Sources */,
 				20F0A96228E272B1006835A4 /* GroupDataPanelTests.swift in Sources */,
 				C832BF7326E0B31B00B9A1F8 /* NavigationTest.swift in Sources */,
@@ -6137,6 +6152,7 @@
 				66C5224927604533003C7F2D /* SuggestionBackButtonTests.swift in Sources */,
 				C832BF7A26E0B31B00B9A1F8 /* NeevaSignInTests.swift in Sources */,
 				9BC9C15B286F5880004DA7ED /* SpaceGeneratorTests.swift in Sources */,
+				F57946CB29372F57006A8FB9 /* WelcomeFlowTests.swift in Sources */,
 				9BE2C4F2284FFA64004F8BAA /* SpaceGridTests.swift in Sources */,
 				C832BF7126E0B31500B9A1F8 /* DatabaseFixtureTest.swift in Sources */,
 				66E34CDC2711118900F30A3D /* ReaderModeTests.swift in Sources */,
