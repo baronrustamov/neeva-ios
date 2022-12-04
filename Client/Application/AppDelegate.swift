@@ -19,7 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         return nil
     }
 
-    var cleanlyBackgroundedLastTime = true
     weak var application: UIApplication?
 
     // The profile is initialized during startup below and then remains valid for the
@@ -39,15 +38,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         _ application: UIApplication,
         willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        // Determine if the application cleanly exited last time it was used.
-        // Check if the "applicationCleanlyBackgrounded" user
-        // default exists and whether was properly set to true on app exit.
-        //
-        // Then we always set the user default to false. It will be set to true when we the application
-        // is backgrounded.
-        cleanlyBackgroundedLastTime = Defaults[.applicationCleanlyBackgrounded]
-        Defaults[.applicationCleanlyBackgrounded] = false  // Reset for this session.
-
         // If feedback did not finish sending before app closed, record that here
         if !Defaults[.feedbackBeingSent] {
             ClientLogger.shared.logCounterBypassIncognito(.FeedbackFailedToSend)
@@ -92,14 +82,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         if Defaults[.sessionUUIDv2].isEmpty {
             Defaults[.sessionUUIDv2] = UUID().uuidString
         }
-
-        // log last crashed status and page load number
-        // we use applicationCleanlyBackgrounded in Default to keep track
-        // if sceneDidEnterBackground or sceneDidEnterBackground triggered
-        // before the app enter background or close, we use it as a proxy
-        // to determine if there is a crash from last exit
-        PerformanceLogger.shared.logPageLoadWithCrashedStatus(
-            crashed: !cleanlyBackgroundedLastTime)
 
         #if !DEBUG
             if !startCrashReporter() {
@@ -154,7 +136,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
 
         PerformanceLogger.shared.logPageLoadWithCrashedStatus(
-            crashed: crashReporter.hasPendingCrashReport(), forCrashReporter: true)
+            crashed: crashReporter.hasPendingCrashReport()
+        )
 
         crashReporter.purgePendingCrashReport()
         return true
@@ -171,11 +154,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     func applicationWillTerminate(_ application: UIApplication) {
         // We have only five seconds here, so let's hope this doesn't take too long?.
-
-        // Set applicationCleanlyBackgrounded to true when user manually close the app.
-        // Do this first as any subsequent crash would be while the app is backgrounded
-        // from the perspective of the user.
-        Defaults[.applicationCleanlyBackgrounded] = true
 
         // Make sure tabs state has been saved.
         for tabManager in TabManager.all.makeIterator() {

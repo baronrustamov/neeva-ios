@@ -21,7 +21,6 @@ struct InternalSettingsView: View {
     @Default(.topSitesCacheSize) var topSitesCacheSize
     @Default(.widgetKitSimpleTabKey) var widgetKitSimpleTabKey
     @Default(.widgetKitSimpleTopTab) var widgetKitSimpleTopTab
-    @Default(.applicationCleanlyBackgrounded) var applicationCleanlyBackgrounded
     @Default(.ratingsCardHidden) var ratingsCardHidden
     @Default(.lastScheduledNeevaPromoID) var lastScheduledNeevaPromoID
     @Default(.lastNeevaPromoScheduledTimeInterval) var lastNeevaPromoScheduledTimeInterval
@@ -199,20 +198,6 @@ struct InternalSettingsView: View {
                 OptionalDataKeyView("widgetKitSimpleTopTab", data: $widgetKitSimpleTopTab)
             }
 
-            Section(header: Text(verbatim: "Performance")) {
-                Toggle(
-                    String("applicationCleanlyBackgrounded"), isOn: $applicationCleanlyBackgrounded)
-                if let cleanlyBackgrounded = cleanlyBackgroundedLastTime {
-                    let text =
-                        cleanlyBackgrounded
-                        ? "Was cleanly backgrounded last time"
-                        : "Was NOT cleanly backgrounded last time"
-                    Text(text)
-                        .font(.system(.footnote)).italic()
-                        .foregroundColor(cleanlyBackgrounded ? nil : Color.red)
-                }
-            }
-
             Section(header: Text(verbatim: "Notification")) {
                 OptionalStringField(
                     "lastScheduledNeevaPromoID", text: $lastScheduledNeevaPromoID)
@@ -243,10 +228,6 @@ struct InternalSettingsView: View {
         .minimumScaleFactor(0.75)
         .listStyle(.insetGrouped)
         .applyToggleStyle()
-    }
-
-    private var cleanlyBackgroundedLastTime: Bool? {
-        (UIApplication.shared.delegate as? AppDelegate)?.cleanlyBackgroundedLastTime
     }
 }
 

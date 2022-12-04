@@ -116,6 +116,7 @@ extension Defaults.Keys {
         "WidgetKitSimpleTopTab", suite: UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!)
 
     // MARK: - performance
+    @available(*, deprecated, message: "We rely on PLCrashReporter instead")  // 2022-12-01
     public static let applicationCleanlyBackgrounded = Defaults.Key<Bool>(
         "ApplicationCrashedLastTime", default: true)
     public static let pageLoadedCounter = Defaults.Key<Int32>("PageLoadedCounter", default: 0)

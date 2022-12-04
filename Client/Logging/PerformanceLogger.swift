@@ -27,28 +27,27 @@ class PerformanceLogger {
     }
 
     // sent last crash status with page load number
-    func logPageLoadWithCrashedStatus(crashed: Bool, forCrashReporter: Bool = false) {
-        var attributes = [ClientLogCounterAttribute]()
+    func logPageLoadWithCrashedStatus(crashed: Bool) {
         let pageLoadedCount = Defaults[.pageLoadedCounter]
-        attributes.append(
-            ClientLogCounterAttribute(
-                key: PerformanceLoggerAttribute.crashed.rawValue, value: String(crashed)))
 
-        attributes.append(
+        let attributes: [ClientLogCounterAttribute] = [
+            ClientLogCounterAttribute(
+                key: PerformanceLoggerAttribute.crashed.rawValue,
+                value: String(crashed)
+            ),
             ClientLogCounterAttribute(
                 key: LogConfig.Attribute.DeviceName, value: NeevaConstants.deviceNameValue
-            ))
-
-        attributes.append(
+            ),
             ClientLogCounterAttribute(
                 key: PerformanceLoggerAttribute.pageLoaded.rawValue,
-                value: String(pageLoadedCount)))
+                value: String(pageLoadedCount)
+            ),
+        ]
         ClientLogger.shared.logCounter(
-            forCrashReporter ? .AppCrashWithCrashReporter : .AppCrashWithPageLoad,
+            .AppCrashWithCrashReporter,
             attributes: attributes
         )
-        if !forCrashReporter {
-            reset()
-        }
+
+        reset()
     }
 }

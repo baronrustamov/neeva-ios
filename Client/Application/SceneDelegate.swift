@@ -678,6 +678,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 Defaults[.contentBlockingStrength] = BlockingStrength.easyPrivacyStrict.rawValue
             }
 
+            Defaults.reset(.applicationCleanlyBackgrounded)
+
             return true
         }
 
