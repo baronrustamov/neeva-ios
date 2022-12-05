@@ -26,6 +26,7 @@ struct SignInOrUpFlowSignInView: View {
                     self.showError = true
                 }) {
                     model.clearPreviousScreens()
+                    model.justSignedIn = true
                     model.changeScreenTo(.plans)
                 }
             }
@@ -44,6 +45,7 @@ struct SignInOrUpFlowSignInView: View {
                     }
                 ) {
                     model.clearPreviousScreens()
+                    model.justSignedIn = true
                     model.changeScreenTo(.plans)
                 }
             }
@@ -62,6 +64,7 @@ struct SignInOrUpFlowSignInView: View {
                     }
                 ) {
                     model.clearPreviousScreens()
+                    model.justSignedIn = true
                     model.changeScreenTo(.plans)
                 }
             }
@@ -80,6 +83,7 @@ struct SignInOrUpFlowSignInView: View {
                     }
                 ) {
                     model.clearPreviousScreens()
+                    model.justSignedIn = true
                     model.changeScreenTo(.plans)
                 }
             }
@@ -92,6 +96,7 @@ struct SignInOrUpFlowSignInView: View {
                     backgroundColor: .secondary.opacity(0.25)
                 ) {
                     model.prevScreens.append(.signIn)
+                    model.justSignedIn = true
                     model.changeScreenTo(.signInQRCode)
                 }
             }

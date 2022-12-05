@@ -22,6 +22,7 @@ class SignInOrUpFlowModel: ObservableObject {
     @Published var showCloseButton = true
     @Published var showAllSignUpOptions = false
     @Published var currentPremiumPlan: PremiumPlan? = .annual  // nil is the free plan
+    var justSignedIn = false  // set back to false inside `self.complete`
 
     init(authStore: AuthStore, onCloseAction: (() -> Void)? = nil) {
         self.authStore = authStore
@@ -44,6 +45,7 @@ class SignInOrUpFlowModel: ObservableObject {
     func complete() {
         self.onCloseAction?()
         self.onCloseAction = nil
+        self.justSignedIn = false
     }
 
     func logCounter(

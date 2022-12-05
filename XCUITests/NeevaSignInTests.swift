@@ -144,8 +144,8 @@ class NeevaSignInTests: BaseTestCase {
     func testOtherSignUpOptions() throws {
         testSignInUIAppearsFromSettings()
 
-        waitForExistence(app.buttons["Try it Free"])
-        app.buttons["Try it Free"].tap()
+        waitForExistence(app.buttons["Get FREE"])
+        app.buttons["Get FREE"].tap()
 
         waitForExistence(app.buttons["Other Sign-up Options"])
         app.buttons["Other Sign-up Options"].tap()

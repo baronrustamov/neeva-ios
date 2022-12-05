@@ -213,8 +213,12 @@ struct SignInOrUpFlowPlansView: View {
                         )
 
                         if model.currentPremiumPlan == nil {
-                            model.prevScreens.append(.plans)
-                            model.changeScreenTo(.signUp)
+                            if model.justSignedIn {
+                                model.complete()
+                            } else {
+                                model.prevScreens.append(.plans)
+                                model.changeScreenTo(.signUp)
+                            }
                         } else {
                             if !NeevaUserInfo.shared.hasLoginCookie() {
                                 model.changeScreenTo(.signUp)
@@ -308,7 +312,14 @@ struct SignInOrUpFlowPlansView: View {
                         model.complete()
                     }
                 } else {
-                    model.complete()
+                    if model.justSignedIn {
+                        model.complete()
+                    }
+                }
+            } else {
+                if PremiumStore.shared.products.count == 0 {
+                    // No product found, ensure the free plan is selected. By default annual is assumed.
+                    model.currentPremiumPlan = nil
                 }
             }
         }
