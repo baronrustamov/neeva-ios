@@ -14,6 +14,12 @@
 " %lld Followers" = " %lld Followers";
 
 /* No comment provided by engineer. */
+" and" = " and";
+
+/* No comment provided by engineer. */
+" and " = " and ";
+
+/* No comment provided by engineer. */
 " by inviting friends to join Neeva" = " by inviting friends to join Neeva";
 
 /* No comment provided by engineer. */
@@ -27,6 +33,12 @@
 
 /* No comment provided by engineer. */
 "·" = "·";
+
+/* No comment provided by engineer. */
+"“%@“" = "“%@“";
+
+/* No comment provided by engineer. */
+"“%@”" = "“%@”";
 
 /* No comment provided by engineer. */
 "(" = "(";
@@ -170,7 +182,13 @@
 "Accept Non-essential Cookies" = "Accept Non-essential Cookies";
 
 /* No comment provided by engineer. */
+"access and to see results for" = "access and to see results for";
+
+/* No comment provided by engineer. */
 "Account Settings" = "Account Settings";
+
+/* No comment provided by engineer. */
+"acknowledge Neeva’s " = "acknowledge Neeva’s ";
 
 /* No comment provided by engineer. */
 "Activate Neeva Shield for this site." = "Activate Neeva Shield for this site.";
@@ -228,6 +246,9 @@
 
 /* Show all the spaces */
 "All Spaces" = "All Spaces";
+
+/* No comment provided by engineer. */
+"Already have an account? " = "Already have an account? ";
 
 /* No comment provided by engineer. */
 "Already have an account? Sign in" = "Already have an account? Sign in";
@@ -321,6 +342,15 @@
 
 /* No comment provided by engineer. */
 "Buying Guide" = "Buying Guide";
+
+/* No comment provided by engineer. */
+"By creating your Neeva account you" = "By creating your Neeva account you";
+
+/* No comment provided by engineer. */
+"By creating your Neeva account you acknowledge" = "By creating your Neeva account you acknowledge";
+
+/* No comment provided by engineer. */
+"By creating your Neeva account you acknowledge Neeva’s" = "By creating your Neeva account you acknowledge Neeva’s";
 
 /* No comment provided by engineer. */
 "Cache" = "Cache";
@@ -428,6 +458,9 @@
 "Contact us via Support %@" = "Contact us via Support %@";
 
 /* No comment provided by engineer. */
+"Continue" = "Continue";
+
+/* No comment provided by engineer. */
 "Continue to Neeva" = "Continue to Neeva";
 
 /* No comment provided by engineer. */
@@ -486,6 +519,15 @@
 
 /* No comment provided by engineer. */
 "Create your account" = "Create your account";
+
+/* No comment provided by engineer. */
+"Create your account for continued" = "Create your account for continued";
+
+/* No comment provided by engineer. */
+"Create your free Neeva account" = "Create your free Neeva account";
+
+/* No comment provided by engineer. */
+"Create your Neeva account." = "Create your Neeva account.";
 
 /* accessibility label for one type of themes for reader mode feature */
 "Dark Theme" = "Dark Theme";
@@ -546,6 +588,9 @@
 
 /* No comment provided by engineer. */
 "Dismiss tour" = "Dismiss tour";
+
+/* No comment provided by engineer. */
+"Don't have an account? " = "Don't have an account? ";
 
 /* No comment provided by engineer. */
 "Done" = "Done";
@@ -639,9 +684,6 @@
 
 /* No comment provided by engineer. */
 "Essential cookies are used by sites to remember things like your login information and preferences. These cookies cannot be blocked by the extension." = "Essential cookies are used by sites to remember things like your login information and preferences. These cookies cannot be blocked by the extension.";
-
-/* No comment provided by engineer. */
-"Events" = "Events";
 
 /* No comment provided by engineer. */
 "Expand" = "Expand";
@@ -788,6 +830,9 @@
 "Instructions" = "Instructions";
 
 /* No comment provided by engineer. */
+"Invalid QR Code" = "Invalid QR Code";
+
+/* No comment provided by engineer. */
 "Invite" = "Invite";
 
 /* No comment provided by engineer. */
@@ -798,6 +843,9 @@
 
 /* No comment provided by engineer. */
 "Item removed from Space" = "Item removed from Space";
+
+/* No comment provided by engineer. */
+"Join Neeva" = "Join Neeva";
 
 /* No comment provided by engineer. */
 "Keep" = "Keep";
@@ -944,6 +992,12 @@
 "Neeva Shield stops annoying cookie popups and blocks invasive trackers across the web." = "Neeva Shield stops annoying cookie popups and blocks invasive trackers across the web.";
 
 /* No comment provided by engineer. */
+"Neeva's " = "Neeva's ";
+
+/* No comment provided by engineer. */
+"Neeva’s " = "Neeva’s ";
+
+/* No comment provided by engineer. */
 "Neeva’s Free Basic membership gives you access to all Neeva search and personalization features." = "Neeva’s Free Basic membership gives you access to all Neeva search and personalisation features.";
 
 /* No comment provided by engineer. */
@@ -1049,7 +1103,13 @@
 "Open Space" = "Open Space";
 
 /* No comment provided by engineer. */
+"OR" = "OR";
+
+/* No comment provided by engineer. */
 "Other search engines" = "Other search engines";
+
+/* No comment provided by engineer. */
+"Other sign up options" = "Other sign up options";
 
 /* No comment provided by engineer. */
 "Other Sign-up Options" = "Other sign-up options";
@@ -1146,6 +1206,9 @@
 
 /* No comment provided by engineer. */
 "Protection Mode" = "Protection Mode";
+
+/* No comment provided by engineer. */
+"QR Code: %@" = "QR Code: %@";
 
 /* No comment provided by engineer. */
 "Read Less" = "Read Less";
@@ -1280,6 +1343,9 @@
 "See" = "See";
 
 /* No comment provided by engineer. */
+"See results for" = "See results for";
+
+/* No comment provided by engineer. */
 "See what people have said about this page" = "See what people have said about this page";
 
 /* No comment provided by engineer. */
@@ -1340,10 +1406,16 @@
 "shows" = "shows";
 
 /* No comment provided by engineer. */
+"Sign In" = "Sign In";
+
+/* No comment provided by engineer. */
 "Sign in or Join Neeva" = "Sign in or Join Neeva";
 
 /* No comment provided by engineer. */
 "Sign in to:" = "Sign in to:";
+
+/* No comment provided by engineer. */
+"Sign in with %@" = "Sign in with %@";
 
 /* No comment provided by engineer. */
 "Sign in with Apple" = "Sign in with Apple";
@@ -1367,7 +1439,13 @@
 "Sign out of Neeva?" = "Sign out of Neeva?";
 
 /* No comment provided by engineer. */
+"Sign Up" = "Sign Up";
+
+/* No comment provided by engineer. */
 "Sign Up To Get Started" = "Sign Up To Get Started";
+
+/* No comment provided by engineer. */
+"Sign up with %@" = "Sign up with %@";
 
 /* No comment provided by engineer. */
 "Sign up with Apple" = "Sign up with Apple";
@@ -1502,6 +1580,9 @@
 "Text Size" = "Text Size";
 
 /* No comment provided by engineer. */
+"Thank you for trying Neeva!" = "Thank you for trying Neeva!";
+
+/* No comment provided by engineer. */
 "The first ad-free, private search engine" = "The first ad-free, private search engine";
 
 /* No comment provided by engineer. */
@@ -1626,6 +1707,9 @@
 
 /* No comment provided by engineer. */
 "Websites you've closed\nrecently will show up here." = "Websites you've closed\nrecently will show up here.";
+
+/* No comment provided by engineer. */
+"Welcome To Neeva" = "Welcome To Neeva";
 
 /* No comment provided by engineer. */
 "Welcome Tours" = "Welcome Tours";

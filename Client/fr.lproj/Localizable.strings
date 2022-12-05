@@ -14,6 +14,12 @@
 " %lld Followers" = " %lld abonnés";
 
 /* No comment provided by engineer. */
+" and" = " et notre";
+
+/* No comment provided by engineer. */
+" and " = " et notre ";
+
+/* No comment provided by engineer. */
 " by inviting friends to join Neeva" = " en invitant des proches à rejoindre Neeva";
 
 /* No comment provided by engineer. */
@@ -27,6 +33,12 @@
 
 /* No comment provided by engineer. */
 "·" = "·";
+
+/* No comment provided by engineer. */
+"“%@“" = "« %@ »";
+
+/* No comment provided by engineer. */
+"“%@”" = "« %@ »";
 
 /* No comment provided by engineer. */
 "(" = "(";
@@ -170,7 +182,13 @@
 "Accept Non-essential Cookies" = "Accepter les cookies non essentiels";
 
 /* No comment provided by engineer. */
+"access and to see results for" = "et afficher les résultats pour";
+
+/* No comment provided by engineer. */
 "Account Settings" = "Paramètres du compte";
+
+/* No comment provided by engineer. */
+"acknowledge Neeva’s " = "reconnaissez ";
 
 /* No comment provided by engineer. */
 "Activate Neeva Shield for this site." = "Activez Neeva Shield pour ce site.";
@@ -228,6 +246,9 @@
 
 /* Show all the spaces */
 "All Spaces" = "Tous les espaces";
+
+/* No comment provided by engineer. */
+"Already have an account? " = "Vous avez déjà un compte ? ";
 
 /* No comment provided by engineer. */
 "Already have an account? Sign in" = "Se connecter";
@@ -321,6 +342,15 @@
 
 /* No comment provided by engineer. */
 "Buying Guide" = "Guide d'achat";
+
+/* No comment provided by engineer. */
+"By creating your Neeva account you" = "En créant votre compte Neeva, vous";
+
+/* No comment provided by engineer. */
+"By creating your Neeva account you acknowledge" = "En créant votre compte Neeva, vous acceptez nos";
+
+/* No comment provided by engineer. */
+"By creating your Neeva account you acknowledge Neeva’s" = "En créant votre compte Neeva, vous acceptez nos";
 
 /* No comment provided by engineer. */
 "Cache" = "Cache";
@@ -428,6 +458,9 @@
 "Contact us via Support %@" = "Contactez-nous via l'assistance %@";
 
 /* No comment provided by engineer. */
+"Continue" = "Continuer";
+
+/* No comment provided by engineer. */
 "Continue to Neeva" = "Continuer vers Neeva";
 
 /* No comment provided by engineer. */
@@ -486,6 +519,15 @@
 
 /* No comment provided by engineer. */
 "Create your account" = "Créez votre compte";
+
+/* No comment provided by engineer. */
+"Create your account for continued" = "Créez un compte gratuit pour bénéficier d'un accès continu";
+
+/* No comment provided by engineer. */
+"Create your free Neeva account" = "Créez votre compte Neeva gratuit";
+
+/* No comment provided by engineer. */
+"Create your Neeva account." = "Créez votre compte Neeva.";
 
 /* accessibility label for one type of themes for reader mode feature */
 "Dark Theme" = "Thème sombre";
@@ -546,6 +588,9 @@
 
 /* No comment provided by engineer. */
 "Dismiss tour" = "Ignorer la visite";
+
+/* No comment provided by engineer. */
+"Don't have an account? " = "Vous n'avez pas de compte ? ";
 
 /* No comment provided by engineer. */
 "Done" = "Terminé";
@@ -639,9 +684,6 @@
 
 /* No comment provided by engineer. */
 "Essential cookies are used by sites to remember things like your login information and preferences. These cookies cannot be blocked by the extension." = "Les cookies essentiels sont utilisés par les sites pour enregistrer des éléments tels que vos informations de connexion et vos préférences. Ces cookies ne peuvent pas être bloqués par l'extension.";
-
-/* No comment provided by engineer. */
-"Events" = "Events";
 
 /* No comment provided by engineer. */
 "Expand" = "Développer";
@@ -788,6 +830,9 @@
 "Instructions" = "Instructions";
 
 /* No comment provided by engineer. */
+"Invalid QR Code" = "Code QR non valide";
+
+/* No comment provided by engineer. */
 "Invite" = "Inviter";
 
 /* No comment provided by engineer. */
@@ -798,6 +843,9 @@
 
 /* No comment provided by engineer. */
 "Item removed from Space" = "Élément supprimé de l'espace";
+
+/* No comment provided by engineer. */
+"Join Neeva" = "Rejoignez Neeva";
 
 /* No comment provided by engineer. */
 "Keep" = "Conserver";
@@ -944,6 +992,12 @@
 "Neeva Shield stops annoying cookie popups and blocks invasive trackers across the web." = "Neeva Shield bloque les fenêtres contextuelles de gestion des cookies indésirables et les traqueurs envahissants sur le Web.";
 
 /* No comment provided by engineer. */
+"Neeva's " = "de Neeva ";
+
+/* No comment provided by engineer. */
+"Neeva’s " = "de Neeva ";
+
+/* No comment provided by engineer. */
 "Neeva’s Free Basic membership gives you access to all Neeva search and personalization features." = "L'abonnement Neeva Free Basic vous donne accès à toutes les fonctionnalités de recherche et de personnalisation de Neeva.";
 
 /* No comment provided by engineer. */
@@ -1049,7 +1103,13 @@
 "Open Space" = "Ouvrir l'espace";
 
 /* No comment provided by engineer. */
+"OR" = "ou";
+
+/* No comment provided by engineer. */
 "Other search engines" = "Autres moteurs de recherche";
+
+/* No comment provided by engineer. */
+"Other sign up options" = "Autres options d'inscription";
 
 /* No comment provided by engineer. */
 "Other Sign-up Options" = "Autres options d'inscription";
@@ -1146,6 +1206,9 @@
 
 /* No comment provided by engineer. */
 "Protection Mode" = "Mode protection";
+
+/* No comment provided by engineer. */
+"QR Code: %@" = "Code QR : %@";
 
 /* No comment provided by engineer. */
 "Read Less" = "Lire moins";
@@ -1280,6 +1343,9 @@
 "See" = "Afficher";
 
 /* No comment provided by engineer. */
+"See results for" = "Afficher les résultats pour";
+
+/* No comment provided by engineer. */
 "See what people have said about this page" = "Découvrez ce que les internautes ont pensé de cette page";
 
 /* No comment provided by engineer. */
@@ -1340,10 +1406,16 @@
 "shows" = "affiche";
 
 /* No comment provided by engineer. */
+"Sign In" = "Se connecter";
+
+/* No comment provided by engineer. */
 "Sign in or Join Neeva" = "Se connecter";
 
 /* No comment provided by engineer. */
 "Sign in to:" = "Connectez-vous à :";
+
+/* No comment provided by engineer. */
+"Sign in with %@" = "Se connecter avec %@";
 
 /* No comment provided by engineer. */
 "Sign in with Apple" = "Se connecter avec Apple";
@@ -1367,7 +1439,13 @@
 "Sign out of Neeva?" = "Se déconnecter de Neeva ?";
 
 /* No comment provided by engineer. */
+"Sign Up" = "S'inscrire";
+
+/* No comment provided by engineer. */
 "Sign Up To Get Started" = "Inscrivez-vous pour commencer";
+
+/* No comment provided by engineer. */
+"Sign up with %@" = "S'inscrire avec avec %@";
 
 /* No comment provided by engineer. */
 "Sign up with Apple" = "S'inscrire avec Apple";
@@ -1502,6 +1580,9 @@
 "Text Size" = "Taille du texte";
 
 /* No comment provided by engineer. */
+"Thank you for trying Neeva!" = "Merci d'avoir essayé Neeva !";
+
+/* No comment provided by engineer. */
 "The first ad-free, private search engine" = "le premier moteur de recherche privée sans publicité";
 
 /* No comment provided by engineer. */
@@ -1626,6 +1707,9 @@
 
 /* No comment provided by engineer. */
 "Websites you've closed\nrecently will show up here." = "Les sites Web que vous avez fermés récemment apparaîtront ici.";
+
+/* No comment provided by engineer. */
+"Welcome To Neeva" = "Bienvenue chez Neeva";
 
 /* No comment provided by engineer. */
 "Welcome Tours" = "Visites de bienvenue";
