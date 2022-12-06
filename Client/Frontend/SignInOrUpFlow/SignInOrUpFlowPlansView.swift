@@ -308,7 +308,7 @@ struct SignInOrUpFlowPlansView: View {
                             onCancelled: self.onPurchaseCancelled,
                             onError: self.onPurchaseError,
                             onSuccess: self.onPurchaseSuccess)
-                    } else {
+                    } else if model.justSignedIn {
                         model.complete()
                     }
                 } else {
