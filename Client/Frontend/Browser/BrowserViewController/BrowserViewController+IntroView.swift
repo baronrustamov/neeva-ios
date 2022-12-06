@@ -54,6 +54,9 @@ extension BrowserViewController {
         startScreen: SignInOrUpFlowScreen? = nil, onCompleteDismissZeroQuery: Bool = false,
         onCompleteHideCardGrid: Bool = false
     ) {
+        // ensure we don't have any lingering cookies
+        NeevaUserInfo.shared.deleteLoginCookie()
+
         let signInOrUpFlowModel = SignInOrUpFlowModel(
             authStore: AuthStore(bvc: self),
             onCloseAction: {

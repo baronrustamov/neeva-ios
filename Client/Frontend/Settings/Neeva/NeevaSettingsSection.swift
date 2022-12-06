@@ -47,7 +47,7 @@ struct NeevaSettingsSection: View {
             }.onDisappear {
                 loaderOpacity = 0
             }
-        } else if userInfo.isUserLoggedIn && Defaults[.signedInOnce] && userInfo.email != nil
+        } else if userInfo.hasLoginCookie() && Defaults[.signedInOnce] && userInfo.email != nil
             && !userInfo.email!.isEmpty
         {
             NavigationLink(
