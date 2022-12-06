@@ -17,7 +17,7 @@ enum ShareToUX {
 }
 
 struct ShareToAction<Icon: View>: View {
-    let name: String
+    let name: LocalizedStringKey
     let icon: Icon
 
     var body: some View {

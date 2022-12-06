@@ -1634,6 +1634,7 @@
 		54B61AD22936A534004FE4A8 /* en-NZ */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-NZ"; path = "en-NZ.lproj/LoginManager.strings"; sourceTree = "<group>"; };
 		54B61AD32936A534004FE4A8 /* en-NZ */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-NZ"; path = "en-NZ.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
 		54B61AD42936A534004FE4A8 /* en-NZ */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-NZ"; path = "en-NZ.lproj/Storage.strings"; sourceTree = "<group>"; };
+		54B61AFA293EAF57004FE4A8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		54C835622936A57D00206E8E /* en-NZ */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-NZ"; path = "en-NZ.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		54C835632936A57D00206E8E /* en-NZ */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-NZ"; path = "en-NZ.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		54C835642936A57D00206E8E /* en-NZ */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-NZ"; path = "en-NZ.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -7021,6 +7022,7 @@
 				54884B4A2936A5740068585F /* en-AU */,
 				54C835652936A57D00206E8E /* en-NZ */,
 				54091E402936A584006B132C /* en-CA */,
+				54B61AFA293EAF57004FE4A8 /* en */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
