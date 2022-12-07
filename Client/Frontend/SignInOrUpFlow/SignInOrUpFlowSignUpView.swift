@@ -41,6 +41,7 @@ struct SignInOrUpFlowSignUpView: View {
                     self.error = message
                     self.showError = true
                 }) {
+                    model.justSignedUp = true
                     model.changeScreenTo(.plans)
                 }
             }
@@ -81,6 +82,7 @@ struct SignInOrUpFlowSignUpView: View {
                             self.showError = true
                         }
                     ) {
+                        model.justSignedUp = true
                         model.changeScreenTo(.plans)
                     }
                 }
@@ -100,6 +102,7 @@ struct SignInOrUpFlowSignUpView: View {
                             self.showError = true
                         }
                     ) {
+                        model.justSignedUp = true
                         model.changeScreenTo(.plans)
                     }
                 }

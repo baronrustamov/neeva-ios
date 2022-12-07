@@ -213,7 +213,7 @@ struct SignInOrUpFlowPlansView: View {
                         )
 
                         if model.currentPremiumPlan == nil {
-                            if model.justSignedIn {
+                            if model.justSignedIn || model.justSignedUp {
                                 model.complete()
                             } else {
                                 model.prevScreens.append(.plans)
@@ -223,8 +223,11 @@ struct SignInOrUpFlowPlansView: View {
                             if !NeevaUserInfo.shared.hasLoginCookie() {
                                 model.changeScreenTo(.signUp)
                             } else {
-                                if let product = premiumStore.getProductForPlan(
-                                    model.currentPremiumPlan)
+                                if NeevaUserInfo.shared.subscriptionType == nil
+                                    || NeevaUserInfo.shared.subscriptionType == .basic
+                                    || NeevaUserInfo.shared.subscriptionType == .unknown,
+                                    let product = premiumStore.getProductForPlan(
+                                        model.currentPremiumPlan)
                                 {
                                     premiumStore.purchase(
                                         product, reloadUserInfo: true,
@@ -232,6 +235,8 @@ struct SignInOrUpFlowPlansView: View {
                                         onCancelled: self.onPurchaseCancelled,
                                         onError: self.onPurchaseError,
                                         onSuccess: self.onPurchaseSuccess)
+                                } else {
+                                    model.complete()
                                 }
                             }
                         }
@@ -295,9 +300,6 @@ struct SignInOrUpFlowPlansView: View {
              */
             if NeevaUserInfo.shared.hasLoginCookie() {
                 if let product = PremiumStore.shared.getProductForPlan(model.currentPremiumPlan) {
-                    /*
-                     NOTE: Only execute for users who have no subscription
-                     */
                     if NeevaUserInfo.shared.subscriptionType == nil
                         || NeevaUserInfo.shared.subscriptionType == .basic
                         || NeevaUserInfo.shared.subscriptionType == .unknown
@@ -308,7 +310,7 @@ struct SignInOrUpFlowPlansView: View {
                             onCancelled: self.onPurchaseCancelled,
                             onError: self.onPurchaseError,
                             onSuccess: self.onPurchaseSuccess)
-                    } else if model.justSignedIn {
+                    } else if model.justSignedIn || model.justSignedUp {
                         model.complete()
                     }
                 } else {
