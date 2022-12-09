@@ -1,9 +1,0 @@
-/* Bundle display name */
-"CFBundleDisplayName" = "Neeva for Safari Extension";
-
-/* Bundle name */
-"CFBundleName" = "NeevaForSafariExtension";
-
-/* Copyright (human-readable) */
-"NSHumanReadableCopyright" = "Copyright © 2021 Neeva. All rights reserved.";
-
