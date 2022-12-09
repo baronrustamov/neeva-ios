@@ -243,9 +243,15 @@ public class TabCardDetails: CardDropDelegate, CardDetails, AccessingManagerProv
         super.dropEntered(info: info)
     }
 
+    // TODO: Give this function a clearer name
+    // The button closes AND unpins the tab, depending on its state.
     func onClose() {
         if !tab.isPinned {
             manager.close(tab)
+        } else {
+            manager.toggleTabPinnedState(tab)
+            ToastDefaults().showToastForPinningTab(
+                pinning: false, tabManager: manager)
         }
     }
 
