@@ -247,6 +247,8 @@ extension Defaults.Keys {
         "numOfDailyZeroQueryImpression", default: 0)
     public static let lastZeroQueryImpUpdatedTimestamp = Defaults.Key<Date?>(
         "lastZeroQueryImpUpdatedTimestamp")
+    public static let numOfZeroQueryImpressions = Defaults.Key<Int>(
+        "numOfZeroQueryImpressions", default: 0)
 
     #if DEBUG
         public static let enableDebugGraphQLLogger = Defaults.BoolKey(

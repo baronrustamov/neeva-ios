@@ -150,7 +150,7 @@ struct ZeroQueryView: View {
 
     @ViewBuilder
     private func contentView(_ parentGeom: GeometryProxy) -> some View {
-        promoCardView(parentGeom)
+        PromoCardView(zqModel: self.viewModel, viewWidth: parentGeom.size.width)
         suggestedSitesView(parentGeom)
         searchesView
         adBlockAnnouncement
@@ -224,26 +224,6 @@ struct ZeroQueryView: View {
             .environmentObject(viewModel.bvc.suggestionModel)
 
             SuggestionsDivider(height: 8)
-        }
-    }
-
-    @ViewBuilder
-    private func promoCardView(_ parentGeom: GeometryProxy) -> some View {
-        if let promoCardType = viewModel.promoCard {
-            PromoCard(type: promoCardType, viewWidth: parentGeom.size.width)
-                .modifier(
-                    ImpressionLoggerModifier(
-                        path: .PromoCardAppear,
-                        attributes: EnvironmentHelper.shared.getAttributes()
-                            + [
-                                ClientLogCounterAttribute(
-                                    key: LogConfig.PromoCardAttribute
-                                        .promoCardType,
-                                    value: viewModel.promoCard?.name ?? "None"
-                                )
-                            ]
-                    )
-                )
         }
     }
 

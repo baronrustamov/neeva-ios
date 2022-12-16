@@ -11,6 +11,14 @@ enum RatingsCardState {
     case appStoreReview
 }
 
+enum AppRatingPromoCardRule {
+    static let numOfAppForegroundLastWeek = 3
+}
+
+enum AppRatingSystemDialogRule {
+    static let numOfAppForeground = 6
+}
+
 struct RatingsCard: View {
     @State var state = RatingsCardState.rateExperience
 

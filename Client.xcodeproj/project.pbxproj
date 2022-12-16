@@ -260,7 +260,6 @@
 		4AD771B42734F06900B6769D /* EntityInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD771B32734F06800B6769D /* EntityInfoView.swift */; };
 		4AD771B62738697A00B6769D /* SpaceEntityData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD771B52738697A00B6769D /* SpaceEntityData.swift */; };
 		4AD771B827387B1F00B6769D /* SpaceGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD771B727387B1F00B6769D /* SpaceGeneratorView.swift */; };
-		4ADC5420265DA2CD00A210CE /* PromoCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADC541F265DA2CD00A210CE /* PromoCard.swift */; };
 		4ADF3F3F269627F100CB1B98 /* TrackingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADF3F3E269627F100CB1B98 /* TrackingUITests.swift */; };
 		4AF1948D266EC78A007E2C3B /* SearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF1948C266EC78A007E2C3B /* SearchResults.swift */; };
 		4F97573B1AFA6F37006ECC24 /* readerContent.html in Resources */ = {isa = PBXBuildFile; fileRef = 4F9757391AFA6F37006ECC24 /* readerContent.html */; };
@@ -988,6 +987,7 @@
 		F564D06928AEEE2E00A033CA /* SignInOrUpFlowSignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D06828AEEE2E00A033CA /* SignInOrUpFlowSignUpView.swift */; };
 		F564D06B28AEEE5F00A033CA /* SignInOrUpFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F564D06A28AEEE5F00A033CA /* SignInOrUpFlowView.swift */; };
 		F57946CB29372F57006A8FB9 /* WelcomeFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F57946CA29372F57006A8FB9 /* WelcomeFlowTests.swift */; };
+		F5FF76AB294980000055A948 /* PromoCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5FF76AA294980000055A948 /* PromoCardView.swift */; };
 		F805A79F2840187D00372451 /* Black@3x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = F805A79B2840187D00372451 /* Black@3x~ipad.png */; };
 		F805A7A02840187D00372451 /* System@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = F805A79C2840187D00372451 /* System@2x~ipad.png */; };
 		F805A7A12840187D00372451 /* Black@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = F805A79D2840187D00372451 /* Black@2x~ipad.png */; };
@@ -1567,7 +1567,6 @@
 		4AD771B32734F06800B6769D /* EntityInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityInfoView.swift; sourceTree = "<group>"; };
 		4AD771B52738697A00B6769D /* SpaceEntityData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceEntityData.swift; sourceTree = "<group>"; };
 		4AD771B727387B1F00B6769D /* SpaceGeneratorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceGeneratorView.swift; sourceTree = "<group>"; };
-		4ADC541F265DA2CD00A210CE /* PromoCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoCard.swift; sourceTree = "<group>"; };
 		4ADF3F3E269627F100CB1B98 /* TrackingUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingUITests.swift; sourceTree = "<group>"; };
 		4AF1948C266EC78A007E2C3B /* SearchResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResults.swift; sourceTree = "<group>"; };
 		4F9757391AFA6F37006ECC24 /* readerContent.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = readerContent.html; sourceTree = "<group>"; };
@@ -2379,6 +2378,7 @@
 		F564D06828AEEE2E00A033CA /* SignInOrUpFlowSignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInOrUpFlowSignUpView.swift; sourceTree = "<group>"; };
 		F564D06A28AEEE5F00A033CA /* SignInOrUpFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInOrUpFlowView.swift; sourceTree = "<group>"; };
 		F57946CA29372F57006A8FB9 /* WelcomeFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeFlowTests.swift; sourceTree = "<group>"; };
+		F5FF76AA294980000055A948 /* PromoCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoCardView.swift; sourceTree = "<group>"; };
 		F805A79B2840187D00372451 /* Black@3x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Black@3x~ipad.png"; sourceTree = "<group>"; };
 		F805A79C2840187D00372451 /* System@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "System@2x~ipad.png"; sourceTree = "<group>"; };
 		F805A79D2840187D00372451 /* Black@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Black@2x~ipad.png"; sourceTree = "<group>"; };
@@ -4810,7 +4810,7 @@
 		F84B22211A09122500AAB793 /* ZeroQuery */ = {
 			isa = PBXGroup;
 			children = (
-				4ADC541F265DA2CD00A210CE /* PromoCard.swift */,
+				F5FF76AA294980000055A948 /* PromoCardView.swift */,
 				8A2401CA26BB4D75006ABF7D /* RatingsCard.swift */,
 				E64024E727F2432300D65B63 /* RecommendedSpacesView.swift */,
 				C9BED4C02667FA91001D9C77 /* SuggestedSearchViews.swift */,
@@ -6389,6 +6389,7 @@
 				D0C95EF6201A55A800E4E51C /* BrowserViewController+UIDropInteractionDelegate.swift in Sources */,
 				D31CF65C1CC1959A001D0BD0 /* PrivilegedRequest.swift in Sources */,
 				C832BF8726E3CA0900B9A1F8 /* SendFeedbackPanel.swift in Sources */,
+				F5FF76AB294980000055A948 /* PromoCardView.swift in Sources */,
 				C832BF5D26E0A8D500B9A1F8 /* DownloadOverlayContent.swift in Sources */,
 				F87F47982899A01A0076B95C /* WelcomeFlowIntroView.swift in Sources */,
 				F815A5E72899C57A003FE9A8 /* WelcomeFlowSignInView.swift in Sources */,
@@ -6420,7 +6421,6 @@
 				66B379DD26DDAD4400087B04 /* FeedbackHelper.swift in Sources */,
 				7BA8D1C71BA037F500C8AE9E /* OpenInHelper.swift in Sources */,
 				E4B423BE1AB9FE6A007E66C8 /* ReaderModeCache.swift in Sources */,
-				4ADC5420265DA2CD00A210CE /* PromoCard.swift in Sources */,
 				6751BAB926AA08FB007FC7EA /* NavSuggestion.swift in Sources */,
 				20978E6B2874A9590009D346 /* Card.swift in Sources */,
 				BCC7CA4A270401AC004714C0 /* RecipeView.swift in Sources */,

@@ -53,6 +53,7 @@ struct ZeroQueryContent: View {
                     Defaults[.numOfDailyZeroQueryImpression] = 0
                 }
                 Defaults[.numOfDailyZeroQueryImpression] += 1
+                Defaults[.numOfZeroQueryImpressions] += 1
                 Defaults[.lastZeroQueryImpUpdatedTimestamp] = Date()
 
                 self.model.updateState()

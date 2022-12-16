@@ -156,6 +156,8 @@ public enum LogConfig {
         case PreviewSearch
         /// Sign in from promo card
         case PromoSignin
+        /// Premium from promo card
+        case PromoPremium
         /// Sign up on preview promo card
         case PreviewModePromoSignup
         /// Sign in from setting
@@ -245,6 +247,8 @@ public enum LogConfig {
         case PromoDefaultBrowser
         /// Close default browser promo card
         case CloseDefaultBrowserPromo
+        /// Close premium promo card
+        case ClosePremiumPromo
         /// Close preview sign up card
         case ClosePreviewSignUpPromo
         case DefaultBrowserOnboardingInterstitialSkip
@@ -669,6 +673,7 @@ public enum LogConfig {
         case .LoginAfterFirstRun: return .FirstRun
         case .FirstRunPageLoad: return .FirstRun
         case .PromoSignin: return .FirstRun
+        case .PromoPremium: return .FirstRun
         case .PreviewModePromoSignup: return .FirstRun
         case .SettingSignin: return .FirstRun
         case .SuggestionErrorLoginViewImpression: return .FirstRun
@@ -727,6 +732,7 @@ public enum LogConfig {
         case .PromoCardAppear: return .PromoCard
         case .PromoDefaultBrowser: return .PromoCard
         case .CloseDefaultBrowserPromo: return .PromoCard
+        case .ClosePremiumPromo: return .PromoCard
         case .ClosePreviewSignUpPromo: return .PromoCard
         case .GoToSysAppSettings: return .PromoCard
         case .DefaultBrowserPromoCardImp: return .PromoCard
