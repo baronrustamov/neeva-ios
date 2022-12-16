@@ -190,7 +190,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
 
     func createProfile() -> Profile {
-        return BrowserProfile(localName: "profile")
+        return BrowserProfile(localName: Defaults[.profileLocalName])
     }
 
     fileprivate func setUserAgent() {

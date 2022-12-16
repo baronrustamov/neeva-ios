@@ -97,6 +97,8 @@ extension Defaults.Keys {
     public static let enableLogToConsole = Defaults.BoolKey("profile_enableLogToConsole")
     public static let enableLogToFile = Defaults.BoolKey("profile_enableLogToFile")
     public static let enableGeigerCounter = Defaults.BoolKey("profile.enableGeigerCounter")
+    // avoid using `profile` prefix in the key name so that the value does not get cleared
+    public static let profileLocalName = Defaults.Key("pLocalName", default: "profile")
 
     // MARK: - caches
     public static let topSitesCacheIsValid = Defaults.BoolKey("profile.topSitesCacheIsValid")

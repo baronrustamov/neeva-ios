@@ -50,6 +50,7 @@ struct InternalSettingsView: View {
     @Default(.lastDefaultBrowserInterstitialChoice) var lastDefaultBrowserInterstitialChoice
     @Default(.introSeenDate) var introSeenDate
     @Default(.shouldCollectUsageStats) var shouldCollectUsageStats
+    @Default(.profileLocalName) var profileLocalName
 
     var body: some View {
         List {
@@ -78,6 +79,9 @@ struct InternalSettingsView: View {
                     String("maxQueryLimit"), number: $maxQueryLimit)
             }
             Group {
+                makeNavigationLink(title: String("Tab Storage Settings")) {
+                    TabStorageSettingsView()
+                }
                 Section(header: Text(verbatim: "Spaces")) {
                     Toggle(String("spacesIntroSeen"), isOn: $seenSpacesIntro)
                     Toggle(String("spacesShareIntroSeen"), isOn: $seenSpacesShareIntro)

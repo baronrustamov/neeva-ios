@@ -214,6 +214,8 @@
 		4392FB48252EC50400AD3D23 /* InternalSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC486982195F46A00CDA48D /* InternalSchemeHandler.swift */; };
 		4392FB5C252EC51E00AD3D23 /* PrivilegedRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31CF65B1CC1959A001D0BD0 /* PrivilegedRequest.swift */; };
 		4766AC7729108C0500F79C47 /* CheatsheetOnboardingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4766AC7629108C0500F79C47 /* CheatsheetOnboardingTests.swift */; };
+		476F47D7293A87BD00397520 /* TabStorageSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476F47D6293A87BD00397520 /* TabStorageSettingsView.swift */; };
+		47DD39F0293EA453001DD744 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 47DD39EF293EA453001DD744 /* ZIPFoundation */; };
 		4A15C8B526E1815A006CD097 /* ShareSpaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A15C8B426E1815A006CD097 /* ShareSpaceView.swift */; };
 		4A15C8B726E183F5006CD097 /* ContactsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A15C8B626E183F5006CD097 /* ContactsProvider.swift */; };
 		4A15C8B926E1BFAC006CD097 /* SpaceRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A15C8B826E1BFAB006CD097 /* SpaceRequest.swift */; };
@@ -1521,6 +1523,7 @@
 		435222C025882E3800FCA5B6 /* WidgetKitTopSiteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetKitTopSiteModel.swift; sourceTree = "<group>"; };
 		435FAB17242404B400AE9310 /* FullscreenHelper.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = FullscreenHelper.js; path = Client/Frontend/UserContent/UserScripts/AllFrames/AtDocumentStart/FullscreenHelper.js; sourceTree = SOURCE_ROOT; };
 		4766AC7629108C0500F79C47 /* CheatsheetOnboardingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheatsheetOnboardingTests.swift; sourceTree = "<group>"; };
+		476F47D6293A87BD00397520 /* TabStorageSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabStorageSettingsView.swift; sourceTree = "<group>"; };
 		4A15C8B426E1815A006CD097 /* ShareSpaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSpaceView.swift; sourceTree = "<group>"; };
 		4A15C8B626E183F5006CD097 /* ContactsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsProvider.swift; sourceTree = "<group>"; };
 		4A15C8B826E1BFAB006CD097 /* SpaceRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceRequest.swift; sourceTree = "<group>"; };
@@ -2466,6 +2469,7 @@
 				6786EA772759545A00B53127 /* CrashReporter in Frameworks */,
 				85EFC02E27C5174B009460DE /* SwiftyJSON.xcframework in Frameworks */,
 				85EFC03527C5179F009460DE /* XCGLogger.xcframework in Frameworks */,
+				47DD39F0293EA453001DD744 /* ZIPFoundation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3763,6 +3767,7 @@
 				323E460927C6C76900F325E2 /* SpotlightSettingsView.swift */,
 				676685C427E50EAF003CEA6D /* ServerLoggingSettingsView.swift */,
 				E9EC2604283EC9B400B9A79B /* CheatsheetSettingsView.swift */,
+				476F47D6293A87BD00397520 /* TabStorageSettingsView.swift */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -5267,6 +5272,7 @@
 				6786EA762759545A00B53127 /* CrashReporter */,
 				E942D4392819BA8100B4A3EC /* HTMLEntities */,
 				1C45B367283C4F36008A1401 /* CodeScanner */,
+				47DD39EF293EA453001DD744 /* ZIPFoundation */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -5466,6 +5472,7 @@
 				E942D4382819BA8100B4A3EC /* XCRemoteSwiftPackageReference "swift-html-entities" */,
 				E96D956D2832FDF100DD5BB3 /* XCRemoteSwiftPackageReference "Yams" */,
 				E61A44A22832C942004AAC3F /* XCRemoteSwiftPackageReference "Kanna" */,
+				47DD39EE293EA453001DD744 /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
 			);
 			productRefGroup = F84B21BF1A090F8100AAB793 /* Products */;
 			projectDirPath = "";
@@ -6617,6 +6624,7 @@
 				59A681BDFC95A19F05E07223 /* SuggestionsContent.swift in Sources */,
 				6679BBBA276AAFD700290041 /* SpacesFilterView.swift in Sources */,
 				32FAB3DF27B62A5F00FEBDFE /* NeevaScopeLoadingKeyFrameView.swift in Sources */,
+				476F47D7293A87BD00397520 /* TabStorageSettingsView.swift in Sources */,
 				C9BED4C12667FA91001D9C77 /* SuggestedSearchViews.swift in Sources */,
 				F564D05B28AEEA5900A033CA /* SignInOrUpFlowModel.swift in Sources */,
 				F8F360352874DA6700736740 /* NeevaPremiumView.swift in Sources */,
@@ -9431,6 +9439,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		47DD39EE293EA453001DD744 /* XCRemoteSwiftPackageReference "ZIPFoundation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/weichsel/ZIPFoundation.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.9;
+			};
+		};
 		4A3D2996268993FE0082F293 /* XCRemoteSwiftPackageReference "ViewInspector" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nalexn/ViewInspector";
@@ -9542,6 +9558,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BC532EED278C00550027CA11 /* XCRemoteSwiftPackageReference "CodeScanner" */;
 			productName = CodeScanner;
+		};
+		47DD39EF293EA453001DD744 /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 47DD39EE293EA453001DD744 /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
 		};
 		4A3D2997268993FE0082F293 /* ViewInspector */ = {
 			isa = XCSwiftPackageProductDependency;

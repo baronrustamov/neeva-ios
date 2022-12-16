@@ -25,19 +25,11 @@ class TabManagerStore {
     }
 
     fileprivate func getBasePath() -> String? {
-        let profilePath: String?
-
         if AppConstants.IsRunningTest || AppConstants.IsRunningPerfTest {
-            profilePath = (UIApplication.shared.delegate as? TestAppDelegate)?.dirForTestProfile
+            return (UIApplication.shared.delegate as? TestAppDelegate)?.dirForTestProfile
         } else {
-            profilePath =
-                fileManager.containerURL(
-                    forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?
-                .appendingPathComponent("profile.profile").path
+            return (UIApplication.shared.delegate as? AppDelegate)?.profile.files.rootPath
         }
-
-        guard let path = profilePath else { return nil }
-        return path
     }
 
     fileprivate func fallbackTabsPath() -> String? {
