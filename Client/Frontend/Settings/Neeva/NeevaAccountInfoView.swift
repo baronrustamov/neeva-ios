@@ -140,7 +140,7 @@ struct NeevaAccountInfoView: View {
             EmptyView()
         case .lifetime:
             EmptyView()
-        case .premium:
+        case .premium, .unlimited:
             // TODO: When we support Google Pay for Android, we should be more precise with this messaging.
             if userInfo.subscription?.source != .apple {
                 Text("Please sign in to Neeva from your computer to manage your subscription.")
@@ -193,6 +193,26 @@ struct NeevaAccountInfoView: View {
 
                 Text(
                     "If you have any questions or need assistance with your Premium membership, please reach out to premium@neeva.co."
+                )
+                .withFont(.bodyLarge)
+                .fixedSize(horizontal: false, vertical: true)
+            }
+
+            NavigationLinkButton("View Benefits") {
+                openURL(NeevaConstants.appMembershipURL)
+            }
+        case .unlimited:
+            VStack(alignment: .leading) {
+                Text(SubscriptionType.unlimited.displayName)
+                    .withFont(.headingMedium)
+                    .padding(4)
+                    .padding(.horizontal, 4)
+                    .foregroundColor(.brand.charcoal)
+                    .background(SubscriptionType.unlimited.color)
+                    .cornerRadius(4)
+
+                Text(
+                    "If you have any questions or need assistance with your Unlimited membership, please reach out to premium@neeva.co."
                 )
                 .withFont(.bodyLarge)
                 .fixedSize(horizontal: false, vertical: true)

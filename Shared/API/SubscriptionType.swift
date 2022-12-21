@@ -9,6 +9,7 @@ extension SubscriptionType {
         switch self {
         case .basic: return "Free Basic"
         case .premium, .lifetime: return "Premium"
+        case .unlimited: return "Unlimited"
         default: return "\(Image(systemSymbol: .exclamationmarkTriangleFill)) Membership Unknown"
         }
     }
@@ -16,7 +17,7 @@ extension SubscriptionType {
     public var color: Color {
         switch self {
         case .basic: return .brand.polar
-        case .premium, .lifetime: return .brand.variant.offwhite
+        case .premium, .lifetime, .unlimited: return .brand.variant.offwhite
         default: return .secondarySystemFill
         }
     }

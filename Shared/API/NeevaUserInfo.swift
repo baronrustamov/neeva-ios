@@ -63,6 +63,10 @@ public class NeevaUserInfo: ObservableObject {
         try! reachability.startNotifier()
     }
 
+    public func entitledToPremiumFeatures() -> Bool {
+        return [.premium, .lifetime, .unlimited].contains(self.subscriptionType)
+    }
+
     func fetch() {
         if !isDeviceOnline {
             print("Warn: the device is offline, forcing cached information load.")
