@@ -110,8 +110,7 @@ class ZeroQueryModel: ObservableObject {
     func updatePromoCardView() {
         // no promos for premium members
         if NeevaUserInfo.shared.hasLoginCookie()
-            && (NeevaUserInfo.shared.subscriptionType == .premium
-                || NeevaUserInfo.shared.subscriptionType == .lifetime)
+            && NeevaUserInfo.shared.entitledToPremiumFeatures()
         {
             promoCardType = nil
             return
