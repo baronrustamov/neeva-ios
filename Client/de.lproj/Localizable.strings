@@ -14,9 +14,6 @@
 " %lld Followers" = " %lld Follower";
 
 /* No comment provided by engineer. */
-" by inviting friends to join Neeva" = " indem Sie Freunde zu Neeva einladen";
-
-/* No comment provided by engineer. */
 " 􀉞 " = " 􀉞 ";
 
 /* This shows up on a recipe to specify the prep time for this dish */
@@ -135,9 +132,6 @@
 
 /* No comment provided by engineer. */
 "$%.2f" = "$%.2f";
-
-/* No comment provided by engineer. */
-"$5000" = "$5000";
 
 /* No comment provided by engineer. */
 "0" = "0";
@@ -620,9 +614,6 @@
 "Enable notifications" = "Benachrichtigungen aktivieren";
 
 /* No comment provided by engineer. */
-"Enable Notifications" = "Aktivieren von Benachrichtigungen";
-
-/* No comment provided by engineer. */
 "Enable shareable link" = "Teilbaren Link aktivieren";
 
 /* No comment provided by engineer. */
@@ -692,9 +683,6 @@
 "FREE" = "KOSTENLOS";
 
 /* No comment provided by engineer. */
-"From news to shopping,\nget the best of the web\ndelivered right to you" = "Von Nachrichten bis hin zum Shoppen –\nholen Sie sich das Beste aus dem Internet\ndirekt zu Ihnen nach Hause";
-
-/* No comment provided by engineer. */
 "From news to shopping, we bring the best of the web to you!" = "Von Nachrichten bis zum Shoppen – wir bringen Ihnen das Beste aus dem Internet!";
 
 /* No comment provided by engineer. */
@@ -718,11 +706,11 @@
 /* Button to get the free plan for our product */
 "Get FREE" = "Holen Sie sich den KOSTENLOSEN TARIF";
 
-/* No comment provided by engineer. */
-"Get safer, richer and better\nsearch when you sign in" = "Sicherere, umfassendere und bessere Suche,\nwenn Sie sich anmelden";
+/* (No Comment) */
+"Get Premium for unlimited access & top-tier privacy" = "Holen Sie sich Premium für unbegrenzten Zugriff und erstklassigen Datenschutz";
 
-/* No comment provided by engineer. */
-"Get the most out of Neeva's private search and browsing." = "Holen Sie das Beste aus der privaten Suche und dem Browsen in Neeva heraus.";
+/* (No Comment) */
+"Get the most out of Neeva’s private search and browsing." = "Holen Sie das Beste aus der privaten Suche und dem Browsen in Neeva heraus.";
 
 /* No comment provided by engineer. */
 "Got it" = "Verstanden";
@@ -777,9 +765,6 @@
 
 /* No comment provided by engineer. */
 "If you have any questions or need assistance with your Premium membership, please reach out to premium@neeva.co." = "Wenn Sie Fragen zu Ihrer Premium-Mitgliedschaft haben oder Unterstützung benötigen, wenden Sie sich bitte an premium@neeva.co.";
-
-/* No comment provided by engineer. */
-"If you have any questions or need assistance with your Unlimited membership, please reach out to premium@neeva.co." = "Wenn Sie Fragen zu Ihrer Unlimited-Mitgliedschaft haben oder Unterstützung benötigen, wenden Sie sich bitte an premium@neeva.co.";
 
 /* No comment provided by engineer. */
 "Incognito Tabs" = "Inkognito-Tabs";
@@ -1132,6 +1117,9 @@
 /* No comment provided by engineer. */
 "Premium\nMonthly" = "Premium\nmonatlich";
 
+/* (No Comment) */
+"Premium Password Manager+VPN" = "Premium-Passwortmanager + VPN";
+
 /* No comment provided by engineer. */
 "Price History" = "Preishistorie";
 
@@ -1297,7 +1285,7 @@
 /* accessibility label for one type of themes for reader mode feature */
 "Sepia Theme" = "Thema: Sepia";
 
-/* No comment provided by engineer. */
+/* (No Comment) */
 "Set as Default Browser" = "Als Standardbrowser festlegen";
 
 /* No comment provided by engineer. */
@@ -1490,9 +1478,6 @@
 "tech news" = "Tech-News";
 
 /* No comment provided by engineer. */
-"Tell me more" = "Erzählen Sie uns mehr";
-
-/* No comment provided by engineer. */
 "Terms" = "Bedingungen";
 
 /* No comment provided by engineer. */
@@ -1572,6 +1557,9 @@
 
 /* No comment provided by engineer. */
 "Unknown" = "Unbekannt";
+
+/* (No Comment) */
+"Unlimited ad-free searches" = "Unbegrenzte werbefreie Suchen";
 
 /* Bullet point text to describe Neeva premium benefit */
 "Unlimited ad-free, private search" = "Unbegrenzte werbefreie, private Suche";
@@ -1655,9 +1643,6 @@
 "Who's Tracking You" = "Wer Sie trackt";
 
 /* No comment provided by engineer. */
-"Win " = "Win ";
-
-/* No comment provided by engineer. */
 "Yelp" = "Yelp";
 
 /* No comment provided by engineer. */
@@ -1692,3 +1677,4 @@
 
 /* No comment provided by engineer. */
 "Your Subscription" = "Ihr Abonnement";
+

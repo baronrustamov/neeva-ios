@@ -14,9 +14,6 @@
 " %lld Followers" = " %lld Followers";
 
 /* No comment provided by engineer. */
-" by inviting friends to join Neeva" = " by inviting friends to join Neeva";
-
-/* No comment provided by engineer. */
 " 􀉞 " = " 􀉞 ";
 
 /* This shows up on a recipe to specify the prep time for this dish */
@@ -135,9 +132,6 @@
 
 /* No comment provided by engineer. */
 "$%.2f" = "$%.2f";
-
-/* No comment provided by engineer. */
-"$5000" = "$5000";
 
 /* No comment provided by engineer. */
 "0" = "0";
@@ -620,9 +614,6 @@
 "Enable notifications" = "Enable notifications";
 
 /* No comment provided by engineer. */
-"Enable Notifications" = "Enable Notifications";
-
-/* No comment provided by engineer. */
 "Enable shareable link" = "Enable shareable link";
 
 /* No comment provided by engineer. */
@@ -692,9 +683,6 @@
 "FREE" = "FREE";
 
 /* No comment provided by engineer. */
-"From news to shopping,\nget the best of the web\ndelivered right to you" = "From news to shopping,\nget the best of the web\ndelivered right to you";
-
-/* No comment provided by engineer. */
 "From news to shopping, we bring the best of the web to you!" = "From news to shopping, we bring the best of the web to you!";
 
 /* No comment provided by engineer. */
@@ -718,11 +706,11 @@
 /* Button to get the free plan for our product */
 "Get FREE" = "Get FREE";
 
-/* No comment provided by engineer. */
-"Get safer, richer and better\nsearch when you sign in" = "Get safer, richer and better\nsearch when you sign in";
+/* (No Comment) */
+"Get Premium for unlimited access & top-tier privacy" = "Get Premium for unlimited access & top-tier privacy";
 
-/* No comment provided by engineer. */
-"Get the most out of Neeva's private search and browsing." = "Get the most out of Neeva's private search and browsing.";
+/* (No Comment) */
+"Get the most out of Neeva’s private search and browsing." = "Get the most out of Neeva’s private search and browsing.";
 
 /* No comment provided by engineer. */
 "Got it" = "Got it";
@@ -777,9 +765,6 @@
 
 /* No comment provided by engineer. */
 "If you have any questions or need assistance with your Premium membership, please reach out to premium@neeva.co." = "If you have any questions or need assistance with your Premium membership, please reach out to premium@neeva.co.";
-
-/* No comment provided by engineer. */
-"If you have any questions or need assistance with your Unlimited membership, please reach out to premium@neeva.co." = "If you have any questions or need assistance with your Unlimited membership, please reach out to premium@neeva.co.";
 
 /* No comment provided by engineer. */
 "Incognito Tabs" = "Incognito Tabs";
@@ -1132,6 +1117,9 @@
 /* No comment provided by engineer. */
 "Premium\nMonthly" = "Premium\nMonthly";
 
+/* (No Comment) */
+"Premium Password Manager+VPN" = "Premium password manager + VPN";
+
 /* No comment provided by engineer. */
 "Price History" = "Price History";
 
@@ -1297,7 +1285,7 @@
 /* accessibility label for one type of themes for reader mode feature */
 "Sepia Theme" = "Sepia Theme";
 
-/* No comment provided by engineer. */
+/* (No Comment) */
 "Set as Default Browser" = "Set as Default Browser";
 
 /* No comment provided by engineer. */
@@ -1490,9 +1478,6 @@
 "tech news" = "tech news";
 
 /* No comment provided by engineer. */
-"Tell me more" = "Tell me more";
-
-/* No comment provided by engineer. */
 "Terms" = "Terms";
 
 /* No comment provided by engineer. */
@@ -1572,6 +1557,9 @@
 
 /* No comment provided by engineer. */
 "Unknown" = "Unknown";
+
+/* (No Comment) */
+"Unlimited ad-free searches" = "Unlimited ad-free searches";
 
 /* Bullet point text to describe Neeva premium benefit */
 "Unlimited ad-free, private search" = "Unlimited ad-free, private search";
@@ -1655,9 +1643,6 @@
 "Who's Tracking You" = "Who's Tracking You";
 
 /* No comment provided by engineer. */
-"Win " = "Win ";
-
-/* No comment provided by engineer. */
 "Yelp" = "Yelp";
 
 /* No comment provided by engineer. */
@@ -1692,3 +1677,4 @@
 
 /* No comment provided by engineer. */
 "Your Subscription" = "Your Subscription";
+
