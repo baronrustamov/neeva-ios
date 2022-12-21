@@ -779,7 +779,7 @@
 "If you have any questions or need assistance with your Premium membership, please reach out to premium@neeva.co." = "Si vous avez des questions ou avez besoin d'aide concernant votre abonnement Premium, veuillez nous contacter à l'adresse premium@neeva.co.";
 
 /* No comment provided by engineer. */
-"If you have any questions or need assistance with your Unlimited membership, please reach out to premium@neeva.co." = "Si vous avez des questions ou avez besoin d'aide concernant votre abonnement Illimité, veuillez nous contacter à l'adresse premium@neeva.co.";
+"If you have any questions or need assistance with your Unlimited membership, please reach out to premium@neeva.co." = "Si vous avez des questions ou avez besoin d'aide concernant votre abonnement Unlimited, veuillez nous contacter à l'adresse premium@neeva.co.";
 
 /* No comment provided by engineer. */
 "Incognito Tabs" = "Onglets de navigation privée";
@@ -1692,5 +1692,3 @@
 
 /* No comment provided by engineer. */
 "Your Subscription" = "Votre abonnement";
-
-"Unlimited" = "Illimité";
