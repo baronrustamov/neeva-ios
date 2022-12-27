@@ -101,6 +101,16 @@ class ArchivedTabsGroupedDataModel: GroupedDataPanelModel {
     }
 
     // MARK: - Archived Tab Methods
+    func removeArchivedTabs(_ tabs: [ArchivedTab]) {
+        tabManager.remove(archivedTabs: tabs)
+        loadData()
+    }
+
+    func removeArchivedTabGroup(_ group: ArchivedTabGroup) {
+        tabManager.remove(archivedTabGroup: group)
+        loadData()
+    }
+
     func clearArchivedTabs() {
         tabManager.remove(archivedTabs: tabManager.archivedTabs)
         loadData()

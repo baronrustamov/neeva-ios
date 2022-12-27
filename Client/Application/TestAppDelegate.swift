@@ -203,6 +203,10 @@ class TestAppDelegate: AppDelegate {
             BrowserViewController.createNewTabOnStartForTesting = true
         }
 
+        if launchArguments.contains(LaunchArguments.AddTestArchivedTabs) {
+            BrowserViewController.createArchivedTabOnStartForTesting = true
+        }
+
         if launchArguments.contains(LaunchArguments.EnableMockSpaces) {
             SpaceServiceProvider.shared = SpaceServiceMock()
         }

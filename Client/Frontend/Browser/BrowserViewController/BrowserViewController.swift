@@ -162,6 +162,7 @@ class BrowserViewController: UIViewController {
     private(set) var feedbackImage: UIImage?
 
     static var createNewTabOnStartForTesting: Bool = false
+    static var createArchivedTabOnStartForTesting: Bool = false
 
     /// Update the screenshot sent along with feedback. Called before opening overflow menu
     func updateFeedbackImage() {
@@ -470,6 +471,19 @@ class BrowserViewController: UIViewController {
         let didSelectTabOnStartup = tabManager.restoreTabs()
 
         DispatchQueue.main.async {
+            if Self.createArchivedTabOnStartForTesting {
+                self.tabManager.add(
+                    archivedTab: ArchivedTab(
+                        savedTab: self.tabManager.addTab(
+                            tabConfig: .init(
+                                request: URLRequest(url: "www.example.com"), zombie: true),
+                            isIncognito: false
+                        ).saveSessionDataAndCreateSavedTab(isSelected: false, tabIndex: nil)
+                    )
+                )
+                self.tabManager.updateAllTabDataAndSendNotifications(notify: true)
+            }
+
             if Self.createNewTabOnStartForTesting {
                 self.tabManager.select(self.tabManager.addTab())
             } else if !didSelectTabOnStartup {

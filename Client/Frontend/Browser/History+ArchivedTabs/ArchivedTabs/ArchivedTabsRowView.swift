@@ -37,15 +37,13 @@ struct NewArchivedTabsRowView: View {
 
                         if #available(iOS 15.0, *) {
                             Button(role: .destructive) {
-                                tabManager.remove(archivedTabGroup: tabGroup)
-                                archivedTabModel.loadData()
+                                archivedTabModel.removeArchivedTabGroup(tabGroup)
                             } label: {
                                 Label("Delete Tab Group", systemSymbol: .trash)
                             }
                         } else {
                             Button {
-                                tabManager.remove(archivedTabGroup: tabGroup)
-                                archivedTabModel.loadData()
+                                archivedTabModel.removeArchivedTabGroup(tabGroup)
                             } label: {
                                 Label("Delete Tab Group", systemSymbol: .trash)
                             }
@@ -67,7 +65,12 @@ struct NewArchivedTabsRowView: View {
 
             HStack {
                 ForEach(tabs, id: \.self) { tab in
-                    ArchivedTabsCardView(tab: tab, tabManager: self.tabManager, width: width / 2)
+                    ArchivedTabsCardView(
+                        tab: tab,
+                        tabManager: self.tabManager,
+                        model: self.archivedTabModel,
+                        width: width / 2
+                    )
                 }
             }
         }

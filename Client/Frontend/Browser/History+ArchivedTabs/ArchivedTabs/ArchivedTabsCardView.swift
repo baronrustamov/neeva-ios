@@ -11,6 +11,7 @@ struct ArchivedTabsCardView: View {
 
     let tab: ArchivedTab
     let tabManager: TabManager
+    let model: ArchivedTabsGroupedDataModel
     let width: CGFloat
 
     private let padding: CGFloat = 4
@@ -58,17 +59,18 @@ struct ArchivedTabsCardView: View {
         }.contextMenu {
             if #available(iOS 15.0, *) {
                 Button(role: .destructive) {
-                    tabManager.remove(archivedTabs: [tab])
+                    model.removeArchivedTabs([tab])
                 } label: {
                     Label("Delete", systemSymbol: .trash)
                 }
             } else {
                 Button {
-                    tabManager.remove(archivedTabs: [tab])
+                    model.removeArchivedTabs([tab])
                 } label: {
                     Label("Delete", systemSymbol: .trash)
                 }
             }
         }
+        .accessibilityIdentifier("ArchivedTabCardView")
     }
 }

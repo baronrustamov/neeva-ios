@@ -88,6 +88,7 @@
 		20587947286F6A0800994E15 /* checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 20587944286F6A0800994E15 /* checkmark.png */; };
 		20587948286F6A0800994E15 /* picker.css in Resources */ = {isa = PBXBuildFile; fileRef = 20587945286F6A0800994E15 /* picker.css */; };
 		20587949286F6A0800994E15 /* switch.css in Resources */ = {isa = PBXBuildFile; fileRef = 20587946286F6A0800994E15 /* switch.css */; };
+		205C30B6295284D40042FE93 /* ArchivedTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205C30B5295284D40042FE93 /* ArchivedTabTests.swift */; };
 		206954A627FF425B000360D6 /* SiteRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206954A527FF425B000360D6 /* SiteRowView.swift */; };
 		206954A827FF449E000360D6 /* RecentlyClosedTabsPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206954A727FF449E000360D6 /* RecentlyClosedTabsPanelView.swift */; };
 		2089ADBA2876932E00CB3448 /* RecentlyClosedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2089ADB92876932E00CB3448 /* RecentlyClosedTests.swift */; };
@@ -1379,6 +1380,7 @@
 		20587944286F6A0800994E15 /* checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkmark.png; sourceTree = "<group>"; };
 		20587945286F6A0800994E15 /* picker.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = picker.css; sourceTree = "<group>"; };
 		20587946286F6A0800994E15 /* switch.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = switch.css; sourceTree = "<group>"; };
+		205C30B5295284D40042FE93 /* ArchivedTabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedTabTests.swift; sourceTree = "<group>"; };
 		206954A527FF425B000360D6 /* SiteRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteRowView.swift; sourceTree = "<group>"; };
 		206954A727FF449E000360D6 /* RecentlyClosedTabsPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyClosedTabsPanelView.swift; sourceTree = "<group>"; };
 		2089ADB92876932E00CB3448 /* RecentlyClosedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyClosedTests.swift; sourceTree = "<group>"; };
@@ -3099,6 +3101,7 @@
 		3BFE4B081D342FB900DDF53F /* XCUITests */ = {
 			isa = PBXGroup;
 			children = (
+				205C30B5295284D40042FE93 /* ArchivedTabTests.swift */,
 				662BF63826CEDFEE0037FAF1 /* AuthenticationTests.swift */,
 				20FBBE722838822B000F666B /* BackForwardListViewTests.swift */,
 				209F3F4E28A7247B00B6AB9E /* CardStripTests.swift */,
@@ -6091,6 +6094,7 @@
 				C8BD2A79278814DB001B3355 /* CreateOrSwitchToTabTests.swift in Sources */,
 				C832BF7426E0B31B00B9A1F8 /* SettingsTest.swift in Sources */,
 				C832BF7926E0B31B00B9A1F8 /* ZeroQueryTests.swift in Sources */,
+				205C30B6295284D40042FE93 /* ArchivedTabTests.swift in Sources */,
 				20C5B263282D82F400BD35B9 /* CookieCutterTests.swift in Sources */,
 				C832BF7726E0B31B00B9A1F8 /* TabMenuTests.swift in Sources */,
 				209CD9A327DBF9F20069675C /* TabGroupTests.swift in Sources */,

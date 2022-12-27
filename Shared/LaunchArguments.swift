@@ -31,6 +31,7 @@ public struct LaunchArguments {
     public static let UseM1AppHost = "USE_M1_APP_HOST"
 
     public static let DontAddTabOnLaunch = "DONT_ADD_TAB_ON_LAUNCH"
+    public static let AddTestArchivedTabs = "ADD_TEST_ARCHIVED_TABS"
 
     public static let DisableCheatsheetBloomFilters = "DISABLE_CHEATSHEET_BLOOM_FILTERS"
 }
