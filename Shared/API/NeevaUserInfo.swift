@@ -126,6 +126,7 @@ public class NeevaUserInfo: ObservableObject {
     }
 
     public func setLoginCookie(_ value: String) {
+        assert(Thread.isMainThread)
         Defaults[.signedInOnce] = true
 
         // check if token has changed, when different, save new token
@@ -145,6 +146,7 @@ public class NeevaUserInfo: ObservableObject {
     }
 
     public func getLoginCookie() -> String? {
+        assert(Thread.isMainThread)
         return try? NeevaConstants.keychain.getString(NeevaConstants.loginKeychainKey)
     }
 
@@ -157,6 +159,7 @@ public class NeevaUserInfo: ObservableObject {
     }
 
     public func deleteLoginCookie() {
+        assert(Thread.isMainThread)
         let cookieStore = WKWebsiteDataStore.default().httpCookieStore
         cookieStore.getAllCookies { cookies in
             if let authCookie = cookies.first(where: Self.matchesLoginCookie) {
