@@ -500,6 +500,22 @@ class TabManagerTests: XCTestCase {
         }
         XCTAssertEqual(manager.selectedTab, tab3)
     }
+
+    // MARK: - Archive Tab Tests
+    func testIncognitoTabNotArchived() throws {
+        let testURL = try XCTUnwrap(URL(string: "testURL"))
+        manager.addTabsForURLs([testURL], incognito: true)
+
+        // Make sure the incognito tab is added.
+        XCTAssertEqual(manager.activeTabs.count, 1)
+        XCTAssertEqual(manager.incognitoTabs.count, 1)
+
+        manager.debugArchiveAllTabs()
+
+        // Make sure it still exists.
+        XCTAssertEqual(manager.activeTabs.count, 1)
+        XCTAssertEqual(manager.incognitoTabs.count, 1)
+    }
 }
 
 extension TabManager {

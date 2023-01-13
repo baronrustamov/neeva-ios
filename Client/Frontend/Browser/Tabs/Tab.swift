@@ -215,7 +215,9 @@ class Tab: NSObject, ObservableObject, GenericTab {
     }
 
     var shouldBeArchived: Bool {
-        !isPinned && Client.shouldBeArchived(basedOn: lastExecutedTime)
+        !isPinned
+            && !isIncognito
+            && Client.shouldBeArchived(basedOn: lastExecutedTime)
     }
 
     fileprivate(set) var screenshot: UIImage?

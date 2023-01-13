@@ -16,7 +16,6 @@ protocol GenericTab: Identifiable {
 
     /// All tabs with the same `rootUUID` are considered part of the same group.
     var rootUUID: String { get }
-
     var parentSpaceID: String? { get }
 }
 

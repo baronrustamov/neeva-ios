@@ -166,11 +166,7 @@ class TabManagerStore {
         restoredTabs.reserveCapacity(savedTabs.count)  // Overestimating
 
         for savedTab in savedTabs {
-            let shouldBeArchived =
-                !savedTab.isPinned
-                && shouldBeArchived(
-                    basedOn: savedTab.lastExecutedTime ?? Date.nowMilliseconds())
-            if shouldBeArchived {
+            if savedTab.shouldBeArchived {
                 tabManager.add(archivedTab: ArchivedTab(savedTab: savedTab))
             } else {
                 let tab = tabManager.restore(savedTab: savedTab, resolveParentRef: false)

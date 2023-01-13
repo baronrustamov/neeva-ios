@@ -28,6 +28,14 @@ class SavedTab: NSObject, NSCoding {
     let parentSpaceID: String?
     let pageZoom: CGFloat?
 
+    var shouldBeArchived: Bool {
+        !isPinned
+            && !isIncognito
+            && Client.shouldBeArchived(
+                basedOn: lastExecutedTime ?? Date.nowMilliseconds()
+            )
+    }
+
     init(
         screenshotUUID: UUID?, isSelected: Bool, title: String?, isIncognito: Bool, isPinned: Bool,
         pinnedTime: TimeInterval?, lastExecutedTime: Timestamp,

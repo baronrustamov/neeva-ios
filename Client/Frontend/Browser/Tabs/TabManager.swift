@@ -1703,14 +1703,18 @@ extension TabManager {
         // time passing to cause all tabs to appear as though they should be archived.
         // Don't update anything else so we can use this as a way to test out how the
         // code handles this scenario.
-        tabs.forEach {
-            $0.lastExecutedTime = 0
+        tabs.forEach { tab in
+            tab.lastExecutedTime = 0
+            guard tab != selectedTab, tab.shouldBeArchived else {
+                return
+            }
 
             add(
                 archivedTab: ArchivedTab(
-                    savedTab: $0.saveSessionDataAndCreateSavedTab(isSelected: false, tabIndex: nil)
+                    savedTab: tab.saveSessionDataAndCreateSavedTab(isSelected: false, tabIndex: nil)
                 )
             )
+            removeTab(tab, flushToDisk: true, notify: false)
         }
 
         updateAllTabDataAndSendNotifications(notify: true)
