@@ -1,0 +1,12 @@
+/* Description text displayed when there are no open tabs while in private mode */
+"Neeva *won't save* any of your personal activity like searches, clicks or browsing." = "Neeva *no guardará* nada de su actividad personal, como búsquedas, clics o navegación.";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Search privately, knowing that other people who use this device won't see your activity if you close your incognito tabs." = "Busque en privado, con la tranquilidad de que otras personas que utilicen este dispositivo no podrán ver su actividad si cierra las pestañas de incógnito.";
+
+/* Title displayed for when there are no open tabs while in incognito mode */
+"You are incognito" = "Está de incógnito";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Your activity *might still be visible* to your internet service provider, your school or employer." = "De todos modos, tenga en cuenta que su actividad *sí podría estar visible* para su proveedor de servicios de internet, su centro de estudios o su empresa.";
+

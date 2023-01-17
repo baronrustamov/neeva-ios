@@ -18,10 +18,12 @@ while getopts "eih" option; do
        xcodebuild -importLocalizations -localizationPath $2/fr-FR/en.xliff
        sed -i '' -e 's/de-DE/de/' $2/de-DE/en.xliff
        xcodebuild -importLocalizations -localizationPath $2/de-DE/en.xliff
-       xcodebuild -importLocalizations -localizationPath $2/en-GB/en.xliff
-       cp -r $2/en-GB $2/en-CA
-       sed -i '' -e 's/en-GB/en-CA/' $2/en-CA/en.xliff
-       xcodebuild -importLocalizations -localizationPath $2/en-CA/en.xliff
+       sed -i '' -e 's/es-ES/es/' $2/es-ES/en.xliff
+       xcodebuild -importLocalizations -localizationPath $2/es-ES/en.xliff
+       #xcodebuild -importLocalizations -localizationPath $2/en-GB/en.xliff
+       #cp -r $2/en-GB $2/en-CA
+       #sed -i '' -e 's/en-GB/en-CA/' $2/en-CA/en.xliff
+       #xcodebuild -importLocalizations -localizationPath $2/en-CA/en.xliff
        echo "### Done importing all xliff files ###"
        echo "Don't forget to commit and push the changes"
        ;;
