@@ -14,12 +14,18 @@ while getopts "eih" option; do
          echo "missing argument: import directory"
          exit
        fi
-       sed -i '' -e 's/fr-FR/fr/' $2/fr-FR/en.xliff
-       xcodebuild -importLocalizations -localizationPath $2/fr-FR/en.xliff
-       sed -i '' -e 's/de-DE/de/' $2/de-DE/en.xliff
-       xcodebuild -importLocalizations -localizationPath $2/de-DE/en.xliff
-       sed -i '' -e 's/es-ES/es/' $2/es-ES/en.xliff
-       xcodebuild -importLocalizations -localizationPath $2/es-ES/en.xliff
+       #sed -i '' -e 's/fr-FR/fr/' $2/fr-FR/en.xliff
+       #xcodebuild -importLocalizations -localizationPath $2/fr-FR/en.xliff
+       #sed -i '' -e 's/de-DE/de/' $2/de-DE/en.xliff
+       #xcodebuild -importLocalizations -localizationPath $2/de-DE/en.xliff
+       #sed -i '' -e 's/es-ES/es/' $2/es-ES/en.xliff
+       #xcodebuild -importLocalizations -localizationPath $2/es-ES/en.xliff
+       cp -r $2/en-GB $2/en-AU
+       sed -i '' -e 's/en-GB/en-AU/' $2/en-AU/en.xliff
+       xcodebuild -importLocalizations -localizationPath $2/en-AU/en.xliff
+       cp -r $2/en-GB $2/en-NZ
+       sed -i '' -e 's/en-GB/en-NZ/' $2/en-NZ/en.xliff
+       xcodebuild -importLocalizations -localizationPath $2/en-NZ/en.xliff
        #xcodebuild -importLocalizations -localizationPath $2/en-GB/en.xliff
        #cp -r $2/en-GB $2/en-CA
        #sed -i '' -e 's/en-GB/en-CA/' $2/en-CA/en.xliff
